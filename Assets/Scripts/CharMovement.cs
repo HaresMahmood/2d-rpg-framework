@@ -1,23 +1,25 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class PlayerMovement : MonoBehaviour
+public class CharMovement : MonoBehaviour
 {
-
     public Tilemap groundTiles;
     public Tilemap obstacleTiles;
-    public bool isMoving = false;
 
-    public bool onCooldown = false;
-    public bool onExit = false;
-    private float moveTime = 0.1f;
+    private bool isMoving = false;
 
-    // Use this for initialization
+    private bool onCooldown = false;
+    private bool onExit = false;
+
+    private float moveTime = 0.2f;
+
+    private Animator animator;
+
+    // Start is used for initialization
     void Start()
     {
-
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -29,9 +31,11 @@ public class PlayerMovement : MonoBehaviour
         //To store move directions.
         int horizontal = 0;
         int vertical = 0;
+
         //To get move directions
         horizontal = (int)(Input.GetAxisRaw("Horizontal"));
         vertical = (int)(Input.GetAxisRaw("Vertical"));
+
         //We can't go in both directions at the same time
         if (horizontal != 0)
             vertical = 0;
@@ -39,10 +43,17 @@ public class PlayerMovement : MonoBehaviour
         //If there's a direction, we are trying to move.
         if (horizontal != 0 || vertical != 0)
         {
+            Debug.Log(horizontal + " " + vertical);
+            animator.SetFloat("moveX", horizontal);
+            animator.SetFloat("moveY", vertical);
+            animator.SetBool("isWalking", true);
+
             StartCoroutine(actionCooldown(0.2f));
             Move(horizontal, vertical);
+        } else
+        {
+            animator.SetBool("isWalking", false);
         }
-
     }
 
     private void Move(int xDir, int yDir)
@@ -58,7 +69,6 @@ public class PlayerMovement : MonoBehaviour
         //If the player starts their movement from a ground tile.
         if (isOnGround)
         {
-
             //If the front tile is a walkable ground tile, the player moves here.
             if (hasGroundTile && !hasObstacleTile)
             {
@@ -95,8 +105,6 @@ public class PlayerMovement : MonoBehaviour
     //Blocked animation
     private IEnumerator BlockedMovement(Vector3 end)
     {
-        //while (isMoving) yield return null;
-
         isMoving = true;
 
         Vector3 originalPos = transform.position;
