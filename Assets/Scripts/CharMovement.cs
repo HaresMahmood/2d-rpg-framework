@@ -1,11 +1,15 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class CharMovement : MonoBehaviour
 {
-    public Tilemap groundTiles;
-    public Tilemap obstacleTiles;
+    public List<Tilemap> groundTiles = new List<Tilemap>();
+    public List<Tilemap> obstacleTiles = new List<Tilemap>();
+    //public Tilemap groundTiles;
+    //public Tilemap obstacleTiles;
+
 
     private bool isMoving = false;
 
@@ -15,6 +19,10 @@ public class CharMovement : MonoBehaviour
     private float moveTime = 0.2f;
 
     private Animator animator;
+
+    public bool isOnGround;
+    public bool hasGroundTile;
+    public bool hasObstacleTile;
 
     // Start is used for initialization
     void Start()
@@ -43,7 +51,6 @@ public class CharMovement : MonoBehaviour
         //If there's a direction, we are trying to move.
         if (horizontal != 0 || vertical != 0)
         {
-            Debug.Log(horizontal + " " + vertical);
             animator.SetFloat("moveX", horizontal);
             animator.SetFloat("moveY", vertical);
             animator.SetBool("isWalking", true);
@@ -62,9 +69,36 @@ public class CharMovement : MonoBehaviour
         Vector2 startCell = transform.position;
         Vector2 targetCell = startCell + new Vector2(xDir, yDir);
 
-        bool isOnGround = getCell(groundTiles, startCell) != null; //If the player is on the ground
-        bool hasGroundTile = getCell(groundTiles, targetCell) != null; //If target Tile has a ground
-        bool hasObstacleTile = getCell(obstacleTiles, targetCell) != null; //if target Tile has an obstacle
+        hasObstacleTile = false;
+
+        foreach (var t in groundTiles)
+        {
+            if (getCell(t, startCell) != null)
+            {
+                isOnGround = true; //If the player is on the ground
+            }
+            else
+            {
+                isOnGround = false;
+            }
+
+            if (getCell(t, targetCell) != null)
+            {
+                hasGroundTile = true; //If target Tile has a ground
+            }
+            else
+            {
+                hasGroundTile = false;
+            }
+        }
+
+        foreach (var t in obstacleTiles)
+        {
+            if (getCell(t, targetCell) != null)
+            {
+                hasObstacleTile = true; //if target Tile has an obstacle
+            }
+        }
 
         //If the player starts their movement from a ground tile.
         if (isOnGround)
@@ -111,7 +145,7 @@ public class CharMovement : MonoBehaviour
 
         end = transform.position + ((end - transform.position) / 3);
         float sqrRemainingDistance = (transform.position - end).sqrMagnitude;
-        float inverseMoveTime = (1 / (moveTime * 2));
+        float inverseMoveTime = 1 / moveTime;
 
         while (sqrRemainingDistance > float.Epsilon)
         {
@@ -159,6 +193,7 @@ public class CharMovement : MonoBehaviour
     {
         return tilemap.GetTile(tilemap.WorldToCell(cellWorldPos));
     }
+
     private bool hasTile(Tilemap tilemap, Vector2 cellWorldPos)
     {
         return tilemap.HasTile(tilemap.WorldToCell(cellWorldPos));
