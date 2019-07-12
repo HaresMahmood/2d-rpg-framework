@@ -16,13 +16,15 @@ public class CharMovement : MonoBehaviour
     private bool onCooldown = false;
     private bool onExit = false;
 
-    private float moveTime = 0.2f;
+    public float moveTime;
 
     private Animator animator;
 
     public bool isOnGround;
     public bool hasGroundTile;
     public bool hasObstacleTile;
+
+    public bool isRunning;
 
     // Start is used for initialization
     void Start()
@@ -36,6 +38,8 @@ public class CharMovement : MonoBehaviour
         //We do nothing if the player is still moving.
         if (isMoving || onCooldown || onExit) return;
 
+        isRunning = false; // Since Player is standing still, isRunning is false by default
+     
         //To store move directions.
         int horizontal = 0;
         int vertical = 0;
@@ -43,6 +47,13 @@ public class CharMovement : MonoBehaviour
         //To get move directions
         horizontal = (int)(Input.GetAxisRaw("Horizontal"));
         vertical = (int)(Input.GetAxisRaw("Vertical"));
+        if (isRunning = (int)Input.GetAxisRaw("Run") != 0)
+        {
+            isRunning = true;
+        } else
+        {
+            isRunning = false;
+        }
 
         //We can't go in both directions at the same time
         if (horizontal != 0)
@@ -53,13 +64,32 @@ public class CharMovement : MonoBehaviour
         {
             animator.SetFloat("moveX", horizontal);
             animator.SetFloat("moveY", vertical);
-            animator.SetBool("isWalking", true);
 
-            StartCoroutine(actionCooldown(0.2f));
-            Move(horizontal, vertical);
-        } else
+            if (isRunning)
+            {
+                moveTime = 0.125f;
+
+                animator.SetBool("isRunning", isRunning);
+                animator.SetBool("isWalking", false);
+
+                StartCoroutine(actionCooldown(0.125f)); // Action cooldown and Move Time must be same value to avoid blocky movement
+                Move(horizontal, vertical);
+            }
+            else
+            {
+                moveTime = 0.2f;
+
+                animator.SetBool("isRunning", isRunning);
+                animator.SetBool("isWalking", true);
+
+                StartCoroutine(actionCooldown(0.2f));
+                Move(horizontal, vertical);
+            }
+        }
+        else
         {
             animator.SetBool("isWalking", false);
+            animator.SetBool("isRunning", isRunning);
         }
     }
 
