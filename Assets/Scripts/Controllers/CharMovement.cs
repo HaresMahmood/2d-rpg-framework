@@ -47,13 +47,6 @@ public class CharMovement : MonoBehaviour
         //To get move directions
         horizontal = (int)(Input.GetAxisRaw("Horizontal"));
         vertical = (int)(Input.GetAxisRaw("Vertical"));
-        if (isRunning = (int)Input.GetAxisRaw("Run") != 0)
-        {
-            isRunning = true;
-        } else
-        {
-            isRunning = false;
-        }
 
         //We can't go in both directions at the same time
         if (horizontal != 0)
@@ -64,6 +57,15 @@ public class CharMovement : MonoBehaviour
         {
             animator.SetFloat("moveX", horizontal);
             animator.SetFloat("moveY", vertical);
+
+            if (isRunning = (int)Input.GetAxisRaw("Run") != 0)
+            {
+                isRunning = true;
+            }
+            else
+            {
+                isRunning = false;
+            }
 
             if (isRunning)
             {
