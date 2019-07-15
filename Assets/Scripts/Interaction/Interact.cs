@@ -8,7 +8,7 @@ public class Interact : MonoBehaviour
 {
 
     // public string dialog;
-    public bool playerInRange;
+    public static bool playerInRange;
     public string playerTag = "Player";
     public GameObject dialogBox;
     public TextMeshProUGUI textDisplay;

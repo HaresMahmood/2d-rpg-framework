@@ -1,4 +1,7 @@
-﻿using System.Collections;
+﻿//TODO Move Running functionality from MovingObject to PlayerMovement
+//TODO Move all animations to seperate function, and all walk animations to MovingObject
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,7 +18,6 @@ public class PlayerMovement : MovingObject
         base.Start();
     }
 
-    //TODO Move Running functionality from MovingObject to PlayerMovement
     // Update is called once per frame
     void Update()
     {
@@ -53,7 +55,7 @@ public class PlayerMovement : MovingObject
 
             if (isRunning)
             {
-                moveTime = 0.125f;
+                moveTime = 0.2f;
 
                 animator.SetBool("isRunning", isRunning);
                 animator.SetBool("isWalking", false);
@@ -63,7 +65,7 @@ public class PlayerMovement : MovingObject
             }
             else
             {
-                moveTime = 0.2f;
+                moveTime = 0.3f;
 
                 animator.SetBool("isRunning", isRunning);
                 animator.SetBool("isWalking", true);

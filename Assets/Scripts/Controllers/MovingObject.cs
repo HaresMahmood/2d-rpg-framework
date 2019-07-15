@@ -16,7 +16,7 @@ public abstract class MovingObject : MonoBehaviour
 
     public float moveTime;
 
-    private Collider2D coll;
+    public Collider2D coll;
 
     public bool isOnGround;
     public bool hasGroundTile;
@@ -31,7 +31,7 @@ public abstract class MovingObject : MonoBehaviour
         coll = GetComponent<Collider2D>();
     }
 
-    protected void Move(int xDir, int yDir)
+    protected virtual void Move(int xDir, int yDir)
     {
 
         Vector2 startCell = transform.position;

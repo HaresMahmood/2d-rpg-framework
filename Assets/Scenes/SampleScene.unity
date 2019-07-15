@@ -1183,6 +1183,7 @@ MonoBehaviour:
   onCooldown: 0
   onExit: 0
   moveTime: 0
+  coll: {fileID: 0}
   isOnGround: 0
   hasGroundTile: 0
   hasObstacleTile: 0
@@ -3975,7 +3976,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 756678821}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.3993816, y: -0.33102202, z: 3.0892773}
+  m_LocalPosition: {x: -4.468, y: 2.801, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1882794216}
@@ -3988,7 +3989,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 756678821}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
@@ -4014,12 +4015,11 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 756678821}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9972fa3fd670d0f469813dbb961144c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerInRange: 0
   playerTag: Player
   dialogBox: {fileID: 1015638167}
   textDisplay: {fileID: 2053802022}
@@ -4090,11 +4090,15 @@ MonoBehaviour:
   onCooldown: 0
   onExit: 0
   moveTime: 0.2
+  coll: {fileID: 0}
   isOnGround: 0
   hasGroundTile: 0
   hasObstacleTile: 0
   hasChar: 0
   isRunning: 0
+  bounds: {fileID: 981412486}
+  movingTime: 2
+  waitTime: 2
 --- !u!50 &756678829
 Rigidbody2D:
   serializedVersion: 4
@@ -4141,7 +4145,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 981412484}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1, y: 0, z: 0}
+  m_LocalPosition: {x: -3.38, y: 2.17, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1882794216}
@@ -4171,7 +4175,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 4, y: 3}
+  m_Size: {x: 5.12, y: 4.46}
   m_EdgeRadius: 0
 --- !u!1 &1015638167
 GameObject:
@@ -4998,7 +5002,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1882794215}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.0756183, y: 3.131022, z: -3.0892773}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 756678823}
