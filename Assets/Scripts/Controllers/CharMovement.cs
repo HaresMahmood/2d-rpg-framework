@@ -3,232 +3,60 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class CharMovement : MonoBehaviour
+public class CharMovement: MovingObject
 {
-    public List<Tilemap> groundTiles = new List<Tilemap>();
-    public List<Tilemap> obstacleTiles = new List<Tilemap>();
-    //public Tilemap groundTiles;
-    //public Tilemap obstacleTiles;
+    private Vector3 direction;
 
-
-    private bool isMoving = false;
-
-    private bool onCooldown = false;
-    private bool onExit = false;
-
-    public float moveTime;
-
-    private Animator animator;
-
-    public bool isOnGround;
-    public bool hasGroundTile;
-    public bool hasObstacleTile;
-
-    public bool isRunning;
-
-    // Start is used for initialization
-    void Start()
+    protected override void Start()
     {
-        animator = GetComponent<Animator>();
+        ChangeDirection();
+
+        //Call the Start function of the MovingObject base class.
+        base.Start();
     }
 
-    // Update is called once per frame
     void Update()
     {
         //We do nothing if the player is still moving.
         if (isMoving || onCooldown || onExit) return;
 
-        isRunning = false; // Since Player is standing still, isRunning is false by default
-     
-        //To store move directions.
-        int horizontal = 0;
-        int vertical = 0;
+        Debug.Log(direction);
 
-        //To get move directions
-        horizontal = (int)(Input.GetAxisRaw("Horizontal"));
-        vertical = (int)(Input.GetAxisRaw("Vertical"));
-
-        //We can't go in both directions at the same time
-        if (horizontal != 0)
-            vertical = 0;
-
-        //If there's a direction, we are trying to move.
-        if (horizontal != 0 || vertical != 0)
+        if (direction != null)
         {
-            animator.SetFloat("moveX", horizontal);
-            animator.SetFloat("moveY", vertical);
+            moveTime = 0.2f;
 
-            if (isRunning = (int)Input.GetAxisRaw("Run") != 0)
-            {
-                isRunning = true;
-            }
-            else
-            {
-                isRunning = false;
-            }
-
-            if (isRunning)
-            {
-                moveTime = 0.125f;
-
-                animator.SetBool("isRunning", isRunning);
-                animator.SetBool("isWalking", false);
-
-                StartCoroutine(actionCooldown(0.125f)); // Action cooldown and Move Time must be same value to avoid blocky movement
-                Move(horizontal, vertical);
-            }
-            else
-            {
-                moveTime = 0.2f;
-
-                animator.SetBool("isRunning", isRunning);
-                animator.SetBool("isWalking", true);
-
-                StartCoroutine(actionCooldown(0.2f));
-                Move(horizontal, vertical);
-            }
-        }
-        else
-        {
-            animator.SetBool("isWalking", false);
-            animator.SetBool("isRunning", isRunning);
+            StartCoroutine(actionCooldown(0.2f));
+            Move((int)direction.x, (int)direction.y);
         }
     }
 
-    private void Move(int xDir, int yDir)
+    //TODO NPC doesn't go all the way down when moving down.
+    void ChangeDirection()
     {
+        //int orientation = Random.Range(0, 3
 
-        Vector2 startCell = transform.position;
-        Vector2 targetCell = startCell + new Vector2(xDir, yDir);
+        int orientation = 0; // Debug
 
-        hasObstacleTile = false;
-
-        foreach (var t in groundTiles)
+        switch (orientation)
         {
-            if (getCell(t, startCell) != null)
-            {
-                isOnGround = true; //If the player is on the ground
-            }
-            else
-            {
-                isOnGround = false;
-            }
-
-            if (getCell(t, targetCell) != null)
-            {
-                hasGroundTile = true; //If target Tile has a ground
-            }
-            else
-            {
-                hasGroundTile = false;
-            }
+            case 0:
+                // Down
+                direction = Vector2.down;
+                break;
+            case 1:
+                // Left
+                direction = Vector2.left;
+                break;
+            case 2:
+                // Right
+                direction = Vector2.right;
+                break;
+            case 3:
+                // Up
+                direction = Vector2.up;
+                break;
         }
 
-        foreach (var t in obstacleTiles)
-        {
-            if (getCell(t, targetCell) != null)
-            {
-                hasObstacleTile = true; //if target Tile has an obstacle
-            }
-        }
-
-        //If the player starts their movement from a ground tile.
-        if (isOnGround)
-        {
-            //If the front tile is a walkable ground tile, the player moves here.
-            if (hasGroundTile && !hasObstacleTile)
-            {
-                StartCoroutine(SmoothMovement(targetCell));
-            }
-        }
-
-        if (!isMoving)
-            StartCoroutine(BlockedMovement(targetCell));
     }
-
-    private IEnumerator SmoothMovement(Vector3 end)
-    {
-        //while (isMoving) yield return null;
-
-        isMoving = true;
-
-
-        float sqrRemainingDistance = (transform.position - end).sqrMagnitude;
-        float inverseMoveTime = 1 / moveTime;
-
-        while (sqrRemainingDistance > float.Epsilon)
-        {
-            Vector3 newPosition = Vector3.MoveTowards(transform.position, end, inverseMoveTime * Time.deltaTime);
-            transform.position = newPosition;
-            sqrRemainingDistance = (transform.position - end).sqrMagnitude;
-
-            yield return null;
-        }
-
-        isMoving = false;
-    }
-
-    //Blocked animation
-    private IEnumerator BlockedMovement(Vector3 end)
-    {
-        isMoving = true;
-
-        Vector3 originalPos = transform.position;
-
-        end = transform.position + ((end - transform.position) / 3);
-        float sqrRemainingDistance = (transform.position - end).sqrMagnitude;
-        float inverseMoveTime = 1 / moveTime;
-
-        while (sqrRemainingDistance > float.Epsilon)
-        {
-            Vector3 newPosition = Vector3.MoveTowards(transform.position, end, inverseMoveTime * Time.deltaTime);
-            transform.position = newPosition;
-            sqrRemainingDistance = (transform.position - end).sqrMagnitude;
-
-            yield return null;
-        }
-
-        sqrRemainingDistance = (transform.position - originalPos).sqrMagnitude;
-        while (sqrRemainingDistance > float.Epsilon)
-        {
-            Vector3 newPosition = Vector3.MoveTowards(transform.position, originalPos, inverseMoveTime * Time.deltaTime);
-            transform.position = newPosition;
-            sqrRemainingDistance = (transform.position - originalPos).sqrMagnitude;
-
-            yield return null;
-        }
-        isMoving = false;
-    }
-
-    private IEnumerator actionCooldown(float cooldown)
-    {
-        onCooldown = true;
-
-        //float cooldown = 0.2f;
-        while (cooldown > 0f)
-        {
-            cooldown -= Time.deltaTime;
-            yield return null;
-        }
-
-        onCooldown = false;
-    }
-
-    public Collider2D whatsThere(Vector2 targetPos)
-    {
-        RaycastHit2D hit;
-        hit = Physics2D.Linecast(targetPos, targetPos);
-        return hit.collider;
-    }
-
-    private TileBase getCell(Tilemap tilemap, Vector2 cellWorldPos)
-    {
-        return tilemap.GetTile(tilemap.WorldToCell(cellWorldPos));
-    }
-
-    private bool hasTile(Tilemap tilemap, Vector2 cellWorldPos)
-    {
-        return tilemap.HasTile(tilemap.WorldToCell(cellWorldPos));
-    }
-
 }
