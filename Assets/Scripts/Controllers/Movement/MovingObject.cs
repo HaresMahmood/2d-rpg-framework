@@ -53,6 +53,8 @@ public abstract class MovingObject : MonoBehaviour
 
         hasObstacle = false; // By default, there is no obstacle-tile in front of Character.
         hasChar = false; // By default, there is no character in front of Character.
+        hasGround = false;
+        onGround = false;
 
         foreach (var t in groundTiles)
         {

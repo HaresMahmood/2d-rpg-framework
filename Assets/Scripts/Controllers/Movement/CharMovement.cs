@@ -25,7 +25,7 @@ public class CharMovement: MovingObject
     {
         if (isMoving || onCoolDown || onExit) return; // We wait until Character is done moving.
         
-        Debug.Log(direction);
+        //Debug.Log(direction);
 
         if (direction == Vector3.zero)
         {
