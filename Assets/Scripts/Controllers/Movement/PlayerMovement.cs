@@ -1,6 +1,4 @@
-﻿// Clean up Start function.
-
-using UnityEngine;
+﻿using UnityEngine;
 
 /**
  * File-name: PlayerMovement.cs
@@ -13,25 +11,6 @@ using UnityEngine;
 public class PlayerMovement : MovingObject
 {
     private bool isRunning;
-
-    public Vector2 orientation;
-    public Vector2 position;
-
-    /*
-     * Start is called before the first frame update
-     */
-    protected override void Start()
-    {
-        base.Start();
-
-        SceneTransition sceneManager = GameObject.Find("SceneManager").GetComponent<SceneTransition>();
-
-        orientation = sceneManager.startOrientation;
-        position = sceneManager.startPosition;
-
-        SetAnimations((int)orientation.x, (int)orientation.y);
-        transform.position = position;
-    }
 
     /*
      * Update is called once per frame

@@ -1,6 +1,11 @@
 ﻿//TODO come up with better implemenation for int orientation.
-//TODO Clean up code, document and comment, do additional bug-testing.
-//TODO Come up with better implementation of SceneTransition, player's orientation does NOT change.
+//TODO CLEAN UP CODE (animator function should preferably not be here, document and 
+// comment, do additional bug-testing.
+//TODO Come up with better implementation of SceneTransition, instead of putting
+// starting-position for current scene in SceneManager, starting-position should be
+// Player's position upon SWITCHING scene.
+// Make prefab out of GameObject SceneTransition, with SceneManager, Canvas and
+// EventSystem.
 
 using System.Collections;
 using System.Collections.Generic;
@@ -13,7 +18,10 @@ public class SceneTransition : MonoBehaviour
     public Vector2 startPosition;
     public int orientation;
 
-    //[HideInInspector]
+    private Animator anim;
+    public Animator transitionAnim;
+
+    [HideInInspector]
     public Vector2 startOrientation;
 
     void Start()
@@ -35,13 +43,37 @@ public class SceneTransition : MonoBehaviour
             default:
                 break;
         }
+
+        PlayerMovement player = GameObject.Find("Player").GetComponent<PlayerMovement>();
+
+        anim = player.GetComponent<Animator>();
+
+        SetAnimations((int)startOrientation.x, (int)startOrientation.y);
+        player.transform.position = startPosition;
     }
 
     public void OnTriggerStay2D(Collider2D other)
     {
         if (other.CompareTag("Player") && !other.isTrigger)
         {
-            SceneManager.LoadScene(loadScene);
+            StartCoroutine(LoadScene());
         }
+    }
+
+    IEnumerator LoadScene()
+    {
+        transitionAnim.SetTrigger("fade-out");
+        yield return new WaitForSeconds(0f);
+
+        SceneManager.LoadScene(loadScene);
+    }
+
+    /*
+     * 
+     */
+    protected void SetAnimations(int xDir, int yDir)
+    {
+        anim.SetFloat("moveX", xDir);
+        anim.SetFloat("moveY", yDir);
     }
 }
