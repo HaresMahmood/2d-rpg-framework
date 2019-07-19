@@ -15,6 +15,7 @@ public class Interact : MonoBehaviour
     public string[] sentences;
     public float typingSpeed;
     private int index;
+    //public bool isInteracting = Input.GetButtonDown("Interact");
 
     // Update is called once per frame
     void Update()
