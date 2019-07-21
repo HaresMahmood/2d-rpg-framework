@@ -21,7 +21,7 @@ public abstract class MovingObject : MonoBehaviour
     public float moveTime;
 
     [HideInInspector]
-    public bool isMoving = false, onCoolDown = false, onExit = false;
+    public bool canMove = true, isMoving = false, onCoolDown = false, onExit = false;
     [HideInInspector]
     public bool onGround, hasGround, hasObstacle, hasChar;
 

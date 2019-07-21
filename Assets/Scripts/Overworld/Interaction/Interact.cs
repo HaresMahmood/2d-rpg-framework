@@ -15,13 +15,27 @@ public class Interact : MonoBehaviour
     public string[] sentences;
     public float typingSpeed;
     private int index;
+
+    public PlayerMovement player;
+    public CharMovement npc;
+    private Animator anim;
+
     //public bool isInteracting = Input.GetButtonDown("Interact");
+
+    void Start()
+    {
+        player = GameObject.Find("Player").GetComponent<PlayerMovement>();
+        npc = GameObject.Find("NPC").GetComponent<CharMovement>();
+
+        anim = npc.GetComponent<Animator>();
+    }
 
     // Update is called once per frame
     void Update()
     {
         if (Input.GetButtonDown("Interact") && playerInRange) 
         {
+
             if (dialogBox.activeInHierarchy)
             {
                 dialogBox.SetActive(false);
@@ -40,6 +54,7 @@ public class Interact : MonoBehaviour
         if (other.CompareTag(playerTag)) 
         {
             playerInRange = true;
+
             Debug.Log("In range");
         }
     }
@@ -75,5 +90,14 @@ public class Interact : MonoBehaviour
         {
             textDisplay.text = "";
         }
+    }
+
+    /*
+     * 
+     */
+    private void SetAnimations(int xDir, int yDir)
+    {
+        anim.SetFloat("moveX", xDir);
+        anim.SetFloat("moveY", yDir);
     }
 }

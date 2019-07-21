@@ -10,20 +10,23 @@ public class CharMovement: MovingObject
     private float decisionTimeCount;
 
     private Vector3 direction;
-    private readonly bool canMove = !Interact.playerInRange;
+    public PlayerMovement player; //TODO This should not exist.
 
     protected override void Start()
     {
+        player = GameObject.Find("Player").GetComponent<PlayerMovement>(); //TODO This should not exist.
+
         moveTime = 0.3f;
 
         decisionTimeCount = Random.Range(decisionTime.x, decisionTime.y);
         ChangeDirection();
+
         base.Start(); // Calls the Start-function of the MovingObject base-class.
     }
 
     void Update()
     {
-        if (isMoving || onCoolDown || onExit) return; // We wait until Character is done moving.
+        if (!canMove || isMoving || onCoolDown || onExit) return; // We wait until Character is done moving. //TODO move this line to MovingObject.
         
         //Debug.Log(direction);
 
@@ -38,19 +41,39 @@ public class CharMovement: MovingObject
             SetAnimations((int)direction.x, (int)direction.y);
         }
 
-        if (canMove) // If Player is not in range, ...
+        if (!Interact.playerInRange && canMove) // If Player is not in range and Character is able to move, ...
         {
-            if (bounds.bounds.Contains(transform.position + direction))
+            if (bounds.bounds.Contains(transform.position + direction)) // If target-tile is withing the set boundary.
             {
                 StartCoroutine(CoolDown(moveTime)); // Starts cool-down timer.
                 CheckCollision((int)direction.x, (int)direction.y); // Moves Character if possible.
+
                 if (hasObstacle)
+                {
                     CheckDecisionTime();
+                }
                 else
                     CheckDecisionTime();
             }
             else
                 CheckDecisionTime();
+        }
+        else
+        {
+
+            //TODO This whole "changing orientation" part needs to move to an interactable-class.
+            if (Input.GetButtonDown("Interact") && Interact.playerInRange)
+            {
+                // Sets correct orientation for Character.
+                if (player.horizontal == 0 && player.vertical == -1) // Down
+                    SetAnimations(0, 1); // Up
+                else if (player.horizontal == 0 && player.vertical == 1) // Up
+                    SetAnimations(0, -1); // Down
+                else if (player.horizontal == -1 && player.vertical == 0) // Left
+                    SetAnimations(1, 0); // Right
+                else if (player.horizontal == 1 && player.vertical == 0) // Right
+                    SetAnimations(-1, 0); // Left
+            }
         }
     }
 

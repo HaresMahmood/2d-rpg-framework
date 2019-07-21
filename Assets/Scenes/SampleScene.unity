@@ -628,8 +628,8 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 1015638168}
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_Father: {fileID: 2027613214}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -964,12 +964,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 112401938}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -589.3417, y: -264.43344, z: 581.5765}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_Father: {fileID: 2027613214}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &130788050
 GameObject:
@@ -1643,6 +1643,15 @@ Tilemap:
       m_ObjectToInstantiate: {fileID: 0}
       m_TileFlags: 1
       m_ColliderType: 1
+  - first: {x: -12, y: 3, z: 0}
+    second:
+      m_TileIndex: 9
+      m_TileSpriteIndex: 0
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
   - first: {x: -8, y: 3, z: 0}
     second:
       m_TileIndex: 6
@@ -1690,11 +1699,12 @@ Tilemap:
     m_Data: {fileID: 11400000, guid: a5e2e12d40c2d8746be0d72897df16c3, type: 2}
   - m_RefCount: 1
     m_Data: {fileID: 11400000, guid: 05ca3f7c5fb97d542bf24ade6aa8b1ac, type: 2}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
+  - m_RefCount: 1
+    m_Data: {fileID: 11400000, guid: 8e9b754020e24d1478ea108a9fce3eac, type: 2}
   m_TileSpriteArray:
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
+  - m_RefCount: 1
+    m_Data: {fileID: 7007286435288457171, guid: 46f52ace6415523439df2ef8860790ce,
+      type: 3}
   - m_RefCount: 1
     m_Data: {fileID: 1617488057665253523, guid: 46f52ace6415523439df2ef8860790ce,
       type: 3}
@@ -1722,7 +1732,7 @@ Tilemap:
     m_Data: {fileID: 7950549432505747019, guid: 46f52ace6415523439df2ef8860790ce,
       type: 3}
   m_TileMatrixArray:
-  - m_RefCount: 9
+  - m_RefCount: 10
     m_Data:
       e00: 1
       e01: 0
@@ -1741,7 +1751,7 @@ Tilemap:
       e32: 0
       e33: 1
   m_TileColorArray:
-  - m_RefCount: 9
+  - m_RefCount: 10
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -5713,7 +5723,7 @@ GameObject:
   - component: {fileID: 756678829}
   m_Layer: 0
   m_Name: NPC
-  m_TagString: Untagged
+  m_TagString: NPC
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5826,6 +5836,8 @@ MonoBehaviour:
   - Hi! Nice to meet you!
   - My name? I don't really have one. You?
   typingSpeed: 0.02
+  player: {fileID: 0}
+  npc: {fileID: 0}
 --- !u!61 &756678826
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5886,6 +5898,7 @@ MonoBehaviour:
   - {fileID: 1355674112}
   - {fileID: 73783354}
   moveTime: 0.2
+  canMove: 1
   isMoving: 0
   onCoolDown: 0
   onExit: 0
@@ -5897,6 +5910,7 @@ MonoBehaviour:
   anim: {fileID: 0}
   bounds: {fileID: 981412486}
   decisionTime: {x: 0, y: 1}
+  player: {fileID: 0}
 --- !u!50 &756678829
 Rigidbody2D:
   serializedVersion: 4
@@ -5967,7 +5981,7 @@ Transform:
   - {fileID: 1650874799}
   - {fileID: 422847513}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &957947679
 GameObject:
@@ -6130,7 +6144,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1015638167}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -6140,8 +6154,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0.000012398, y: 100}
-  m_SizeDelta: {x: 700, y: 128.8}
+  m_AnchoredPosition: {x: -6, y: 160}
+  m_SizeDelta: {x: 1230.9, y: 233.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1015638169
 MonoBehaviour:
@@ -6977,6 +6991,8 @@ MonoBehaviour:
   textDisplay: {fileID: 0}
   sentences: []
   typingSpeed: 0
+  player: {fileID: 0}
+  npc: {fileID: 0}
   scene: SampleHouse
   startPosition: {x: -11.483, y: 2.783}
   orientation: 0
@@ -7478,6 +7494,38 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!1 &2027613213
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2027613214}
+  m_Layer: 0
+  m_Name: UI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2027613214
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2027613213}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 589.3417, y: 264.43344, z: -581.5765}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 58494386}
+  - {fileID: 112401941}
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2053802020
 GameObject:
   m_ObjectHideFlags: 0
@@ -7566,8 +7614,8 @@ MonoBehaviour:
   m_fontSize: 21
   m_fontSizeBase: 21
   m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 18
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 30
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_textAlignment: 257

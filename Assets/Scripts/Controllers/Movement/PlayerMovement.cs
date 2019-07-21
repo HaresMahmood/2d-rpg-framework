@@ -12,18 +12,26 @@ public class PlayerMovement : MovingObject
 {
     private bool isRunning;
 
+    public int horizontal;
+    public int vertical;
+
     /*
      * Update is called once per frame
      */
     void Update()
     {
-        if (isMoving || onCoolDown || onExit) return; // We wait until Player is done moving.
+        if (!canMove || isMoving || onCoolDown || onExit) return; // We wait until Player is done moving. //TODO move this line to MovingObject.
 
         isRunning = false; // By default, Player is not running.
+        canMove = true; // By default, Player is able to move.
 
         // To store the direction in which Player wants to move.
-        int horizontal = 0;
-        int vertical = 0;
+        // int horizontal = 0;
+        //int vertical = 0;
+
+        //TODO Change back to above.
+        horizontal = 0;
+        vertical = 0;
 
         // To get move directions.
         horizontal = (int)(Input.GetAxisRaw("Horizontal"));
@@ -35,25 +43,26 @@ public class PlayerMovement : MovingObject
 
         if (horizontal != 0 || vertical != 0) // If there is an input, ...
         {
-           if ((int)Input.GetAxisRaw("Run") != 0)
-                isRunning = true;
+            if (canMove) // If Player is able to move, ...
+            {
+                if ((int)Input.GetAxisRaw("Run") != 0)
+                    isRunning = true;
 
-            SetAnimations(horizontal, vertical); // Sets direction the player is facing in, based on input.
+                SetAnimations(horizontal, vertical); // Sets direction the player is facing in, based on input.
 
-            if (isRunning)
-                moveTime = 0.2f; // Move-time when running.
-            else
-                moveTime = 0.3f; // Move-time when walking.
+                if (isRunning)
+                    moveTime = 0.2f; // Move-time when running.
+                else
+                    moveTime = 0.3f; // Move-time when walking.
 
-            StartCoroutine(CoolDown(moveTime)); // Starts cool-down timer.
-            CheckCollision(horizontal, vertical); // Moves Player if possible.
+                StartCoroutine(CoolDown(moveTime)); // Starts cool-down timer.
+                CheckCollision(horizontal, vertical); // Moves Player if possible.
 
-            SetMoveAnimations(); // Sets animations based on if Player is walking or running.
+                SetMoveAnimations(); // Sets animations based on if Player is walking or running.
+            }
         }
         else
-        {
             SetMoveAnimations(); // Turns all move animations off.
-        }
     }
 
     /*
