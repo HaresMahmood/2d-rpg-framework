@@ -1,6 +1,7 @@
 ﻿//TODO Clean up code, document and comment, fix animation bugs.
 //TODO Make Interactable-class to store info for all interactables.
 //TODO Move all typing functionality to seperate class?
+//TODO Stop-icon NOT appearing. (it only appears if I do NOT hold down Interact-button when the last sentece is being typed).
 
 using System.Collections;
 using System.Collections.Generic;
@@ -11,7 +12,6 @@ using TMPro;
 public class Interact : MonoBehaviour
 {
 
-    // public string dialog;
     public static bool playerInRange;
 
     public string playerTag = "Player";
@@ -25,11 +25,11 @@ public class Interact : MonoBehaviour
     public string[] sentences;
 
     public float typingSpeed = 0.05f;
-    public float speedMultiplier = 0.5f;
+    public float speedMultiplier = 0.01f;
 
-    private bool _isStringBeingRevealed = false;
-    private bool _isDialoguePlaying = false;
-    private bool _isEndOfDialogue = false;
+    public bool _isStringBeingRevealed = false;
+    public bool _isDialoguePlaying = false;
+    public bool _isEndOfDialogue = false;
 
     void Start()
     {
@@ -41,18 +41,20 @@ public class Interact : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!_isStringBeingRevealed && !_isDialoguePlaying)
+            dialogBox.SetActive(false);
+
         if (Input.GetButtonDown("Interact") && playerInRange) 
         {
             if (dialogBox.activeInHierarchy && !_isDialoguePlaying)
-            {
                 dialogBox.SetActive(false);
-            }
             else
             {
-                dialogBox.SetActive(true);
                 if (!_isDialoguePlaying)
                 {
                     _isDialoguePlaying = true;
+
+                    dialogBox.SetActive(true);
                     StartCoroutine(StartDialogue());
                 }
             }
