@@ -12,9 +12,6 @@ public class PlayerMovement : MovingObject
 {
     private bool isRunning;
 
-    public int horizontal;
-    public int vertical;
-
     /*
      * Update is called once per frame
      */
@@ -26,12 +23,8 @@ public class PlayerMovement : MovingObject
         canMove = true; // By default, Player is able to move.
 
         // To store the direction in which Player wants to move.
-        // int horizontal = 0;
-        //int vertical = 0;
-
-        //TODO Change back to above.
-        horizontal = 0;
-        vertical = 0;
+        int horizontal = 0;
+        int vertical = 0;
 
         // To get move directions.
         horizontal = (int)(Input.GetAxisRaw("Horizontal"));
@@ -40,6 +33,7 @@ public class PlayerMovement : MovingObject
         // We can't go in both directions at the same time
         if (horizontal != 0)
             vertical = 0;
+
 
         if (horizontal != 0 || vertical != 0) // If there is an input, ...
         {

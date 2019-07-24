@@ -10,11 +10,12 @@ public class CharMovement: MovingObject
     private float decisionTimeCount;
 
     private Vector3 direction;
-    public PlayerMovement player; //TODO This should not exist.
+
+    private PlayerMovement player;
 
     protected override void Start()
     {
-        player = GameObject.Find("Player").GetComponent<PlayerMovement>(); //TODO This should not exist.
+        player = GameObject.Find("Player").GetComponent<PlayerMovement>();
 
         moveTime = 0.3f;
 
@@ -26,8 +27,15 @@ public class CharMovement: MovingObject
 
     void Update()
     {
+        //TODO Find more neat way to implement changing of orientation on Player interaction.
+        if (Input.GetButtonDown("Interact") && Interact.playerInRange)
+        {
+            player.orientation = new Vector2(player.anim.GetFloat("moveX"), player.anim.GetFloat("moveY")); //TODO Set orientation of Player AND Character in MovingObject
+            direction = player.orientation * -1;
+        }
+
         if (!canMove || isMoving || onCoolDown || onExit) return; // We wait until Character is done moving. //TODO move this line to MovingObject.
-        
+
         //Debug.Log(direction);
 
         if (direction == Vector3.zero)
@@ -48,32 +56,10 @@ public class CharMovement: MovingObject
                 StartCoroutine(CoolDown(moveTime)); // Starts cool-down timer.
                 CheckCollision((int)direction.x, (int)direction.y); // Moves Character if possible.
 
-                if (hasObstacle)
-                {
-                    CheckDecisionTime();
-                }
-                else
-                    CheckDecisionTime();
+                CheckDecisionTime();
             }
             else
                 CheckDecisionTime();
-        }
-        else
-        {
-
-            //TODO This whole "changing orientation" part needs to move to an interactable-class.
-            if (Input.GetButtonDown("Interact") && Interact.playerInRange)
-            {
-                // Sets correct orientation for Character.
-                if (player.horizontal == 0 && player.vertical == -1) // Down
-                    SetAnimations(0, 1); // Up
-                else if (player.horizontal == 0 && player.vertical == 1) // Up
-                    SetAnimations(0, -1); // Down
-                else if (player.horizontal == -1 && player.vertical == 0) // Left
-                    SetAnimations(1, 0); // Right
-                else if (player.horizontal == 1 && player.vertical == 0) // Right
-                    SetAnimations(-1, 0); // Left
-            }
         }
     }
 

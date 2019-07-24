@@ -1,4 +1,8 @@
-﻿using System.Collections;
+﻿//TODO Clean up code, document and comment, fix animation bugs.
+//TODO Make Interactable-class to store info for all interactables.
+//TODO Move all typing functionality to seperate class?
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,25 +13,29 @@ public class Interact : MonoBehaviour
 
     // public string dialog;
     public static bool playerInRange;
+
     public string playerTag = "Player";
+
     public GameObject dialogBox;
+    public GameObject continueIcon;
+    public GameObject stopIcon;
+
     public TextMeshProUGUI textDisplay;
+    
     public string[] sentences;
-    public float typingSpeed;
-    private int index;
 
-    public PlayerMovement player;
-    public CharMovement npc;
-    private Animator anim;
+    public float typingSpeed = 0.05f;
+    public float speedMultiplier = 0.5f;
 
-    //public bool isInteracting = Input.GetButtonDown("Interact");
+    private bool _isStringBeingRevealed = false;
+    private bool _isDialoguePlaying = false;
+    private bool _isEndOfDialogue = false;
 
     void Start()
     {
-        player = GameObject.Find("Player").GetComponent<PlayerMovement>();
-        npc = GameObject.Find("NPC").GetComponent<CharMovement>();
+        textDisplay.text = "";
 
-        anim = npc.GetComponent<Animator>();
+        HideIcons();
     }
 
     // Update is called once per frame
@@ -35,15 +43,18 @@ public class Interact : MonoBehaviour
     {
         if (Input.GetButtonDown("Interact") && playerInRange) 
         {
-
-            if (dialogBox.activeInHierarchy)
+            if (dialogBox.activeInHierarchy && !_isDialoguePlaying)
             {
                 dialogBox.SetActive(false);
             }
             else
             {
                 dialogBox.SetActive(true);
-                StartCoroutine(Type());
+                if (!_isDialoguePlaying)
+                {
+                    _isDialoguePlaying = true;
+                    StartCoroutine(StartDialogue());
+                }
             }
         }
 
@@ -55,49 +66,109 @@ public class Interact : MonoBehaviour
         {
             playerInRange = true;
 
-            Debug.Log("In range");
+            //Debug.Log("In range");
         }
     }
-
+    
     private void OnTriggerExit2D(Collider2D other)
     {
         if (other.CompareTag(playerTag))
         {
             playerInRange = false;
-            Debug.Log("Not in range");
+
+            //Debug.Log("Not in range");
         }
     }
 
-    IEnumerator Type()
+    private IEnumerator StartDialogue()
     {
+        int dialogueLength = sentences.Length;
+        int currentDialogueIndex = 0;
+
+        while (currentDialogueIndex < dialogueLength || !_isStringBeingRevealed)
+        {
+            if (!_isStringBeingRevealed)
+            {
+                _isStringBeingRevealed = true;
+                StartCoroutine(DisplayText(sentences[currentDialogueIndex++]));
+
+                if (currentDialogueIndex >= dialogueLength)
+                {
+                    _isEndOfDialogue = true;
+                }
+            }
+
+            yield return 0;
+        }
+
+        while (true)
+        {
+            if (Input.GetButtonDown("Interact"))
+                break;
+
+            yield return 0;
+        }
+
+        HideIcons();
+        _isEndOfDialogue = false;
+        _isDialoguePlaying = false;
+    }
+
+    IEnumerator DisplayText(string text)
+    {
+        int textLength = text.Length;
+        int currentChar = 0;
+
+        HideIcons();
+
         textDisplay.text = "";
-        foreach (char letter in sentences[index].ToCharArray())
+
+        while (currentChar < textLength)
         {
-            textDisplay.text += letter;
-            yield return new WaitForSeconds(typingSpeed);
+            textDisplay.text += text[currentChar];
+            currentChar++;
+
+            if (currentChar < textLength)
+            {
+                if (Input.GetButton("Interact"))
+                    yield return new WaitForSeconds(typingSpeed * speedMultiplier);
+                else
+                    yield return new WaitForSeconds(typingSpeed);
+            }
+            else
+                break;
         }
+
+        ShowIcon();
+
+        while (true)
+        {
+            if (Input.GetButtonDown("Interact"))
+                break;
+
+            yield return 0;
+        }
+
+        HideIcons();
+
+        _isStringBeingRevealed = false; 
+        textDisplay.text = "";
     }
 
-    private void NextSentece()
+    private void HideIcons()
     {
-        if (index < sentences.Length - 1)
-        {
-            index++;
-            textDisplay.text = "";
-            StartCoroutine(Type());
-        }
-        else
-        {
-            textDisplay.text = "";
-        }
+        continueIcon.SetActive(false);
+        stopIcon.SetActive(false);
     }
 
-    /*
-     * 
-     */
-    private void SetAnimations(int xDir, int yDir)
+    private void ShowIcon()
     {
-        anim.SetFloat("moveX", xDir);
-        anim.SetFloat("moveY", yDir);
+        if (_isEndOfDialogue)
+        {
+            stopIcon.SetActive(true);
+            return;
+        }
+
+        continueIcon.SetActive(true);
     }
 }

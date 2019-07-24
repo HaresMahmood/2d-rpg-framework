@@ -30,6 +30,8 @@ public abstract class MovingObject : MonoBehaviour
     [HideInInspector]
     public Animator anim;
 
+    public Vector2 orientation; //TODO Check CharMovement
+
     /*
      * Start is called before the first frame update
      */
