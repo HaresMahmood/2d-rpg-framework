@@ -1,4 +1,4 @@
-﻿//TODO Clean up code, document and comment, fix animation bugs.
+﻿//TODO Clean up code, document and comment.
 
 using UnityEngine;
 
@@ -28,7 +28,7 @@ public class CharMovement: MovingObject
     void Update()
     {
         //TODO Find more neat way to implement changing of orientation on Player interaction.
-        if (Input.GetButtonDown("Interact") && Interact.playerInRange)
+        if (Input.GetButtonDown("Interact") && InteractableObject.playerInRange)
         {
             player.orientation = new Vector2(player.anim.GetFloat("moveX"), player.anim.GetFloat("moveY")); //TODO Set orientation of Player AND Character in MovingObject
             direction = player.orientation * -1;

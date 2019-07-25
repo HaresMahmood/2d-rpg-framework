@@ -5812,7 +5812,7 @@ GameObject:
   - component: {fileID: 756678822}
   - component: {fileID: 756678830}
   - component: {fileID: 756678828}
-  - component: {fileID: 756678825}
+  - component: {fileID: 756678831}
   - component: {fileID: 756678827}
   - component: {fileID: 756678824}
   - component: {fileID: 756678826}
@@ -5913,28 +5913,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2.9657362, y: 2.955947}
   m_EdgeRadius: 0
---- !u!114 &756678825
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 756678821}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9972fa3fd670d0f469813dbb961144c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerTag: Player
-  dialogBox: {fileID: 1015638167}
-  continueIcon: {fileID: 282495009}
-  stopIcon: {fileID: 1040860972}
-  textDisplay: {fileID: 2053802022}
-  sentences:
-  - Hi! Nice to meet you! What's your name? Me? I don't really have one...
-  - Nice to have a chat with you. Seeya!
-  typingSpeed: 0.05
-  speedMultiplier: 0.01
 --- !u!61 &756678826
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6048,6 +6026,24 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &756678831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 756678821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8432f0dae8cd2cf4e8d4913f16e760e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialog:
+    name: Henry
+    sentences:
+    - Hi! Nice to meet you! What's your name? Me? I don't really have one...
+    - Nice to have a chat with you. Seeya!
+  playerTag: Player
 --- !u!1 &783331770
 GameObject:
   m_ObjectHideFlags: 0
@@ -6368,6 +6364,58 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1040860972}
   m_CullTransparentMesh: 0
+--- !u!1 &1071743728
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1071743730}
+  - component: {fileID: 1071743729}
+  m_Layer: 0
+  m_Name: DialogManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1071743729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1071743728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db59d86006b6c344c843e84a21dd8293, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogBox: {fileID: 1015638167}
+  continueIcon: {fileID: 282495009}
+  stopIcon: {fileID: 1040860972}
+  textDisplay: {fileID: 2053802022}
+  typingSpeed: 0.05
+  speedMultiplier: 0.01
+  _isStringBeingRevealed: 0
+  _isDialoguePlaying: 0
+  _isEndOfDialogue: 0
+--- !u!4 &1071743730
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1071743728}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.95565116, y: 3.7143087, z: -9.964456}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1315979524
 GameObject:
   m_ObjectHideFlags: 0
@@ -7167,6 +7215,9 @@ MonoBehaviour:
   sentences: []
   typingSpeed: 0
   speedMultiplier: 0.5
+  _isStringBeingRevealed: 0
+  _isDialoguePlaying: 0
+  _isEndOfDialogue: 0
   scene: SampleHouse
   startPosition: {x: -11.483, y: 2.783}
   orientation: 0

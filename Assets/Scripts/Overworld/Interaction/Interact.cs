@@ -1,7 +1,4 @@
-﻿//TODO Clean up code, document and comment, fix animation bugs.
-//TODO Make Interactable-class to store info for all interactables.
-//TODO Move all typing functionality to seperate class?
-//TODO Stop-icon NOT appearing. (it only appears if I do NOT hold down Interact-button when the last sentece is being typed).
+﻿
 
 using System.Collections;
 using System.Collections.Generic;
@@ -11,9 +8,7 @@ using TMPro;
 
 public class Interact : MonoBehaviour
 {
-
     public static bool playerInRange;
-
     public string playerTag = "Player";
 
     public GameObject dialogBox;
@@ -59,27 +54,6 @@ public class Interact : MonoBehaviour
                 }
             }
         }
-
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag(playerTag)) 
-        {
-            playerInRange = true;
-
-            //Debug.Log("In range");
-        }
-    }
-    
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.CompareTag(playerTag))
-        {
-            playerInRange = false;
-
-            //Debug.Log("Not in range");
-        }
     }
 
     private IEnumerator StartDialogue()
@@ -99,7 +73,6 @@ public class Interact : MonoBehaviour
                     _isEndOfDialogue = true;
                 }
             }
-
             yield return 0;
         }
 
@@ -116,7 +89,7 @@ public class Interact : MonoBehaviour
         _isDialoguePlaying = false;
     }
 
-    IEnumerator DisplayText(string text)
+    private IEnumerator DisplayText(string text)
     {
         int textLength = text.Length;
         int currentChar = 0;
@@ -157,11 +130,33 @@ public class Interact : MonoBehaviour
         textDisplay.text = "";
     }
 
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag(playerTag))
+        {
+            playerInRange = true;
+
+            //Debug.Log("In range");
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag(playerTag))
+        {
+            playerInRange = false;
+
+            //Debug.Log("Not in range");
+        }
+    }
+
     private void HideIcons()
     {
         continueIcon.SetActive(false);
         stopIcon.SetActive(false);
     }
+
+
 
     private void ShowIcon()
     {
