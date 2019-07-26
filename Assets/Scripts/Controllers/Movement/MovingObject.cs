@@ -60,16 +60,16 @@ public abstract class MovingObject : MonoBehaviour
 
         foreach (var t in groundTiles)
         {
-            if (getTile(t, startTile) != null) // If Character is currently standing on a ground-tile, ...
+            if (GetTile(t, startTile) != null) // If Character is currently standing on a ground-tile, ...
                 onGround = true;
 
-            if (getTile(t, targetTile) != null) // If target-tile is a ground-tile, ...
+            if (GetTile(t, targetTile) != null) // If target-tile is a ground-tile, ...
                 hasGround = true;
         }
 
         foreach (var t in obstacleTiles)
         {
-            if (getTile(t, targetTile) != null) // If target-tile is an obstacle-tile, ..
+            if (GetTile(t, targetTile) != null) // If target-tile is an obstacle-tile, ..
                 hasObstacle = true; 
         }
 
@@ -157,7 +157,7 @@ public abstract class MovingObject : MonoBehaviour
      * Vector 2 pos for position.
      * Returns a boolean (true/false).
      */
-    protected bool hasTile(Tilemap tilemap, Vector2 pos)
+    protected bool HasTile(Tilemap tilemap, Vector2 pos)
     {
         return tilemap.HasTile(tilemap.WorldToCell(pos));
     }
@@ -168,7 +168,7 @@ public abstract class MovingObject : MonoBehaviour
      * Vector 2 pos for position.
      * Returns a TileBase (tile).
      */
-    protected TileBase getTile(Tilemap tilemap, Vector2 pos)
+    protected TileBase GetTile(Tilemap tilemap, Vector2 pos)
     {
         return tilemap.GetTile(tilemap.WorldToCell(pos));
     }

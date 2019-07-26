@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class DialogManager : MonoBehaviour
@@ -10,45 +9,58 @@ public class DialogManager : MonoBehaviour
     public GameObject continueIcon;
     public GameObject stopIcon;
 
-    public TextMeshProUGUI textDisplay;
+    public TextMeshProUGUI dialogText;
 
     public float typingSpeed = 0.05f;
     public float speedMultiplier = 0.01f;
 
-    public bool _isStringBeingRevealed = false;
-    public bool _isDialoguePlaying = false;
-    public bool _isEndOfDialogue = false;
+    public Animator anim;
+
+    public bool isActive = false;
+    public bool isTyping = false;
+    public bool hasEnded = false;
 
     void Start()
     {
-        textDisplay.text = "";
+        anim = dialogBox.GetComponent<Animator>();
 
+        ResetText();
         HideIcons();
     }
 
     void Update()
     {
-        if (!_isStringBeingRevealed && !_isDialoguePlaying)
+        if (!isTyping && !isActive)
+        {
             dialogBox.SetActive(false);
+        }
     }
+
+    public IEnumerator PlayAnimation()
+    {
+        anim.SetBool("isOpen", true);
+        yield return new WaitForSeconds(0.5f);
+    }
+
 
     public IEnumerator StartDialog(string[] sentences)
     {
-        int dialogueLength = sentences.Length;
-        int currentDialogueIndex = 0;
+        int dialogLength = sentences.Length;
+        int currentSentence = 0;
 
-        while (currentDialogueIndex < dialogueLength || !_isStringBeingRevealed)
+        while (currentSentence < dialogLength || !isTyping)
         {
-            if (!_isStringBeingRevealed)
+            if (!isTyping)
             {
-                _isStringBeingRevealed = true;
-                StartCoroutine(TypeSentence(sentences[currentDialogueIndex++]));
+                isTyping = true;
+                StartCoroutine(TypeSentence(sentences[currentSentence++]));
 
-                if (currentDialogueIndex >= dialogueLength)
+                if (currentSentence >= dialogLength)
                 {
-                    _isEndOfDialogue = true;
+                    hasEnded = true;
                 }
             }
+
             yield return 0;
         }
 
@@ -56,31 +68,33 @@ public class DialogManager : MonoBehaviour
         {
             if (Input.GetButtonDown("Interact"))
                 break;
+                    
+
 
             yield return 0;
         }
 
         HideIcons();
 
-        _isEndOfDialogue = false;
-        _isDialoguePlaying = false;
+        hasEnded = false;
+        isActive = false;
     }
 
     private IEnumerator TypeSentence(string sentence)
     {
-        int textLength = sentence.Length;
+        int sentenceLength = sentence.Length;
         int currentChar = 0;
 
         HideIcons();
 
-        textDisplay.text = "";
+        ResetText();
 
-        while (currentChar < textLength)
+        while (currentChar < sentenceLength)
         {
-            textDisplay.text += sentence[currentChar];
+            dialogText.text += sentence[currentChar];
             currentChar++;
 
-            if (currentChar < textLength)
+            if (currentChar < sentenceLength)
             {
                 if (Input.GetButton("Interact"))
                     yield return new WaitForSeconds(typingSpeed * speedMultiplier);
@@ -102,9 +116,13 @@ public class DialogManager : MonoBehaviour
         }
 
         HideIcons();
+        isTyping = false;
+        ResetText();
+    }
 
-        _isStringBeingRevealed = false;
-        textDisplay.text = "";
+    private void ResetText()
+    {
+        dialogText.text = "";
     }
 
     private void HideIcons()
@@ -115,7 +133,7 @@ public class DialogManager : MonoBehaviour
 
     private void ShowIcon()
     {
-        if (_isEndOfDialogue)
+        if (hasEnded)
         {
             stopIcon.SetActive(true);
             return;
@@ -123,5 +141,11 @@ public class DialogManager : MonoBehaviour
 
         continueIcon.SetActive(true);
     }
-
+    
+    /*public void SetAnimations()
+    {
+        if (isActive)
+            anim.SetBool("isOpen", true);
+            
+    }*/
 }

@@ -49,7 +49,7 @@ public class CharMovement: MovingObject
             SetAnimations((int)direction.x, (int)direction.y);
         }
 
-        if (!Interact.playerInRange && canMove) // If Player is not in range and Character is able to move, ...
+        if (!InteractableObject.playerInRange && canMove) // If Player is not in range and Character is able to move, ...
         {
             if (bounds.bounds.Contains(transform.position + direction)) // If target-tile is withing the set boundary.
             {
