@@ -12,9 +12,10 @@ public class DialogManager : MonoBehaviour
     public TextMeshProUGUI dialogText;
 
     public float typingSpeed = 0.05f;
-    public float speedMultiplier = 0.01f;
+    public float speedMultiplier = 0.005f;
 
     public Animator anim;
+    public PlayerMovement player;
 
     public bool isActive = false;
     public bool isTyping = false;
@@ -23,6 +24,7 @@ public class DialogManager : MonoBehaviour
     void Start()
     {
         anim = dialogBox.GetComponent<Animator>();
+        player = GameObject.Find("Player").GetComponent<PlayerMovement>();
 
         ResetText();
         HideIcons();
@@ -32,16 +34,22 @@ public class DialogManager : MonoBehaviour
     {
         if (!isTyping && !isActive)
         {
-            dialogBox.SetActive(false);
+            if (anim.gameObject.activeSelf)
+            {
+                //Debug.Log("TRUE");
+
+                StartCoroutine(PlayAnimation());
+
+                player.canMove = true;
+
+                //dialogBox.SetActive(false);
+            }
+        }
+        else
+        {
+            player.canMove = false;
         }
     }
-
-    public IEnumerator PlayAnimation()
-    {
-        anim.SetBool("isOpen", true);
-        yield return new WaitForSeconds(0.5f);
-    }
-
 
     public IEnumerator StartDialog(string[] sentences)
     {
@@ -68,8 +76,6 @@ public class DialogManager : MonoBehaviour
         {
             if (Input.GetButtonDown("Interact"))
                 break;
-                    
-
 
             yield return 0;
         }
@@ -118,6 +124,12 @@ public class DialogManager : MonoBehaviour
         HideIcons();
         isTyping = false;
         ResetText();
+    }
+
+    public IEnumerator PlayAnimation()
+    {
+        anim.SetBool("isOpen", true);
+        yield return new WaitForSeconds(0.1f);
     }
 
     private void ResetText()

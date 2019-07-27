@@ -1464,6 +1464,7 @@ GameObject:
   - component: {fileID: 282495010}
   - component: {fileID: 282495012}
   - component: {fileID: 282495011}
+  - component: {fileID: 282495013}
   m_Layer: 5
   m_Name: Continue
   m_TagString: Untagged
@@ -1528,6 +1529,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 282495009}
   m_CullTransparentMesh: 0
+--- !u!95 &282495013
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 282495009}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ac1bbe3d1cd69ef4aadf001d410867da, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &303366303
 GameObject:
   m_ObjectHideFlags: 0
@@ -6241,6 +6261,7 @@ GameObject:
   - component: {fileID: 1040860973}
   - component: {fileID: 1040860975}
   - component: {fileID: 1040860974}
+  - component: {fileID: 1040860976}
   m_Layer: 5
   m_Name: Stop
   m_TagString: Untagged
@@ -6305,6 +6326,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1040860972}
   m_CullTransparentMesh: 0
+--- !u!95 &1040860976
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1040860972}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2c6eeb7c67f988643982698aef712be2, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1071743728
 GameObject:
   m_ObjectHideFlags: 0
@@ -6339,8 +6379,9 @@ MonoBehaviour:
   stopIcon: {fileID: 1040860972}
   dialogText: {fileID: 2053802022}
   typingSpeed: 0.05
-  speedMultiplier: 0.01
+  speedMultiplier: 0.005
   anim: {fileID: 0}
+  player: {fileID: 0}
   isActive: 0
   isTyping: 0
   hasEnded: 0
