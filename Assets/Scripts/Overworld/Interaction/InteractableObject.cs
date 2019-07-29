@@ -15,10 +15,21 @@ public class InteractableObject : MonoBehaviour
 
     public static bool playerInRange;
     public string playerTag = "Player";
+
+    public bool hasOptions;
+
+    public string option1;
+    public string option2;
     
     void Start()
     {
         dialogManager = FindObjectOfType<DialogManager>();
+
+        hasOptions = dialog.hasOptions;
+        Debug.Log(dialog.hasOptions);
+
+        option1 = dialog.options[0];
+        option2 = dialog.options[1];
     }
 
     void Update()
@@ -27,14 +38,19 @@ public class InteractableObject : MonoBehaviour
         {
             Debug.Log("INTERACTING");
             if (dialogManager.dialogBox.activeInHierarchy && !dialogManager.isActive)
+            {
                 dialogManager.dialogBox.SetActive(false);
+                dialogManager.nameBox.SetActive(false);
+            }
             else
             {
                 if (!dialogManager.isActive)
                 {
                     dialogManager.isActive = true;
                     dialogManager.dialogBox.SetActive(true);
+                    dialogManager.nameBox.SetActive(true);
 
+                    SetName();
                     TriggerDialog();
                 }
             }
@@ -44,6 +60,12 @@ public class InteractableObject : MonoBehaviour
     public void TriggerDialog()
     {
        StartCoroutine(dialogManager.StartDialog(dialog.sentences));
+    }
+
+    public void SetName()
+    {
+        dialogManager.nameText.text = "";
+        dialogManager.nameText.text = dialog.name;
     }
 
     private void OnTriggerEnter2D(Collider2D other)

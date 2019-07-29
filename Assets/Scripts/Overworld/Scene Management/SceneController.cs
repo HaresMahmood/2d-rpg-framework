@@ -65,7 +65,7 @@ public class SceneController : Interact
         if (other.CompareTag(playerTag))
         {
             playerInRange = true;
-            Debug.Log("In range");
+            //Debug.Log("In range");
         }
     }
 
@@ -74,7 +74,7 @@ public class SceneController : Interact
         if (other.CompareTag(playerTag))
         {
             playerInRange = false;
-            Debug.Log("Not in range");
+            //Debug.Log("Not in range");
         }
     }
 

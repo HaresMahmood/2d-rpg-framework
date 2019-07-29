@@ -6,16 +6,25 @@ using TMPro;
 public class DialogManager : MonoBehaviour
 {
     public GameObject dialogBox;
+    public GameObject nameBox;
+    public GameObject optionBoxes;
+
     public GameObject continueIcon;
     public GameObject stopIcon;
+    public GameObject optionIcon;
 
     public TextMeshProUGUI dialogText;
+    public TextMeshProUGUI nameText;
+
+    public TextMeshProUGUI option1;
+    public TextMeshProUGUI option2;
 
     public float typingSpeed = 0.05f;
     public float speedMultiplier = 0.005f;
 
     public Animator anim;
     public PlayerMovement player;
+    public InteractableObject interactable;
 
     public bool isActive = false;
     public bool isTyping = false;
@@ -25,6 +34,8 @@ public class DialogManager : MonoBehaviour
     {
         anim = dialogBox.GetComponent<Animator>();
         player = GameObject.Find("Player").GetComponent<PlayerMovement>();
+        
+        optionBoxes.SetActive(false); // Make into something like "HideOptions"-function
 
         ResetText();
         HideIcons();
@@ -39,6 +50,8 @@ public class DialogManager : MonoBehaviour
                 //Debug.Log("TRUE");
 
                 StartCoroutine(PlayAnimation());
+                nameBox.SetActive(false);
+                nameText.text = "";
 
                 player.canMove = true;
 
@@ -48,6 +61,30 @@ public class DialogManager : MonoBehaviour
         else
         {
             player.canMove = false;
+        }
+
+        if (interactable.hasOptions)
+        {
+            Debug.Log("HAS OPTIONS");
+            if (hasEnded && !isTyping)
+            {
+                Debug.Log("HAS ENDED");
+
+                optionBoxes.SetActive(true);
+                option1.SetText(interactable.option1);
+                option2.SetText(interactable.option2);
+
+                if (Input.GetAxisRaw("Vertical") == -1 && optionIcon.transform.position != new Vector3(300, 323))
+                {
+                    optionIcon.transform.position = new Vector3(300, 243);
+                }
+                else if (Input.GetAxisRaw("Vertical") == 1 && optionIcon.transform.position != new Vector3(300, 243))
+                {
+                    optionIcon.transform.position = new Vector3(300, 323);
+                }
+
+               
+            }
         }
     }
 
