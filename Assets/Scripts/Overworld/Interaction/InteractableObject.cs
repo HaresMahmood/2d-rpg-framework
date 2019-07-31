@@ -1,71 +1,40 @@
-﻿//TODO Clean up code, document and comment, fix animation bugs.
-//TODO Stop-icon NOT appearing. (it only appears if I do NOT hold down Interact-button when the last sentece is being typed).
-//TODO Move all UI-changing functionality in update function to DialogManager.
-//TODO Fix bug where NPC doesn't interact and only changes orientation the first time Interact button is pressed and only interacts on second press.
+﻿//TODO: Change variable names.
 
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class InteractableObject : MonoBehaviour
 {
-    public Dialog dialog;
     private DialogManager dialogManager;
+    public Dialog dialogue;
 
     public static bool playerInRange;
     public string playerTag = "Player";
 
-    public bool hasOptions;
-
-    public string option1;
-    public string option2;
-    
     void Start()
     {
         dialogManager = FindObjectOfType<DialogManager>();
-
-        hasOptions = dialog.hasOptions;
-        Debug.Log(dialog.hasOptions);
-
-        option1 = dialog.options[0];
-        option2 = dialog.options[1];
     }
 
     void Update()
     {
-        if (Input.GetButtonDown("Interact") && InteractableObject.playerInRange)
+        if (playerInRange)
         {
-            Debug.Log("INTERACTING");
-            if (dialogManager.dialogBox.activeInHierarchy && !dialogManager.isActive)
+            if (Input.GetButtonDown("Interact") && !dialogManager.isActive && !dialogManager.isTyping)
             {
-                dialogManager.dialogBox.SetActive(false);
-                dialogManager.nameBox.SetActive(false);
+                TriggerDialogue();
             }
-            else
+            else if (Input.GetButtonDown("Interact") && dialogManager.isActive && !dialogManager.isTyping)
             {
-                if (!dialogManager.isActive)
-                {
-                    dialogManager.isActive = true;
-                    dialogManager.dialogBox.SetActive(true);
-                    dialogManager.nameBox.SetActive(true);
-
-                    SetName();
-                    TriggerDialog();
-                }
+                dialogManager.DisplayNextSentence();
             }
         }
     }
 
-    public void TriggerDialog()
+    public void TriggerDialogue()
     {
-       StartCoroutine(dialogManager.StartDialog(dialog.sentences));
-    }
-
-    public void SetName()
-    {
-        dialogManager.nameText.text = "";
-        dialogManager.nameText.text = dialog.name;
+        dialogManager.StartDialogue(dialogue);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -83,4 +52,5 @@ public class InteractableObject : MonoBehaviour
             playerInRange = false;
         }
     }
+
 }

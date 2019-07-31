@@ -1,200 +1,169 @@
-﻿using System.Collections;
+﻿//TODO: 
+//- Change variable names.
+//- Look into animations by watching
+//Brackey's video.
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class DialogManager : MonoBehaviour
 {
-    public GameObject dialogBox;
-    public GameObject nameBox;
-    public GameObject optionBoxes;
+
+    public TextMeshProUGUI nameText;
+    public TextMeshProUGUI dialogueText;
+
+    public GameObject dBox;
 
     public GameObject continueIcon;
-    public GameObject stopIcon;
-    public GameObject optionIcon;
 
-    public TextMeshProUGUI dialogText;
-    public TextMeshProUGUI nameText;
+    public bool isActive;
+    public bool isTyping;
 
-    public TextMeshProUGUI option1;
-    public TextMeshProUGUI option2;
+    public Animator animator;
 
-    public float typingSpeed = 0.05f;
-    public float speedMultiplier = 0.005f;
+    public float waitTime = 0.02f;
 
-    public Animator anim;
-    public PlayerMovement player;
-    public InteractableObject interactable;
+    private Queue<string> sentences;
 
-    public bool isActive = false;
-    public bool isTyping = false;
-    public bool hasEnded = false;
-
+    // Use this for initialization
     void Start()
     {
-        anim = dialogBox.GetComponent<Animator>();
-        player = GameObject.Find("Player").GetComponent<PlayerMovement>();
-        
-        optionBoxes.SetActive(false); // Make into something like "HideOptions"-function
-
-        ResetText();
-        HideIcons();
+        sentences = new Queue<string>();
     }
 
     void Update()
     {
+        DisplayIcon();
+
+        /*
         if (!isTyping && !isActive)
         {
-            if (anim.gameObject.activeSelf)
+            if (animator.gameObject.activeSelf)
             {
-                //Debug.Log("TRUE");
-
+                Debug.Log("ACTIVE");
                 StartCoroutine(PlayAnimation());
-                nameBox.SetActive(false);
-                nameText.text = "";
-
-                player.canMove = true;
-
-                //dialogBox.SetActive(false);
             }
         }
-        else
+        */
+    }
+    
+    public void StartDialogue(Dialog dialogue)
+    {
+        dBox.SetActive(true);
+        isActive = true;
+
+        nameText.text = dialogue.name;
+
+        sentences.Clear();
+
+        foreach (string sentence in dialogue.sentences)
         {
-            player.canMove = false;
+            sentences.Enqueue(sentence);
         }
 
-        if (interactable.hasOptions)
-        {
-            Debug.Log("HAS OPTIONS");
-            if (hasEnded && !isTyping)
-            {
-                Debug.Log("HAS ENDED");
-
-                optionBoxes.SetActive(true);
-                option1.SetText(interactable.option1);
-                option2.SetText(interactable.option2);
-
-                if (Input.GetAxisRaw("Vertical") == -1 && optionIcon.transform.position != new Vector3(300, 323))
-                {
-                    optionIcon.transform.position = new Vector3(300, 243);
-                }
-                else if (Input.GetAxisRaw("Vertical") == 1 && optionIcon.transform.position != new Vector3(300, 243))
-                {
-                    optionIcon.transform.position = new Vector3(300, 323);
-                }
-
-               
-            }
-        }
+        DisplayNextSentence();
     }
 
-    public IEnumerator StartDialog(string[] sentences)
+    public void DisplayNextSentence()
     {
-        int dialogLength = sentences.Length;
-        int currentSentence = 0;
-
-        while (currentSentence < dialogLength || !isTyping)
+       if (sentences.Count == 0)
         {
-            if (!isTyping)
-            {
-                isTyping = true;
-                StartCoroutine(TypeSentence(sentences[currentSentence++]));
-
-                if (currentSentence >= dialogLength)
-                {
-                    hasEnded = true;
-                }
-            }
-
-            yield return 0;
-        }
-
-        while (true)
-        {
-            if (Input.GetButtonDown("Interact"))
-                break;
-
-            yield return 0;
-        }
-
-        HideIcons();
-
-        hasEnded = false;
-        isActive = false;
-    }
-
-    private IEnumerator TypeSentence(string sentence)
-    {
-        int sentenceLength = sentence.Length;
-        int currentChar = 0;
-
-        HideIcons();
-
-        ResetText();
-
-        while (currentChar < sentenceLength)
-        {
-            dialogText.text += sentence[currentChar];
-            currentChar++;
-
-            if (currentChar < sentenceLength)
-            {
-                if (Input.GetButton("Interact"))
-                    yield return new WaitForSeconds(typingSpeed * speedMultiplier);
-                else
-                    yield return new WaitForSeconds(typingSpeed);
-            }
-            else
-                break;
-        }
-
-        ShowIcon();
-
-        while (true)
-        {
-            if (Input.GetButtonDown("Interact"))
-                break;
-
-            yield return 0;
-        }
-
-        HideIcons();
-        isTyping = false;
-        ResetText();
-    }
-
-    public IEnumerator PlayAnimation()
-    {
-        anim.SetBool("isOpen", true);
-        yield return new WaitForSeconds(0.1f);
-    }
-
-    private void ResetText()
-    {
-        dialogText.text = "";
-    }
-
-    private void HideIcons()
-    {
-        continueIcon.SetActive(false);
-        stopIcon.SetActive(false);
-    }
-
-    private void ShowIcon()
-    {
-        if (hasEnded)
-        {
-            stopIcon.SetActive(true);
+            EndDialogue();
             return;
         }
 
-        continueIcon.SetActive(true);
+        //DisplayIcon();
+
+        string sentence = sentences.Dequeue();
+        StopAllCoroutines();
+        StartCoroutine(TypeSentence(sentence));
     }
-    
-    /*public void SetAnimations()
+
+    IEnumerator TypeSentence(string sentence)
     {
-        if (isActive)
-            anim.SetBool("isOpen", true);
-            
-    }*/
+
+        isTyping = true;
+
+        dialogueText.text = ""; //TODO: Turn into function called "ResetText()".
+
+        foreach (char letter in sentence.ToCharArray())
+        {
+            dialogueText.text += letter;
+
+            yield return new WaitForSeconds(waitTime);
+
+            if (Input.GetButtonDown("Interact") && isTyping)
+            {
+                dialogueText.text = "";
+                dialogueText.text = sentence;
+
+                break;
+            }
+        }
+
+        isTyping = false;
+    }
+
+    void EndDialogue()
+    {
+        isActive = false;
+
+        if (animator.gameObject.activeSelf)
+        {
+            StartCoroutine(PlayAnimation());
+        }
+    }
+
+    void DisplayIcon() //TODO: Rename to "ToggleIcon()".
+    {
+        if (!isTyping && isActive)
+            continueIcon.SetActive(true);
+        else
+            continueIcon.SetActive(false);
+    }
+
+    IEnumerator PlayAnimation()
+    {
+        animator.SetTrigger("isInactive");
+        yield return new WaitForSeconds(0.25f);
+
+        dBox.SetActive(false);
+    }
+
+    //TODO: Make into rich-text parsing function.
+    private string ParseRichText(string text)
+    {
+        bool loop = false;
+
+        string ret = "";
+
+        foreach (char x in text.ToCharArray())
+        {
+            if (x == '<')
+            {
+                loop = true;
+
+                ret += x + 1; //Dunno
+
+                continue;
+            }
+            else if (x == '>')
+            {
+                loop = false;
+                continue;
+            }
+            else if (loop)
+            {
+                continue;
+            }
+
+            //ret += x;
+        }
+
+        return ret;
+    }
+
 }

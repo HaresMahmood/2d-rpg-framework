@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneController : Interact
+public class SceneController : InteractableObject
 {
     public string scene;
     public Vector2 startPosition;
