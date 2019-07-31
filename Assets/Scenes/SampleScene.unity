@@ -1608,7 +1608,6 @@ TilemapCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   m_MaximumTileChangeCount: 1000
-  m_ExtrusionFactor: 0.00001
 --- !u!1 &133263125
 GameObject:
   m_ObjectHideFlags: 0
@@ -6312,7 +6311,7 @@ MonoBehaviour:
     name: Hank
     hasOptions: 0
     sentences:
-    - Hi! Nice to meet you! I guess I finally have a name now!
+    - Hi! Nice to meet you! I guess I finally have <b>a name</b> now!
     - Okay then. Seeya!
     options: []
   playerTag: Player
