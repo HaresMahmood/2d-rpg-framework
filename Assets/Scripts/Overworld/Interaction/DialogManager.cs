@@ -84,10 +84,13 @@ public class DialogManager : MonoBehaviour
 
     IEnumerator TypeSentence(string sentence)
     {
-
         isTyping = true;
 
         dialogueText.text = ""; //TODO: Turn into function called "ResetText()".
+ 
+ 
+        //Debug.Log(ParseRichText(sentence));
+
 
         foreach (char letter in sentence.ToCharArray())
         {
@@ -142,25 +145,22 @@ public class DialogManager : MonoBehaviour
 
         foreach (char x in text.ToCharArray())
         {
-            if (x == '<')
+            if (x == '>')
             {
                 loop = true;
 
-                ret += x + 1; //Dunno
+                if (x == '<')
+                {
+                    loop = false;
+                }
+            }
 
-                continue;
-            }
-            else if (x == '>')
+            while (loop)
             {
-                loop = false;
-                continue;
-            }
-            else if (loop)
-            {
+                ret += x;
                 continue;
             }
 
-            //ret += x;
         }
 
         return ret;
