@@ -27,7 +27,7 @@ public class DialogManager : MonoBehaviour
     public float waitTime = 0.02f;
 
     private Queue<string> sentences;
-
+    
     // Use this for initialization
     void Start()
     {
@@ -79,7 +79,8 @@ public class DialogManager : MonoBehaviour
 
         string sentence = sentences.Dequeue();
         StopAllCoroutines();
-        StartCoroutine(TypeSentence(sentence));
+
+        StartCoroutine(RevealText(sentence));
     }
 
     IEnumerator TypeSentence(string sentence)
@@ -97,6 +98,38 @@ public class DialogManager : MonoBehaviour
             dialogueText.text += letter;
 
             yield return new WaitForSeconds(waitTime);
+
+            if (Input.GetButtonDown("Interact") && isTyping)
+            {
+                dialogueText.text = "";
+                dialogueText.text = sentence;
+
+                break;
+            }
+        }
+
+        isTyping = false;
+    }
+
+    IEnumerator RevealText(string sentence)
+    {
+        isTyping = true;
+
+        dialogueText.text = ""; //TODO: Turn into function called "ResetText()".
+
+        int charsRevealed = 0;
+
+        while (charsRevealed < sentence.Length)
+        {
+            while (sentence[charsRevealed] == ' ')
+                ++charsRevealed;
+
+            ++charsRevealed;
+
+            dialogueText.text = sentence.Substring(0, charsRevealed);
+
+            yield return new WaitForSeconds(waitTime);
+
 
             if (Input.GetButtonDown("Interact") && isTyping)
             {
