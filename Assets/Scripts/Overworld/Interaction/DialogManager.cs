@@ -5,15 +5,17 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 using TMPro;
 
 public class DialogManager : MonoBehaviour
 {
-
+    public TextMeshProUGUI dialogText;
     public TextMeshProUGUI nameText;
-    public TextMeshProUGUI dialogueText;
+    //public TextMeshProUGUI dialogueText;
 
     public GameObject dBox;
 
@@ -24,10 +26,10 @@ public class DialogManager : MonoBehaviour
 
     public Animator animator;
 
-    public float waitTime = 0.02f;
+    public float waitTime = 0.03f;
 
     private Queue<string> sentences;
-    
+
     // Use this for initialization
     void Start()
     {
@@ -49,7 +51,7 @@ public class DialogManager : MonoBehaviour
         }
         */
     }
-    
+
     public void StartDialogue(Dialog dialogue)
     {
         dBox.SetActive(true);
@@ -80,30 +82,42 @@ public class DialogManager : MonoBehaviour
         string sentence = sentences.Dequeue();
         StopAllCoroutines();
 
-        StartCoroutine(RevealText(sentence));
+        StartCoroutine(TypeSentence(sentence));
     }
 
     IEnumerator TypeSentence(string sentence)
     {
         isTyping = true;
 
-        dialogueText.text = ""; //TODO: Turn into function called "ResetText()".
- 
- 
-        //Debug.Log(ParseRichText(sentence));
+        dialogText.SetText(sentence);
 
+        dialogText.ForceMeshUpdate();
 
-        foreach (char letter in sentence.ToCharArray())
+        int totalVisibleCharacters = dialogText.textInfo.characterCount;
+        int counter = 0;
+
+        int visibleCount = 0;
+
+        while (visibleCount < totalVisibleCharacters)
         {
-            dialogueText.text += letter;
+            visibleCount = counter % (totalVisibleCharacters + 1);
 
+            dialogText.maxVisibleCharacters = visibleCount;
+
+            /*
+            if (visibleCount >= totalVisibleCharacters)
+            {
+                yield break;
+            }*/
+
+            counter++;
             yield return new WaitForSeconds(waitTime);
 
             if (Input.GetButtonDown("Interact") && isTyping)
             {
-                dialogueText.text = "";
-                dialogueText.text = sentence;
-
+                visibleCount = totalVisibleCharacters;
+                dialogText.maxVisibleCharacters = visibleCount;
+                dialogText.ForceMeshUpdate();
                 break;
             }
         }
@@ -115,7 +129,7 @@ public class DialogManager : MonoBehaviour
     {
         isTyping = true;
 
-        dialogueText.text = ""; //TODO: Turn into function called "ResetText()".
+        dialogText.text = ""; //TODO: Turn into function called "ResetText()".
 
         int charsRevealed = 0;
 
@@ -126,15 +140,15 @@ public class DialogManager : MonoBehaviour
 
             ++charsRevealed;
 
-            dialogueText.text = sentence.Substring(0, charsRevealed);
+            dialogText.text = sentence.Substring(0, charsRevealed);
 
             yield return new WaitForSeconds(waitTime);
 
 
             if (Input.GetButtonDown("Interact") && isTyping)
             {
-                dialogueText.text = "";
-                dialogueText.text = sentence;
+                dialogText.text = "";
+                dialogText.text = sentence;
 
                 break;
             }

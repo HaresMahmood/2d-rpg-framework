@@ -6311,7 +6311,8 @@ MonoBehaviour:
     name: Hank
     hasOptions: 0
     sentences:
-    - Hi! Nice to meet you! I guess I finally have a name now!
+    - Hi! Nice to meet you! I guess I finally have <color=#ff1100><b>a name</b></color>
+      now!
     - Okay then. Seeya!
     options: []
   playerTag: Player
@@ -6718,14 +6719,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a516b043198037d4f9d1996808cdf93f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dialogText: {fileID: 2053802022}
   nameText: {fileID: 82411371}
-  dialogueText: {fileID: 2053802022}
   dBox: {fileID: 1015638167}
   continueIcon: {fileID: 282495009}
   isActive: 0
   isTyping: 0
   animator: {fileID: 1015638171}
-  waitTime: 0.02
+  waitTime: 0.03
 --- !u!4 &1071743730
 Transform:
   m_ObjectHideFlags: 0
