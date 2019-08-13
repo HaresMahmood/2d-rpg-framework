@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿//TODO: Add "[UnityEngine.Header("Configuration")]"
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -20,15 +22,11 @@ public abstract class MovingObject : MonoBehaviour
     // Time it takes for Character to move 1 tile.
     public float moveTime;
 
-    [HideInInspector]
-    public bool canMove = true, isMoving = false, onCoolDown = false, onExit = false;
-    [HideInInspector]
-    public bool onGround, hasGround, hasObstacle, hasChar;
-
-    [HideInInspector]
-    public Collider2D coll;
-    [HideInInspector]
-    public Animator anim;
+    [HideInInspector] public bool canMove = true, isMoving = false, onCoolDown = false, onExit = false;
+    [HideInInspector] public bool onGround, hasGround, hasObstacle, hasChar;
+    
+    [HideInInspector] public Collider2D coll;
+    [HideInInspector] public Animator anim;
 
     public Vector2 orientation; //TODO Check CharMovement
 

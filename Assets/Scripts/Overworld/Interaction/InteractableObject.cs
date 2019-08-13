@@ -1,16 +1,17 @@
 ﻿//TODO: Change variable names.
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class InteractableObject : MonoBehaviour
 {
+    [UnityEngine.Header("Dialog")]
+    public Dialog dialog;
     private DialogManager dialogManager;
-    public Dialog dialogue;
 
-    public static bool playerInRange;
+    [UnityEngine.Header("Configuration")]
     public string playerTag = "Player";
+    [HideInInspector] public static bool playerInRange;
+    
 
     void Start()
     {
@@ -19,38 +20,34 @@ public class InteractableObject : MonoBehaviour
 
     void Update()
     {
-        if (playerInRange)
+        if (playerInRange && Input.GetButtonDown("Interact") && !dialogManager.isTyping)
         {
-            if (Input.GetButtonDown("Interact") && !dialogManager.isActive && !dialogManager.isTyping)
-            {
-                TriggerDialogue();
-            }
-            else if (Input.GetButtonDown("Interact") && dialogManager.isActive && !dialogManager.isTyping)
-            {
-                dialogManager.DisplayNextSentence();
-            }
+            if (!dialogManager.isActive)
+                StartDialogue();
+            else if (dialogManager.isActive)
+                NextSentence();
         }
     }
 
-    public void TriggerDialogue()
+    public void StartDialogue()
     {
-        dialogManager.StartDialogue(dialogue);
+        dialogManager.StartDialog(dialog);
+    }
+
+    public void NextSentence()
+    {
+        dialogManager.NextSentence();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag(playerTag))
-        {
             playerInRange = true;
-        }
     }
-
     private void OnTriggerExit2D(Collider2D other)
     {
         if (other.CompareTag(playerTag))
-        {
             playerInRange = false;
-        }
     }
 
 }

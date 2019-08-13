@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿//TODO: Add "[UnityEngine.Header("Configuration")]"
+
+using UnityEngine;
 
 /**
  * File-name: PlayerMovement.cs

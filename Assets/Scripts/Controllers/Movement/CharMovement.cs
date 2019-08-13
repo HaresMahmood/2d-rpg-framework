@@ -1,4 +1,5 @@
 ﻿//TODO Clean up code, document and comment.
+//TODO: Add "[UnityEngine.Header("Configuration")]"
 
 using UnityEngine;
 
