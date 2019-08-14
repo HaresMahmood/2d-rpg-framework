@@ -20,6 +20,7 @@ public class DialogManager : MonoBehaviour
     public bool isActive, isTyping;
 
     public bool hasDialogChoice; //Debug
+    public bool choiceMade = false; //Debug
 
     private TextMeshProUGUI dialogText, nameText;
     private Image continueIcon;
@@ -29,8 +30,16 @@ public class DialogManager : MonoBehaviour
     public MovingObject movingObject;
 
     private Queue<string> sentences;
-    private Queue<DialogSentences> dialogSentences;
+
+    private Queue<DialogConfig> dialogSentences;
+
     public string[] dialogChoices;
+    public GameObject[] choiceButtons;
+    public GameObject choiceButtonPrefab;
+    public float xPos;
+    public float yPosOffset = 40f;
+
+    public int vertical;
 
     // Use this for initialization
     void Start()
@@ -45,9 +54,7 @@ public class DialogManager : MonoBehaviour
 
         sentences = new Queue<string>();
 
-        dialogSentences = new Queue<DialogSentences>();
-
-        dialogChoices = new string[3];
+        dialogSentences = new Queue<DialogConfig>();
     }
 
     void Update()
@@ -67,17 +74,17 @@ public class DialogManager : MonoBehaviour
         dialogBox.SetActive(true);
         isActive = true;
 
-        nameText.text = dialog.name;
+        nameText.text = dialog.charName;
 
         dialogSentences.Clear();
 
-        foreach (DialogSentences dialogSentence in dialog.sentences) //TODO: Change name of DialogSentences.
+        foreach (DialogConfig dialogSentence in dialog.dialog) //TODO: Change name of DialogSentences.
         {
             sentences.Enqueue(dialogSentence.sentence);
 
         }
 
-        foreach (DialogSentences dialogSentence in dialog.sentences) //TODO: Change name of DialogSentences.
+        foreach (DialogConfig dialogSentence in dialog.dialog) //TODO: Change name of DialogSentences.
         {
             dialogSentences.Enqueue(dialogSentence);
         }
@@ -102,16 +109,12 @@ public class DialogManager : MonoBehaviour
 
         string sentence = sentences.Dequeue();
 
-        DialogSentences dialogSentence = dialogSentences.Dequeue();
+        DialogConfig dialogSentence = dialogSentences.Dequeue();
         hasDialogChoice = dialogSentence.hasChoices;
 
         if (hasDialogChoice && dialogSentence.choices.Length != 0)
         {
-            for (int i = 0; i < dialogSentence.choices.Length; i++)
-            {
-                Debug.Log(dialogSentence.choices[i]);
-                dialogChoices[i] = dialogSentence.choices[i];
-            }
+            dialogChoices = dialogSentence.choices;
         }
 
 
@@ -154,45 +157,43 @@ public class DialogManager : MonoBehaviour
 
         isTyping = false;
 
-        DisplayChoices();
+        if (hasDialogChoice)
+        {
+            CreateChoiceButtons();
+        }
     }
 
-    private void DisplayChoices()
+    private void CreateChoiceButtons()
     {
-        if (hasDialogChoice)
-            choiceBox.SetActive(true);
-        else
-            choiceBox.SetActive(false);
+        choiceButtons = new GameObject[dialogChoices.Length];
 
-        GameObject selected = choiceBox.transform.Find("Option Boxes").Find("Option Box").gameObject;
-        choiceIcon.transform.position = new Vector2(selected.transform.position.x - 350, selected.transform.position.y);
+        int i = 0;
+        float offsetCounter = 0;
 
-        TextMeshProUGUI text1 = choiceBox.transform.Find("Text").Find("Text (Option 1)").GetComponent<TextMeshProUGUI>();
-        TextMeshProUGUI text2 = choiceBox.transform.Find("Text").Find("Text (Option 2)").GetComponent<TextMeshProUGUI>();
-
-        text1.SetText(dialogChoices[0]);
-        text2.SetText(dialogChoices[1]);
-
-        int vertical = (int)(Input.GetAxisRaw("Vertical"));
-
-        if (vertical == 1)
+        foreach (string choice in dialogChoices)
         {
-            selected = choiceBox.transform.Find("Option Boxes").Find("Option Box").gameObject;
-            choiceIcon.transform.position = new Vector2(selected.transform.position.x - 350, selected.transform.position.y);
-            Debug.Log(vertical);
-        }
-        else if (vertical == -1)
-        {
-            selected = choiceBox.transform.Find("Option Boxes").Find("Option Box (1)").gameObject;
-            choiceIcon.transform.position = new Vector2(selected.transform.position.x - 350, selected.transform.position.y);
-            Debug.Log(vertical);
-        }
+            GameObject choiceButtonObj = (GameObject)Instantiate(choiceButtonPrefab, Vector3.zero, Quaternion.identity);
+            choiceButtonObj.name = "ChoiceButton: " + i;
 
-        if (Input.GetButtonDown("Interact"))
-        {
-            //Debug.Log the choice
-        }
+            choiceButtonObj.transform.SetParent(choiceBox.transform.Find("Option Boxes").transform, false);
 
+            Button choiceButton = choiceButtonObj.GetComponent<Button>();
+
+            choiceButton.GetComponentInChildren<Text>().text = dialogChoices[i];
+
+            Vector2 pos = Vector2.zero;
+            pos.y = offsetCounter;
+            pos.x = xPos;
+
+            choiceButton.GetComponent<RectTransform>().anchoredPosition = pos;
+
+            offsetCounter -= yPosOffset;
+
+            choiceButtons[i] = choiceButtonObj;
+
+            i++;
+
+        }
 
     }
 
