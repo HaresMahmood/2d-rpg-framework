@@ -8,6 +8,8 @@ public class DialogConfig
     public bool hasChoices;
     
     public string[] choices;
+
+    public int jumpToSentence;
     
     [TextArea()]
     public string sentence;

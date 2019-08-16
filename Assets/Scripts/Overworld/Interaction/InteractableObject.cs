@@ -11,7 +11,7 @@ public class InteractableObject : MonoBehaviour
     [UnityEngine.Header("Configuration")]
     public string playerTag = "Player";
     [HideInInspector] public static bool playerInRange;
-    
+
 
     void Start()
     {

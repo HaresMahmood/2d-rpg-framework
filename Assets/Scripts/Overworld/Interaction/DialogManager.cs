@@ -29,15 +29,10 @@ public class DialogManager : MonoBehaviour
 
     public MovingObject movingObject;
 
-    private Queue<string> sentences;
-
     private Queue<DialogConfig> dialogSentences;
+    private ChoiceController choiceController;
 
     public string[] dialogChoices;
-    public GameObject[] choiceButtons;
-    public GameObject choiceButtonPrefab;
-    public float xPos;
-    public float yPosOffset = 40f;
 
     public int vertical;
 
@@ -47,13 +42,12 @@ public class DialogManager : MonoBehaviour
         dialogText = dialogBox.transform.Find("Dialog Text").GetComponent<TextMeshProUGUI>();
         nameText = dialogBox.transform.Find("Name").Find("Name Text").GetComponent<TextMeshProUGUI>();
         continueIcon = dialogBox.transform.Find("Icons").Find("Continue").GetComponent<Image>();
-        choiceIcon = choiceBox.transform.Find("Icons").Find("Select").GetComponent<Image>();
         animator = dialogBox.GetComponent<Animator>();
 
+        choiceController = GetComponent<ChoiceController>();
+
         movingObject = (MovingObject)FindObjectOfType(typeof(MovingObject));
-
-        sentences = new Queue<string>();
-
+        
         dialogSentences = new Queue<DialogConfig>();
     }
 
@@ -80,12 +74,6 @@ public class DialogManager : MonoBehaviour
 
         foreach (DialogConfig dialogSentence in dialog.dialog) //TODO: Change name of DialogSentences.
         {
-            sentences.Enqueue(dialogSentence.sentence);
-
-        }
-
-        foreach (DialogConfig dialogSentence in dialog.dialog) //TODO: Change name of DialogSentences.
-        {
             dialogSentences.Enqueue(dialogSentence);
         }
 
@@ -95,19 +83,13 @@ public class DialogManager : MonoBehaviour
 
     public void NextSentence()
     {
-        if (sentences.Count == 0)
-        {
-            EndDialogue();
-            return;
-        }
 
         if (dialogSentences.Count == 0)
         {
             EndDialogue();
             return;
         }
-
-        string sentence = sentences.Dequeue();
+        
 
         DialogConfig dialogSentence = dialogSentences.Dequeue();
         hasDialogChoice = dialogSentence.hasChoices;
@@ -119,7 +101,7 @@ public class DialogManager : MonoBehaviour
 
 
         StopAllCoroutines();
-        StartCoroutine(DisplaySentence(dialogSentence.sentence));        
+        StartCoroutine(DisplaySentence(dialogSentence.sentence));
     }
 
     IEnumerator DisplaySentence(string sentence)
@@ -127,6 +109,8 @@ public class DialogManager : MonoBehaviour
         //TODO: VERY inefficient, do not put this section in DisplaySentence
         if (!hasDialogChoice)
             choiceBox.SetActive(false);
+        else
+            choiceBox.SetActive(true);
 
         isTyping = true;
 
@@ -159,42 +143,8 @@ public class DialogManager : MonoBehaviour
 
         if (hasDialogChoice)
         {
-            CreateChoiceButtons();
+            choiceController.CreateChoiceButtons();
         }
-    }
-
-    private void CreateChoiceButtons()
-    {
-        choiceButtons = new GameObject[dialogChoices.Length];
-
-        int i = 0;
-        float offsetCounter = 0;
-
-        foreach (string choice in dialogChoices)
-        {
-            GameObject choiceButtonObj = (GameObject)Instantiate(choiceButtonPrefab, Vector3.zero, Quaternion.identity);
-            choiceButtonObj.name = "ChoiceButton: " + i;
-
-            choiceButtonObj.transform.SetParent(choiceBox.transform.Find("Option Boxes").transform, false);
-
-            Button choiceButton = choiceButtonObj.GetComponent<Button>();
-
-            choiceButton.GetComponentInChildren<Text>().text = dialogChoices[i];
-
-            Vector2 pos = Vector2.zero;
-            pos.y = offsetCounter;
-            pos.x = xPos;
-
-            choiceButton.GetComponent<RectTransform>().anchoredPosition = pos;
-
-            offsetCounter -= yPosOffset;
-
-            choiceButtons[i] = choiceButtonObj;
-
-            i++;
-
-        }
-
     }
 
     void EndDialogue()
@@ -211,11 +161,7 @@ public class DialogManager : MonoBehaviour
             continueIcon.gameObject.SetActive(true);
         else
             continueIcon.gameObject.SetActive(false);
-
-        if (!isTyping && hasDialogChoice && isActive)
-            choiceIcon.gameObject.SetActive(true);
-        else
-            choiceIcon.gameObject.SetActive(false);
+        
     }
 
     IEnumerator PlayAnimation()
