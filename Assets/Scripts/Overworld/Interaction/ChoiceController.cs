@@ -5,7 +5,6 @@ using TMPro;
 
 public class ChoiceController : MonoBehaviour
 {
-
     public GameObject[] choiceButtons;
     public GameObject choiceButtonPrefab;
     public float xPos;
@@ -24,7 +23,6 @@ public class ChoiceController : MonoBehaviour
     {
         dialogManager = FindObjectOfType<DialogManager>();
     }
-
 
     // Update is called once per frame
     void Update()
@@ -63,15 +61,17 @@ public class ChoiceController : MonoBehaviour
             keyDown = false;
         }
 
-        if (selected >= 0 && index >= 0)
+        if (selected >= 0)
         {
-            if (Input.GetButtonDown("Interact"))
+            if (Input.GetButtonDown("Interact") && dialogManager.isActive && !dialogManager.isTyping && !dialogManager.choiceMade)
             {
                 Debug.Log("Button pressed: " + selected);
-                clickAction();
+
+                ClickAction();
 
                 GameObject selector = dialogManager.choiceBox.transform.Find("Selector").gameObject;
                 selector.SetActive(false);
+                dialogManager.choiceMade = true;
 
                 dialogManager.NextSentence();
             }
@@ -82,7 +82,7 @@ public class ChoiceController : MonoBehaviour
             GameObject selector = dialogManager.choiceBox.transform.Find("Selector").gameObject;
             Vector2 choiceButtonPos = choiceButtons[selected].transform.position;
 
-            selector.transform.position = new Vector2(choiceButtonPos.x, choiceButtonPos.y);
+            selector.transform.position = choiceButtonPos;
             selector.SetActive(true);
         }
         else
@@ -125,7 +125,7 @@ public class ChoiceController : MonoBehaviour
         maxIndex = choiceButtons.Length;
     }
 
-    void clickAction()
+    void ClickAction()
     {
         //button clicked
 

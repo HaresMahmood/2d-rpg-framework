@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class DialogConfig
+public class DialogTree
 {
     public bool hasChoices;
     

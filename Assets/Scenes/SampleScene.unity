@@ -6288,14 +6288,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialog:
     charName: Hank
-    dialog:
-    - hasChoices: 1
-      choices:
-      - Yes
-      - No
-      jumpToSentence: 1
-      sentence: Hi! I guess I finall have <color=#31bfeb>a name</color> now! But what
-        about you?
+    dialogTree:
+    - hasChoices: 0
+      choices: []
+      jumpToSentence: 0
+      sentence: Hi! I guess I finally have <color=#59c3de>a name</color> now! But
+        what about you?
     - hasChoices: 0
       choices: []
       jumpToSentence: 0
@@ -7663,7 +7661,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialog:
     charName: 
-    dialog: []
+    dialogTree: []
   playerTag: Player
   scene: SampleHouse
   startPosition: {x: -11.483, y: 2.783}

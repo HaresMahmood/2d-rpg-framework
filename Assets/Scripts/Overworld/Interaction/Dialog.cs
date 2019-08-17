@@ -13,5 +13,5 @@ public class Dialog
     public string charName;
 
     //[UnityEngine.Header("Dialog")]
-    public DialogConfig[] dialog; //TODO: Change name of DialogConfig (DialogProperties/SentenceProperties?)
+    public DialogTree[] dialogTree; //TODO: Change name of DialogConfig (DialogProperties/SentenceProperties?)
 }

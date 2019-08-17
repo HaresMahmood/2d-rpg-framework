@@ -4,14 +4,13 @@ using UnityEngine;
 
 public class InteractableObject : MonoBehaviour
 {
-    [UnityEngine.Header("Dialog")]
+    //[UnityEngine.Header("Dialog")]
     public Dialog dialog;
     private DialogManager dialogManager;
 
-    [UnityEngine.Header("Configuration")]
+    //[UnityEngine.Header("Configuration")]
     public string playerTag = "Player";
     [HideInInspector] public static bool playerInRange;
-
 
     void Start()
     {
@@ -24,7 +23,7 @@ public class InteractableObject : MonoBehaviour
         {
             if (!dialogManager.isActive)
                 StartDialogue();
-            else if (dialogManager.isActive)
+            else if (dialogManager.isActive && !dialogManager.hasDialogChoice)
                 NextSentence();
         }
     }

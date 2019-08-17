@@ -29,7 +29,7 @@ public class DialogManager : MonoBehaviour
 
     public MovingObject movingObject;
 
-    private Queue<DialogConfig> dialogSentences;
+    private Queue<DialogTree> dialogTree;
     private ChoiceController choiceController;
 
     public string[] dialogChoices;
@@ -48,7 +48,7 @@ public class DialogManager : MonoBehaviour
 
         movingObject = (MovingObject)FindObjectOfType(typeof(MovingObject));
         
-        dialogSentences = new Queue<DialogConfig>();
+        dialogTree = new Queue<DialogTree>();
     }
 
     void Update()
@@ -70,48 +70,38 @@ public class DialogManager : MonoBehaviour
 
         nameText.text = dialog.charName;
 
-        dialogSentences.Clear();
+        dialogTree.Clear();
 
-        foreach (DialogConfig dialogSentence in dialog.dialog) //TODO: Change name of DialogSentences.
+        foreach (DialogTree dialogBranch in dialog.dialogTree)
         {
-            dialogSentences.Enqueue(dialogSentence);
+            dialogTree.Enqueue(dialogBranch);
         }
-
 
         NextSentence();
     }
 
     public void NextSentence()
     {
-
-        if (dialogSentences.Count == 0)
+        if (dialogTree.Count == 0)
         {
             EndDialogue();
             return;
         }
-        
 
-        DialogConfig dialogSentence = dialogSentences.Dequeue();
-        hasDialogChoice = dialogSentence.hasChoices;
+        DialogTree dialogBranch = dialogTree.Dequeue();
+        hasDialogChoice = dialogBranch.hasChoices;
 
-        if (hasDialogChoice && dialogSentence.choices.Length != 0)
+        if (hasDialogChoice && dialogBranch.choices.Length != 0)
         {
-            dialogChoices = dialogSentence.choices;
+            dialogChoices = dialogBranch.choices;
         }
 
-
         StopAllCoroutines();
-        StartCoroutine(DisplaySentence(dialogSentence.sentence));
+        StartCoroutine(DisplaySentence(dialogBranch.sentence));
     }
 
     IEnumerator DisplaySentence(string sentence)
     {
-        //TODO: VERY inefficient, do not put this section in DisplaySentence
-        if (!hasDialogChoice)
-            choiceBox.SetActive(false);
-        else
-            choiceBox.SetActive(true);
-
         isTyping = true;
 
         dialogText.SetText(sentence);
@@ -143,6 +133,7 @@ public class DialogManager : MonoBehaviour
 
         if (hasDialogChoice)
         {
+            choiceMade = false;
             choiceController.CreateChoiceButtons();
         }
     }
