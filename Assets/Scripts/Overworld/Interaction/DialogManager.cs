@@ -22,10 +22,10 @@ public class DialogManager : MonoBehaviour
     public bool hasDialogChoice; //Debug
     public bool choiceMade = false; //Debug
 
-    private TextMeshProUGUI dialogText, nameText;
-    private Image continueIcon;
+    public TextMeshProUGUI dialogText, nameText;
+    public Image dialogSelector;
     public Image choiceIcon;
-    private Animator animator;
+    public Animator animator;
 
     public MovingObject movingObject;
 
@@ -39,10 +39,12 @@ public class DialogManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        dialogText = dialogBox.transform.Find("Dialog Text").GetComponent<TextMeshProUGUI>();
-        nameText = dialogBox.transform.Find("Name").Find("Name Text").GetComponent<TextMeshProUGUI>();
-        continueIcon = dialogBox.transform.Find("Icons").Find("Continue").GetComponent<Image>();
+        dialogText = dialogBox.transform.Find("Text").GetComponent<TextMeshProUGUI>();
+        nameText = dialogBox.transform.Find("Portrait").Find("Name").Find("Text").GetComponent<TextMeshProUGUI>();
+        dialogSelector = dialogBox.transform.Find("Selector").GetComponent<Image>();
         animator = dialogBox.GetComponent<Animator>();
+
+        choiceBox = dialogBox.transform.Find("Choices").transform.gameObject;
 
         choiceController = GetComponent<ChoiceController>();
 
@@ -53,7 +55,7 @@ public class DialogManager : MonoBehaviour
 
     void Update()
     {
-        ToggleIcon(); //TODO: Should NOT toggle icon every frame!
+        ToggleSelector(); //TODO: Should NOT toggle icon every frame!
 
         if (isTyping || isActive)
             movingObject.canMove = false;
@@ -146,19 +148,19 @@ public class DialogManager : MonoBehaviour
             StartCoroutine(PlayAnimation());
     }
 
-    void ToggleIcon()
+    void ToggleSelector()
     {
         if (!isTyping && !hasDialogChoice && isActive)
-            continueIcon.gameObject.SetActive(true);
+            dialogSelector.gameObject.SetActive(true);
         else
-            continueIcon.gameObject.SetActive(false);
+            dialogSelector.gameObject.SetActive(false);
         
     }
 
     IEnumerator PlayAnimation()
     {
-        animator.SetTrigger("isInactive");
-        yield return new WaitForSeconds(0.25f);
+        animator.SetTrigger("isInActive");
+        yield return new WaitForSeconds(0.20f);
 
         dialogBox.SetActive(false);
     }
