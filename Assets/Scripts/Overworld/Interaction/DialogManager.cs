@@ -153,15 +153,33 @@ public class DialogManager : MonoBehaviour
         if (!isTyping && !hasDialogChoice && isActive)
             dialogSelector.gameObject.SetActive(true);
         else
-            dialogSelector.gameObject.SetActive(false);
+            StartCoroutine(PlaySelectorAnimation());
         
     }
 
     IEnumerator PlayAnimation()
     {
         animator.SetTrigger("isInActive");
-        yield return new WaitForSeconds(0.20f);
+
+        AnimatorClipInfo[] currentClip = animator.GetCurrentAnimatorClipInfo(0);
+        float waitTime = currentClip[0].clip.length;
+
+        yield return new WaitForSeconds(waitTime);
 
         dialogBox.SetActive(false);
+    }
+
+    IEnumerator PlaySelectorAnimation()
+    {
+        Animator animator = dialogSelector.GetComponent<Animator>();
+        animator.SetTrigger("isInActive");
+
+        AnimatorClipInfo[] currentClip = animator.GetCurrentAnimatorClipInfo(0);
+        float waitTime = currentClip[0].clip.length;
+
+        yield return new WaitForSeconds(waitTime);
+
+        dialogSelector.gameObject.SetActive(false);
+
     }
 }

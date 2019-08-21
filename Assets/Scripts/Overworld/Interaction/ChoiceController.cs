@@ -8,7 +8,7 @@ public class ChoiceController : MonoBehaviour
     public GameObject[] choiceButtons;
     public GameObject choiceButtonPrefab;
     public float xPos;
-    public float yPosOffset = 170f;
+    public float yPosOffset = 300f;
     public DialogManager dialogManager;
 
     public int selected;

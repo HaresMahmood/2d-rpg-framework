@@ -974,7 +974,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 16777215
+    rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -1097,9 +1097,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalAxis: Horizontal
   m_VerticalAxis: Vertical
-  m_SubmitButton: Submit
+  m_SubmitButton: Interact
   m_CancelButton: Cancel
-  m_InputActionsPerSecond: 10
+  m_InputActionsPerSecond: 2
   m_RepeatDelay: 0.5
   m_ForceModuleActive: 0
 --- !u!114 &112401940
@@ -1114,7 +1114,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 0}
+  m_FirstSelected: {fileID: 2250663871594758102, guid: 15230c131f3a9c04c9c6c29e1221c784,
+    type: 3}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
 --- !u!4 &112401941
@@ -5515,6 +5516,31 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2250663871594758103, guid: 15230c131f3a9c04c9c6c29e1221c784,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2250663870784042555, guid: 15230c131f3a9c04c9c6c29e1221c784,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2250663870784042555, guid: 15230c131f3a9c04c9c6c29e1221c784,
+        type: 3}
+      propertyPath: m_textInfo.wordCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2250663870784042555, guid: 15230c131f3a9c04c9c6c29e1221c784,
+        type: 3}
+      propertyPath: m_textInfo.lineCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2250663870784042555, guid: 15230c131f3a9c04c9c6c29e1221c784,
+        type: 3}
+      propertyPath: m_textInfo.pageCount
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 15230c131f3a9c04c9c6c29e1221c784, type: 3}
 --- !u!1 &671088475
@@ -6228,8 +6254,11 @@ MonoBehaviour:
   dialog:
     charName: Hank
     dialogTree:
-    - hasChoices: 0
-      choices: []
+    - hasChoices: 1
+      choices:
+      - Yes.
+      - No.
+      - Maybe.
       jumpToSentence: 0
       sentence: Hi! I guess I finally have <color=#59c3de>a name</color> now! But
         what about you?
@@ -6572,10 +6601,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   choiceButtons: []
-  choiceButtonPrefab: {fileID: 7251333477464045616, guid: 15230c131f3a9c04c9c6c29e1221c784,
+  choiceButtonPrefab: {fileID: 2250663871594758102, guid: 15230c131f3a9c04c9c6c29e1221c784,
     type: 3}
   xPos: 0
-  yPosOffset: 130
+  yPosOffset: 170
   dialogManager: {fileID: 0}
   selected: 0
   index: 0
@@ -6666,6 +6695,7 @@ GameObject:
   - component: {fileID: 1279437294}
   - component: {fileID: 1279437296}
   - component: {fileID: 1279437295}
+  - component: {fileID: 1279437297}
   m_Layer: 5
   m_Name: Selector
   m_TagString: Untagged
@@ -6689,7 +6719,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1667, y: 156.09}
+  m_AnchoredPosition: {x: -1667, y: 156.08997}
   m_SizeDelta: {x: 3365, y: 500}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1279437295
@@ -6730,6 +6760,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1279437293}
   m_CullTransparentMesh: 0
+--- !u!95 &1279437297
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1279437293}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: fa130607513cc7b4497a32714b462901, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1315979524
 GameObject:
   m_ObjectHideFlags: 0
@@ -7140,7 +7189,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 500, y: 500}
+  m_AnchoredPosition: {x: 1150, y: 1150}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1409491819
@@ -8443,7 +8492,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 16777215
+    rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
