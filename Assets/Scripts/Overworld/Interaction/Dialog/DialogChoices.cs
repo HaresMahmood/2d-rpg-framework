@@ -10,7 +10,9 @@ public class DialogChoices : ScriptableObject
     public class Choices
     {
         public string choiceText;
+        public Dialog nextDialog;
         public UnityEvent choiceEvent;
+        
     }
 
     public Choices[] choices;

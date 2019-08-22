@@ -4,17 +4,16 @@ using UnityEngine;
 
 
 [CreateAssetMenu(fileName = "New Dialog", menuName = "Dialog/Dialog")]
-public class DialogBase : ScriptableObject
+public class Dialog : ScriptableObject
 {
     [System.Serializable]
     public class Info
     {
         public CharacterInfo character;
-        [TextArea(1, 4)]
+        [TextArea]
         public string sentence;
         public DialogChoices choices;
     }
-
-    [Header("Dialog information")]
+    
     public Info[] dialogInfo;
 }

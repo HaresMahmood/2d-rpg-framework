@@ -6,7 +6,7 @@ public class InteractableObject : MonoBehaviour
 {
     //[UnityEngine.Header("Dialog")]
     //public Dialog dialog;
-    public DialogBase dialog;
+    public Dialog dialog;
     private DialogManager dialogManager;
 
     //[UnityEngine.Header("Configuration")]

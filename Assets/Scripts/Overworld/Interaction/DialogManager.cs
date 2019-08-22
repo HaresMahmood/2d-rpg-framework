@@ -21,29 +21,25 @@ public class DialogManager : MonoBehaviour
     }
 
     public GameObject dialogBox;
-    public GameObject choiceBox;
 
-    public float typingSpeed = 0.03f;
+    private float typingSpeed = 0.03f;
 
-    public bool isActive, isTyping;
+    [HideInInspector] public bool isActive, isTyping;
 
-    public bool hasDialogChoice = false; //Debug
-    public bool choiceMade = false; //Debug
+    [HideInInspector] public bool hasDialogChoice = false, choiceMade = false; //Debug
 
-    public TextMeshProUGUI dialogText, nameText;
-    public Image dialogSelector;
-    public Image choiceIcon;
-    public Image charPortrait;
-    public Animator animator;
+    private TextMeshProUGUI dialogText, nameText;
+    private Image dialogSelector;
+    private Image choiceIcon;
+    private Image charPortrait;
+    private Animator animator;
 
-    public MovingObject movingObject;
+    private MovingObject movingObject;
 
-    private Queue<DialogBase.Info> dialog;
+    [HideInInspector] public Queue<Dialog.Info> dialogInfo;
     private ChoiceController choiceController;
 
-    public DialogChoices dialogChoices;
-
-    public int vertical;
+    [HideInInspector] public DialogChoices dialogChoices;
 
     // Use this for initialization
     void Start()
@@ -54,13 +50,13 @@ public class DialogManager : MonoBehaviour
         dialogSelector = dialogBox.transform.Find("Selector").GetComponent<Image>();
         animator = dialogBox.GetComponent<Animator>();
 
-        choiceBox = dialogBox.transform.Find("Choices").transform.gameObject;
+        
 
         choiceController = GetComponent<ChoiceController>();
 
         movingObject = (MovingObject)FindObjectOfType(typeof(MovingObject));
         
-        dialog = new Queue<DialogBase.Info>();
+        dialogInfo = new Queue<Dialog.Info>();
     }
 
     void Update()
@@ -75,30 +71,24 @@ public class DialogManager : MonoBehaviour
         //Debug.Log(dialogSentences.Dequeue().hasChoices);
     }
 
-    public void StartDialog(DialogBase dialogBase)
+    public void StartDialog(Dialog dialog)
     {
         dialogBox.SetActive(true);
         isActive = true;
 
-        dialog.Clear();
-
-        foreach (DialogBase.Info info in dialogBase.dialogInfo)
-        {
-            dialog.Enqueue(info);
-        }
-
+        EnqueueDialog(dialog);
         NextSentence();
     }
 
     public void NextSentence()
     {
-        if (dialog.Count == 0)
+        if (dialogInfo.Count == 0)
         {
             EndDialogue();
             return;
         }
 
-        DialogBase.Info info = dialog.Dequeue();
+        Dialog.Info info = dialogInfo.Dequeue();
 
         nameText.text = info.character.name;
         charPortrait.sprite = info.character.portrait;
@@ -155,8 +145,16 @@ public class DialogManager : MonoBehaviour
             choiceMade = false;
             choiceController.CreateChoiceButtons();
         }
+    }
 
+    public void EnqueueDialog(Dialog dialog)
+    {
+        dialogInfo.Clear();
 
+        foreach (Dialog.Info info in dialog.dialogInfo)
+        {
+            dialogInfo.Enqueue(info);
+        }
     }
 
     void EndDialogue()
