@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 using UnityEngine;
 using TMPro;
 
@@ -7,9 +8,8 @@ public class ChoiceController : MonoBehaviour
 {
     public GameObject[] choiceButtons;
     public GameObject choiceButtonPrefab;
-    public float xPos;
-    public float yPosOffset = 300f;
-    public DialogManager dialogManager;
+    private DialogManager dialogManager;
+    public EventSystem eventSystem;
 
     public int selected;
 
@@ -22,6 +22,7 @@ public class ChoiceController : MonoBehaviour
     void Start()
     {
         dialogManager = FindObjectOfType<DialogManager>();
+        
     }
 
     // Update is called once per frame
@@ -84,45 +85,41 @@ public class ChoiceController : MonoBehaviour
 
             selector.transform.position = choiceButtonPos;
             selector.SetActive(true);
+
+            eventSystem.SetSelectedGameObject(null); //Resetting the currently selected GO
+            eventSystem.firstSelectedGameObject = choiceButtons[0].transform.Find("Base").gameObject;
+            eventSystem.SetSelectedGameObject(choiceButtons[selected].transform.Find("Base").gameObject);
         }
         else
             return;
     }
 
+
     public void CreateChoiceButtons()
     {
-        choiceButtons = new GameObject[dialogManager.dialogChoices.Length];
+        choiceButtons = new GameObject[dialogManager.dialogChoices.choices.Length];
 
         int i = 0;
-        float offsetCounter = 0;
 
-        foreach (string choice in dialogManager.dialogChoices)
+        for (i = 0; i < dialogManager.dialogChoices.choices.Length; i++)
         {
             GameObject choiceButtonObj = (GameObject)Instantiate(choiceButtonPrefab, Vector3.zero, Quaternion.identity);
             choiceButtonObj.name = "ChoiceButton: " + i;
 
-            choiceButtonObj.transform.SetParent(dialogManager.choiceBox.transform, false);
+            choiceButtonObj.transform.SetParent(dialogManager.choiceBox.transform.Find("Buttons").transform, false);
 
-            //Button choiceButton = choiceButtonObj.GetComponent<Button>();
-
-            choiceButtonObj.GetComponentInChildren<TextMeshProUGUI>().text = dialogManager.dialogChoices[i];
+            choiceButtonObj.GetComponentInChildren<TextMeshProUGUI>().text = dialogManager.dialogChoices.choices[i].choiceText;
 
             Vector2 pos = Vector2.zero;
-            pos.y = offsetCounter;
-            pos.x = xPos;
 
             choiceButtonObj.GetComponent<RectTransform>().anchoredPosition = pos;
-
-            offsetCounter -= yPosOffset;
 
             choiceButtonObj.GetComponent<ButtonHandler>().buttonIndex = i;
 
             choiceButtons[i] = choiceButtonObj;
-
-            i++;
         }
 
-        maxIndex = choiceButtons.Length;
+        maxIndex = choiceButtons.Length - 1;
     }
 
     void ClickAction()

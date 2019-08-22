@@ -5,11 +5,12 @@ using UnityEngine;
 public class InteractableObject : MonoBehaviour
 {
     //[UnityEngine.Header("Dialog")]
-    public Dialog dialog;
+    //public Dialog dialog;
+    public DialogBase dialog;
     private DialogManager dialogManager;
 
     //[UnityEngine.Header("Configuration")]
-    public string playerTag = "Player";
+    private string playerTag = "Player";
     [HideInInspector] public static bool playerInRange;
 
     void Start()

@@ -62,7 +62,7 @@ public class SceneController : InteractableObject
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag(playerTag))
+        if (other.CompareTag("Player"))
         {
             playerInRange = true;
             //Debug.Log("In range");
@@ -71,7 +71,7 @@ public class SceneController : InteractableObject
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.CompareTag(playerTag))
+        if (other.CompareTag("Player"))
         {
             playerInRange = false;
             //Debug.Log("Not in range");

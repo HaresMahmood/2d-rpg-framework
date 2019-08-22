@@ -12,6 +12,14 @@ using TMPro;
 
 public class DialogManager : MonoBehaviour
 {
+    public static DialogManager instance;
+    
+    private void Awake()
+    {
+        if (instance == null)
+            instance = this;
+    }
+
     public GameObject dialogBox;
     public GameObject choiceBox;
 
@@ -19,20 +27,21 @@ public class DialogManager : MonoBehaviour
 
     public bool isActive, isTyping;
 
-    public bool hasDialogChoice; //Debug
+    public bool hasDialogChoice = false; //Debug
     public bool choiceMade = false; //Debug
 
     public TextMeshProUGUI dialogText, nameText;
     public Image dialogSelector;
     public Image choiceIcon;
+    public Image charPortrait;
     public Animator animator;
 
     public MovingObject movingObject;
 
-    private Queue<DialogTree> dialogTree;
+    private Queue<DialogBase.Info> dialog;
     private ChoiceController choiceController;
 
-    public string[] dialogChoices;
+    public DialogChoices dialogChoices;
 
     public int vertical;
 
@@ -41,6 +50,7 @@ public class DialogManager : MonoBehaviour
     {
         dialogText = dialogBox.transform.Find("Text").GetComponent<TextMeshProUGUI>();
         nameText = dialogBox.transform.Find("Portrait").Find("Name").Find("Text").GetComponent<TextMeshProUGUI>();
+        charPortrait = dialogBox.transform.Find("Portrait").Find("Image").Find("Base").Find("Portrait").GetComponent<Image>();
         dialogSelector = dialogBox.transform.Find("Selector").GetComponent<Image>();
         animator = dialogBox.GetComponent<Animator>();
 
@@ -50,7 +60,7 @@ public class DialogManager : MonoBehaviour
 
         movingObject = (MovingObject)FindObjectOfType(typeof(MovingObject));
         
-        dialogTree = new Queue<DialogTree>();
+        dialog = new Queue<DialogBase.Info>();
     }
 
     void Update()
@@ -65,18 +75,16 @@ public class DialogManager : MonoBehaviour
         //Debug.Log(dialogSentences.Dequeue().hasChoices);
     }
 
-    public void StartDialog(Dialog dialog)
+    public void StartDialog(DialogBase dialogBase)
     {
         dialogBox.SetActive(true);
         isActive = true;
 
-        nameText.text = dialog.charName;
+        dialog.Clear();
 
-        dialogTree.Clear();
-
-        foreach (DialogTree dialogBranch in dialog.dialogTree)
+        foreach (DialogBase.Info info in dialogBase.dialogInfo)
         {
-            dialogTree.Enqueue(dialogBranch);
+            dialog.Enqueue(info);
         }
 
         NextSentence();
@@ -84,22 +92,31 @@ public class DialogManager : MonoBehaviour
 
     public void NextSentence()
     {
-        if (dialogTree.Count == 0)
+        if (dialog.Count == 0)
         {
             EndDialogue();
             return;
         }
 
-        DialogTree dialogBranch = dialogTree.Dequeue();
-        hasDialogChoice = dialogBranch.hasChoices;
+        DialogBase.Info info = dialog.Dequeue();
 
-        if (hasDialogChoice && dialogBranch.choices.Length != 0)
+        nameText.text = info.character.name;
+        charPortrait.sprite = info.character.portrait;
+
+        if (info.choices != null)
         {
-            dialogChoices = dialogBranch.choices;
+            hasDialogChoice = true;
+            dialogChoices = info.choices;
+        }
+        else
+        {
+            hasDialogChoice = false;
         }
 
+        string sentence = info.sentence;
+
         StopAllCoroutines();
-        StartCoroutine(DisplaySentence(dialogBranch.sentence));
+        StartCoroutine(DisplaySentence(sentence));
     }
 
     IEnumerator DisplaySentence(string sentence)
@@ -138,6 +155,8 @@ public class DialogManager : MonoBehaviour
             choiceMade = false;
             choiceController.CreateChoiceButtons();
         }
+
+
     }
 
     void EndDialogue()
