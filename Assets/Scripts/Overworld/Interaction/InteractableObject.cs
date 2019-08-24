@@ -4,49 +4,48 @@ using UnityEngine;
 
 public class InteractableObject : MonoBehaviour
 {
-    //[UnityEngine.Header("Dialog")]
-    //public Dialog dialog;
+    [UnityEngine.Header("Setup")]
     public Dialog dialog;
-    private DialogManager dialogManager;
-
-    //[UnityEngine.Header("Configuration")]
-    private string playerTag = "Player";
+    
     [HideInInspector] public static bool playerInRange;
-
-    void Start()
-    {
-        dialogManager = FindObjectOfType<DialogManager>();
-    }
 
     void Update()
     {
-        if (playerInRange && Input.GetButtonDown("Interact") && !dialogManager.isTyping)
+        if (CanInteract())
         {
-            if (!dialogManager.isActive)
+            if (!DialogManager.instance.isActive)
                 StartDialogue();
-            else if (dialogManager.isActive && !dialogManager.hasDialogChoice)
+            else if (DialogManager.instance.isActive && !DialogManager.instance.hasBranchingDialog)
                 NextSentence();
         }
     }
 
     public void StartDialogue()
     {
-        dialogManager.StartDialog(dialog);
+        DialogManager.instance.StartDialog(dialog);
     }
 
     public void NextSentence()
     {
-        dialogManager.NextSentence();
+        DialogManager.instance.NextSentence();
+    }
+
+    private bool CanInteract()
+    {
+        if (playerInRange && Input.GetButtonDown("Interact") && !DialogManager.instance.isTyping)
+            return true;
+
+        return false;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag(playerTag))
+        if (other.CompareTag(GameManager.instance.playerTag))
             playerInRange = true;
     }
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.CompareTag(playerTag))
+        if (other.CompareTag(GameManager.instance.playerTag))
             playerInRange = false;
     }
 

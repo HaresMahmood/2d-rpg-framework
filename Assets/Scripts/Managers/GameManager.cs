@@ -14,4 +14,7 @@ public class GameManager : MonoBehaviour
     }
 
     public Transform player;
+
+    [UnityEngine.Header("Settings")]
+    public string playerTag = "Player";
 }

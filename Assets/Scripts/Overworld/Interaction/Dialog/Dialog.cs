@@ -10,8 +10,7 @@ public class Dialog : ScriptableObject
     public class Info
     {
         public CharacterInfo character;
-        [TextArea]
-        public string sentence;
+        [TextArea] public string sentence;
         public DialogChoices choices;
     }
     

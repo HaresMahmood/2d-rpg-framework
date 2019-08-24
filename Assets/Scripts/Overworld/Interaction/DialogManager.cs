@@ -20,24 +20,20 @@ public class DialogManager : MonoBehaviour
             instance = this;
     }
 
+    [UnityEngine.Header("Setup")]
     public GameObject dialogBox;
 
-    private float typingSpeed = 0.03f;
-
-    [HideInInspector] public bool isActive, isTyping;
-
-    [HideInInspector] public bool hasDialogChoice = false, choiceMade = false; //Debug
+    [UnityEngine.Header("Settings")]
+    [Range(0.01f, 1.0f)] [SerializeField] private float typingDelay = 0.03f;
 
     private TextMeshProUGUI dialogText, nameText;
-    private Image dialogSelector;
-    private Image choiceIcon;
-    private Image charPortrait;
+    private Image dialogSelector, charPortrait;
     private Animator animator;
-
     private MovingObject movingObject;
 
+    [HideInInspector] public bool isActive, isTyping, hasBranchingDialog = false, choiceMade = false;
+
     [HideInInspector] public Queue<Dialog.Info> dialogInfo;
-    private ChoiceController choiceController;
 
     [HideInInspector] public DialogChoices dialogChoices;
 
@@ -50,25 +46,28 @@ public class DialogManager : MonoBehaviour
         dialogSelector = dialogBox.transform.Find("Selector").GetComponent<Image>();
         animator = dialogBox.GetComponent<Animator>();
 
-        
-
-        choiceController = GetComponent<ChoiceController>();
-
         movingObject = (MovingObject)FindObjectOfType(typeof(MovingObject));
         
         dialogInfo = new Queue<Dialog.Info>();
     }
 
-    void Update()
+    private void Update()
     {
-        ToggleSelector(); //TODO: Should NOT toggle icon every frame!
+        ToggleSelector();
 
         if (isTyping || isActive)
+        {
+            if (movingObject.isMoving)
+            {
+                Debug.Log(movingObject);
+                movingObject.isMoving = false;
+                Debug.Log(movingObject.isMoving);
+            }
+
             movingObject.canMove = false;
+        }
         else
             movingObject.canMove = true;
-
-        //Debug.Log(dialogSentences.Dequeue().hasChoices);
     }
 
     public void StartDialog(Dialog dialog)
@@ -95,13 +94,11 @@ public class DialogManager : MonoBehaviour
 
         if (info.choices != null)
         {
-            hasDialogChoice = true;
+            hasBranchingDialog = true;
             dialogChoices = info.choices;
         }
         else
-        {
-            hasDialogChoice = false;
-        }
+            hasBranchingDialog = false;
 
         string sentence = info.sentence;
 
@@ -127,7 +124,8 @@ public class DialogManager : MonoBehaviour
             dialogText.maxVisibleCharacters = visibleChars;
 
             counter++;
-            yield return new WaitForSeconds(typingSpeed);
+
+            yield return new WaitForSeconds(typingDelay);
 
             if (Input.GetButtonDown("Interact") && isTyping)
             {
@@ -140,10 +138,10 @@ public class DialogManager : MonoBehaviour
 
         isTyping = false;
 
-        if (hasDialogChoice)
+        if (hasBranchingDialog)
         {
             choiceMade = false;
-            choiceController.CreateChoiceButtons();
+            ChoiceManager.instance.CreateChoiceButtons();
         }
     }
 
@@ -167,7 +165,7 @@ public class DialogManager : MonoBehaviour
 
     void ToggleSelector()
     {
-        if (!isTyping && !hasDialogChoice && isActive)
+        if (!isTyping && !hasBranchingDialog && isActive)
             dialogSelector.gameObject.SetActive(true);
         else
             StartCoroutine(PlaySelectorAnimation());
@@ -178,9 +176,7 @@ public class DialogManager : MonoBehaviour
     {
         animator.SetTrigger("isInActive");
 
-        AnimatorClipInfo[] currentClip = animator.GetCurrentAnimatorClipInfo(0);
-        float waitTime = currentClip[0].clip.length;
-
+        float waitTime = GetAnimationInfo(animator);
         yield return new WaitForSeconds(waitTime);
 
         dialogBox.SetActive(false);
@@ -189,14 +185,24 @@ public class DialogManager : MonoBehaviour
     IEnumerator PlaySelectorAnimation()
     {
         Animator animator = dialogSelector.GetComponent<Animator>();
+
         animator.SetTrigger("isInActive");
 
-        AnimatorClipInfo[] currentClip = animator.GetCurrentAnimatorClipInfo(0);
-        float waitTime = currentClip[0].clip.length;
-
+        float waitTime = GetAnimationInfo(animator);
         yield return new WaitForSeconds(waitTime);
 
         dialogSelector.gameObject.SetActive(false);
+    }
 
+    private float GetAnimationInfo(Animator animator)
+    {
+        AnimatorClipInfo[] currentClip = null;
+        float waitTime = 0;
+
+        currentClip = animator.GetCurrentAnimatorClipInfo(0);
+        if (currentClip.Length > 0)
+            waitTime = currentClip[0].clip.length;
+
+        return waitTime;
     }
 }
