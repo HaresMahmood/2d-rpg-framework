@@ -147,7 +147,6 @@ public class ChoiceManager : MonoBehaviour
                     if (buttonIndex < maxButtonIndex)
                     {
                         buttonIndex++;
-                        selector.transform.position =- new Vector2(1000, 1000);
                     }
                     else
                         buttonIndex = 0;
@@ -204,7 +203,7 @@ public class ChoiceManager : MonoBehaviour
         }
     }
 
-        private float GetAnimationInfo(Animator animator)
+    private float GetAnimationInfo(Animator animator)
     {
         AnimatorClipInfo[] currentClip = null;
         float waitTime = 0;

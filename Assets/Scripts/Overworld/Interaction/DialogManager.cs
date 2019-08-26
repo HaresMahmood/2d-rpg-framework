@@ -42,7 +42,7 @@ public class DialogManager : MonoBehaviour
     {
         dialogText = dialogBox.transform.Find("Text").GetComponent<TextMeshProUGUI>();
         nameText = dialogBox.transform.Find("Portrait").Find("Name").Find("Text").GetComponent<TextMeshProUGUI>();
-        charPortrait = dialogBox.transform.Find("Portrait").Find("Image").Find("Base").Find("Portrait").GetComponent<Image>();
+        charPortrait = dialogBox.transform.Find("Portrait").Find("Image").GetComponent<Image>();
         dialogSelector = dialogBox.transform.Find("Selector").GetComponent<Image>();
         animator = dialogBox.GetComponent<Animator>();
 
