@@ -9,9 +9,10 @@ using TMPro;
 public class FormHandler : MonoBehaviour
 {
     public int buttonIndex;
+    private BlurEvent bevent;
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (FormManager.instance.buttonIndex == buttonIndex)
             FormManager.instance.selectedButton = buttonIndex;
@@ -28,6 +29,7 @@ public class FormHandler : MonoBehaviour
             StartCoroutine(FadeButton(this.gameObject, 1f, 1f));
             //Debug.Log("FADING");
         }
+
     }
 
     // Define an enumerator to perform our fading.

@@ -23,7 +23,7 @@ public class ChoiceManager : MonoBehaviour
     [SerializeField] private GameObject choiceButtonPrefab;
 
     private GameObject[] choiceButtons;
-    private GameObject choiceHolder, selector;
+    [HideInInspector] public GameObject choiceHolder, selector;
 
     private bool isInteracting;
     [HideInInspector] public int buttonIndex, selectedButton;
@@ -62,7 +62,7 @@ public class ChoiceManager : MonoBehaviour
             return;
     }
 
-    public void CreateChoiceButtons()
+    public IEnumerator CreateChoiceButtons()
     {
         choiceButtons = new GameObject[DialogManager.instance.dialogChoices.choices.Length];
 
@@ -83,22 +83,44 @@ public class ChoiceManager : MonoBehaviour
             else
                 eventHandler.dialog = null;
 
+            Color color = choiceButtonObj.GetComponent<Button>().GetComponent<Image>().color;
+            color.a = 0;
+            choiceButtonObj.GetComponent<Button>().GetComponent<Image>().color = color;
+
             choiceButtons[i] = choiceButtonObj;
+
+
         }
 
         maxButtonIndex = choiceButtons.Length - 1;
+
         choiceHolder.SetActive(true);
+
+        float timeToFade = 0.05f; // Make serializable
+
+        for (int i = 0; i < choiceButtons.Length; i++)
+        {
+            StartCoroutine(FadeButton(choiceButtons[i], 1f, timeToFade));
+            yield return new WaitForSeconds(timeToFade);
+        }
     }
 
-    private IEnumerator ChoiceMade()
+    public IEnumerator ChoiceMade()
     {
         // Play animations.
-        Animator selectorAnimator = selector.GetComponent<Animator>();
-        selectorAnimator.SetTrigger("isInActive");
+        if (selector.gameObject.activeSelf)
+        {
+            Animator selectorAnimator = selector.GetComponent<Animator>();
+            selectorAnimator.SetTrigger("isInActive");
 
-        float waitTime = GetAnimationInfo(selectorAnimator);
-        //yield return null;
-        yield return new WaitForSeconds(waitTime/2);
+            float waitTime = GetAnimationInfo(selectorAnimator);
+            yield return new WaitForSeconds(waitTime / 2);
+        }
+
+        Animator choiceAnimator = choiceHolder.GetComponent<Animator>();
+        choiceAnimator.SetTrigger("isInActive");
+
+        float choiceWaitTime = GetAnimationInfo(choiceAnimator);
 
         float timeToFade = 0.07f; // Make serializable
 
@@ -107,7 +129,7 @@ public class ChoiceManager : MonoBehaviour
             StartCoroutine(FadeButton(choiceButtons[i], 0f, timeToFade));
             yield return new WaitForSeconds(timeToFade);
         }
-        
+
         choiceHolder.SetActive(false);
 
         UnityEventHandler choiceEvent = choiceButtons[selectedButton].GetComponent<Button>().GetComponent<UnityEventHandler>();

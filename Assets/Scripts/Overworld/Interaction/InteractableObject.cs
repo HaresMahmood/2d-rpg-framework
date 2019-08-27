@@ -18,6 +18,8 @@ public class InteractableObject : MonoBehaviour
             else if (DialogManager.instance.isActive && !DialogManager.instance.hasBranchingDialog)
                 NextSentence();
         }
+        else if (Input.GetButtonDown("Back") && DialogManager.instance.isActive)
+            DialogManager.instance.EndDialog();
     }
 
     public void StartDialogue()

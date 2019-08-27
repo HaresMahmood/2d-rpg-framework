@@ -26,10 +26,15 @@ public class DialogManager : MonoBehaviour
     [UnityEngine.Header("Settings")]
     [Range(0.01f, 1.0f)] [SerializeField] private float typingDelay = 0.03f;
 
-    private TextMeshProUGUI dialogText, nameText;
-    private Image dialogSelector, charPortrait;
+    private GameObject charHolder;
+    private TextMeshProUGUI dialogText;
+    private Image dialogSelector;
     private Animator animator;
     private MovingObject movingObject;
+
+    private RectTransform textTransform;
+    private Vector2 initTextPos;
+    private Vector2 initTextDem;
 
     [HideInInspector] public bool isActive, isTyping, hasBranchingDialog = false, choiceMade = false;
 
@@ -41,10 +46,12 @@ public class DialogManager : MonoBehaviour
     void Start()
     {
         dialogText = dialogBox.transform.Find("Text").GetComponent<TextMeshProUGUI>();
-        nameText = dialogBox.transform.Find("Portrait").Find("Name").Find("Text").GetComponent<TextMeshProUGUI>();
-        charPortrait = dialogBox.transform.Find("Portrait").Find("Image").GetComponent<Image>();
         dialogSelector = dialogBox.transform.Find("Selector").GetComponent<Image>();
         animator = dialogBox.GetComponent<Animator>();
+
+        textTransform = dialogText.GetComponent<RectTransform>();
+        initTextPos = textTransform.anchoredPosition;
+        initTextDem = textTransform.sizeDelta;
 
         movingObject = (MovingObject)FindObjectOfType(typeof(MovingObject));
         
@@ -83,14 +90,33 @@ public class DialogManager : MonoBehaviour
     {
         if (dialogInfo.Count == 0)
         {
-            EndDialogue();
+            EndDialog();
             return;
         }
 
         Dialog.Info info = dialogInfo.Dequeue();
 
-        nameText.text = info.character.name;
-        charPortrait.sprite = info.character.portrait;
+        charHolder = dialogBox.transform.Find("Portrait").gameObject;
+
+        if (info.character != null)
+        {
+            TextMeshProUGUI nameText =  charHolder.transform.Find("Name").Find("Text").GetComponent<TextMeshProUGUI>();
+            Image charPortrait = charHolder.transform.Find("Image").GetComponent<Image>();
+
+            nameText.text = info.character.name;
+            charPortrait.sprite = info.character.portrait;
+            charHolder.SetActive(true);    
+ 
+            textTransform.sizeDelta = initTextDem;
+            textTransform.anchoredPosition = initTextPos;
+        }
+        else
+        {
+            charHolder.SetActive(false);
+ 
+            textTransform.sizeDelta = new Vector2 (dialogBox.transform.Find("Base").GetComponent<RectTransform>().rect.width - 500, initTextDem.y);
+            textTransform.anchoredPosition = new Vector2 (0, initTextPos.y);
+        }
 
         if (info.choices != null)
         {
@@ -141,7 +167,7 @@ public class DialogManager : MonoBehaviour
         if (hasBranchingDialog)
         {
             choiceMade = false;
-            ChoiceManager.instance.CreateChoiceButtons();
+            StartCoroutine(ChoiceManager.instance.CreateChoiceButtons());
         }
     }
 
@@ -155,12 +181,18 @@ public class DialogManager : MonoBehaviour
         }
     }
 
-    void EndDialogue()
+    public void EndDialog()
     {
+        ChoiceManager.instance.selector.SetActive(false);
+        ChoiceManager.instance.ChoiceMade();
+
         isActive = false;
+
+        ToggleSelector();
 
         if (animator.gameObject.activeSelf)
             StartCoroutine(PlayAnimation());
+
     }
 
     void ToggleSelector()
@@ -169,7 +201,6 @@ public class DialogManager : MonoBehaviour
             dialogSelector.gameObject.SetActive(true);
         else
             StartCoroutine(PlaySelectorAnimation());
-        
     }
 
     IEnumerator PlayAnimation()
