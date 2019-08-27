@@ -88,8 +88,6 @@ public class ChoiceManager : MonoBehaviour
             choiceButtonObj.GetComponent<Button>().GetComponent<Image>().color = color;
 
             choiceButtons[i] = choiceButtonObj;
-
-
         }
 
         maxButtonIndex = choiceButtons.Length - 1;
@@ -160,11 +158,11 @@ public class ChoiceManager : MonoBehaviour
 
     private void CheckInput()
     {
-        if (Input.GetAxis("Vertical") != 0)
+        if (Input.GetAxisRaw("Vertical") != 0)
         {
             if (!isInteracting)
             {
-                if (Input.GetAxis("Vertical") < 0)
+                if (Input.GetAxisRaw("Vertical") < 0)
                 {
                     if (buttonIndex < maxButtonIndex)
                     {
@@ -173,7 +171,7 @@ public class ChoiceManager : MonoBehaviour
                     else
                         buttonIndex = 0;
                 }
-                else if (Input.GetAxis("Vertical") > 0)
+                else if (Input.GetAxisRaw("Vertical") > 0)
                 {
                     if (buttonIndex > 0)
                         buttonIndex--;

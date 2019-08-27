@@ -19,7 +19,10 @@ public class InteractableObject : MonoBehaviour
                 NextSentence();
         }
         else if (Input.GetButtonDown("Back") && DialogManager.instance.isActive)
-            DialogManager.instance.EndDialog();
+        {
+            StopAllCoroutines();
+            StartCoroutine(DialogManager.instance.EndDialog());
+        }
     }
 
     public void StartDialogue()

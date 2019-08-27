@@ -6,6 +6,6 @@ using UnityEngine.EventSystems;
 
 public class UnityEventHandler : MonoBehaviour
 {
-    public UnityEvent eventHandler;
     public Dialog dialog;
+    public UnityEvent eventHandler;
 }

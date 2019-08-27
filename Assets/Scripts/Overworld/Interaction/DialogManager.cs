@@ -90,7 +90,7 @@ public class DialogManager : MonoBehaviour
     {
         if (dialogInfo.Count == 0)
         {
-            EndDialog();
+            StartCoroutine(EndDialog());
             return;
         }
 
@@ -181,18 +181,20 @@ public class DialogManager : MonoBehaviour
         }
     }
 
-    public void EndDialog()
+    public IEnumerator EndDialog()
     {
-        ChoiceManager.instance.selector.SetActive(false);
-        ChoiceManager.instance.ChoiceMade();
+        bool canPlayAnimation = animator.gameObject.activeSelf && dialogSelector.gameObject.activeSelf;
 
+        ChoiceManager.instance.choiceHolder.SetActive(false);
+
+        isTyping = false;
         isActive = false;
 
-        ToggleSelector();
 
-        if (animator.gameObject.activeSelf)
-            StartCoroutine(PlayAnimation());
-
+        while (!canPlayAnimation)
+            yield return null;
+        
+        StartCoroutine(PlayAnimation());
     }
 
     void ToggleSelector()
