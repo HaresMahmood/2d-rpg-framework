@@ -15,7 +15,7 @@ public class ChoiceManager : MonoBehaviour
         if (instance == null)
             instance = this;
     }
-    
+
     [UnityEngine.Header("Setup")]
     [SerializeField] private EventSystem eventSystem;
 

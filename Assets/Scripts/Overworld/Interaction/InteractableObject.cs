@@ -21,7 +21,7 @@ public class InteractableObject : MonoBehaviour
         else if (Input.GetButtonDown("Back") && DialogManager.instance.isActive)
         {
             StopAllCoroutines();
-            StartCoroutine(DialogManager.instance.EndDialog());
+            DialogManager.instance.EndDialog();
         }
     }
 

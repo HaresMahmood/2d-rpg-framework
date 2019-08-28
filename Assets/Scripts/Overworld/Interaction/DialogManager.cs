@@ -38,6 +38,8 @@ public class DialogManager : MonoBehaviour
 
     [HideInInspector] public bool isActive, isTyping, hasBranchingDialog = false, choiceMade = false;
 
+    private bool canPlayAnimation = false;
+
     [HideInInspector] public Queue<Dialog.Info> dialogInfo;
 
     [HideInInspector] public DialogChoices dialogChoices;
@@ -90,7 +92,7 @@ public class DialogManager : MonoBehaviour
     {
         if (dialogInfo.Count == 0)
         {
-            StartCoroutine(EndDialog());
+            EndDialog();
             return;
         }
 
@@ -181,18 +183,10 @@ public class DialogManager : MonoBehaviour
         }
     }
 
-    public IEnumerator EndDialog()
-    {
-        bool canPlayAnimation = animator.gameObject.activeSelf && dialogSelector.gameObject.activeSelf;
-
-        ChoiceManager.instance.choiceHolder.SetActive(false);
-
-        isTyping = false;
+    public void EndDialog()
+    { 
+        
         isActive = false;
-
-
-        while (!canPlayAnimation)
-            yield return null;
         
         StartCoroutine(PlayAnimation());
     }
