@@ -5,19 +5,16 @@ using UnityEngine;
 
 public class CharMovement: MovingObject
 {
+    [UnityEngine.Header("Setup")]
     public Collider2D bounds;
 
     public Vector2 decisionTime = new Vector2(0, 1.5f);
     private float decisionTimeCount;
 
-    private Vector3 direction;
-
-    private PlayerMovement player;
+    [HideInInspector] public Vector3 direction;
 
     protected override void Start()
     {
-        player = GameObject.Find("Player").GetComponent<PlayerMovement>();
-
         moveTime = 0.3f;
 
         decisionTimeCount = Random.Range(decisionTime.x, decisionTime.y);
@@ -28,16 +25,8 @@ public class CharMovement: MovingObject
 
     void Update()
     {
-        //TODO Find more neat way to implement changing of orientation on Player interaction.
-        if (Input.GetButtonDown("Interact") && InteractableObject.playerInRange)
-        {
-            player.orientation = new Vector2(player.anim.GetFloat("moveX"), player.anim.GetFloat("moveY")); //TODO Set orientation of Player AND Character in MovingObject
-            direction = player.orientation * -1;
-        }
 
         if (!canMove || isMoving || onCoolDown || onExit) return; // We wait until Character is done moving. //TODO move this line to MovingObject.
-
-        //Debug.Log(direction);
 
         if (direction == Vector3.zero)
         {
@@ -50,7 +39,7 @@ public class CharMovement: MovingObject
             SetAnimations((int)direction.x, (int)direction.y);
         }
 
-        if (!InteractableObject.playerInRange && canMove) // If Player is not in range and Character is able to move, ...
+        if (!RangeHandler.playerInRange && canMove) // If Player is not in range and Character is able to move, ...
         {
             if (bounds.bounds.Contains(transform.position + direction)) // If target-tile is withing the set boundary.
             {

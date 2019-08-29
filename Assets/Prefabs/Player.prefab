@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 435328811974675732}
   - component: {fileID: 435328811974675734}
   - component: {fileID: 435328811974675736}
+  - component: {fileID: 1900324573637382871}
   - component: {fileID: 435328811974675738}
   - component: {fileID: 435328811974675735}
   - component: {fileID: 435328811974675737}
@@ -30,7 +31,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 435328811974675731}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.475, y: -0.2, z: 0}
+  m_LocalPosition: {x: -11.47, y: 2.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -50,6 +51,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -61,6 +63,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -123,6 +126,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   moveTime: 0
+  canMove: 1
   isMoving: 0
   onCoolDown: 0
   onExit: 0
@@ -132,7 +136,22 @@ MonoBehaviour:
   hasChar: 0
   coll: {fileID: 0}
   anim: {fileID: 0}
-  startingPos: {fileID: 0}
+  orientation: {x: 0, y: 0}
+--- !u!114 &1900324573637382871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 435328811974675731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5efb79d209954d4999032b92996b6cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!114 &435328811974675738
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -161,7 +180,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.024260819, y: -0.2957976}
+  m_Offset: {x: -0.03, y: -0.3}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -172,7 +191,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.9880351, y: 0.9901725}
+  m_Size: {x: 0.98, y: 0.98}
   m_EdgeRadius: 0
 --- !u!50 &435328811974675737
 Rigidbody2D:

@@ -1,26 +1,22 @@
-﻿//TODO: Add "[UnityEngine.Header("Configuration")]"
-
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-/**
- * File-name: MovingObject.cs
- * Author: Hares Mahmood
- * Initial implementation: 11/07/2019
- * 
- * Sets up TileMap and character GameObject collision, as 
- * well as TileMap, grid-based movement.
- */
+/// <summary>
+/// MovingObject: Sets up TileMap and character GameObject collision, as 
+/// well as TileMap, grid-based movement.
+/// </summary>
 public abstract class MovingObject : MonoBehaviour
 {
     // Lists of ground- and obstacle-tiles.
-    public List<Tilemap> groundTiles = new List<Tilemap>();
-    public List<Tilemap> obstacleTiles = new List<Tilemap>();
+    [UnityEngine.Header("Setup")]
+    [SerializeField] private List<Tilemap> groundTiles = new List<Tilemap>();
+    [SerializeField] private List<Tilemap> obstacleTiles = new List<Tilemap>();
 
     // Time it takes for Character to move 1 tile.
-    public float moveTime;
+    
+    [HideInInspector] public float moveTime;
 
     [HideInInspector] public bool canMove = true, isMoving = false, onCoolDown = false, onExit = false;
     [HideInInspector] public bool onGround, hasGround, hasObstacle, hasChar;
@@ -28,21 +24,22 @@ public abstract class MovingObject : MonoBehaviour
     [HideInInspector] public Collider2D coll;
     [HideInInspector] public Animator anim;
 
-    public Vector2 orientation; //TODO Check CharMovement
+    [HideInInspector] public Vector2 orientation;
 
-    /*
-     * Start is called before the first frame update
-     */
+    /// <summary>
+    /// Start is called before the first frame update
+    /// </summary>
     protected virtual void Start()
     {
         anim = GetComponent<Animator>();
         coll = GetComponent<Collider2D>();
     }
 
-    /*
-     * Checks if Character can move to target-tile.
-     * Takes 2 parameters: int xDir and int yDir for direction.
-     */ 
+    /// <summary>
+    /// Checks if Character can move to target-tile.
+    /// </summary>
+    /// <param name="xDir"> X-coordinate of the target-direction. </param>
+    /// <param name="yDir"> Y-coordinate of the target-direction. </param>
     protected virtual void CheckCollision(int xDir, int yDir)
     {
         // Starting position of Character.
@@ -71,7 +68,7 @@ public abstract class MovingObject : MonoBehaviour
                 hasObstacle = true; 
         }
 
-        if (getChar(coll, direction, 0.5f))
+        if (GetCharacter(coll, direction, 0.5f))
             hasChar = true; // If a character is standing on the target-tile, ...
 
         // If Character starts movement from a ground-tile.
@@ -80,17 +77,14 @@ public abstract class MovingObject : MonoBehaviour
             // If the front tile is a walkable ground-tile and doesn't already have 
             // a character standing there, Character will move towards said tile.
             if (hasGround && !hasObstacle & !hasChar)
-            {
-                // Moves Character to target-tile
-                StartCoroutine(Move(targetTile));
-            }
+                StartCoroutine(Move(targetTile)); // Moves Character to target-tile.
         }
     }
 
-    /*
-     * Moves Character to the center of target-tile.
-     * Takes 1 parameter: Vector 2 end for end-position.
-     */
+    /// <summary>
+    /// Moves Character to the center of target-tile.
+    /// </summary>
+    /// <param name="end"> End-position of Character. </param>
     protected IEnumerator Move(Vector3 end)
     {
         isMoving = true; // Character is now moving.
@@ -111,36 +105,38 @@ public abstract class MovingObject : MonoBehaviour
         isMoving = false; // Once player has reached the new position, it is not moving anymore.
     }
 
-    /*
-     * Prevents Character from doing anything by setting cool-down.
-     * Takes 1 parameter: float coolDown for duration of cool-down.
-     */
-    protected IEnumerator CoolDown(float cooldown)
+    /// <summary>
+    /// Prevents Character from doing anything by setting cool-down timer.
+    /// </summary>
+    /// <param name="coolDown"> Duration of cool-down. </param>
+    protected IEnumerator CoolDown(float duration)
     {
         onCoolDown = true;
         
-        while (cooldown > 0f)
+        while (duration> 0f)
         {
-            cooldown -= Time.deltaTime;
+            duration -= Time.deltaTime;
             yield return null;
         }
 
         onCoolDown = false;
     }
-
-    /*
-     * Sets the walk and run animations for Character.
-     */
+    
+    /// <summary>
+    ///  Sets the walk and run animations for Character and
+    ///  sets the appriopriate orientation values of Character.
+    /// </summary>
     protected void SetAnimations(int xDir, int yDir)
     {
         anim.SetFloat("moveX", xDir);
         anim.SetFloat("moveY", yDir);
+
+        orientation = new Vector2(xDir, yDir);
     }
 
-    /*
-     * Sets the correct direction in the Animator for Character.
-     * Takes 2 parameters: int xDir and int yDir for direction.
-     */
+    /// <summary>
+    /// Sets the correct direction in the Animator for Character.
+    /// </summary>
     protected virtual void SetMoveAnimations()
     {
         if (isMoving)
@@ -149,36 +145,37 @@ public abstract class MovingObject : MonoBehaviour
             anim.SetBool("isWalking", false);
     }
 
-    /*
-     * Returns true if the position specified has a tile.
-     * Takes 2 parameters: Tilemap tilemap to check in a specific Tilemap and
-     * Vector 2 pos for position.
-     * Returns a boolean (true/false).
-     */
+    /// <summary>
+    /// Returns true if the position specified has a Tilemap (tile).
+    /// </summary>
+    /// <param name="tilemap"> Tilemap that needs to be checked. </param>
+    /// <param name="pos"> Position of Tilemap. </param>
+    /// <returns> Boolean. </returns>
     protected bool HasTile(Tilemap tilemap, Vector2 pos)
     {
         return tilemap.HasTile(tilemap.WorldToCell(pos));
     }
 
-    /*
-     * Returns the tile at the specified position.
-     * Takes 2 parameters: Tilemap tilemap to check in a specific Tilemap and
-     * Vector 2 pos for position.
-     * Returns a TileBase (tile).
-     */
+    /// <summary>
+    /// Returns the Tilemap at the specified position.
+    /// </summary>
+    /// <param name="tilemap"> Tilemap that needs to be checked. </param>
+    /// <param name="pos"> Position of Tilemap. </param>
+    /// <returns> TileBase. </returns>
     protected TileBase GetTile(Tilemap tilemap, Vector2 pos)
     {
         return tilemap.GetTile(tilemap.WorldToCell(pos));
     }
 
-    /*
-     * Returns true if the Collider2D of Character collides with that of
-     * another character.
-     * Takes 3 parameters: Collider2D moveCollider for Character's collider,
-     * Vector2 direction for direction and float distance for distance.
-     * Returns a boolean (true/false).
-     */ 
-    protected bool getChar(Collider2D moveCollider, Vector2 direction, float distance)
+    /// <summary>
+    /// Returns true if the Collider2D of Character collides with that of 
+    /// another character.
+    /// </summary>
+    /// <param name="moveCollider"> Collider of the character that is being checked. </param>
+    /// <param name="direction"> Direction Character is facing towards. </param>
+    /// <param name="distance"> Maximum distance the character that is being checked can be located. </param>
+    /// <returns> Boolean. </returns>
+    public static bool GetCharacter(Collider2D moveCollider, Vector2 direction, float distance)
     {
         if (moveCollider != null)
         {
@@ -190,12 +187,10 @@ public abstract class MovingObject : MonoBehaviour
             for (int i = 0; i < numHits; i++)
             {
                 if (!hits[i].collider.isTrigger) // If the particular collider is not a Trigger, ...
-                {
                     return true; // Hit blocking collision
-                }
             }
         }
+        
         return false;
     }
-
 }

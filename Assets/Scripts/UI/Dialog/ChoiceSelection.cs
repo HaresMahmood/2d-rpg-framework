@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ButtonHandler : MonoBehaviour
+public class ChoiceSelection : MonoBehaviour
 {
     public int buttonIndex;
 

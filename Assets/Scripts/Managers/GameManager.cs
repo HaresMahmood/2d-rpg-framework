@@ -13,8 +13,9 @@ public class GameManager : MonoBehaviour
             instance = this;
     }
 
+    [UnityEngine.Header("General Settings")]
     public Transform player;
 
-    [UnityEngine.Header("Settings")]
+    [UnityEngine.Header("Global Settings")]
     public string playerTag = "Player";
 }

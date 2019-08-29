@@ -1,5 +1,4 @@
-﻿//TODO: Add "[UnityEngine.Header("Configuration")]"
-
+﻿using System.Collections;
 using UnityEngine;
 
 /**
@@ -29,19 +28,26 @@ public class PlayerMovement : MovingObject
         int vertical = 0;
 
         // To get move directions.
-        horizontal = (int)(Input.GetAxisRaw("Horizontal"));
-        vertical = (int)(Input.GetAxisRaw("Vertical"));
+        horizontal = (int)(Input.GetAxis("Horizontal"));
+        vertical = (int)(Input.GetAxis("Vertical"));
 
         // We can't go in both directions at the same time
         if (horizontal != 0)
             vertical = 0;
 
 
-        if (horizontal != 0 || vertical != 0) // If there is an input, ...
+        if (horizontal > 0 && horizontal < 1 || vertical > 0 && vertical < 1) // If there is an input, ...
         {
-            if (canMove) // If Player is able to move, ...
+            SetAnimations(horizontal, vertical); // Sets direction the player is facing in, based on input.
+
+            StartCoroutine(CoolDown(moveTime)); // Starts cool-down timer.
+        }
+
+        else if (horizontal != 0 || vertical != 0) // If there is an input, ...
+        {
+           if (canMove) // If Player is able to move, ...
             {
-                if ((int)Input.GetAxisRaw("Run") != 0)
+                if (Input.GetButton("Run"))
                     isRunning = true;
 
                 SetAnimations(horizontal, vertical); // Sets direction the player is facing in, based on input.
@@ -82,6 +88,5 @@ public class PlayerMovement : MovingObject
             anim.SetBool("isRunning", false);
             anim.SetBool("isWalking", true);
         }
-        
     }
 }
