@@ -9,7 +9,7 @@ public class InteractionHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        bool hasOrientation = Physics2D.Raycast(transform.position, GetComponent<PlayerMovement>().orientation, 0.5f, layerMask);
+        bool hasOrientation = Physics2D.Raycast(transform.position, GetComponent<PlayerMovement>().orientation, 1f, layerMask);
 
         Debug.DrawRay(transform.position, GetComponent<PlayerMovement>().orientation, Color.red); // Debug
         Debug.Log(transform.position); // Debug
