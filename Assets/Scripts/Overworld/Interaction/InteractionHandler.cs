@@ -4,20 +4,24 @@ using UnityEngine;
 
 public class InteractionHandler : MonoBehaviour
 {
-    public LayerMask layerMask = 1 << 8;
+    [SerializeField] private static LayerMask layerMask = 1 << 8;
 
-    // Update is called once per frame
-    void Update()
+    private static Vector2 position;
+    private static Vector2 orientation;
+
+    private void Update()
     {
-        bool hasOrientation = Physics2D.Raycast(transform.position, GetComponent<PlayerMovement>().orientation, 1f, layerMask);
+        position = transform.position;
+        orientation = GetComponent<PlayerMovement>().orientation;
+    }
 
-        Debug.DrawRay(transform.position, GetComponent<PlayerMovement>().orientation, Color.red); // Debug
-        Debug.Log(transform.position); // Debug
+    public static bool hasOrientation()
+    {
+        bool hasOrientation = Physics2D.Raycast(position, orientation, 1f, layerMask);
 
         if (hasOrientation)
-            InteractableObject.orientation = true;
+            return true;
         else
-            InteractableObject.orientation = false;
-
+            return false;
     }
 }

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 435328811974675736}
   - component: {fileID: 1900324573637382871}
   - component: {fileID: 435328811974675738}
+  - component: {fileID: 1660426546575582436}
   - component: {fileID: 435328811974675735}
   - component: {fileID: 435328811974675737}
   m_Layer: 0
@@ -119,12 +120,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81c1c95603bfaa748851fd3fb952eac5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundTiles:
-  - {fileID: 0}
-  - {fileID: 0}
-  obstacleTiles:
-  - {fileID: 0}
-  - {fileID: 0}
+  groundTiles: []
+  obstacleTiles: []
   moveTime: 0
   canMove: 1
   isMoving: 0
@@ -149,9 +146,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5efb79d209954d4999032b92996b6cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 256
 --- !u!114 &435328811974675738
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -167,6 +161,18 @@ MonoBehaviour:
   baseSortingOrder: 500
   offset: -1
   runOnce: 0
+--- !u!114 &1660426546575582436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 435328811974675731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffd53b297bf2f6a49bb0337366acd56b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!61 &435328811974675735
 BoxCollider2D:
   m_ObjectHideFlags: 0

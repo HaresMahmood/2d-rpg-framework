@@ -3,8 +3,8 @@ using System.Collections;
 
 public class CamController : MonoBehaviour
 {
-    public Transform target;
-    public float moveSpeed;
+    [SerializeField] private Transform target;
+    [SerializeField] private float moveSpeed;
 
     void Start()
     {

@@ -10,12 +10,10 @@ using UnityEngine.Tilemaps;
 public abstract class MovingObject : MonoBehaviour
 {
     // Lists of ground- and obstacle-tiles.
-    [UnityEngine.Header("Setup")]
-    [SerializeField] private List<Tilemap> groundTiles = new List<Tilemap>();
-    [SerializeField] private List<Tilemap> obstacleTiles = new List<Tilemap>();
+    public List<Tilemap> groundTiles = new List<Tilemap>();
+    public List<Tilemap> obstacleTiles = new List<Tilemap>();
 
     // Time it takes for Character to move 1 tile.
-    
     [HideInInspector] public float moveTime;
 
     [HideInInspector] public bool canMove = true, isMoving = false, onCoolDown = false, onExit = false;
@@ -27,12 +25,21 @@ public abstract class MovingObject : MonoBehaviour
     [HideInInspector] public Vector2 orientation;
 
     /// <summary>
-    /// Start is called before the first frame update
+    /// Start is called before the first frame update.
     /// </summary>
     protected virtual void Start()
     {
         anim = GetComponent<Animator>();
         coll = GetComponent<Collider2D>();
+    }
+
+    /// <summary>
+    /// Update is called once per frame.
+    /// </summary>
+    protected virtual void Update() // TODO: Do check with bool for performance boost.
+    {
+        groundTiles = TilemapManager.groundTiles;
+        obstacleTiles = TilemapManager.obstacleTiles;
     }
 
     /// <summary>

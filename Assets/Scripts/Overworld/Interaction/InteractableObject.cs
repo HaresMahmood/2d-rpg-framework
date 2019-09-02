@@ -2,10 +2,10 @@
 
 public abstract class InteractableObject : MonoBehaviour
 {
-    public static bool orientation = false;
     protected virtual bool CanInteract(bool trigger)
     {
-        if (orientation && trigger)
+        bool hasOrientation = InteractionHandler.hasOrientation();
+        if (hasOrientation && trigger)
             return true;
 
         return false;

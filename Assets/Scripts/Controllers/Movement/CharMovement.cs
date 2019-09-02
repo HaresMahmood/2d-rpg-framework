@@ -1,32 +1,48 @@
-﻿//TODO Clean up code, document and comment.
-//TODO: Add "[UnityEngine.Header("Configuration")]"
+﻿using UnityEngine;
 
-using UnityEngine;
-
+/// <summary>
+/// CharMovement: Randomly moves NPC to tile, making 
+/// sure they stay within the set boundary.
+/// 
+/// Inherits from MovingObject.
+/// </summary>
 public class CharMovement: MovingObject
 {
     [UnityEngine.Header("Setup")]
-    public Collider2D bounds;
+    public Collider2D bounds; // The boundary within which NPC can move.
 
-    public Vector2 decisionTime = new Vector2(0, 1.5f);
+    [UnityEngine.Header("Settings")]
+    public Vector2 decisionTime = new Vector2(0, 1.5f); // Minimum and maximum values from which a random decision value is taken.
     private float decisionTimeCount;
 
-    [HideInInspector] public Vector3 direction;
+    [HideInInspector] public Vector3 direction; // Direction in which NPC will move.
 
+    /// <summary>
+    /// Start is called before the first frame update.
+    /// 
+    /// Overrides Start function from the MovingObject base-class.
+    /// </summary>
     protected override void Start()
     {
-        moveTime = 0.3f;
-
+        moveTime = 0.3f; // Default move-time is set at the beginning.
+        
+        // Choose a random time delay for taking a decision (changing direction, or standing in place for a while).
         decisionTimeCount = Random.Range(decisionTime.x, decisionTime.y);
         ChangeDirection();
 
-        base.Start(); // Calls the Start-function of the MovingObject base-class.
+        base.Start(); // Calls the Start function of the MovingObject base-class.
     }
 
-    void Update()
+    /// <summary>
+    /// Update is called once per frame.
+    /// 
+    /// Overrides Update function from the MovingObject base-class.
+    /// </summary>
+    protected override void Update()
     {
+        base.Update(); // Calls the update function of the MovingObject base-class.
 
-        if (!canMove || isMoving || onCoolDown || onExit) return; // We wait until Character is done moving. //TODO move this line to MovingObject.
+        if (!canMove || isMoving || onCoolDown || onExit) return; // We wait until NPC is done moving. //TODO move this line to MovingObject.
 
         if (direction == Vector3.zero)
         {
@@ -39,12 +55,12 @@ public class CharMovement: MovingObject
             SetAnimations((int)direction.x, (int)direction.y);
         }
 
-        if (!RangeHandler.playerInRange && canMove) // If Player is not in range and Character is able to move, ...
+        if (!RangeHandler.playerInRange && canMove) // If Player is not in range and NPC is able to move, ...
         {
             if (bounds.bounds.Contains(transform.position + direction)) // If target-tile is withing the set boundary.
             {
                 StartCoroutine(CoolDown(moveTime)); // Starts cool-down timer.
-                CheckCollision((int)direction.x, (int)direction.y); // Moves Character if possible.
+                CheckCollision((int)direction.x, (int)direction.y); // Moves NPC into direction if possible.
 
                 CheckDecisionTime();
             }
@@ -53,6 +69,9 @@ public class CharMovement: MovingObject
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     private void CheckDecisionTime()
     {
         SetMoveAnimations();
@@ -67,6 +86,11 @@ public class CharMovement: MovingObject
         }
     }
 
+    /// <summary>
+    /// Chooses a random new direction until an 
+    /// arbitrary timer is up or a completely new
+    /// direction has been choses.
+    /// </summary>
     private void ChooseNewDirection()
     {
         isMoving = false;
@@ -81,12 +105,14 @@ public class CharMovement: MovingObject
             i++;
         }
     }
-    
+
+    /// <summary>
+    /// Chooses a random direction for the NPC to move in,
+    /// or ensures NPC stays in place.
+    /// </summary>
     void ChangeDirection()
     {
         int orientation = Random.Range(0, 6);
-
-        //int orientation = 0; // Debug
 
         switch (orientation)
         {
@@ -106,6 +132,9 @@ public class CharMovement: MovingObject
                 direction = Vector3.zero; // Stay in place;
                 break;
             case 5:
+                direction = Vector3.zero; // Stay in place;
+                break;
+            case 6:
                 direction = Vector3.zero; // Stay in place;
                 break;
             default:
