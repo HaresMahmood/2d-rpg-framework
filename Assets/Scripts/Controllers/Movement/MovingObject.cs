@@ -75,7 +75,7 @@ public abstract class MovingObject : MonoBehaviour
                 hasObstacle = true; 
         }
 
-        if (GetCharacter(coll, direction, 0.5f))
+        if (GetCharacter(coll, direction, 1f))
             hasChar = true; // If a character is standing on the target-tile, ...
 
         // If Character starts movement from a ground-tile.

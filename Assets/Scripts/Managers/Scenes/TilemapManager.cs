@@ -1,37 +1,75 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 public class TilemapManager : MonoBehaviour
 {
-    [UnityEngine.Header("Static data")]
+    //[UnityEngine.Header("Static data")]
     public static List<Tilemap> groundTiles = new List<Tilemap>();
     public static List<Tilemap> obstacleTiles = new List<Tilemap>();
 
-    private void Start()
-    {
-        groundTiles.Clear();
-        obstacleTiles.Clear();
+    private bool hasLoaded;
 
-        GetTileMaps();
+    public void Start()
+    {
+        /*
+        Debug.Log(SceneManager.GetActiveScene().name);
+        if (!hasLoaded)
+            GetTileMaps(SceneManager.GetActiveScene());
+        */
     }
 
-    public static void GetTileMaps()
+    public void Update()
     {
-        Tilemap[] ground = GetFirstChildren(GameObject.Find("Grid").transform.Find("Ground").transform);
-        Tilemap[] obstacles = GetFirstChildren(GameObject.Find("Grid").transform.Find("Objects").transform);
+        Debug.Log(SceneManager.GetActiveScene().name);
 
+        if (!hasLoaded)
+            GetTileMaps(SceneManager.GetActiveScene());
 
-        //Debug.Log(ground.Length);
-        //Debug.Log(obstacles.Length);
+        /*
+        //Debug.Log(SceneStreamer.IsSceneLoaded(SceneManager.GetActiveScene().name));
 
-        groundTiles.AddRange(ground);
-        obstacleTiles.AddRange(obstacles);
+        if (!hasLoaded)
+        {
+            if (SceneStreamer.IsSceneLoaded(SceneManager.GetActiveScene().name))
+            {
+                GetTileMaps(SceneManager.GetActiveScene());
+                hasLoaded = true;
+            }
+        }
+
+        if (!SceneStreamer.IsSceneLoaded(SceneManager.GetActiveScene().name))
+            hasLoaded = false;
+            */
     }
 
+    public void GetTileMaps(Scene scene)
+    {
+        Tilemap[] ground;
+        Tilemap[] obstacles;
 
-    public static Tilemap[] GetFirstChildren(Transform parent)
+        List<GameObject> objList = GameObjectEventsHandler.specificSceneObjects[scene.name];
+        Debug.Log(objList.Count);
+
+        foreach (GameObject gObject in objList)
+        {
+            if (gObject.name == "Ground")
+            {
+                ground = GetFirstChildren(gObject.transform);
+                groundTiles.AddRange(ground);
+            }
+            else if (gObject.name == "Obstacles")
+            {
+                obstacles = GetFirstChildren(gObject.transform);
+                obstacleTiles.AddRange(obstacles);
+            }
+        }
+
+        hasLoaded = true;
+    }
+
+    public Tilemap[] GetFirstChildren(Transform parent)
     {
         Transform[] children = parent.GetComponentsInChildren<Transform>();
         Tilemap[] firstChildren = new Tilemap[parent.childCount];

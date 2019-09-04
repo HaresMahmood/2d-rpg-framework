@@ -61,8 +61,6 @@ public class ChoiceManager : MonoBehaviour
             selector.transform.position = choiceButtonPos;
             selector.SetActive(true);
 
-            eventSystem.SetSelectedGameObject(null); //Resetting the currently selected GO
-            eventSystem.firstSelectedGameObject = choiceButtons[0].transform.gameObject;
             eventSystem.SetSelectedGameObject(choiceButtons[selectedButton].transform.gameObject);
         }
         else
@@ -105,6 +103,9 @@ public class ChoiceManager : MonoBehaviour
             StartCoroutine((choiceButtons[i].FadeObject(1f, buttonAnimationSpeed)));
             yield return new WaitForSeconds(buttonAnimationSpeed);
         }
+
+        eventSystem.SetSelectedGameObject(null); //Resetting the currently selected GO
+        eventSystem.firstSelectedGameObject = choiceButtons[0].transform.gameObject;
     }
 
     public IEnumerator ChoiceMade()
@@ -143,6 +144,7 @@ public class ChoiceManager : MonoBehaviour
             Destroy(choiceButtons[i]);
 
         choiceButtons = null; // Reset choiceButtons-array to prepare for next batch of choices.
+        selectedButton = 0; buttonIndex = 0;
 
         DialogManager.instance.choiceMade = true;
         DialogManager.instance.NextSentence();
