@@ -29,11 +29,11 @@ public class GameObjectEventsHandler : MonoBehaviour
     public void HandlenotifyAwake(GameObject obj)
     {
         //if there are no objects for this scene then create a new list with the current scene list name
-        if (!specificSceneObjects.ContainsKey(SceneManager.GetActiveScene().name))
-            specificSceneObjects.Add(SceneManager.GetActiveScene().name, new List<GameObject>());
+        if (!specificSceneObjects.ContainsKey(obj.scene.name))
+            specificSceneObjects.Add(obj.scene.name, new List<GameObject>());
 
         //now add the gameobject which sent this event upon awake/start to this list
-        specificSceneObjects[SceneManager.GetActiveScene().name].Add(obj);
+        specificSceneObjects[obj.scene.name].Add(obj);
     }
 
     public void HandlenotifyDeath(GameObject obj)
@@ -42,8 +42,8 @@ public class GameObjectEventsHandler : MonoBehaviour
         //if the dicitonary has this object then remove it upon object destroy
         if (specificSceneObjects.ContainsKey(SceneManager.GetActiveScene().name))
         {
-            if (specificSceneObjects[SceneManager.GetActiveScene().name].Contains(obj))
-                specificSceneObjects[SceneManager.GetActiveScene().name].Remove(obj);
+            if (specificSceneObjects[obj.scene.name].Contains(obj))
+                specificSceneObjects[obj.scene.name].Remove(obj);
         }
     }
 }

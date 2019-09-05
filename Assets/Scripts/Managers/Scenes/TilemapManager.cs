@@ -9,7 +9,7 @@ public class TilemapManager : MonoBehaviour
     public static List<Tilemap> groundTiles = new List<Tilemap>();
     public static List<Tilemap> obstacleTiles = new List<Tilemap>();
 
-    private bool hasLoaded;
+    private static bool hasLoaded;
 
     public void Start()
     {
@@ -25,7 +25,7 @@ public class TilemapManager : MonoBehaviour
         Debug.Log(SceneManager.GetActiveScene().name);
 
         if (!hasLoaded)
-            GetTileMaps(SceneManager.GetActiveScene());
+            GetTileMaps(SceneEdgeController.activeScene);
 
         /*
         //Debug.Log(SceneStreamer.IsSceneLoaded(SceneManager.GetActiveScene().name));
@@ -44,7 +44,7 @@ public class TilemapManager : MonoBehaviour
             */
     }
 
-    public void GetTileMaps(Scene scene)
+    public static void GetTileMaps(Scene scene)
     {
         Tilemap[] ground;
         Tilemap[] obstacles;
@@ -69,7 +69,7 @@ public class TilemapManager : MonoBehaviour
         hasLoaded = true;
     }
 
-    public Tilemap[] GetFirstChildren(Transform parent)
+    public static Tilemap[] GetFirstChildren(Transform parent)
     {
         Transform[] children = parent.GetComponentsInChildren<Transform>();
         Tilemap[] firstChildren = new Tilemap[parent.childCount];
