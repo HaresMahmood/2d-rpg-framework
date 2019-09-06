@@ -44,13 +44,13 @@ public class TilemapManager : MonoBehaviour
             */
     }
 
-    public static void GetTileMaps(Scene scene)
+    public void GetTileMaps(Scene scene)
     {
         Tilemap[] ground;
         Tilemap[] obstacles;
 
         List<GameObject> objList = GameObjectEventsHandler.specificSceneObjects[scene.name];
-        Debug.Log(objList.Count);
+        //Debug.Log(objList.Count);
 
         foreach (GameObject gObject in objList)
         {
