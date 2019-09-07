@@ -9,11 +9,9 @@
 	[AddComponentMenu("Scene Streamer/Neighboring Scenes")]
 	public class NeighboringScenes : MonoBehaviour
 	{
-
 		/// <summary>
 		/// The scene's neighbors.
 		/// </summary>
 		[Tooltip("This scene's neighbors")]
 		public string[] sceneNames;
-
 	}

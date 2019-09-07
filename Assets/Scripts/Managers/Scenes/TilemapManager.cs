@@ -9,67 +9,58 @@ public class TilemapManager : MonoBehaviour
     public static List<Tilemap> groundTiles = new List<Tilemap>();
     public static List<Tilemap> obstacleTiles = new List<Tilemap>();
 
-    private static bool hasLoaded;
-
-    public void Start()
-    {
-        /*
-        Debug.Log(SceneManager.GetActiveScene().name);
-        if (!hasLoaded)
-            GetTileMaps(SceneManager.GetActiveScene());
-        */
-    }
-
-    public void Update()
-    {
-        Debug.Log(SceneManager.GetActiveScene().name);
-
-        if (!hasLoaded)
-            GetTileMaps(SceneEdgeController.activeScene);
-
-        /*
-        //Debug.Log(SceneStreamer.IsSceneLoaded(SceneManager.GetActiveScene().name));
-
-        if (!hasLoaded)
-        {
-            if (SceneStreamer.IsSceneLoaded(SceneManager.GetActiveScene().name))
-            {
-                GetTileMaps(SceneManager.GetActiveScene());
-                hasLoaded = true;
-            }
-        }
-
-        if (!SceneStreamer.IsSceneLoaded(SceneManager.GetActiveScene().name))
-            hasLoaded = false;
-            */
-    }
-
-    public void GetTileMaps(Scene scene)
+    public static void GetTilemaps(GameObject[] objList)
     {
         Tilemap[] ground;
         Tilemap[] obstacles;
 
-        List<GameObject> objList = GameObjectEventsHandler.specificSceneObjects[scene.name];
-        //Debug.Log(objList.Count);
+        //Debug.Log(objList.Length);
 
         foreach (GameObject gObject in objList)
         {
-            if (gObject.name == "Ground")
+            Transform[] rootObjects = GetFirstChildren(gObject.transform);
+
+            foreach (Transform rootObject in rootObjects)
             {
-                ground = GetFirstChildren(gObject.transform);
-                groundTiles.AddRange(ground);
-            }
-            else if (gObject.name == "Obstacles")
-            {
-                obstacles = GetFirstChildren(gObject.transform);
-                obstacleTiles.AddRange(obstacles);
+                if (rootObject)
+                {
+                    Transform[] grid = GetFirstChildren(rootObject);
+
+                    foreach (Transform gridObject in grid)
+                    {
+                        if (gridObject.name == "Ground")
+                        {
+                            ground = GetFirstTilemapChildren(gridObject.transform);
+                            groundTiles.AddRange(ground);
+                        }
+                        else if (gridObject.name == "Obstacles")
+                        {
+                            obstacles = GetFirstTilemapChildren(gridObject.transform);
+                            obstacleTiles.AddRange(obstacles);
+                        }
+                    }
+                }
             }
         }
-
-        hasLoaded = true;
     }
 
-    public static Tilemap[] GetFirstChildren(Transform parent)
+    public static Transform[] GetFirstChildren(Transform parent)
+    {
+        Transform[] children = parent.GetComponentsInChildren<Transform>();
+        Transform[] firstChildren = new Transform[parent.childCount];
+        int index = 0;
+        foreach (Transform child in children)
+        {
+            if (child.parent == parent)
+            {
+                firstChildren[index] = child;
+                index++;
+            }
+        }
+        return firstChildren;
+    }
+
+    public static Tilemap[] GetFirstTilemapChildren(Transform parent)
     {
         Transform[] children = parent.GetComponentsInChildren<Transform>();
         Tilemap[] firstChildren = new Tilemap[parent.childCount];

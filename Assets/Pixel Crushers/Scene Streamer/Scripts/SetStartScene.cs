@@ -13,7 +13,7 @@ using System.Collections;
 
 		public void Start() 
 		{
-			SceneStreamer.SetCurrentScene(startSceneName);
+			SceneStreamManager.SetCurrentScene(startSceneName);
 			Destroy(this);
 		}
 
