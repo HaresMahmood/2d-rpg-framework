@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// PlayerMovement: Moves Player to tile depending on input.
@@ -15,10 +14,8 @@ public class PlayerMovement : MovingObject
     /// 
     /// Overrides Update function from the MovingObject base-class.
     /// </summary>
-    protected override void Update()
+    private void Update()
     {
-        base.Update(); // Calls the update function of the MovingObject base-class.
-
         if (!canMove || isMoving || onCoolDown || onExit) return; // We wait until Player is done moving. //TODO move this line to MovingObject.
 
         isRunning = false; // By default, Player is not running.

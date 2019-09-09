@@ -2,9 +2,7 @@
 using UnityEngine.Events;
 using System.Collections;
 using System.Collections.Generic;
-#if !(UNITY_4_6 || UNITY_4_7 || UNITY_5_0 || UNITY_5_1 || UNITY_5_2)
 using UnityEngine.SceneManagement;
-#endif
 
 /// <summary>
 /// SceneStreamer is a singleton MonoBehavior used to load and unload scenes that contain
@@ -28,18 +26,8 @@ using UnityEngine.SceneManagement;
 /// SceneStreamer works with Unity and Unity Pro. In Unity 4 free, it uses LoadLevelAdditive. 
 /// In Unity 5 or Unity 4 Pro, it uses LoadLevelAdditiveAsync.
 /// </summary>
-[AddComponentMenu("Scene Streamer/Scene Streamer")]
 public class SceneStreamManager : MonoBehaviour
 {
-
-#if !UNITY_5_3_OR_NEWER
-        /// <summary>
-        /// The GameObject that will contain all loaded scenes.
-        /// </summary>
-        [Tooltip("The GameObject that will contain all loaded scenes.")]
-        public GameObject sceneContainer = null;
-#endif
-
     /// <summary>
     /// The max number of neighbors to load out from the current scene.
     /// </summary>
@@ -114,6 +102,8 @@ public class SceneStreamManager : MonoBehaviour
             s_instance = value;
         }
     }
+
+    public static bool scenesUnloaded = false;
 
     public void Awake()
     {
@@ -211,7 +201,7 @@ public class SceneStreamManager : MonoBehaviour
         if (!scene) return null;
         NeighboringScenes neighboringScenes = scene.AddComponent<NeighboringScenes>();
         HashSet<string> neighbors = new HashSet<string>();
-        var sceneEdges = scene.GetComponentsInChildren<SceneEdge>();
+        var sceneEdges = scene.GetComponentsInChildren<SceneEdgeController>();
         for (int i = 0; i < sceneEdges.Length; i++)
         {
             neighbors.Add(sceneEdges[i].nextSceneName);
@@ -258,17 +248,8 @@ public class SceneStreamManager : MonoBehaviour
         }
         m_loading.Add(sceneName);
         if (logDebugInfo && distance > 0) Debug.Log("Scene Streamer: Loading " + sceneName + ".");
-#if UNITY_4_6 || UNITY_4_7
-			if (Application.HasProLicense())
-			{
-				StartCoroutine(LoadAdditiveAsync(sceneName, loadedHandler, distance));
-			} else
-			{
-				StartCoroutine(LoadAdditive(sceneName, loadedHandler, distance));
-			}
-#else
+
         StartCoroutine(LoadAdditiveAsync(sceneName, loadedHandler, distance));
-#endif
     }
 
     /// <summary>
@@ -279,47 +260,13 @@ public class SceneStreamManager : MonoBehaviour
     /// <param name="distance">Distance.</param>
     private IEnumerator LoadAdditiveAsync(string sceneName, InternalLoadedHandler loadedHandler, int distance)
     {
-#if UNITY_4_6 || UNITY_4_7 || UNITY_5_0 || UNITY_5_1 || UNITY_5_2
-            AsyncOperation asyncOperation = Application.LoadLevelAdditiveAsync(sceneName);
-#else
         AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
 
-        //SceneManager.sceneLoaded += OnSceneLoadedWrapper;
-
-        //Debug.Log("DELEGATE ADDED"); // Debug
-#endif
         onLoading.Invoke(sceneName, asyncOperation);
         yield return asyncOperation;
 
         FinishLoad(sceneName, loadedHandler, distance);
-
-        //yield return new WaitForEndOfFrame();
         GetTilemaps(sceneName);
-    }
-
-    /// <summary>
-    /// (Unity) Runs Application.LoadLevelAdditive() and calls FinishLoad() when done.
-    /// This coroutine waits two frames to wait for the load to complete.
-    /// </summary>
-    /// <returns>The additive.</returns>
-    /// <param name="sceneName">Scene name.</param>
-    /// <param name="loadedHandler">Loaded handler.</param>
-    /// <param name="distance">Distance.</param>
-    private IEnumerator LoadAdditive(string sceneName, InternalLoadedHandler loadedHandler, int distance)
-    {
-#if UNITY_4_6 || UNITY_4_7 || UNITY_5_0 || UNITY_5_1 || UNITY_5_2
-            Application.LoadLevelAdditive(sceneName);
-#else
-        SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
-
-        //SceneManager.sceneLoaded += OnSceneLoadedWrapper;
-
-        //Debug.Log("DELEGATE ADDED"); // Debug
-#endif
-        onLoading.Invoke(sceneName, null);
-        yield return new WaitForEndOfFrame();
-        yield return new WaitForEndOfFrame();
-        FinishLoad(sceneName, loadedHandler, distance);
     }
 
     /// <summary>
@@ -333,9 +280,7 @@ public class SceneStreamManager : MonoBehaviour
     {
         GameObject scene = GameObject.Find(sceneName);
         if (scene == null && Debug.isDebugBuild) Debug.LogWarning("Scene Streamer: Can't find loaded scene named '" + sceneName + "'.");
-#if !UNITY_5_3_OR_NEWER
-            if (scene) scene.transform.parent = sceneContainer.transform;
-#endif
+
         m_loading.Remove(sceneName);
         m_loaded.Add(sceneName);
         onLoaded.Invoke(sceneName);
@@ -350,10 +295,13 @@ public class SceneStreamManager : MonoBehaviour
         HashSet<string> far = new HashSet<string>(m_loaded);
         far.ExceptWith(m_near);
         if (logDebugInfo && far.Count > 0) Debug.Log("Scene Streamer: Unloading scenes more than " + maxNeighborDistance + " away from current scene " + m_currentSceneName + ".");
+
         foreach (var sceneName in far)
         {
             Unload(sceneName);
         }
+
+        StartCoroutine(RemoveTilemaps());
     }
 
     /// <summary>
@@ -363,22 +311,12 @@ public class SceneStreamManager : MonoBehaviour
     public void Unload(string sceneName)
     {
         if (logDebugInfo) Debug.Log("Scene Streamer: Unloading scene " + sceneName + ".");
+
         Destroy(GameObject.Find(sceneName));
         m_loaded.Remove(sceneName);
-#if UNITY_5_3 || UNITY_5_4
-            StartCoroutine(UnloadSceneDelayed(sceneName));
-#elif UNITY_5_5_OR_NEWER
-        SceneManager.UnloadSceneAsync(sceneName);
-#endif
-    }
 
-#if UNITY_5_3 || UNITY_5_4
-        protected IEnumerator UnloadSceneDelayed(string sceneName)
-        {
-            yield return new WaitForSeconds(0.1f); // Delay to fix Unity bug #783271.
-            SceneManager.UnloadScene(sceneName);
+        SceneManager.UnloadSceneAsync(sceneName);
     }
-#endif
 
     /// <summary>
     /// Sets the current scene.
@@ -431,7 +369,13 @@ public class SceneStreamManager : MonoBehaviour
 
     public void GetTilemaps(string sceneName)
     {
-        TilemapManager.GetTilemaps(SceneManager.GetSceneByName(sceneName).GetRootGameObjects());
+        TilemapManager.instance.GetTilemaps(SceneManager.GetSceneByName(sceneName).GetRootGameObjects(), PlayerMovement.groundTiles, PlayerMovement.obstacleTiles);
+    }
+
+    public IEnumerator RemoveTilemaps()
+    {
+        yield return new WaitForEndOfFrame();
+        TilemapManager.instance.RemoveTilemaps(PlayerMovement.groundTiles, PlayerMovement.obstacleTiles);
     }
 
 }

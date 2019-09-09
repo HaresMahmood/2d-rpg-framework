@@ -5,16 +5,23 @@ using UnityEngine.Tilemaps;
 
 public class TilemapManager : MonoBehaviour
 {
-    //[UnityEngine.Header("Static data")]
-    public static List<Tilemap> groundTiles = new List<Tilemap>();
-    public static List<Tilemap> obstacleTiles = new List<Tilemap>();
+    public static TilemapManager instance;
 
-    public static void GetTilemaps(GameObject[] objList)
+    // Start is called before the first frame update
+    private void Awake()
+    {
+        if (instance == null)
+            instance = this;
+    }
+
+    //[UnityEngine.Header("Static data")]
+    //public static List<Tilemap> groundTiles = new List<Tilemap>();
+    //public static List<Tilemap> obstacleTiles = new List<Tilemap>();
+
+    public void GetTilemaps(GameObject[] objList, List<Tilemap> groundTiles, List<Tilemap> obstacleTiles)
     {
         Tilemap[] ground;
         Tilemap[] obstacles;
-
-        //Debug.Log(objList.Length);
 
         foreach (GameObject gObject in objList)
         {
@@ -41,6 +48,30 @@ public class TilemapManager : MonoBehaviour
                     }
                 }
             }
+        }
+    }
+
+    public void RemoveTilemaps(List<Tilemap> groundTiles, List<Tilemap> obstacleTiles)
+    {
+        Debug.Log("TilemapManager: Tilemap removal triggered.");
+
+        //groundTiles.ClearNullReferences();
+        //obstacleTiles.ClearNullReferences();
+
+        
+        //groundTiles.RemoveAll(GameObject => GameObject == null);
+        //obstacleTiles.RemoveAll(GameObject => GameObject == null);
+
+        for (var i = groundTiles.Count - 1; i > -1; i--)
+        {
+            if (groundTiles[i] == null)
+                groundTiles.RemoveAt(i);
+        }
+
+        for (var i = obstacleTiles.Count - 1; i > -1; i--)
+        {
+            if (obstacleTiles[i] == null)
+                obstacleTiles.RemoveAt(i);
         }
     }
 

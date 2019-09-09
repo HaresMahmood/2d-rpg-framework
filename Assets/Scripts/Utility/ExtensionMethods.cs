@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 
 //It is common to create a class to contain all of your
@@ -88,5 +89,14 @@ public static class ExtensionMethods
             waitTime = currentClip[0].clip.length;
 
         return waitTime;
+    }
+
+    public static void ClearNullReferences<T>(this List<T> list)
+    {
+        for (var i = list.Count - 1; i > -1; i--)
+        {
+            if (list[i] == null)
+                list.RemoveAt(i);
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Tilemaps;
 
 /// <summary>
 /// CharMovement: Randomly moves NPC to tile, making 
@@ -24,6 +25,8 @@ public class CharMovement: MovingObject
     /// </summary>
     protected override void Start()
     {
+        TilemapManager.instance.GetTilemaps(this.gameObject.scene.GetRootGameObjects(), groundTiles, obstacleTiles);
+
         moveTime = 0.3f; // Default move-time is set at the beginning.
         
         // Choose a random time delay for taking a decision (changing direction, or standing in place for a while).
@@ -38,10 +41,8 @@ public class CharMovement: MovingObject
     /// 
     /// Overrides Update function from the MovingObject base-class.
     /// </summary>
-    protected override void Update()
+    private void Update()
     {
-        base.Update(); // Calls the update function of the MovingObject base-class.
-
         if (!canMove || isMoving || onCoolDown || onExit) return; // We wait until NPC is done moving. //TODO move this line to MovingObject.
 
         if (direction == Vector3.zero)
