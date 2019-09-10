@@ -4,24 +4,37 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 /// <summary>
-/// MovingObject: Sets up TileMap and character GameObject collision, as 
-/// well as TileMap, grid-based movement.
+/// Defines collision for Tilemaps and Characters and
+/// defines grid-based movement for Characters.
 /// </summary>
 public abstract class MovingObject : MonoBehaviour
 {
-    // Lists of ground- and obstacle-tiles.
-    public static List<Tilemap> groundTiles = new List<Tilemap>();
-    public static List<Tilemap> obstacleTiles = new List<Tilemap>();
+    /// <summary>
+    /// Lists that keep track of Tilemaps. These can
+    /// be dynamically updated depending on the scene Character is in.
+    /// </summary>
+    public static List<Tilemap> groundTiles = new List<Tilemap>(), obstacleTiles = new List<Tilemap>();
 
-    // Time it takes for Character to move 1 tile.
+    /// <summary>
+    /// Time it takes for Character to move 1 tile.
+    /// </summary>
     [HideInInspector] public float moveTime;
 
-    [HideInInspector] public bool canMove = true, isMoving = false, onCoolDown = false, onExit = false;
-    [HideInInspector] public bool onGround, hasGround, hasObstacle, hasChar;
-    
+    // Checks to see if Character is allowed to move.
+    [HideInInspector] public bool canMove = true, isMoving = false, onCoolDown = false, onExit = false, onGround, hasGround, hasObstacle, hasChar;
+
+    /// <summary>
+    /// Collider2D attached to Character.
+    /// </summary>
     [HideInInspector] public Collider2D coll;
+    /// <summary>
+    /// Animator attached to Character.
+    /// </summary>
     [HideInInspector] public Animator anim;
 
+    /// <summary>
+    /// Orientation of Character.
+    /// </summary>
     [HideInInspector] public Vector2 orientation;
 
     /// <summary>
@@ -63,7 +76,7 @@ public abstract class MovingObject : MonoBehaviour
         foreach (var t in obstacleTiles)
         {
             if (GetTile(t, targetTile) != null) // If target-tile is an obstacle-tile, ..
-                hasObstacle = true; 
+                hasObstacle = true;
         }
 
         if (GetCharacter(coll, direction, 1f))
@@ -86,7 +99,7 @@ public abstract class MovingObject : MonoBehaviour
     protected IEnumerator Move(Vector3 end)
     {
         isMoving = true; // Character is now moving.
-        
+
         float remainingDistance = (transform.position - end).sqrMagnitude; // Calculates squared magnitude of the remaining distance, since it is much faster.
         float inverseMoveTime = 1 / moveTime; // Calculates the inverse move-time, since it is mathematically "cheaper" to divide than to multiply.
 
@@ -110,8 +123,8 @@ public abstract class MovingObject : MonoBehaviour
     protected IEnumerator CoolDown(float duration)
     {
         onCoolDown = true;
-        
-        while (duration> 0f)
+
+        while (duration > 0f)
         {
             duration -= Time.deltaTime;
             yield return null;
@@ -119,7 +132,7 @@ public abstract class MovingObject : MonoBehaviour
 
         onCoolDown = false;
     }
-    
+
     /// <summary>
     ///  Sets the walk and run animations for Character and
     ///  sets the appriopriate orientation values of Character.
@@ -188,7 +201,7 @@ public abstract class MovingObject : MonoBehaviour
                     return true; // Hit blocking collision
             }
         }
-        
+
         return false;
     }
 }

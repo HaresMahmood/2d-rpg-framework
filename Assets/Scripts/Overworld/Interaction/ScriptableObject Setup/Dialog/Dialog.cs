@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 
 [CreateAssetMenu(fileName = "New Dialog", menuName = "Dialog/Dialog")]
@@ -13,6 +11,6 @@ public class Dialog : ScriptableObject
         [TextArea] public string sentence;
         public DialogChoices choices;
     }
-    
+
     public Info[] dialogInfo;
 }

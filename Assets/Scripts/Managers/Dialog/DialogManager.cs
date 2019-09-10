@@ -1,12 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 public class DialogManager : MonoBehaviour
 {
     public static DialogManager instance;
-    
+
     private void Awake()
     {
         if (instance == null)
@@ -45,7 +45,7 @@ public class DialogManager : MonoBehaviour
 
         dialogTransform = dialogBox.GetComponent<RectTransform>();
         initDialogPos = dialogTransform.anchoredPosition;
-        
+
         dialogInfo = new Queue<Dialog.Info>();
     }
 
@@ -53,7 +53,7 @@ public class DialogManager : MonoBehaviour
     {
         ToggleSelector();
 
-        PlayerMovement player = GameManager.instance.player.GetComponent<PlayerMovement>();
+        PlayerMovement player = GameManager.Player().GetComponent<PlayerMovement>();
         if (isTyping || isActive)
             player.canMove = false;
         else
@@ -82,13 +82,13 @@ public class DialogManager : MonoBehaviour
         charHolder = dialogBox.transform.Find("Portrait").gameObject;
         if (info.character != null)
         {
-            TextMeshProUGUI nameText =  charHolder.transform.Find("Name").Find("Text").GetComponent<TextMeshProUGUI>();
+            TextMeshProUGUI nameText = charHolder.transform.Find("Name").Find("Text").GetComponent<TextMeshProUGUI>();
             Image charPortrait = charHolder.transform.Find("Image").GetComponent<Image>();
 
             nameText.text = info.character.name;
             charPortrait.sprite = info.character.portrait;
-            charHolder.SetActive(true);    
- 
+            charHolder.SetActive(true);
+
             textTransform.sizeDelta = initTextDem;
             textTransform.anchoredPosition = initTextPos;
 
@@ -97,9 +97,9 @@ public class DialogManager : MonoBehaviour
         else
         {
             charHolder.SetActive(false);
- 
-            textTransform.sizeDelta = new Vector2 (dialogBox.transform.Find("Base").GetComponent<RectTransform>().rect.width - 500, initTextDem.y);
-            textTransform.anchoredPosition = new Vector2 (0, initTextPos.y);
+
+            textTransform.sizeDelta = new Vector2(dialogBox.transform.Find("Base").GetComponent<RectTransform>().rect.width - 500, initTextDem.y);
+            textTransform.anchoredPosition = new Vector2(0, initTextPos.y);
 
             dialogTransform.anchoredPosition = new Vector2(0, initDialogPos.y);
         }
@@ -163,7 +163,7 @@ public class DialogManager : MonoBehaviour
     }
 
     public void EndDialog()
-    { 
+    {
         isActive = false;
         StartCoroutine(PlayAnimation(dialogAnimator));
     }
@@ -180,7 +180,7 @@ public class DialogManager : MonoBehaviour
     {
         animator.SetTrigger("isInActive");
 
-        float waitTime = animator.GetAnimationInfo();
+        float waitTime = animator.GetAnimationTime();
         yield return new WaitForSeconds(waitTime);
 
         animator.gameObject.SetActive(false);

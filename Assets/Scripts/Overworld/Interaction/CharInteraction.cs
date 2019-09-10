@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CharInteraction : InteractableObject
 {
@@ -20,7 +18,7 @@ public class CharInteraction : InteractableObject
         {
             if (CanInteract(!DialogManager.instance.isTyping))
             {
-                movement.direction = GameManager.instance.player.GetComponent<PlayerMovement>().orientation * -1;
+                movement.direction = GameManager.Player().GetComponent<PlayerMovement>().orientation * -1;
 
                 if (!DialogManager.instance.isActive)
                     StartDialogue();

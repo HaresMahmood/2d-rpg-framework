@@ -1,12 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    // Start is called before the first frame update
+    /// <summary>
+    /// Awake is called when the script instance is being loaded.
+    /// </summary>
     private void Awake()
     {
         if (instance == null)
@@ -18,4 +18,9 @@ public class GameManager : MonoBehaviour
 
     [UnityEngine.Header("Global Settings")]
     public string playerTag = "Player";
+
+    public static Transform Player()
+    {
+        return instance.player;
+    }
 }

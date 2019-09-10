@@ -5580,8 +5580,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0ea60d51c219a749acf4778a43653ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundTiles: []
-  obstacleTiles: []
   moveTime: 0.3
   canMove: 1
   isMoving: 0
@@ -6371,12 +6369,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27f088c4b23abd544ad48cf77411d12c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activeScene:
-    m_Handle: 0
-  nextScene:
-    m_Handle: 0
-  nextSceneName: SampleScene3
   currentSceneRoot: {fileID: 1923595031}
+  nextScene: SampleScene3
 --- !u!61 &1457060826
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6636,12 +6630,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27f088c4b23abd544ad48cf77411d12c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activeScene:
-    m_Handle: 0
-  nextScene:
-    m_Handle: 0
-  nextSceneName: SampleScene2
   currentSceneRoot: {fileID: 1923595031}
+  nextScene: SampleScene2
 --- !u!1 &1996946704
 GameObject:
   m_ObjectHideFlags: 0

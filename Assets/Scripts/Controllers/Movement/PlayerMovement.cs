@@ -1,12 +1,15 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// PlayerMovement: Moves Player to tile depending on input.
+/// Moves Player to tile depending on input.
 /// 
 /// Inherits from MovingObject.
 /// </summary>
 public class PlayerMovement : MovingObject
 {
+    /// <summary>
+    /// Used to check if Player is running.
+    /// </summary>
     private bool isRunning;
 
     /// <summary>
@@ -16,7 +19,7 @@ public class PlayerMovement : MovingObject
     /// </summary>
     private void Update()
     {
-        if (!canMove || isMoving || onCoolDown || onExit) return; // We wait until Player is done moving. //TODO move this line to MovingObject.
+        if (!canMove || isMoving || onCoolDown || onExit) return; // We wait until Player is done moving.
 
         isRunning = false; // By default, Player is not running.
         canMove = true; // By default, Player is able to move.
@@ -41,7 +44,7 @@ public class PlayerMovement : MovingObject
 
         else if (horizontal != 0 || vertical != 0) // If there is an input, ...
         {
-           if (canMove) // If Player is able to move, ...
+            if (canMove) // If Player is able to move, ...
             {
                 if (Input.GetButton("Run"))
                     isRunning = true;

@@ -1,10 +1,8 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.Events;
-using UnityEngine.EventSystems;
-using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class ChoiceManager : MonoBehaviour
 {
@@ -40,7 +38,7 @@ public class ChoiceManager : MonoBehaviour
         selector = choiceHolder.transform.Find("Selector").gameObject;
 
         selectorAnimator = selector.GetComponent<Animator>();
-        choiceHolderAnimator   = choiceHolder.GetComponent<Animator>();
+        choiceHolderAnimator = choiceHolder.GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -115,13 +113,13 @@ public class ChoiceManager : MonoBehaviour
         {
             selectorAnimator.SetTrigger("isInActive");
 
-            float waitTime = selectorAnimator.GetAnimationInfo();
+            float waitTime = selectorAnimator.GetAnimationTime();
             yield return new WaitForSeconds(waitTime / 2);
         }
-        
+
         choiceHolderAnimator.SetTrigger("isInActive");
 
-        float choiceWaitTime = choiceHolderAnimator.GetAnimationInfo();
+        float choiceWaitTime = choiceHolderAnimator.GetAnimationTime();
 
         for (int i = 0; i < choiceButtons.Length; i++)
         {

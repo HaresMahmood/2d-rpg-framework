@@ -1,22 +1,32 @@
 ﻿using UnityEngine;
-using UnityEngine.Tilemaps;
 
 /// <summary>
-/// CharMovement: Randomly moves NPC to tile, making 
+/// Randomly moves NPC to tile, making 
 /// sure they stay within the set boundary.
 /// 
 /// Inherits from MovingObject.
 /// </summary>
-public class CharMovement: MovingObject
+public class CharMovement : MovingObject
 {
+    /// <summary>
+    /// The boundary within which NPC can move.
+    /// </summary>
     [UnityEngine.Header("Setup")]
-    public Collider2D bounds; // The boundary within which NPC can move.
+    [Tooltip("The boundary within which NPC can move.")]
+    public Collider2D bounds;
 
+    /// <summary>
+    /// Minimum and maximum values from which a random decision value is taken.
+    /// </summary>
     [UnityEngine.Header("Settings")]
-    public Vector2 decisionTime = new Vector2(0, 1.5f); // Minimum and maximum values from which a random decision value is taken.
+    [Tooltip("Minimum and maximum values from which a random decision value is taken.")]
+    public Vector2 decisionTime = new Vector2(0, 1.5f);
     private float decisionTimeCount;
 
-    [HideInInspector] public Vector3 direction; // Direction in which NPC will move.
+    /// <summary>
+    /// Direction in which NPC will move.
+    /// </summary>
+    [HideInInspector] public Vector3 direction;
 
     /// <summary>
     /// Start is called before the first frame update.
@@ -28,7 +38,7 @@ public class CharMovement: MovingObject
         TilemapManager.instance.GetTilemaps(this.gameObject.scene.GetRootGameObjects(), groundTiles, obstacleTiles);
 
         moveTime = 0.3f; // Default move-time is set at the beginning.
-        
+
         // Choose a random time delay for taking a decision (changing direction, or standing in place for a while).
         decisionTimeCount = Random.Range(decisionTime.x, decisionTime.y);
         ChangeDirection();
@@ -43,7 +53,7 @@ public class CharMovement: MovingObject
     /// </summary>
     private void Update()
     {
-        if (!canMove || isMoving || onCoolDown || onExit) return; // We wait until NPC is done moving. //TODO move this line to MovingObject.
+        if (!canMove || isMoving || onCoolDown || onExit) return; // We wait until NPC is done moving.
 
         if (direction == Vector3.zero)
         {

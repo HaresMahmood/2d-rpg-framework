@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,7 +13,7 @@ public class FormManager : MonoBehaviour
     }
 
     public GameObject blurOverlay;
-    
+
     public bool isInteracting;
     public int buttonIndex, selectedButton;
     public int maxButtonIndex = 1;
@@ -72,7 +71,7 @@ public class FormManager : MonoBehaviour
     }
 
 
-        private void CheckInput()
+    private void CheckInput()
     {
         if (Input.GetAxisRaw("Horizontal") != 0)
         {

@@ -1,85 +1,65 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
-//It is common to create a class to contain all of your
-//extension methods. This class must be static.
+/// <summary>
+/// A collection of extension methods.
+/// </summary>
 public static class ExtensionMethods
 {
-    //Even though they are used like normal methods, extension
-    //methods must be declared static. Notice that the first
-    //parameter has the 'this' keyword followed by a Transform
-    //variable. This variable denotes which class the extension
-    //method becomes a part of.
-    public static void ResetTransformation(this Transform trans)
-    {
-        trans.position = Vector3.zero;
-        trans.localRotation = Quaternion.identity;
-        trans.localScale = new Vector3(1, 1, 1);
-    }
-
-    // Define an enumerator to perform our fading.
-    // Pass it the material to fade, the opacity to fade to (0 = transparent, 1 = opaque),
-    // and the number of seconds to fade over.
+    /// <summary>
+    /// Defines an enumerator to perform fading on a GameObject.
+    /// </summary>
+    /// <param name="gameObject"> GameObject to fade. </param>
+    /// <param name="targetOpacity"> Opacity (0 to 1) to fade GameObject to. </param>
+    /// <param name="duration"> Duration of fade. </param>
+    /// <returns></returns>
     public static IEnumerator FadeObject(this GameObject gameObject, float targetOpacity, float duration)
     {
-
-        // Cache the current color of the material, and its initiql opacity.
+        bool isImage = false, hasText = false;
         Color color;
-        bool hasImage = false;
-        bool hasText = false;
-        Color textColor;
 
-        if (gameObject.GetComponent<Image>() != null)
+        if (gameObject.GetComponent<Image>() != null) // If the GameObject is an image, ...
         {
-            color = gameObject.GetComponent<Image>().color;
-            hasImage = true;
+            color = gameObject.GetComponent<Image>().color; // Caches the current color and initial opacity of image.
+            isImage = true;
         }
         else
-            color = gameObject.GetComponent<Renderer>().material.color;
+            color = gameObject.GetComponent<Renderer>().material.color; // Caches the current color of and initial opacity of material.
 
-        if (gameObject.GetComponentInChildren<TextMeshProUGUI>() != null)
-        {
-            textColor = gameObject.GetComponentInChildren<TextMeshProUGUI>().color;
+        if (gameObject.GetComponentInChildren<TextMeshProUGUI>() != null) // If the GameObject has a TextMeshPro object as child, ...
             hasText = true;
-        }
-        
-        float startOpacity = color.a;
 
-        // Track how many seconds we've been fading.
-        float t = 0;
+        float startOpacity = color.a; // Creates a value of the initial opacity.
 
-        while (t < duration)
+        float t = 0; // Tracks how many seconds we've been fading.
+        while (t < duration) // While time is less than the duration of the fade, ...
         {
-            // Step the fade forward one frame.
-            t += Time.deltaTime;
-            // Turn the time into an interpolation factor between 0 and 1.
-            float blend = Mathf.Clamp01(t / duration);
+            t += Time.deltaTime; // Steps the fade forward one frame.
+            float blend = Mathf.Clamp01(t / duration); // Turns the time into an interpolation factor between 0 and 1. 
 
-            // Blend to the corresponding opacity between start & target.
-            color.a = Mathf.Lerp(startOpacity, targetOpacity, blend);
-            // Apply the resulting color to the button.
-            if (hasImage)
+            color.a = Mathf.Lerp(startOpacity, targetOpacity, blend); // Blends to the corresponding opacity between start & target.
+
+            if (isImage)
                 gameObject.GetComponent<Image>().color = color;
             else
                 gameObject.GetComponent<Renderer>().material.color = color;
 
             if (hasText)
-            {
-                // Blend to the corresponding opacity between start & target.
-                textColor.a = Mathf.Lerp(startOpacity, targetOpacity, blend);
-                // Apply the resulting color to the text.
                 gameObject.GetComponentInChildren<TextMeshProUGUI>().color = color;
-            }
 
-            // Wait one frame, then repeat.
-            yield return null;
+            yield return null; // Wait one frame, then repeat.
         }
     }
 
-    public static float GetAnimationInfo(this Animator animator)
+    /// <summary>
+    /// Gets the time of the current clip playing in any Animator.
+    /// </summary>
+    /// <param name="animator"> The Animator attached to the GameObject. </param>
+    /// <returns></returns>
+    public static float GetAnimationTime(this Animator animator)
     {
         AnimatorClipInfo[] currentClip = null;
         float waitTime = 0;
@@ -91,12 +71,41 @@ public static class ExtensionMethods
         return waitTime;
     }
 
+    /// <summary>
+    /// Checks for and clears any missing (null) entries in a List.
+    /// </summary>
+    /// <typeparam name="T"> Generic The element type of the List. </typeparam>
+    /// <param name="list"> Generic List with missing (null) entries. </param>
     public static void ClearNullReferences<T>(this List<T> list)
     {
-        for (var i = list.Count - 1; i > -1; i--)
+        List<T> templist = new List<T>(); // Creates
+        for (int i = 0; i < list.Count - 1; i++)
+            if (list[i] != null) templist.Add(list[i]);
+
+        list = templist;
+    }
+
+    /// <summary>
+    /// Removes parent Transform from 
+    /// MonoBehaviour.GetComonentsInChildren<>() and returns an array 
+    /// containing only the parent's children.
+    /// </summary>
+    /// <param name="parent"> Transform of GameObject with children. </param>
+    /// <returns> An array containing the children of the parent Transform. </returns>
+    public static Transform[] GetChildren(this Transform parent)
+    {
+        Transform[] children = parent.GetComponentsInChildren<Transform>();
+        Transform[] firstChildren = new Transform[parent.childCount];
+        int index = 0;
+        foreach (Transform child in children)
         {
-            if (list[i] == null)
-                list.RemoveAt(i);
+            if (child.parent == parent)
+            {
+                firstChildren[index] = child;
+                index++;
+            }
         }
+
+        return firstChildren;
     }
 }

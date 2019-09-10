@@ -8,9 +8,9 @@
 /// </summary>
 public class NeighboringScenes : MonoBehaviour
 {
-	/// <summary>
-	/// The scene's neighbors.
-	/// </summary>
-	[Tooltip("This scene's neighbors")]
-	public string[] sceneNames;
+    /// <summary>
+    /// The scenes neighboring this scene.
+    /// </summary>
+    [Tooltip("The scenes neighboring this scene.")]
+    public string[] sceneNames;
 }
