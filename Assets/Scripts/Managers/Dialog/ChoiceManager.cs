@@ -19,7 +19,7 @@ public class ChoiceManager : MonoBehaviour
 
     [UnityEngine.Header("Settings")]
     [SerializeField] private GameObject choiceButtonPrefab;
-    [Range(0.01f, 0.2f)] [SerializeField] private float buttonAnimationSpeed = 0.07f;
+    [Range(0.01f, 0.2f)] [SerializeField] private float buttonAnimationDelay = 0.07f;
 
     private GameObject[] choiceButtons;
     [HideInInspector] public GameObject choiceHolder, selector;
@@ -98,9 +98,11 @@ public class ChoiceManager : MonoBehaviour
 
         for (int i = 0; i < choiceButtons.Length; i++)
         {
-            StartCoroutine((choiceButtons[i].FadeObject(1f, buttonAnimationSpeed)));
-            yield return new WaitForSeconds(buttonAnimationSpeed);
+            StartCoroutine((choiceButtons[i].FadeObject(1f, buttonAnimationDelay)));
+            yield return new WaitForSeconds(buttonAnimationDelay);
         }
+
+        selectedButton = 0;
 
         eventSystem.SetSelectedGameObject(null); //Resetting the currently selected GO
         eventSystem.firstSelectedGameObject = choiceButtons[0].transform.gameObject;
@@ -119,14 +121,13 @@ public class ChoiceManager : MonoBehaviour
 
         choiceHolderAnimator.SetTrigger("isInActive");
 
-        float choiceWaitTime = choiceHolderAnimator.GetAnimationTime();
-
         for (int i = 0; i < choiceButtons.Length; i++)
         {
-            StartCoroutine(choiceButtons[i].FadeObject(0f, buttonAnimationSpeed));
-            yield return new WaitForSeconds(buttonAnimationSpeed);
+            StartCoroutine(choiceButtons[i].FadeObject(0f, buttonAnimationDelay));
+            yield return new WaitForSeconds(buttonAnimationDelay);
         }
 
+        selector.SetActive(false);
         choiceHolder.SetActive(false);
 
         UnityEventHandler choiceEvent = choiceButtons[selectedButton].GetComponent<Button>().GetComponent<UnityEventHandler>();
@@ -138,14 +139,30 @@ public class ChoiceManager : MonoBehaviour
                 DialogManager.instance.dialogInfo.Enqueue(dialogInfo);
         }
 
-        for (int i = 0; i < choiceButtons.Length; i++) // Destroy currenty displayed choice buttons.
-            Destroy(choiceButtons[i]);
-
-        choiceButtons = null; // Reset choiceButtons-array to prepare for next batch of choices.
-        selectedButton = 0; buttonIndex = 0;
+        DestroyButtons();
 
         DialogManager.instance.choiceMade = true;
         DialogManager.instance.NextSentence();
+    }
+
+    public void DestroyButtons()
+    {
+        if (choiceButtons != null)
+        {
+            for (int i = 0; i < choiceButtons.Length; i++) // Destroy currenty displayed choice buttons.
+                Destroy(choiceButtons[i]);
+        }
+
+        choiceButtons = null; // Reset choiceButtons-array to prepare for next batch of choices.
+        selectedButton = 0; buttonIndex = 0;
+    }
+
+    public void SkipChoice()
+    {
+        selector.SetActive(true);
+        choiceHolder.SetActive(false);
+
+        DestroyButtons();
     }
 
     private bool CanMakeChoice()

@@ -31,6 +31,8 @@ public class DialogManager : MonoBehaviour
     private RectTransform textTransform, dialogTransform;
     private Vector2 initTextPos, initTextDem, initDialogPos;
 
+    private Coroutine typingRoutine;
+
     // Use this for initialization
     private void Start()
     {
@@ -114,7 +116,7 @@ public class DialogManager : MonoBehaviour
 
         string sentence = info.sentence;
         StopAllCoroutines();
-        StartCoroutine(DisplaySentence(sentence));
+        typingRoutine = StartCoroutine(DisplaySentence(sentence));
     }
 
     IEnumerator DisplaySentence(string sentence)
@@ -164,6 +166,12 @@ public class DialogManager : MonoBehaviour
 
     public void EndDialog()
     {
+        if (isTyping)
+        {
+            StopCoroutine(typingRoutine);
+            isTyping = false;
+        }
+
         isActive = false;
         StartCoroutine(PlayAnimation(dialogAnimator));
     }

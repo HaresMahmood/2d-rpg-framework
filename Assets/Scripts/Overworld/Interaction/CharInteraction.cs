@@ -25,11 +25,11 @@ public class CharInteraction : InteractableObject
                 else if (DialogManager.instance.isActive && !DialogManager.instance.hasBranchingDialog)
                     NextSentence();
             }
-            else if (Input.GetButtonDown("Back") && DialogManager.instance.isActive)
-            {
-                //StopAllCoroutines();
-                DialogManager.instance.EndDialog();
-            }
+        }
+
+        if (Input.GetButtonDown("Cancel") && DialogManager.instance.isActive)
+        {
+            SkipDialog();
         }
     }
 

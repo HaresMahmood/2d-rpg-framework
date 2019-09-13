@@ -10,4 +10,12 @@ public abstract class InteractableObject : MonoBehaviour
 
         return false;
     }
+
+    protected virtual void SkipDialog()
+    {
+        if (DialogManager.instance.hasBranchingDialog)
+            ChoiceManager.instance.SkipChoice();
+
+        DialogManager.instance.EndDialog();
+    }
 }
