@@ -11,6 +11,12 @@ public abstract class InteractableObject : MonoBehaviour
         return false;
     }
 
+    protected virtual void ToggleAutoAdvance()
+    {
+        if (DialogManager.instance.isActive || DialogManager.instance.isTyping)
+                DialogManager.instance.autoAdvance = !DialogManager.instance.autoAdvance; // Toggles autoAdvance bool.
+    }
+
     protected virtual void SkipDialog()
     {
         if (DialogManager.instance.hasBranchingDialog)

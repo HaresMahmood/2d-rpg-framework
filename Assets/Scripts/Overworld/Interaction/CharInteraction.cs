@@ -27,10 +27,11 @@ public class CharInteraction : InteractableObject
             }
         }
 
+        if (Input.GetButtonDown("Toggle"))
+            ToggleAutoAdvance();
+
         if (Input.GetButtonDown("Cancel") && DialogManager.instance.isActive)
-        {
             SkipDialog();
-        }
     }
 
     private void StartDialogue()

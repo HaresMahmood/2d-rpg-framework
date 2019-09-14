@@ -19,11 +19,11 @@ public class DialogManager : MonoBehaviour
     [UnityEngine.Header("Settings")]
     [Range(0.01f, 1.0f)] [SerializeField] private float typingDelay = 0.03f;
 
-    [HideInInspector] public bool isActive, isTyping, hasBranchingDialog = false, choiceMade = false;
+    [HideInInspector] public bool isActive, isTyping, autoAdvance, hasBranchingDialog = false, choiceMade = false;
     [HideInInspector] public Queue<Dialog.Info> dialogInfo;
     [HideInInspector] public DialogChoices dialogChoices;
 
-    private GameObject charHolder;
+    private GameObject charHolder, autoAdvanceIcon;
     private TextMeshProUGUI dialogText;
     private Image dialogSelector;
     private Animator dialogAnimator, selectorAnimator;
@@ -32,13 +32,15 @@ public class DialogManager : MonoBehaviour
     private Vector2 initTextPos, initTextDem, initDialogPos;
 
     private Coroutine typingRoutine;
+    private Coroutine autoAdvanceRoutine; // TODO: Make dictionary to keep track of all purgable Coroutines.
 
     // Use this for initialization
     private void Start()
     {
         dialogText = dialogBox.transform.Find("Text").GetComponent<TextMeshProUGUI>();
-        dialogSelector = dialogBox.transform.Find("Selector").GetComponent<Image>();
         dialogAnimator = dialogBox.GetComponent<Animator>();
+        autoAdvanceIcon = dialogBox.transform.Find("Auto advance").gameObject;
+        dialogSelector = dialogBox.transform.Find("Selector").GetComponent<Image>();
         selectorAnimator = dialogSelector.GetComponent<Animator>();
 
         textTransform = dialogText.GetComponent<RectTransform>();
@@ -53,7 +55,15 @@ public class DialogManager : MonoBehaviour
 
     private void Update()
     {
-        ToggleSelector();
+        if (autoAdvance)
+            autoAdvanceRoutine = StartCoroutine(AutoAdvance());
+        else
+        {
+            if (autoAdvanceRoutine != null)
+                StopCoroutine(autoAdvanceRoutine);
+        }
+
+        ToggleSelector(); // TODO: Look for more performant way to toggle selector.
 
         PlayerMovement player = GameManager.Player().GetComponent<PlayerMovement>();
         if (isTyping || isActive)
@@ -164,6 +174,18 @@ public class DialogManager : MonoBehaviour
             dialogInfo.Enqueue(info);
     }
 
+    public IEnumerator AutoAdvance()
+    {
+        while (isTyping)
+            yield return null;
+
+        if (!isTyping && !hasBranchingDialog && autoAdvance)
+        {
+            yield return new WaitForSeconds(1f); // TODO: make waiting time between sentences serializable.
+            NextSentence();
+        }
+    }
+
     public void EndDialog()
     {
         if (isTyping)
@@ -178,10 +200,20 @@ public class DialogManager : MonoBehaviour
 
     private void ToggleSelector()
     {
-        if (!isTyping && !hasBranchingDialog && isActive)
-            dialogSelector.gameObject.SetActive(true);
+        if (!autoAdvance)
+        {
+            autoAdvanceIcon.SetActive(false);
+
+            if (!isTyping && !hasBranchingDialog && isActive)
+                dialogSelector.gameObject.SetActive(true);
+            else
+                StartCoroutine(PlayAnimation(selectorAnimator));
+        }
         else
-            StartCoroutine(PlayAnimation(selectorAnimator));
+        {
+            dialogSelector.gameObject.SetActive(false);
+            autoAdvanceIcon.SetActive(true);
+        }
     }
 
     private IEnumerator PlayAnimation(Animator animator)
