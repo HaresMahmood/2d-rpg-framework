@@ -20,8 +20,8 @@ public class DialogManager : MonoBehaviour
     [Range(0.01f, 1.0f)] [SerializeField] private float typingDelay = 0.03f;
 
     [HideInInspector] public bool isActive, isTyping, autoAdvance, hasBranchingDialog = false, choiceMade = false;
-    [HideInInspector] public Queue<Dialog.Info> dialogInfo;
-    [HideInInspector] public DialogChoices dialogChoices;
+    [HideInInspector] public Queue<Dialog.DialogInfo> dialogInfo;
+    [HideInInspector] public BranchingDialog dialogChoices;
 
     private GameObject charHolder, autoAdvanceIcon;
     private TextMeshProUGUI dialogText;
@@ -50,7 +50,7 @@ public class DialogManager : MonoBehaviour
         dialogTransform = dialogBox.GetComponent<RectTransform>();
         initDialogPos = dialogTransform.anchoredPosition;
 
-        dialogInfo = new Queue<Dialog.Info>();
+        dialogInfo = new Queue<Dialog.DialogInfo>();
     }
 
     private void Update()
@@ -89,16 +89,16 @@ public class DialogManager : MonoBehaviour
             return;
         }
 
-        Dialog.Info info = dialogInfo.Dequeue();
+        Dialog.DialogInfo dialog = dialogInfo.Dequeue();
 
         charHolder = dialogBox.transform.Find("Portrait").gameObject;
-        if (info.character != null)
+        if (dialog.character != null)
         {
             TextMeshProUGUI nameText = charHolder.transform.Find("Name").Find("Text").GetComponent<TextMeshProUGUI>();
             Image charPortrait = charHolder.transform.Find("Image").GetComponent<Image>();
 
-            nameText.text = info.character.name;
-            charPortrait.sprite = info.character.portrait;
+            nameText.text = dialog.character.name;
+            charPortrait.sprite = dialog.character.portrait;
             charHolder.SetActive(true);
 
             textTransform.sizeDelta = initTextDem;
@@ -116,15 +116,15 @@ public class DialogManager : MonoBehaviour
             dialogTransform.anchoredPosition = new Vector2(0, initDialogPos.y);
         }
 
-        if (info.choices != null)
+        if (dialog.choices != null)
         {
             hasBranchingDialog = true;
-            dialogChoices = info.choices;
+            dialogChoices = dialog.choices;
         }
         else
             hasBranchingDialog = false;
 
-        string sentence = info.sentence;
+        string sentence = dialog.sentence;
         StopAllCoroutines();
         typingRoutine = StartCoroutine(DisplaySentence(sentence));
     }
@@ -170,7 +170,7 @@ public class DialogManager : MonoBehaviour
     {
         dialogInfo.Clear();
 
-        foreach (Dialog.Info info in dialog.dialogInfo)
+        foreach (Dialog.DialogInfo info in dialog.dialog)
             dialogInfo.Enqueue(info);
     }
 

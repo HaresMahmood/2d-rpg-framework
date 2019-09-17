@@ -10,7 +10,7 @@ public class PlayerMovement : MovingObject
     /// <summary>
     /// Used to check if Player is running.
     /// </summary>
-    private bool isRunning;
+    public bool isRunning; // TODO: Made public until UI indication of run-toggle is added.
 
     /// <summary>
     /// Update is called once per frame.
@@ -19,9 +19,15 @@ public class PlayerMovement : MovingObject
     /// </summary>
     private void Update()
     {
+        if (Input.GetButtonDown("Toggle"))
+            ToggleRunning();
+
+        if (!isMoving)
+            SetMoveAnimations(); // Turns all move animations off.
+
         if (!canMove || isMoving || onCoolDown || onExit) return; // We wait until Player is done moving.
 
-        isRunning = false; // By default, Player is not running.
+        //isRunning = false; // By default, Player is not running.
         canMove = true; // By default, Player is able to move.
 
         // To store the direction in which Player wants to move.
@@ -67,13 +73,22 @@ public class PlayerMovement : MovingObject
     }
 
     /// <summary>
+    /// Used to permanently toggle running, instead of holding
+    /// down the "Shift"-key all the time.
+    /// </summary>
+    private void ToggleRunning()
+    {
+        isRunning = !isRunning;
+    }
+
+    /// <summary>
     /// Sets the walk and run animations for Player. 
     /// 
     /// Overrides SetMoveAnimions function from the MovingObject base-class.
     /// </summary>
     protected override void SetMoveAnimations()
     {
-        if (isRunning) // If Player is running, ...
+        if (isRunning && isMoving) // If Player is running, ...
         {
             anim.SetBool("isRunning", true);
             anim.SetBool("isWalking", false);

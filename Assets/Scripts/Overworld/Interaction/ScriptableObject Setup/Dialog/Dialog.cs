@@ -1,16 +1,17 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Events;
 
-
-[CreateAssetMenu(fileName = "New Dialog", menuName = "Dialog/Dialog")]
+[CreateAssetMenu(fileName = "New Dialog", menuName = "Dialog/Dialog", order = 1)]
 public class Dialog : ScriptableObject
 {
     [System.Serializable]
-    public class Info
+    public class DialogInfo
     {
-        public CharacterInfo character;
-        [TextArea] public string sentence;
-        public DialogChoices choices;
+        public Character character;
+        public string sentence;
+        public BranchingDialog choices;
     }
 
-    public Info[] dialogInfo;
+    public List<DialogInfo> dialog = new List<DialogInfo>();
 }
