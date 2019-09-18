@@ -67,22 +67,22 @@ public class ChoiceManager : MonoBehaviour
 
     public IEnumerator CreateChoiceButtons()
     {
-        choiceButtons = new GameObject[DialogManager.instance.dialogChoices.branchingDialog.Count];
+        choiceButtons = new GameObject[DialogManager.instance.branchingDialog.dialogBranches.Count];
 
-        for (int i = 0; i < DialogManager.instance.dialogChoices.branchingDialog.Count; i++)
+        for (int i = 0; i < DialogManager.instance.branchingDialog.dialogBranches.Count; i++)
         {
             GameObject choiceButtonObj = (GameObject)Instantiate(choiceButtonPrefab, Vector3.zero, Quaternion.identity); // Instantiates (creates) new choice button from prefab in scene.
 
             choiceButtonObj.name = "Choice Button " + (i + 1); // Gives appropriate name to newly instantiated choice button.
             choiceButtonObj.transform.SetParent(choiceHolder.transform.Find("Buttons").transform, false);
-            choiceButtonObj.GetComponentInChildren<TextMeshProUGUI>().text = DialogManager.instance.dialogChoices.branchingDialog[i].choiceText;
+            choiceButtonObj.GetComponentInChildren<TextMeshProUGUI>().text = DialogManager.instance.branchingDialog.dialogBranches[i].branchOption;
             choiceButtonObj.GetComponent<ChoiceSelection>().buttonIndex = i;
 
             UnityEventHandler eventHandler = choiceButtonObj.GetComponent<UnityEventHandler>();
-            eventHandler.eventHandler = DialogManager.instance.dialogChoices.branchingDialog[i].choiceEvent;
+            eventHandler.eventHandler = DialogManager.instance.branchingDialog.dialogBranches[i].branchEvent;
 
-            if (DialogManager.instance.dialogChoices.branchingDialog[i].nextDialog != null)
-                eventHandler.dialog = DialogManager.instance.dialogChoices.branchingDialog[i].nextDialog;
+            if (DialogManager.instance.branchingDialog.dialogBranches[i].nextDialog != null)
+                eventHandler.dialog = DialogManager.instance.branchingDialog.dialogBranches[i].nextDialog;
             else
                 eventHandler.dialog = null;
 
@@ -135,8 +135,8 @@ public class ChoiceManager : MonoBehaviour
 
         if (choiceEvent.dialog != null)
         {
-            foreach (Dialog.DialogInfo dialogInfo in choiceEvent.dialog.dialog)
-                DialogManager.instance.dialogInfo.Enqueue(dialogInfo);
+            foreach (Dialog.DialogData dialog in choiceEvent.dialog.dialogData)
+                DialogManager.instance.dialogData.Enqueue(dialog);
         }
 
         DestroyButtons();

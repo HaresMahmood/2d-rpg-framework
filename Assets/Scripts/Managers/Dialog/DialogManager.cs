@@ -20,8 +20,8 @@ public class DialogManager : MonoBehaviour
     [Range(0.01f, 1.0f)] [SerializeField] private float typingDelay = 0.03f;
 
     [HideInInspector] public bool isActive, isTyping, autoAdvance, hasBranchingDialog = false, choiceMade = false;
-    [HideInInspector] public Queue<Dialog.DialogInfo> dialogInfo;
-    [HideInInspector] public BranchingDialog dialogChoices;
+    [HideInInspector] public Queue<Dialog.DialogData> dialogData;
+    [HideInInspector] public BranchingDialog branchingDialog;
 
     private GameObject charHolder, autoAdvanceIcon;
     private TextMeshProUGUI dialogText;
@@ -50,7 +50,8 @@ public class DialogManager : MonoBehaviour
         dialogTransform = dialogBox.GetComponent<RectTransform>();
         initDialogPos = dialogTransform.anchoredPosition;
 
-        dialogInfo = new Queue<Dialog.DialogInfo>();
+        dialogData = new Queue<Dialog.DialogData>();
+
     }
 
     private void Update()
@@ -83,13 +84,13 @@ public class DialogManager : MonoBehaviour
 
     public void NextSentence()
     {
-        if (dialogInfo.Count == 0)
+        if (dialogData.Count == 0)
         {
             EndDialog();
             return;
         }
 
-        Dialog.DialogInfo dialog = dialogInfo.Dequeue();
+        Dialog.DialogData dialog = dialogData.Dequeue();
 
         charHolder = dialogBox.transform.Find("Portrait").gameObject;
         if (dialog.character != null)
@@ -109,20 +110,20 @@ public class DialogManager : MonoBehaviour
         else
         {
             charHolder.SetActive(false);
-
             textTransform.sizeDelta = new Vector2(dialogBox.transform.Find("Base").GetComponent<RectTransform>().rect.width - 500, initTextDem.y);
             textTransform.anchoredPosition = new Vector2(0, initTextPos.y);
-
             dialogTransform.anchoredPosition = new Vector2(0, initDialogPos.y);
         }
 
-        if (dialog.choices != null)
+        if (dialog.branchingDialog != null)
         {
+            branchingDialog = dialog.branchingDialog;
             hasBranchingDialog = true;
-            dialogChoices = dialog.choices;
         }
         else
+        {
             hasBranchingDialog = false;
+        }
 
         string sentence = dialog.sentence;
         StopAllCoroutines();
@@ -168,10 +169,10 @@ public class DialogManager : MonoBehaviour
 
     public void EnqueueDialog(Dialog dialog)
     {
-        dialogInfo.Clear();
+        dialogData.Clear();
 
-        foreach (Dialog.DialogInfo info in dialog.dialog)
-            dialogInfo.Enqueue(info);
+        foreach (Dialog.DialogData info in dialog.dialogData)
+            dialogData.Enqueue(info);
     }
 
     public IEnumerator AutoAdvance()

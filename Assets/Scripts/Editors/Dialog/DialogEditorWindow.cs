@@ -1,23 +1,25 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEngine.Events;
 
 public class DialogEditorWindow : EditorWindow
 {
     public Character character;
     public string sentence;
-    public BranchingDialog choices;
+    public BranchingDialog branchingDialog;
 
     public static Dialog dialog;
 
-    //public List<SerializedObject> serializedList = new List<SerializedObject>();
+    public bool hasBranchingDialog;
 
-    public bool hasBranchingDialog = false;
+    //Vector2 scrollPos;
 
     public static void ShowWindow(Dialog _dialog)
     {
-        EditorWindow window = EditorWindow.GetWindow(typeof(DialogEditorWindow));
-        window.maxSize = new Vector2(400, 220);
+        DialogEditorWindow window = (DialogEditorWindow)EditorWindow.GetWindow(typeof(DialogEditorWindow), true, "Add new sentence");
+        window.maxSize = new Vector2(400, 230);
         window.minSize = window.maxSize;
 
         dialog = _dialog;
@@ -25,6 +27,11 @@ public class DialogEditorWindow : EditorWindow
 
     private void OnGUI()
     {
+        //scrollPos = GUILayout.BeginScrollView(scrollPos, false, true, , GUILayout.MaxHeight(500), GUILayout.ExpandHeight(true));
+        EditorGUILayout.BeginVertical();
+
+
+        EditorGUILayout.BeginVertical();
         GUILayout.Space(10);
 
         EditorGUILayout.BeginVertical();
@@ -39,6 +46,7 @@ public class DialogEditorWindow : EditorWindow
         EditorGUILayout.BeginVertical();
         EditorGUILayout.LabelField("Sentence");
         sentence = EditorGUILayout.TextArea(sentence, GUILayout.MaxHeight(50));
+        EditorStyles.textField.wordWrap = true;
         EditorGUILayout.EndVertical();
 
         GUILayout.Space(5);
@@ -48,18 +56,7 @@ public class DialogEditorWindow : EditorWindow
         EditorGUILayout.BeginVertical();
         hasBranchingDialog = EditorGUILayout.Toggle("Branching dialog", hasBranchingDialog);
         if (hasBranchingDialog)
-        {
-            choices = (BranchingDialog)EditorGUILayout.ObjectField(choices, typeof(BranchingDialog), false);
-
-            /*
-            if (GUILayout.Button("Add dialog branch"))
-            {
-                serializedObj.Update();
-                EditorGUILayout.PropertyField(serializedProperty, true);
-                serializedObj.ApplyModifiedProperties();
-            }
-            */
-        }
+            branchingDialog = (BranchingDialog)EditorGUILayout.ObjectField(branchingDialog, typeof(BranchingDialog), false);
         EditorGUILayout.EndVertical();
 
         GUILayout.Space(5);
@@ -67,23 +64,28 @@ public class DialogEditorWindow : EditorWindow
         GUILayout.Space(5);
 
         EditorGUILayout.BeginVertical();
+        EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Add"))
         {
             AddSentence();
             this.Close();
         }
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.EndVertical();
+
+        //GUILayout.EndScrollView();
         EditorGUILayout.EndVertical();
     }
 
     public void AddSentence()
     {
-        Dialog.DialogInfo newSentence = new Dialog.DialogInfo();
+        Dialog.DialogData newSentence = new Dialog.DialogData();
 
         newSentence.character = character;
         newSentence.sentence = sentence;
-        newSentence.choices = choices;
+        newSentence.branchingDialog = branchingDialog;
 
-        dialog.dialog.Add(newSentence);
+        dialog.dialogData.Add(newSentence);
     }
 
     void GUILine(int height = 1) // TODO: Move to ExtensionMethods

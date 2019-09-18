@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 369e51a9a5a0d9f45aede7dbdbfd6c64, type: 3}
-  m_Name: New Dialog Branch
+  m_Name: New dialog branch
   m_EditorClassIdentifier: 
-  branchingDialog:
-  - choiceText: Yes
+  dialogBranches:
+  - branchOption: Yes
     nextDialog: {fileID: 0}
-    choiceEvent:
+    branchEvent:
       m_PersistentCalls:
         m_Calls: []
-  - choiceText: No
+  - branchOption: No
     nextDialog: {fileID: 0}
-    choiceEvent:
+    branchEvent:
       m_PersistentCalls:
         m_Calls: []

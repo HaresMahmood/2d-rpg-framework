@@ -2,17 +2,17 @@
 using UnityEngine.Events;
 using System.Collections.Generic;
 
-[CreateAssetMenu(fileName = "New Dialog Branch", menuName = "Dialog/Dialog Branch")]
+[CreateAssetMenu(fileName = "New dialog branch", menuName = "Dialog/Dialog branch")]
 public class BranchingDialog : ScriptableObject
 {
     [System.Serializable]
-    public class Choices
-    {
-        public string choiceText;
+    public class DialogBranch
+    { 
+        public string branchOption;
         public Dialog nextDialog;
-        public UnityEvent choiceEvent;
-
+        public UnityEvent branchEvent;
     }
 
-    public List<Choices> branchingDialog = new List<Choices>();
+    public List<DialogBranch> dialogBranches = new List<DialogBranch>();
 }
+

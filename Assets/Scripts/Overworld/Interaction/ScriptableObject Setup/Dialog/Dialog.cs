@@ -2,16 +2,16 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-[CreateAssetMenu(fileName = "New Dialog", menuName = "Dialog/Dialog", order = 1)]
+[CreateAssetMenu(fileName = "New dialog", menuName = "Dialog/Dialog")]
 public class Dialog : ScriptableObject
 {
     [System.Serializable]
-    public class DialogInfo
+    public class DialogData
     {
         public Character character;
         public string sentence;
-        public BranchingDialog choices;
+        public BranchingDialog branchingDialog;
     }
 
-    public List<DialogInfo> dialog = new List<DialogInfo>();
+    public List<DialogData> dialogData = new List<DialogData>();
 }
