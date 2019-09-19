@@ -7,14 +7,11 @@ using UnityEngine.Events;
 [CustomEditor(typeof(Dialog)), CanEditMultipleObjects]
 public class DialogEditor : Editor
 {
-    public Character character;
-    public string sentence;
-    public BranchingDialog branchingDialog;
+    private Dialog dialog;
 
-    public Dialog dialog;
-
-    bool hasBranchingDialog;
-    //[SerializeField] public static bool expandProperties = true;
+    private Character character;
+    private string sentence;
+    private BranchingDialog branchingDialog;
 
     private void OnEnable()
     {
@@ -24,74 +21,77 @@ public class DialogEditor : Editor
     public override void OnInspectorGUI()
     {
         EditorGUILayout.BeginVertical();
+
         GUILayout.Space(5);
 
         EditorGUILayout.BeginVertical("Box");
         GUILayout.Label("Total sentences: " + dialog.dialogData.Count);
         EditorGUILayout.EndVertical();
+        
+        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+
         EditorGUILayout.EndVertical();
-        GUILayout.Space(10);
 
         foreach (Dialog.DialogData dialog in dialog.dialogData)
         {
-            //expandProperties = EditorGUILayout.Foldout(expandProperties, "Sentence " + (this.dialog.dialogData.IndexOf(dialog) + 1));
-            //if (expandProperties)
-            //{
-            //EditorGUI.indentLevel++;
+            EditorGUILayout.BeginHorizontal();
+
             EditorGUILayout.BeginVertical("Box");
             GUILayout.Label("Sentence " + (this.dialog.dialogData.IndexOf(dialog) + 1) + ":");
             EditorGUILayout.EndVertical();
+
+            if (GUILayout.Button("Remove", GUILayout.Width(70), GUILayout.Height(25)))
+            {
+                this.dialog.dialogData.Remove(dialog);
+                EditorUtility.SetDirty(target);
+                return;
+            }
+
+            EditorGUILayout.EndHorizontal();
+
             EditorGUILayout.BeginVertical();
-                GUILayout.Space(5);
 
-                EditorGUILayout.BeginVertical();
-                EditorGUILayout.LabelField("Character");
-                dialog.character = (Character)EditorGUILayout.ObjectField(dialog.character, typeof(Character), false);
-                EditorGUILayout.EndVertical();
-
-                GUILayout.Space(5);
-                GUILine();
-                GUILayout.Space(5);
-
-                EditorGUILayout.BeginVertical();
-                EditorGUILayout.LabelField("Sentence");
-                dialog.sentence = EditorGUILayout.TextArea(dialog.sentence, GUILayout.MaxHeight(50));
-            EditorStyles.textField.wordWrap = true;
+            EditorGUILayout.BeginVertical();
+            EditorGUILayout.LabelField("Character");
+            dialog.character = (Character)EditorGUILayout.ObjectField(dialog.character, typeof(Character), false);
+            EditorUtility.SetDirty(target);
             EditorGUILayout.EndVertical();
 
-                GUILayout.Space(5);
-                GUILine();
-                GUILayout.Space(5);
+            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
-                EditorGUILayout.BeginVertical();
-                EditorGUILayout.LabelField("Branching dialog");
-                dialog.branchingDialog = (BranchingDialog)EditorGUILayout.ObjectField(dialog.branchingDialog, typeof(BranchingDialog), false);
-                EditorGUILayout.EndVertical();
+            EditorGUILayout.BeginVertical();
+            EditorGUILayout.LabelField("Sentence");
+            dialog.sentence = EditorGUILayout.TextArea(dialog.sentence, GUILayout.MaxHeight(50));
+            EditorStyles.textField.wordWrap = true;
+            EditorUtility.SetDirty(target);
+            EditorGUILayout.EndVertical();
 
-                GUILayout.Space(5);
-                GUILine();
-                GUILayout.Space(5);
-                EditorGUILayout.EndVertical();
-            //}
+            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+
+            EditorGUILayout.BeginVertical();
+            EditorGUILayout.LabelField("Branching dialog");
+            dialog.branchingDialog = (BranchingDialog)EditorGUILayout.ObjectField(dialog.branchingDialog, typeof(BranchingDialog), false);
+            EditorUtility.SetDirty(target);
+            EditorGUILayout.EndVertical();
+
+            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+
+            EditorGUILayout.EndVertical();
         }
 
         EditorGUILayout.BeginVertical();
+
         EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Add sentence"))
             DialogEditorWindow.ShowWindow(this.dialog);
 
         if (GUILayout.Button("Clear all sentences"))
+        {
             this.dialog.dialogData.Clear();
+            EditorUtility.SetDirty(target);
+        }
         EditorGUILayout.EndHorizontal();
+
         EditorGUILayout.EndVertical();
-
-        //base.OnInspectorGUI();
-    }
-
-    void GUILine(int height = 1) // TODO: Move to ExtensionMethods
-    {
-        Rect rect = EditorGUILayout.GetControlRect(false, height);
-        rect.height = height;
-        EditorGUI.DrawRect(rect, new Color(0.5f, 0.5f, 0.5f, 1));
     }
 }

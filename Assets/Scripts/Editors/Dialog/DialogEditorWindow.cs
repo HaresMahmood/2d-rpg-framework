@@ -6,20 +6,18 @@ using UnityEngine.Events;
 
 public class DialogEditorWindow : EditorWindow
 {
-    public Character character;
-    public string sentence;
-    public BranchingDialog branchingDialog;
+    private static Dialog dialog;
 
-    public static Dialog dialog;
+    private Character character;
+    private string sentence;
+    private BranchingDialog branchingDialog;
 
-    public bool hasBranchingDialog;
-
-    //Vector2 scrollPos;
+    private bool hasBranchingDialog;
 
     public static void ShowWindow(Dialog _dialog)
     {
-        DialogEditorWindow window = (DialogEditorWindow)EditorWindow.GetWindow(typeof(DialogEditorWindow), true, "Add new sentence");
-        window.maxSize = new Vector2(400, 230);
+        DialogEditorWindow window = (DialogEditorWindow)EditorWindow.GetWindow(typeof(DialogEditorWindow), true, "New sentence");
+        window.maxSize = new Vector2(400, 230); // Width and height respectively of Editor Window.
         window.minSize = window.maxSize;
 
         dialog = _dialog;
@@ -27,11 +25,10 @@ public class DialogEditorWindow : EditorWindow
 
     private void OnGUI()
     {
-        //scrollPos = GUILayout.BeginScrollView(scrollPos, false, true, , GUILayout.MaxHeight(500), GUILayout.ExpandHeight(true));
         EditorGUILayout.BeginVertical();
 
-
         EditorGUILayout.BeginVertical();
+
         GUILayout.Space(10);
 
         EditorGUILayout.BeginVertical();
@@ -39,9 +36,7 @@ public class DialogEditorWindow : EditorWindow
         character = (Character)EditorGUILayout.ObjectField(character, typeof(Character) , false);
         EditorGUILayout.EndVertical();
 
-        GUILayout.Space(5);
-        GUILine();
-        GUILayout.Space(5);
+        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
         EditorGUILayout.BeginVertical();
         EditorGUILayout.LabelField("Sentence");
@@ -49,9 +44,7 @@ public class DialogEditorWindow : EditorWindow
         EditorStyles.textField.wordWrap = true;
         EditorGUILayout.EndVertical();
 
-        GUILayout.Space(5);
-        GUILine();
-        GUILayout.Space(5);
+        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
         EditorGUILayout.BeginVertical();
         hasBranchingDialog = EditorGUILayout.Toggle("Branching dialog", hasBranchingDialog);
@@ -59,39 +52,43 @@ public class DialogEditorWindow : EditorWindow
             branchingDialog = (BranchingDialog)EditorGUILayout.ObjectField(branchingDialog, typeof(BranchingDialog), false);
         EditorGUILayout.EndVertical();
 
-        GUILayout.Space(5);
-        GUILine();
-        GUILayout.Space(5);
+        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
         EditorGUILayout.BeginVertical();
+
         EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Add"))
         {
-            AddSentence();
-            this.Close();
+            if (string.IsNullOrEmpty(sentence) && EditorUtility.DisplayDialog("Leave sentence empty?",
+            "Are you sure you want to leave the dialog sentence empty?",
+            "Yes", "No"))
+            {
+                AddSentence();
+                this.Close();
+            }
+            else
+            {
+                AddSentence();
+                this.Close();
+            }
         }
         EditorGUILayout.EndHorizontal();
+
         EditorGUILayout.EndVertical();
 
-        //GUILayout.EndScrollView();
         EditorGUILayout.EndVertical();
     }
 
     public void AddSentence()
     {
-        Dialog.DialogData newSentence = new Dialog.DialogData();
-
-        newSentence.character = character;
-        newSentence.sentence = sentence;
-        newSentence.branchingDialog = branchingDialog;
-
+        Dialog.DialogData newSentence = new Dialog.DialogData
+        {
+            character = character,
+            sentence = sentence,
+            branchingDialog = branchingDialog
+        };
         dialog.dialogData.Add(newSentence);
-    }
 
-    void GUILine(int height = 1) // TODO: Move to ExtensionMethods
-    {
-        Rect rect = EditorGUILayout.GetControlRect(false, height);
-        rect.height = height;
-        EditorGUI.DrawRect(rect, new Color(0.5f, 0.5f, 0.5f, 1));
+        EditorUtility.SetDirty(dialog);
     }
 }
