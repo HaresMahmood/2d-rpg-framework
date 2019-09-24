@@ -7,11 +7,14 @@
 /// </summary>
 public class PlayerMovement : MovingObject
 {
+    #region Variables
     /// <summary>
-    /// Used to check if Player is running.
+    /// Used to determine the state of running.
     /// </summary>
-    public bool isRunning; // TODO: Made public until UI indication of run-toggle is added.
+    private bool isRunning, toggleRunning;
+    #endregion
 
+    #region Unity Methods
     /// <summary>
     /// Update is called once per frame.
     /// 
@@ -50,11 +53,14 @@ public class PlayerMovement : MovingObject
 
         else if (horizontal != 0 || vertical != 0) // If there is an input, ...
         {
+            Debug.Log(Input.GetButton("Run"));
+            if (Input.GetButton("Run"))
+                isRunning = true;
+            else if (!Input.GetButton("Run") && isRunning && !toggleRunning)
+                isRunning = false;
+
             if (canMove) // If Player is able to move, ...
             {
-                if (Input.GetButton("Run"))
-                    isRunning = true;
-
                 SetAnimations(horizontal, vertical); // Sets direction the player is facing in, based on input.
 
                 if (isRunning)
@@ -71,14 +77,17 @@ public class PlayerMovement : MovingObject
         else
             SetMoveAnimations(); // Turns all move animations off.
     }
+    #endregion
 
     /// <summary>
     /// Used to permanently toggle running, instead of holding
     /// down the "Shift"-key all the time.
     /// </summary>
+    /// <returns></returns>
     private void ToggleRunning()
     {
         isRunning = !isRunning;
+        toggleRunning = !toggleRunning;
     }
 
     /// <summary>

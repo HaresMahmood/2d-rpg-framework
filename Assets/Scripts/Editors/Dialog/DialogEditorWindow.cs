@@ -1,16 +1,15 @@
-﻿using UnityEngine;
-using UnityEditor;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine.Events;
+﻿using UnityEditor;
+using UnityEngine;
 
 public class DialogEditorWindow : EditorWindow
 {
+    #region Variables
     private static Dialog dialog;
 
     private Character character;
     private string sentence;
     private BranchingDialog branchingDialog;
+    #endregion
 
     private bool hasBranchingDialog;
 
@@ -33,7 +32,7 @@ public class DialogEditorWindow : EditorWindow
 
         EditorGUILayout.BeginVertical();
         EditorGUILayout.LabelField("Character");
-        character = (Character)EditorGUILayout.ObjectField(character, typeof(Character) , false);
+        character = (Character)EditorGUILayout.ObjectField(character, typeof(Character), false);
         EditorGUILayout.EndVertical();
 
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);

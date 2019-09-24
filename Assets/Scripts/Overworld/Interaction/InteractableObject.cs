@@ -14,7 +14,7 @@ public abstract class InteractableObject : MonoBehaviour
     protected virtual void ToggleAutoAdvance()
     {
         if (DialogManager.instance.isActive || DialogManager.instance.isTyping)
-                DialogManager.instance.autoAdvance = !DialogManager.instance.autoAdvance; // Toggles autoAdvance bool.
+            DialogManager.instance.autoAdvance = !DialogManager.instance.autoAdvance; // Toggles autoAdvance bool.
     }
 
     protected virtual void SkipDialog()

@@ -8,6 +8,7 @@
 /// </summary>
 public class CharMovement : MovingObject
 {
+    #region Variables
     /// <summary>
     /// The boundary within which NPC can move.
     /// </summary>
@@ -27,7 +28,9 @@ public class CharMovement : MovingObject
     /// Direction in which NPC will move.
     /// </summary>
     [HideInInspector] public Vector3 direction;
+    #endregion
 
+    #region Unity Methods
     /// <summary>
     /// Start is called before the first frame update.
     /// 
@@ -79,6 +82,7 @@ public class CharMovement : MovingObject
                 CheckDecisionTime();
         }
     }
+    #endregion
 
     /// <summary>
     /// 
@@ -151,6 +155,5 @@ public class CharMovement : MovingObject
             default:
                 break;
         }
-
     }
 }

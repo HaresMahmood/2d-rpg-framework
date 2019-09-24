@@ -1,19 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEditor;
 using UnityEngine;
-using UnityEditor;
 
 [CustomEditor(typeof(Character)), CanEditMultipleObjects]
 public class CharacterEditor : Editor
 {
+    #region Variables
     private Character character;
 
     private Rect characterSection, portraitSection;
-
     private Texture2D characterPortrait;
-
     private float portraitSize = 150f, offset = 10f, margin = 20f;
-    
+    #endregion
 
     private void OnEnable()
     {

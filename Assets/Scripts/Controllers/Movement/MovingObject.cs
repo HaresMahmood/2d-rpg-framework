@@ -9,6 +9,7 @@ using UnityEngine.Tilemaps;
 /// </summary>
 public abstract class MovingObject : MonoBehaviour
 {
+    #region Variables
     /// <summary>
     /// Lists that keep track of Tilemaps. These can
     /// be dynamically updated depending on the scene Character is in.
@@ -20,7 +21,9 @@ public abstract class MovingObject : MonoBehaviour
     /// </summary>
     [HideInInspector] public float moveTime;
 
-    // Checks to see if Character is allowed to move.
+    /// <summary>
+    /// Determines the state of movement of Character.
+    /// </summary>
     [HideInInspector] public bool canMove = true, isMoving = false, onCoolDown = false, onExit = false, onGround, hasGround, hasObstacle, hasChar;
 
     /// <summary>
@@ -36,7 +39,9 @@ public abstract class MovingObject : MonoBehaviour
     /// Orientation of Character.
     /// </summary>
     [HideInInspector] public Vector2 orientation;
+    #endregion
 
+    #region Unity Methods
     /// <summary>
     /// Start is called before the first frame update.
     /// </summary>
@@ -45,6 +50,7 @@ public abstract class MovingObject : MonoBehaviour
         anim = GetComponent<Animator>();
         coll = GetComponent<Collider2D>();
     }
+    #endregion
 
     /// <summary>
     /// Checks if Character can move to target-tile.

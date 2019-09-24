@@ -1,17 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEditor;
 using UnityEngine;
-using UnityEditor;
-using UnityEngine.Events;
 
 [CustomEditor(typeof(Dialog)), CanEditMultipleObjects]
 public class DialogEditor : Editor
 {
+    #region Variables
     private Dialog dialog;
 
     private Character character;
     private string sentence;
     private BranchingDialog branchingDialog;
+    #endregion
 
     private void OnEnable()
     {
@@ -27,7 +26,7 @@ public class DialogEditor : Editor
         EditorGUILayout.BeginVertical("Box");
         GUILayout.Label("Total sentences: " + dialog.dialogData.Count);
         EditorGUILayout.EndVertical();
-        
+
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
         EditorGUILayout.EndVertical();

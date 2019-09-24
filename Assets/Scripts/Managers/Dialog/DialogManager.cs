@@ -5,13 +5,8 @@ using UnityEngine;
 using UnityEngine.UI;
 public class DialogManager : MonoBehaviour
 {
+    #region Variables
     public static DialogManager instance;
-
-    private void Awake()
-    {
-        if (instance == null)
-            instance = this;
-    }
 
     [UnityEngine.Header("Setup")]
     public GameObject dialogBox;
@@ -33,6 +28,14 @@ public class DialogManager : MonoBehaviour
 
     private Coroutine typingRoutine;
     private Coroutine autoAdvanceRoutine; // TODO: Make dictionary to keep track of all purgable Coroutines.
+    #endregion
+
+    #region Unity Methods
+    private void Awake()
+    {
+        if (instance == null)
+            instance = this;
+    }
 
     // Use this for initialization
     private void Start()
@@ -72,6 +75,7 @@ public class DialogManager : MonoBehaviour
         else
             player.canMove = true;
     }
+    #endregion
 
     public void StartDialog(Dialog dialog)
     {
