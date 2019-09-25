@@ -11,12 +11,13 @@ public class DialogEditorWindow : EditorWindow
     private BranchingDialog branchingDialog;
     #endregion
 
-    private bool hasBranchingDialog;
+    private static Vector2 windowSize = new Vector2(400, 200); // Default width and height respectively of Editor Window.
+    private static bool hasBranchingDialog;
 
     public static void ShowWindow(Dialog _dialog)
     {
         DialogEditorWindow window = (DialogEditorWindow)EditorWindow.GetWindow(typeof(DialogEditorWindow), true, "New sentence");
-        window.maxSize = new Vector2(400, 230); // Width and height respectively of Editor Window.
+        window.maxSize = windowSize;
         window.minSize = window.maxSize;
 
         dialog = _dialog;
@@ -35,7 +36,7 @@ public class DialogEditorWindow : EditorWindow
         character = (Character)EditorGUILayout.ObjectField(character, typeof(Character), false);
         EditorGUILayout.EndVertical();
 
-        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+        ExtensionMethods.DrawUILine("#969696".ToColor());
 
         EditorGUILayout.BeginVertical();
         EditorGUILayout.LabelField("Sentence");
@@ -43,7 +44,7 @@ public class DialogEditorWindow : EditorWindow
         EditorStyles.textField.wordWrap = true;
         EditorGUILayout.EndVertical();
 
-        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+        ExtensionMethods.DrawUILine("#969696".ToColor());
 
         EditorGUILayout.BeginVertical();
         hasBranchingDialog = EditorGUILayout.Toggle("Branching dialog", hasBranchingDialog);
@@ -51,7 +52,7 @@ public class DialogEditorWindow : EditorWindow
             branchingDialog = (BranchingDialog)EditorGUILayout.ObjectField(branchingDialog, typeof(BranchingDialog), false);
         EditorGUILayout.EndVertical();
 
-        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+        ExtensionMethods.DrawUILine("#969696".ToColor());
 
         EditorGUILayout.BeginVertical();
 

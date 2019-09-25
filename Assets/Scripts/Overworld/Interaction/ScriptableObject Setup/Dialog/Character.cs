@@ -7,6 +7,8 @@ public class Character : ScriptableObject
     public int id;
     public Sprite portrait;
     public Gender gender;
+    public bool battleable;
+    //TODO: Create fields for trainers/battleable NPCs.
 
     public enum Gender
     {

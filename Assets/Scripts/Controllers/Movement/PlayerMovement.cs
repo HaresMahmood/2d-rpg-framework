@@ -53,7 +53,6 @@ public class PlayerMovement : MovingObject
 
         else if (horizontal != 0 || vertical != 0) // If there is an input, ...
         {
-            Debug.Log(Input.GetButton("Run"));
             if (Input.GetButton("Run"))
                 isRunning = true;
             else if (!Input.GetButton("Run") && isRunning && !toggleRunning)

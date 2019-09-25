@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-[CreateAssetMenu(fileName = "New dialog branch", menuName = "Dialog/Dialog branch")]
+[CreateAssetMenu(fileName = "New branch", menuName = "Dialog/Branch")]
 public class BranchingDialog : ScriptableObject
 {
     [System.Serializable]

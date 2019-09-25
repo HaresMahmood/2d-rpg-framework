@@ -27,7 +27,7 @@ public class DialogEditor : Editor
         GUILayout.Label("Total sentences: " + dialog.dialogData.Count);
         EditorGUILayout.EndVertical();
 
-        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+        ExtensionMethods.DrawUILine("#969696".ToColor(), 3);
 
         EditorGUILayout.EndVertical();
 
@@ -56,7 +56,7 @@ public class DialogEditor : Editor
             EditorUtility.SetDirty(target);
             EditorGUILayout.EndVertical();
 
-            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+            ExtensionMethods.DrawUILine("#969696".ToColor());
 
             EditorGUILayout.BeginVertical();
             EditorGUILayout.LabelField("Sentence");
@@ -65,7 +65,7 @@ public class DialogEditor : Editor
             EditorUtility.SetDirty(target);
             EditorGUILayout.EndVertical();
 
-            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+            ExtensionMethods.DrawUILine("#969696".ToColor());
 
             EditorGUILayout.BeginVertical();
             EditorGUILayout.LabelField("Branching dialog");
@@ -73,7 +73,7 @@ public class DialogEditor : Editor
             EditorUtility.SetDirty(target);
             EditorGUILayout.EndVertical();
 
-            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+            ExtensionMethods.DrawUILine("#969696".ToColor());
 
             EditorGUILayout.EndVertical();
         }

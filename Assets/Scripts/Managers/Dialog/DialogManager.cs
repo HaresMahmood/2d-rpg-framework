@@ -211,6 +211,8 @@ public class DialogManager : MonoBehaviour
 
             if (!isTyping && !hasBranchingDialog && isActive)
                 dialogSelector.gameObject.SetActive(true);
+            else if (!isActive)
+                dialogSelector.gameObject.SetActive(false);
             else
                 StartCoroutine(PlayAnimation(selectorAnimator));
         }
@@ -221,8 +223,9 @@ public class DialogManager : MonoBehaviour
         }
     }
 
-    private IEnumerator PlayAnimation(Animator animator)
+    private IEnumerator PlayAnimation(Animator animator) //TODO: Add state argument.
     {
+        //animator.Play("pressed", -1, 0f); //TODO: To reset selector animation.
         animator.SetTrigger("isInActive");
 
         float waitTime = animator.GetAnimationTime();
