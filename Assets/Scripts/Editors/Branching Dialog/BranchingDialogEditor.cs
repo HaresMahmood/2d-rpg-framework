@@ -55,33 +55,32 @@ public class BranchingDialogEditor : Editor
                 EditorGUILayout.BeginVertical();
 
                 EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField("Option text");
+                EditorGUILayout.LabelField(new GUIContent("Option text", "Text displayed during dialog, representing " +
+                    "this specific branch."));
                 dialogBranch.branchOption = EditorGUILayout.TextField(dialogBranch.branchOption, GUILayout.MaxWidth(230));
                 EditorUtility.SetDirty(branchingDialog);
                 EditorGUILayout.EndHorizontal();
 
                 EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField("Jump to dialog");
+                EditorGUILayout.LabelField(new GUIContent("Jump to dialog", "Whether or not this branch splits off to another dialog."));
                 dialogBranch.nextDialog = (Dialog)EditorGUILayout.ObjectField(dialogBranch.nextDialog, typeof(Dialog), false, GUILayout.MaxWidth(230));
                 EditorUtility.SetDirty(branchingDialog);
                 EditorGUILayout.EndHorizontal();
 
-                GUILayout.Space(5);
-                ExtensionMethods.DrawUILine("#969696".ToColor());
                 GUILayout.Space(5);
 
                 EditorGUILayout.BeginVertical();
                 SerializedProperty branchList = serializedObject.FindProperty("dialogBranches");
                 SerializedProperty branchProperty = branchList.GetArrayElementAtIndex(branchingDialog.dialogBranches.IndexOf(dialogBranch)).FindPropertyRelative("branchEvent");
                 //Debug.Log(branchProperty.name); // Debug
-                EditorGUILayout.PropertyField(branchProperty);
+                EditorGUILayout.PropertyField(branchProperty, new GUIContent("Custom event"));
                 serializedObject.ApplyModifiedProperties();
                 EditorUtility.SetDirty(branchingDialog);
                 EditorGUILayout.EndVertical();
 
-                GUILayout.Space(5);
+                GUILayout.Space(10f);
                 ExtensionMethods.DrawUILine("#969696".ToColor());
-                GUILayout.Space(5);
+                GUILayout.Space(2);
 
                 EditorGUILayout.EndVertical();
             }
@@ -90,10 +89,10 @@ public class BranchingDialogEditor : Editor
         EditorGUILayout.BeginVertical();
 
         EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("Add branch"))
+        if (GUILayout.Button(new GUIContent("Add branch", "Adds an entry to the current branching dialog.")))
             AddBranchingDialog();
 
-        if (GUILayout.Button("Clear all branches"))
+        if (GUILayout.Button(new GUIContent("Clear all branches", "Clears all branch entries from current branching dialog.")))
         {
             this.branchingDialog.dialogBranches.Clear();
             EditorUtility.SetDirty(target);

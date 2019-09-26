@@ -32,14 +32,16 @@ public class DialogEditorWindow : EditorWindow
         GUILayout.Space(10);
 
         EditorGUILayout.BeginVertical();
-        EditorGUILayout.LabelField("Character");
+        EditorGUILayout.LabelField(new GUIContent("Character", "Character who is conversing this sentence. " +
+            "Can be left empty I.E. for system messages through the dialog box."));
         character = (Character)EditorGUILayout.ObjectField(character, typeof(Character), false);
         EditorGUILayout.EndVertical();
 
         ExtensionMethods.DrawUILine("#969696".ToColor());
 
         EditorGUILayout.BeginVertical();
-        EditorGUILayout.LabelField("Sentence");
+        EditorGUILayout.LabelField(new GUIContent("Sentence", "Text displayed in dialog box. " +
+            "Note that this is allowed to be multiple sentences long."));
         sentence = EditorGUILayout.TextArea(sentence, GUILayout.MaxHeight(50));
         EditorStyles.textField.wordWrap = true;
         EditorGUILayout.EndVertical();
@@ -47,7 +49,8 @@ public class DialogEditorWindow : EditorWindow
         ExtensionMethods.DrawUILine("#969696".ToColor());
 
         EditorGUILayout.BeginVertical();
-        hasBranchingDialog = EditorGUILayout.Toggle("Branching dialog", hasBranchingDialog);
+        hasBranchingDialog = EditorGUILayout.Toggle(new GUIContent("Branching dialog", "Whether or not this sentence contains a dialog " +
+                "branch at the end of the sentence. Can be left empty"), hasBranchingDialog);
         if (hasBranchingDialog)
             branchingDialog = (BranchingDialog)EditorGUILayout.ObjectField(branchingDialog, typeof(BranchingDialog), false);
         EditorGUILayout.EndVertical();

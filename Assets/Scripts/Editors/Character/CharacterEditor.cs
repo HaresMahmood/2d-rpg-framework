@@ -8,7 +8,7 @@ public class CharacterEditor : Editor
     #region Variables
     private Character character;
 
-    private string characterID;
+    private string characterID = "000";
 
     private Rect characterSection, portraitSection;
     private Texture2D characterPortrait;
@@ -19,12 +19,7 @@ public class CharacterEditor : Editor
     {
         character = (Character)target;
 
-        if (character.id < 10)
-            characterID = "00" + character.id.ToString();
-        else if (character.id > 10 && character.id < 100)
-            characterID = "0" + character.id.ToString();
-        else
-            characterID = character.id.ToString();
+        SetID();
 
         characterSection.x = 0;
         characterSection.height = portraitSize + margin;
@@ -36,9 +31,6 @@ public class CharacterEditor : Editor
 
     public override void OnInspectorGUI()
     {
-        EditorGUIUtility.labelWidth = Screen.width / 4;
-        EditorGUIUtility.fieldWidth = Screen.width / 4;
-
         characterSection.width = Screen.width;
         characterSection.y = 0;
 
@@ -54,7 +46,12 @@ public class CharacterEditor : Editor
 
             EditorGUILayout.BeginVertical();
             GUI.Box(characterSection, characterPortrait);
-            GUILayout.Space(characterSection.height);
+
+            EditorGUILayout.BeginVertical();
+            EditorGUILayout.LabelField("Preview");
+            EditorGUILayout.EndVertical();
+
+            GUILayout.Space(characterSection.height - margin + 2);
             EditorGUILayout.EndVertical();
 
             ExtensionMethods.DrawUILine("#969696".ToColor());
@@ -65,7 +62,8 @@ public class CharacterEditor : Editor
         EditorGUILayout.BeginVertical();
 
         EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField("ID");
+        EditorGUILayout.LabelField(new GUIContent("ID number", "Number that defines this character. " +
+            "Must be unique for every character. used internally by engine. Must be only 3 digits."));
         char chr = Event.current.character;
         if (chr < '0' || chr > '9')
             Event.current.character = '\0';
@@ -73,12 +71,14 @@ public class CharacterEditor : Editor
         if (!characterID.Equals(""))
             character.id = Int32.Parse(characterID);
         EditorUtility.SetDirty(target);
+        SetID();
         EditorGUILayout.EndHorizontal();
 
         GUILayout.Space(2);
 
         EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField("Name");
+        EditorGUILayout.LabelField(new GUIContent("Name", "How this character is refered to during during " +
+            "and, if applicable, battles."));
         character.name = EditorGUILayout.TextField(character.name);
         EditorUtility.SetDirty(target);
         EditorGUILayout.EndHorizontal();
@@ -86,7 +86,8 @@ public class CharacterEditor : Editor
         GUILayout.Space(2);
 
         EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField("Gender");
+        EditorGUILayout.LabelField(new GUIContent("Gender", "Gender with which character is addressed. " +
+            "Select 'Mixed' I.E. a character represent a pair of triners"));
         character.gender = (Character.Gender)EditorGUILayout.EnumPopup(character.gender);
         EditorUtility.SetDirty(target);
         EditorGUILayout.EndHorizontal();
@@ -95,15 +96,21 @@ public class CharacterEditor : Editor
         GUILayout.Space(2);
 
         EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField("Portrait");
+        EditorGUILayout.LabelField(new GUIContent("ID", "Sprite shown during dialog."));
         character.portrait = (Sprite)EditorGUILayout.ObjectField(character.portrait, typeof(Sprite), false);
         EditorUtility.SetDirty(target);
         EditorGUILayout.EndHorizontal();
 
         EditorGUILayout.EndVertical();
+    }
 
-
-
-        //base.OnInspectorGUI();
+    private void SetID()
+    {
+        if (character.id < 10)
+            characterID = "00" + character.id.ToString();
+        else if (character.id > 10 && character.id < 100)
+            characterID = "0" + character.id.ToString();
+        else
+            characterID = character.id.ToString();
     }
 }
