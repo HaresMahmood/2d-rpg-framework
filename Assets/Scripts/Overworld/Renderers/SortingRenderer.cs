@@ -2,31 +2,39 @@
 
 public class SortingRenderer : MonoBehaviour
 {
-    public int baseSortingOrder = 500;
-    public int offset = -1;
-    public bool runOnce = false;
+    #region Variables
 
-    private float timer;
-    private float timerMax = 0.1f;
     private Renderer rend;
+    private int baseSortingOrder = 500, offset = -1;
+    private float timer, maxTimer = 0.1f;
+    [SerializeField] public bool runOnce = true;
 
-    void Awake()
+    #endregion
+
+    #region Unity Methods
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private void Awake()
     {
         rend = GetComponent<Renderer>();
     }
 
-    // Update is called once per frame
-    void LateUpdate()
+    /// <summary>
+    /// 
+    /// </summary>
+    private void LateUpdate()
     {
         timer -= Time.deltaTime;
         if (timer <= 0f)
         {
-            timer = timerMax;
+            timer = maxTimer;
             rend.sortingOrder = (int)(baseSortingOrder - transform.position.y - offset);
             if (runOnce)
-            {
                 Destroy(this);
-            }
         }
     }
+
+    #endregion
 }

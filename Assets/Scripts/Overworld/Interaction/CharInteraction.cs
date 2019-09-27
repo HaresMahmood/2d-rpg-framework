@@ -2,10 +2,18 @@
 
 public class CharInteraction : InteractableObject
 {
-    [UnityEngine.Header("Setup")]
-    public Dialog dialog;
+    #region Variables
 
     private CharMovement movement;
+
+    [UnityEngine.Header("Settings")]
+    [SerializeField] private Dialog dialog;
+
+    private bool isActive;
+
+    #endregion
+
+    #region Unity Methods
 
     private void Start()
     {
@@ -14,15 +22,20 @@ public class CharInteraction : InteractableObject
 
     private void Update()
     {
+        // Caches DialogManager bools.
+        isActive = DialogManager.instance.isActive;
+        bool isTyping = DialogManager.instance.isTyping;
+        bool hasBranchingDialog = DialogManager.instance.hasBranchingDialog;
+
         if (Input.GetButtonDown("Interact"))
         {
-            if (CanInteract(!DialogManager.instance.isTyping))
+            if (CanInteract(!isTyping))
             {
                 movement.direction = GameManager.Player().GetComponent<PlayerMovement>().orientation * -1;
 
-                if (!DialogManager.instance.isActive)
+                if (!isActive)
                     StartDialogue();
-                else if (DialogManager.instance.isActive && !DialogManager.instance.hasBranchingDialog)
+                else if (isActive && !hasBranchingDialog)
                     NextSentence();
             }
         }
@@ -30,9 +43,21 @@ public class CharInteraction : InteractableObject
         if (Input.GetButtonDown("Toggle"))
             ToggleAutoAdvance();
 
-        if (Input.GetButtonDown("Cancel") && DialogManager.instance.isActive)
+        if (Input.GetButtonDown("Cancel") && isActive)
             SkipDialog();
     }
+
+    private void LateUpdate()
+    {
+        isActive = DialogManager.instance.isActive; // Caches DialogManager bools.
+
+        if (isActive)
+            CameraController.instance.ZoomCamera(4.2f, CameraController.instance.moveSpeed);
+        else
+            CameraController.instance.ZoomCamera(CameraController.instance.startSize, CameraController.instance.moveSpeed);
+    }
+
+    #endregion
 
     private void StartDialogue()
     {

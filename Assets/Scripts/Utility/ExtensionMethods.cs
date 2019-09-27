@@ -12,6 +12,16 @@ using UnityEditor;
 public static class ExtensionMethods
 {
     /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="t"></param>
+    /// <returns></returns>
+    public static float SmoothStep(float t)
+    {
+        return t * t * t * (t * (6f * t - 15f) + 10f);
+    }
+
+    /// <summary>
     /// Defines an enumerator to perform fading on a GameObject.
     /// </summary>
     /// <param name="gameObject"> GameObject to fade. </param>

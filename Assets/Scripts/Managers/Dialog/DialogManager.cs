@@ -223,9 +223,8 @@ public class DialogManager : MonoBehaviour
         }
     }
 
-    private IEnumerator PlayAnimation(Animator animator) //TODO: Add state argument.
+    private IEnumerator PlayAnimation(Animator animator)
     {
-        //animator.Play("pressed", -1, 0f); //TODO: To reset selector animation.
         animator.SetTrigger("isInActive");
 
         float waitTime = animator.GetAnimationTime();
