@@ -56,7 +56,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: c06c97e59a557e94f8d2662decee2ce6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -120,8 +120,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81c1c95603bfaa748851fd3fb952eac5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundTiles: []
-  obstacleTiles: []
   moveTime: 0
   canMove: 1
   isMoving: 0
@@ -158,8 +156,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 778195ca6bc605a43ba3e703b82754f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseSortingOrder: 500
-  offset: -1
   runOnce: 0
 --- !u!114 &1660426546575582436
 MonoBehaviour:

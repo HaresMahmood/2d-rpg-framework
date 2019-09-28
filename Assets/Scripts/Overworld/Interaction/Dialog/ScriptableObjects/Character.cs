@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Character", menuName = "Dialog/Character")]
+[CreateAssetMenu(fileName = "New character", menuName = "Dialog/Character")]
 public class Character : ScriptableObject
 {
     public new string name;
