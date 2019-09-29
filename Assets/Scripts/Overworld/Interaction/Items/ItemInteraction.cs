@@ -30,7 +30,7 @@ public class ItemInteraction : InteractableObject
     {
         if (Input.GetButtonDown("Interact") && rangeHandler.playerInRange) //TODO: Make sure Player can't interact when 2 interactable ranges overlap!
         {
-            if (CanInteract(transform.position))
+            if (CanInteract())
             {
                 ShowItem();
                 Destroy(this.gameObject);

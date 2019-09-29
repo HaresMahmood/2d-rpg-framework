@@ -31,7 +31,7 @@ public class CharInteraction : InteractableObject
 
         if (Input.GetButtonDown("Interact") && rangeHandler.playerInRange) //TODO: Make sure Player can't interact when 2 interactable ranges overlap!
         {
-            if (CanInteract(transform.position, !isTyping))
+            if (CanInteract(!isTyping))
             {
                 movement.direction = GameManager.Player().GetComponent<PlayerMovement>().orientation * -1;
 

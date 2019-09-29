@@ -2,9 +2,9 @@
 
 public abstract class InteractableObject : MonoBehaviour
 {
-    protected virtual bool CanInteract(Vector2 position, bool trigger = true)
+    protected virtual bool CanInteract(bool trigger = true)
     {
-        bool hasOrientation = InteractionHandler.hasOrientation(position);
+        bool hasOrientation = InteractionHandler.hasOrientation();
         if (hasOrientation && trigger)
             return true;
 
