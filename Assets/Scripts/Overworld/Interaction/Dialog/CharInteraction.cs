@@ -4,6 +4,7 @@ public class CharInteraction : InteractableObject
 {
     #region Variables
 
+    private RangeHandler rangeHandler;
     private CharMovement movement;
 
     [UnityEngine.Header("Settings")]
@@ -17,6 +18,7 @@ public class CharInteraction : InteractableObject
 
     private void Start()
     {
+        rangeHandler = gameObject.transform.Find("Range").GetComponent<RangeHandler>();
         movement = GetComponent<CharMovement>();
     }
 
@@ -27,9 +29,9 @@ public class CharInteraction : InteractableObject
         bool isTyping = DialogManager.instance.isTyping;
         bool hasBranchingDialog = DialogManager.instance.hasBranchingDialog;
 
-        if (Input.GetButtonDown("Interact"))
+        if (Input.GetButtonDown("Interact") && rangeHandler.playerInRange) //TODO: Make sure Player can't interact when 2 interactable ranges overlap!
         {
-            if (CanInteract(!isTyping))
+            if (CanInteract(transform.position, !isTyping))
             {
                 movement.direction = GameManager.Player().GetComponent<PlayerMovement>().orientation * -1;
 

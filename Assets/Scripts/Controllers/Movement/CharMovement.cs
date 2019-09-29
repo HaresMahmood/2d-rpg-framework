@@ -9,6 +9,9 @@
 public class CharMovement : MovingObject
 {
     #region Variables
+
+    private RangeHandler rangeHandler;
+
     /// <summary>
     /// The boundary within which NPC can move.
     /// </summary>
@@ -28,6 +31,7 @@ public class CharMovement : MovingObject
     /// Direction in which NPC will move.
     /// </summary>
     [HideInInspector] public Vector3 direction;
+
     #endregion
 
     #region Unity Methods
@@ -38,6 +42,8 @@ public class CharMovement : MovingObject
     /// </summary>
     protected override void Start()
     {
+        rangeHandler = gameObject.transform.Find("Range").GetComponent<RangeHandler>();
+
         TilemapManager.instance.GetTilemaps(this.gameObject.scene.GetRootGameObjects(), groundTiles, obstacleTiles);
 
         moveTime = 0.3f; // Default move-time is set at the beginning.
@@ -69,7 +75,7 @@ public class CharMovement : MovingObject
             SetAnimations((int)direction.x, (int)direction.y);
         }
 
-        if (!RangeHandler.playerInRange && canMove) // If Player is not in range and NPC is able to move, ...
+        if (!rangeHandler.playerInRange && canMove) // If Player is not in range and NPC is able to move, ...
         {
             if (bounds.bounds.Contains(transform.position + direction)) // If target-tile is withing the set boundary.
             {

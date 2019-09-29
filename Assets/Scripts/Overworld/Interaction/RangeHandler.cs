@@ -2,7 +2,7 @@
 
 public class RangeHandler : MonoBehaviour
 {
-    [HideInInspector] public static bool playerInRange;
+    [HideInInspector] public bool playerInRange;
 
     /// <summary>
     /// Sent when another object enters a trigger collider attached to this object (2D physics only).

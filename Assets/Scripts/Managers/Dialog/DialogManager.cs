@@ -31,6 +31,7 @@ public class DialogManager : MonoBehaviour
     #endregion
 
     #region Unity Methods
+
     private void Awake()
     {
         if (instance == null)

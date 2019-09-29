@@ -121,6 +121,12 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &576950816 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 20578840908244018, guid: a6561841eebb5f7429af501c8ee03959,
+    type: 3}
+  m_PrefabInstance: {fileID: 766236334}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &699163251 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 9002698741562631121, guid: a6561841eebb5f7429af501c8ee03959,
@@ -240,11 +246,27 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9100753011347215716, guid: a6561841eebb5f7429af501c8ee03959,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1227085213307571371, guid: a6561841eebb5f7429af501c8ee03959,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a6561841eebb5f7429af501c8ee03959, type: 3}
 --- !u!1 &766236335 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2980444094947391326, guid: a6561841eebb5f7429af501c8ee03959,
+    type: 3}
+  m_PrefabInstance: {fileID: 766236334}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &766236336 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9100753011347215716, guid: a6561841eebb5f7429af501c8ee03959,
     type: 3}
   m_PrefabInstance: {fileID: 766236334}
   m_PrefabAsset: {fileID: 0}
@@ -365,6 +387,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4257048062760908938, guid: 9e7cfa39ff75e5844be6b5bfc05ecfa4,
+        type: 3}
+      propertyPath: itemBox
+      value: 
+      objectReference: {fileID: 766236336}
+    - target: {fileID: 4257048062760908938, guid: 9e7cfa39ff75e5844be6b5bfc05ecfa4,
+        type: 3}
+      propertyPath: itemContainer
+      value: 
+      objectReference: {fileID: 576950816}
     - target: {fileID: 6002379217965659319, guid: 9e7cfa39ff75e5844be6b5bfc05ecfa4,
         type: 3}
       propertyPath: m_Name
@@ -485,7 +517,8 @@ PrefabInstance:
       propertyPath: pausePanel
       value: 
       objectReference: {fileID: 766236335}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4074017875759827718, guid: 9e7cfa39ff75e5844be6b5bfc05ecfa4, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 9e7cfa39ff75e5844be6b5bfc05ecfa4, type: 3}
 --- !u!1001 &2066104219
 PrefabInstance:
