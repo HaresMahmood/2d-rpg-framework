@@ -2,7 +2,7 @@
 
 public class InteractionHandler : MonoBehaviour
 {
-    public static LayerMask layerMask = 1 << 8;
+    private static LayerMask layerMask = 1 << 8;
 
     private static Vector2 position;
     private static Vector2 orientation;
@@ -15,7 +15,7 @@ public class InteractionHandler : MonoBehaviour
 
     public static bool hasOrientation()
     {
-        bool hasOrientation = Physics2D.Raycast(position, orientation, 1f, layerMask);
+        bool hasOrientation = Physics2D.Raycast(position, orientation, 0.98f, layerMask);
 
         if (hasOrientation)
             return true;

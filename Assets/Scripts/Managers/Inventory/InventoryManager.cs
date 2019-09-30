@@ -14,11 +14,12 @@ public class InventoryManager : MonoBehaviour
     public static InventoryManager instance;
 
     [UnityEngine.Header("Setup")]
-    public GameObject itemBox;
-    public GameObject itemContainer;
+    public GameObject itemGrid;
 
-    private TextMeshProUGUI itemName, itemCategory;
-    private Image itemSprite;
+    [UnityEngine.Header("Settings")]
+    [SerializeField] private GameObject itemContainerPrefab;
+
+    private List<Item> items;
 
     #endregion
 
@@ -35,9 +36,7 @@ public class InventoryManager : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        itemName = itemContainer.transform.Find("Name").GetComponent<TextMeshProUGUI>();
-        itemCategory = itemContainer.transform.Find("Category").GetComponent<TextMeshProUGUI>();
-        itemSprite = itemContainer.transform.Find("Sprite").GetComponent<Image>();
+        items = new List<Item>();
     }
 
     /// <summary>
@@ -50,15 +49,23 @@ public class InventoryManager : MonoBehaviour
 
     #endregion
 
+    public void AddItem(Item item)
+    {
+        items.Add(item);
+        ShowItem(item);
+    }
+
     public void ShowItem(Item item)
     {
-        if (!itemBox.activeSelf)
-        {
-            itemBox.SetActive(true);
+        GameObject itemContainerObj = (GameObject)Instantiate(itemContainerPrefab, Vector3.zero, Quaternion.identity); // Instantiates/creates new choice button from prefab in scene.
 
-            itemName.SetText(item.name);
-            itemCategory.SetText(item.category.ToString().ToUpper());
-            itemSprite.sprite = item.sprite;
-        }
+        itemContainerObj.name = "Item container"; // Gives appropriate name to newly instantiated choice button.
+        itemContainerObj.transform.SetParent(itemGrid.transform, false);
+
+        itemContainerObj.transform.Find("Item container/Item/Name").GetComponent<TextMeshProUGUI>().text = item.name;
+        itemContainerObj.transform.Find("Item container/Item/Category").GetComponent<TextMeshProUGUI>().text = item.category.ToString().ToUpper();
+        itemContainerObj.transform.Find("Item container/Item/Sprite").GetComponent<Image>().sprite = item.sprite;
+
+        Destroy(itemContainerObj, itemContainerObj.transform.GetComponentInChildren<Animator>().GetAnimationTime() * 3); //TODO: Find better solution to destroy Item UI.
     }
 }

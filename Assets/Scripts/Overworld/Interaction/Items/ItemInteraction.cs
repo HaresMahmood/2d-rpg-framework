@@ -32,7 +32,7 @@ public class ItemInteraction : InteractableObject
         {
             if (CanInteract())
             {
-                ShowItem();
+                AddItem();
                 Destroy(this.gameObject);
             }
         }
@@ -40,8 +40,8 @@ public class ItemInteraction : InteractableObject
 
     #endregion
 
-    private void ShowItem()
+    private void AddItem()
     {
-        InventoryManager.instance.ShowItem(item);
+        InventoryManager.instance.AddItem(item);
     }
 }

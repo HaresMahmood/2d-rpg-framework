@@ -71,7 +71,7 @@ public class ChoiceManager : MonoBehaviour
 
         for (int i = 0; i < DialogManager.instance.branchingDialog.dialogBranches.Count; i++)
         {
-            GameObject choiceButtonObj = (GameObject)Instantiate(choiceButtonPrefab, Vector3.zero, Quaternion.identity); // Instantiates (creates) new choice button from prefab in scene.
+            GameObject choiceButtonObj = (GameObject)Instantiate(choiceButtonPrefab, Vector3.zero, Quaternion.identity); // Instantiates/creates new choice button from prefab in scene.
 
             choiceButtonObj.name = "Choice Button " + (i + 1); // Gives appropriate name to newly instantiated choice button.
             choiceButtonObj.transform.SetParent(choiceHolder.transform.Find("Buttons").transform, false);
