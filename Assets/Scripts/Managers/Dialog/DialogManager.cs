@@ -9,25 +9,25 @@ public class DialogManager : MonoBehaviour
     public static DialogManager instance;
 
     [UnityEngine.Header("Setup")]
-    public GameObject dialogBox;
+    public GameObject dialogContainer;
 
     [UnityEngine.Header("Settings")]
     [Range(0.01f, 1.0f)] [SerializeField] private float typingDelay = 0.03f;
 
-    [HideInInspector] public bool isActive, isTyping, autoAdvance, hasBranchingDialog = false, choiceMade = false;
+    [HideInInspector] public bool isActive, isTyping, autoAdvance;
+    [HideInInspector] public bool hasBranchingDialog = false, choiceMade = false;
     [HideInInspector] public Queue<Dialog.DialogData> dialogData;
     [HideInInspector] public BranchingDialog branchingDialog;
 
-    private GameObject charHolder, autoAdvanceIcon;
+    private GameObject portraitContainer, autoAdvanceIcon;
     private TextMeshProUGUI dialogText;
-    private Image dialogSelector;
+    private Image selector;
     private Animator dialogAnimator, selectorAnimator;
 
     private RectTransform textTransform, dialogTransform;
     private Vector2 initTextPos, initTextDem, initDialogPos;
 
-    private Coroutine typingRoutine;
-    private Coroutine autoAdvanceRoutine; // TODO: Make dictionary to keep track of all purgable Coroutines.
+    private Coroutine typingCoroutine, autoAdvanceCoroutine;
     #endregion
 
     #region Unity Methods
@@ -41,31 +41,31 @@ public class DialogManager : MonoBehaviour
     // Use this for initialization
     private void Start()
     {
-        dialogText = dialogBox.transform.Find("Text").GetComponent<TextMeshProUGUI>();
-        dialogAnimator = dialogBox.GetComponent<Animator>();
-        autoAdvanceIcon = dialogBox.transform.Find("Auto advance").gameObject;
-        dialogSelector = dialogBox.transform.Find("Selector").GetComponent<Image>();
-        selectorAnimator = dialogSelector.GetComponent<Animator>();
+        dialogAnimator = dialogContainer.GetComponent<Animator>();
+        dialogText = dialogContainer.transform.Find("Text").GetComponent<TextMeshProUGUI>();
+        portraitContainer = dialogContainer.transform.Find("Portrait Container").gameObject;
+        autoAdvanceIcon = dialogContainer.transform.Find("Auto Advance").gameObject;
+        selector = dialogContainer.transform.Find("Selector").GetComponent<Image>();
+        selectorAnimator = selector.GetComponent<Animator>();
 
         textTransform = dialogText.GetComponent<RectTransform>();
         initTextPos = textTransform.anchoredPosition;
         initTextDem = textTransform.sizeDelta;
 
-        dialogTransform = dialogBox.GetComponent<RectTransform>();
+        dialogTransform = dialogContainer.GetComponent<RectTransform>();
         initDialogPos = dialogTransform.anchoredPosition;
 
         dialogData = new Queue<Dialog.DialogData>();
-
     }
 
     private void Update()
     {
         if (autoAdvance)
-            autoAdvanceRoutine = StartCoroutine(AutoAdvance());
+            autoAdvanceCoroutine = StartCoroutine(AutoAdvance());
         else
         {
-            if (autoAdvanceRoutine != null)
-                StopCoroutine(autoAdvanceRoutine);
+            if (autoAdvanceCoroutine != null)
+                StopCoroutine(autoAdvanceCoroutine);
         }
 
         ToggleSelector(); // TODO: Look for more performant way to toggle selector.
@@ -81,7 +81,7 @@ public class DialogManager : MonoBehaviour
     public void StartDialog(Dialog dialog)
     {
         isActive = true;
-        dialogBox.SetActive(true);
+        dialogContainer.SetActive(true);
 
         EnqueueDialog(dialog);
         NextSentence();
@@ -96,16 +96,15 @@ public class DialogManager : MonoBehaviour
         }
 
         Dialog.DialogData dialog = dialogData.Dequeue();
-
-        charHolder = dialogBox.transform.Find("Portrait").gameObject;
+        
         if (dialog.character != null)
         {
-            TextMeshProUGUI nameText = charHolder.transform.Find("Name").Find("Text").GetComponent<TextMeshProUGUI>();
-            Image charPortrait = charHolder.transform.Find("Image").GetComponent<Image>();
+            TextMeshProUGUI nameText = portraitContainer.transform.Find("Name/Text").GetComponent<TextMeshProUGUI>();
+            Image charPortrait = portraitContainer.transform.Find("Image").GetComponent<Image>();
 
             nameText.text = dialog.character.name;
             charPortrait.sprite = dialog.character.portrait;
-            charHolder.SetActive(true);
+            portraitContainer.SetActive(true);
 
             textTransform.sizeDelta = initTextDem;
             textTransform.anchoredPosition = initTextPos;
@@ -114,8 +113,8 @@ public class DialogManager : MonoBehaviour
         }
         else
         {
-            charHolder.SetActive(false);
-            textTransform.sizeDelta = new Vector2(dialogBox.transform.Find("Base").GetComponent<RectTransform>().rect.width - 500, initTextDem.y);
+            portraitContainer.SetActive(false);
+            textTransform.sizeDelta = new Vector2(dialogContainer.transform.Find("Base").GetComponent<RectTransform>().rect.width - 500, initTextDem.y);
             textTransform.anchoredPosition = new Vector2(0, initTextPos.y);
             dialogTransform.anchoredPosition = new Vector2(0, initDialogPos.y);
         }
@@ -126,13 +125,11 @@ public class DialogManager : MonoBehaviour
             hasBranchingDialog = true;
         }
         else
-        {
             hasBranchingDialog = false;
-        }
 
         string sentence = dialog.sentence;
         StopAllCoroutines();
-        typingRoutine = StartCoroutine(DisplaySentence(sentence));
+        typingCoroutine = StartCoroutine(DisplaySentence(sentence));
     }
 
     IEnumerator DisplaySentence(string sentence)
@@ -168,7 +165,7 @@ public class DialogManager : MonoBehaviour
         if (hasBranchingDialog)
         {
             choiceMade = false;
-            StartCoroutine(ChoiceManager.instance.CreateChoiceButtons());
+            StartCoroutine(BranchingDialogManager.instance.CreateChoiceButtons());
         }
     }
 
@@ -196,7 +193,7 @@ public class DialogManager : MonoBehaviour
     {
         if (isTyping)
         {
-            StopCoroutine(typingRoutine);
+            StopCoroutine(typingCoroutine);
             isTyping = false;
         }
 
@@ -211,15 +208,15 @@ public class DialogManager : MonoBehaviour
             autoAdvanceIcon.SetActive(false);
 
             if (!isTyping && !hasBranchingDialog && isActive)
-                dialogSelector.gameObject.SetActive(true);
+                selector.gameObject.SetActive(true);
             else if (!isActive)
-                dialogSelector.gameObject.SetActive(false);
+                selector.gameObject.SetActive(false);
             else
                 StartCoroutine(PlayAnimation(selectorAnimator));
         }
         else
         {
-            dialogSelector.gameObject.SetActive(false);
+            selector.gameObject.SetActive(false);
             autoAdvanceIcon.SetActive(true);
         }
     }

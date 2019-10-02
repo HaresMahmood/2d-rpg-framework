@@ -20,6 +20,9 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private GameObject itemContainerPrefab;
 
     private List<Item> items;
+    public List<GameObject> itemContainers;
+
+    public bool displayingItem = false;
 
     #endregion
 
@@ -37,6 +40,7 @@ public class InventoryManager : MonoBehaviour
     private void Start()
     {
         items = new List<Item>();
+        itemContainers = new List<GameObject>();
     }
 
     /// <summary>
@@ -44,7 +48,7 @@ public class InventoryManager : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        
+
     }
 
     #endregion
@@ -52,20 +56,35 @@ public class InventoryManager : MonoBehaviour
     public void AddItem(Item item)
     {
         items.Add(item);
-        ShowItem(item);
+        DisplayItem(item);
+
     }
 
-    public void ShowItem(Item item)
+    public void DisplayItem(Item item)
     {
-        GameObject itemContainerObj = (GameObject)Instantiate(itemContainerPrefab, Vector3.zero, Quaternion.identity); // Instantiates/creates new choice button from prefab in scene.
+        displayingItem = true;
+        GameObject containerObj = (GameObject)Instantiate(itemContainerPrefab, Vector3.zero, Quaternion.identity);
 
-        itemContainerObj.name = "Item container"; // Gives appropriate name to newly instantiated choice button.
-        itemContainerObj.transform.SetParent(itemGrid.transform, false);
+        containerObj.name = "Overworld Item Container";
+        containerObj.transform.SetParent(itemGrid.transform, false);
 
-        itemContainerObj.transform.Find("Item container/Item/Name").GetComponent<TextMeshProUGUI>().text = item.name;
-        itemContainerObj.transform.Find("Item container/Item/Category").GetComponent<TextMeshProUGUI>().text = item.category.ToString().ToUpper();
-        itemContainerObj.transform.Find("Item container/Item/Sprite").GetComponent<Image>().sprite = item.sprite;
+        containerObj.transform.Find("Overworld Item Container/Item/Name").GetComponent<TextMeshProUGUI>().text = item.name;
+        containerObj.transform.Find("Overworld Item Container/Item/Category").GetComponent<TextMeshProUGUI>().text = item.category.ToString().ToUpper();
+        containerObj.transform.Find("Overworld Item Container/Item/Sprite").GetComponent<Image>().sprite = item.sprite;
 
-        Destroy(itemContainerObj, itemContainerObj.transform.GetComponentInChildren<Animator>().GetAnimationTime() * 3); //TODO: Find better solution to destroy Item UI.
+        itemContainers.Add(containerObj);
+
+        Destroy(containerObj.gameObject, containerObj.transform.GetComponentInChildren<Animator>().GetAnimationTime() * 3);
+        displayingItem = false;
+    }
+
+    private void DestroyObjects()
+    {
+        foreach (GameObject container in itemContainers.ToArray())
+        {
+            Destroy(container.gameObject);
+        }
+
+        itemContainers.Clear();
     }
 }

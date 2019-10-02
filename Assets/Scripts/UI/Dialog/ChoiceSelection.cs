@@ -7,7 +7,7 @@ public class ChoiceSelection : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (ChoiceManager.instance.buttonIndex == buttonIndex)
-            ChoiceManager.instance.selectedButton = buttonIndex;
+        if (BranchingDialogManager.instance.buttonIndex == buttonIndex)
+            BranchingDialogManager.instance.selectedButton = buttonIndex;
     }
 }

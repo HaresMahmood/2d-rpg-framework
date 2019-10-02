@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -20,6 +21,7 @@ public class CharacterEditor : Editor
         character = (Character)target;
 
         SetID();
+        SetName();
 
         characterSection.x = 0;
         characterSection.height = portraitSize + margin;
@@ -96,8 +98,10 @@ public class CharacterEditor : Editor
         GUILayout.Space(2);
 
         EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField(new GUIContent("ID", "Sprite shown during dialog."));
+        EditorGUILayout.LabelField(new GUIContent("Portrait", "Sprite shown during dialog."));
         character.portrait = (Sprite)EditorGUILayout.ObjectField(character.portrait, typeof(Sprite), false);
+        if (character.id == 0 && character.portrait != null)
+            SetFilenameID(character.portrait);
         EditorUtility.SetDirty(target);
         EditorGUILayout.EndHorizontal();
 
@@ -112,5 +116,22 @@ public class CharacterEditor : Editor
             characterID = "0" + character.id.ToString();
         else
             characterID = character.id.ToString();
+
+        EditorUtility.SetDirty(target);
+    }
+
+    private void SetName()
+    {
+        string assetPath = AssetDatabase.GetAssetPath(target.GetInstanceID());
+        character.name = Path.GetFileNameWithoutExtension(assetPath);
+        EditorUtility.SetDirty(target);
+    }
+
+    private void SetFilenameID(Sprite portrait)
+    {
+        string id = portrait.name.Substring(3, 3);
+        characterID = id;
+        character.id = Int32.Parse(id);
+        EditorUtility.SetDirty(target);
     }
 }

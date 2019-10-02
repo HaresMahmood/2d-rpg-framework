@@ -20,7 +20,7 @@ public abstract class InteractableObject : MonoBehaviour
     protected virtual void SkipDialog()
     {
         if (DialogManager.instance.hasBranchingDialog)
-            ChoiceManager.instance.SkipChoice();
+            BranchingDialogManager.instance.SkipChoice();
 
         DialogManager.instance.EndDialog();
     }

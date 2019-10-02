@@ -7,7 +7,7 @@ public class CameraController : MonoBehaviour
     private Camera cam;
 
     public float moveSpeed;
-    [SerializeField] private Transform target;
+    private Transform target;
 
     [HideInInspector] public float startSize, currentSize, zoomTime;
 
@@ -21,6 +21,7 @@ public class CameraController : MonoBehaviour
     {
         cam = this.GetComponent<Camera>();
         startSize = cam.orthographicSize;
+        target = GameManager.Player();
         transform.position = new Vector3(target.transform.position.x, target.transform.position.y, transform.position.z);
     }
 

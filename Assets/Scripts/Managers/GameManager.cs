@@ -19,8 +19,28 @@ public class GameManager : MonoBehaviour
     [UnityEngine.Header("Global Settings")]
     public string playerTag = "Player";
 
+    [UnityEngine.Header("Global Data")]
+    public string playerName = "Hilliard";
+
+    public Transform activePlayer;
+
+    private void Start()
+    {
+        if (player != null)
+        {
+            for (int i = 0; i < player.childCount; i++)
+            {
+                if (player.GetChild(i).gameObject.activeSelf == true)
+                {
+                    activePlayer = player.GetChild(i);
+                    return;
+                }
+            }
+        }
+    }
+
     public static Transform Player()
     {
-        return instance.player;
+        return instance.activePlayer;
     }
 }

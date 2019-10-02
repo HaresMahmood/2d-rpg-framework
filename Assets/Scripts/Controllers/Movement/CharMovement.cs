@@ -42,7 +42,7 @@ public class CharMovement : MovingObject
     /// </summary>
     protected override void Start()
     {
-        rangeHandler = gameObject.transform.Find("Range").GetComponent<RangeHandler>();
+        rangeHandler = gameObject.transform.GetComponentInChildren<RangeHandler>();
 
         TilemapManager.instance.GetTilemaps(this.gameObject.scene.GetRootGameObjects(), groundTiles, obstacleTiles);
 

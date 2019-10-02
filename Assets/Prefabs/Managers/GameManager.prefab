@@ -106,7 +106,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f17c27e0ef6e0dd4b975dd7ba77c39db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemBox: {fileID: 0}
+  itemGrid: {fileID: 0}
+  itemContainerPrefab: {fileID: 0}
 --- !u!1 &3949471990861423225
 GameObject:
   m_ObjectHideFlags: 0
@@ -227,7 +228,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a516b043198037d4f9d1996808cdf93f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogBox: {fileID: 0}
+  dialogContainer: {fileID: 0}
   typingDelay: 0.03
   isActive: 0
   isTyping: 0
@@ -248,10 +249,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eventSystem: {fileID: 0}
-  choiceButtonPrefab: {fileID: 3969236073452555062, guid: 15230c131f3a9c04c9c6c29e1221c784,
-    type: 3}
-  buttonAnimationDelay: 0.07
-  choiceHolder: {fileID: 0}
+  optionButtonPrefab: {fileID: 0}
+  buttonAnimationDelay: 0.09
+  optionContainer: {fileID: 0}
   selector: {fileID: 0}
   buttonIndex: 0
   selectedButton: 0
@@ -360,7 +360,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f17c27e0ef6e0dd4b975dd7ba77c39db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemBox: {fileID: 0}
+  itemGrid: {fileID: 0}
+  itemContainerPrefab: {fileID: 0}
 --- !u!1001 &3393467421920137384
 PrefabInstance:
   m_ObjectHideFlags: 0
