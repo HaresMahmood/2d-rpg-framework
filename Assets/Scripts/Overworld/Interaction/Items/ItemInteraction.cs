@@ -26,8 +26,10 @@ public class ItemInteraction : InteractableObject
     /// <summary>
     /// Update is called once per frame.
     /// </summary>
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
+
         if (Input.GetButtonDown("Interact") && rangeHandler.playerInRange) //TODO: Make sure Player can't interact when 2 interactable ranges overlap!
         {
             if (CanInteract())
@@ -36,6 +38,9 @@ public class ItemInteraction : InteractableObject
                 Destroy(this.gameObject);
             }
         }
+
+        if (rangeHandler.playerInRange && PlayerInteraction.contextBox.activeSelf)
+            SetContextText("Pick up.");
     }
 
     #endregion

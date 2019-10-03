@@ -11,7 +11,10 @@ public class RangeHandler : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag(GameManager.instance.playerTag))
+        {
             playerInRange = true;
+            GameManager.instance.playerInRange = true;
+        }
     }
 
     /// <summary>
@@ -21,6 +24,9 @@ public class RangeHandler : MonoBehaviour
     private void OnTriggerExit2D(Collider2D other)
     {
         if (other.CompareTag(GameManager.instance.playerTag))
+        { 
             playerInRange = false;
+            GameManager.instance.playerInRange = false;
+        }
     }
 }

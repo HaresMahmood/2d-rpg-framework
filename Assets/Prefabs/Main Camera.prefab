@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5533555568278583573}
   - component: {fileID: 5533555568278583786}
+  - component: {fileID: 7440536737775334175}
   - component: {fileID: 5533555568278583787}
   - component: {fileID: 9053787903645275582}
   - component: {fileID: 5533555568278583784}
@@ -78,6 +79,26 @@ Camera:
   m_OcclusionCulling: 0
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!114 &7440536737775334175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5533555568278583785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c88f5cead0c0b2a4eb05b5900433f8d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AssetsPPU: 32
+  m_RefResolutionX: 510
+  m_RefResolutionY: 290
+  m_UpscaleRT: 0
+  m_PixelSnapping: 0
+  m_CropFrameX: 0
+  m_CropFrameY: 0
+  m_StretchFill: 0
 --- !u!114 &5533555568278583787
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -90,8 +111,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e51c479b1d4e814c9d2194616ee689b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cam: {fileID: 0}
   moveSpeed: 3
-  target: {fileID: 0}
   startSize: 0
   currentSize: 0
   zoomTime: 0

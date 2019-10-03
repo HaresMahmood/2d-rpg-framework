@@ -4,7 +4,7 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     public static CameraController instance;
-    private Camera cam;
+    [HideInInspector] public Camera cam;
 
     public float moveSpeed;
     private Transform target;

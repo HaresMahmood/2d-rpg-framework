@@ -22,8 +22,10 @@ public class CharInteraction : InteractableObject
         movement = GetComponent<CharMovement>();
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
+
         // Caches DialogManager bools.
         isActive = DialogManager.instance.isActive;
         bool isTyping = DialogManager.instance.isTyping;
@@ -47,6 +49,9 @@ public class CharInteraction : InteractableObject
 
         if (Input.GetButtonDown("Cancel") && isActive)
             SkipDialog();
+
+        if (rangeHandler.playerInRange && PlayerInteraction.contextBox.activeSelf)
+            SetContextText("Talk.");
     }
 
     private void LateUpdate()

@@ -20,6 +20,9 @@ public class GameManager : MonoBehaviour
     public string playerTag = "Player";
 
     [UnityEngine.Header("Global Data")]
+    public bool playerInRange;
+
+    [UnityEngine.Header("Player Data")]
     public string playerName = "Hilliard";
 
     public Transform activePlayer;

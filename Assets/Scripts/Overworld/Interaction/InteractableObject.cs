@@ -1,7 +1,17 @@
 ﻿using UnityEngine;
+using TMPro;
 
 public abstract class InteractableObject : MonoBehaviour
 {
+
+    protected virtual void Update()
+    {
+        if (CanInteract() && !DialogManager.instance.isActive)
+            SetContextVisible();
+        else
+            SetContextInvisible();
+    }
+
     protected virtual bool CanInteract(bool trigger = true)
     {
         bool hasOrientation = InteractionHandler.hasOrientation();
@@ -23,5 +33,20 @@ public abstract class InteractableObject : MonoBehaviour
             BranchingDialogManager.instance.SkipChoice();
 
         DialogManager.instance.EndDialog();
+    }
+
+    protected virtual void SetContextVisible()
+    {
+        PlayerInteraction.SetVisible();
+    }
+
+    protected virtual void SetContextInvisible()
+    {
+        StartCoroutine(PlayerInteraction.SetInvisible());
+    }
+
+    protected virtual void SetContextText(string text)
+    {
+        PlayerInteraction.contextBox.GetComponentInChildren<TextMeshProUGUI>().SetText(text);
     }
 }
