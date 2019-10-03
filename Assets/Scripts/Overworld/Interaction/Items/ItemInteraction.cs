@@ -40,7 +40,7 @@ public class ItemInteraction : InteractableObject
         }
 
         if (rangeHandler.playerInRange && PlayerInteraction.contextBox.activeSelf)
-            SetContextText("Pick up.");
+            SetContextText("Pick up");
     }
 
     #endregion

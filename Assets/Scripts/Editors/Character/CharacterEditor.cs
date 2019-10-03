@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -14,6 +15,12 @@ public class CharacterEditor : Editor
     private Rect characterSection, portraitSection;
     private Texture2D characterPortrait;
     private float portraitSize = 250f, offset = 10f, margin = 20f;
+
+    private string[] characterGuids;
+    private List<Character> characterObjs = new List<Character>();
+
+    private bool uniqueID = true;
+
     #endregion
 
     private void OnEnable()
@@ -29,6 +36,16 @@ public class CharacterEditor : Editor
         portraitSection.width = portraitSize * 0.65f;
         portraitSection.height = portraitSize;
 
+        string[] characterGuids = AssetDatabase.FindAssets("t:Character", null);
+        foreach (string characterGuid in characterGuids)
+        {
+            string assetPath = AssetDatabase.GUIDToAssetPath(characterGuid);
+            if (!string.Equals(AssetDatabase.GetAssetPath(target.GetInstanceID()), assetPath))
+            {
+                Character character = (Character)AssetDatabase.LoadAssetAtPath(assetPath, typeof(Character));
+                characterObjs.Add(character);
+            }
+        }
     }
 
     public override void OnInspectorGUI()
@@ -66,14 +83,31 @@ public class CharacterEditor : Editor
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.LabelField(new GUIContent("ID number", "Number that defines this character. " +
             "Must be unique for every character. used internally by engine. Must be only 3 digits."));
+
         char chr = Event.current.character;
         if (chr < '0' || chr > '9')
             Event.current.character = '\0';
+        EditorGUI.BeginChangeCheck();
         characterID = EditorGUILayout.TextField(characterID);
+
         if (!characterID.Equals(""))
             character.id = Int32.Parse(characterID);
-        EditorUtility.SetDirty(target);
+
+        foreach (Character character in characterObjs)
+        {
+            if (character.id == this.character.id)
+                uniqueID = false;
+            else
+                uniqueID = true;
+        }
+        if (EditorGUI.EndChangeCheck() && !uniqueID && EditorUtility.DisplayDialog("ID: " + characterID + " has " +
+        "already been taken.",
+        "Please fill in a unique ID for this character.",
+        "Okay"))
+            characterID = "000";
+
         SetID();
+        EditorUtility.SetDirty(target);
         EditorGUILayout.EndHorizontal();
 
         GUILayout.Space(2);
@@ -89,7 +123,7 @@ public class CharacterEditor : Editor
 
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.LabelField(new GUIContent("Gender", "Gender with which character is addressed. " +
-            "Select 'Mixed' I.E. a character represent a pair of triners"));
+            "Select 'Mixed' for I.E. a character representing a pair of triners"));
         character.gender = (Character.Gender)EditorGUILayout.EnumPopup(character.gender);
         EditorUtility.SetDirty(target);
         EditorGUILayout.EndHorizontal();
@@ -108,7 +142,7 @@ public class CharacterEditor : Editor
         EditorGUILayout.EndVertical();
     }
 
-    private void SetID()
+    private string SetID()
     {
         if (character.id < 10)
             characterID = "00" + character.id.ToString();
@@ -117,7 +151,7 @@ public class CharacterEditor : Editor
         else
             characterID = character.id.ToString();
 
-        EditorUtility.SetDirty(target);
+        return characterID;
     }
 
     private void SetName()

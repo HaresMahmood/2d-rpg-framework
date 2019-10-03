@@ -51,7 +51,7 @@ public class CharInteraction : InteractableObject
             SkipDialog();
 
         if (rangeHandler.playerInRange && PlayerInteraction.contextBox.activeSelf)
-            SetContextText("Talk.");
+            SetContextText("Talk");
     }
 
     private void LateUpdate()
