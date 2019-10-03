@@ -7,7 +7,7 @@ public class SortingRenderer : MonoBehaviour
     private Renderer rend;
     private int baseSortingOrder = 500, offset = -1;
     private float timer, maxTimer = 0.1f;
-    [SerializeField] public bool runOnce = true;
+    [SerializeField] public bool runOnce;
 
     #endregion
 
