@@ -115,6 +115,7 @@ public class BranchingDialogManager : MonoBehaviour
 
     public IEnumerator ChoiceMade()
     {
+        destroyingButtons = true;
         // Play animations.
         if (selector.gameObject.activeSelf)
         {
@@ -128,6 +129,7 @@ public class BranchingDialogManager : MonoBehaviour
 
         for (int i = 0; i < choiceButtons.Length; i++)
         {
+            if (choiceButtons[i] != null)
             StartCoroutine(choiceButtons[i].FadeObject(0f, buttonAnimationDelay));
             yield return new WaitForSeconds(buttonAnimationDelay);
         }
@@ -152,7 +154,6 @@ public class BranchingDialogManager : MonoBehaviour
 
     public void DestroyButtons()
     {
-        destroyingButtons = true;
         if (choiceButtons != null)
         {
             for (int i = 0; i < choiceButtons.Length; i++) // Destroy currenty displayed choice buttons.

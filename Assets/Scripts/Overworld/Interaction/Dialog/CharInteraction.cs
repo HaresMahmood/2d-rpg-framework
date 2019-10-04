@@ -41,12 +41,6 @@ public class CharInteraction : InteractableObject
                     StartDialogue();
                 else if (isActive && !hasBranchingDialog)
                 {
-                    if (isTyping)
-                    {
-                        StopCoroutine(DialogManager.instance.typingCoroutine);
-                        isTyping = false;
-                    }
-
                     NextSentence();
                 }
             }

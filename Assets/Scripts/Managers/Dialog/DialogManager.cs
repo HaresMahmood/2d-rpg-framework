@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,17 +19,18 @@ public class DialogManager : MonoBehaviour
     [HideInInspector] public bool hasBranchingDialog = false, choiceMade = false;
     [HideInInspector] public Queue<Dialog.DialogData> dialogData;
     [HideInInspector] public BranchingDialog branchingDialog;
-    [HideInInspector] public Coroutine typingCoroutine;
 
     private GameObject portraitContainer, autoAdvanceIcon;
     private TextMeshProUGUI dialogText;
     private Image selector;
     private Animator dialogAnimator, selectorAnimator;
 
+    private float typingMultiplier = 1;
+
     private RectTransform textTransform, dialogTransform;
     private Vector2 initTextPos, initTextDem, initDialogPos;
 
-    private Coroutine autoAdvanceCoroutine;
+    private Coroutine typingCoroutine, autoAdvanceCoroutine;
 
     #endregion
 
@@ -138,6 +140,9 @@ public class DialogManager : MonoBehaviour
     {
         isTyping = true;
 
+        if (sentence.ToLower().Contains("[player]"))
+            sentence = sentence.Replace("[player]", GameManager.instance.playerName);
+
         dialogText.SetText(sentence);
         dialogText.ForceMeshUpdate();
 
@@ -146,15 +151,26 @@ public class DialogManager : MonoBehaviour
         while (visibleChars < totalChars)
         {
             visibleChars = counter % (totalChars + 1);
-
             dialogText.maxVisibleCharacters = visibleChars;
-
             counter++;
 
-            yield return new WaitForSeconds(typingDelay);
+            if (dialogText.textInfo.characterInfo[dialogText.maxVisibleCharacters].character == ' ')
+                typingMultiplier = 0;
+            else if (dialogText.textInfo.characterInfo[dialogText.maxVisibleCharacters].character == '.')
+                typingMultiplier = 5;
+            else
+                typingMultiplier = 1;
+
+            yield return new WaitForSeconds(typingDelay * typingMultiplier);
 
             if (Input.GetButtonDown("Interact") && isTyping)
             {
+                if (isTyping)
+                {
+                    StopCoroutine(typingCoroutine);
+                    isTyping = false;
+                }
+
                 visibleChars = totalChars;
                 dialogText.maxVisibleCharacters = visibleChars;
                 dialogText.ForceMeshUpdate();
