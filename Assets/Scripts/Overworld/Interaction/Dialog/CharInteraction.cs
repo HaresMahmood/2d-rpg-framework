@@ -40,7 +40,15 @@ public class CharInteraction : InteractableObject
                 if (!isActive)
                     StartDialogue();
                 else if (isActive && !hasBranchingDialog)
+                {
+                    if (isTyping)
+                    {
+                        StopCoroutine(DialogManager.instance.typingCoroutine);
+                        isTyping = false;
+                    }
+
                     NextSentence();
+                }
             }
         }
 
@@ -58,10 +66,12 @@ public class CharInteraction : InteractableObject
     {
         isActive = DialogManager.instance.isActive; // Caches DialogManager bools.
 
+        
         if (isActive)
             CameraController.instance.ZoomCamera(4.2f, CameraController.instance.moveSpeed);
         else
             CameraController.instance.ZoomCamera(CameraController.instance.startSize, CameraController.instance.moveSpeed);
+        
     }
 
     #endregion

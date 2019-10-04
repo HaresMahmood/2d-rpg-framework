@@ -24,12 +24,13 @@ public class BranchingDialogManager : MonoBehaviour
     private GameObject[] choiceButtons;
     [HideInInspector] public GameObject optionContainer, selector;
 
-    private Animator selectorAnimator;
-    private Animator choiceHolderAnimator;
+    private Animator selectorAnim, optionContainerAnim;
 
     private bool isInteracting;
     [HideInInspector] public int buttonIndex, selectedButton;
     private int maxButtonIndex;
+
+    private bool destroyingButtons = false;
 
     /// <summary>
     /// Start is called before the first frame update.
@@ -39,8 +40,8 @@ public class BranchingDialogManager : MonoBehaviour
         optionContainer = DialogManager.instance.dialogContainer.transform.Find("Option Container").gameObject;
         selector = optionContainer.transform.Find("Selector").gameObject;
 
-        selectorAnimator = selector.GetComponent<Animator>();
-        choiceHolderAnimator = optionContainer.GetComponent<Animator>();
+        selectorAnim = selector.GetComponent<Animator>();
+        optionContainerAnim = optionContainer.GetComponent<Animator>();
     }
 
     /// <summary>
@@ -117,13 +118,13 @@ public class BranchingDialogManager : MonoBehaviour
         // Play animations.
         if (selector.gameObject.activeSelf)
         {
-            selectorAnimator.SetTrigger("isInActive");
+            selectorAnim.SetTrigger("isInActive");
 
-            float waitTime = selectorAnimator.GetAnimationTime();
+            float waitTime = selectorAnim.GetAnimationTime();
             yield return new WaitForSeconds(waitTime / 2);
         }
 
-        choiceHolderAnimator.SetTrigger("isInActive");
+        optionContainerAnim.SetTrigger("isInActive");
 
         for (int i = 0; i < choiceButtons.Length; i++)
         {
@@ -151,6 +152,7 @@ public class BranchingDialogManager : MonoBehaviour
 
     public void DestroyButtons()
     {
+        destroyingButtons = true;
         if (choiceButtons != null)
         {
             for (int i = 0; i < choiceButtons.Length; i++) // Destroy currenty displayed choice buttons.
@@ -159,6 +161,7 @@ public class BranchingDialogManager : MonoBehaviour
 
         choiceButtons = null; // Reset choiceButtons-array to prepare for next batch of choices.
         selectedButton = 0; buttonIndex = 0;
+        destroyingButtons = false;
     }
 
     public void SkipChoice()
@@ -171,7 +174,7 @@ public class BranchingDialogManager : MonoBehaviour
 
     private bool CanChoose()
     {
-        if (Input.GetButtonDown("Interact") && !DialogManager.instance.isTyping && !DialogManager.instance.choiceMade)
+        if (Input.GetButtonDown("Interact") && !DialogManager.instance.isTyping && !DialogManager.instance.choiceMade && !destroyingButtons)
             return true;
 
         return false;

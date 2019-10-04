@@ -18,6 +18,7 @@ public class DialogManager : MonoBehaviour
     [HideInInspector] public bool hasBranchingDialog = false, choiceMade = false;
     [HideInInspector] public Queue<Dialog.DialogData> dialogData;
     [HideInInspector] public BranchingDialog branchingDialog;
+    [HideInInspector] public Coroutine typingCoroutine;
 
     private GameObject portraitContainer, autoAdvanceIcon;
     private TextMeshProUGUI dialogText;
@@ -27,7 +28,8 @@ public class DialogManager : MonoBehaviour
     private RectTransform textTransform, dialogTransform;
     private Vector2 initTextPos, initTextDem, initDialogPos;
 
-    private Coroutine typingCoroutine, autoAdvanceCoroutine;
+    private Coroutine autoAdvanceCoroutine;
+
     #endregion
 
     #region Unity Methods
