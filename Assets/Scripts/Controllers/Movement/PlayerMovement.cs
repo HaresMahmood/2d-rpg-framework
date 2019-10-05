@@ -85,8 +85,11 @@ public class PlayerMovement : MovingObject
     /// <returns></returns>
     private void ToggleRunning()
     {
-        isRunning = !isRunning;
-        toggleRunning = !toggleRunning;
+        if (!DialogManager.instance.isActive)
+        {
+            isRunning = !isRunning;
+            toggleRunning = !toggleRunning;
+        }
     }
 
     /// <summary>
