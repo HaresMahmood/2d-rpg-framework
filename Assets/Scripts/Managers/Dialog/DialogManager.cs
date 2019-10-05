@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,7 +19,7 @@ public class DialogManager : MonoBehaviour
     [HideInInspector] public Queue<Dialog.DialogData> dialogData;
     [HideInInspector] public BranchingDialog branchingDialog;
 
-    private GameObject portraitContainer, autoAdvanceIcon;
+    private GameObject portraitContainer, skipContainer, autoAdvanceIcon;
     private TextMeshProUGUI dialogText;
     private Image selector;
     private Animator dialogAnimator, selectorAnimator;
@@ -48,6 +47,7 @@ public class DialogManager : MonoBehaviour
         dialogAnimator = dialogContainer.GetComponent<Animator>();
         dialogText = dialogContainer.transform.Find("Text").GetComponent<TextMeshProUGUI>();
         portraitContainer = dialogContainer.transform.Find("Portrait Container").gameObject;
+        skipContainer = dialogContainer.transform.Find("Skip Container").gameObject;
         autoAdvanceIcon = dialogContainer.transform.Find("Auto Advance").gameObject;
         selector = dialogContainer.transform.Find("Selector").GetComponent<Image>();
         selectorAnimator = selector.GetComponent<Animator>();
@@ -88,10 +88,10 @@ public class DialogManager : MonoBehaviour
         dialogContainer.SetActive(true);
 
         EnqueueDialog(dialog);
-        NextSentence();
+        NextSentence("Interact");
     }
 
-    public void NextSentence()
+    public void NextSentence(string input)
     {
         if (dialogData.Count == 0)
         {
@@ -100,7 +100,7 @@ public class DialogManager : MonoBehaviour
         }
 
         Dialog.DialogData dialog = dialogData.Dequeue();
-        
+
         if (dialog.character != null)
         {
             TextMeshProUGUI nameText = portraitContainer.transform.Find("Name/Text").GetComponent<TextMeshProUGUI>();
@@ -133,10 +133,14 @@ public class DialogManager : MonoBehaviour
 
         string sentence = dialog.sentence;
         StopAllCoroutines();
-        typingCoroutine = StartCoroutine(DisplaySentence(sentence));
+
+        if (input.Equals("Interact"))
+            typingCoroutine = StartCoroutine(TypeSentence(sentence));
+        else if (input.Equals("Cancel"))
+            DisplaySentence(sentence);
     }
 
-    IEnumerator DisplaySentence(string sentence)
+    private IEnumerator TypeSentence(string sentence)
     {
         isTyping = true;
 
@@ -163,20 +167,34 @@ public class DialogManager : MonoBehaviour
 
             yield return new WaitForSeconds(typingDelay * typingMultiplier);
 
-            if (Input.GetButtonDown("Interact") && isTyping)
+            if ((Input.GetButtonDown("Interact") || Input.GetButtonDown("Cancel")) && isTyping)
             {
-                if (isTyping)
-                {
-                    StopCoroutine(typingCoroutine);
-                    isTyping = false;
-                }
-
+                StopCoroutine(typingCoroutine);
                 visibleChars = totalChars;
                 dialogText.maxVisibleCharacters = visibleChars;
                 dialogText.ForceMeshUpdate();
                 break;
             }
         }
+
+        isTyping = false;
+
+        if (hasBranchingDialog)
+        {
+            choiceMade = false;
+            StartCoroutine(BranchingDialogManager.instance.CreateChoiceButtons());
+        }
+    }
+
+    private void DisplaySentence(string sentence)
+    {
+        isTyping = true;
+
+        if (sentence.ToLower().Contains("[player]"))
+            sentence = sentence.Replace("[player]", GameManager.instance.playerName);
+
+        dialogText.SetText(sentence);
+        dialogText.ForceMeshUpdate();
 
         isTyping = false;
 
@@ -203,7 +221,7 @@ public class DialogManager : MonoBehaviour
         if (!isTyping && !hasBranchingDialog && autoAdvance)
         {
             yield return new WaitForSeconds(1f); // TODO: make waiting time between sentences serializable.
-            NextSentence();
+            NextSentence("Interact");
         }
     }
 
@@ -217,6 +235,42 @@ public class DialogManager : MonoBehaviour
 
         isActive = false;
         StartCoroutine(PlayAnimation(dialogAnimator));
+    }
+
+    public IEnumerator SkipDialog()
+    {
+        skipContainer.SetActive(true);
+        Animator skipAnim = skipContainer.GetComponent<Animator>();
+
+        float waitTime = 2f, counter = 0;
+
+        while (counter < waitTime)
+        {
+            //Debug.Log(counter);
+            yield return null;
+            if (Input.GetButtonDown("Interact") || Input.GetButtonDown("Cancel"))
+            {
+                counter = waitTime;
+                StartCoroutine(PlayAnimation(skipAnim));
+            }
+
+            else if (Input.GetButtonDown("Start") && isActive)
+            {
+                counter = waitTime;
+                StartCoroutine(PlayAnimation(skipAnim));
+
+                if (DialogManager.instance.hasBranchingDialog)
+                    BranchingDialogManager.instance.SkipChoice();
+
+                EndDialog();
+            }
+
+            counter += Time.deltaTime;
+            yield return null;
+        }
+
+        StartCoroutine(PlayAnimation(skipAnim));
+        yield break;
     }
 
     private void ToggleSelector()

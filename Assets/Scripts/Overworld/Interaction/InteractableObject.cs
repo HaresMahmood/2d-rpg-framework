@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using TMPro;
+﻿using TMPro;
+using UnityEngine;
 
 public abstract class InteractableObject : MonoBehaviour
 {
@@ -21,22 +21,9 @@ public abstract class InteractableObject : MonoBehaviour
         return false;
     }
 
-    protected virtual void ToggleAutoAdvance()
-    {
-        if (DialogManager.instance.isActive || DialogManager.instance.isTyping)
-            DialogManager.instance.autoAdvance = !DialogManager.instance.autoAdvance; // Toggles autoAdvance bool.
-    }
-
-    protected virtual void SkipDialog()
-    {
-        if (DialogManager.instance.hasBranchingDialog)
-            BranchingDialogManager.instance.SkipChoice();
-
-        DialogManager.instance.EndDialog();
-    }
-
     protected virtual void SetContextVisible()
     {
+        PlayerInteraction.UpdatePosition();
         PlayerInteraction.SetVisible();
     }
 

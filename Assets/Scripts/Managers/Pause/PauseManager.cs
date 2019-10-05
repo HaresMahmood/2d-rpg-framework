@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 ///
@@ -8,7 +6,7 @@ using UnityEngine;
 public class PauseManager : MonoBehaviour
 {
     #region Variables
-    
+
     /// <summary>
     /// Determines whether the game is paused or not.
     /// </summary>
@@ -17,7 +15,7 @@ public class PauseManager : MonoBehaviour
     [SerializeField] private GameObject pausePanel;
 
     #endregion
-    
+
     #region Unity Methods
 
     /// <summary>

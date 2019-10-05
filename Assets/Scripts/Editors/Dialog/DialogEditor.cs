@@ -71,7 +71,7 @@ public class DialogEditor : Editor
             dialog.branchingDialog = (BranchingDialog)EditorGUILayout.ObjectField(dialog.branchingDialog, typeof(BranchingDialog), false);
             EditorUtility.SetDirty(target);
             EditorGUILayout.EndVertical();
-            
+
             GUILayout.Space(4);
             ExtensionMethods.DrawUILine("#969696".ToColor());
             GUILayout.Space(2);

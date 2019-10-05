@@ -38,18 +38,25 @@ public class CharInteraction : InteractableObject
                 movement.direction = GameManager.Player().GetComponent<PlayerMovement>().orientation * -1;
 
                 if (!isActive)
-                    StartDialogue();
+                    StartDialogue("Interact");
                 else if (isActive && !hasBranchingDialog)
-                {
-                    NextSentence();
-                }
+                    NextSentence("Interact");
+            }
+        }
+
+        if (Input.GetButtonDown("Cancel"))
+        {
+            if (CanInteract(!isTyping))
+            {
+                if (isActive && !hasBranchingDialog)
+                    NextSentence("Cancel");
             }
         }
 
         if (Input.GetButtonDown("Toggle"))
             ToggleAutoAdvance();
 
-        if (Input.GetButtonDown("Cancel") && isActive)
+        if (Input.GetButtonDown("Start") && isActive)
             SkipDialog();
 
         if (rangeHandler.playerInRange && PlayerInteraction.contextBox.activeSelf)
@@ -60,23 +67,34 @@ public class CharInteraction : InteractableObject
     {
         isActive = DialogManager.instance.isActive; // Caches DialogManager bools.
 
-        
+
         if (isActive)
             CameraController.instance.ZoomCamera(4.2f, CameraController.instance.moveSpeed);
         else
             CameraController.instance.ZoomCamera(CameraController.instance.startSize, CameraController.instance.moveSpeed);
-        
+
     }
 
     #endregion
 
-    private void StartDialogue()
+    private void StartDialogue(string input)
     {
         DialogManager.instance.StartDialog(dialog);
     }
 
-    private void NextSentence()
+    private void NextSentence(string input)
     {
-        DialogManager.instance.NextSentence();
+        DialogManager.instance.NextSentence(input);
+    }
+
+    private void SkipDialog()
+    {
+        StartCoroutine(DialogManager.instance.SkipDialog());
+    }
+
+    private void ToggleAutoAdvance()
+    {
+        if (DialogManager.instance.isActive || DialogManager.instance.isTyping)
+            DialogManager.instance.autoAdvance = !DialogManager.instance.autoAdvance; // Toggles autoAdvance bool.
     }
 }

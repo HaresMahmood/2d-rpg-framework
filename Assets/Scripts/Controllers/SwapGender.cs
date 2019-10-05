@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 ///
@@ -12,7 +10,7 @@ public class SwapGender : MonoBehaviour
 
 
     #endregion
-    
+
     #region Unity Methods
 
     /// <summary>
@@ -20,7 +18,7 @@ public class SwapGender : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        
+
     }
 
     /// <summary>
@@ -28,7 +26,7 @@ public class SwapGender : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        
+
     }
 
     #endregion

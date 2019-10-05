@@ -10,7 +10,7 @@ public class EventBehaviour : ScriptableObject
             if (GameManager.instance.player.GetChild(i).gameObject.activeSelf == false)
             {
                 GameManager.instance.player.GetChild(i).transform.position = GameManager.instance.player.GetChild(i + 1).transform.position;
-                GameManager.instance.player.GetChild(i).GetComponent<PlayerMovement>().orientation = GameManager.instance.player.GetChild(i + 1).GetComponent<PlayerMovement>().orientation;         
+                GameManager.instance.player.GetChild(i).GetComponent<PlayerMovement>().orientation = GameManager.instance.player.GetChild(i + 1).GetComponent<PlayerMovement>().orientation;
                 GameManager.instance.player.GetChild(i + 1).gameObject.SetActive(false);
                 GameManager.instance.player.GetChild(i).gameObject.SetActive(true);
 

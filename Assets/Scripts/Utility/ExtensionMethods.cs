@@ -2,9 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEditor;
 
 /// <summary>
 /// A collection of extension methods.
@@ -30,7 +30,7 @@ public static class ExtensionMethods
     /// <returns></returns>
     public static IEnumerator FadeObject(this GameObject gameObject, float targetOpacity, float duration)
     {
-        bool isImage = false, hasText = false;
+        bool isImage = false, isText = false, hasText = false;
         Color color;
 
         if (gameObject.GetComponent<Image>() != null) // If the GameObject is an image, ...
@@ -38,8 +38,13 @@ public static class ExtensionMethods
             color = gameObject.GetComponent<Image>().color; // Caches the current color and initial opacity of image.
             isImage = true;
         }
+        else if (gameObject.GetComponent<TextMeshProUGUI>() != null)
+        {
+            color = gameObject.GetComponent<TextMeshProUGUI>().color;
+            isText = true;
+        }
         else
-            color = gameObject.GetComponent<Renderer>().material.color; // Caches the current color of and initial opacity of material.
+            color = gameObject.GetComponent<Renderer>().material.color; // Caches the current color of and initial opacity of material. 
 
         if (gameObject.GetComponentInChildren<TextMeshProUGUI>() != null) // If the GameObject has a TextMeshPro object as child, ...
             hasText = true;
@@ -56,6 +61,8 @@ public static class ExtensionMethods
 
             if (isImage)
                 gameObject.GetComponent<Image>().color = color;
+            else if (isText)
+                gameObject.GetComponent<TextMeshProUGUI>().color = color;
             else
                 gameObject.GetComponent<Renderer>().material.color = color;
 

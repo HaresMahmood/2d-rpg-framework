@@ -1,6 +1,5 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using UnityEngine.Events;
 
 [CustomEditor(typeof(BranchingDialog)), CanEditMultipleObjects]
 public class BranchingDialogEditor : Editor

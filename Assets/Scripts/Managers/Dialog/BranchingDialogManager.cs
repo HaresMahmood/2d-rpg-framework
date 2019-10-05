@@ -122,7 +122,7 @@ public class BranchingDialogManager : MonoBehaviour
             selectorAnim.SetTrigger("isInActive");
 
             float waitTime = selectorAnim.GetAnimationTime();
-            yield return new WaitForSeconds(waitTime / 2);
+            yield return new WaitForSeconds(waitTime / 3);
         }
 
         optionContainerAnim.SetTrigger("isInActive");
@@ -130,7 +130,7 @@ public class BranchingDialogManager : MonoBehaviour
         for (int i = 0; i < choiceButtons.Length; i++)
         {
             if (choiceButtons[i] != null)
-            StartCoroutine(choiceButtons[i].FadeObject(0f, buttonAnimationDelay));
+                StartCoroutine(choiceButtons[i].FadeObject(0f, buttonAnimationDelay));
             yield return new WaitForSeconds(buttonAnimationDelay);
         }
 
@@ -149,7 +149,7 @@ public class BranchingDialogManager : MonoBehaviour
         DestroyButtons();
 
         DialogManager.instance.choiceMade = true;
-        DialogManager.instance.NextSentence();
+        DialogManager.instance.NextSentence("Interact");
     }
 
     public void DestroyButtons()

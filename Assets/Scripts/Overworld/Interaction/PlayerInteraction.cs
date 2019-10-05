@@ -1,7 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 /// <summary>
 ///
@@ -10,12 +8,12 @@ public class PlayerInteraction : MonoBehaviour
 {
     #region Variables
 
-    private ClampUI contextUI;
+    private static ContextController contextUI;
     public static GameObject contextBox;
     private static Animator animator;
 
     #endregion
-    
+
     #region Unity Methods
 
     /// <summary>
@@ -23,7 +21,7 @@ public class PlayerInteraction : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        contextUI = GetComponentInChildren<ClampUI>();
+        contextUI = GetComponentInChildren<ContextController>();
         contextBox = contextUI.contextBox;
         animator = contextBox.GetComponent<Animator>();
     }
@@ -39,7 +37,11 @@ public class PlayerInteraction : MonoBehaviour
     {
         animator.SetTrigger("isInactive");
         yield return new WaitForSeconds(animator.GetAnimationTime());
-        //yield return null;
         contextBox.SetActive(false);
+    }
+
+    public static void UpdatePosition()
+    {
+        contextUI.UpdatePosition();
     }
 }

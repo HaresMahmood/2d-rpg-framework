@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 
 /// <summary>
@@ -14,8 +12,8 @@ public class LightModulator : MonoBehaviour
 
     //[UnityEngine.Header("Setup")]
     //[SerializeableField]
-    private float minRange = 0.10f, maxRange = 0.40f, speed;
-   
+    private float minRange = 0.25f, maxRange = 0.75f, speed;
+
     #endregion
 
     #region Unity Methods
@@ -38,4 +36,9 @@ public class LightModulator : MonoBehaviour
     }
 
     #endregion
+
+    public void FadeLight(float minRange, float maxRange, float speed)
+    {
+        lightSource.intensity = Mathf.Lerp(minRange, maxRange, speed);
+    }
 }
