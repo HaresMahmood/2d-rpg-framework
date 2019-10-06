@@ -14,11 +14,11 @@ public class InventoryManager : MonoBehaviour
 
     [UnityEngine.Header("Setup")]
     public GameObject itemGrid;
+    public Inventory inventory;
 
     [UnityEngine.Header("Settings")]
     [SerializeField] private GameObject itemContainerPrefab;
 
-    private List<Item> items;
     public List<GameObject> itemContainers;
 
     public bool displayingItem = false;
@@ -38,7 +38,6 @@ public class InventoryManager : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        items = new List<Item>();
         itemContainers = new List<GameObject>();
     }
 
@@ -54,9 +53,13 @@ public class InventoryManager : MonoBehaviour
 
     public void AddItem(Item item)
     {
-        items.Add(item);
-        DisplayItem(item);
+        if (!inventory.items.Contains(item))
+            inventory.items.Add(item);
 
+        inventory.items.Find(i => i.name == item.name).amount++;
+
+        DisplayItem(item);
+        //item.isPickedUp = true;
     }
 
     public void DisplayItem(Item item)

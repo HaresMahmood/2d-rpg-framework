@@ -8,6 +8,9 @@ public class Item : ScriptableObject
     public string description;
     public Sprite sprite;
     public Category category;
+    public int amount;
+
+    public bool isPickedUp;
 
     public enum Category
     {

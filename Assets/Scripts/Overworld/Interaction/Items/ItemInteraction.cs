@@ -19,6 +19,9 @@ public class ItemInteraction : InteractableObject
     private void Start()
     {
         rangeHandler = gameObject.transform.Find("Range").GetComponent<RangeHandler>();
+
+        if (item.isPickedUp)
+            Destroy(this.gameObject);
     }
 
     /// <summary>

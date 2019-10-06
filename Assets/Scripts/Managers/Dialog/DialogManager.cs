@@ -252,10 +252,17 @@ public class DialogManager : MonoBehaviour
             {
                 counter = waitTime;
                 StartCoroutine(PlayAnimation(skipAnim));
+                yield break;
             }
 
             else if (Input.GetButtonDown("Start") && isActive)
             {
+                if (isTyping)
+                {
+                    StopCoroutine(typingCoroutine);
+                    isTyping = false;
+                }
+
                 counter = waitTime;
                 StartCoroutine(PlayAnimation(skipAnim));
 
