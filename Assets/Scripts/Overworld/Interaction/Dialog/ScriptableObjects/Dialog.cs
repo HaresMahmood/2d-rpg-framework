@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New dialog", menuName = "Dialog/Dialog")]
+[CreateAssetMenu(fileName = "New inventory", menuName = "Dialog/Dialog")]
 public class Dialog : ScriptableObject
 {
     [System.Serializable]
@@ -13,4 +13,6 @@ public class Dialog : ScriptableObject
     }
 
     public List<DialogData> dialogData = new List<DialogData>();
+    public List<DialogData> dialogDataDutch = new List<DialogData>();
+    public List<DialogData> dialogDataGerman = new List<DialogData>();
 }

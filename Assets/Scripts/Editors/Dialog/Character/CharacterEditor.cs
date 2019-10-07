@@ -36,7 +36,7 @@ public class CharacterEditor : Editor
         portraitSection.width = portraitSize * 0.65f;
         portraitSection.height = portraitSize;
 
-        string[] characterGuids = AssetDatabase.FindAssets("t:Character", null);
+        characterGuids = AssetDatabase.FindAssets("t:Character", null);
         foreach (string characterGuid in characterGuids)
         {
             string assetPath = AssetDatabase.GUIDToAssetPath(characterGuid);
@@ -132,7 +132,7 @@ public class CharacterEditor : Editor
         GUILayout.Space(2);
 
         EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField(new GUIContent("Portrait", "Sprite shown during dialog."));
+        EditorGUILayout.LabelField(new GUIContent("Portrait", "Sprite shown during inventory."));
         character.portrait = (Sprite)EditorGUILayout.ObjectField(character.portrait, typeof(Sprite), false);
         if (character.id == 0 && character.portrait != null)
             SetFilenameID(character.portrait);

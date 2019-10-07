@@ -56,7 +56,7 @@ public class InventoryManager : MonoBehaviour
         if (!inventory.items.Contains(item))
             inventory.items.Add(item);
 
-        inventory.items.Find(i => i.name == item.name).amount++;
+        inventory.items.Find(i => i.id == item.id).amount++;
 
         DisplayItem(item);
         //item.isPickedUp = true;

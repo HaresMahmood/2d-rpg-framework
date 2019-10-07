@@ -54,14 +54,14 @@ public class BranchingDialogEditor : Editor
                 EditorGUILayout.BeginVertical();
 
                 EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField(new GUIContent("Option text", "Text displayed during dialog, representing " +
+                EditorGUILayout.LabelField(new GUIContent("Option text", "Text displayed during inventory, representing " +
                     "this specific branch."));
                 dialogBranch.branchOption = EditorGUILayout.TextField(dialogBranch.branchOption, GUILayout.MaxWidth(230));
                 EditorUtility.SetDirty(branchingDialog);
                 EditorGUILayout.EndHorizontal();
 
                 EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField(new GUIContent("Jump to dialog", "Whether or not this branch splits off to another dialog."));
+                EditorGUILayout.LabelField(new GUIContent("Jump to inventory", "Whether or not this branch splits off to another inventory."));
                 dialogBranch.nextDialog = (Dialog)EditorGUILayout.ObjectField(dialogBranch.nextDialog, typeof(Dialog), false, GUILayout.MaxWidth(230));
                 EditorUtility.SetDirty(branchingDialog);
                 EditorGUILayout.EndHorizontal();
@@ -88,10 +88,10 @@ public class BranchingDialogEditor : Editor
         EditorGUILayout.BeginVertical();
 
         EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button(new GUIContent("Add branch", "Adds an entry to the current branching dialog.")))
+        if (GUILayout.Button(new GUIContent("Add branch", "Adds an entry to the current branching inventory.")))
             AddBranchingDialog();
 
-        if (GUILayout.Button(new GUIContent("Clear all branches", "Clears all branch entries from current branching dialog.")))
+        if (GUILayout.Button(new GUIContent("Clear all branches", "Clears all branch entries from current branching inventory.")))
         {
             this.branchingDialog.dialogBranches.Clear();
             EditorUtility.SetDirty(target);

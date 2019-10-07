@@ -1,15 +1,21 @@
-﻿using UnityEditor;
+﻿using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(Dialog)), CanEditMultipleObjects]
 public class DialogEditor : Editor
 {
     #region Variables
+
     private Dialog dialog;
 
     private Character character;
     private string sentence;
     private BranchingDialog branchingDialog;
+
+    private int tab = 0;
+    private string[] languages = new string[] { "English", "Dutch", "German"};
+   
     #endregion
 
     private void OnEnable()
@@ -19,29 +25,47 @@ public class DialogEditor : Editor
 
     public override void OnInspectorGUI()
     {
+        tab = GUILayout.Toolbar(tab, languages);
+        switch (tab)
+        {
+            case 0:
+                DrawInspector(dialog.dialogData);
+                break;
+            case 1:
+                DrawInspector(dialog.dialogDataDutch);
+                break;
+            case 2:
+                DrawInspector(dialog.dialogDataGerman);
+                break;
+        }
+
+    }
+
+    private void DrawInspector(List<Dialog.DialogData> languageData)
+    {
         EditorGUILayout.BeginVertical();
 
         GUILayout.Space(5);
 
         EditorGUILayout.BeginVertical("Box");
-        GUILayout.Label("Total sentences: " + dialog.dialogData.Count);
+        GUILayout.Label("Total sentences: " + languageData.Count);
         EditorGUILayout.EndVertical();
 
         ExtensionMethods.DrawUILine("#969696".ToColor(), 3);
 
         EditorGUILayout.EndVertical();
 
-        foreach (Dialog.DialogData dialog in dialog.dialogData)
+        foreach (Dialog.DialogData dialog in languageData)
         {
             EditorGUILayout.BeginHorizontal();
 
             EditorGUILayout.BeginVertical("Box");
-            GUILayout.Label("Sentence " + (this.dialog.dialogData.IndexOf(dialog) + 1) + ":");
+            GUILayout.Label("Sentence " + (languageData.IndexOf(dialog) + 1) + ":");
             EditorGUILayout.EndVertical();
 
             if (GUILayout.Button("Remove", GUILayout.Width(70), GUILayout.Height(25)))
             {
-                this.dialog.dialogData.Remove(dialog);
+                languageData.Remove(dialog);
                 EditorUtility.SetDirty(target);
                 return;
             }
@@ -52,13 +76,13 @@ public class DialogEditor : Editor
 
             EditorGUILayout.BeginVertical();
             EditorGUILayout.LabelField(new GUIContent("Character", "Character who is conversing this sentence. " +
-                "Can be left empty I.E. for system messages through the dialog box."));
+                "Can be left empty I.E. for system messages through the inventory box."));
             dialog.character = (Character)EditorGUILayout.ObjectField(dialog.character, typeof(Character), false);
             EditorUtility.SetDirty(target);
             EditorGUILayout.EndVertical();
 
             EditorGUILayout.BeginVertical();
-            EditorGUILayout.LabelField(new GUIContent("Sentence", "Text displayed in dialog box. " +
+            EditorGUILayout.LabelField(new GUIContent("Sentence", "Text displayed in inventory box. " +
                 "Note that this is allowed to be multiple sentences long."));
             dialog.sentence = EditorGUILayout.TextArea(dialog.sentence, GUILayout.MaxHeight(50));
             EditorStyles.textField.wordWrap = true;
@@ -66,7 +90,7 @@ public class DialogEditor : Editor
             EditorGUILayout.EndVertical();
 
             EditorGUILayout.BeginVertical();
-            EditorGUILayout.LabelField(new GUIContent("Branching dialog", "Whether or not this sentence contains a dialog " +
+            EditorGUILayout.LabelField(new GUIContent("Branching inventory", "Whether or not this sentence contains a inventory " +
                 "branch at the end of the sentence. Can be left empty"));
             dialog.branchingDialog = (BranchingDialog)EditorGUILayout.ObjectField(dialog.branchingDialog, typeof(BranchingDialog), false);
             EditorUtility.SetDirty(target);
@@ -82,12 +106,15 @@ public class DialogEditor : Editor
         EditorGUILayout.BeginVertical();
 
         EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button(new GUIContent("Add sentences", "Adds an entry to the current dialog.")))
-            DialogEditorWindow.ShowWindow(this.dialog);
-
-        if (GUILayout.Button(new GUIContent("Clear all sentences", "Clears all entries from the current dialog.")))
+        if (GUILayout.Button(new GUIContent("Add sentences", "Adds an entry to the current inventory.")))
         {
-            this.dialog.dialogData.Clear();
+            DialogEditorWindow.ShowWindow(languageData);
+            EditorUtility.SetDirty(target);
+        }
+
+        if (GUILayout.Button(new GUIContent("Clear all sentences", "Clears all entries from the current inventory.")))
+        {
+            languageData.Clear();
             EditorUtility.SetDirty(target);
         }
         EditorGUILayout.EndHorizontal();
