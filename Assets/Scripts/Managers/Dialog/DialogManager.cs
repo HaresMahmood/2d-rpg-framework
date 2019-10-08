@@ -12,7 +12,8 @@ public class DialogManager : MonoBehaviour
     public GameObject dialogContainer;
 
     [UnityEngine.Header("Settings")]
-    [Range(0.01f, 1.0f)] [SerializeField] private float typingDelay = 0.03f;
+    public Language language = Language.English;
+    [Range(0.01f, 0.09f)] [SerializeField] private float typingDelay = 0.03f;
 
     [HideInInspector] public bool isActive, isTyping, autoAdvance;
     [HideInInspector] public bool hasBranchingDialog = false, choiceMade = false;
@@ -30,6 +31,15 @@ public class DialogManager : MonoBehaviour
     private Vector2 initTextPos, initTextDem, initDialogPos;
 
     private Coroutine typingCoroutine, autoAdvanceCoroutine;
+
+    private List<Dialog.DialogData> languageData;
+
+    public enum Language
+    {
+        English,
+        Dutch,
+        German
+    }
 
     #endregion
 
@@ -60,6 +70,7 @@ public class DialogManager : MonoBehaviour
         initDialogPos = dialogTransform.anchoredPosition;
 
         dialogData = new Queue<Dialog.DialogData>();
+        languageData = new List<Dialog.DialogData>();
     }
 
     private void Update()
@@ -84,10 +95,30 @@ public class DialogManager : MonoBehaviour
 
     public void StartDialog(Dialog dialog)
     {
+        switch (language)
+        {
+            case Language.English:
+                {
+                    languageData = dialog.dialogData;
+                    break;
+                }
+            case Language.Dutch:
+                {
+                    languageData = dialog.dialogDataDutch;
+                    break;
+                }
+            case Language.German:
+                {
+                    languageData = dialog.dialogDataGerman;
+                    break;
+                }
+            default: break;
+        }
+
         isActive = true;
         dialogContainer.SetActive(true);
 
-        EnqueueDialog(dialog);
+        EnqueueDialog(languageData);
         NextSentence("Interact");
     }
 
@@ -205,11 +236,11 @@ public class DialogManager : MonoBehaviour
         }
     }
 
-    public void EnqueueDialog(Dialog dialog)
+    public void EnqueueDialog(List<Dialog.DialogData> dialog)
     {
         dialogData.Clear();
 
-        foreach (Dialog.DialogData info in dialog.dialogData)
+        foreach (Dialog.DialogData info in dialog)
             dialogData.Enqueue(info);
     }
 

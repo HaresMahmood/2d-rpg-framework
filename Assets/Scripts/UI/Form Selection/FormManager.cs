@@ -38,7 +38,7 @@ public class FormManager : MonoBehaviour
             //UnityEventHandler choiceEvent = this.transform.GetChild(selectedButton).GetComponent<UnityEventHandler>();
             //choiceEvent.eventHandler.Invoke();
 
-            DialogManager.instance.StartDialog(dialog);
+            //DialogManager.instance.StartDialog(dialog);
         }
     }
 

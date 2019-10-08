@@ -26,5 +26,27 @@ MonoBehaviour:
     sentence: Oh, but you don't actually get a say in this. <i>I'm</i> the <color=#4ee7f5>cheese
       connoisseur</color> here!
     branchingDialog: {fileID: 0}
-  dialogDataDutch: []
-  dialogDataGerman: []
+  dialogDataDutch:
+  - character: {fileID: 11400000, guid: 92292d809f583ec42ac68c4a618c66d7, type: 2}
+    sentence: Hallo <color=#4ee7f5>[player]</color>! Alles goed? Ik? Ik ging vandaag
+      naar de supermarkt. En ik heb kaas gekocht. <sprite=0> ... Heel veel kaas.
+      <sprite=0> <sprite=0> <sprite=0> !
+    branchingDialog: {fileID: 0}
+  - character: {fileID: 11400000, guid: 92292d809f583ec42ac68c4a618c66d7, type: 2}
+    sentence: Wat vindt je van kaas? Lekker toch? Gesmolten op toast? Of plakjes
+      op een boterham? Aah, ik moet al watertanden terwijl ik eraan denk...
+    branchingDialog: {fileID: 11400000, guid: 09537a246abe7a44b92b8a13b32cb8dc, type: 2}
+  - character: {fileID: 11400000, guid: 92292d809f583ec42ac68c4a618c66d7, type: 2}
+    sentence: Oh, maar jouw mening is eigenlijk niet eens geldig hier. <i>Ik</i>
+      ben de enige <color=#4ee7f5>kaas fijnproever</color> hier!
+    branchingDialog: {fileID: 0}
+  dialogDataGerman:
+  - character: {fileID: 11400000, guid: 92292d809f583ec42ac68c4a618c66d7, type: 2}
+    sentence: German test 1
+    branchingDialog: {fileID: 0}
+  - character: {fileID: 11400000, guid: 92292d809f583ec42ac68c4a618c66d7, type: 2}
+    sentence: German test 2
+    branchingDialog: {fileID: 0}
+  - character: {fileID: 11400000, guid: 92292d809f583ec42ac68c4a618c66d7, type: 2}
+    sentence: German test 3
+    branchingDialog: {fileID: 0}

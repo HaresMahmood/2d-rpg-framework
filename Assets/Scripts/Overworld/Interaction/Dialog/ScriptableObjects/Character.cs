@@ -12,8 +12,8 @@ public class Character : ScriptableObject
 
     public enum Gender
     {
-        male,
-        female,
-        mixed
+        Male,
+        Female,
+        Mixed
     }
 }

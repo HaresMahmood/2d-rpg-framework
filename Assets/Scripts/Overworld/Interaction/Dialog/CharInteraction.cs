@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class CharInteraction : InteractableObject
 {
@@ -11,6 +12,7 @@ public class CharInteraction : InteractableObject
     [SerializeField] private Dialog dialog;
 
     private bool isActive;
+    private DialogManager.Language language;
 
     #endregion
 
@@ -20,6 +22,8 @@ public class CharInteraction : InteractableObject
     {
         rangeHandler = gameObject.transform.Find("Range").GetComponent<RangeHandler>();
         movement = GetComponent<CharMovement>();
+
+        language = DialogManager.instance.language;
     }
 
     protected override void Update()
@@ -61,6 +65,21 @@ public class CharInteraction : InteractableObject
 
         if (rangeHandler.playerInRange && PlayerInteraction.contextBox.activeSelf)
             SetContextText("Talk");
+
+
+
+
+        // Debug
+        if (Input.GetButtonDown("Cycle"))
+        {
+            int currentLanguage = (int)language, nextLanguge = ++currentLanguage;
+            if ((currentLanguage % DialogManager.Language.GetNames(typeof(DialogManager.Language)).Length) == 0)
+                nextLanguge = 0;
+
+            language = (DialogManager.Language)nextLanguge;
+
+            DialogManager.instance.language = language;
+        }
     }
 
     private void LateUpdate()
