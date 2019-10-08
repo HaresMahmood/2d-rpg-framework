@@ -29,14 +29,20 @@ public class DialogEditor : Editor
         switch (tab)
         {
             case 0:
-                DrawInspector(dialog.dialogData);
-                break;
+                {
+                    DrawInspector(dialog.dialogData);
+                    break;
+                }
             case 1:
-                DrawInspector(dialog.dialogDataDutch);
-                break;
+                {
+                    DrawInspector(dialog.dialogDataDutch);
+                    break;
+                }
             case 2:
-                DrawInspector(dialog.dialogDataGerman);
-                break;
+                {
+                    DrawInspector(dialog.dialogDataGerman);
+                    break;
+                }
         }
 
     }
@@ -106,7 +112,7 @@ public class DialogEditor : Editor
         EditorGUILayout.BeginVertical();
 
         EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button(new GUIContent("Add sentences", "Adds an entry to the current dialog.")))
+        if (GUILayout.Button(new GUIContent("Add sentence", "Adds an entry to the current dialog.")))
         {
             DialogEditorWindow.ShowWindow(languageData);
             EditorUtility.SetDirty(target);
