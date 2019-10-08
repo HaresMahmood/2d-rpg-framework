@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
-using static UnityEngine.GUI;
 
 [CustomEditor(typeof(Inventory)), CanEditMultipleObjects]
 public class InventoryEditor : Editor
@@ -78,7 +75,7 @@ public class InventoryEditor : Editor
                 inventory.items[inventory.items.IndexOf(item)] = (Item)EditorGUILayout.ObjectField(inventory.items[inventory.items.IndexOf(item)], typeof(Item), false);
                 GUILayout.FlexibleSpace();
                 EditorGUILayout.PrefixLabel(new GUIContent("X"));
-                item.id = EditorGUILayout.IntField(item.id, GUILayout.Width(30));
+                item.amount = EditorGUILayout.IntField(item.amount, GUILayout.Width(30));
                 EditorGUILayout.EndHorizontal();
 
 
