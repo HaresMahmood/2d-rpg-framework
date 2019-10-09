@@ -22,6 +22,4 @@ public class Item : ScriptableObject
         Berry,
         Other
     }
-
-
 }

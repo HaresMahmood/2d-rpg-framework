@@ -37,30 +37,41 @@ public class InventoryEditor : Editor
         GUILayout.Space(5);
 
         EditorGUILayout.BeginVertical("Box");
-        GUILayout.Label("Total items: " + inventory.items.Count);
+        int counter = 0; foreach (Item item in inventory.items.ToArray())
+            if (item.category.ToString().Equals(category)) counter++;
+        GUILayout.Label("Displaying " + counter + "/" + inventory.items.Count + " items.");
         EditorGUILayout.EndVertical();
 
         ExtensionMethods.DrawUILine("#969696".ToColor(), 3);
 
         EditorGUILayout.EndVertical();
 
-        foreach (Item item in inventory.items.ToArray())
+        counter = 0;  foreach (Item item in inventory.items.ToArray())
         {
-            if (item.category.ToString().Equals(category))
+            if (item.category.ToString().Equals(category) || item.category == null)
             {
+                counter++;
                 EditorGUILayout.BeginHorizontal();
 
+                if (item.sprite != null)
+                {
+                    Texture2D itemSprite = item.sprite.texture;
+                    GUILayout.FlexibleSpace();
+                    GUILayout.Label(itemSprite, GUILayout.Width(30), GUILayout.Height(30));
+                }
+                EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.BeginVertical("Box");
-                GUILayout.Label("Item " + (inventory.items.IndexOf(item) + 1) + ":");
+                GUILayout.Label(("Item " + counter + ":"), GUILayout.Width(Screen.width - 150));
                 EditorGUILayout.EndVertical();
-
+                GUILayout.FlexibleSpace();
                 if (GUILayout.Button("Remove", GUILayout.Width(70), GUILayout.Height(25)))
                 {
+                    item.amount = 0;
                     inventory.items.Remove(item);
                     EditorUtility.SetDirty(target);
                     return;
                 }
-
+                EditorGUILayout.EndHorizontal();
                 EditorGUILayout.EndHorizontal();
 
                 EditorGUILayout.Space(2);
@@ -68,21 +79,21 @@ public class InventoryEditor : Editor
                 EditorGUILayout.BeginVertical();
 
                 EditorGUILayout.BeginVertical();
-                //EditorGUILayout.LabelField(new GUIContent("Item", "Character who is conversing this sentence. " +
-                //    "Can be left empty I.E. for system messages through the inventory box."));
 
                 EditorGUILayout.BeginHorizontal();
                 inventory.items[inventory.items.IndexOf(item)] = (Item)EditorGUILayout.ObjectField(inventory.items[inventory.items.IndexOf(item)], typeof(Item), false);
+                if (!inventory.items[inventory.items.IndexOf(item)].category.ToString().Equals(category))
+                    inventory.items[inventory.items.IndexOf(item)] = item;
+
                 GUILayout.FlexibleSpace();
                 EditorGUILayout.PrefixLabel(new GUIContent("X"));
                 item.amount = EditorGUILayout.IntField(item.amount, GUILayout.Width(30));
                 EditorGUILayout.EndHorizontal();
 
-
                 EditorUtility.SetDirty(target);
                 EditorGUILayout.EndVertical();
 
-                GUILayout.Space(4);
+                GUILayout.Space(3);
                 ExtensionMethods.DrawUILine("#969696".ToColor());
                 GUILayout.Space(2);
 
@@ -94,22 +105,40 @@ public class InventoryEditor : Editor
 
         EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button(new GUIContent("Add item", "Adds an item entry to this category.")))
-        { }
+        {
+            AddItem(category);
+        }
 
-        if (GUILayout.Button(new GUIContent("Remove all items.", "Removes all items of from this category.")))
+        EditorGUI.BeginDisabledGroup(counter == 0);
+        if (GUILayout.Button(new GUIContent("Clear category", "Removes all items of from this category.")))
         {
             foreach (Item item in inventory.items.ToArray())
             {
                 if (item.category.ToString().Equals(category))
-                {
                     inventory.items.Remove(item);
-                }
             }
 
             EditorUtility.SetDirty(target);
         }
+        EditorGUI.EndDisabledGroup();
         EditorGUILayout.EndHorizontal();
 
         EditorGUILayout.EndVertical();
+    }
+
+    public void AddItem(string category)
+    {
+        Item.Category.TryParse(category, out Item.Category itemCategory);
+        inventory.items.Add
+        (
+            new Item
+            {
+                id = 0,
+                name = string.Empty,
+                category = itemCategory
+            }
+        );
+
+        EditorUtility.SetDirty(target);
     }
 }

@@ -16,13 +16,13 @@ public class BranchingDialogManager : MonoBehaviour
 
     [UnityEngine.Header("Setup")]
     [SerializeField] private EventSystem eventSystem;
+    [SerializeField] private GameObject optionButtonPrefab;
 
     [UnityEngine.Header("Settings")]
-    [SerializeField] private GameObject optionButtonPrefab;
     [Range(0.01f, 0.2f)] [SerializeField] private float buttonAnimationDelay = 0.07f;
 
-    private GameObject[] choiceButtons;
-    [HideInInspector] public GameObject optionContainer, selector;
+    private GameObject[] optionButtons;
+    [HideInInspector] public GameObject optionContainer, optionIndicator;
 
     private Animator selectorAnim, optionContainerAnim;
 
@@ -38,9 +38,9 @@ public class BranchingDialogManager : MonoBehaviour
     private void Start()
     {
         optionContainer = DialogManager.instance.dialogContainer.transform.Find("Option Container").gameObject;
-        selector = optionContainer.transform.Find("Selector").gameObject;
+        optionIndicator = optionContainer.transform.Find("Selector").gameObject;
 
-        selectorAnim = selector.GetComponent<Animator>();
+        selectorAnim = optionIndicator.GetComponent<Animator>();
         optionContainerAnim = optionContainer.GetComponent<Animator>();
     }
 
@@ -51,20 +51,20 @@ public class BranchingDialogManager : MonoBehaviour
     {
         CheckForInput();
 
-        if (choiceButtons != null)
+        if (optionButtons != null)
         {
             if (CanChoose())
                 StartCoroutine(ChoiceMade());
         }
 
-        if (choiceButtons != null && !DialogManager.instance.choiceMade)
+        if (optionButtons != null && !DialogManager.instance.choiceMade)
         {
-            Vector2 choiceButtonPos = choiceButtons[selectedButton].transform.position;
+            Vector2 choiceButtonPos = optionButtons[selectedButton].transform.position;
 
-            selector.transform.position = choiceButtonPos;
-            selector.SetActive(true);
+            optionIndicator.transform.position = choiceButtonPos;
+            optionIndicator.SetActive(true);
 
-            eventSystem.SetSelectedGameObject(choiceButtons[selectedButton].transform.gameObject);
+            eventSystem.SetSelectedGameObject(optionButtons[selectedButton].transform.gameObject);
         }
         else
             return;
@@ -72,7 +72,7 @@ public class BranchingDialogManager : MonoBehaviour
 
     public IEnumerator CreateChoiceButtons()
     {
-        choiceButtons = new GameObject[DialogManager.instance.branchingDialog.dialogBranches.Count];
+        optionButtons = new GameObject[DialogManager.instance.branchingDialog.dialogBranches.Count];
 
         for (int i = 0; i < DialogManager.instance.branchingDialog.dialogBranches.Count; i++)
         {
@@ -95,29 +95,29 @@ public class BranchingDialogManager : MonoBehaviour
             color.a = 0;
             choiceButtonObj.GetComponent<Button>().GetComponent<Image>().color = color;
 
-            choiceButtons[i] = choiceButtonObj;
+            optionButtons[i] = choiceButtonObj;
         }
 
-        maxButtonIndex = choiceButtons.Length - 1;
+        maxButtonIndex = optionButtons.Length - 1;
         optionContainer.SetActive(true);
 
-        for (int i = 0; i < choiceButtons.Length; i++)
+        for (int i = 0; i < optionButtons.Length; i++)
         {
-            StartCoroutine((choiceButtons[i].FadeObject(1f, buttonAnimationDelay)));
+            StartCoroutine((optionButtons[i].FadeObject(1f, buttonAnimationDelay)));
             yield return new WaitForSeconds(buttonAnimationDelay);
         }
 
         selectedButton = 0;
 
         eventSystem.SetSelectedGameObject(null); //Resetting the currently selected GO
-        eventSystem.firstSelectedGameObject = choiceButtons[0].transform.gameObject;
+        eventSystem.firstSelectedGameObject = optionButtons[0].transform.gameObject;
     }
 
     public IEnumerator ChoiceMade()
     {
         destroyingButtons = true;
         // Play animations.
-        if (selector.gameObject.activeSelf)
+        if (optionIndicator.gameObject.activeSelf)
         {
             selectorAnim.SetTrigger("isInActive");
 
@@ -127,17 +127,17 @@ public class BranchingDialogManager : MonoBehaviour
 
         optionContainerAnim.SetTrigger("isInActive");
 
-        for (int i = 0; i < choiceButtons.Length; i++)
+        for (int i = 0; i < optionButtons.Length; i++)
         {
-            if (choiceButtons[i] != null)
-                StartCoroutine(choiceButtons[i].FadeObject(0f, buttonAnimationDelay));
+            if (optionButtons[i] != null)
+                StartCoroutine(optionButtons[i].FadeObject(0f, buttonAnimationDelay));
             yield return new WaitForSeconds(buttonAnimationDelay);
         }
 
-        selector.SetActive(false);
+        optionIndicator.SetActive(false);
         optionContainer.SetActive(false);
 
-        UnityEventHandler choiceEvent = choiceButtons[selectedButton].GetComponent<Button>().GetComponent<UnityEventHandler>();
+        UnityEventHandler choiceEvent = optionButtons[selectedButton].GetComponent<Button>().GetComponent<UnityEventHandler>();
         choiceEvent.eventHandler.Invoke();
 
         if (choiceEvent.dialog != null)
@@ -154,20 +154,20 @@ public class BranchingDialogManager : MonoBehaviour
 
     public void DestroyButtons()
     {
-        if (choiceButtons != null)
+        if (optionButtons != null)
         {
-            for (int i = 0; i < choiceButtons.Length; i++) // Destroy currenty displayed choice buttons.
-                Destroy(choiceButtons[i]);
+            for (int i = 0; i < optionButtons.Length; i++) // Destroy currenty displayed choice buttons.
+                Destroy(optionButtons[i]);
         }
 
-        choiceButtons = null; // Reset choiceButtons-array to prepare for next batch of choices.
+        optionButtons = null; // Reset optionButtons-array to prepare for next batch of choices.
         selectedButton = 0; buttonIndex = 0;
         destroyingButtons = false;
     }
 
     public void SkipChoice()
     {
-        selector.SetActive(true);
+        optionIndicator.SetActive(true);
         optionContainer.SetActive(false);
 
         DestroyButtons();

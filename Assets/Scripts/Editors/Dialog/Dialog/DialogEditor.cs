@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -21,6 +22,13 @@ public class DialogEditor : Editor
     private void OnEnable()
     {
         dialog = (Dialog)target;
+
+        /*
+        if (dialog.dialogDataDutch.Count == 0)
+            dialog.dialogDataDutch = dialog.dialogData.ToList();
+        else if (dialog.dialogDataGerman.Count == 0)
+            dialog.dialogDataGerman = dialog.dialogData.ToList();
+            */
     }
 
     public override void OnInspectorGUI()
@@ -44,7 +52,6 @@ public class DialogEditor : Editor
                     break;
                 }
         }
-
     }
 
     private void DrawInspector(List<Dialog.DialogData> languageData)
@@ -118,11 +125,13 @@ public class DialogEditor : Editor
             EditorUtility.SetDirty(target);
         }
 
+        EditorGUI.BeginDisabledGroup(languageData.Count == 0);
         if (GUILayout.Button(new GUIContent("Clear all sentences", "Clears all entries from the current dialog.")))
         {
             languageData.Clear();
             EditorUtility.SetDirty(target);
         }
+        EditorGUI.EndDisabledGroup();
         EditorGUILayout.EndHorizontal();
 
         EditorGUILayout.EndVertical();

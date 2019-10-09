@@ -91,11 +91,13 @@ public class BranchingDialogEditor : Editor
         if (GUILayout.Button(new GUIContent("Add branch", "Adds an entry to the current branching inventory.")))
             AddBranchingDialog();
 
+        EditorGUI.BeginDisabledGroup(branchingDialog.dialogBranches.Count == 0);
         if (GUILayout.Button(new GUIContent("Clear all branches", "Clears all branch entries from current branching inventory.")))
         {
             this.branchingDialog.dialogBranches.Clear();
             EditorUtility.SetDirty(target);
         }
+        EditorGUI.EndDisabledGroup();
         EditorGUILayout.EndHorizontal();
 
         EditorGUILayout.EndVertical();

@@ -8,9 +8,11 @@ public class ItemInteraction : InteractableObject
     #region Variables
 
     private RangeHandler rangeHandler;
+    //private GameObject particlesIdle, particlesExplosion;
 
     [UnityEngine.Header("Settings")]
-    [SerializeField] private Item item;
+    public Item item;
+    [Range(0.15f, 0.75f)] [SerializeField] private float duration = 0.3f;
 
     #endregion
 
@@ -19,6 +21,8 @@ public class ItemInteraction : InteractableObject
     private void Start()
     {
         rangeHandler = gameObject.transform.Find("Range").GetComponent<RangeHandler>();
+        //particlesIdle = gameObject.transform.Find("Particle Effects/Particle System (Idle)").gameObject;
+        //particlesExplosion = gameObject.transform.Find("Particle Effects/Particle System (Explosion)").GetComponent<ParticleSystem>();
 
         if (item.isPickedUp)
             Destroy(this.gameObject);
@@ -36,7 +40,7 @@ public class ItemInteraction : InteractableObject
             if (CanInteract())
             {
                 AddItem();
-                Destroy(this.gameObject);
+                AnimateLight(duration);
             }
         }
 
@@ -49,5 +53,13 @@ public class ItemInteraction : InteractableObject
     private void AddItem()
     {
         InventoryManager.instance.AddItem(item);
+    }
+
+    private void AnimateLight(float duration)
+    {
+        //particlesIdle.SetActive(false);
+        //particlesExplosion.Play();
+        StartCoroutine(LightController.instance.FadeLight(0f, duration));
+        Destroy(this.gameObject, duration);
     }
 }

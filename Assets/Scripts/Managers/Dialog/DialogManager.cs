@@ -22,8 +22,8 @@ public class DialogManager : MonoBehaviour
 
     private GameObject portraitContainer, skipContainer, autoAdvanceIcon;
     private TextMeshProUGUI dialogText;
-    private Image selector;
-    private Animator dialogAnimator, selectorAnimator;
+    private Image dialogIndicator;
+    private Animator dialogAnimator, indicatorAnimator;
 
     private float typingMultiplier = 1;
 
@@ -59,8 +59,8 @@ public class DialogManager : MonoBehaviour
         portraitContainer = dialogContainer.transform.Find("Portrait Container").gameObject;
         skipContainer = dialogContainer.transform.Find("Skip Container").gameObject;
         autoAdvanceIcon = dialogContainer.transform.Find("Auto Advance").gameObject;
-        selector = dialogContainer.transform.Find("Selector").GetComponent<Image>();
-        selectorAnimator = selector.GetComponent<Animator>();
+        dialogIndicator = dialogContainer.transform.Find("Selector").GetComponent<Image>();
+        indicatorAnimator = dialogIndicator.GetComponent<Animator>();
 
         textTransform = dialogText.GetComponent<RectTransform>();
         initTextPos = textTransform.anchoredPosition;
@@ -83,7 +83,7 @@ public class DialogManager : MonoBehaviour
                 StopCoroutine(autoAdvanceCoroutine);
         }
 
-        ToggleSelector(); // TODO: Look for more performant way to toggle selector.
+        ToggleSelector(); // TODO: Look for more performant way to toggle dialogIndicator.
 
         PlayerMovement player = GameManager.Player().GetComponent<PlayerMovement>();
         if (isTyping || isActive)
@@ -93,23 +93,23 @@ public class DialogManager : MonoBehaviour
     }
     #endregion
 
-    public void StartDialog(Dialog dialog)
+    public void StartDialog(Dialog dialogSequence)
     {
         switch (language)
         {
             case Language.English:
                 {
-                    languageData = dialog.dialogData;
+                    languageData = dialogSequence.dialogData;
                     break;
                 }
             case Language.Dutch:
                 {
-                    languageData = dialog.dialogDataDutch;
+                    languageData = dialogSequence.dialogDataDutch;
                     break;
                 }
             case Language.German:
                 {
-                    languageData = dialog.dialogDataGerman;
+                    languageData = dialogSequence.dialogDataGerman;
                     break;
                 }
             default: break;
@@ -318,15 +318,15 @@ public class DialogManager : MonoBehaviour
             autoAdvanceIcon.SetActive(false);
 
             if (!isTyping && !hasBranchingDialog && isActive)
-                selector.gameObject.SetActive(true);
+                dialogIndicator.gameObject.SetActive(true);
             else if (!isActive)
-                selector.gameObject.SetActive(false);
+                dialogIndicator.gameObject.SetActive(false);
             else
-                StartCoroutine(PlayAnimation(selectorAnimator));
+                StartCoroutine(PlayAnimation(indicatorAnimator));
         }
         else
         {
-            selector.gameObject.SetActive(false);
+            dialogIndicator.gameObject.SetActive(false);
             autoAdvanceIcon.SetActive(true);
         }
     }

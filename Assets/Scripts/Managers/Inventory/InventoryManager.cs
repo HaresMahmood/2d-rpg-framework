@@ -15,13 +15,12 @@ public class InventoryManager : MonoBehaviour
     [UnityEngine.Header("Setup")]
     public GameObject itemGrid;
     public Inventory inventory;
-
-    [UnityEngine.Header("Settings")]
     [SerializeField] private GameObject itemContainerPrefab;
+    
 
-    public List<GameObject> itemContainers;
+    private List<GameObject> itemContainers;
 
-    public bool displayingItem = false;
+    private bool displayingItem = false;
 
     #endregion
 
