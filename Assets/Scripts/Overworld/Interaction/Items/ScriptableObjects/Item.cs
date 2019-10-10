@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 [CreateAssetMenu(fileName = "New item", menuName = "Inventory/Item")]
 public class Item : ScriptableObject
@@ -21,5 +22,10 @@ public class Item : ScriptableObject
         TM,
         Berry,
         Other
+    }
+
+    internal object Clone()
+    {
+        throw new NotImplementedException();
     }
 }

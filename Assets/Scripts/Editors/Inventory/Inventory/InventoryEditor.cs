@@ -1,5 +1,8 @@
-﻿using UnityEditor;
+﻿using System.Linq;
+using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using System;
 
 [CustomEditor(typeof(Inventory)), CanEditMultipleObjects]
 public class InventoryEditor : Editor
@@ -8,6 +11,7 @@ public class InventoryEditor : Editor
 
     private Inventory inventory;
 
+    private bool sameItem = false;
     private int tab = 0;
     private string[] categories = new string[] { "Key", "Health", "PokéBall", "Battle", "TM", "Berry", "Other" };
 
@@ -48,11 +52,10 @@ public class InventoryEditor : Editor
 
         counter = 0;  foreach (Item item in inventory.items.ToArray())
         {
-            if (item.category.ToString().Equals(category) || item.category == null)
+            if (item.category.ToString().Equals(category))
             {
                 counter++;
                 EditorGUILayout.BeginHorizontal();
-
                 if (item.sprite != null)
                 {
                     Texture2D itemSprite = item.sprite.texture;
@@ -61,7 +64,12 @@ public class InventoryEditor : Editor
                 }
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.BeginVertical("Box");
-                GUILayout.Label(("Item " + counter + ":"), GUILayout.Width(Screen.width - 150));
+                float boxWidth = 0;
+                if (item.sprite != null)
+                    boxWidth = Screen.width - 150;
+                else
+                    boxWidth = Screen.width - 112;
+                GUILayout.Label(("Slot " + counter + ":"), GUILayout.Width(boxWidth));
                 EditorGUILayout.EndVertical();
                 GUILayout.FlexibleSpace();
                 if (GUILayout.Button("Remove", GUILayout.Width(70), GUILayout.Height(25)))
@@ -81,13 +89,24 @@ public class InventoryEditor : Editor
                 EditorGUILayout.BeginVertical();
 
                 EditorGUILayout.BeginHorizontal();
-                inventory.items[inventory.items.IndexOf(item)] = (Item)EditorGUILayout.ObjectField(inventory.items[inventory.items.IndexOf(item)], typeof(Item), false);
-                if (!inventory.items[inventory.items.IndexOf(item)].category.ToString().Equals(category))
-                    inventory.items[inventory.items.IndexOf(item)] = item;
+                EditorGUI.BeginChangeCheck();
+                try
+                {
+                    inventory.items[inventory.items.IndexOf(item)] = (Item)EditorGUILayout.ObjectField(inventory.items[inventory.items.IndexOf(item)], typeof(Item), false, GUILayout.Width(Screen.width - 115));
+                }
+                catch (NullReferenceException e)
+                {
+                    
+                }
 
+                inventory.items = inventory.items.Distinct().ToList();
                 GUILayout.FlexibleSpace();
                 EditorGUILayout.PrefixLabel(new GUIContent("X"));
+                if (GUILayout.Button(new GUIContent("+", "Increments the amount of this item in the inventory."), GUILayout.Height(18), GUILayout.Width(18)))
+                    if (item.amount < 999) item.amount++;
                 item.amount = EditorGUILayout.IntField(item.amount, GUILayout.Width(30));
+                if (GUILayout.Button(new GUIContent("-", "Decrements the amount of this item in the inventory."), GUILayout.Height(18), GUILayout.Width(18)))
+                    if (item.amount > 1) item.amount--;
                 EditorGUILayout.EndHorizontal();
 
                 EditorUtility.SetDirty(target);
@@ -105,9 +124,7 @@ public class InventoryEditor : Editor
 
         EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button(new GUIContent("Add item", "Adds an item entry to this category.")))
-        {
             AddItem(category);
-        }
 
         EditorGUI.BeginDisabledGroup(counter == 0);
         if (GUILayout.Button(new GUIContent("Clear category", "Removes all items of from this category.")))
@@ -133,11 +150,9 @@ public class InventoryEditor : Editor
         (
             new Item
             {
-                id = 0,
-                name = string.Empty,
                 category = itemCategory
             }
-        );
+        ); 
 
         EditorUtility.SetDirty(target);
     }
