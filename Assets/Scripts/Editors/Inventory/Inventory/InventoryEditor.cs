@@ -90,23 +90,16 @@ public class InventoryEditor : Editor
 
                 EditorGUILayout.BeginHorizontal();
                 EditorGUI.BeginChangeCheck();
-                try
-                {
-                    inventory.items[inventory.items.IndexOf(item)] = (Item)EditorGUILayout.ObjectField(inventory.items[inventory.items.IndexOf(item)], typeof(Item), false, GUILayout.Width(Screen.width - 115));
-                }
-                catch (NullReferenceException e)
-                {
-                    
-                }
-
+                inventory.items[inventory.items.IndexOf(item)] = (Item)EditorGUILayout.ObjectField(inventory.items[inventory.items.IndexOf(item)], typeof(Item), false, GUILayout.Width(Screen.width - 115));
                 inventory.items = inventory.items.Distinct().ToList();
+                EditorUtility.SetDirty(target);
                 GUILayout.FlexibleSpace();
                 EditorGUILayout.PrefixLabel(new GUIContent("X"));
-                if (GUILayout.Button(new GUIContent("+", "Increments the amount of this item in the inventory."), GUILayout.Height(18), GUILayout.Width(18)))
-                    if (item.amount < 999) item.amount++;
-                item.amount = EditorGUILayout.IntField(item.amount, GUILayout.Width(30));
                 if (GUILayout.Button(new GUIContent("-", "Decrements the amount of this item in the inventory."), GUILayout.Height(18), GUILayout.Width(18)))
-                    if (item.amount > 1) item.amount--;
+                    if (item.amount > 1) item.amount--; EditorUtility.SetDirty(item);
+                item.amount = EditorGUILayout.IntField(item.amount, GUILayout.Width(30));
+                if (GUILayout.Button(new GUIContent("+", "Increments the amount of this item in the inventory."), GUILayout.Height(18), GUILayout.Width(18)))
+                    if (item.amount < 999) item.amount++; EditorUtility.SetDirty(item);
                 EditorGUILayout.EndHorizontal();
 
                 EditorUtility.SetDirty(target);

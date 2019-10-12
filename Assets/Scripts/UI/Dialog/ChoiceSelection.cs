@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿//TODO: Merge with ItemSelection.cs!
+
+using UnityEngine;
 
 public class ChoiceSelection : MonoBehaviour
 {

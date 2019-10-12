@@ -21,6 +21,14 @@ public class PauseManager : MonoBehaviour
 
     [SerializeField] private GameObject pausePanel;
 
+    public GameObject itemIndicator;
+
+    private Transform[] grid;
+
+    public bool isInteracting;
+    public int slotIndex, selectedItem;
+    public int maxSlotIndex;
+
     #endregion
 
     #region Unity Methods
@@ -36,6 +44,9 @@ public class PauseManager : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        itemIndicator = pausePanel.transform.Find("Inventory/Indicator").gameObject;
+        grid = pausePanel.transform.Find("Inventory/Item Grid").transform.GetChildren();
+
         isPaused = false;
     }
 
@@ -45,6 +56,9 @@ public class PauseManager : MonoBehaviour
     private void Update()
     {
         TogglePause();
+        CheckForInput();
+
+        itemIndicator.transform.position = grid[selectedItem].transform.position;
     }
 
     #endregion
@@ -56,21 +70,28 @@ public class PauseManager : MonoBehaviour
 
         if (isPaused)
         {
-
             pausePanel.SetActive(true);
 
             //TODO: Move this whole block to InventoryManager!
             if (InventoryManager.instance.inventory.items.Count > 0)
             {
-                Transform[] grid = pausePanel.transform.Find("Inventory/Item Grid").transform.GetChildren();
+                maxSlotIndex = grid.Length - 1;
                 foreach (Transform itemSlot in grid)
                 {
                     if (Array.IndexOf(grid, itemSlot) < InventoryManager.instance.inventory.items.Count)
                     {
+                        itemSlot.GetComponent<ItemSelection>().slotIndex = Array.IndexOf(grid, itemSlot);
+
                         Item item = InventoryManager.instance.inventory.items[Array.IndexOf(grid, itemSlot)];
                         itemSlot.Find("Sprite").GetComponent<Image>().sprite = item.sprite;
                         itemSlot.Find("Sprite").gameObject.SetActive(true);
                         itemSlot.Find("Amount").GetComponentInChildren<TextMeshProUGUI>().SetText(item.amount.ToString());
+
+                        if (selectedItem == Array.IndexOf(grid, itemSlot))
+                        {
+                            pausePanel.transform.Find("Inventory/Item Information/Name/Item Name").GetComponent<TextMeshProUGUI>().SetText(item.name);
+                            pausePanel.transform.Find("Inventory/Item Information/Description/Item Description").GetComponent<TextMeshProUGUI>().SetText(item.description);
+                        }
                     }
                 }
             }
@@ -83,5 +104,53 @@ public class PauseManager : MonoBehaviour
             pausePanel.SetActive(false);
             Time.timeScale = 1f;
         }
+    }
+
+    private void CheckForInput()
+    {
+        if (Input.GetAxisRaw("Horizontal") != 0)
+        {
+            if (!isInteracting)
+            {
+                if (Input.GetAxisRaw("Horizontal") < 0)
+                {
+                    if (slotIndex < maxSlotIndex)
+                        slotIndex++;
+                    else
+                        slotIndex = 0;
+                }
+                else if (Input.GetAxisRaw("Horizontal") > 0)
+                {
+                    if (slotIndex > 0)
+                        slotIndex--;
+                    else
+                        slotIndex = maxSlotIndex;
+                }
+                isInteracting = true;
+            }
+        }
+        else if (Input.GetAxisRaw("Vertical") != 0)
+        {
+            if (!isInteracting)
+            {
+                if (Input.GetAxisRaw("Vertical") < 0)
+                {
+                    if (slotIndex < maxSlotIndex)
+                        slotIndex += 6;
+                    else
+                        slotIndex = 0;
+                }
+                else if (Input.GetAxisRaw("Vertical") > 0)
+                {
+                    if (slotIndex > 0)
+                        slotIndex += 6;
+                    else
+                        slotIndex = maxSlotIndex;
+                }
+                isInteracting = true;
+            }
+        }
+        else
+            isInteracting = false;
     }
 }
