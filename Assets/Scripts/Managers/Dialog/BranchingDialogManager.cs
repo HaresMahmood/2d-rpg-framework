@@ -64,7 +64,7 @@ public class BranchingDialogManager : MonoBehaviour
             optionIndicator.transform.position = choiceButtonPos;
             optionIndicator.SetActive(true);
 
-            eventSystem.SetSelectedGameObject(optionButtons[selectedButton].transform.gameObject);
+            eventSystem.SetSelectedGameObject(optionButtons[selectedButton]);
         }
         else
             return;
