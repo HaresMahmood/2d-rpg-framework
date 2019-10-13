@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 /// <summary>
 ///
@@ -37,6 +38,7 @@ public class PauseManager : MonoBehaviour
     public string currentCategory;
     public int currentCategoryIndex;
     public int maxSlotIndex;
+    public int counter;
 
     #endregion
 
@@ -68,7 +70,6 @@ public class PauseManager : MonoBehaviour
     private void Update()
     {
         TogglePause();
-        CheckForInput();
 
         if (isPaused)
         {
@@ -102,49 +103,14 @@ public class PauseManager : MonoBehaviour
             eventSystem.firstSelectedGameObject = grid[0].transform.gameObject;
         }
 
+        DrawInventory();
+
         if (isPaused)
         {
             pausePanel.SetActive(true);
 
-            //TODO: Move this whole block to InventoryManager!
-            if (InventoryManager.instance.inventory.items.Count > 0)
-            {
-                maxSlotIndex = InventoryManager.instance.inventory.items.Count - 1;
-                int counter = 0;  foreach (Transform itemSlot in grid)
-                {
-                    if (Array.IndexOf(grid, itemSlot) < InventoryManager.instance.inventory.items.Count)
-                    {
-                        Item item = InventoryManager.instance.inventory.items[Array.IndexOf(grid, itemSlot)];
-
-                        if (item.category.ToString().Equals(currentCategory))
-                        {
-                            counter++;
-                            itemSlot.GetComponent<ItemSelection>().slotIndex = counter;
-
-                            itemSlot.Find("Sprite").GetComponent<Image>().sprite = item.sprite;
-                            itemSlot.Find("Sprite").gameObject.SetActive(true);
-                            itemSlot.Find("Amount").GetComponentInChildren<TextMeshProUGUI>().SetText(item.amount.ToString());
-
-                            if (selectedItem == Array.IndexOf(grid, itemSlot))
-                            {
-                                pausePanel.transform.Find("Inventory/Item Information/Name/Item Name").GetComponent<TextMeshProUGUI>().SetText(item.name);
-                                pausePanel.transform.Find("Inventory/Item Information/Description/Item Description").GetComponent<TextMeshProUGUI>().SetText(item.description);
-                            }
-                        }
-                        else
-                        {
-                            itemSlot.Find("Sprite").gameObject.SetActive(false);
-                            itemSlot.Find("Amount").gameObject.SetActive(false);
-                        }
-                    }
-                    else
-                    {
-                        itemSlot.Find("Sprite").gameObject.SetActive(false);
-                        itemSlot.Find("Amount").gameObject.SetActive(false);
-                    }
-                }
-            }
-            //
+            DrawInventory();
+            CheckForInput();
 
             Time.timeScale = 0f;
         }
@@ -153,6 +119,50 @@ public class PauseManager : MonoBehaviour
             pausePanel.SetActive(false);
             Time.timeScale = 1f;
         }
+    }
+
+    private void DrawInventory()
+    {
+        pausePanel.transform.Find("Inventory/Categories/Category Information").GetComponentInChildren<TextMeshProUGUI>().SetText(currentCategory);
+
+        //TODO: Move this whole block to InventoryManager!
+        List<Item> inventory = InventoryManager.instance.inventory.items;
+
+        if (InventoryManager.instance.inventory.items.Count > 0)
+        {
+            counter = 0; foreach (Item item in inventory)
+            {
+                if (item.category.ToString().Equals(currentCategory))
+                {
+                    Transform itemSlot = grid[counter];
+                    itemSlot.GetComponent<ItemSelection>().slotIndex = counter;
+
+                    itemSlot.Find("Sprite").GetComponent<Image>().sprite = item.sprite;
+                    itemSlot.Find("Sprite").gameObject.SetActive(true);
+                    itemSlot.Find("Amount").GetComponentInChildren<TextMeshProUGUI>().SetText(item.amount.ToString());
+                    itemSlot.Find("Amount").gameObject.SetActive(true);
+
+                    if (selectedItem == counter)
+                    {
+                        pausePanel.transform.Find("Inventory/Item Information/Name").gameObject.SetActive(true);
+                        pausePanel.transform.Find("Inventory/Item Information/Description").gameObject.SetActive(true);
+                        pausePanel.transform.Find("Inventory/Item Information/Name/Item Name").GetComponent<TextMeshProUGUI>().SetText(item.name);
+                        pausePanel.transform.Find("Inventory/Item Information/Description/Item Description").GetComponent<TextMeshProUGUI>().SetText(item.description);
+                    }
+                    counter++;
+                }
+            }
+
+            for (int i = counter; i < grid.Length; i++)
+            {
+                Transform itemSlot = grid[i];
+                itemSlot.Find("Sprite").gameObject.SetActive(false);
+                itemSlot.Find("Amount").gameObject.SetActive(false);
+            }
+
+            maxSlotIndex = counter;
+        }
+        //
     }
 
     private void CheckForInput()
@@ -223,7 +233,7 @@ public class PauseManager : MonoBehaviour
                     else
                         currentCategory = categories[0];
                 }
-                isInteracting = true;
+                isInteracting = true; counter = 0; DrawInventory();
             }
         }
         else
