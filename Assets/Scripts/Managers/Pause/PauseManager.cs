@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
-
+using UnityEngine.EventSystems;
 //TODO: Should not be here!
 using UnityEngine.UI;
-using TMPro;
-using UnityEngine.EventSystems;
-using System.Collections.Generic;
 
 /// <summary>
 ///
@@ -32,11 +32,17 @@ public class PauseManager : MonoBehaviour
     private float initialPosY;
     private Color initialColor;
 
+
     public bool isInteracting = false;
     public int slotIndex, selectedItem;
     public string[] categories = new string[] { "Key", "Health", "PokéBall", "Battle", "TM", "Berry", "Other" };
     public string currentCategory;
-    public int currentCategoryIndex;
+    public int currentCategoryIndex = 0;
+    private Animator categoryAnim;
+    private Animator indicatorAnim;
+
+    public Animator rightAnim;
+    public Animator leftAnim;
     public int maxSlotIndex;
     public int counter;
 
@@ -60,6 +66,10 @@ public class PauseManager : MonoBehaviour
         categoryContainer = pausePanel.transform.Find("Inventory/Categories/Category Icons").GetChildren();
         initialPosY = categoryContainer[0].position.y;
         initialColor = categoryContainer[0].gameObject.GetComponent<Image>().color;
+        categoryAnim = pausePanel.transform.Find("Inventory/Categories/Category Icons").GetComponent<Animator>();
+        rightAnim = pausePanel.transform.Find("Inventory/Categories/Navigation/Right").GetComponent<Animator>();
+        leftAnim = pausePanel.transform.Find("Inventory/Categories/Navigation/Left").GetComponent<Animator>();
+        indicatorAnim = itemIndicator.GetComponent<Animator>();
 
         isPaused = false;
     }
@@ -75,19 +85,8 @@ public class PauseManager : MonoBehaviour
         {
             itemIndicator.transform.position = grid[selectedItem].position;
             eventSystem.SetSelectedGameObject(grid[selectedItem].gameObject);
-            foreach (Transform category in categoryContainer)
-            {
-                if (category != categoryContainer[currentCategoryIndex])
-                {
-                    category.position = new Vector2(category.position.x, initialPosY);
-                    category.gameObject.GetComponent<Image>().color = initialColor;
-                }
-                else
-                {
-                    category.position = new Vector2(category.position.x, initialPosY + 40);
-                    category.gameObject.GetComponent<Image>().color = "51c2fc".ToColor();
-                }
-            }
+
+            AnimateCategory();
         }
     }
 
@@ -99,7 +98,7 @@ public class PauseManager : MonoBehaviour
         {
             isPaused = !isPaused;
             selectedItem = 0; maxSlotIndex = 0;
-            currentCategory = categories[0];
+            currentCategory = categories[currentCategoryIndex];
             eventSystem.firstSelectedGameObject = grid[0].transform.gameObject;
         }
 
@@ -116,6 +115,7 @@ public class PauseManager : MonoBehaviour
         }
         else
         {
+            categoryAnim.Rebind();
             pausePanel.SetActive(false);
             Time.timeScale = 1f;
         }
@@ -125,6 +125,7 @@ public class PauseManager : MonoBehaviour
     {
         pausePanel.transform.Find("Inventory/Categories/Category Information").GetComponentInChildren<TextMeshProUGUI>().SetText(currentCategory);
 
+        //selectedItem = 0;
         //TODO: Move this whole block to InventoryManager!
         List<Item> inventory = InventoryManager.instance.inventory.items;
 
@@ -160,7 +161,7 @@ public class PauseManager : MonoBehaviour
                 itemSlot.Find("Amount").gameObject.SetActive(false);
             }
 
-            maxSlotIndex = counter;
+            maxSlotIndex = counter - 1;
         }
         //
     }
@@ -215,28 +216,74 @@ public class PauseManager : MonoBehaviour
             {
                 if (Input.GetAxisRaw("Trigger") > 0)
                 {
-                    if (Array.IndexOf(categories, currentCategory) < categories.Length)
+                    AnimateArrows(rightAnim);
+                    if (currentCategoryIndex < (categories.Length - 1))
                     {
                         currentCategory = categories[Array.IndexOf(categories, currentCategory) + 1];
                         currentCategoryIndex++;
                     }
                     else
-                        currentCategory = categories[categories.Length - 1];
+                    {
+                        currentCategory = categories[0];
+                        currentCategoryIndex = 0;
+                    }
                 }
                 else if (Input.GetAxisRaw("Trigger") < 0)
                 {
-                    if (Array.IndexOf(categories, currentCategory) > 0)
+                    AnimateArrows(leftAnim);
+                    if (currentCategoryIndex > 0)
                     {
                         currentCategory = categories[Array.IndexOf(categories, currentCategory) - 1];
                         currentCategoryIndex--;
                     }
                     else
-                        currentCategory = categories[0];
+                    {
+                        currentCategory = categories[categories.Length - 1];
+                        currentCategoryIndex = categories.Length - 1;
+                    }
                 }
-                isInteracting = true; counter = 0; DrawInventory();
+                isInteracting = true; counter = 0; selectedItem = 0;
             }
         }
         else
+        {
             isInteracting = false;
+            leftAnim.Rebind(); rightAnim.Rebind();
+        }
+
+        if (Input.GetButtonDown("Interact"))
+        {
+            StartCoroutine(AnimateIndicator(indicatorAnim));
+        }
+        else if (Input.GetButtonUp("Interact"))
+        {
+            indicatorAnim.Rebind();
+        }
+
+    }
+
+    private void AnimateCategory()
+    {
+        foreach (Transform category in categoryContainer)
+        {
+            if (category != categoryContainer[currentCategoryIndex])
+                categoryAnim.SetBool(category.name, false);
+            else
+                categoryAnim.SetBool(category.name, true);
+        }
+    }
+
+    private void AnimateArrows(Animator anim)
+    {
+        anim.ResetTrigger("isActive");
+        anim.SetTrigger("isActive");
+    }
+
+    private IEnumerator AnimateIndicator(Animator anim)
+    {
+        anim.ResetTrigger("isPressed");
+        anim.SetTrigger("isPressed");
+        float waitTime = anim.GetAnimationTime();
+        yield return new WaitForSeconds(waitTime);
     }
 }

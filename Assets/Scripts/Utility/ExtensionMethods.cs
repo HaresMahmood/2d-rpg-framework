@@ -55,7 +55,10 @@ public static class ExtensionMethods
         float t = 0; // Tracks how many seconds we've been fading.
         while (t < duration) // While time is less than the duration of the fade, ...
         {
-            t += Time.deltaTime; // Steps the fade forward one frame.
+            if (Time.timeScale == 0)
+                t += Time.unscaledDeltaTime;
+            else
+                t += Time.deltaTime;
             float blend = Mathf.Clamp01(t / duration); // Turns the time into an interpolation factor between 0 and 1. 
 
             color.a = Mathf.Lerp(startOpacity, targetOpacity, blend); // Blends to the corresponding opacity between start & target.
@@ -69,6 +72,55 @@ public static class ExtensionMethods
 
             if (hasText)
                 gameObject.GetComponentInChildren<TextMeshProUGUI>().color = color;
+
+            yield return null; // Wait one frame, then repeat.
+        }
+    }
+
+    /// <summary>
+    /// Defines an enumerator to perform fading on a GameObject.
+    /// </summary>
+    /// <param name="gameObject"> GameObject to fade. </param>
+    /// <param name="targetColor"> Color to change GameObject to. </param>
+    /// <param name="duration"> Duration of color change. </param>
+    /// <returns></returns>
+    public static IEnumerator ColorObject(this GameObject gameObject, Color targetColor, float duration)
+    {
+        bool isImage = false, isText = false;
+        Color color;
+
+        if (gameObject.GetComponent<Image>() != null) // If the GameObject is an image, ...
+        {
+            color = gameObject.GetComponent<Image>().color; // Caches the current color and initial opacity of image.
+            isImage = true;
+        }
+        else if (gameObject.GetComponent<TextMeshProUGUI>() != null)
+        {
+            color = gameObject.GetComponent<TextMeshProUGUI>().color;
+            isText = true;
+        }
+        else
+            color = gameObject.GetComponent<Renderer>().material.color; // Caches the current color of and initial opacity of material. 
+
+        Color startColor = color; // Creates a value of the initial opacity.
+
+        float t = 0; // Tracks how many seconds we've been fading.
+        while (t < duration) // While time is less than the duration of the fade, ...
+        {
+            if (Time.timeScale == 0)
+                t += Time.unscaledDeltaTime;
+            else
+                t += Time.deltaTime;
+            float blend = Mathf.Clamp01(t / duration); Debug.Log(t); // Turns the time into an interpolation factor between 0 and 1. 
+
+            color = Color.Lerp(startColor, targetColor, blend); // Blends to the corresponding opacity between start & target.
+
+            if (isImage)
+                gameObject.GetComponent<Image>().color = color;
+            else if (isText)
+                gameObject.GetComponent<TextMeshProUGUI>().color = color;
+            else
+                gameObject.GetComponent<Renderer>().material.color = color;
 
             yield return null; // Wait one frame, then repeat.
         }
