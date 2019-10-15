@@ -59,7 +59,7 @@ public class ItemInteraction : InteractableObject
     {
         //particlesIdle.SetActive(false);
         //particlesExplosion.Play();
-        StartCoroutine(LightController.instance.FadeLight(0f, duration));
+        LightController.instance.FadeLight(0f, duration);
         Destroy(this.gameObject, duration);
     }
 }

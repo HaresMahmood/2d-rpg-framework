@@ -8,9 +8,7 @@ public class LightController : MonoBehaviour
 {
     #region Variables
     public static LightController instance;
-    private Light lightSource;
-    private Item item;
-    private ItemInteraction interaction;
+    private SpriteRenderer rend;
 
     //[UnityEngine.Header("Setup")]
     //[SerializeableField]
@@ -31,9 +29,7 @@ public class LightController : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        lightSource = GetComponent<Light>();
-        interaction = GetComponentInParent<ItemInteraction>();
-        item = interaction.item;
+        rend = GetComponent<SpriteRenderer>();
         speed = Random.Range(0.3f, 1f);
     }
 
@@ -43,7 +39,9 @@ public class LightController : MonoBehaviour
     private void Update()
     {
         //while (!item.isPickedUp)
-            lightSource.intensity = PingPong(minRange, maxRange, speed);
+        Color startColor = rend.color;
+        startColor.a = PingPong(minRange, maxRange, speed);
+        rend.color = startColor;
     }
 
     #endregion
@@ -53,20 +51,8 @@ public class LightController : MonoBehaviour
          return Mathf.Lerp(minRange, maxRange, Mathf.PingPong(Time.time, speed));
     }
 
-    public IEnumerator FadeLight(float targetIntensity, float duration)
+    public void FadeLight(float targetIntensity, float duration)
     {
-        float startIntensity = lightSource.intensity;
-
-        float t = 0;
-        while (t < duration)
-        {
-            t += Time.deltaTime;
-            float blend = Mathf.Clamp01(t / duration);
-            float newIntensity = Mathf.Lerp(startIntensity, targetIntensity, blend);
-
-            lightSource.intensity = newIntensity;
-
-            yield return null;
-        }
+        StartCoroutine(rend.gameObject.FadeObject(targetIntensity, duration));
     }
 }

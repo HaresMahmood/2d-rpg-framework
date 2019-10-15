@@ -46,6 +46,8 @@ public class PauseManager : MonoBehaviour
     public int maxSlotIndex;
     public int counter;
 
+    public bool isInMenu;
+
     #endregion
 
     #region Unity Methods
@@ -255,13 +257,19 @@ public class PauseManager : MonoBehaviour
 
         if (Input.GetButtonDown("Interact"))
         {
-            StartCoroutine(AnimateIndicator(indicatorAnim));
+            if (!isInMenu)
+            {
+                StartCoroutine(AnimateIndicator(indicatorAnim));
+            }
         }
-        else if (Input.GetButtonUp("Interact"))
-        {
+        else if (Input.GetButtonUp("Interact") && !isInMenu)
             indicatorAnim.Rebind();
-        }
 
+        if (Input.GetButtonDown("Interact") && isInMenu)
+        {
+            pausePanel.transform.Find("Inventory/Menu").gameObject.SetActive(false);
+            isInMenu = false;
+        }
     }
 
     private void AnimateCategory()
@@ -286,6 +294,11 @@ public class PauseManager : MonoBehaviour
         anim.ResetTrigger("isPressed");
         anim.SetTrigger("isPressed");
         float waitTime = anim.GetAnimationTime();
-        yield return new WaitForSeconds(waitTime);
+        yield return null;
+        GameObject menuPanel = pausePanel.transform.Find("Inventory/Menu/Base").gameObject;
+        pausePanel.transform.Find("Inventory/Menu").gameObject.SetActive(true);
+        menuPanel.transform.position = grid[selectedItem].position;
+        menuPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(menuPanel.GetComponent<Image>().sprite.rect.width, menuPanel.GetComponent<Image>().sprite.rect.height);
+        isInMenu = true;
     }
 }
