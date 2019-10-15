@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.Experimental.Rendering.Universal;
 
 /// <summary>
 ///
@@ -9,7 +8,7 @@ public class LightController : MonoBehaviour
 {
     #region Variables
     public static LightController instance;
-    private Light2D lightSource;
+    private Light lightSource;
     private Item item;
     private ItemInteraction interaction;
 
@@ -32,7 +31,7 @@ public class LightController : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        lightSource = GetComponent<Light2D>();
+        lightSource = GetComponent<Light>();
         interaction = GetComponentInParent<ItemInteraction>();
         item = interaction.item;
         speed = Random.Range(0.3f, 1f);

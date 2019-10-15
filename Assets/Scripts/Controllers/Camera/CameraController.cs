@@ -1,11 +1,9 @@
 ﻿using UnityEngine;
-using UnityEngine.Experimental.Rendering.Universal;
 
 public class CameraController : MonoBehaviour
 {
     public static CameraController instance;
     [HideInInspector] public Camera cam;
-    private PixelPerfectCamera pixCam;
 
     public float moveSpeed;
     private Transform target;
@@ -21,7 +19,6 @@ public class CameraController : MonoBehaviour
     private void Start()
     {
         cam = GetComponent<Camera>();
-        pixCam = GetComponent<PixelPerfectCamera>();
 
         startSize = cam.orthographicSize;
         target = GameManager.Player();

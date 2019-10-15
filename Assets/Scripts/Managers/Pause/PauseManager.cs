@@ -107,6 +107,7 @@ public class PauseManager : MonoBehaviour
         if (isPaused)
         {
             pausePanel.SetActive(true);
+            CameraController.instance.GetComponent<PostprocessingBlur>().enabled = true;
 
             DrawInventory();
             CheckForInput();
@@ -117,6 +118,7 @@ public class PauseManager : MonoBehaviour
         {
             categoryAnim.Rebind();
             pausePanel.SetActive(false);
+            CameraController.instance.GetComponent<PostprocessingBlur>().enabled = false;
             Time.timeScale = 1f;
         }
     }
