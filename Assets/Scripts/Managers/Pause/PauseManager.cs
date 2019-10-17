@@ -21,6 +21,8 @@ public class PauseManager : MonoBehaviour
     /// </summary>
     public bool isPaused; // Made public for debug purposes.
 
+
+    [SerializeField] private GameObject menuButtonPrefab;
     [SerializeField] private EventSystem eventSystem;
     [SerializeField] private GameObject pausePanel;
     
@@ -38,13 +40,23 @@ public class PauseManager : MonoBehaviour
     public string[] categories = new string[] { "Key", "Health", "PokéBall", "Battle", "TM", "Berry", "Other" };
     public string currentCategory;
     public int currentCategoryIndex = 0;
+    public int maxButtonIndex;
+    public int buttonIndex;
+    public int selectedButton;
     private Animator categoryAnim;
     private Animator indicatorAnim;
+
+    private GameObject[] menuButtons;
 
     public Animator rightAnim;
     public Animator leftAnim;
     public int maxSlotIndex;
     public int counter;
+
+    public bool isInventoryDrawn;
+
+    public Item currentItem;
+    public List<Item> currentCategoryItems = new List<Item>();
 
     public bool isInMenu;
 
@@ -89,7 +101,13 @@ public class PauseManager : MonoBehaviour
             eventSystem.SetSelectedGameObject(grid[selectedItem].gameObject);
 
             AnimateCategory();
+
+            if (isInMenu)
+            {
+                pausePanel.transform.Find("Inventory/Menu/Indicator").position = menuButtons[selectedButton].transform.position;
+            }
         }
+
     }
 
     #endregion
@@ -104,14 +122,14 @@ public class PauseManager : MonoBehaviour
             eventSystem.firstSelectedGameObject = grid[0].transform.gameObject;
         }
 
-        DrawInventory();
-
         if (isPaused)
         {
             pausePanel.SetActive(true);
             CameraController.instance.GetComponent<PostprocessingBlur>().enabled = true;
 
             DrawInventory();
+            if (currentCategoryItems.Count > 0)
+                currentItem = currentCategoryItems[selectedItem];
             CheckForInput();
 
             Time.timeScale = 0f;
@@ -127,132 +145,167 @@ public class PauseManager : MonoBehaviour
 
     private void DrawInventory()
     {
-        pausePanel.transform.Find("Inventory/Categories/Category Information").GetComponentInChildren<TextMeshProUGUI>().SetText(currentCategory);
-
-        //selectedItem = 0;
-        //TODO: Move this whole block to InventoryManager!
-        List<Item> inventory = InventoryManager.instance.inventory.items;
-
-        if (InventoryManager.instance.inventory.items.Count > 0)
+        if (!isInventoryDrawn)
         {
-            counter = 0; foreach (Item item in inventory)
+            pausePanel.transform.Find("Inventory/Categories/Category Information").GetComponentInChildren<TextMeshProUGUI>().SetText(currentCategory);
+
+            //selectedItem = 0;
+            //TODO: Move this whole block to InventoryManager!
+            List<Item> inventory = InventoryManager.instance.inventory.items;
+
+            if (InventoryManager.instance.inventory.items.Count > 0)
             {
-                if (item.category.ToString().Equals(currentCategory))
+                counter = 0; foreach (Item item in inventory)
                 {
-                    Transform itemSlot = grid[counter];
-                    itemSlot.GetComponent<ItemSelection>().slotIndex = counter;
-
-                    itemSlot.Find("Sprite").GetComponent<Image>().sprite = item.sprite;
-                    itemSlot.Find("Sprite").gameObject.SetActive(true);
-                    itemSlot.Find("Amount").GetComponentInChildren<TextMeshProUGUI>().SetText(item.amount.ToString());
-                    itemSlot.Find("Amount").gameObject.SetActive(true);
-
-                    if (selectedItem == counter)
+                    if (item.category.ToString().Equals(currentCategory))
                     {
-                        pausePanel.transform.Find("Inventory/Item Information/Name").gameObject.SetActive(true);
-                        pausePanel.transform.Find("Inventory/Item Information/Description").gameObject.SetActive(true);
-                        pausePanel.transform.Find("Inventory/Item Information/Name/Item Name").GetComponent<TextMeshProUGUI>().SetText(item.name);
-                        pausePanel.transform.Find("Inventory/Item Information/Description/Item Description").GetComponent<TextMeshProUGUI>().SetText(item.description);
+                        Transform itemSlot = grid[counter];
+                        itemSlot.GetComponent<ItemSelection>().slotIndex = counter;
+
+                        itemSlot.Find("Sprite").GetComponent<Image>().sprite = item.sprite;
+                        itemSlot.Find("Sprite").gameObject.SetActive(true);
+                        itemSlot.Find("Amount").GetComponentInChildren<TextMeshProUGUI>().SetText(item.amount.ToString());
+                        itemSlot.Find("Amount").gameObject.SetActive(true);
+
+                        if (selectedItem == counter)
+                        {
+                            pausePanel.transform.Find("Inventory/Item Information/Name").gameObject.SetActive(true);
+                            pausePanel.transform.Find("Inventory/Item Information/Description").gameObject.SetActive(true);
+                            pausePanel.transform.Find("Inventory/Item Information/Name/Item Name").GetComponent<TextMeshProUGUI>().SetText(item.name);
+                            pausePanel.transform.Find("Inventory/Item Information/Description/Item Description").GetComponent<TextMeshProUGUI>().SetText(item.description);
+                        }
+                        counter++;
+
+                        currentCategoryItems.Add(item);
                     }
-                    counter++;
                 }
-            }
 
-            for (int i = counter; i < grid.Length; i++)
-            {
-                Transform itemSlot = grid[i];
-                itemSlot.Find("Sprite").gameObject.SetActive(false);
-                itemSlot.Find("Amount").gameObject.SetActive(false);
-            }
+                for (int i = counter; i < grid.Length; i++)
+                {
+                    Transform itemSlot = grid[i];
+                    itemSlot.Find("Sprite").gameObject.SetActive(false);
+                    itemSlot.Find("Amount").gameObject.SetActive(false);
+                }
 
-            maxSlotIndex = counter - 1;
+                maxSlotIndex = counter - 1;
+                isInventoryDrawn = true;
+            }
+            //
         }
-        //
     }
 
     private void CheckForInput()
     {
-        if (Input.GetAxisRaw("Horizontal") != 0)
+        if (!isInMenu)
         {
-            if (!isInteracting)
+            if (Input.GetAxisRaw("Horizontal") != 0)
             {
-                if (Input.GetAxisRaw("Horizontal") > 0)
+                if (!isInteracting)
                 {
-                    if (slotIndex < maxSlotIndex)
-                        slotIndex++;
-                    else
-                        slotIndex = 0;
+                    if (Input.GetAxisRaw("Horizontal") > 0)
+                    {
+                        if (slotIndex < maxSlotIndex)
+                            slotIndex++;
+                        else
+                            slotIndex = 0;
+                    }
+                    else if (Input.GetAxisRaw("Horizontal") < 0)
+                    {
+                        if (slotIndex > 0)
+                            slotIndex--;
+                        else
+                            slotIndex = maxSlotIndex;
+                    }
+                    isInteracting = true;
                 }
-                else if (Input.GetAxisRaw("Horizontal") < 0)
+            }
+            else if (Input.GetAxisRaw("Vertical") != 0)
+            {
+                if (!isInteracting)
                 {
-                    if (slotIndex > 0)
-                        slotIndex--;
-                    else
-                        slotIndex = maxSlotIndex;
+                    if (Input.GetAxisRaw("Vertical") > 0)
+                    {
+                        if ((slotIndex - 6) > 0)
+                            slotIndex -= 6;
+                        else
+                            slotIndex = 0;
+                    }
+                    else if (Input.GetAxisRaw("Vertical") < 0)
+                    {
+                        if ((slotIndex + 6) < maxSlotIndex)
+                            slotIndex += 6;
+                        else
+                            slotIndex = maxSlotIndex;
+                    }
+                    isInteracting = true;
                 }
-                isInteracting = true;
+            }
+            else if (Input.GetAxisRaw("Trigger") != 0)
+            {
+                if (!isInteracting)
+                {
+                    if (Input.GetAxisRaw("Trigger") > 0)
+                    {
+                        AnimateArrows(rightAnim);
+                        if (currentCategoryIndex < (categories.Length - 1))
+                        {
+                            currentCategory = categories[Array.IndexOf(categories, currentCategory) + 1];
+                            currentCategoryIndex++;
+                        }
+                        else
+                        {
+                            currentCategory = categories[0];
+                            currentCategoryIndex = 0;
+                        }
+                    }
+                    else if (Input.GetAxisRaw("Trigger") < 0)
+                    {
+                        AnimateArrows(leftAnim);
+                        if (currentCategoryIndex > 0)
+                        {
+                            currentCategory = categories[Array.IndexOf(categories, currentCategory) - 1];
+                            currentCategoryIndex--;
+                        }
+                        else
+                        {
+                            currentCategory = categories[categories.Length - 1];
+                            currentCategoryIndex = categories.Length - 1;
+                        }
+                    }
+                    isInteracting = true; counter = 0; selectedItem = 0; currentCategoryItems.Clear(); isInventoryDrawn = false;
+                }
+            }
+            else
+            {
+                isInteracting = false;
+                leftAnim.Rebind(); rightAnim.Rebind();
             }
         }
-        else if (Input.GetAxisRaw("Vertical") != 0)
+        else if (isInMenu)
         {
-            if (!isInteracting)
+            if (Input.GetAxisRaw("Vertical") != 0)
             {
-                if (Input.GetAxisRaw("Vertical") > 0)
+                if (!isInteracting)
                 {
-                    if ((slotIndex - 6) > 0)
-                        slotIndex -= 6;
-                    else
-                        slotIndex = 0;
+                    if (Input.GetAxisRaw("Vertical") < 0)
+                    {
+                        if (buttonIndex < maxButtonIndex)
+                            buttonIndex++;
+                        else
+                            buttonIndex = 0;
+                    }
+                    else if (Input.GetAxisRaw("Vertical") > 0)
+                    {
+                        if (buttonIndex > 0)
+                            buttonIndex--;
+                        else
+                            buttonIndex = maxButtonIndex;
+                    }
+                    isInteracting = true;
                 }
-                else if (Input.GetAxisRaw("Vertical") < 0)
-                {
-                    if ((slotIndex + 6) < maxSlotIndex)
-                        slotIndex += 6;
-                    else
-                        slotIndex = maxSlotIndex;
-                }
-                isInteracting = true;
             }
-        }
-        else if (Input.GetAxisRaw("Trigger") != 0)
-        {
-            if (!isInteracting)
-            {
-                if (Input.GetAxisRaw("Trigger") > 0)
-                {
-                    AnimateArrows(rightAnim);
-                    if (currentCategoryIndex < (categories.Length - 1))
-                    {
-                        currentCategory = categories[Array.IndexOf(categories, currentCategory) + 1];
-                        currentCategoryIndex++;
-                    }
-                    else
-                    {
-                        currentCategory = categories[0];
-                        currentCategoryIndex = 0;
-                    }
-                }
-                else if (Input.GetAxisRaw("Trigger") < 0)
-                {
-                    AnimateArrows(leftAnim);
-                    if (currentCategoryIndex > 0)
-                    {
-                        currentCategory = categories[Array.IndexOf(categories, currentCategory) - 1];
-                        currentCategoryIndex--;
-                    }
-                    else
-                    {
-                        currentCategory = categories[categories.Length - 1];
-                        currentCategoryIndex = categories.Length - 1;
-                    }
-                }
-                isInteracting = true; counter = 0; selectedItem = 0;
-            }
-        }
-        else
-        {
-            isInteracting = false;
-            leftAnim.Rebind(); rightAnim.Rebind();
+            else
+                isInteracting = false;
         }
 
         if (Input.GetButtonDown("Interact"))
@@ -268,6 +321,26 @@ public class PauseManager : MonoBehaviour
         if (Input.GetButtonDown("Interact") && isInMenu)
         {
             pausePanel.transform.Find("Inventory/Menu").gameObject.SetActive(false);
+
+            for (int i = 0; i <= maxSlotIndex; i++)
+            {
+                if (grid[i] != grid[selectedItem])
+                {
+                    foreach (Transform child in grid[i].GetChildren())
+                    {
+                        if (!child.GetComponent<Image>())
+                        {
+                            foreach (Transform grandChild in child.GetChildren())
+                                StartCoroutine(grandChild.gameObject.FadeObject(1f, 0.1f));
+                        }
+                        else
+                            StartCoroutine(child.gameObject.FadeObject(1f, 0.1f));
+                    }
+                }
+            }
+
+            DestroyMenuButtons();
+
             isInMenu = false;
         }
     }
@@ -295,10 +368,93 @@ public class PauseManager : MonoBehaviour
         anim.SetTrigger("isPressed");
         float waitTime = anim.GetAnimationTime();
         yield return null;
+
+        for (int i = 0; i <= maxSlotIndex; i++)
+        {
+            if (grid[i] != grid[selectedItem])
+            {
+                foreach (Transform child in grid[i].GetChildren())
+                {
+                    if (!child.GetComponent<Image>())
+                    {
+                        foreach (Transform grandChild in child.GetChildren())
+                            StartCoroutine(grandChild.gameObject.FadeObject(0.5f, 0.1f));
+                    }
+                    else
+                        StartCoroutine(child.gameObject.FadeObject(0.5f, 0.1f));
+                }
+            }
+        }
+
         GameObject menuPanel = pausePanel.transform.Find("Inventory/Menu/Base").gameObject;
+        StartCoroutine(CreateMenuButtons(currentItem));
         pausePanel.transform.Find("Inventory/Menu").gameObject.SetActive(true);
-        menuPanel.transform.position = grid[selectedItem].position;
-        menuPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(menuPanel.GetComponent<Image>().sprite.rect.width, menuPanel.GetComponent<Image>().sprite.rect.height);
+        menuPanel.transform.position = grid[selectedItem].position;        
+
         isInMenu = true;
+    }
+
+    public IEnumerator CreateMenuButtons(Item item)
+    {
+        item = InventoryManager.instance.inventory.items.Find(i => i.id == item.id);
+        menuButtons = new GameObject[item.action.actionData.Count];
+
+        for (int i = 0; i < menuButtons.Length; i++)
+        {
+            GameObject menuButtonObj = (GameObject)Instantiate(menuButtonPrefab, Vector3.zero, Quaternion.identity); // Instantiates/creates new choice button from prefab in scene.
+
+            menuButtonObj.name = "Menu Button " + (i + 1); // Gives appropriate name to newly instantiated choice button.
+            menuButtonObj.transform.SetParent(pausePanel.transform.Find("Inventory/Menu/Base"), false);
+            menuButtonObj.GetComponentInChildren<TextMeshProUGUI>().text = item.action.actionData[i].actionOption;
+
+            ItemEventHandler eventHandler = menuButtonObj.GetComponent<ItemEventHandler>();
+            eventHandler.eventHandler = item.action.actionData[i].actionEvent;
+
+            /*
+            foreach (Transform child in menuButtonObj.transform.GetChildren())
+            {
+                if (!child.GetComponent<Image>())
+                {
+                    foreach (Transform grandChild in child.GetChildren())
+                    {
+                        Color color = grandChild.GetComponentInChildren<Image>().color;
+                        color.a = 0;
+                        grandChild.GetComponentInChildren<Image>().color = color;
+                    }
+                }
+                else
+                {
+                    Color color = child.GetComponentInChildren<Image>().color;
+                    color.a = 0;
+                    child.GetComponentInChildren<Image>().color = color;
+                }
+            }
+            */
+
+
+            menuButtons[i] = menuButtonObj;
+        }
+
+        maxButtonIndex = menuButtons.Length - 1;
+
+        /*
+        for (int i = 0; i < menuButtons.Length; i++)
+        {
+            StartCoroutine((menuButtons[i].FadeObject(1f, 0.07f)));
+            yield return new WaitForSeconds(0.07f);
+        }
+        */
+
+        yield return null;
+
+        selectedButton = 0;
+    }
+
+    private void DestroyMenuButtons()
+    {
+        for (int i = 0; i < menuButtons.Length; i++)
+            Destroy(menuButtons[i]);
+
+        menuButtons = null;
     }
 }

@@ -9,14 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67de09d52199d944d92ac06b5078ab34, type: 3}
-  m_Name: Potion
+  m_Script: {fileID: 11500000, guid: bcc69c8f4cadec043af565ebe14ce0c0, type: 3}
+  m_Name: Pokeball
   m_EditorClassIdentifier: 
-  name: Potion
-  id: 3
-  description: Test 3
-  sprite: {fileID: 21300000, guid: baba8ce5bc763db47a96de8111c975ef, type: 3}
-  category: 1
-  amount: 2
-  action: {fileID: 0}
-  isPickedUp: 0
+  actionData:
+  - actionOption: Discord
+    actionEvent:
+      m_PersistentCalls:
+        m_Calls: []
+  - actionOption: Cancel
+    actionEvent:
+      m_PersistentCalls:
+        m_Calls: []

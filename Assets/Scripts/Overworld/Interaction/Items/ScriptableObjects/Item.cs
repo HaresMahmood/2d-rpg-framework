@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New item", menuName = "Inventory/Item")]
+[CreateAssetMenu(fileName = "New Item", menuName = "Inventory/Item")]
 public class Item : ScriptableObject
 {
     public new string name;
@@ -10,6 +10,7 @@ public class Item : ScriptableObject
     public Sprite sprite;
     public Category category;
     public int amount;
+    public ItemAction action;
 
     public bool isPickedUp;
 
@@ -22,10 +23,5 @@ public class Item : ScriptableObject
         TM,
         Berry,
         Other
-    }
-
-    internal object Clone()
-    {
-        throw new NotImplementedException();
     }
 }

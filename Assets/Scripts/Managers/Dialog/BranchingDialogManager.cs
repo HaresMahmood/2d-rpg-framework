@@ -83,7 +83,7 @@ public class BranchingDialogManager : MonoBehaviour
             choiceButtonObj.GetComponentInChildren<TextMeshProUGUI>().text = DialogManager.instance.branchingDialog.dialogBranches[i].branchOption;
             choiceButtonObj.GetComponent<ChoiceSelection>().buttonIndex = i;
 
-            UnityEventHandler eventHandler = choiceButtonObj.GetComponent<UnityEventHandler>();
+            DialogEventHandler eventHandler = choiceButtonObj.GetComponent<DialogEventHandler>();
             eventHandler.eventHandler = DialogManager.instance.branchingDialog.dialogBranches[i].branchEvent;
 
             if (DialogManager.instance.branchingDialog.dialogBranches[i].nextDialog != null)
@@ -137,7 +137,7 @@ public class BranchingDialogManager : MonoBehaviour
         optionIndicator.SetActive(false);
         optionContainer.SetActive(false);
 
-        UnityEventHandler choiceEvent = optionButtons[selectedButton].GetComponent<Button>().GetComponent<UnityEventHandler>();
+        DialogEventHandler choiceEvent = optionButtons[selectedButton].GetComponent<Button>().GetComponent<DialogEventHandler>();
         choiceEvent.eventHandler.Invoke();
 
         if (choiceEvent.dialog != null)
