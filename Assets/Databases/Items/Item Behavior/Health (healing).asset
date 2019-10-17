@@ -10,14 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bcc69c8f4cadec043af565ebe14ce0c0, type: 3}
-  m_Name: Pokeball
+  m_Name: Health (healing)
   m_EditorClassIdentifier: 
-  actionData:
-  - actionOption: Discord
-    actionEvent:
+  behaviorData:
+  - menuOption: Use
+    behaviorEvent:
       m_PersistentCalls:
         m_Calls: []
-  - actionOption: Cancel
-    actionEvent:
+  - menuOption: GIve
+    behaviorEvent:
+      m_PersistentCalls:
+        m_Calls: []
+  - menuOption: Discard
+    behaviorEvent:
+      m_PersistentCalls:
+        m_Calls: []
+  - menuOption: Cancel
+    behaviorEvent:
       m_PersistentCalls:
         m_Calls: []

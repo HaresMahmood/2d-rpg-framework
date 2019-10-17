@@ -10,18 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bcc69c8f4cadec043af565ebe14ce0c0, type: 3}
-  m_Name: Casteliacone
+  m_Name: "Pok\xE9ball"
   m_EditorClassIdentifier: 
-  actionData:
-  - actionOption: Use
-    actionEvent:
+  behaviorData:
+  - menuOption: Discard
+    behaviorEvent:
       m_PersistentCalls:
         m_Calls: []
-  - actionOption: Discard
-    actionEvent:
-      m_PersistentCalls:
-        m_Calls: []
-  - actionOption: Cancel
-    actionEvent:
+  - menuOption: Cancel
+    behaviorEvent:
       m_PersistentCalls:
         m_Calls: []

@@ -16,10 +16,10 @@ public class BranchingDialogManager : MonoBehaviour
 
     [UnityEngine.Header("Setup")]
     [SerializeField] private EventSystem eventSystem;
-    [SerializeField] private GameObject optionButtonPrefab;
 
     [UnityEngine.Header("Settings")]
     [Range(0.01f, 0.2f)] [SerializeField] private float buttonAnimationDelay = 0.07f;
+    [SerializeField] private GameObject optionButtonPrefab;
 
     private GameObject[] optionButtons;
     [HideInInspector] public GameObject optionContainer, optionIndicator;

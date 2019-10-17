@@ -10,7 +10,7 @@ public class Item : ScriptableObject
     public Sprite sprite;
     public Category category;
     public int amount;
-    public ItemAction action;
+    public ItemBehavior action;
 
     public bool isPickedUp;
 

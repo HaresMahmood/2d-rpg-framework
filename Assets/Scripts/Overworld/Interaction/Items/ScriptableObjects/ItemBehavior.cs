@@ -7,14 +7,14 @@ using UnityEngine.Events;
 ///
 /// </summary>
 [CreateAssetMenu(fileName = "New Item", menuName = "Inventory/Item Action")]
-public class ItemAction : ScriptableObject
+public class ItemBehavior : ScriptableObject
 {
     [System.Serializable]
-    public class ActionData
+    public class BehaviorData
     {
-        public string actionOption;
-        public UnityEvent actionEvent;
+        public string menuOption;
+        public UnityEvent behaviorEvent;
     }
 
-    public List<ActionData> actionData = new List<ActionData>();
+    public List<BehaviorData> behaviorData = new List<BehaviorData>();
 }
