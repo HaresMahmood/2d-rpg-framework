@@ -11,6 +11,7 @@ public class BranchingDialog : ScriptableObject
         public string branchOption;
         public Dialog nextDialog;
         public UnityEvent branchEvent;
+        public bool hasBackButton;
     }
 
     public List<DialogBranch> dialogBranches = new List<DialogBranch>();

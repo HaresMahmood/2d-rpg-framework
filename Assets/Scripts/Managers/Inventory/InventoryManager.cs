@@ -94,6 +94,7 @@ public class InventoryManager : MonoBehaviour
             if (isInMenu && menuButtons.Length > 0)
             {
                 menuPanel.transform.Find("Indicator").position = menuButtons[buttonIndex].transform.position;
+                menuPanel.transform.Find("Indicator").gameObject.SetActive(true);
             }
 
             if (currentCategoryItems.Count > 0)
@@ -336,7 +337,9 @@ public class InventoryManager : MonoBehaviour
                     if (!child.GetComponent<Image>())
                     {
                         foreach (Transform grandChild in child.GetChildren())
+                        {
                             StartCoroutine(grandChild.gameObject.FadeObject(0.5f, 0.1f));
+                        }
                     }
                     else
                         StartCoroutine(child.gameObject.FadeObject(0.5f, 0.1f));
@@ -354,6 +357,7 @@ public class InventoryManager : MonoBehaviour
     public void DestroyMenu()
     {
         menuPanel.SetActive(false);
+        menuPanel.transform.Find("Indicator").gameObject.SetActive(false);
 
         for (int i = 0; i <= maxItemIndex; i++)
         {

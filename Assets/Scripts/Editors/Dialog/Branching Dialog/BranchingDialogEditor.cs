@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(BranchingDialog)), CanEditMultipleObjects]
@@ -65,6 +66,15 @@ public class BranchingDialogEditor : Editor
                 dialogBranch.nextDialog = (Dialog)EditorGUILayout.ObjectField(dialogBranch.nextDialog, typeof(Dialog), false, GUILayout.MaxWidth(230));
                 EditorUtility.SetDirty(branchingDialog);
                 EditorGUILayout.EndHorizontal();
+
+                if (dialogBranch == branchingDialog.dialogBranches.Last())
+                {
+                    EditorGUILayout.BeginVertical();
+                    dialogBranch.hasBackButton = EditorGUILayout.Toggle(new GUIContent("Back button", "Whether or not this option " +
+                    "includes a 'Back'-button. Can only be assigned to the last element in the list."), dialogBranch.hasBackButton); //TODO: Edit tooltip!
+                    EditorUtility.SetDirty(branchingDialog);
+                    EditorGUILayout.EndVertical();
+                }
 
                 GUILayout.Space(5);
 

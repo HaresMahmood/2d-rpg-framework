@@ -26,11 +26,9 @@ public class BranchingDialogManager : MonoBehaviour
 
     private Animator selectorAnim, optionContainerAnim;
 
-    private bool isInteracting;
     [HideInInspector] public int buttonIndex, selectedButton;
     private int maxButtonIndex;
-
-    private bool destroyingButtons = false;
+    private bool isInteracting, hasBackButton = false, destroyingButtons = false;
 
     /// <summary>
     /// Start is called before the first frame update.
@@ -80,20 +78,42 @@ public class BranchingDialogManager : MonoBehaviour
 
             choiceButtonObj.name = "Option Button " + (i + 1); // Gives appropriate name to newly instantiated choice button.
             choiceButtonObj.transform.SetParent(optionContainer.transform.Find("Option Buttons").transform, false);
-            choiceButtonObj.GetComponentInChildren<TextMeshProUGUI>().text = DialogManager.instance.branchingDialog.dialogBranches[i].branchOption;
+            choiceButtonObj.GetComponentInChildren<TextMeshProUGUI>().SetText(DialogManager.instance.branchingDialog.dialogBranches[i].branchOption);
             choiceButtonObj.GetComponent<ChoiceSelection>().buttonIndex = i;
 
             DialogEventHandler eventHandler = choiceButtonObj.GetComponent<DialogEventHandler>();
             eventHandler.eventHandler = DialogManager.instance.branchingDialog.dialogBranches[i].branchEvent;
 
             if (DialogManager.instance.branchingDialog.dialogBranches[i].nextDialog != null)
+            {
                 eventHandler.dialog = DialogManager.instance.branchingDialog.dialogBranches[i].nextDialog;
+            }
             else
+            {
                 eventHandler.dialog = null;
+            }
+
+            if (DialogManager.instance.branchingDialog.dialogBranches[i].hasBackButton)
+            {
+                choiceButtonObj.transform.Find("Button").gameObject.SetActive(true);
+                hasBackButton = true;
+            }
+            else
+            {
+                hasBackButton = false;
+            }
 
             Color color = choiceButtonObj.GetComponent<Button>().GetComponent<Image>().color;
-            color.a = 0;
+            Color textColor = choiceButtonObj.GetComponentInChildren<TextMeshProUGUI>().color;
+            color.a = 0; textColor.a = 0;
             choiceButtonObj.GetComponent<Button>().GetComponent<Image>().color = color;
+            choiceButtonObj.GetComponent<Button>().GetComponent<Image>().color = textColor;
+            if (hasBackButton)
+            {
+                Color buttonColor = choiceButtonObj.GetComponentInChildren<Image>().color;
+                buttonColor.a = 0;
+                choiceButtonObj.GetComponentInChildren<Image>().color = buttonColor;
+            }
 
             optionButtons[i] = choiceButtonObj;
         }
@@ -104,6 +124,11 @@ public class BranchingDialogManager : MonoBehaviour
         for (int i = 0; i < optionButtons.Length; i++)
         {
             StartCoroutine((optionButtons[i].FadeObject(1f, buttonAnimationDelay)));
+            StartCoroutine((optionButtons[i].transform.Find("Text").gameObject.FadeObject(1f, buttonAnimationDelay)));
+            if (hasBackButton)
+            {
+                StartCoroutine((optionButtons[i].transform.Find("Button").gameObject.FadeObject(1f, buttonAnimationDelay)));
+            }
             yield return new WaitForSeconds(buttonAnimationDelay);
         }
 
@@ -143,7 +168,9 @@ public class BranchingDialogManager : MonoBehaviour
         if (choiceEvent.dialog != null)
         {
             foreach (Dialog.DialogData dialog in choiceEvent.dialog.dialogData)
+            {
                 DialogManager.instance.dialogData.Enqueue(dialog);
+            }
         }
 
         DestroyButtons();
@@ -157,7 +184,9 @@ public class BranchingDialogManager : MonoBehaviour
         if (optionButtons != null)
         {
             for (int i = 0; i < optionButtons.Length; i++) // Destroy currenty displayed choice buttons.
+            {
                 Destroy(optionButtons[i]);
+            }
         }
 
         optionButtons = null; // Reset optionButtons-array to prepare for next batch of choices.
@@ -176,7 +205,15 @@ public class BranchingDialogManager : MonoBehaviour
     private bool CanChoose()
     {
         if (Input.GetButtonDown("Interact") && !DialogManager.instance.isTyping && !DialogManager.instance.choiceMade && !destroyingButtons)
+        {
             return true;
+        }
+
+        if (Input.GetButtonDown("Cancel") && hasBackButton && !DialogManager.instance.isTyping && !DialogManager.instance.choiceMade && !destroyingButtons)
+        {
+            buttonIndex = maxButtonIndex; selectedButton = buttonIndex;
+            return true;
+        }
 
         return false;
     }

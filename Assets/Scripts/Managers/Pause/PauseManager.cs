@@ -54,16 +54,21 @@ public class PauseManager : MonoBehaviour
             isPaused = !isPaused;
         }
 
-        OnPause();
+        InPause();
     }
 
-    public void OnPause()
+    public void InPause()
     {
         if (isPaused)
         {
             pauseContainer.SetActive(true);
             CameraController.instance.GetComponent<PostprocessingBlur>().enabled = true;
             Time.timeScale = 0f;
+
+            if (Input.GetButtonDown("Cancel"))
+            {
+                isPaused = false;
+            }
         }
         else
         {
