@@ -180,139 +180,142 @@ public class InventoryManager : MonoBehaviour
 
     private void CheckForInput()
     {
-        if (!inMenu && !PauseManager.instance.inPartyMenu)
-        {
-            if (Input.GetAxisRaw("Horizontal") != 0)
-            {
-                if (!isInteracting)
-                {
-                    if (Input.GetAxisRaw("Horizontal") > 0)
-                    {
-                        if (itemIndex < maxItemIndex)
-                            itemIndex++;
-                        else
-                            itemIndex = 0;
-                    }
-                    else if (Input.GetAxisRaw("Horizontal") < 0)
-                    {
-                        if (itemIndex > 0)
-                            itemIndex--;
-                        else
-                        {
-                            StartCoroutine(inventoryContainer.FadeObject(0.7f, 0.1f));
-                            PauseManager.instance.inPartyMenu = true;
-                        }
-                    }
-                    isInteracting = true;
-                }
-            }
-            else if (Input.GetAxisRaw("Vertical") != 0)
-            {
-                if (!isInteracting)
-                {
-                    if (Input.GetAxisRaw("Vertical") > 0)
-                    {
-                        if ((itemIndex - 6) > 0)
-                            itemIndex -= 6;
-                        else
-                            itemIndex = 0;
-                    }
-                    else if (Input.GetAxisRaw("Vertical") < 0)
-                    {
-                        if ((itemIndex + 6) < maxItemIndex)
-                            itemIndex += 6;
-                        else
-                            itemIndex = maxItemIndex;
-                    }
-                    isInteracting = true;
-                }
-            }
-            else if (Input.GetAxisRaw("Trigger") != 0)
-            {
-                if (!isInteracting)
-                {
-                    if (Input.GetAxisRaw("Trigger") > 0)
-                    {
-                        AnimateArrows(rightAnim);
-                        if (currentCategoryIndex < (categories.Length - 1))
-                        {
-                            currentCategory = categories[Array.IndexOf(categories, currentCategory) + 1];
-                            currentCategoryIndex++;
-                        }
-                        else
-                        {
-                            currentCategory = categories[0];
-                            currentCategoryIndex = 0;
-                        }
-                    }
-                    else if (Input.GetAxisRaw("Trigger") < 0)
-                    {
-                        AnimateArrows(leftAnim);
-                        if (currentCategoryIndex > 0)
-                        {
-                            currentCategory = categories[Array.IndexOf(categories, currentCategory) - 1];
-                            currentCategoryIndex--;
-                        }
-                        else
-                        {
-                            currentCategory = categories[categories.Length - 1];
-                            currentCategoryIndex = categories.Length - 1;
-                        }
-                    }
-                    isInteracting = true;
-                    counter = 0; itemIndex = 0;
-                    currentCategoryItems.Clear();
-                    isInventoryDrawn = false;
-                }
-            }
-            else
-            {
-                isInteracting = false;
-                leftAnim.Rebind(); rightAnim.Rebind();
-            }
-        }
-        else if (inMenu)
-        {
-            if (Input.GetAxisRaw("Vertical") != 0)
-            {
-                if (!isInteracting)
-                {
-                    if (Input.GetAxisRaw("Vertical") < 0)
-                    {
-                        if (buttonIndex < maxButtonIndex)
-                            buttonIndex++;
-                        else
-                            buttonIndex = 0;
-                    }
-                    else if (Input.GetAxisRaw("Vertical") > 0)
-                    {
-                        if (buttonIndex > 0)
-                            buttonIndex--;
-                        else
-                            buttonIndex = maxButtonIndex;
-                    }
-                    isInteracting = true;
-                }
-            }
-            else
-                isInteracting = false;
-        }
-
-        if (Input.GetButtonDown("Interact"))
+        if (!PauseManager.instance.inPartyMenu)
         {
             if (!inMenu)
             {
-                StartCoroutine(CreateMenu(indicatorAnim));
+                if (Input.GetAxisRaw("Horizontal") != 0)
+                {
+                    if (!isInteracting)
+                    {
+                        if (Input.GetAxisRaw("Horizontal") > 0)
+                        {
+                            if (itemIndex < maxItemIndex)
+                                itemIndex++;
+                            else
+                                itemIndex = 0;
+                        }
+                        else if (Input.GetAxisRaw("Horizontal") < 0)
+                        {
+                            if (itemIndex > 0)
+                                itemIndex--;
+                            else
+                            {
+                                StartCoroutine(inventoryContainer.FadeObject(0.7f, 0.1f));
+                                PauseManager.instance.inPartyMenu = true;
+                            }
+                        }
+                        isInteracting = true;
+                    }
+                }
+                else if (Input.GetAxisRaw("Vertical") != 0)
+                {
+                    if (!isInteracting)
+                    {
+                        if (Input.GetAxisRaw("Vertical") > 0)
+                        {
+                            if ((itemIndex - 6) > 0)
+                                itemIndex -= 6;
+                            else
+                                itemIndex = 0;
+                        }
+                        else if (Input.GetAxisRaw("Vertical") < 0)
+                        {
+                            if ((itemIndex + 6) < maxItemIndex)
+                                itemIndex += 6;
+                            else
+                                itemIndex = maxItemIndex;
+                        }
+                        isInteracting = true;
+                    }
+                }
+                else if (Input.GetAxisRaw("Trigger") != 0)
+                {
+                    if (!isInteracting)
+                    {
+                        if (Input.GetAxisRaw("Trigger") > 0)
+                        {
+                            AnimateArrows(rightAnim);
+                            if (currentCategoryIndex < (categories.Length - 1))
+                            {
+                                currentCategory = categories[Array.IndexOf(categories, currentCategory) + 1];
+                                currentCategoryIndex++;
+                            }
+                            else
+                            {
+                                currentCategory = categories[0];
+                                currentCategoryIndex = 0;
+                            }
+                        }
+                        else if (Input.GetAxisRaw("Trigger") < 0)
+                        {
+                            AnimateArrows(leftAnim);
+                            if (currentCategoryIndex > 0)
+                            {
+                                currentCategory = categories[Array.IndexOf(categories, currentCategory) - 1];
+                                currentCategoryIndex--;
+                            }
+                            else
+                            {
+                                currentCategory = categories[categories.Length - 1];
+                                currentCategoryIndex = categories.Length - 1;
+                            }
+                        }
+                        isInteracting = true;
+                        counter = 0; itemIndex = 0;
+                        currentCategoryItems.Clear();
+                        isInventoryDrawn = false;
+                    }
+                }
+                else
+                {
+                    isInteracting = false;
+                    leftAnim.Rebind(); rightAnim.Rebind();
+                }
             }
-        }
-        else if (Input.GetButtonUp("Interact") && !inMenu)
-        {
-            indicatorAnim.Rebind();
-        }
+            else if (inMenu)
+            {
+                if (Input.GetAxisRaw("Vertical") != 0)
+                {
+                    if (!isInteracting)
+                    {
+                        if (Input.GetAxisRaw("Vertical") < 0)
+                        {
+                            if (buttonIndex < maxButtonIndex)
+                                buttonIndex++;
+                            else
+                                buttonIndex = 0;
+                        }
+                        else if (Input.GetAxisRaw("Vertical") > 0)
+                        {
+                            if (buttonIndex > 0)
+                                buttonIndex--;
+                            else
+                                buttonIndex = maxButtonIndex;
+                        }
+                        isInteracting = true;
+                    }
+                }
+                else
+                    isInteracting = false;
+            }
 
-        if (Input.GetButtonDown("Interact") && inMenu)
-        {
-            DestroyMenu();
+            if (Input.GetButtonDown("Interact"))
+            {
+                if (!inMenu)
+                {
+                    StartCoroutine(CreateMenu(indicatorAnim));
+                }
+            }
+            else if (Input.GetButtonUp("Interact") && !inMenu)
+            {
+                indicatorAnim.Rebind();
+            }
+
+            if (Input.GetButtonDown("Interact") && inMenu)
+            {
+                DestroyMenu();
+            }
         }
     }
 
