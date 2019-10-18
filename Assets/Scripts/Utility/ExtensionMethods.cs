@@ -31,13 +31,18 @@ public static class ExtensionMethods
     /// <returns></returns>
     public static IEnumerator FadeObject(this GameObject gameObject, float targetOpacity, float duration)
     {
-        bool isImage = false, isText = false, hasText = false;
-        Color color;
+        bool isImage = false, isCanvas = false, isText = false, hasText = false;
+        Color color = new Color();
 
         if (gameObject.GetComponent<Image>() != null) // If the GameObject is an image, ...
         {
             color = gameObject.GetComponent<Image>().color; // Caches the current color and initial opacity of image.
             isImage = true;
+        }
+        else if (gameObject.GetComponent<CanvasGroup>() != null)
+        {
+            color.a = gameObject.GetComponent<CanvasGroup>().alpha;
+            isCanvas = true;
         }
         else if (gameObject.GetComponent<TextMeshProUGUI>() != null)
         {
@@ -47,7 +52,7 @@ public static class ExtensionMethods
         else
             color = gameObject.GetComponent<Renderer>().material.color; // Caches the current color of and initial opacity of material. 
 
-        if (gameObject.GetComponentInChildren<TextMeshProUGUI>() != null) // If the GameObject has a TextMeshPro object as child, ...
+        if (gameObject.GetComponentInChildren<TextMeshProUGUI>() != null && gameObject.GetComponent<CanvasGroup>() == null) // If the GameObject has a TextMeshPro object as child, ...
             hasText = true;
 
         float startOpacity = color.a; // Creates a value of the initial opacity.
@@ -65,6 +70,8 @@ public static class ExtensionMethods
 
             if (isImage)
                 gameObject.GetComponent<Image>().color = color;
+            else if (isCanvas)
+                gameObject.GetComponent<CanvasGroup>().alpha = color.a;
             else if (isText)
                 gameObject.GetComponent<TextMeshProUGUI>().color = color;
             else

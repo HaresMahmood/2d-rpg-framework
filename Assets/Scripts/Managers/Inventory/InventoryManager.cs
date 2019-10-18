@@ -20,7 +20,8 @@ public class InventoryManager : MonoBehaviour
     [UnityEngine.Header("Settings")]
     [SerializeField] private GameObject menuButtonPrefab;
 
-    private GameObject inventoryContainer, itemIndicator, menuPanel;
+    [HideInInspector] public GameObject inventoryContainer;
+    private GameObject itemIndicator, menuPanel;
     private GameObject[] menuButtons;
     private Transform[] grid, categoryContainer;
     [HideInInspector] public Animator categoryAnim, indicatorAnim, rightAnim, leftAnim;
@@ -36,7 +37,7 @@ public class InventoryManager : MonoBehaviour
     [HideInInspector] public int itemIndex, maxItemIndex, selectedItem = 0;
     private int buttonIndex, maxButtonIndex, selectedButton = 0;
 
-    private bool isInventoryDrawn, isInteracting = false, isInMenu = false;
+    private bool isInventoryDrawn, isInteracting = false, inMenu = false;
 
     #endregion
 
@@ -91,7 +92,7 @@ public class InventoryManager : MonoBehaviour
             AnimateCategory();
             CheckForInput();
 
-            if (isInMenu && menuButtons.Length > 0)
+            if (inMenu && menuButtons.Length > 0)
             {
                 menuPanel.transform.Find("Indicator").position = menuButtons[buttonIndex].transform.position;
                 menuPanel.transform.Find("Indicator").gameObject.SetActive(true);
@@ -102,7 +103,19 @@ public class InventoryManager : MonoBehaviour
                 currentItem = currentCategoryItems[selectedItem];
             }
 
-            itemIndicator.transform.position = grid[selectedItem].position;
+            if (!PauseManager.instance.inPartyMenu)
+            {
+                itemIndicator.transform.position = grid[selectedItem].position;
+                if (!itemIndicator.activeSelf)
+                {
+                    itemIndicator.SetActive(true);
+                }
+            }
+            else
+            {
+                itemIndicator.SetActive(false);
+            }
+
             inventoryContainer.SetActive(true);
             currentCategory = categories[currentCategoryIndex];
 
@@ -167,7 +180,7 @@ public class InventoryManager : MonoBehaviour
 
     private void CheckForInput()
     {
-        if (!isInMenu)
+        if (!inMenu && !PauseManager.instance.inPartyMenu)
         {
             if (Input.GetAxisRaw("Horizontal") != 0)
             {
@@ -185,7 +198,10 @@ public class InventoryManager : MonoBehaviour
                         if (itemIndex > 0)
                             itemIndex--;
                         else
-                            itemIndex = maxItemIndex;
+                        {
+                            StartCoroutine(inventoryContainer.FadeObject(0.7f, 0.1f));
+                            PauseManager.instance.inPartyMenu = true;
+                        }
                     }
                     isInteracting = true;
                 }
@@ -255,7 +271,7 @@ public class InventoryManager : MonoBehaviour
                 leftAnim.Rebind(); rightAnim.Rebind();
             }
         }
-        else if (isInMenu)
+        else if (inMenu)
         {
             if (Input.GetAxisRaw("Vertical") != 0)
             {
@@ -284,17 +300,17 @@ public class InventoryManager : MonoBehaviour
 
         if (Input.GetButtonDown("Interact"))
         {
-            if (!isInMenu)
+            if (!inMenu)
             {
                 StartCoroutine(CreateMenu(indicatorAnim));
             }
         }
-        else if (Input.GetButtonUp("Interact") && !isInMenu)
+        else if (Input.GetButtonUp("Interact") && !inMenu)
         {
             indicatorAnim.Rebind();
         }
 
-        if (Input.GetButtonDown("Interact") && isInMenu)
+        if (Input.GetButtonDown("Interact") && inMenu)
         {
             DestroyMenu();
         }
@@ -351,7 +367,7 @@ public class InventoryManager : MonoBehaviour
         menuPanel.transform.Find("Base").position = grid[selectedItem].position;
         menuPanel.SetActive(true);
 
-        isInMenu = true;
+        inMenu = true;
     }
 
     public void DestroyMenu()
@@ -382,7 +398,7 @@ public class InventoryManager : MonoBehaviour
 
         DestroyMenuButtons();
 
-        isInMenu = false;
+        inMenu = false;
     }
 
     public IEnumerator CreateMenuButtons(Item item)

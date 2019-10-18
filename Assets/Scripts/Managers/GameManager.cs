@@ -18,14 +18,14 @@ public class GameManager : MonoBehaviour
 
     [UnityEngine.Header("Global Settings")]
     public string playerTag = "Player";
+    public Transform activePlayer;
 
     [UnityEngine.Header("Global Data")]
     public bool playerInRange;
 
     [UnityEngine.Header("Player Data")]
     public string playerName = "Hilliard";
-
-    public Transform activePlayer;
+    public Party party;
 
     private void Start()
     {
