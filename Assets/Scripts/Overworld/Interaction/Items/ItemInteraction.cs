@@ -10,7 +10,7 @@ public class ItemInteraction : InteractableObject
     private RangeHandler rangeHandler;
 
     [UnityEngine.Header("Settings")]
-    public Item item;
+    public OverworldItem overworldItem;
     [Range(0.15f, 0.75f)] [SerializeField] private float duration = 0.3f;
 
     #endregion
@@ -21,7 +21,7 @@ public class ItemInteraction : InteractableObject
     {
         rangeHandler = gameObject.transform.Find("Range").GetComponent<RangeHandler>();
 
-        if (item.isPickedUp)
+        if (overworldItem.isPickedUp)
             Destroy(this.gameObject);
     }
 
@@ -49,12 +49,12 @@ public class ItemInteraction : InteractableObject
 
     private void AddItem()
     {
-       OverworldItemManager.instance.AddItem(item);
+       OverworldItemManager.instance.AddItem(overworldItem);
     }
 
     private void AnimateLight(float duration)
     {
-        LightController.instance.FadeLight(0f, duration);
+        OverworldItemController.instance.FadeItem(0f, duration);
         Destroy(this.gameObject, duration);
     }
 }

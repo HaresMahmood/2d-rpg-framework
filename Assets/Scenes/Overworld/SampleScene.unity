@@ -3016,24 +3016,6 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
---- !u!1 &1122547644 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2469898884194640567, guid: a2cfeee3aedd54a468f888e61187ef69,
-    type: 3}
-  m_PrefabInstance: {fileID: 7538976761842102180}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1122547646
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1122547644}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52abf9112eae38f4ca9b1f203e8cc28e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1238187041
 GameObject:
   m_ObjectHideFlags: 0
@@ -3983,46 +3965,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1842473648705246589, guid: a2cfeee3aedd54a468f888e61187ef69,
+    - target: {fileID: 1255434374171468803, guid: a2cfeee3aedd54a468f888e61187ef69,
         type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.054
-      objectReference: {fileID: 0}
-    - target: {fileID: 1842473648705246589, guid: a2cfeee3aedd54a468f888e61187ef69,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.253
-      objectReference: {fileID: 0}
-    - target: {fileID: 1842473648705246589, guid: a2cfeee3aedd54a468f888e61187ef69,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.536
-      objectReference: {fileID: 0}
-    - target: {fileID: 1842473648705246589, guid: a2cfeee3aedd54a468f888e61187ef69,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.504
-      objectReference: {fileID: 0}
-    - target: {fileID: 2469898884194640567, guid: a2cfeee3aedd54a468f888e61187ef69,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2302952028506728568, guid: a2cfeee3aedd54a468f888e61187ef69,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: overworldItem
       value: 
-      objectReference: {fileID: 2100000, guid: 7852da15c3963374896af76c3c35ebf3, type: 2}
-    - target: {fileID: 2302952028506728568, guid: a2cfeee3aedd54a468f888e61187ef69,
-        type: 3}
-      propertyPath: m_SortingLayerID
-      value: 1368453917
-      objectReference: {fileID: 0}
-    - target: {fileID: 2302952028506728568, guid: a2cfeee3aedd54a468f888e61187ef69,
-        type: 3}
-      propertyPath: m_SortingLayer
-      value: 2
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 11400000, guid: 8dd8befb6113cde48ae17ff26102c46b,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a2cfeee3aedd54a468f888e61187ef69, type: 3}
 --- !u!4 &8787615248888351656 stripped

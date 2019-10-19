@@ -12,8 +12,6 @@ public class Item : ScriptableObject
     public int amount;
     public ItemBehavior action;
 
-    public bool isPickedUp;
-
     public enum Category
     {
         Key,

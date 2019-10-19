@@ -23,6 +23,32 @@ public static class ExtensionMethods
     }
 
     /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="light"></param>
+    /// <param name="targetIntensity"></param>
+    /// <param name="duration"></param>
+    /// <returns></returns>
+    public static IEnumerator FadeLight(this Light light, float targetIntensity, float duration)
+    {
+        float startIntensity = light.intensity; // Creates a value of the initial opacity.
+
+        float t = 0; // Tracks how many seconds we've been fading.
+        while (t < duration) // While time is less than the duration of the fade, ...
+        {
+            if (Time.timeScale == 0)
+                t += Time.unscaledDeltaTime;
+            else
+                t += Time.deltaTime;
+            float blend = Mathf.Clamp01(t / duration); // Turns the time into an interpolation factor between 0 and 1. 
+
+            light.intensity = Mathf.Lerp(startIntensity, targetIntensity, blend); // Blends to the corresponding opacity between start & target.
+
+            yield return null; // Wait one frame, then repeat.
+        }
+    }
+
+    /// <summary>
     /// Defines an enumerator to perform fading on a GameObject.
     /// </summary>
     /// <param name="gameObject"> GameObject to fade. </param>
@@ -50,7 +76,9 @@ public static class ExtensionMethods
             isText = true;
         }
         else
-            color = gameObject.GetComponent<Renderer>().material.color; // Caches the current color of and initial opacity of material. 
+        {
+            color = gameObject.GetComponent<Renderer>().material.color; // Caches the current color of and initial opacity of material.
+        }
 
         if (gameObject.GetComponentInChildren<TextMeshProUGUI>() != null && gameObject.GetComponent<CanvasGroup>() == null) // If the GameObject has a TextMeshPro object as child, ...
             hasText = true;

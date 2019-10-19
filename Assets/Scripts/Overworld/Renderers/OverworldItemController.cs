@@ -4,15 +4,14 @@ using UnityEngine;
 /// <summary>
 ///
 /// </summary>
-public class LightController : MonoBehaviour
+public class OverworldItemController : MonoBehaviour
 {
     #region Variables
-    public static LightController instance;
-    private SpriteRenderer rend;
+    public static OverworldItemController instance;
 
-    //[UnityEngine.Header("Setup")]
-    //[SerializeableField]
-    private float minRange = 0.25f, maxRange = 0.75f, speed;
+    private SpriteRenderer image;
+    private new Light light;
+    private float speed;
 
     #endregion
 
@@ -29,7 +28,8 @@ public class LightController : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        rend = GetComponent<SpriteRenderer>();
+        image = GetComponentInChildren<SpriteRenderer>();
+        light = GetComponentInChildren<Light>();
         speed = Random.Range(0.3f, 1f);
     }
 
@@ -38,10 +38,11 @@ public class LightController : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        //while (!item.isPickedUp)
-        Color startColor = rend.color;
-        startColor.a = PingPong(minRange, maxRange, speed);
-        rend.color = startColor;
+        Color color = image.color;
+        color.a = PingPong(0.25f, 0.75f, speed);
+        image.color = color;
+
+        light.intensity = PingPong(3.5f, 5.5f, speed);
     }
 
     #endregion
@@ -51,8 +52,9 @@ public class LightController : MonoBehaviour
          return Mathf.Lerp(minRange, maxRange, Mathf.PingPong(Time.time, speed));
     }
 
-    public void FadeLight(float targetIntensity, float duration)
+    public void FadeItem(float targetOpacity, float duration)
     {
-        StartCoroutine(rend.gameObject.FadeObject(targetIntensity, duration));
+        StartCoroutine(image.gameObject.FadeObject(targetOpacity, duration));
+        StartCoroutine(light.FadeLight(targetOpacity, duration));
     }
 }
