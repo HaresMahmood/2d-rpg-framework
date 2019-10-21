@@ -37,7 +37,8 @@ public class InventoryManager : MonoBehaviour
     [HideInInspector] public int itemIndex, maxItemIndex, selectedItem = 0;
     private int buttonIndex, maxButtonIndex, selectedButton = 0;
 
-    private bool isInventoryDrawn, isInteracting = false, inMenu = false;
+     public bool inMenu = false, givingItem = false;
+    private bool isInventoryDrawn, isInteracting = false;
 
     #endregion
 
@@ -137,7 +138,7 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    private void DrawInventory()
+    public void DrawInventory()
     {
         if (!isInventoryDrawn)
         {
@@ -314,7 +315,7 @@ public class InventoryManager : MonoBehaviour
 
             if (Input.GetButtonDown("Interact") && inMenu)
             {
-                DestroyMenu();
+                StartCoroutine(ChoiceMade());
             }
         }
     }
@@ -404,6 +405,16 @@ public class InventoryManager : MonoBehaviour
         inMenu = false;
     }
 
+    public IEnumerator ChoiceMade()
+    {
+        ItemEventHandler choiceEvent = menuButtons[buttonIndex].GetComponent<ItemEventHandler>();
+        choiceEvent.eventHandler.Invoke(currentItem);
+
+        selectedButton = 0; buttonIndex = 0;
+        yield return null;
+        DestroyMenu();
+    }
+
     public IEnumerator CreateMenuButtons(Item item)
     {
         item = InventoryManager.instance.inventory.items.Find(i => i.id == item.id);
@@ -443,4 +454,60 @@ public class InventoryManager : MonoBehaviour
         menuButtons = null;
     }
 
+    public void GiveItem(Item item)
+    {
+        StartCoroutine(inventoryContainer.FadeObject(0.7f, 0.1f));
+        PauseManager.instance.inPartyMenu = true;
+        givingItem = true;
+
+        if (item.amount > 1)
+            item.amount--;
+        else
+            InventoryManager.instance.inventory.items.Remove(item);
+
+        InventoryManager.instance.UpdateInventory();
+
+        PauseManager.instance.GiveItem(item);
+    }
+
+    public void UpdateInventory()
+    {
+        isInventoryDrawn = false;
+
+        if (inventory.items.Count > 0)
+        {
+            counter = 0;
+            foreach (Item item in inventory.items)
+            {
+                if (item.category.ToString().Equals(currentCategory))
+                {
+                    Transform itemSlot = grid[counter];
+                    itemSlot.GetComponent<ItemSelection>().slotIndex = counter;
+
+                    itemSlot.Find("Sprite").GetComponent<Image>().sprite = item.sprite;
+                    itemSlot.Find("Amount").GetComponentInChildren<TextMeshProUGUI>().SetText(item.amount.ToString());
+                    itemSlot.Find("Sprite").gameObject.SetActive(true);
+                    itemSlot.Find("Amount").gameObject.SetActive(true);
+
+                    counter++;
+
+                    currentCategoryItems.Add(item);
+                }
+            }
+
+            maxItemIndex = counter - 1;
+
+            isInventoryDrawn = true;
+        }
+
+        for (int i = counter; i < grid.Length; i++)
+        {
+            Transform itemSlot = grid[i];
+            itemSlot.Find("Sprite").gameObject.SetActive(false);
+            itemSlot.Find("Amount").gameObject.SetActive(false);
+        }
+
+        isInventoryDrawn = true;
+
+    }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -99,8 +100,8 @@ public class PauseManager : MonoBehaviour
             CameraController.instance.GetComponent<PostprocessingBlur>().enabled = true;
             Time.timeScale = 0f;
 
-            if (!isDrawingParty)
-            {
+            //if (!isDrawingParty)
+            //{
                 int currentSlot = 0;
 
                 for (int i = 0; i < GameManager.instance.party.playerParty.Count; i++)
@@ -126,8 +127,8 @@ public class PauseManager : MonoBehaviour
                     }
                 }
 
-                isDrawingParty = true;
-            }
+                //isDrawingParty = true;
+            //}
 
             if (Input.GetButtonDown("Cancel"))
             {
@@ -147,6 +148,19 @@ public class PauseManager : MonoBehaviour
     private void ResetInventory()
     {
         InventoryManager.instance.categoryAnim.Rebind();
+    }
+
+    public void GiveItem(Item item)
+    {
+        Pokemon selectedPokemon = GameManager.instance.party.playerParty[0];
+
+        if (Input.GetButtonDown("Interact") && InventoryManager.instance.givingItem)
+        {
+            selectedPokemon.heldItem = item;
+            StartCoroutine(InventoryManager.instance.inventoryContainer.FadeObject(1f, 0.1f));
+            inPartyMenu = false;
+            InventoryManager.instance.givingItem = false;
+        }
     }
 
     private void CheckForInput()
@@ -176,14 +190,14 @@ public class PauseManager : MonoBehaviour
                 isInteracting = true;
             }
         }
-        else if (Input.GetAxisRaw("Horizontal") != 0)
+        else if (Input.GetAxisRaw("Horizontal") != 0 && !InventoryManager.instance.givingItem)
         {
             if (!isInteracting)
             {
                 if (Input.GetAxisRaw("Horizontal") > 0)
                 {
                     StartCoroutine(InventoryManager.instance.inventoryContainer.FadeObject(1f, 0.1f));
-                    PauseManager.instance.inPartyMenu = false;
+                    inPartyMenu = false;
                 }
                 else if (Input.GetAxisRaw("Horizontal") < 0)
                 {

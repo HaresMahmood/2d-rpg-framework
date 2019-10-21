@@ -13,7 +13,7 @@ public class ItemBehavior : ScriptableObject
     public class BehaviorData
     {
         public string menuOption;
-        public UnityEvent behaviorEvent;
+        public ItemEventHandler.ItemEvent behaviorEvent;
     }
 
     public List<BehaviorData> behaviorData = new List<BehaviorData>();
