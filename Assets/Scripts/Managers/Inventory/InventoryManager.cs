@@ -82,6 +82,26 @@ public class InventoryManager : MonoBehaviour
     private void Update()
     {
         OnPause();
+
+        if (Input.GetButtonDown("Interact") && givingItem)
+        {
+            Pokemon selectedPokemon = GameManager.instance.party.playerParty[PauseManager.instance.slotIndex];
+
+            if (selectedPokemon.heldItem != currentItem)
+            {
+                selectedPokemon.heldItem = currentItem;
+                if (currentItem.amount > 1)
+                    currentItem.amount--;
+                else
+                    inventory.items.Remove(currentItem);
+
+                UpdateInventory();
+            }
+
+            StartCoroutine(inventoryContainer.FadeObject(1f, 0.1f));
+            PauseManager.instance.inPartyMenu = false;
+            givingItem = false;
+        }
     }
 
     #endregion
@@ -473,26 +493,15 @@ public class InventoryManager : MonoBehaviour
 
     public void GiveItem(Item item)
     {
+        StartCoroutine(HandOverItem());
+    }
+
+    private IEnumerator HandOverItem()
+    {
+        yield return null;
         StartCoroutine(inventoryContainer.FadeObject(0.7f, 0.1f));
         PauseManager.instance.inPartyMenu = true;
-
-
-        if (item.amount > 1)
-            item.amount--;
-        else
-            inventory.items.Remove(item);
-
-        UpdateInventory();
         givingItem = true;
-
-        Pokemon selectedPokemon = GameManager.instance.party.playerParty[0];
-        if (!isInteracting && Input.GetButtonDown("Interact"))
-        {
-            selectedPokemon.heldItem = item;
-            StartCoroutine(InventoryManager.instance.inventoryContainer.FadeObject(1f, 0.1f));
-            PauseManager.instance.inPartyMenu = false;
-            givingItem = false;
-        }
     }
 
     public void UpdateInventory()

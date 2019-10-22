@@ -20,7 +20,7 @@ public class PauseManager : MonoBehaviour
 
     [HideInInspector] public bool isPaused, inPartyMenu = false;
 
-    private int slotIndex, maxSlotIndex, selectedSlot = 0;
+    [HideInInspector] public int slotIndex, maxSlotIndex, selectedSlot = 0;
 
     public bool isInteracting = false, isDrawingParty = false, isResetingInventory = false;
 
@@ -164,7 +164,7 @@ public class PauseManager : MonoBehaviour
 
     }
 
-    private void CheckForInput()
+    public void CheckForInput()
     {
         maxSlotIndex = GameManager.instance.party.playerParty.Count;
 
@@ -210,5 +210,4 @@ public class PauseManager : MonoBehaviour
         else
             isInteracting = false;
     }
-
 }
