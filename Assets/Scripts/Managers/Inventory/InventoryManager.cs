@@ -181,6 +181,7 @@ public class InventoryManager : MonoBehaviour
                 itemSlot.Find("Sprite").gameObject.SetActive(false);
                 itemSlot.Find("Amount").gameObject.SetActive(false);
                 itemSlot.Find("Favorite").gameObject.SetActive(false);
+                itemSlot.Find("New").gameObject.SetActive(false);
             }
         }
     }
@@ -201,6 +202,15 @@ public class InventoryManager : MonoBehaviour
         else
         {
             itemSlot.Find("Favorite").gameObject.SetActive(false);
+        }
+
+        if (item.isNew)
+        {
+            itemSlot.Find("New").gameObject.SetActive(true);
+        }
+        else
+        {
+            itemSlot.Find("New").gameObject.SetActive(false);
         }
 
         counter++;

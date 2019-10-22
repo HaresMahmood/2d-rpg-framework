@@ -48,7 +48,8 @@ public class OverworldItemManager : MonoBehaviour
         InventoryManager.instance.inventory.items.Find(i => i.id == item.id).amount++;
 
         DisplayItem(item);
-        //overworldItem.isPickedUp = true; 
+        //overworldItem.isPickedUp = true;
+        item.isNew = true;
     }
 
     public void DisplayItem(Item item)

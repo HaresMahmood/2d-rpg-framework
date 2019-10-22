@@ -12,6 +12,7 @@ public class Item : ScriptableObject
     public int amount;
     public bool isFavorite;
     public ItemBehavior action;
+    public bool isNew;
 
     public enum Category
     {

@@ -22,7 +22,7 @@ public class PauseManager : MonoBehaviour
 
     private int slotIndex, maxSlotIndex, selectedSlot = 0;
 
-    private bool isInteracting = false, isDrawingParty = false;
+    public bool isInteracting = false, isDrawingParty = false, isResetingInventory = false;
 
     #endregion
 
@@ -63,6 +63,18 @@ public class PauseManager : MonoBehaviour
         if (Input.GetButtonDown("Start") && !DialogManager.instance.isActive)
         {
             isPaused = !isPaused;
+            isResetingInventory = !isResetingInventory;
+
+            if (!isResetingInventory && !isPaused)
+            {
+                foreach (Item item in InventoryManager.instance.inventory.items)
+                {
+                    if (item.isNew)
+                    {
+                        item.isNew = false;
+                    }
+                }
+            }
         }
 
         InPause();
@@ -100,34 +112,34 @@ public class PauseManager : MonoBehaviour
             CameraController.instance.GetComponent<PostprocessingBlur>().enabled = true;
             Time.timeScale = 0f;
 
-            //if (!isDrawingParty)
+            //if (isDrawingParty)
             //{
-                int currentSlot = 0;
+            int currentSlot = 0;
 
-                for (int i = 0; i < GameManager.instance.party.playerParty.Count; i++)
+            for (int i = 0; i < GameManager.instance.party.playerParty.Count; i++)
+            {
+                Pokemon pokemon = GameManager.instance.party.playerParty[i];
+                currentSlot = i;
+
+                party[currentSlot].Find("Pokémon").GetComponent<Image>().sprite = pokemon.menuSprite;
+                party[currentSlot].Find("Pokémon").gameObject.SetActive(true);
+                if (pokemon.heldItem != null)
                 {
-                    Pokemon pokemon = GameManager.instance.party.playerParty[i];
-                    currentSlot = i;
-
-                    party[currentSlot].Find("Pokémon").GetComponent<Image>().sprite = pokemon.menuSprite;
-                    party[currentSlot].Find("Pokémon").gameObject.SetActive(true);
-                    if (pokemon.heldItem != null)
-                    {
-                        party[currentSlot].Find("Held Item").GetComponent<Image>().sprite = pokemon.heldItem.sprite;
-                        party[currentSlot].Find("Held Item").gameObject.SetActive(true);
-                    }
+                    party[currentSlot].Find("Held Item").GetComponent<Image>().sprite = pokemon.heldItem.sprite;
+                    party[currentSlot].Find("Held Item").gameObject.SetActive(true);
                 }
+            }
 
-                if (GameManager.instance.party.playerParty.Count < 6)
+            if (GameManager.instance.party.playerParty.Count < 6)
+            {
+                for (int i = currentSlot++; i < party.Length; i++)
                 {
-                    for (int i = currentSlot++; i < party.Length; i++)
-                    {
-                        party[currentSlot].Find("Pokémon").gameObject.SetActive(false);
-                        party[currentSlot].Find("Held Item").gameObject.SetActive(false);
-                    }
+                    party[currentSlot].Find("Pokémon").gameObject.SetActive(false);
+                    party[currentSlot].Find("Held Item").gameObject.SetActive(false);
                 }
+            }
 
-                //isDrawingParty = true;
+            //isDrawingParty = false;
             //}
 
             if (Input.GetButtonDown("Cancel"))
@@ -138,16 +150,18 @@ public class PauseManager : MonoBehaviour
         else
         {
             ResetInventory();
-
             pauseContainer.SetActive(false);
             CameraController.instance.GetComponent<PostprocessingBlur>().enabled = false;
             Time.timeScale = 1f;
+            isDrawingParty = false;
         }
     }
 
     private void ResetInventory()
     {
         InventoryManager.instance.categoryAnim.Rebind();
+
+
     }
 
     private void CheckForInput()
