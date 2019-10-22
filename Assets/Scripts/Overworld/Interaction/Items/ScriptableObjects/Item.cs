@@ -10,6 +10,7 @@ public class Item : ScriptableObject
     public Sprite sprite;
     public Category category;
     public int amount;
+    public bool isFavorite;
     public ItemBehavior action;
 
     public enum Category

@@ -18,6 +18,14 @@ public class DefaultBehavior : MonoBehaviour
         InventoryManager.instance.GiveItem(item);
     }
 
+    public void MakeFavorite(Item item)
+    {
+        item.isFavorite = !item.isFavorite;
+        //InventoryManager.instance.selectedItem = 0; InventoryManager.instance.itemIndex = 0;
+        InventoryManager.instance.currentItem = item;
+        InventoryManager.instance.UpdateInventory();
+    }
+
     public void CancelMenu()
     {
         Debug.Log("Destroying menu.");

@@ -26,7 +26,7 @@ public class InventoryManager : MonoBehaviour
     private Transform[] grid, categoryContainer;
     [HideInInspector] public Animator categoryAnim, indicatorAnim, rightAnim, leftAnim;
     private TextMeshProUGUI categoryText;
-    private Item currentItem;
+    [HideInInspector] public Item currentItem;
     private List<Item> currentCategoryItems;
 
     private string[] categories = new string[] { "Key", "Health", "PokéBall", "Battle", "TM", "Berry", "Other" };
@@ -37,7 +37,7 @@ public class InventoryManager : MonoBehaviour
     [HideInInspector] public int itemIndex, maxItemIndex, selectedItem = 0;
     private int buttonIndex, maxButtonIndex, selectedButton = 0;
 
-     public bool inMenu = false, givingItem = false;
+    public bool inMenu = false, givingItem = false;
     private bool isInventoryDrawn, isInteracting = false;
 
     #endregion
@@ -68,7 +68,7 @@ public class InventoryManager : MonoBehaviour
         indicatorAnim = itemIndicator.GetComponent<Animator>();
 
         categoryText = inventoryContainer.transform.Find("Categories/Information/Name").GetComponent<TextMeshProUGUI>();
-        
+
         currentCategoryItems = new List<Item>();
 
         currentCategory = categories[0];
@@ -88,8 +88,15 @@ public class InventoryManager : MonoBehaviour
     private void OnPause()
     {
         if (PauseManager.instance.isPaused)
-        {            
-            DrawInventory();
+        {
+            if (isInventoryDrawn)
+            {
+                UpdateInventory();
+            }
+            else
+            {
+                DrawInventory();
+            }
             AnimateCategory();
             CheckForInput();
 
@@ -149,19 +156,17 @@ public class InventoryManager : MonoBehaviour
                 counter = 0;
                 foreach (Item item in inventory.items)
                 {
-                    if (item.category.ToString().Equals(currentCategory))
+                    if (item.category.ToString().Equals(currentCategory) && item.isFavorite)
                     {
-                        Transform itemSlot = grid[counter];
-                        itemSlot.GetComponent<ItemSelection>().slotIndex = counter;
+                        counter = DrawItem(item, counter, true);
+                    }
+                }
 
-                        itemSlot.Find("Sprite").GetComponent<Image>().sprite = item.sprite;
-                        itemSlot.Find("Amount").GetComponentInChildren<TextMeshProUGUI>().SetText(item.amount.ToString());
-                        itemSlot.Find("Sprite").gameObject.SetActive(true);
-                        itemSlot.Find("Amount").gameObject.SetActive(true);
-
-                        counter++;
-
-                        currentCategoryItems.Add(item);
+                for (int i = counter; i < inventory.items.Count; i++)
+                {
+                    if (inventory.items[i].category.ToString().Equals(currentCategory) && !inventory.items[i].isFavorite)
+                    {
+                        counter = DrawItem(inventory.items[i], counter);
                     }
                 }
 
@@ -175,9 +180,36 @@ public class InventoryManager : MonoBehaviour
                 Transform itemSlot = grid[i];
                 itemSlot.Find("Sprite").gameObject.SetActive(false);
                 itemSlot.Find("Amount").gameObject.SetActive(false);
+                itemSlot.Find("Favorite").gameObject.SetActive(false);
             }
         }
     }
+
+    private int DrawItem(Item item, int counter, bool isFavorite = false)
+    {
+        Transform itemSlot = grid[counter];
+        itemSlot.GetComponent<ItemSelection>().slotIndex = counter;
+
+        itemSlot.Find("Sprite").GetComponent<Image>().sprite = item.sprite;
+        itemSlot.Find("Amount").GetComponentInChildren<TextMeshProUGUI>().SetText(item.amount.ToString());
+        itemSlot.Find("Sprite").gameObject.SetActive(true);
+        itemSlot.Find("Amount").gameObject.SetActive(true);
+        if (isFavorite)
+        {
+            itemSlot.Find("Favorite").gameObject.SetActive(true);
+        }
+        else
+        {
+            itemSlot.Find("Favorite").gameObject.SetActive(false);
+        }
+
+        counter++;
+
+        currentCategoryItems.Add(item);
+
+        return counter;
+    }
+
 
     private void CheckForInput()
     {
@@ -352,21 +384,10 @@ public class InventoryManager : MonoBehaviour
         {
             if (grid[i] != grid[selectedItem])
             {
-                foreach (Transform child in grid[i].GetChildren())
-                {
-                    if (!child.GetComponent<Image>())
-                    {
-                        foreach (Transform grandChild in child.GetChildren())
-                        {
-                            StartCoroutine(grandChild.gameObject.FadeObject(0.5f, 0.1f));
-                        }
-                    }
-                    else
-                        StartCoroutine(child.gameObject.FadeObject(0.5f, 0.1f));
-                }
+                StartCoroutine(grid[i].gameObject.FadeObject(0.5f, 0.1f));
             }
         }
-        
+
         StartCoroutine(CreateMenuButtons(currentItem));
         menuPanel.transform.Find("Base").position = grid[selectedItem].position;
         menuPanel.SetActive(true);
@@ -383,20 +404,7 @@ public class InventoryManager : MonoBehaviour
         {
             if (grid[i] != grid[selectedItem])
             {
-                foreach (Transform child in grid[i].GetChildren())
-                {
-                    if (!child.GetComponent<Image>())
-                    {
-                        foreach (Transform grandChild in child.GetChildren())
-                        {
-                            StartCoroutine(grandChild.gameObject.FadeObject(1f, 0.1f));
-                        }
-                    }
-                    else
-                    {
-                        StartCoroutine(child.gameObject.FadeObject(1f, 0.1f));
-                    }
-                }
+                StartCoroutine(grid[i].gameObject.FadeObject(1f, 0.1f));
             }
         }
 
@@ -409,10 +417,9 @@ public class InventoryManager : MonoBehaviour
     {
         ItemEventHandler choiceEvent = menuButtons[buttonIndex].GetComponent<ItemEventHandler>();
         choiceEvent.eventHandler.Invoke(currentItem);
-
-        selectedButton = 0; buttonIndex = 0;
         yield return null;
         DestroyMenu();
+        selectedButton = 0; buttonIndex = 0;
     }
 
     public IEnumerator CreateMenuButtons(Item item)
@@ -458,40 +465,49 @@ public class InventoryManager : MonoBehaviour
     {
         StartCoroutine(inventoryContainer.FadeObject(0.7f, 0.1f));
         PauseManager.instance.inPartyMenu = true;
-        givingItem = true;
+
 
         if (item.amount > 1)
             item.amount--;
         else
-            InventoryManager.instance.inventory.items.Remove(item);
+            inventory.items.Remove(item);
 
-        InventoryManager.instance.UpdateInventory();
+        UpdateInventory();
+        givingItem = true;
 
-        PauseManager.instance.GiveItem(item);
+        Pokemon selectedPokemon = GameManager.instance.party.playerParty[0];
+        if (!isInteracting && Input.GetButtonDown("Interact"))
+        {
+            selectedPokemon.heldItem = item;
+            StartCoroutine(InventoryManager.instance.inventoryContainer.FadeObject(1f, 0.1f));
+            PauseManager.instance.inPartyMenu = false;
+            givingItem = false;
+        }
     }
 
     public void UpdateInventory()
     {
+        currentCategoryItems.Clear();
         isInventoryDrawn = false;
+
+        categoryText.SetText(currentCategory);
 
         if (inventory.items.Count > 0)
         {
             counter = 0;
             foreach (Item item in inventory.items)
             {
-                if (item.category.ToString().Equals(currentCategory))
+                if (item.category.ToString().Equals(currentCategory) && item.isFavorite)
                 {
-                    Transform itemSlot = grid[counter];
-                    itemSlot.GetComponent<ItemSelection>().slotIndex = counter;
+                    counter = DrawItem(item, counter, true);
+                }
+            }
 
-                    itemSlot.Find("Sprite").GetComponent<Image>().sprite = item.sprite;
-                    itemSlot.Find("Amount").GetComponentInChildren<TextMeshProUGUI>().SetText(item.amount.ToString());
-                    itemSlot.Find("Sprite").gameObject.SetActive(true);
-                    itemSlot.Find("Amount").gameObject.SetActive(true);
-
-                    counter++;
-
-                    currentCategoryItems.Add(item);
+            for (int i = counter; i < inventory.items.Count; i++)
+            {
+                if (inventory.items[i].category.ToString().Equals(currentCategory) && !inventory.items[i].isFavorite)
+                {
+                    counter = DrawItem(inventory.items[i], counter);
                 }
             }
 
@@ -505,7 +521,9 @@ public class InventoryManager : MonoBehaviour
             Transform itemSlot = grid[i];
             itemSlot.Find("Sprite").gameObject.SetActive(false);
             itemSlot.Find("Amount").gameObject.SetActive(false);
+            itemSlot.Find("Favorite").gameObject.SetActive(false);
         }
+
 
         isInventoryDrawn = true;
 

@@ -150,19 +150,6 @@ public class PauseManager : MonoBehaviour
         InventoryManager.instance.categoryAnim.Rebind();
     }
 
-    public void GiveItem(Item item)
-    {
-        Pokemon selectedPokemon = GameManager.instance.party.playerParty[0];
-
-        if (Input.GetButtonDown("Interact") && InventoryManager.instance.givingItem)
-        {
-            selectedPokemon.heldItem = item;
-            StartCoroutine(InventoryManager.instance.inventoryContainer.FadeObject(1f, 0.1f));
-            inPartyMenu = false;
-            InventoryManager.instance.givingItem = false;
-        }
-    }
-
     private void CheckForInput()
     {
         maxSlotIndex = GameManager.instance.party.playerParty.Count;
