@@ -60,12 +60,7 @@ public static class ExtensionMethods
         bool isImage = false, isCanvas = false, isText = false, hasText = false;
         Color color = new Color();
 
-        if (gameObject.GetComponent<Image>() != null) // If the GameObject is an image, ...
-        {
-            color = gameObject.GetComponent<Image>().color; // Caches the current color and initial opacity of image.
-            isImage = true;
-        }
-        else if (gameObject.GetComponent<CanvasGroup>() != null)
+        if (gameObject.GetComponent<CanvasGroup>() != null)
         {
             color.a = gameObject.GetComponent<CanvasGroup>().alpha;
             isCanvas = true;
@@ -74,6 +69,11 @@ public static class ExtensionMethods
         {
             color = gameObject.GetComponent<TextMeshProUGUI>().color;
             isText = true;
+        }
+        else if (gameObject.GetComponent<Image>() != null) // If the GameObject is an image, ...
+        {
+            color = gameObject.GetComponent<Image>().color; // Caches the current color and initial opacity of image.
+            isImage = true;
         }
         else
         {
