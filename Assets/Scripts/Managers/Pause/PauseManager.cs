@@ -93,45 +93,50 @@ public class PauseManager : MonoBehaviour
                 else
                 {
                     StartCoroutine(AnimateSlots(i, true));
+                    party[slotIndex].Find("Information").gameObject.SetActive(true);
+
                 }
             }
-
-            CheckForInput();
-
-            StartCoroutine(MoveIndicator());
-            indicator.SetActive(true);
         }
         else
         {
+            isAnimating = true;
+            party[slotIndex].GetComponent<Animator>().SetBool("isSelected", false);
             indicator.SetActive(false);
-            party[slotIndex].Find("Information").gameObject.SetActive(false);
-            StartCoroutine(AnimateSlots(slotIndex, false));
         }
     }
 
     private IEnumerator AnimateSlots(int slot, bool state)
     {
-        party[slot].Find("Information").gameObject.SetActive(state);
-        party[slot].GetComponent<Animator>().SetBool("isSelected", state);
-        yield return new WaitForSecondsRealtime(party[slot].GetComponent<Animator>().GetAnimationTime());
-    }
+        if (isAnimating)
+        {
+            indicator.SetActive(false);
 
-    private IEnumerator MoveIndicator()
-    {
-        if (slotIndex > (GameManager.instance.party.playerParty.Count - 1))
-        {
-            indicator.transform.Find("Party Indicator").gameObject.SetActive(false);
-            yield return null;
-            indicator.transform.position = partyContainer.transform.Find("Edit").position;
-            indicator.transform.Find("Edit Indicator").gameObject.SetActive(true);
+            party[slot].GetComponent<Animator>().SetBool("isSelected", state);
+
+
+            if (inPartyMenu)
+            {
+                if (slotIndex > (GameManager.instance.party.playerParty.Count - 1))
+                {
+                    indicator.transform.Find("Party Indicator").gameObject.SetActive(false);
+                    indicator.transform.position = partyContainer.transform.Find("Edit").position;
+                    indicator.transform.Find("Edit Indicator").gameObject.SetActive(true);
+                }
+                else
+                {
+                    indicator.transform.Find("Edit Indicator").gameObject.SetActive(false);
+                    indicator.transform.position = new Vector2(indicator.transform.position.x, party[slotIndex].position.y);
+                    indicator.transform.Find("Party Indicator").gameObject.SetActive(true);
+                }
+
+                yield return new WaitForSecondsRealtime(0.15f);
+                indicator.SetActive(true);
+            }
         }
-        else
-        {
-            indicator.transform.Find("Edit Indicator").gameObject.SetActive(false);
-            yield return null;
-            indicator.transform.SetParent(party[slotIndex]);indicator.transform.position = party[slotIndex].position;
-            indicator.transform.Find("Party Indicator").gameObject.SetActive(true);
-        }
+        isAnimating = false;
+        yield return new WaitForSecondsRealtime(0.05f);
+        CheckForInput();
     }
 
     public void InPause()
@@ -159,7 +164,6 @@ public class PauseManager : MonoBehaviour
                     party[currentSlot].Find("Held Item").gameObject.SetActive(true);
                 }
                 party[currentSlot].Find("Health Bar").gameObject.SetActive(true);
-
                 party[currentSlot].Find("Information/Name").GetComponent<TextMeshProUGUI>().SetText(pokemon.name);
                 party[currentSlot].Find("Information/Level/Level").GetComponent<TextMeshProUGUI>().SetText(pokemon.level.ToString());
             }
@@ -171,6 +175,7 @@ public class PauseManager : MonoBehaviour
                     party[currentSlot].Find("Pokémon").gameObject.SetActive(false);
                     party[currentSlot].Find("Held Item").gameObject.SetActive(false);
                     party[currentSlot].Find("Health Bar").gameObject.SetActive(false);
+                    party[currentSlot].Find("Information").gameObject.SetActive(false);
                 }
             }
 
@@ -195,8 +200,6 @@ public class PauseManager : MonoBehaviour
     private void ResetInventory()
     {
         InventoryManager.instance.categoryAnim.Rebind();
-
-
     }
 
     public void CheckForInput()
@@ -205,6 +208,7 @@ public class PauseManager : MonoBehaviour
 
         if (Input.GetAxisRaw("Vertical") != 0)
         {
+            isAnimating = true;
             if (!isInteracting)
             {
                 if (Input.GetAxisRaw("Vertical") < 0)
@@ -228,6 +232,7 @@ public class PauseManager : MonoBehaviour
         }
         else if (Input.GetAxisRaw("Horizontal") != 0 && !InventoryManager.instance.givingItem)
         {
+            isAnimating = true;
             if (!isInteracting)
             {
                 if (Input.GetAxisRaw("Horizontal") > 0)
@@ -243,6 +248,9 @@ public class PauseManager : MonoBehaviour
             }
         }
         else
+        {
             isInteracting = false;
+        }
+            
     }
 }

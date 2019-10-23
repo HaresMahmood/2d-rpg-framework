@@ -6,7 +6,7 @@ public abstract class InteractableObject : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (CanInteract() && !DialogManager.instance.isActive)
+        if (CanInteract() && !DialogManager.instance.isActive && !PauseManager.instance.isPaused)
             SetContextVisible();
         else
             SetContextInvisible();
