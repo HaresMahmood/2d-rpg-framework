@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,7 +23,7 @@ public class PauseManager : MonoBehaviour
 
     [HideInInspector] public int slotIndex, maxSlotIndex, selectedSlot = 0;
 
-    public bool isInteracting = false, isDrawingParty = false, isResetingInventory = false;
+    private bool isInteracting = false, isDrawingParty = false, isResetingInventory = false, isAnimating = false;
 
     #endregion
 
@@ -53,6 +54,7 @@ public class PauseManager : MonoBehaviour
     /// </summary>
     private void Update()
     {
+        //StartCoroutine(TogglePause());
         TogglePause();
     }
 
@@ -60,6 +62,7 @@ public class PauseManager : MonoBehaviour
 
     public void TogglePause()
     {
+
         if (Input.GetButtonDown("Start") && !DialogManager.instance.isActive)
         {
             isPaused = !isPaused;
@@ -81,26 +84,53 @@ public class PauseManager : MonoBehaviour
 
         if (inPartyMenu)
         {
-            indicator.SetActive(true);
+            for (int i = 0; i < GameManager.instance.party.playerParty.Count; i++)
+            {
+                if (i != slotIndex)
+                {
+                    StartCoroutine(AnimateSlots(i, false));
+                }
+                else
+                {
+                    StartCoroutine(AnimateSlots(i, true));
+                }
+            }
 
             CheckForInput();
 
-            if (slotIndex > (GameManager.instance.party.playerParty.Count - 1))
-            {
-                indicator.transform.Find("Party Indicator").gameObject.SetActive(false);
-                indicator.transform.Find("Edit Indicator").gameObject.SetActive(true);
-                indicator.transform.position = partyContainer.transform.Find("Edit").position;
-            }
-            else
-            {
-                indicator.transform.Find("Party Indicator").gameObject.SetActive(true);
-                indicator.transform.Find("Edit Indicator").gameObject.SetActive(false);
-                indicator.transform.position = party[slotIndex].position;
-            }
+            StartCoroutine(MoveIndicator());
+            indicator.SetActive(true);
         }
         else
         {
             indicator.SetActive(false);
+            party[slotIndex].Find("Information").gameObject.SetActive(false);
+            StartCoroutine(AnimateSlots(slotIndex, false));
+        }
+    }
+
+    private IEnumerator AnimateSlots(int slot, bool state)
+    {
+        party[slot].Find("Information").gameObject.SetActive(state);
+        party[slot].GetComponent<Animator>().SetBool("isSelected", state);
+        yield return new WaitForSecondsRealtime(party[slot].GetComponent<Animator>().GetAnimationTime());
+    }
+
+    private IEnumerator MoveIndicator()
+    {
+        if (slotIndex > (GameManager.instance.party.playerParty.Count - 1))
+        {
+            indicator.transform.Find("Party Indicator").gameObject.SetActive(false);
+            yield return null;
+            indicator.transform.position = partyContainer.transform.Find("Edit").position;
+            indicator.transform.Find("Edit Indicator").gameObject.SetActive(true);
+        }
+        else
+        {
+            indicator.transform.Find("Edit Indicator").gameObject.SetActive(false);
+            yield return null;
+            indicator.transform.SetParent(party[slotIndex]);indicator.transform.position = party[slotIndex].position;
+            indicator.transform.Find("Party Indicator").gameObject.SetActive(true);
         }
     }
 
@@ -128,6 +158,10 @@ public class PauseManager : MonoBehaviour
                     party[currentSlot].Find("Held Item").GetComponent<Image>().sprite = pokemon.heldItem.sprite;
                     party[currentSlot].Find("Held Item").gameObject.SetActive(true);
                 }
+                party[currentSlot].Find("Health Bar").gameObject.SetActive(true);
+
+                party[currentSlot].Find("Information/Name").GetComponent<TextMeshProUGUI>().SetText(pokemon.name);
+                party[currentSlot].Find("Information/Level/Level").GetComponent<TextMeshProUGUI>().SetText(pokemon.level.ToString());
             }
 
             if (GameManager.instance.party.playerParty.Count < 6)
@@ -136,6 +170,7 @@ public class PauseManager : MonoBehaviour
                 {
                     party[currentSlot].Find("Pokémon").gameObject.SetActive(false);
                     party[currentSlot].Find("Held Item").gameObject.SetActive(false);
+                    party[currentSlot].Find("Health Bar").gameObject.SetActive(false);
                 }
             }
 

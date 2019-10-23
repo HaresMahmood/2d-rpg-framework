@@ -5,6 +5,7 @@ public class Pokemon : ScriptableObject
 {
     public new string name;
     public int id;
+    public int level;
     public string dexEntry;
     public Sprite frontSprite;
     public Sprite backSprite;

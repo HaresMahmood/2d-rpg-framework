@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEditor;
 
 /// <summary>
 ///
@@ -37,7 +38,7 @@ public class InventoryManager : MonoBehaviour
     [HideInInspector] public int itemIndex, maxItemIndex, selectedItem = 0;
     private int buttonIndex, maxButtonIndex, selectedButton = 0;
 
-    public bool inMenu = false, givingItem = false;
+    [HideInInspector] public bool inMenu = false, givingItem = false;
     private bool isInventoryDrawn, isInteracting = false;
 
     #endregion
@@ -70,9 +71,7 @@ public class InventoryManager : MonoBehaviour
         categoryText = inventoryContainer.transform.Find("Categories/Information/Name").GetComponent<TextMeshProUGUI>();
 
         currentCategoryItems = new List<Item>();
-
         currentCategory = categories[0];
-
         inventoryContainer.SetActive(false);
     }
 
@@ -85,11 +84,11 @@ public class InventoryManager : MonoBehaviour
 
         if (Input.GetButtonDown("Interact") && givingItem)
         {
-            Pokemon selectedPokemon = GameManager.instance.party.playerParty[PauseManager.instance.slotIndex];
-
-            if (selectedPokemon.heldItem != currentItem)
+            if (GameManager.instance.party.playerParty[PauseManager.instance.slotIndex].heldItem != currentItem)
             {
-                selectedPokemon.heldItem = currentItem;
+                GameManager.instance.party.playerParty[PauseManager.instance.slotIndex].heldItem = currentItem;
+                EditorUtility.SetDirty(GameManager.instance.party.playerParty[PauseManager.instance.slotIndex]); //TODO: Debug
+
                 if (currentItem.amount > 1)
                     currentItem.amount--;
                 else
@@ -410,7 +409,7 @@ public class InventoryManager : MonoBehaviour
         float waitTime = anim.GetAnimationTime();
         yield return null;
 
-        for (int i = 0; i <= maxItemIndex; i++)
+        for (int i = 0; i < grid.Length; i++)
         {
             if (grid[i] != grid[selectedItem])
             {
@@ -430,7 +429,7 @@ public class InventoryManager : MonoBehaviour
         menuPanel.SetActive(false);
         menuPanel.transform.Find("Indicator").gameObject.SetActive(false);
 
-        for (int i = 0; i <= maxItemIndex; i++)
+        for (int i = 0; i < grid.Length; i++)
         {
             if (grid[i] != grid[selectedItem])
             {
