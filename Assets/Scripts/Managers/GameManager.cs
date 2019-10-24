@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class GameManager : MonoBehaviour
     [UnityEngine.Header("Global Settings")]
     public string playerTag = "Player";
     public Transform activePlayer;
+    public Color accentColor = "51C2FC".ToColor();
 
     [UnityEngine.Header("Global Data")]
     public bool playerInRange;
@@ -26,6 +28,14 @@ public class GameManager : MonoBehaviour
     [UnityEngine.Header("Player Data")]
     public string playerName = "Hilliard";
     public Party party;
+
+    public GameObject[] customizableElements;
+
+    [System.Serializable]
+    public class Settings
+    {
+        public static Color accentColor;
+    }
 
     private void Start()
     {
@@ -39,6 +49,19 @@ public class GameManager : MonoBehaviour
                     return;
                 }
             }
+        }
+    }
+
+    private void Update()
+    {
+        ApplySettings();
+    }
+
+    private void ApplySettings()
+    {
+        foreach (GameObject element in customizableElements)
+        {
+            StartCoroutine(element.FadeColor(accentColor, 0.000000001f));
         }
     }
 

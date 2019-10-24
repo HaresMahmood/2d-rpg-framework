@@ -24,8 +24,8 @@ public class InventoryManager : MonoBehaviour
     [HideInInspector] public GameObject inventoryContainer;
     private GameObject itemIndicator, menuPanel;
     private GameObject[] menuButtons;
-    private Transform[] grid, categoryContainer;
-    [HideInInspector] public Animator categoryAnim, indicatorAnim, rightAnim, leftAnim;
+    [HideInInspector] public Transform[] grid, categoryContainer;
+    [HideInInspector] public Animator indicatorAnim, rightAnim, leftAnim;
     private TextMeshProUGUI categoryText;
     [HideInInspector] public Item currentItem;
     private List<Item> currentCategoryItems;
@@ -63,7 +63,6 @@ public class InventoryManager : MonoBehaviour
         grid = inventoryContainer.transform.Find("Item Grid").transform.GetChildren();
         categoryContainer = inventoryContainer.transform.Find("Categories/Category Icons").GetChildren();
 
-        categoryAnim = inventoryContainer.transform.Find("Categories/Category Icons").GetComponent<Animator>();
         rightAnim = inventoryContainer.transform.Find("Categories/Navigation/Right").GetComponent<Animator>();
         leftAnim = inventoryContainer.transform.Find("Categories/Navigation/Left").GetComponent<Animator>();
         indicatorAnim = itemIndicator.GetComponent<Animator>();
@@ -97,7 +96,7 @@ public class InventoryManager : MonoBehaviour
                 UpdateInventory();
             }
 
-            StartCoroutine(inventoryContainer.FadeObject(1f, 0.1f));
+            StartCoroutine(inventoryContainer.FadeOpacity(1f, 0.1f));
             PauseManager.instance.inPartyMenu = false;
             givingItem = false;
         }
@@ -108,6 +107,8 @@ public class InventoryManager : MonoBehaviour
     {
         if (PauseManager.instance.isPaused)
         {
+            currentCategory = categories[currentCategoryIndex];
+
             if (isInventoryDrawn)
             {
                 UpdateInventory();
@@ -116,6 +117,7 @@ public class InventoryManager : MonoBehaviour
             {
                 DrawInventory();
             }
+
             AnimateCategory();
             CheckForInput();
 
@@ -144,7 +146,6 @@ public class InventoryManager : MonoBehaviour
             }
 
             inventoryContainer.SetActive(true);
-            currentCategory = categories[currentCategoryIndex];
 
             if (currentCategoryItems.Count > 0)
             {
@@ -202,6 +203,8 @@ public class InventoryManager : MonoBehaviour
                 itemSlot.Find("Favorite").gameObject.SetActive(false);
                 itemSlot.Find("New").gameObject.SetActive(false);
             }
+
+            
         }
     }
 
@@ -263,7 +266,7 @@ public class InventoryManager : MonoBehaviour
                                 itemIndex--;
                             else
                             {
-                                StartCoroutine(inventoryContainer.FadeObject(0.7f, 0.1f));
+                                StartCoroutine(inventoryContainer.FadeOpacity(0.7f, 0.1f));
                                 PauseManager.instance.inPartyMenu = true;
                             }
                         }
@@ -297,7 +300,7 @@ public class InventoryManager : MonoBehaviour
                     {
                         if (Input.GetAxisRaw("Trigger") > 0)
                         {
-                            AnimateArrows(rightAnim);
+                            AnimateArrows(rightAnim); AnimateCategory();
                             if (currentCategoryIndex < (categories.Length - 1))
                             {
                                 currentCategory = categories[Array.IndexOf(categories, currentCategory) + 1];
@@ -311,7 +314,7 @@ public class InventoryManager : MonoBehaviour
                         }
                         else if (Input.GetAxisRaw("Trigger") < 0)
                         {
-                            AnimateArrows(leftAnim);
+                            AnimateArrows(leftAnim); AnimateCategory();
                             if (currentCategoryIndex > 0)
                             {
                                 currentCategory = categories[Array.IndexOf(categories, currentCategory) - 1];
@@ -383,15 +386,18 @@ public class InventoryManager : MonoBehaviour
 
     private void AnimateCategory()
     {
+        //Debug.Log("INVENTORY MANAGER: Animating category icon.");
         foreach (Transform category in categoryContainer)
         {
             if (category != categoryContainer[currentCategoryIndex])
             {
-                categoryAnim.SetBool(category.name, false);
+                category.GetComponent<Animator>().SetBool("isSelected", false);
+                StartCoroutine(category.GetComponentInChildren<Image>().gameObject.FadeColor(Color.white, 0.1f));
             }
             else
             {
-                categoryAnim.SetBool(category.name, true);
+                category.GetComponent<Animator>().SetBool("isSelected", true);
+                StartCoroutine(category.GetComponentInChildren<Image>().gameObject.FadeColor(GameManager.instance.accentColor, 0.1f));
             }
         }
     }
@@ -413,7 +419,7 @@ public class InventoryManager : MonoBehaviour
         {
             if (grid[i] != grid[selectedItem])
             {
-                StartCoroutine(grid[i].gameObject.FadeObject(0.5f, 0.1f));
+                StartCoroutine(grid[i].gameObject.FadeOpacity(0.5f, 0.1f));
             }
         }
 
@@ -433,7 +439,7 @@ public class InventoryManager : MonoBehaviour
         {
             if (grid[i] != grid[selectedItem])
             {
-                StartCoroutine(grid[i].gameObject.FadeObject(1f, 0.1f));
+                StartCoroutine(grid[i].gameObject.FadeOpacity(1f, 0.1f));
             }
         }
 
@@ -498,7 +504,7 @@ public class InventoryManager : MonoBehaviour
     private IEnumerator HandOverItem()
     {
         yield return null;
-        StartCoroutine(inventoryContainer.FadeObject(0.7f, 0.1f));
+        StartCoroutine(inventoryContainer.FadeOpacity(0.7f, 0.1f));
         PauseManager.instance.inPartyMenu = true;
         givingItem = true;
     }

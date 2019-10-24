@@ -123,11 +123,11 @@ public class BranchingDialogManager : MonoBehaviour
 
         for (int i = 0; i < optionButtons.Length; i++)
         {
-            StartCoroutine((optionButtons[i].FadeObject(1f, buttonAnimationDelay)));
-            StartCoroutine((optionButtons[i].transform.Find("Text").gameObject.FadeObject(1f, buttonAnimationDelay)));
+            StartCoroutine((optionButtons[i].FadeOpacity(1f, buttonAnimationDelay)));
+            StartCoroutine((optionButtons[i].transform.Find("Text").gameObject.FadeOpacity(1f, buttonAnimationDelay)));
             if (hasBackButton)
             {
-                StartCoroutine((optionButtons[i].transform.Find("Button").gameObject.FadeObject(1f, buttonAnimationDelay)));
+                StartCoroutine((optionButtons[i].transform.Find("Button").gameObject.FadeOpacity(1f, buttonAnimationDelay)));
             }
             yield return new WaitForSeconds(buttonAnimationDelay);
         }
@@ -155,7 +155,7 @@ public class BranchingDialogManager : MonoBehaviour
         for (int i = 0; i < optionButtons.Length; i++)
         {
             if (optionButtons[i] != null)
-                StartCoroutine(optionButtons[i].FadeObject(0f, buttonAnimationDelay));
+                StartCoroutine(optionButtons[i].FadeOpacity(0f, buttonAnimationDelay));
             yield return new WaitForSeconds(buttonAnimationDelay);
         }
 

@@ -55,7 +55,7 @@ public static class ExtensionMethods
     /// <param name="targetOpacity"> Opacity (0 to 1) to fade GameObject to. </param>
     /// <param name="duration"> Duration of fade. </param>
     /// <returns></returns>
-    public static IEnumerator FadeObject(this GameObject gameObject, float targetOpacity, float duration)
+    public static IEnumerator FadeOpacity(this GameObject gameObject, float targetOpacity, float duration)
     {
         bool isImage = false, isCanvas = false, isText = false, hasText = false;
         Color color = new Color();
@@ -119,7 +119,7 @@ public static class ExtensionMethods
     /// <param name="targetColor"> Color to change GameObject to. </param>
     /// <param name="duration"> Duration of color change. </param>
     /// <returns></returns>
-    public static IEnumerator ColorObject(this GameObject gameObject, Color targetColor, float duration)
+    public static IEnumerator FadeColor(this GameObject gameObject, Color targetColor, float duration)
     {
         bool isImage = false, isText = false;
         Color color;
@@ -146,7 +146,7 @@ public static class ExtensionMethods
                 t += Time.unscaledDeltaTime;
             else
                 t += Time.deltaTime;
-            float blend = Mathf.Clamp01(t / duration); Debug.Log(t); // Turns the time into an interpolation factor between 0 and 1. 
+            float blend = Mathf.Clamp01(t / duration); // Turns the time into an interpolation factor between 0 and 1. 
 
             color = Color.Lerp(startColor, targetColor, blend); // Blends to the corresponding opacity between start & target.
 

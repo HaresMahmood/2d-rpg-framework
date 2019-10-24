@@ -54,7 +54,7 @@ public class OverworldItemController : MonoBehaviour
 
     public void FadeItem(float targetOpacity, float duration)
     {
-        StartCoroutine(image.gameObject.FadeObject(targetOpacity, duration));
+        StartCoroutine(image.gameObject.FadeOpacity(targetOpacity, duration));
         StartCoroutine(light.FadeLight(targetOpacity, duration));
     }
 }

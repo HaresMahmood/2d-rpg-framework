@@ -199,7 +199,10 @@ public class PauseManager : MonoBehaviour
 
     private void ResetInventory()
     {
-        InventoryManager.instance.categoryAnim.Rebind();
+        foreach (Transform category in InventoryManager.instance.categoryContainer)
+        {
+            category.GetComponent<Animator>().Rebind();
+        }
     }
 
     public void CheckForInput()
@@ -237,7 +240,7 @@ public class PauseManager : MonoBehaviour
             {
                 if (Input.GetAxisRaw("Horizontal") > 0)
                 {
-                    StartCoroutine(InventoryManager.instance.inventoryContainer.FadeObject(1f, 0.1f));
+                    StartCoroutine(InventoryManager.instance.inventoryContainer.FadeOpacity(1f, 0.1f));
                     inPartyMenu = false;
                 }
                 else if (Input.GetAxisRaw("Horizontal") < 0)
