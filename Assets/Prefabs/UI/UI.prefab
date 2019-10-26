@@ -1412,7 +1412,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.92156863}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1548,6 +1548,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7630277319752675863}
+  - component: {fileID: 3435762806915709886}
   m_Layer: 5
   m_Name: Categories
   m_TagString: Untagged
@@ -1577,6 +1578,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -172}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &3435762806915709886
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 421295978333097283}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &442651660834009047
 GameObject:
   m_ObjectHideFlags: 0
@@ -7154,6 +7167,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2522309171005902327}
+  - component: {fileID: 5464740245568120084}
   m_Layer: 5
   m_Name: Current
   m_TagString: Untagged
@@ -7181,6 +7195,25 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 925}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!95 &5464740245568120084
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1844172025843661484}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: acaa79372eb8ad840aebde2ebb3bca7e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 2
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1858346064219259133
 GameObject:
   m_ObjectHideFlags: 0
@@ -12061,6 +12094,7 @@ GameObject:
   - component: {fileID: 4830444264094352006}
   - component: {fileID: 48275084521742999}
   - component: {fileID: 762031355434310236}
+  - component: {fileID: 9075197857471607171}
   m_Layer: 5
   m_Name: Indicator
   m_TagString: Untagged
@@ -12123,6 +12157,25 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!95 &9075197857471607171
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2932286043528663950}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2815caa13b33d5148b9db10467a93b6e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 2
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &2957006031807481374
 GameObject:
   m_ObjectHideFlags: 0
@@ -12371,6 +12424,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8027470680363017928}
+  - component: {fileID: 3703160019843356225}
   m_Layer: 5
   m_Name: Amount Picker
   m_TagString: Untagged
@@ -12400,6 +12454,18 @@ RectTransform:
   m_AnchoredPosition: {x: -917.7, y: 176.4}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &3703160019843356225
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2979103867838573619}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &2993368211041793296
 GameObject:
   m_ObjectHideFlags: 0
@@ -12881,6 +12947,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8057064747571700883}
+  - component: {fileID: 8609292841219343303}
   m_Layer: 5
   m_Name: Item Information
   m_TagString: Untagged
@@ -12910,6 +12977,18 @@ RectTransform:
   m_AnchoredPosition: {x: -50, y: 50}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &8609292841219343303
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3147293823142804798}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &3148265365910249592
 GameObject:
   m_ObjectHideFlags: 0
@@ -24046,6 +24125,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9178589753632736167}
+  - component: {fileID: 1552234687973348403}
   - component: {fileID: 5244058061564191647}
   m_Layer: 5
   m_Name: Item Grid
@@ -24101,6 +24181,18 @@ RectTransform:
   m_AnchoredPosition: {x: -310, y: -240}
   m_SizeDelta: {x: 1850, y: 1050}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &1552234687973348403
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6226852543863279838}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!114 &5244058061564191647
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27399,6 +27491,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1075995575901651765}
+  - component: {fileID: 5228666652934958386}
   m_Layer: 5
   m_Name: Menu
   m_TagString: Untagged
@@ -27427,6 +27520,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &5228666652934958386
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7492974698940343474}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &7514140772002022268
 GameObject:
   m_ObjectHideFlags: 0

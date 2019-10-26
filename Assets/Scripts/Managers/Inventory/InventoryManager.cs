@@ -155,7 +155,7 @@ public class InventoryManager : MonoBehaviour
             if (!PauseManager.instance.inPartyMenu)
             {
                 itemIndicator.transform.position = grid[selectedSlot].position;
-                if (!itemIndicator.activeSelf)
+                if (!itemIndicator.activeSelf && !inContextMenu)
                 {
                     itemIndicator.SetActive(true);
                 }
@@ -285,7 +285,7 @@ public class InventoryManager : MonoBehaviour
                                 selectedSlot--;
                             else
                             {
-                                StartCoroutine(inventoryContainer.FadeOpacity(0.7f, 0.1f));
+                                FadeInventory(0.5f);
                                 PauseManager.instance.inPartyMenu = true;
                             }
                         }
@@ -393,10 +393,6 @@ public class InventoryManager : MonoBehaviour
                         StartCoroutine(CreateMenu(indicatorAnim));
                     }
                 }
-                else if (Input.GetButtonUp("Interact") && !inContextMenu)
-                {
-                    indicatorAnim.Rebind();
-                }
 
                 if (Input.GetButtonDown("Interact") && inContextMenu)
                 {
@@ -404,6 +400,21 @@ public class InventoryManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void FadeInventory(float opacity)
+    {
+        Transform[] children = inventoryContainer.transform.GetChildren();
+
+        foreach (Transform child in children)
+        {
+            if (child != null)
+            {
+                StartCoroutine(child.gameObject.FadeOpacity(opacity, 0.1f));
+            }
+        }
+
+        StartCoroutine(PauseManager.instance.pauseContainer.transform.Find("Target Sprite").gameObject.FadeOpacity(opacity, 0.1f));
     }
 
     private void AnimateCategory()
@@ -434,7 +445,8 @@ public class InventoryManager : MonoBehaviour
         anim.ResetTrigger("isPressed");
         anim.SetTrigger("isPressed");
         float waitTime = anim.GetAnimationTime();
-        yield return null;
+        yield return new WaitForSecondsRealtime(0.15f);
+        itemIndicator.SetActive(false);
 
         for (int i = 0; i < grid.Length; i++)
         {
@@ -451,10 +463,13 @@ public class InventoryManager : MonoBehaviour
         inContextMenu = true;
     }
 
-    public void DestroyMenu()
+    public IEnumerator DestroyMenu()
     {
+        StartCoroutine(menuPanel.FadeOpacity(0f, 0.075f));
+        yield return new WaitForSecondsRealtime(0.075f);
         menuPanel.SetActive(false);
         menuPanel.transform.Find("Indicator").gameObject.SetActive(false);
+        menuPanel.GetComponent<CanvasGroup>().alpha = 1;
 
         if (!isDiscardingItem)
         {
@@ -470,6 +485,7 @@ public class InventoryManager : MonoBehaviour
         DestroyMenuButtons();
 
         inContextMenu = false;
+        itemIndicator.SetActive(true);
     }
 
     public IEnumerator ChoiceMade()
@@ -477,7 +493,7 @@ public class InventoryManager : MonoBehaviour
         ItemEventHandler choiceEvent = menuButtons[selectedMenuButton].GetComponent<ItemEventHandler>();
         choiceEvent.eventHandler.Invoke(currentItem);
         yield return null;
-        DestroyMenu();
+        StartCoroutine(DestroyMenu());
         selectedMenuButton = 0;
     }
     
@@ -501,19 +517,29 @@ public class InventoryManager : MonoBehaviour
 
             ItemEventHandler eventHandler = menuButtonObj.GetComponent<ItemEventHandler>();
             eventHandler.eventHandler = item.action.behaviorData[i].behaviorEvent;
+            menuButtonObj.GetComponent<CanvasGroup>().alpha = 0;
 
             menuButtons[i] = menuButtonObj;
         }
 
         totalMenuButtons = menuButtons.Length - 1;
-
-        yield return null;
-
         selectedMenuButton = 0;
+
+        float menuAnimationDelay = 0.2f / menuButtons.Length;
+        StartCoroutine(menuPanel.transform.Find("Base").gameObject.FadeOpacity(0.9f, menuAnimationDelay));
+
+        foreach (GameObject button in menuButtons)
+        {
+            float buttonAnimationDelay = 0.07f;
+            StartCoroutine(button.FadeOpacity(1f, buttonAnimationDelay));
+            yield return new WaitForSecondsRealtime(buttonAnimationDelay);
+        }
     }
 
     private void DestroyMenuButtons()
     {
+        StartCoroutine(menuPanel.transform.Find("Base").gameObject.FadeOpacity(0f, 0.0001f));
+
         for (int i = 0; i < menuButtons.Length; i++)
             Destroy(menuButtons[i]);
 
@@ -528,7 +554,7 @@ public class InventoryManager : MonoBehaviour
     private IEnumerator GiveItemRoutine()
     {
         yield return null;
-        StartCoroutine(inventoryContainer.FadeOpacity(0.7f, 0.1f));
+        StartCoroutine(inventoryContainer.FadeOpacity(0.5f, 0.1f));
         PauseManager.instance.inPartyMenu = true;
         isGivingItem = true;
     }

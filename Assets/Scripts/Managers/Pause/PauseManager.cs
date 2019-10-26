@@ -252,7 +252,7 @@ public class PauseManager : MonoBehaviour
             {
                 if (Input.GetAxisRaw("Horizontal") > 0)
                 {
-                    StartCoroutine(InventoryManager.instance.inventoryContainer.FadeOpacity(1f, 0.1f));
+                    InventoryManager.instance.FadeInventory(1f);
                     if (InventoryManager.instance.isGivingItem)
                     {
                         InventoryManager.instance.isGivingItem = false;
@@ -272,6 +272,7 @@ public class PauseManager : MonoBehaviour
             {
                 if (Input.GetAxisRaw("Face Trigger") > 0)
                 {
+                    StartCoroutine(AnimateText());
                     if (currentMenuIndex < (menus.Length - 1))
                     {
                         currentMenu = menus[Array.IndexOf(menus, currentMenu) + 1];
@@ -285,6 +286,7 @@ public class PauseManager : MonoBehaviour
                 }
                 else if (Input.GetAxisRaw("Face Trigger") < 0)
                 {
+                    StartCoroutine(AnimateText());
                     if (currentMenuIndex > 0)
                     {
                         currentMenu = menus[Array.IndexOf(menus, currentMenu) - 1];
@@ -302,7 +304,21 @@ public class PauseManager : MonoBehaviour
         else
         {
             isInteracting = false;
+            RebindText();
         }
+    }
+
+    private IEnumerator AnimateText()
+    {
+        Animator textAnimator = topPanel.transform.Find("Navigation/Current").GetComponentInChildren<Animator>();
+        textAnimator.SetTrigger("isActive");
+        yield return new WaitForSecondsRealtime(textAnimator.GetAnimationTime());
+    }
+
+    private void RebindText()
+    {
+        Animator textAnimator = topPanel.transform.Find("Navigation/Current").GetComponentInChildren<Animator>();
+        textAnimator.Rebind();
     }
 
     public void UpdateMenu()
@@ -319,7 +335,6 @@ public class PauseManager : MonoBehaviour
                 marker.GetComponent<Image>().color = "848484".ToColor();
             }
         }
-
         
         int previousMenu = currentMenuIndex - 1;
         int nextMenu = currentMenuIndex + 1;

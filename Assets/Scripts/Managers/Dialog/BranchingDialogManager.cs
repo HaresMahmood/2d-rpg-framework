@@ -74,14 +74,14 @@ public class BranchingDialogManager : MonoBehaviour
 
         for (int i = 0; i < DialogManager.instance.branchingDialog.dialogBranches.Count; i++)
         {
-            GameObject choiceButtonObj = (GameObject)Instantiate(optionButtonPrefab, Vector3.zero, Quaternion.identity); // Instantiates/creates new choice button from prefab in scene.
+            GameObject optionButton = (GameObject)Instantiate(optionButtonPrefab, Vector3.zero, Quaternion.identity); // Instantiates/creates new choice button from prefab in scene.
 
-            choiceButtonObj.name = "Option Button " + (i + 1); // Gives appropriate name to newly instantiated choice button.
-            choiceButtonObj.transform.SetParent(optionContainer.transform.Find("Option Buttons").transform, false);
-            choiceButtonObj.GetComponentInChildren<TextMeshProUGUI>().SetText(DialogManager.instance.branchingDialog.dialogBranches[i].branchOption);
-            choiceButtonObj.GetComponent<ChoiceSelection>().buttonIndex = i;
+            optionButton.name = "Option Button " + (i + 1); // Gives appropriate name to newly instantiated choice button.
+            optionButton.transform.SetParent(optionContainer.transform.Find("Option Buttons").transform, false);
+            optionButton.GetComponentInChildren<TextMeshProUGUI>().SetText(DialogManager.instance.branchingDialog.dialogBranches[i].branchOption);
+            optionButton.GetComponent<ChoiceSelection>().buttonIndex = i;
 
-            DialogEventHandler eventHandler = choiceButtonObj.GetComponent<DialogEventHandler>();
+            DialogEventHandler eventHandler = optionButton.GetComponent<DialogEventHandler>();
             eventHandler.eventHandler = DialogManager.instance.branchingDialog.dialogBranches[i].branchEvent;
 
             if (DialogManager.instance.branchingDialog.dialogBranches[i].nextDialog != null)
@@ -95,7 +95,7 @@ public class BranchingDialogManager : MonoBehaviour
 
             if (DialogManager.instance.branchingDialog.dialogBranches[i].hasBackButton)
             {
-                choiceButtonObj.transform.Find("Button").gameObject.SetActive(true);
+                optionButton.transform.Find("Button").gameObject.SetActive(true);
                 hasBackButton = true;
             }
             else
@@ -103,32 +103,17 @@ public class BranchingDialogManager : MonoBehaviour
                 hasBackButton = false;
             }
 
-            Color color = choiceButtonObj.GetComponent<Button>().GetComponent<Image>().color;
-            Color textColor = choiceButtonObj.GetComponentInChildren<TextMeshProUGUI>().color;
-            color.a = 0; textColor.a = 0;
-            choiceButtonObj.GetComponent<Button>().GetComponent<Image>().color = color;
-            choiceButtonObj.GetComponent<Button>().GetComponent<Image>().color = textColor;
-            if (hasBackButton)
-            {
-                Color buttonColor = choiceButtonObj.GetComponentInChildren<Image>().color;
-                buttonColor.a = 0;
-                choiceButtonObj.GetComponentInChildren<Image>().color = buttonColor;
-            }
+            optionButton.GetComponent<CanvasGroup>().alpha = 0;
 
-            optionButtons[i] = choiceButtonObj;
+            optionButtons[i] = optionButton;
         }
 
         maxButtonIndex = optionButtons.Length - 1;
         optionContainer.SetActive(true);
 
-        for (int i = 0; i < optionButtons.Length; i++)
+        foreach (GameObject button in optionButtons)
         {
-            StartCoroutine((optionButtons[i].FadeOpacity(1f, buttonAnimationDelay)));
-            StartCoroutine((optionButtons[i].transform.Find("Text").gameObject.FadeOpacity(1f, buttonAnimationDelay)));
-            if (hasBackButton)
-            {
-                StartCoroutine((optionButtons[i].transform.Find("Button").gameObject.FadeOpacity(1f, buttonAnimationDelay)));
-            }
+            StartCoroutine(button.FadeOpacity(1f, buttonAnimationDelay));
             yield return new WaitForSeconds(buttonAnimationDelay);
         }
 
@@ -156,6 +141,13 @@ public class BranchingDialogManager : MonoBehaviour
         {
             if (optionButtons[i] != null)
                 StartCoroutine(optionButtons[i].FadeOpacity(0f, buttonAnimationDelay));
+            yield return new WaitForSeconds(buttonAnimationDelay);
+        }
+
+        foreach (GameObject button in optionButtons)
+        {
+            if (button != null)
+                StartCoroutine(button.FadeOpacity(0f, buttonAnimationDelay));
             yield return new WaitForSeconds(buttonAnimationDelay);
         }
 
@@ -204,15 +196,17 @@ public class BranchingDialogManager : MonoBehaviour
 
     private bool CanChoose()
     {
-        if (Input.GetButtonDown("Interact") && !DialogManager.instance.isTyping && !DialogManager.instance.choiceMade && !destroyingButtons)
+        if (!DialogManager.instance.isTyping && !DialogManager.instance.choiceMade && !destroyingButtons)
         {
-            return true;
-        }
-
-        if (Input.GetButtonDown("Cancel") && hasBackButton && !DialogManager.instance.isTyping && !DialogManager.instance.choiceMade && !destroyingButtons)
-        {
-            buttonIndex = maxButtonIndex; selectedButton = buttonIndex;
-            return true;
+            if (Input.GetButtonDown("Interact"))
+            {
+                return true;
+            }
+            else if (Input.GetButtonDown("Cancel"))
+            {
+                buttonIndex = maxButtonIndex; selectedButton = buttonIndex;
+                return true;
+            }
         }
 
         return false;
