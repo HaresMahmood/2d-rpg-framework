@@ -9,7 +9,7 @@ public class ItemSelection : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (InventoryManager.instance.itemIndex == slotIndex)
-            InventoryManager.instance.selectedItem = slotIndex;
+        //if (InventoryManager.instance.selectedSlot == slotIndex)
+        //    InventoryManager.instance.selectedSlot = slotIndex;
     }
 }

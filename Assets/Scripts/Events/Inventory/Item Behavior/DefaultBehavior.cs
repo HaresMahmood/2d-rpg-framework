@@ -9,7 +9,7 @@ public class DefaultBehavior : MonoBehaviour
 {
     public void DiscardItem(Item item)
     {
-        InventoryManager.instance.isDiscarding = true;
+        InventoryManager.instance.isDiscardingItem = true;
     }
 
     public void GiveItem(Item item)

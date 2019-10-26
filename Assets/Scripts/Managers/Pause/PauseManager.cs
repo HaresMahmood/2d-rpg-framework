@@ -18,6 +18,7 @@ public class PauseManager : MonoBehaviour
 
     private GameObject sidePanel, topPanel, indicator;
     private Transform[] party;
+    private Animator pauseAnimator, spriteAnimator;
 
     [HideInInspector] public bool isPaused, inPartyMenu = false, isInteracting = false;
 
@@ -48,6 +49,9 @@ public class PauseManager : MonoBehaviour
         topPanel = pauseContainer.transform.Find("Top Panel").gameObject;
         indicator = sidePanel.transform.Find("Indicators").gameObject;
 
+        pauseAnimator = pauseContainer.GetComponent<Animator>();
+        spriteAnimator = pauseContainer.transform.Find("Target Sprite").GetComponent<Animator>();
+
         party = sidePanel.transform.Find("Party").transform.GetChildren();
 
         currentMenu = menus[2];
@@ -62,42 +66,6 @@ public class PauseManager : MonoBehaviour
     private void Update()
     {
         TogglePause();
-
-        if (Input.GetAxisRaw("Face Trigger") != 0 && isPaused)
-        {
-            if (!isInteracting)
-            {
-                if (Input.GetAxisRaw("Face Trigger") > 0)
-                {
-                    if (currentMenuIndex < (menus.Length - 1))
-                    {
-                        currentMenu = menus[Array.IndexOf(menus, currentMenu) + 1];
-                        currentMenuIndex++;
-                    }
-                    else
-                    {
-                        currentMenu = menus[0];
-                        currentMenuIndex = 0;
-                    }
-                }
-                else if (Input.GetAxisRaw("Face Trigger") < 0)
-                {
-                    if (currentMenuIndex > 0)
-                    {
-                        currentMenu = menus[Array.IndexOf(menus, currentMenu) - 1];
-                        currentMenuIndex--;
-                    }
-                    else
-                    {
-                        currentMenu = menus[menus.Length - 1];
-                        currentMenuIndex = menus.Length - 1;
-                    }
-                }
-                isInteracting = true;
-            }
-        }
-        else
-            isInteracting = false;
 
         UpdateMenu();
     }
@@ -124,6 +92,8 @@ public class PauseManager : MonoBehaviour
         }
 
         InPause();
+
+        CheckForInput();
 
         if (inPartyMenu)
         {
@@ -177,8 +147,6 @@ public class PauseManager : MonoBehaviour
             }
         }
         isAnimating = false;
-        yield return new WaitForSecondsRealtime(0.05f);
-        CheckForInput();
     }
 
     public void InPause()
@@ -285,15 +253,48 @@ public class PauseManager : MonoBehaviour
                 if (Input.GetAxisRaw("Horizontal") > 0)
                 {
                     StartCoroutine(InventoryManager.instance.inventoryContainer.FadeOpacity(1f, 0.1f));
-                    if (InventoryManager.instance.givingItem)
+                    if (InventoryManager.instance.isGivingItem)
                     {
-                        InventoryManager.instance.givingItem = false;
+                        InventoryManager.instance.isGivingItem = false;
                     }
                     inPartyMenu = false;
                 }
                 else if (Input.GetAxisRaw("Horizontal") < 0)
                 {
                     //Debug.Log("Reached end of screen in PAUSEMANAGER");
+                }
+                isInteracting = true;
+            }
+        }
+        else if (Input.GetAxisRaw("Face Trigger") != 0)
+        {
+            if (!isInteracting)
+            {
+                if (Input.GetAxisRaw("Face Trigger") > 0)
+                {
+                    if (currentMenuIndex < (menus.Length - 1))
+                    {
+                        currentMenu = menus[Array.IndexOf(menus, currentMenu) + 1];
+                        currentMenuIndex++;
+                    }
+                    else
+                    {
+                        currentMenu = menus[0];
+                        currentMenuIndex = 0;
+                    }
+                }
+                else if (Input.GetAxisRaw("Face Trigger") < 0)
+                {
+                    if (currentMenuIndex > 0)
+                    {
+                        currentMenu = menus[Array.IndexOf(menus, currentMenu) - 1];
+                        currentMenuIndex--;
+                    }
+                    else
+                    {
+                        currentMenu = menus[menus.Length - 1];
+                        currentMenuIndex = menus.Length - 1;
+                    }
                 }
                 isInteracting = true;
             }
@@ -311,7 +312,7 @@ public class PauseManager : MonoBehaviour
         {
             if (Array.IndexOf(progressMarkers, marker) == currentMenuIndex)
             {
-                marker.GetComponent<Image>().color = "51C2FC".ToColor();
+                marker.GetComponent<Image>().color = GameManager.instance.accentColor;
             }
             else
             {
@@ -333,8 +334,8 @@ public class PauseManager : MonoBehaviour
             nextMenu = 0;
         }
 
-        Debug.Log(previousMenu);
-        Debug.Log(nextMenu);
+        //Debug.Log(previousMenu);
+        //Debug.Log(nextMenu);
 
         topPanel.transform.Find("Navigation/Current").GetComponentInChildren<TextMeshProUGUI>().SetText(currentMenu);
         topPanel.transform.Find("Navigation/Previous").GetComponentInChildren<TextMeshProUGUI>().SetText(menus[previousMenu]);
@@ -342,26 +343,39 @@ public class PauseManager : MonoBehaviour
 
         if (currentMenu == menus[0])
         {
-            Debug.Log("PAUSE MANAGER: Mission screen active.");
+            //Debug.Log("PAUSE MANAGER: Mission screen active.");
             InventoryManager.instance.inventoryContainer.SetActive(false);
-            InventoryManager.instance.isInInventory = false;
+            InventoryManager.instance.isActive = false;
         }
         else if (currentMenu == menus[1])
         {
-            Debug.Log("PAUSE MANAGER: Party screen active.");
-            InventoryManager.instance.inventoryContainer.SetActive(false);
-            InventoryManager.instance.isInInventory = false;
+            //Debug.Log("PAUSE MANAGER: Pause active.");
+            //InventoryManager.instance.inventoryContainer.SetActive(false);
+            InventoryManager.instance.isActive = false;
+
+            pauseAnimator.SetBool("isInInventory", false);
+            pauseAnimator.SetBool("isInParty", true);
+
+            spriteAnimator.SetBool("isInInventory", false);
+            spriteAnimator.SetBool("isInParty", true);
         }
         else if (currentMenu == menus[2])
         {
             InventoryManager.instance.inventoryContainer.SetActive(true);
-            InventoryManager.instance.isInInventory = true;
+            InventoryManager.instance.isActive = true;
+
+            spriteAnimator.SetBool("isInInventory", true);
+            spriteAnimator.SetBool("isInParty", false);
+
+            pauseAnimator.SetBool("isInInventory", true);
+            pauseAnimator.SetBool("isInParty", false);
+
         }
         else if (currentMenu == menus[3])
         {
-            Debug.Log("PAUSE MANAGER: System screen active.");
+            //Debug.Log("PAUSE MANAGER: System screen active.");
             InventoryManager.instance.inventoryContainer.SetActive(false);
-            InventoryManager.instance.isInInventory = false;
+            InventoryManager.instance.isActive = false;
         }
     }
 }
