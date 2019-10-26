@@ -253,5 +253,17 @@ public static class ExtensionMethods
         EditorGUI.DrawRect(r, color);
     }
 
+    public static IEnumerator waitForInput(string button)
+    {
+        bool done = false;
+        while (!done)
+        {
+            if (Input.GetButtonDown(button))
+            {
+                done = true; // breaks the loop
+            }
+            yield return null;
+        }
+    }
 
 }

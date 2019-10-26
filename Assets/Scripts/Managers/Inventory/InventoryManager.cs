@@ -38,8 +38,11 @@ public class InventoryManager : MonoBehaviour
     [HideInInspector] public int itemIndex, maxItemIndex, selectedItem = 0;
     private int buttonIndex, maxButtonIndex, selectedButton = 0;
 
-    [HideInInspector] public bool inMenu = false, givingItem = false;
+    [HideInInspector] public bool isInInventory, inMenu = false, givingItem = false, isDiscarding = false;
     private bool isInventoryDrawn, isInteracting = false;
+
+    private int amount;
+    private GameObject amountPicker;
 
     #endregion
 
@@ -59,6 +62,7 @@ public class InventoryManager : MonoBehaviour
         inventoryContainer = PauseManager.instance.pauseContainer.transform.Find("Inventory").gameObject;
         itemIndicator = inventoryContainer.transform.Find("Indicator").gameObject;
         menuPanel = inventoryContainer.transform.Find("Menu").gameObject;
+        amountPicker = inventoryContainer.transform.Find("Amount Picker").gameObject;
 
         grid = inventoryContainer.transform.Find("Item Grid").transform.GetChildren();
         categoryContainer = inventoryContainer.transform.Find("Categories/Category Icons").GetChildren();
@@ -81,24 +85,51 @@ public class InventoryManager : MonoBehaviour
     {
         OnPause();
 
-        if (Input.GetButtonDown("Interact") && givingItem)
+        if (Input.GetButtonDown("Interact") && givingItem &&!isDiscarding)
         {
             if (GameManager.instance.party.playerParty[PauseManager.instance.slotIndex].heldItem != currentItem)
             {
                 GameManager.instance.party.playerParty[PauseManager.instance.slotIndex].heldItem = currentItem;
                 EditorUtility.SetDirty(GameManager.instance.party.playerParty[PauseManager.instance.slotIndex]); //TODO: Debug
 
-                if (currentItem.amount > 1)
-                    currentItem.amount--;
-                else
-                    inventory.items.Remove(currentItem);
-
-                UpdateInventory();
+                RemoveItem(currentItem);
             }
 
             StartCoroutine(inventoryContainer.FadeOpacity(1f, 0.1f));
             PauseManager.instance.inPartyMenu = false;
             givingItem = false;
+        }
+
+        if (!isDiscarding)
+            amountPicker.SetActive(false);
+
+        if (isDiscarding)
+        {
+            StartCoroutine(DiscardItem(currentItem, amount));
+
+            if (Input.GetAxisRaw("Vertical") != 0)
+            {
+                if (!isInteracting)
+                {
+                    if (Input.GetAxisRaw("Vertical") < 0)
+                    {
+                        if (amount > 1)
+                            amount--;
+                        else
+                            amount = currentItem.amount;
+                    }
+                    else if (Input.GetAxisRaw("Vertical") > 0)
+                    {
+                        if (amount < currentItem.amount)
+                            amount++;
+                        else
+                           amount = 1;
+                    }
+                    isInteracting = true;
+                }
+            }
+            else
+                isInteracting = false;
         }
     }
 
@@ -245,9 +276,9 @@ public class InventoryManager : MonoBehaviour
 
     private void CheckForInput()
     {
-        if (!PauseManager.instance.inPartyMenu)
+        if (!PauseManager.instance.inPartyMenu && !givingItem)
         {
-            if (!inMenu)
+            if (!inMenu && !isDiscarding)
             {
                 if (Input.GetAxisRaw("Horizontal") != 0)
                 {
@@ -365,21 +396,24 @@ public class InventoryManager : MonoBehaviour
                     isInteracting = false;
             }
 
-            if (Input.GetButtonDown("Interact"))
+            if (!isDiscarding)
             {
-                if (!inMenu)
+                if (Input.GetButtonDown("Interact"))
                 {
-                    StartCoroutine(CreateMenu(indicatorAnim));
+                    if (!inMenu)
+                    {
+                        StartCoroutine(CreateMenu(indicatorAnim));
+                    }
                 }
-            }
-            else if (Input.GetButtonUp("Interact") && !inMenu)
-            {
-                indicatorAnim.Rebind();
-            }
+                else if (Input.GetButtonUp("Interact") && !inMenu)
+                {
+                    indicatorAnim.Rebind();
+                }
 
-            if (Input.GetButtonDown("Interact") && inMenu)
-            {
-                StartCoroutine(ChoiceMade());
+                if (Input.GetButtonDown("Interact") && inMenu)
+                {
+                    StartCoroutine(ChoiceMade());
+                }
             }
         }
     }
@@ -435,11 +469,14 @@ public class InventoryManager : MonoBehaviour
         menuPanel.SetActive(false);
         menuPanel.transform.Find("Indicator").gameObject.SetActive(false);
 
-        for (int i = 0; i < grid.Length; i++)
+        if (!isDiscarding)
         {
-            if (grid[i] != grid[selectedItem])
+            for (int i = 0; i < grid.Length; i++)
             {
-                StartCoroutine(grid[i].gameObject.FadeOpacity(1f, 0.1f));
+                if (grid[i] != grid[selectedItem])
+                {
+                    StartCoroutine(grid[i].gameObject.FadeOpacity(1f, 0.1f));
+                }
             }
         }
 
@@ -456,7 +493,7 @@ public class InventoryManager : MonoBehaviour
         DestroyMenu();
         selectedButton = 0; buttonIndex = 0;
     }
-
+    
     public IEnumerator CreateMenuButtons(Item item)
     {
         item = InventoryManager.instance.inventory.items.Find(i => i.id == item.id);
@@ -498,10 +535,10 @@ public class InventoryManager : MonoBehaviour
 
     public void GiveItem(Item item)
     {
-        StartCoroutine(HandOverItem());
+        StartCoroutine(GiveItemRoutine());
     }
 
-    private IEnumerator HandOverItem()
+    private IEnumerator GiveItemRoutine()
     {
         yield return null;
         StartCoroutine(inventoryContainer.FadeOpacity(0.7f, 0.1f));
@@ -550,6 +587,44 @@ public class InventoryManager : MonoBehaviour
 
 
         isInventoryDrawn = true;
+    }
 
+    public IEnumerator DiscardItem(Item item, int amount)
+    {
+        yield return null;
+        amountPicker.transform.position = new Vector2(grid[selectedItem].position.x + 215, grid[selectedItem].position.y);
+        amountPicker.SetActive(true);
+
+        amountPicker.GetComponentInChildren<TextMeshProUGUI>().SetText(amount.ToString());
+
+        //StartCoroutine(ExtensionMethods.waitForInput("Interact"));
+
+        if (Input.GetButtonDown("Interact") && isDiscarding)
+        {
+            RemoveItem(item, amount);
+            for (int i = 0; i < grid.Length; i++)
+            {
+                if (grid[i] != grid[selectedItem])
+                {
+                    StartCoroutine(grid[i].gameObject.FadeOpacity(1f, 0.1f));
+                }
+            }
+            isDiscarding = false;
+            amountPicker.SetActive(false);
+        }
+    }
+
+    public void RemoveItem(Item item, int amount = 1)
+    {
+        if (item.amount > 1 || (item.amount - amount > 0))
+        {
+            item.amount -= amount;
+        }
+        else
+        {
+            inventory.items.Remove(item);
+        }
+
+        UpdateInventory();
     }
 }

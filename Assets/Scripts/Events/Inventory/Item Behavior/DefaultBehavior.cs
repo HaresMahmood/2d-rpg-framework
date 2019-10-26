@@ -9,8 +9,7 @@ public class DefaultBehavior : MonoBehaviour
 {
     public void DiscardItem(Item item)
     {
-        InventoryManager.instance.inventory.items.Remove(item);
-        InventoryManager.instance.UpdateInventory();
+        InventoryManager.instance.isDiscarding = true;
     }
 
     public void GiveItem(Item item)
@@ -21,13 +20,12 @@ public class DefaultBehavior : MonoBehaviour
     public void MakeFavorite(Item item)
     {
         item.isFavorite = !item.isFavorite;
-        //InventoryManager.instance.selectedItem = 0; InventoryManager.instance.itemIndex = 0;
-        InventoryManager.instance.currentItem = item;
         InventoryManager.instance.UpdateInventory();
+        //InventoryManager.instance.currentItem = item;
     }
 
     public void CancelMenu()
     {
-        Debug.Log("Destroying menu.");
+        //Debug.Log("Destroying menu.");
     }
 }
