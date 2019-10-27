@@ -332,7 +332,7 @@ public class PauseManager : MonoBehaviour
             }
             else
             {
-                marker.GetComponent<Image>().color = "848484".ToColor();
+                marker.GetComponent<Image>().color = "696969".ToColor();
             }
         }
         
