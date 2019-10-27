@@ -27,7 +27,6 @@ public class GameManager : MonoBehaviour
 
     [UnityEngine.Header("Player Data")]
     public string playerName = "Hilliard";
-    public Party party;
 
     public GameObject[] customizableElements;
 

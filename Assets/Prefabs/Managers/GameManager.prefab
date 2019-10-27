@@ -63,6 +63,51 @@ Transform:
   m_Father: {fileID: 267685611436356901}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &580097946109288166
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1281012373029174089}
+  - component: {fileID: 1250590200143088598}
+  m_Layer: 0
+  m_Name: PartyManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1281012373029174089
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 580097946109288166}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 481548375044098156}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1250590200143088598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 580097946109288166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de58ecb25fc96f54ab94d97098f9fc6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  party: {fileID: 0}
+  partyContainer: {fileID: 0}
 --- !u!1 &1588163222089477265
 GameObject:
   m_ObjectHideFlags: 0
@@ -92,6 +137,7 @@ Transform:
   m_Children:
   - {fileID: 6834575018846982040}
   - {fileID: 5411629645143428498}
+  - {fileID: 1281012373029174089}
   m_Father: {fileID: 6002379217965659316}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -172,6 +218,10 @@ MonoBehaviour:
   pauseContainer: {fileID: 0}
   isPaused: 0
   inPartyMenu: 0
+  isInteracting: 0
+  slotIndex: 0
+  maxSlotIndex: 0
+  selectedSlot: 0
 --- !u!1 &4563878083279935505
 GameObject:
   m_ObjectHideFlags: 0
@@ -327,9 +377,10 @@ MonoBehaviour:
   player: {fileID: 0}
   playerTag: Player
   activePlayer: {fileID: 0}
+  accentColor: {r: 0.31764707, g: 0.7607843, b: 0.9882353, a: 1}
   playerInRange: 0
   playerName: Hilliard
-  party: {fileID: 0}
+  customizableElements: []
 --- !u!114 &7727496629757164840
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -465,15 +516,16 @@ MonoBehaviour:
   menuButtonPrefab: {fileID: 2042213031241034387, guid: f7c192d6a4a58cc4084a1be14bafc297,
     type: 3}
   inventoryContainer: {fileID: 0}
-  categoryAnim: {fileID: 0}
+  grid: []
+  categoryContainer: []
   indicatorAnim: {fileID: 0}
   rightAnim: {fileID: 0}
   leftAnim: {fileID: 0}
-  itemIndex: 0
-  maxItemIndex: 0
-  selectedItem: 0
-  inMenu: 0
-  givingItem: 0
+  currentItem: {fileID: 0}
+  isActive: 0
+  inContextMenu: 0
+  isGivingItem: 0
+  isDiscardingItem: 0
 --- !u!114 &1351163362760467619
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -559,11 +611,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7423616054217241068}
     m_Modifications:
-    - target: {fileID: 7579663957560267640, guid: 43cbb708e67c857409518d8ddde5fe37,
-        type: 3}
-      propertyPath: m_Name
-      value: Default
-      objectReference: {fileID: 0}
     - target: {fileID: 1053698646842173833, guid: 43cbb708e67c857409518d8ddde5fe37,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -618,6 +665,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7579663957560267640, guid: 43cbb708e67c857409518d8ddde5fe37,
+        type: 3}
+      propertyPath: m_Name
+      value: Default
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 43cbb708e67c857409518d8ddde5fe37, type: 3}
@@ -634,11 +686,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7423616054217241068}
     m_Modifications:
-    - target: {fileID: 4393373215081512009, guid: 9a4a35e1ee815e94aba492035bbaaf48,
-        type: 3}
-      propertyPath: m_Name
-      value: Health
-      objectReference: {fileID: 0}
     - target: {fileID: 5936161408528348728, guid: 9a4a35e1ee815e94aba492035bbaaf48,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -693,6 +740,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4393373215081512009, guid: 9a4a35e1ee815e94aba492035bbaaf48,
+        type: 3}
+      propertyPath: m_Name
+      value: Health
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9a4a35e1ee815e94aba492035bbaaf48, type: 3}

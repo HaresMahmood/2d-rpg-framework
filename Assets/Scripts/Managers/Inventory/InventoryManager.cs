@@ -32,7 +32,8 @@ public class InventoryManager : MonoBehaviour
     private List<Item> categoryItems;
     private string[] categories = new string[] { "Key", "Health", "PokéBall", "Battle", "TM", "Berry", "Other" };
     private string currentCategory;
-    private int selectedSlot = 0, totalSlots, selectedCategory = 0, selectedMenuButton = 0, totalMenuButtons, counter, amount;
+    [HideInInspector] public int selectedSlot = 0;
+    private int totalSlots, selectedCategory = 0, selectedMenuButton = 0, totalMenuButtons, counter, amount;
 
     [HideInInspector] public bool isActive, inContextMenu = false, isGivingItem = false, isDiscardingItem = false;
     private bool isInventoryDrawn, isInteracting = false, isDirty = false;
@@ -82,10 +83,10 @@ public class InventoryManager : MonoBehaviour
 
         if (Input.GetButtonDown("Interact") && isGivingItem &&!isDiscardingItem)
         {
-            if (GameManager.instance.party.playerParty[PauseManager.instance.slotIndex].heldItem != currentItem)
+            if (PartyManager.instance.party.playerParty[PauseManager.instance.selectedSlot].heldItem != currentItem)
             {
-                GameManager.instance.party.playerParty[PauseManager.instance.slotIndex].heldItem = currentItem;
-                EditorUtility.SetDirty(GameManager.instance.party.playerParty[PauseManager.instance.slotIndex]); //TODO: Debug
+                PartyManager.instance.party.playerParty[PauseManager.instance.selectedSlot].heldItem = currentItem;
+                EditorUtility.SetDirty(PartyManager.instance.party.playerParty[PauseManager.instance.selectedSlot]); //TODO: Debug
 
                 RemoveItem(currentItem);
             }
@@ -154,7 +155,14 @@ public class InventoryManager : MonoBehaviour
 
             if (!PauseManager.instance.inPartyMenu)
             {
-                itemIndicator.transform.position = grid[selectedSlot].position;
+                if (selectedSlot > -1)
+                {
+                    itemIndicator.transform.position = grid[selectedSlot].position;
+                }
+                else
+                {
+                    itemIndicator.transform.position = grid[0].position;
+                }
                 if (!itemIndicator.activeSelf && !inContextMenu)
                 {
                     itemIndicator.SetActive(true);
@@ -167,7 +175,14 @@ public class InventoryManager : MonoBehaviour
 
             if (categoryItems.Count > 0)
             {
-                currentItem = categoryItems[selectedSlot];
+                if (selectedSlot > -1)
+                {
+                    currentItem = categoryItems[selectedSlot];
+                }
+                else
+                {
+                    currentItem = categoryItems[0];
+                }
             }
 
             inventoryContainer.SetActive(true);
@@ -264,7 +279,7 @@ public class InventoryManager : MonoBehaviour
 
     private void CheckForInput()
     {
-        if (!PauseManager.instance.inPartyMenu && !isGivingItem)
+        if (isActive && !PauseManager.instance.inPartyMenu && !isGivingItem)
         {
             if (!inContextMenu && !isDiscardingItem)
             {
@@ -285,8 +300,7 @@ public class InventoryManager : MonoBehaviour
                                 selectedSlot--;
                             else
                             {
-                                FadeInventory(0.5f);
-                                PauseManager.instance.inPartyMenu = true;
+                                selectedSlot = -1;
                             }
                         }
                         isInteracting = true;

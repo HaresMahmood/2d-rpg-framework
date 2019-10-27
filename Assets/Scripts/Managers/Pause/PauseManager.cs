@@ -22,7 +22,7 @@ public class PauseManager : MonoBehaviour
 
     [HideInInspector] public bool isPaused, inPartyMenu = false, isInteracting = false;
 
-    [HideInInspector] public int slotIndex, maxSlotIndex, selectedSlot = 0;
+    [HideInInspector] public int selectedSlot, totalSlots;
 
     private bool isDrawingParty = false, isResetingInventory = false, isAnimating = false;
     private string[] menus = new string[] { "Missions", "Party", "Inventory", "System"};
@@ -97,23 +97,23 @@ public class PauseManager : MonoBehaviour
 
         if (inPartyMenu)
         {
-            for (int i = 0; i < GameManager.instance.party.playerParty.Count; i++)
+            for (int i = 0; i < PartyManager.instance.party.playerParty.Count; i++)
             {
-                if (i != slotIndex)
+                if (i != selectedSlot)
                 {
                     StartCoroutine(AnimateSlots(i, false));
                 }
                 else
                 {
                     StartCoroutine(AnimateSlots(i, true));
-                    party[slotIndex].Find("Information").gameObject.SetActive(true);
+                    party[selectedSlot].Find("Information").gameObject.SetActive(true);
                 }
             }
         }
         else
         {
             isAnimating = true;
-            party[slotIndex].GetComponent<Animator>().SetBool("isSelected", false);
+            party[selectedSlot].GetComponent<Animator>().SetBool("isSelected", false);
             indicator.SetActive(false);
         }
     }
@@ -129,7 +129,7 @@ public class PauseManager : MonoBehaviour
 
             if (inPartyMenu)
             {
-                if (slotIndex > (GameManager.instance.party.playerParty.Count - 1))
+                if (selectedSlot > (PartyManager.instance.party.playerParty.Count - 1))
                 {
                     indicator.transform.Find("Party Indicator").gameObject.SetActive(false);
                     indicator.transform.position = sidePanel.transform.Find("Edit").position;
@@ -138,7 +138,7 @@ public class PauseManager : MonoBehaviour
                 else
                 {
                     indicator.transform.Find("Edit Indicator").gameObject.SetActive(false);
-                    indicator.transform.position = new Vector2(indicator.transform.position.x, party[slotIndex].position.y);
+                    indicator.transform.position = new Vector2(indicator.transform.position.x, party[selectedSlot].position.y);
                     indicator.transform.Find("Party Indicator").gameObject.SetActive(true);
                 }
 
@@ -161,9 +161,9 @@ public class PauseManager : MonoBehaviour
             //{
             int currentSlot = 0;
 
-            for (int i = 0; i < GameManager.instance.party.playerParty.Count; i++)
+            for (int i = 0; i < PartyManager.instance.party.playerParty.Count; i++)
             {
-                Pokemon pokemon = GameManager.instance.party.playerParty[i];
+                Pokemon pokemon = PartyManager.instance.party.playerParty[i];
                 currentSlot = i;
 
                 party[currentSlot].Find("Pokémon").GetComponent<Image>().sprite = pokemon.menuSprite;
@@ -178,7 +178,7 @@ public class PauseManager : MonoBehaviour
                 party[currentSlot].Find("Information/Level/Level").GetComponent<TextMeshProUGUI>().SetText(pokemon.level.ToString());
             }
 
-            if (GameManager.instance.party.playerParty.Count < 6)
+            if (PartyManager.instance.party.playerParty.Count < 6)
             {
                 for (int i = currentSlot++; i < party.Length; i++)
                 {
@@ -219,30 +219,33 @@ public class PauseManager : MonoBehaviour
 
     public void CheckForInput()
     {
-        maxSlotIndex = GameManager.instance.party.playerParty.Count;
+        totalSlots = PartyManager.instance.party.playerParty.Count;
 
         if (Input.GetAxisRaw("Vertical") != 0)
         {
-            isAnimating = true;
-            if (!isInteracting)
+            if (inPartyMenu)
             {
-                if (Input.GetAxisRaw("Vertical") < 0)
+                isAnimating = true;
+                if (!isInteracting)
                 {
-                    if (slotIndex < maxSlotIndex)
-                        slotIndex++;
-                    else
-                        slotIndex = 0;
-                }
-                else if (Input.GetAxisRaw("Vertical") > 0)
-                {
-                    if (slotIndex > 0)
-                        slotIndex--;
-                    else
+                    if (Input.GetAxisRaw("Vertical") < 0)
                     {
-                        slotIndex = maxSlotIndex;
+                        if (selectedSlot < totalSlots)
+                            selectedSlot++;
+                        else
+                            selectedSlot = 0;
                     }
+                    else if (Input.GetAxisRaw("Vertical") > 0)
+                    {
+                        if (selectedSlot > 0)
+                            selectedSlot--;
+                        else
+                        {
+                            selectedSlot = totalSlots;
+                        }
+                    }
+                    isInteracting = true;
                 }
-                isInteracting = true;
             }
         }
         else if (Input.GetAxisRaw("Horizontal") != 0)
@@ -252,16 +255,36 @@ public class PauseManager : MonoBehaviour
             {
                 if (Input.GetAxisRaw("Horizontal") > 0)
                 {
-                    InventoryManager.instance.FadeInventory(1f);
-                    if (InventoryManager.instance.isGivingItem)
+                    if (InventoryManager.instance.isActive)
                     {
-                        InventoryManager.instance.isGivingItem = false;
+                        InventoryManager.instance.FadeInventory(1f);
+                        if (InventoryManager.instance.isGivingItem)
+                        {
+                            InventoryManager.instance.isGivingItem = false;
+                        }
+                    }
+                    else if (PartyManager.instance.isActive)
+                    {
+                        PartyManager.instance.Fade(1f);
                     }
                     inPartyMenu = false;
+                    //selectedSlot = 0;
                 }
                 else if (Input.GetAxisRaw("Horizontal") < 0)
                 {
-                    //Debug.Log("Reached end of screen in PAUSEMANAGER");
+                    if (InventoryManager.instance.isActive)
+                    {
+                        if (InventoryManager.instance.selectedSlot == -1)
+                        {
+                            InventoryManager.instance.FadeInventory(0.5f);
+                            inPartyMenu = true;
+                        }
+                    }
+                    else if (PartyManager.instance.isActive)
+                    {
+                        PartyManager.instance.Fade(0.5f);
+                        inPartyMenu = true;
+                    }
                 }
                 isInteracting = true;
             }
@@ -270,6 +293,24 @@ public class PauseManager : MonoBehaviour
         {
             if (!isInteracting)
             {
+                if (inPartyMenu)
+                {
+                    if (InventoryManager.instance.isActive)
+                    {
+                        InventoryManager.instance.FadeInventory(1f);
+                        if (InventoryManager.instance.isGivingItem)
+                        {
+                            InventoryManager.instance.isGivingItem = false;
+                        }
+                    }
+                    else if (PartyManager.instance.isActive)
+                    {
+                        PartyManager.instance.Fade(1f);
+                    }
+                    inPartyMenu = false;
+                    //selectedSlot = 0;
+                }
+
                 if (Input.GetAxisRaw("Face Trigger") > 0)
                 {
                     StartCoroutine(AnimateText());
@@ -359,14 +400,16 @@ public class PauseManager : MonoBehaviour
         if (currentMenu == menus[0])
         {
             //Debug.Log("PAUSE MANAGER: Mission screen active.");
-            InventoryManager.instance.inventoryContainer.SetActive(false);
+            //InventoryManager.instance.inventoryContainer.SetActive(false);
             InventoryManager.instance.isActive = false;
+            PartyManager.instance.isActive = false;
         }
         else if (currentMenu == menus[1])
         {
             //Debug.Log("PAUSE MANAGER: Pause active.");
             //InventoryManager.instance.inventoryContainer.SetActive(false);
             InventoryManager.instance.isActive = false;
+            PartyManager.instance.isActive = true;
 
             pauseAnimator.SetBool("isInInventory", false);
             pauseAnimator.SetBool("isInParty", true);
@@ -376,7 +419,8 @@ public class PauseManager : MonoBehaviour
         }
         else if (currentMenu == menus[2])
         {
-            InventoryManager.instance.inventoryContainer.SetActive(true);
+            //InventoryManager.instance.inventoryContainer.SetActive(true);
+            PartyManager.instance.isActive = false;
             InventoryManager.instance.isActive = true;
 
             spriteAnimator.SetBool("isInInventory", true);
@@ -389,8 +433,9 @@ public class PauseManager : MonoBehaviour
         else if (currentMenu == menus[3])
         {
             //Debug.Log("PAUSE MANAGER: System screen active.");
-            InventoryManager.instance.inventoryContainer.SetActive(false);
+            //InventoryManager.instance.inventoryContainer.SetActive(false);
             InventoryManager.instance.isActive = false;
+            PartyManager.instance.isActive = false;
         }
     }
 }
