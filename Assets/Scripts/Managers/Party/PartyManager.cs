@@ -17,8 +17,8 @@ public class PartyManager : MonoBehaviour
     [UnityEngine.Header("Setup")]
     public Party party;
 
-    [HideInInspector] public GameObject partyContainer;
-    private GameObject informationContainer, movesContainer, indicator;
+    [HideInInspector] public GameObject partyContainer, indicator;
+    private GameObject informationContainer, movesContainer;
     private Transform[] movePanels;
     private Pokemon currentPokemon;
     private Move currentMove;
@@ -70,7 +70,7 @@ public class PartyManager : MonoBehaviour
         indicator.transform.position = movePanels[selectedMove].position;
         if (PauseManager.instance.inPartyMenu)
         {
-            //indicator.SetActive(false);
+            indicator.SetActive(false);
         }
 
         CheckForInput();
@@ -87,6 +87,7 @@ public class PartyManager : MonoBehaviour
         {
             DrawMove(i, currentPokemon.learnedMoves[i]);
         }
+        DrawSprite(currentPokemon);
         //    isDrawing = true;
         //}
     }
@@ -146,6 +147,7 @@ public class PartyManager : MonoBehaviour
 
         info.Find("Name").GetComponent<TextMeshProUGUI>().SetText(learnedMove.move.name);
         info.Find("Typing/Typing").GetComponent<TextMeshProUGUI>().SetText(learnedMove.move.type.ToString());
+        info.Find("Typing/Typing").GetComponent<TextMeshProUGUI>().color = learnedMove.move.UIColor;
         info.Find("PP/PP").GetComponent<TextMeshProUGUI>().SetText(learnedMove.remainingPp.ToString() + "/" + learnedMove.move.pp);
         if (learnedMove.move.category == Move.Category.Physical)
         {
@@ -162,6 +164,12 @@ public class PartyManager : MonoBehaviour
         description.GetComponent<TextMeshProUGUI>().SetText(learnedMove.move.description);
 
         movePanels[selectedMove].GetComponent<Image>().color = learnedMove.move.UIColor;
+    }
+
+    private void DrawSprite(Pokemon pokemon)
+    {
+        PauseManager.instance.pauseContainer.transform.Find("Target Sprite/Pokémon/Sprite").GetComponent<Image>().sprite = pokemon.frontSprite;
+        PauseManager.instance.pauseContainer.transform.Find("Target Sprite/Pokémon/Sprite").GetComponent<Image>().SetNativeSize();
     }
 
     public void Fade(float opacity)

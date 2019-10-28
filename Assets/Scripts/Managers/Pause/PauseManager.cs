@@ -266,6 +266,7 @@ public class PauseManager : MonoBehaviour
                     else if (PartyManager.instance.isActive)
                     {
                         PartyManager.instance.Fade(1f);
+                        PartyManager.instance.indicator.SetActive(true);
                     }
                     inPartyMenu = false;
                     //selectedSlot = 0;
