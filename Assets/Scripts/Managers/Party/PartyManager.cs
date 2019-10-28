@@ -64,7 +64,7 @@ public class PartyManager : MonoBehaviour
             currentPokemon = party.playerParty[PauseManager.instance.selectedSlot];
         }
 
-        currentMove = currentPokemon.moves[selectedMove];
+        currentMove = currentPokemon.learnedMoves[selectedMove].move;
         DrawParty(currentPokemon);
 
         indicator.transform.position = movePanels[selectedMove].position;
@@ -85,7 +85,7 @@ public class PartyManager : MonoBehaviour
         DrawInformation(pokemon);
         for (int i = 0; i < movePanels.Length; i++)
         {
-            DrawMove(i, currentPokemon.moves[i]);
+            DrawMove(i, currentPokemon.learnedMoves[i]);
         }
         //    isDrawing = true;
         //}
@@ -100,35 +100,68 @@ public class PartyManager : MonoBehaviour
         generalInfo.Find("Name/Name").GetComponent<TextMeshProUGUI>().SetText(pokemon.name);
         generalInfo.Find("Name/Dex Information/Information").GetComponent<TextMeshProUGUI>().SetText(pokemon.category.ToUpper() + " <color=#696969>POKÉMON  -  #</color>00" + pokemon.id);
         generalInfo.Find("Status/Status Ailment").GetComponent<TextMeshProUGUI>().SetText(pokemon.status.ToString());
+        switch (pokemon.status)
+        {
+            case Pokemon.Status.Paralyzed:
+                {
+                    generalInfo.Find("Status/Status Ailment").GetComponent<TextMeshProUGUI>().color = "FCFF83".ToColor();
+                    break;
+                }
+            case Pokemon.Status.Burned:
+                {
+                    generalInfo.Find("Status/Status Ailment").GetComponent<TextMeshProUGUI>().color = "FF9D83".ToColor();
+                    break;
+                }
+            case Pokemon.Status.Frozen:
+                {
+                    generalInfo.Find("Status/Status Ailment").GetComponent<TextMeshProUGUI>().color = "A0FCFF".ToColor();
+                    break;
+                }
+            case Pokemon.Status.Poisoned:
+                {
+                    generalInfo.Find("Status/Status Ailment").GetComponent<TextMeshProUGUI>().color = "F281FF".ToColor();
+                    break;
+                }
+            case Pokemon.Status.Asleep:
+                {
+                    generalInfo.Find("Status/Status Ailment").GetComponent<TextMeshProUGUI>().color = "B0B0B0".ToColor();
+                    break;
+                }
+            default:
+                {
+                    generalInfo.Find("Status/Status Ailment").GetComponent<TextMeshProUGUI>().color = Color.white;
+                    break;
+                }
+        }
         progress.Find("Level/Level").GetComponent<TextMeshProUGUI>().SetText(pokemon.level.ToString());
         item.Find("Item Name").GetComponent<TextMeshProUGUI>().SetText(pokemon.heldItem.name);
         item.Find("Item Sprite").GetComponent<Image>().sprite = pokemon.heldItem.sprite;
     }
 
-    private void DrawMove(int selectedMove, Move move)
+    private void DrawMove(int selectedMove, Pokemon.LearnedMove learnedMove)
     {
         Transform info = movePanels[selectedMove].transform.Find("Information");
         Transform stats = movePanels[selectedMove].transform.Find("Stats");
         Transform description = movePanels[selectedMove].transform.Find("Description/Description");
 
-        info.Find("Name").GetComponent<TextMeshProUGUI>().SetText(move.name);
-        info.Find("Typing/Typing");
-        info.Find("PP/PP").GetComponent<TextMeshProUGUI>().SetText(move.remaindingPP.ToString() + "/" + move.pp);
-        if (move.category == Move.Category.Physical)
+        info.Find("Name").GetComponent<TextMeshProUGUI>().SetText(learnedMove.move.name);
+        info.Find("Typing/Typing").GetComponent<TextMeshProUGUI>().SetText(learnedMove.move.type.ToString());
+        info.Find("PP/PP").GetComponent<TextMeshProUGUI>().SetText(learnedMove.remainingPp.ToString() + "/" + learnedMove.move.pp);
+        if (learnedMove.move.category == Move.Category.Physical)
         {
             stats.Find("Category/Category/Physical").gameObject.SetActive(true);
             stats.Find("Category/Category/Special").gameObject.SetActive(false);
         }
-        else if (move.category == Move.Category.Special)
+        else if (learnedMove.move.category == Move.Category.Special)
         {
             stats.Find("Category/Category/Special").gameObject.SetActive(true);
             stats.Find("Category/Category/Physical").gameObject.SetActive(false);
         }
-        stats.Find("Accuracy/Accuracy").GetComponent<TextMeshProUGUI>().SetText(move.accuracy.ToString());
-        stats.Find("Power/Power").GetComponent<TextMeshProUGUI>().SetText(move.power.ToString());
-        description.GetComponent<TextMeshProUGUI>().SetText(move.description);
+        stats.Find("Accuracy/Accuracy").GetComponent<TextMeshProUGUI>().SetText(learnedMove.move.accuracy.ToString());
+        stats.Find("Power/Power").GetComponent<TextMeshProUGUI>().SetText(learnedMove.move.power.ToString());
+        description.GetComponent<TextMeshProUGUI>().SetText(learnedMove.move.description);
 
-        movePanels[selectedMove].GetComponent<Image>().color = move.UIColor;
+        movePanels[selectedMove].GetComponent<Image>().color = learnedMove.move.UIColor;
     }
 
     public void Fade(float opacity)

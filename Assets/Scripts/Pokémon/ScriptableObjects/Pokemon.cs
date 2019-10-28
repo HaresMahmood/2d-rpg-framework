@@ -14,9 +14,16 @@ public class Pokemon : ScriptableObject
     public Sprite menuSprite;
     public Type primaryType;
     public Type secondaryType;
-    public List<Move> moves = new List<Move>();
+    public List<LearnedMove> learnedMoves = new List<LearnedMove>();
     public Status status;
     public Item heldItem;
+
+    [System.Serializable]
+    public class LearnedMove
+    {
+        public Move move;
+        public int remainingPp;
+    }
 
     public enum Type
     {
