@@ -23,7 +23,8 @@ public class PartyManager : MonoBehaviour
     private Pokemon currentPokemon;
     private Move currentMove;
 
-    private int selectedMove, totalMoves;
+    [HideInInspector] public int selectedMove;
+    private int totalMoves;
 
     [HideInInspector] public bool isActive;
     private bool isInteracting = false, isDrawing = false;
@@ -187,7 +188,7 @@ public class PartyManager : MonoBehaviour
         StartCoroutine(PauseManager.instance.pauseContainer.transform.Find("Target Sprite").gameObject.FadeOpacity(opacity, 0.1f));
     }
 
-    private void SelectMove()
+    public void SelectMove()
     {
         indicator.SetActive(false);
 

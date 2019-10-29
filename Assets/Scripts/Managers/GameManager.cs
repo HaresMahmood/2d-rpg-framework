@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -21,6 +22,8 @@ public class GameManager : MonoBehaviour
     public string playerTag = "Player";
     public Transform activePlayer;
     public Color accentColor = "51C2FC".ToColor();
+    public TMP_FontAsset dyslexiaFont;
+    public bool dyslexiaMode;
 
     [UnityEngine.Header("Global Data")]
     public bool playerInRange;
@@ -61,6 +64,15 @@ public class GameManager : MonoBehaviour
         foreach (GameObject element in customizableElements)
         {
             StartCoroutine(element.FadeColor(accentColor, 0.000000001f));
+        }
+
+        if (dyslexiaMode)
+        {
+            TextMeshProUGUI[] textElements = FindObjectsOfType<TextMeshProUGUI>();
+            foreach (TextMeshProUGUI element in textElements)
+            {
+                element.font = dyslexiaFont;
+            }
         }
     }
 

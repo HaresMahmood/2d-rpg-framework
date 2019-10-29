@@ -228,6 +228,15 @@ public class PauseManager : MonoBehaviour
                 isAnimating = true;
                 if (!isInteracting)
                 {
+                    if (PartyManager.instance.isActive)
+                    {
+                        if (PartyManager.instance.selectedMove != 0)
+                        {
+                            PartyManager.instance.selectedMove = 0;
+                            PartyManager.instance.SelectMove();
+                        }
+                    }
+                    
                     if (Input.GetAxisRaw("Vertical") < 0)
                     {
                         if (selectedSlot < totalSlots)
