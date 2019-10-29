@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -31,7 +32,7 @@ public class GameManager : MonoBehaviour
     [UnityEngine.Header("Player Data")]
     public string playerName = "Hilliard";
 
-    public GameObject[] customizableElements;
+    private Color initialColor;
 
     [System.Serializable]
     public class Settings
@@ -52,6 +53,8 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
+
+        initialColor = accentColor;
     }
 
     private void Update()
@@ -61,9 +64,25 @@ public class GameManager : MonoBehaviour
 
     private void ApplySettings()
     {
-        foreach (GameObject element in customizableElements)
+        if (initialColor != accentColor)
         {
-            StartCoroutine(element.FadeColor(accentColor, 0.000000001f));
+            initialColor = accentColor;
+            TextMeshProUGUI[] textElements = Resources.FindObjectsOfTypeAll<TextMeshProUGUI>();
+            foreach (TextMeshProUGUI element in textElements)
+            {
+                if (element.CompareTag("Customizable"))
+                {
+                    element.color = accentColor;
+                }
+            }
+            Image[] imageElements = Resources.FindObjectsOfTypeAll<Image>();
+            foreach (Image element in imageElements)
+            {
+                if (element.CompareTag("Customizable"))
+                {
+                    element.color = accentColor;
+                }
+            }
         }
 
         if (dyslexiaMode)

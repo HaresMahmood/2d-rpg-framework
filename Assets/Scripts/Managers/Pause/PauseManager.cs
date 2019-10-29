@@ -66,7 +66,6 @@ public class PauseManager : MonoBehaviour
     private void Update()
     {
         TogglePause();
-
         UpdateMenu();
     }
 
