@@ -315,10 +315,27 @@ public class PauseManager : MonoBehaviour
                     }
                     else if (PartyManager.instance.isActive)
                     {
+                        PartyManager.instance.SelectMove();
                         PartyManager.instance.Fade(1f);
+
                     }
                     inPartyMenu = false;
                     //selectedSlot = 0;
+                }
+
+                //if (InventoryManager.instance.isActive || PartyManager.instance.isActive)
+                for (int i = 0; i < PartyManager.instance.party.playerParty.Count; i++)
+                {
+                    Transform slot = party[i];
+                    GameObject heldItem = slot.Find("Held Item").gameObject;
+                    if (InventoryManager.instance.isActive)
+                    {
+                        StartCoroutine(heldItem.FadeOpacity(0f, 0.15f));
+                    }
+                    else if (PartyManager.instance.isActive)
+                    {
+                        StartCoroutine(heldItem.FadeOpacity(1f, 0.15f));
+                    }
                 }
 
                 if (Input.GetAxisRaw("Face Trigger") > 0)
@@ -400,13 +417,11 @@ public class PauseManager : MonoBehaviour
             nextMenu = 0;
         }
 
-        //Debug.Log(previousMenu);
-        //Debug.Log(nextMenu);
-
         topPanel.transform.Find("Navigation/Current").GetComponentInChildren<TextMeshProUGUI>().SetText(currentMenu);
         topPanel.transform.Find("Navigation/Previous").GetComponentInChildren<TextMeshProUGUI>().SetText(menus[previousMenu]);
         topPanel.transform.Find("Navigation/Next").GetComponentInChildren<TextMeshProUGUI>().SetText(menus[nextMenu]);
 
+        
         if (currentMenu == menus[0])
         {
             //Debug.Log("PAUSE MANAGER: Mission screen active.");
