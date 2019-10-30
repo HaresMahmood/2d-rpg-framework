@@ -232,7 +232,7 @@ public class PauseManager : MonoBehaviour
                         if (PartyManager.instance.selectedMove != 0)
                         {
                             PartyManager.instance.selectedMove = 0;
-                            PartyManager.instance.SelectMove();
+                            StartCoroutine(PartyManager.instance.AnimateMove(PartyManager.instance.totalMoves, PartyManager.instance.selectedMove));
                         }
                     }
                     
@@ -314,7 +314,7 @@ public class PauseManager : MonoBehaviour
                     }
                     else if (PartyManager.instance.isActive)
                     {
-                        PartyManager.instance.SelectMove();
+                        StartCoroutine(PartyManager.instance.AnimateMove(PartyManager.instance.selectedMove - 1, PartyManager.instance.selectedMove));
                         PartyManager.instance.Fade(1f);
 
                     }

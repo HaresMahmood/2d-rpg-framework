@@ -23,8 +23,7 @@ public class PartyManager : MonoBehaviour
     private Pokemon currentPokemon;
     private Move currentMove;
 
-    [HideInInspector] public int selectedMove;
-    private int totalMoves;
+    [HideInInspector] public int selectedMove, totalMoves;
 
     [HideInInspector] public bool isActive;
     private bool isInteracting = false, isDrawing = false;
@@ -69,6 +68,7 @@ public class PartyManager : MonoBehaviour
         DrawParty(currentPokemon);
 
         indicator.transform.position = movePanels[selectedMove].position;
+        indicator.GetComponent<RectTransform>().sizeDelta = movePanels[selectedMove].GetComponent<RectTransform>().sizeDelta;
         if (PauseManager.instance.inPartyMenu)
         {
             indicator.SetActive(false);
@@ -188,25 +188,38 @@ public class PartyManager : MonoBehaviour
         StartCoroutine(PauseManager.instance.pauseContainer.transform.Find("Target Sprite").gameObject.FadeOpacity(opacity, 0.1f));
     }
 
-    public void SelectMove()
+    public IEnumerator AnimateMove(int lastMove, int currentMove)
     {
         indicator.SetActive(false);
 
+        
         foreach (Transform move in movePanels)
         {
             if (Array.IndexOf(movePanels, move) == selectedMove)
             {
                 move.Find("Stats").gameObject.SetActive(true);
+                StartCoroutine(move.Find("Stats").gameObject.FadeOpacity(1f, 0.3f));
                 move.Find("Description").gameObject.SetActive(true);
+                StartCoroutine(move.Find("Description").gameObject.FadeOpacity(1f, 0.3f));
             }
             else
             {
                 move.Find("Stats").gameObject.SetActive(false);
+                move.Find("Stats").GetComponent<CanvasGroup>().alpha = 0;
                 move.Find("Description").gameObject.SetActive(false);
+                move.Find("Description").GetComponent<CanvasGroup>().alpha = 0;
             }
         }
+        
+        /*
+        movePanels[currentMove].GetComponent<Animator>().SetBool("isActive", true);
+        movePanels[lastMove].GetComponent<Animator>().SetBool("isActive", false);
+        yield return new WaitForSecondsRealtime(0.10f);
+        */
 
         LayoutRebuilder.ForceRebuildLayoutImmediate(movesContainer.GetComponent<RectTransform>());
+
+        yield return new WaitForSecondsRealtime(0.10f);
 
         if (!PauseManager.instance.inPartyMenu)
         {
@@ -227,20 +240,28 @@ public class PartyManager : MonoBehaviour
                     if (Input.GetAxisRaw("Vertical") < 0)
                     {
                         if (selectedMove < totalMoves)
+                        {
                             selectedMove++;
+                            StartCoroutine(AnimateMove(selectedMove - 1, selectedMove));
+                        }
                         else
+                        {
                             selectedMove = 0;
-
-                        SelectMove();
+                            StartCoroutine(AnimateMove(totalMoves, selectedMove));
+                        }
                     }
                     else if (Input.GetAxisRaw("Vertical") > 0)
                     {
                         if (selectedMove > 0)
+                        {
                             selectedMove--;
+                            StartCoroutine(AnimateMove(selectedMove + 1, selectedMove));
+                        }
                         else
+                        {
                             selectedMove = totalMoves;
-
-                        SelectMove();
+                            StartCoroutine(AnimateMove(0, totalMoves));
+                        }
                     }
                     isInteracting = true;
                 }
