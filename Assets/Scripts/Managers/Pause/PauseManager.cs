@@ -231,8 +231,8 @@ public class PauseManager : MonoBehaviour
                     {
                         if (PartyManager.instance.selectedMove != 0)
                         {
-                            PartyManager.instance.selectedMove = 0;
                             StartCoroutine(PartyManager.instance.AnimateMove(PartyManager.instance.totalMoves, PartyManager.instance.selectedMove));
+                            PartyManager.instance.selectedMove = 0;
                         }
                     }
                     

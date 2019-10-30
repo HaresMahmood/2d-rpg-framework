@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,7 +20,7 @@ public class PartyManager : MonoBehaviour
 
     [HideInInspector] public GameObject partyContainer, indicator;
     private GameObject informationContainer, movesContainer;
-    private Transform[] movePanels;
+    private Transform[] movePanels, movePositioners;
     private Pokemon currentPokemon;
     private Move currentMove;
 
@@ -51,7 +52,9 @@ public class PartyManager : MonoBehaviour
         movesContainer = partyContainer.transform.Find("Moves").gameObject;
         indicator = partyContainer.transform.Find("Indicator").gameObject;
 
-        movePanels = movesContainer.transform.GetChildren();
+        Transform[] panelContainers = movesContainer.transform.GetChildren();
+        movePanels = panelContainers.Where((x, i) => i % 2 == 0).ToArray();
+        movePositioners = panelContainers.Where((x, i) => i % 2 != 0).ToArray();
     }
 
     /// <summary>
@@ -83,6 +86,10 @@ public class PartyManager : MonoBehaviour
     {
         //if (!isDrawing)
         //{
+        //foreach (Transform move in movePanels)
+        //{
+        //    move.position = new Vector2(move.position.x, movePositioners[Array.IndexOf(movePanels, move)].position.y);
+        //}
         DrawInformation(pokemon);
         for (int i = 0; i < movePanels.Length; i++)
         {
@@ -192,11 +199,15 @@ public class PartyManager : MonoBehaviour
     {
         indicator.SetActive(false);
 
-        
-        foreach (Transform move in movePanels)
+        for (int i = 0; i < totalMoves + 1; i++)
         {
+            Transform move = movePanels[i];
+            Transform positioner = movePositioners[i];
             if (Array.IndexOf(movePanels, move) == selectedMove)
             {
+                positioner.Find("Stats").gameObject.SetActive(true);
+                positioner.Find("Description").gameObject.SetActive(true);
+                LayoutRebuilder.ForceRebuildLayoutImmediate(movesContainer.GetComponent<RectTransform>());
                 move.Find("Stats").gameObject.SetActive(true);
                 StartCoroutine(move.Find("Stats").gameObject.FadeOpacity(1f, 0.3f));
                 move.Find("Description").gameObject.SetActive(true);
@@ -204,22 +215,23 @@ public class PartyManager : MonoBehaviour
             }
             else
             {
+                positioner.Find("Stats").gameObject.SetActive(false);
+                positioner.Find("Description").gameObject.SetActive(false);
+                LayoutRebuilder.ForceRebuildLayoutImmediate(movesContainer.GetComponent<RectTransform>());
                 move.Find("Stats").gameObject.SetActive(false);
                 move.Find("Stats").GetComponent<CanvasGroup>().alpha = 0;
                 move.Find("Description").gameObject.SetActive(false);
                 move.Find("Description").GetComponent<CanvasGroup>().alpha = 0;
             }
         }
-        
-        /*
-        movePanels[currentMove].GetComponent<Animator>().SetBool("isActive", true);
-        movePanels[lastMove].GetComponent<Animator>().SetBool("isActive", false);
-        yield return new WaitForSecondsRealtime(0.10f);
-        */
 
         LayoutRebuilder.ForceRebuildLayoutImmediate(movesContainer.GetComponent<RectTransform>());
 
-        yield return new WaitForSecondsRealtime(0.10f);
+        movePanels[currentMove].GetComponent<Animator>().SetBool("isActive", true);
+        movePanels[lastMove].GetComponent<Animator>().SetBool("isActive", false);
+
+        yield return new WaitForSecondsRealtime(0.1f);
+        //yield return null;
 
         if (!PauseManager.instance.inPartyMenu)
         {
@@ -229,7 +241,7 @@ public class PartyManager : MonoBehaviour
 
     private void CheckForInput()
     {
-        totalMoves = 3;
+        totalMoves = movePanels.Length - 1;
 
         if (!PauseManager.instance.inPartyMenu)
         {
