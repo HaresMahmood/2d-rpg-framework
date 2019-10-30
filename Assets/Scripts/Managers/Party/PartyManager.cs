@@ -26,8 +26,8 @@ public class PartyManager : MonoBehaviour
 
     [HideInInspector] public int selectedMove, totalMoves;
 
-    [HideInInspector] public bool isActive;
-    private bool isInteracting = false, isDrawing = false;
+    [HideInInspector] public bool isActive, isDrawing = false;
+    private bool isInteracting = false;
 
     #endregion
 
@@ -68,6 +68,7 @@ public class PartyManager : MonoBehaviour
         }
 
         currentMove = currentPokemon.learnedMoves[selectedMove].move;
+
         DrawParty(currentPokemon);
 
         indicator.transform.position = movePanels[selectedMove].position;
@@ -84,26 +85,22 @@ public class PartyManager : MonoBehaviour
 
     private void DrawParty(Pokemon pokemon)
     {
-        //if (!isDrawing)
-        //{
-        //foreach (Transform move in movePanels)
-        //{
-        //    move.position = new Vector2(move.position.x, movePositioners[Array.IndexOf(movePanels, move)].position.y);
-        //}
-        DrawInformation(pokemon);
-        for (int i = 0; i < movePanels.Length; i++)
+        if (!isDrawing)
         {
-            DrawMove(i, currentPokemon.learnedMoves[i]);
+            DrawInformation(pokemon);
+            for (int i = 0; i < movePanels.Length; i++)
+            {
+                DrawMove(i, currentPokemon.learnedMoves[i]);
+            }
+            DrawSprite(currentPokemon);
+            isDrawing = true;
         }
-        DrawSprite(currentPokemon);
-        //    isDrawing = true;
-        //}
     }
 
     private void DrawInformation(Pokemon pokemon)
     {
         Transform generalInfo = informationContainer.transform.Find("General Information");
-        Transform progress = informationContainer.transform.Find("Progress");
+        Transform progress = informationContainer.transform.Find("Progress/Progress");
         Transform item = informationContainer.transform.Find("Held Item/Held Item");
 
         generalInfo.Find("Name/Name").GetComponent<TextMeshProUGUI>().SetText(pokemon.name);
@@ -143,6 +140,10 @@ public class PartyManager : MonoBehaviour
                 }
         }
         progress.Find("Level/Level").GetComponent<TextMeshProUGUI>().SetText(pokemon.level.ToString());
+        progress.Find("Experience/Experience/Exp").GetComponent<TextMeshProUGUI>().SetText(pokemon.exp.ToString());
+        progress.Find("Experience/Experience/To Next").GetComponent<TextMeshProUGUI>().SetText("TO NEXT   " + (pokemon.totalExp - pokemon.exp).ToString());
+        //progress.Find("Experience/Experience/Bar/Amount").GetComponent<RectTransform>().localScale = new Vector2((pokemon.exp / pokemon.totalExp), 1);
+        StartCoroutine(progress.Find("Experience/Experience/Bar/Amount").gameObject.LerpScale(0.3f, new Vector2((pokemon.exp / pokemon.totalExp), 1)));
         item.Find("Item Name").GetComponent<TextMeshProUGUI>().SetText(pokemon.heldItem.name);
         item.Find("Item Sprite").GetComponent<Image>().sprite = pokemon.heldItem.sprite;
     }

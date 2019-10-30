@@ -416,7 +416,7 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    public void FadeInventory(float opacity)
+    public void Fade(float opacity)
     {
         Transform[] children = inventoryContainer.transform.GetChildren();
 
@@ -479,8 +479,8 @@ public class InventoryManager : MonoBehaviour
 
     public IEnumerator DestroyMenu()
     {
-        StartCoroutine(menuPanel.FadeOpacity(0f, 0.075f));
-        yield return new WaitForSecondsRealtime(0.075f);
+        StartCoroutine(menuPanel.FadeOpacity(0f, 0.1f));
+        yield return new WaitForSecondsRealtime(0.1f);
         menuPanel.SetActive(false);
         menuPanel.transform.Find("Indicator").gameObject.SetActive(false);
         menuPanel.GetComponent<CanvasGroup>().alpha = 1;
@@ -544,7 +544,7 @@ public class InventoryManager : MonoBehaviour
 
         foreach (GameObject button in menuButtons)
         {
-            float buttonAnimationDelay = 0.07f;
+            float buttonAnimationDelay = 0.05f;
             StartCoroutine(button.FadeOpacity(1f, buttonAnimationDelay));
             yield return new WaitForSecondsRealtime(buttonAnimationDelay);
         }

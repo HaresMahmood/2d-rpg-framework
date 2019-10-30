@@ -7,8 +7,12 @@ public class Pokemon : ScriptableObject
     public new string name;
     public int id;
     public int level;
+    [Range(0f, 200f)] public float exp;
+    public float totalExp = 200;
     public string category;
     public string dexEntry;
+    public string ability;
+    public string nature; // TODO: Should be enum.
     public Sprite frontSprite;
     public Sprite backSprite;
     public Sprite menuSprite;

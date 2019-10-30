@@ -96,17 +96,38 @@ public class PauseManager : MonoBehaviour
 
         if (inPartyMenu)
         {
-            for (int i = 0; i < PartyManager.instance.party.playerParty.Count; i++)
+            if (!PartyManager.instance.isActive)
             {
-                if (i != selectedSlot)
+                for (int i = 0; i < PartyManager.instance.party.playerParty.Count; i++)
                 {
-                    StartCoroutine(AnimateSlots(i, false));
+                    if (i != selectedSlot)
+                    {
+                        StartCoroutine(AnimateSlots(i, false));
+                    }
+                    else
+                    {
+                        party[selectedSlot].Find("Information").gameObject.SetActive(true);
+                        StartCoroutine(AnimateSlots(i, true));
+                    }
+                }
+            }
+            else
+            {
+                if (selectedSlot > (PartyManager.instance.party.playerParty.Count - 1))
+                {
+                    indicator.transform.Find("Party Indicator").gameObject.SetActive(false);
+                    indicator.transform.Find("Round Indicator").gameObject.SetActive(false);
+                    indicator.transform.position = sidePanel.transform.Find("Edit").position;
+                    indicator.transform.Find("Edit Indicator").gameObject.SetActive(true);
                 }
                 else
                 {
-                    StartCoroutine(AnimateSlots(i, true));
-                    party[selectedSlot].Find("Information").gameObject.SetActive(true);
+                    indicator.transform.Find("Edit Indicator").gameObject.SetActive(false);
+                    indicator.transform.Find("Party Indicator").gameObject.SetActive(false);
+                    indicator.transform.position = new Vector2(indicator.transform.position.x, party[selectedSlot].position.y);
+                    indicator.transform.Find("Round Indicator").gameObject.SetActive(true);
                 }
+                indicator.SetActive(true);
             }
         }
         else
@@ -131,12 +152,14 @@ public class PauseManager : MonoBehaviour
                 if (selectedSlot > (PartyManager.instance.party.playerParty.Count - 1))
                 {
                     indicator.transform.Find("Party Indicator").gameObject.SetActive(false);
+                    indicator.transform.Find("Round Indicator").gameObject.SetActive(false);
                     indicator.transform.position = sidePanel.transform.Find("Edit").position;
                     indicator.transform.Find("Edit Indicator").gameObject.SetActive(true);
                 }
                 else
                 {
                     indicator.transform.Find("Edit Indicator").gameObject.SetActive(false);
+                    indicator.transform.Find("Round Indicator").gameObject.SetActive(false);
                     indicator.transform.position = new Vector2(indicator.transform.position.x, party[selectedSlot].position.y);
                     indicator.transform.Find("Party Indicator").gameObject.SetActive(true);
                 }
@@ -234,6 +257,7 @@ public class PauseManager : MonoBehaviour
                             StartCoroutine(PartyManager.instance.AnimateMove(PartyManager.instance.totalMoves, PartyManager.instance.selectedMove));
                             PartyManager.instance.selectedMove = 0;
                         }
+                        PartyManager.instance.isDrawing = false;
                     }
                     
                     if (Input.GetAxisRaw("Vertical") < 0)
@@ -265,7 +289,7 @@ public class PauseManager : MonoBehaviour
                 {
                     if (InventoryManager.instance.isActive)
                     {
-                        InventoryManager.instance.FadeInventory(1f);
+                        InventoryManager.instance.Fade(1f);
                         if (InventoryManager.instance.isGivingItem)
                         {
                             InventoryManager.instance.isGivingItem = false;
@@ -285,13 +309,13 @@ public class PauseManager : MonoBehaviour
                     {
                         if (InventoryManager.instance.selectedSlot == -1)
                         {
-                            InventoryManager.instance.FadeInventory(0.5f);
+                            InventoryManager.instance.Fade(0.5f);
                             inPartyMenu = true;
                         }
                     }
                     else if (PartyManager.instance.isActive)
                     {
-                        PartyManager.instance.Fade(0.5f);
+                        PartyManager.instance.Fade(0.8f);
                         inPartyMenu = true;
                     }
                 }
@@ -306,7 +330,7 @@ public class PauseManager : MonoBehaviour
                 {
                     if (InventoryManager.instance.isActive)
                     {
-                        InventoryManager.instance.FadeInventory(1f);
+                        InventoryManager.instance.Fade(1f);
                         if (InventoryManager.instance.isGivingItem)
                         {
                             InventoryManager.instance.isGivingItem = false;

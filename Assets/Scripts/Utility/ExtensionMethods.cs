@@ -162,6 +162,32 @@ public static class ExtensionMethods
     }
 
     /// <summary>
+    /// 
+    /// </summary>
+    /// <param name=""></param>
+    /// <param name=""></param>
+    /// <returns></returns>
+    public static IEnumerator LerpScale(this GameObject gameObject, float duration, Vector3 targetScale)
+    {
+        Transform transform = gameObject.transform;
+        Vector3 initialScale = transform.localScale;
+
+        float t = 0; // Tracks how many seconds we've been fading.
+        while (t < duration) // While time is less than the duration of the fade, ...
+        {
+            if (Time.timeScale == 0)
+                t += Time.unscaledDeltaTime;
+            else
+                t += Time.deltaTime;
+            float blend = Mathf.Clamp01(t / duration); // Turns the time into an interpolation factor between 0 and 1. 
+
+            transform.localScale = Vector3.Lerp(initialScale, targetScale, blend);
+
+            yield return null; // Wait one frame, then repeat.
+        }
+    }
+
+    /// <summary>
     /// Gets the time of the current clip playing in any Animator.
     /// </summary>
     /// <param name="animator"> The Animator attached to the GameObject. </param>
