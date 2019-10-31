@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        initialColor = accentColor;
+        ApplySettings();
     }
 
     private void Update()
@@ -81,6 +81,14 @@ public class GameManager : MonoBehaviour
                 if (element.CompareTag("Customizable"))
                 {
                     element.color = accentColor;
+                }
+            }
+            CustomRenderer[] canvasElements = Resources.FindObjectsOfTypeAll<CustomRenderer>();
+            foreach (CustomRenderer element in canvasElements)
+            {
+                if (element.CompareTag("Customizable"))
+                {
+                    element.GetComponent<CanvasRenderer>().SetColor(accentColor);
                 }
             }
         }

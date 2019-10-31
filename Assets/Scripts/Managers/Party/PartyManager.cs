@@ -18,9 +18,13 @@ public class PartyManager : MonoBehaviour
     [UnityEngine.Header("Setup")]
     public Party party;
 
+    [UnityEngine.Header("Settings")]
+    [SerializeField] private Material chartMaterial;
+
     [HideInInspector] public GameObject partyContainer, indicator;
     private GameObject informationContainer, movesContainer;
     private Transform[] movePanels, movePositioners;
+    private CanvasRenderer radarChartMesh;
     private Pokemon currentPokemon;
     private Move currentMove;
 
@@ -55,6 +59,8 @@ public class PartyManager : MonoBehaviour
         Transform[] panelContainers = movesContainer.transform.GetChildren();
         movePanels = panelContainers.Where((x, i) => i % 2 == 0).ToArray();
         movePositioners = panelContainers.Where((x, i) => i % 2 != 0).ToArray();
+    
+        radarChartMesh = partyContainer.transform.Find("Stats/Chart/Radar Mesh").GetComponent<CanvasRenderer>();
     }
 
     /// <summary>
@@ -79,6 +85,7 @@ public class PartyManager : MonoBehaviour
         }
 
         CheckForInput();
+        DrawStatChart(currentPokemon.stats);
     }
 
     #endregion
@@ -142,7 +149,6 @@ public class PartyManager : MonoBehaviour
         progress.Find("Level/Level").GetComponent<TextMeshProUGUI>().SetText(pokemon.level.ToString());
         progress.Find("Experience/Experience/Exp").GetComponent<TextMeshProUGUI>().SetText(pokemon.exp.ToString());
         progress.Find("Experience/Experience/To Next").GetComponent<TextMeshProUGUI>().SetText("TO NEXT   " + (pokemon.totalExp - pokemon.exp).ToString());
-        //progress.Find("Experience/Experience/Bar/Amount").GetComponent<RectTransform>().localScale = new Vector2((pokemon.exp / pokemon.totalExp), 1);
         StartCoroutine(progress.Find("Experience/Experience/Bar/Amount").gameObject.LerpScale(0.3f, new Vector2((pokemon.exp / pokemon.totalExp), 1)));
         item.Find("Item Name").GetComponent<TextMeshProUGUI>().SetText(pokemon.heldItem.name);
         item.Find("Item Sprite").GetComponent<Image>().sprite = pokemon.heldItem.sprite;
@@ -189,11 +195,73 @@ public class PartyManager : MonoBehaviour
         {
             if (child != null)
             {
-                StartCoroutine(child.gameObject.FadeOpacity(opacity, 0.1f));
+                //StartCoroutine(child.gameObject.FadeOpacity(opacity, 0.1f));
             }
         }
 
         StartCoroutine(PauseManager.instance.pauseContainer.transform.Find("Target Sprite").gameObject.FadeOpacity(opacity, 0.1f));
+    }
+
+    private void DrawStatChart(Pokemon.Stats stats)
+    {
+        Mesh mesh = new Mesh();
+        Vector3[] vertices = new Vector3[7];
+        Vector2[] uv = new Vector2[7];
+        int[] triangles = new int[3 * 6];
+
+        float radarChartSize = 245f, angleIncerement = 360 / 6;
+        int hpVertexIndex = 1;
+        Vector3 hpVertex = Quaternion.Euler(0, 0, -angleIncerement * (hpVertexIndex - 1)) * Vector3.up  * radarChartSize * ((float)stats.hp / 10);
+        int attackVertexIndex = 2;
+        Vector3 attackVertex = Quaternion.Euler(0, 0, -angleIncerement * (attackVertexIndex - 1)) * Vector3.up * radarChartSize * ((float)stats.attack / 10);
+        int defenceVertexIndex = 3;
+        Vector3 defenceVertex = Quaternion.Euler(0, 0, -angleIncerement * (defenceVertexIndex - 1)) * Vector3.up * radarChartSize * ((float)stats.defence / 10);
+        int spAttackVertexIndex = 4;
+        Vector3 spAttackVertex = Quaternion.Euler(0, 0, -angleIncerement * (spAttackVertexIndex - 1)) * Vector3.up * radarChartSize * ((float)stats.spAttack / 10);
+        int spDefenceVertexIndex = 5;
+        Vector3 spDefenceVertex = Quaternion.Euler(0, 0, -angleIncerement * (spDefenceVertexIndex - 1)) * Vector3.up * radarChartSize * ((float)stats.spDefence / 10);
+        int speedVertexIndex = 6;
+        Vector3 speedVertex = Quaternion.Euler(0, 0, -angleIncerement * (speedVertexIndex - 1)) * Vector3.up * radarChartSize * ((float)stats.speed / 10);
+
+        vertices[0] = Vector3.zero;
+        vertices[hpVertexIndex] = hpVertex;
+        vertices[attackVertexIndex] = attackVertex;
+        vertices[defenceVertexIndex] = defenceVertex;
+        vertices[spAttackVertexIndex] = spAttackVertex;
+        vertices[spDefenceVertexIndex] = spDefenceVertex;
+        vertices[speedVertexIndex] = speedVertex;
+
+        triangles[0] = 0;
+        triangles[1] = hpVertexIndex;
+        triangles[2] = attackVertexIndex;
+
+        triangles[3] = 0;
+        triangles[4] = attackVertexIndex;
+        triangles[5] = defenceVertexIndex;
+
+        triangles[6] = 0;
+        triangles[7] = defenceVertexIndex;
+        triangles[8] = spAttackVertexIndex;
+
+        triangles[9] = 0;
+        triangles[10] = spAttackVertexIndex;
+        triangles[11] = spDefenceVertexIndex;
+
+        triangles[12] = 0;
+        triangles[13] = spDefenceVertexIndex;
+        triangles[14] = speedVertexIndex;
+
+        triangles[15] = 0;
+        triangles[16] = speedVertexIndex;
+        triangles[17] = hpVertexIndex;
+
+        mesh.vertices = vertices;
+        mesh.uv = uv;
+        mesh.triangles = triangles;
+
+        radarChartMesh.SetMesh(mesh);
+        radarChartMesh.SetMaterial(chartMaterial, null);
+        //radarChartMesh.GetMaterial().SetColor("_TintColor", GameManager.instance.accentColor);
     }
 
     public IEnumerator AnimateMove(int lastMove, int currentMove)
