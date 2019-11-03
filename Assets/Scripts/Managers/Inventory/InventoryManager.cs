@@ -24,7 +24,7 @@ public class InventoryManager : MonoBehaviour
     [HideInInspector] public GameObject inventoryContainer;
     [HideInInspector] public Transform[] grid, categoryContainer;
     [HideInInspector] public Animator indicatorAnim, rightAnim, leftAnim;
-    private GameObject itemIndicator, menuPanel, amountPicker;
+    private GameObject itemIndicator, menuPanel, amountPicker, itemInfo;
     private GameObject[] menuButtons;
     private TextMeshProUGUI categoryText;
 
@@ -39,12 +39,13 @@ public class InventoryManager : MonoBehaviour
     [HideInInspector] public bool isActive, inContextMenu = false, isGivingItem = false, isDiscardingItem = false;
     private bool isInventoryDrawn, isInteracting = false, isDirty = false;
 
-    private event EventHandler OnUserInput;
-
     #endregion
 
     #region Unity Methods
 
+    /// <summary>
+    /// Awake is called when the script instance is being loaded.
+    /// </summary>
     private void Awake()
     {
         if (instance == null)
@@ -60,6 +61,7 @@ public class InventoryManager : MonoBehaviour
         itemIndicator = inventoryContainer.transform.Find("Indicator").gameObject;
         menuPanel = inventoryContainer.transform.Find("Menu").gameObject;
         amountPicker = inventoryContainer.transform.Find("Amount Picker").gameObject;
+        itemInfo = inventoryContainer.transform.Find("Item Information").gameObject;
 
         rightAnim = inventoryContainer.transform.Find("Categories/Navigation/Right").GetComponent<Animator>();
         leftAnim = inventoryContainer.transform.Find("Categories/Navigation/Left").GetComponent<Animator>();
@@ -71,10 +73,11 @@ public class InventoryManager : MonoBehaviour
         categoryContainer = inventoryContainer.transform.Find("Categories/Category Icons").GetChildren();
 
         categoryItems = new List<Item>();
-
         currentCategory = categories[0];
-
         inventoryContainer.SetActive(false);
+
+        UpdateInventory();
+        AnimateCategory();
     }
 
     /// <summary>
@@ -129,30 +132,46 @@ public class InventoryManager : MonoBehaviour
             else
                 isInteracting = false;
         }
-
-        OnUserInput?.Invoke(this, EventArgs.Empty);
     }
 
     private void InventoryManager_OnUserInput(object sender, System.EventArgs e)
     {
+        Debug.Log("[INVENTORY MANAGER:] Event function invoked (OnUserInput).");
+
         if (isDirty)
         {
-            ResetInventory();
+            UpdateInventory();
+            AnimateCategory();
             isDirty = false;
         }
 
-        if (selectedSlot > -1)
+        if (categoryItems.Count > 0)
         {
-            itemIndicator.transform.position = grid[selectedSlot].position;
+            if (selectedSlot > -1)
+            {
+                currentItem = categoryItems[selectedSlot];
+            }
+            else
+            {
+                currentItem = categoryItems[0];
+            }
+            SetDescription(currentItem);
         }
-        else
+        else if (categoryItems.Count == 0 || currentItem == null)
         {
-            itemIndicator.transform.position = grid[0].position;
+            SetDescription();
         }
 
-        if (!itemIndicator.activeSelf)
+        if (itemIndicator.activeSelf)
         {
-            itemIndicator.SetActive(true);
+            if (selectedSlot > -1)
+            {
+                itemIndicator.transform.position = grid[selectedSlot].position;
+            }
+            else
+            {
+                itemIndicator.transform.position = grid[0].position;
+            }
         }
     }
 
@@ -161,50 +180,14 @@ public class InventoryManager : MonoBehaviour
     {
         if (PauseManager.instance.isPaused)
         {
-            currentCategory = categories[selectedCategory];
+            inventoryContainer.SetActive(true);
 
-            if (isInventoryDrawn)
-            {
-                UpdateInventory();
-            }
-            else
-            {
-                DrawInventory();
-            }
-
-            AnimateCategory();
             GetInput();
 
             if (inContextMenu && menuButtons.Length > 0)
             {
                 menuPanel.transform.Find("Indicator").position = menuButtons[selectedMenuButton].transform.position;
                 menuPanel.transform.Find("Indicator").gameObject.SetActive(true);
-            }
-
-            if (categoryItems.Count > 0)
-            {
-                if (selectedSlot > -1)
-                {
-                    currentItem = categoryItems[selectedSlot];
-                }
-                else
-                {
-                    currentItem = categoryItems[0];
-                }
-            }
-
-            inventoryContainer.SetActive(true);
-
-            if (categoryItems.Count > 0)
-            {
-                Transform itemInfo = inventoryContainer.transform.Find("Item Information");
-                itemInfo.gameObject.SetActive(true);
-                itemInfo.Find("Name/Item Name").GetComponent<TextMeshProUGUI>().SetText(currentItem.name);
-                itemInfo.Find("Description/Item Description").GetComponent<TextMeshProUGUI>().SetText(currentItem.description);
-            }
-            else if (categoryItems.Count == 0 || currentItem == null)
-            {
-                inventoryContainer.transform.Find("Item Information").gameObject.SetActive(false);
             }
         }
         else
@@ -213,8 +196,11 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    public void DrawInventory()
+    public void UpdateInventory()
     {
+        Debug.Log("[INVENTORY MANAGER:] Updating inventory.");
+        ResetInventory();
+
         categoryText.SetText(currentCategory);
 
         if (inventory.items.Count > 0)
@@ -247,8 +233,9 @@ public class InventoryManager : MonoBehaviour
             itemSlot.Find("Sprite").gameObject.SetActive(false);
             itemSlot.Find("Amount").gameObject.SetActive(false);
             itemSlot.Find("Favorite").gameObject.SetActive(false);
-            itemSlot.Find("New").gameObject.SetActive(false);
         }
+
+        currentCategory = categories[selectedCategory];
     }
 
     private int DrawItem(Item item, int position, bool isFavorite = false)
@@ -284,67 +271,49 @@ public class InventoryManager : MonoBehaviour
         return position;
     }
 
+    private void SetDescription(Item item = null)
+    {
+        if (categoryItems.Count > 0)
+        {
+            itemInfo.SetActive(true);
+            itemInfo.transform.Find("Name/Item Name").GetComponent<TextMeshProUGUI>().SetText(item.name);
+            itemInfo.transform.Find("Description/Item Description").GetComponent<TextMeshProUGUI>().SetText(item.description);
+        }
+        else if (item == null)
+        {
+            inventoryContainer.transform.Find("Item Information").gameObject.SetActive(false);
+        }
+    }
+
     private void GetInput()
     {
         if (isActive && !PauseManager.instance.inPartyMenu && !isGivingItem)
         {
             if (!inContextMenu && !isDiscardingItem)
             {
+                bool hasInput = InputManager.HasInput();
+                if (hasInput)
+                {
+                    GameManager.instance.transform.GetComponentInChildren<InputManager>().OnUserInput += InventoryManager_OnUserInput;
+                }
+                else
+                {
+                    if (!isDirty)
+                    {
+                        GameManager.instance.transform.GetComponentInChildren<InputManager>().OnUserInput -= InventoryManager_OnUserInput;
+                    }
+                }
+
                 if (Input.GetAxisRaw("Trigger") == 0)
                 {
                     selectedSlot = InputManager.GetInput("Horizontal", "Vertical", totalSlots, selectedSlot, 1, 6);
-                    OnUserInput += InventoryManager_OnUserInput;
                 }
                 else
                 {
                     selectedCategory = InputManager.GetInput("Trigger", InputManager.Axis.Horizontal, (categories.Length - 1), selectedCategory);
                     isDirty = true;
-                    OnUserInput += InventoryManager_OnUserInput;
+                    // TODO: Animate left and right arrows when triggers are pressed.
                 }
-
-                /*
-                if (Input.GetAxisRaw("Trigger") != 0)
-                {
-                    if (!isInteracting)
-                    {
-                        if (Input.GetAxisRaw("Trigger") > 0)
-                        {
-                            AnimateArrows(rightAnim); AnimateCategory();
-                            if (selectedCategory < (categories.Length - 1))
-                            {
-                                currentCategory = categories[Array.IndexOf(categories, currentCategory) + 1];
-                                selectedCategory++;
-                            }
-                            else
-                            {
-                                currentCategory = categories[0];
-                                selectedCategory = 0;
-                            }
-                        }
-                        else if (Input.GetAxisRaw("Trigger") < 0)
-                        {
-                            AnimateArrows(leftAnim); AnimateCategory();
-                            if (selectedCategory > 0)
-                            {
-                                currentCategory = categories[Array.IndexOf(categories, currentCategory) - 1];
-                                selectedCategory--;
-                            }
-                            else
-                            {
-                                currentCategory = categories[categories.Length - 1];
-                                selectedCategory = categories.Length - 1;
-                            }
-                        }
-                        isInteracting = true;
-                        ResetInventory();
-                    }
-                }
-                else
-                {
-                    isInteracting = false;
-                    leftAnim.Rebind(); rightAnim.Rebind();
-                }
-                */
             }
             else if (inContextMenu)
             {
@@ -411,10 +380,10 @@ public class InventoryManager : MonoBehaviour
 
     public void ResetInventory()
     {
-        //Debug.Log("[INVENTORY MANAGER:] Reseting inventory.");
+        Debug.Log("[INVENTORY MANAGER:] Reseting inventory.");
         counter = 0; selectedSlot = 0;
         categoryItems.Clear();
-        isInventoryDrawn = false;
+        //leftAnim.Rebind(); rightAnim.Rebind();
     }
 
     private IEnumerator CreateMenu(Animator anim)
@@ -534,48 +503,6 @@ public class InventoryManager : MonoBehaviour
         StartCoroutine(inventoryContainer.FadeOpacity(0.5f, 0.1f));
         PauseManager.instance.inPartyMenu = true;
         isGivingItem = true;
-    }
-
-    public void UpdateInventory()
-    {
-        categoryItems.Clear();
-        isInventoryDrawn = false;
-
-        categoryText.SetText(currentCategory);
-
-        if (inventory.items.Count > 0)
-        {
-            counter = 0;
-            foreach (Item item in inventory.items)
-            {
-                if (item.category.ToString().Equals(currentCategory) && item.isFavorite)
-                {
-                    counter = DrawItem(item, counter, true);
-                }
-            }
-
-            for (int i = counter; i < inventory.items.Count; i++)
-            {
-                if (inventory.items[i].category.ToString().Equals(currentCategory) && !inventory.items[i].isFavorite)
-                {
-                    counter = DrawItem(inventory.items[i], counter);
-                }
-            }
-
-            totalSlots = counter - 1;
-
-            isInventoryDrawn = true;
-        }
-
-        for (int i = counter; i < grid.Length; i++)
-        {
-            Transform itemSlot = grid[i];
-            itemSlot.Find("Sprite").gameObject.SetActive(false);
-            itemSlot.Find("Amount").gameObject.SetActive(false);
-            itemSlot.Find("Favorite").gameObject.SetActive(false);
-        }
-
-        isInventoryDrawn = true;
     }
 
     public IEnumerator DiscardItem(Item item, int amount)
