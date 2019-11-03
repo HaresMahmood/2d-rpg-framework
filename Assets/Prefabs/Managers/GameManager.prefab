@@ -107,7 +107,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   party: {fileID: 0}
+  chartMaterial: {fileID: 0}
   partyContainer: {fileID: 0}
+  indicator: {fileID: 0}
+  selectedMove: 0
+  totalMoves: 0
+  isActive: 0
+  isDrawing: 0
 --- !u!1 &1588163222089477265
 GameObject:
   m_ObjectHideFlags: 0
@@ -138,9 +144,61 @@ Transform:
   - {fileID: 6834575018846982040}
   - {fileID: 5411629645143428498}
   - {fileID: 1281012373029174089}
+  - {fileID: 6900684584619626328}
   m_Father: {fileID: 6002379217965659316}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3682788949124881246
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6900684584619626328}
+  - component: {fileID: 4828566817288341718}
+  m_Layer: 0
+  m_Name: SystemManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6900684584619626328
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3682788949124881246}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 481548375044098156}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4828566817288341718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3682788949124881246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aeec81b4d8b91b499e78f5d3f1fb3bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  party: {fileID: 0}
+  chartMaterial: {fileID: 0}
+  partyContainer: {fileID: 0}
+  indicator: {fileID: 0}
+  selectedMove: 0
+  totalMoves: 0
+  isActive: 0
+  isDrawing: 0
 --- !u!1 &3787010750625582226
 GameObject:
   m_ObjectHideFlags: 0
@@ -219,9 +277,8 @@ MonoBehaviour:
   isPaused: 0
   inPartyMenu: 0
   isInteracting: 0
-  slotIndex: 0
-  maxSlotIndex: 0
   selectedSlot: 0
+  totalSlots: 0
 --- !u!1 &4563878083279935505
 GameObject:
   m_ObjectHideFlags: 0
@@ -378,9 +435,10 @@ MonoBehaviour:
   playerTag: Player
   activePlayer: {fileID: 0}
   accentColor: {r: 0.31764707, g: 0.7607843, b: 0.9882353, a: 1}
+  dyslexiaFont: {fileID: 0}
+  dyslexiaMode: 0
   playerInRange: 0
   playerName: Hilliard
-  customizableElements: []
 --- !u!114 &7727496629757164840
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -522,6 +580,7 @@ MonoBehaviour:
   rightAnim: {fileID: 0}
   leftAnim: {fileID: 0}
   currentItem: {fileID: 0}
+  selectedSlot: 0
   isActive: 0
   inContextMenu: 0
   isGivingItem: 0

@@ -450,40 +450,84 @@ public class PauseManager : MonoBehaviour
             //Debug.Log("PAUSE MANAGER: Mission screen active.");
             //InventoryManager.instance.inventoryContainer.SetActive(false);
             InventoryManager.instance.isActive = false;
-            PartyManager.instance.isActive = false;
+            SystemManager.instance.isActive = false;
         }
         else if (currentMenu == menus[1])
         {
             //Debug.Log("PAUSE MANAGER: Pause active.");
             //InventoryManager.instance.inventoryContainer.SetActive(false);
-            InventoryManager.instance.isActive = false;
+
+            if (InventoryManager.instance.isActive)
+            {
+                spriteAnimator.SetBool("isInInventory", false);
+                spriteAnimator.SetBool("isInParty", true);
+
+                pauseAnimator.SetBool("isInInventory", false);
+                pauseAnimator.SetBool("isInParty", true);
+                InventoryManager.instance.isActive = false;
+            }
+            else
+            {
+                InventoryManager.instance.isActive = false;
+                SystemManager.instance.isActive = false;
+            }
+
             PartyManager.instance.isActive = true;
-
-            pauseAnimator.SetBool("isInInventory", false);
-            pauseAnimator.SetBool("isInParty", true);
-
-            spriteAnimator.SetBool("isInInventory", false);
-            spriteAnimator.SetBool("isInParty", true);
         }
         else if (currentMenu == menus[2])
         {
             //InventoryManager.instance.inventoryContainer.SetActive(true);
-            PartyManager.instance.isActive = false;
+            
+            if (PartyManager.instance.isActive)
+            {
+                spriteAnimator.SetBool("isInInventory", true);
+                spriteAnimator.SetBool("isInParty", false);
+
+                pauseAnimator.SetBool("isInInventory", true);
+                pauseAnimator.SetBool("isInParty", false);
+                PartyManager.instance.isActive = false;
+            }
+            else if (SystemManager.instance.isActive)
+            {
+                spriteAnimator.SetBool("isInInventory", true);
+                spriteAnimator.SetBool("isInSystem", false);
+
+                pauseAnimator.SetBool("isInInventory", true);
+                pauseAnimator.SetBool("isInSystem", false);
+
+                StartCoroutine(sidePanel.FadeOpacity(1f, 0.15f));
+                SystemManager.instance.isActive = false;
+            }
+            else
+            {
+                PartyManager.instance.isActive = false;
+                SystemManager.instance.isActive = false;
+            }
+
             InventoryManager.instance.isActive = true;
-
-            spriteAnimator.SetBool("isInInventory", true);
-            spriteAnimator.SetBool("isInParty", false);
-
-            pauseAnimator.SetBool("isInInventory", true);
-            pauseAnimator.SetBool("isInParty", false);
-
         }
         else if (currentMenu == menus[3])
         {
-            //Debug.Log("PAUSE MANAGER: System screen active.");
-            //InventoryManager.instance.inventoryContainer.SetActive(false);
-            InventoryManager.instance.isActive = false;
-            PartyManager.instance.isActive = false;
+            if (InventoryManager.instance.isActive)
+            {
+                spriteAnimator.SetBool("isInInventory", false);
+                spriteAnimator.SetBool("isInSystem", true);
+
+                pauseAnimator.SetBool("isInInventory", false);
+                pauseAnimator.SetBool("isInSystem", true);
+
+                StartCoroutine(sidePanel.FadeOpacity(0f, 0.15f));
+                InventoryManager.instance.isActive = false;
+            }
+            else
+            {
+                PartyManager.instance.isActive = false;
+                InventoryManager.instance.isActive = false;
+            }
+
+            SystemManager.instance.isActive = true;
         }
+
+
     }
 }

@@ -416,7 +416,8 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    public void Fade(float opacity)
+    
+    public void Fade(float opacity, bool fadeFull = true)
     {
         Transform[] children = inventoryContainer.transform.GetChildren();
 
@@ -428,7 +429,10 @@ public class InventoryManager : MonoBehaviour
             }
         }
 
-        StartCoroutine(PauseManager.instance.pauseContainer.transform.Find("Target Sprite").gameObject.FadeOpacity(opacity, 0.1f));
+        if (fadeFull)
+        {
+            StartCoroutine(PauseManager.instance.pauseContainer.transform.Find("Target Sprite").gameObject.FadeOpacity(opacity, 0.1f));
+        }
     }
 
     private void AnimateCategory()

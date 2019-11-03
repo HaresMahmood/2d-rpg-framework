@@ -164,12 +164,12 @@ public static class ExtensionMethods
     /// <summary>
     /// 
     /// </summary>
-    /// <param name=""></param>
-    /// <param name=""></param>
+    /// <param name="transform"></param>
+    /// <param name="duration"></param>
+    /// <param name="targetScale"></param>
     /// <returns></returns>
-    public static IEnumerator LerpScale(this GameObject gameObject, float duration, Vector3 targetScale)
+    public static IEnumerator LerpScale(this Transform transform, Vector3 targetScale, float duration)
     {
-        Transform transform = gameObject.transform;
         Vector3 initialScale = transform.localScale;
 
         float t = 0; // Tracks how many seconds we've been fading.
@@ -185,6 +185,36 @@ public static class ExtensionMethods
 
             yield return null; // Wait one frame, then repeat.
         }
+    }
+
+    /*
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name=""></param>
+    /// <param name=""></param>
+    /// <returns></returns>
+    public static IEnumerator LerpMesh(this CanvasRenderer renderer, Mesh newMesh, float duration)
+    {
+        
+    }
+    */
+
+    public static IEnumerator SetResetTrigger(this Animator animator, string trigger)
+    {
+        float waitTime = animator.GetAnimationTime();
+        animator.SetTrigger(trigger);
+
+        if (Time.timeScale == 0)
+        {
+            yield return new WaitForSecondsRealtime(waitTime);
+        }
+        else
+        {
+            yield return new WaitForSeconds(waitTime);
+        }
+
+        animator.ResetTrigger(trigger);
     }
 
     /// <summary>

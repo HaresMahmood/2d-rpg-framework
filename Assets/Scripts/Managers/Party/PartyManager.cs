@@ -85,7 +85,14 @@ public class PartyManager : MonoBehaviour
         }
 
         CheckForInput();
-        DrawStatChart(currentPokemon.stats);
+        if (PauseManager.instance.isPaused)
+        {
+            DrawStatChart(currentPokemon.stats);
+        }
+        else if (!PauseManager.instance.isPaused && isActive)
+        {
+            radarChartMesh.gameObject.SetActive(false);
+        }
     }
 
     #endregion
@@ -149,7 +156,7 @@ public class PartyManager : MonoBehaviour
         progress.Find("Level/Level").GetComponent<TextMeshProUGUI>().SetText(pokemon.level.ToString());
         progress.Find("Experience/Experience/Exp").GetComponent<TextMeshProUGUI>().SetText(pokemon.exp.ToString());
         progress.Find("Experience/Experience/To Next").GetComponent<TextMeshProUGUI>().SetText("TO NEXT   " + (pokemon.totalExp - pokemon.exp).ToString());
-        StartCoroutine(progress.Find("Experience/Experience/Bar/Amount").gameObject.LerpScale(0.3f, new Vector2((pokemon.exp / pokemon.totalExp), 1)));
+        StartCoroutine(progress.Find("Experience/Experience/Bar/Amount").LerpScale(new Vector2((pokemon.exp / pokemon.totalExp), 1), 0.3f));
         item.Find("Item Name").GetComponent<TextMeshProUGUI>().SetText(pokemon.heldItem.name);
         item.Find("Item Sprite").GetComponent<Image>().sprite = pokemon.heldItem.sprite;
     }
@@ -189,6 +196,7 @@ public class PartyManager : MonoBehaviour
 
     public void Fade(float opacity)
     {
+        /*
         Transform[] children = partyContainer.transform.GetChildren();
 
         foreach (Transform child in children)
@@ -200,6 +208,7 @@ public class PartyManager : MonoBehaviour
         }
 
         StartCoroutine(PauseManager.instance.pauseContainer.transform.Find("Target Sprite").gameObject.FadeOpacity(opacity, 0.1f));
+        */
     }
 
     private void DrawStatChart(Pokemon.Stats stats)
@@ -209,7 +218,10 @@ public class PartyManager : MonoBehaviour
         Vector2[] uv = new Vector2[7];
         int[] triangles = new int[3 * 6];
 
-        float radarChartSize = 245f, angleIncerement = 360 / 6;
+        float radarChartSize = radarChartMesh.transform.parent.GetChildren()[0].GetComponent<RectTransform>().sizeDelta.x / 2;
+        //Debug.Log(radarChartSize);
+        float angleIncerement = 360 / 6;
+
         int hpVertexIndex = 1;
         Vector3 hpVertex = Quaternion.Euler(0, 0, -angleIncerement * (hpVertexIndex - 1)) * Vector3.up  * radarChartSize * ((float)stats.hp / 10);
         int attackVertexIndex = 2;
@@ -223,13 +235,13 @@ public class PartyManager : MonoBehaviour
         int speedVertexIndex = 6;
         Vector3 speedVertex = Quaternion.Euler(0, 0, -angleIncerement * (speedVertexIndex - 1)) * Vector3.up * radarChartSize * ((float)stats.speed / 10);
 
-        vertices[0] = Vector3.zero;
-        vertices[hpVertexIndex] = hpVertex;
-        vertices[attackVertexIndex] = attackVertex;
-        vertices[defenceVertexIndex] = defenceVertex;
-        vertices[spAttackVertexIndex] = spAttackVertex;
-        vertices[spDefenceVertexIndex] = spDefenceVertex;
-        vertices[speedVertexIndex] = speedVertex;
+        vertices[0]                     = Vector3.zero;
+        vertices[hpVertexIndex]         = hpVertex;
+        vertices[attackVertexIndex]     = attackVertex;
+        vertices[defenceVertexIndex]    = defenceVertex;
+        vertices[spAttackVertexIndex]   = spAttackVertex;
+        vertices[spDefenceVertexIndex]  = spDefenceVertex;
+        vertices[speedVertexIndex]      = speedVertex;
 
         triangles[0] = 0;
         triangles[1] = hpVertexIndex;
@@ -255,13 +267,12 @@ public class PartyManager : MonoBehaviour
         triangles[16] = speedVertexIndex;
         triangles[17] = hpVertexIndex;
 
-        mesh.vertices = vertices;
-        mesh.uv = uv;
-        mesh.triangles = triangles;
+        mesh.vertices   = vertices;
+        mesh.uv         = uv;
+        mesh.triangles  = triangles;
 
         radarChartMesh.SetMesh(mesh);
         radarChartMesh.SetMaterial(chartMaterial, null);
-        //radarChartMesh.GetMaterial().SetColor("_TintColor", GameManager.instance.accentColor);
     }
 
     public IEnumerator AnimateMove(int lastMove, int currentMove)
