@@ -32,11 +32,14 @@ public class InventoryManager : MonoBehaviour
     private List<Item> categoryItems;
     private string[] categories = new string[] { "Key", "Health", "PokéBall", "Battle", "TM", "Berry", "Other" };
     private string currentCategory;
-    [HideInInspector] public int selectedSlot = 0;
-    private int totalSlots, selectedCategory = 0, selectedMenuButton = 0, totalMenuButtons, counter, amount;
+    //[HideInInspector]
+    public int selectedSlot = 0;
+    public int totalSlots, selectedCategory = 0, selectedMenuButton = 0, totalMenuButtons, counter, amount;
 
     [HideInInspector] public bool isActive, inContextMenu = false, isGivingItem = false, isDiscardingItem = false;
     private bool isInventoryDrawn, isInteracting = false, isDirty = false;
+
+    private event EventHandler OnUserInput;
 
     #endregion
 
@@ -126,6 +129,31 @@ public class InventoryManager : MonoBehaviour
             else
                 isInteracting = false;
         }
+
+        OnUserInput?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void InventoryManager_OnUserInput(object sender, System.EventArgs e)
+    {
+        if (isDirty)
+        {
+            ResetInventory();
+            isDirty = false;
+        }
+
+        if (selectedSlot > -1)
+        {
+            itemIndicator.transform.position = grid[selectedSlot].position;
+        }
+        else
+        {
+            itemIndicator.transform.position = grid[0].position;
+        }
+
+        if (!itemIndicator.activeSelf)
+        {
+            itemIndicator.SetActive(true);
+        }
     }
 
     #endregion
@@ -145,32 +173,12 @@ public class InventoryManager : MonoBehaviour
             }
 
             AnimateCategory();
-            CheckForInput();
+            GetInput();
 
             if (inContextMenu && menuButtons.Length > 0)
             {
                 menuPanel.transform.Find("Indicator").position = menuButtons[selectedMenuButton].transform.position;
                 menuPanel.transform.Find("Indicator").gameObject.SetActive(true);
-            }
-
-            if (!PauseManager.instance.inPartyMenu)
-            {
-                if (selectedSlot > -1)
-                {
-                    itemIndicator.transform.position = grid[selectedSlot].position;
-                }
-                else
-                {
-                    itemIndicator.transform.position = grid[0].position;
-                }
-                if (!itemIndicator.activeSelf && !inContextMenu)
-                {
-                    itemIndicator.SetActive(true);
-                }
-            }
-            else
-            {
-                itemIndicator.SetActive(false);
             }
 
             if (categoryItems.Count > 0)
@@ -276,58 +284,26 @@ public class InventoryManager : MonoBehaviour
         return position;
     }
 
-
-    private void CheckForInput()
+    private void GetInput()
     {
         if (isActive && !PauseManager.instance.inPartyMenu && !isGivingItem)
         {
             if (!inContextMenu && !isDiscardingItem)
             {
-                if (Input.GetAxisRaw("Horizontal") != 0)
+                if (Input.GetAxisRaw("Trigger") == 0)
                 {
-                    if (!isInteracting)
-                    {
-                        if (Input.GetAxisRaw("Horizontal") > 0)
-                        {
-                            if (selectedSlot < totalSlots)
-                                selectedSlot++;
-                            else
-                                selectedSlot = 0;
-                        }
-                        else if (Input.GetAxisRaw("Horizontal") < 0)
-                        {
-                            if (selectedSlot > 0)
-                                selectedSlot--;
-                            else
-                            {
-                                selectedSlot = -1;
-                            }
-                        }
-                        isInteracting = true;
-                    }
+                    selectedSlot = InputManager.GetInput("Horizontal", "Vertical", totalSlots, selectedSlot, 1, 6);
+                    OnUserInput += InventoryManager_OnUserInput;
                 }
-                else if (Input.GetAxisRaw("Vertical") != 0)
+                else
                 {
-                    if (!isInteracting)
-                    {
-                        if (Input.GetAxisRaw("Vertical") > 0)
-                        {
-                            if ((selectedSlot - 6) > 0)
-                                selectedSlot -= 6;
-                            else
-                                selectedSlot = 0;
-                        }
-                        else if (Input.GetAxisRaw("Vertical") < 0)
-                        {
-                            if ((selectedSlot + 6) < totalSlots)
-                                selectedSlot += 6;
-                            else
-                                selectedSlot = totalSlots;
-                        }
-                        isInteracting = true;
-                    }
+                    selectedCategory = InputManager.GetInput("Trigger", InputManager.Axis.Horizontal, (categories.Length - 1), selectedCategory);
+                    isDirty = true;
+                    OnUserInput += InventoryManager_OnUserInput;
                 }
-                else if (Input.GetAxisRaw("Trigger") != 0)
+
+                /*
+                if (Input.GetAxisRaw("Trigger") != 0)
                 {
                     if (!isInteracting)
                     {
@@ -360,9 +336,7 @@ public class InventoryManager : MonoBehaviour
                             }
                         }
                         isInteracting = true;
-                        counter = 0; selectedSlot = 0;
-                        categoryItems.Clear();
-                        isInventoryDrawn = false;
+                        ResetInventory();
                     }
                 }
                 else
@@ -370,32 +344,11 @@ public class InventoryManager : MonoBehaviour
                     isInteracting = false;
                     leftAnim.Rebind(); rightAnim.Rebind();
                 }
+                */
             }
             else if (inContextMenu)
             {
-                if (Input.GetAxisRaw("Vertical") != 0)
-                {
-                    if (!isInteracting)
-                    {
-                        if (Input.GetAxisRaw("Vertical") < 0)
-                        {
-                            if (selectedMenuButton < totalMenuButtons)
-                                selectedMenuButton++;
-                            else
-                                selectedMenuButton = 0;
-                        }
-                        else if (Input.GetAxisRaw("Vertical") > 0)
-                        {
-                            if (selectedMenuButton > 0)
-                                selectedMenuButton--;
-                            else
-                                selectedMenuButton = totalMenuButtons;
-                        }
-                        isInteracting = true;
-                    }
-                }
-                else
-                    isInteracting = false;
+                selectedMenuButton = InputManager.GetInput("Vertical", InputManager.Axis.Vertical, totalMenuButtons, selectedMenuButton);
             }
 
             if (!isDiscardingItem)
@@ -407,7 +360,6 @@ public class InventoryManager : MonoBehaviour
                         StartCoroutine(CreateMenu(indicatorAnim));
                     }
                 }
-
                 if (Input.GetButtonDown("Interact") && inContextMenu)
                 {
                     StartCoroutine(ChoiceMade());
@@ -416,7 +368,6 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    
     public void Fade(float opacity, bool fadeFull = true)
     {
         Transform[] children = inventoryContainer.transform.GetChildren();
@@ -456,6 +407,14 @@ public class InventoryManager : MonoBehaviour
     {
         anim.ResetTrigger("isActive");
         anim.SetTrigger("isActive");
+    }
+
+    public void ResetInventory()
+    {
+        //Debug.Log("[INVENTORY MANAGER:] Reseting inventory.");
+        counter = 0; selectedSlot = 0;
+        categoryItems.Clear();
+        isInventoryDrawn = false;
     }
 
     private IEnumerator CreateMenu(Animator anim)

@@ -173,7 +173,5 @@ public class SystemManager : MonoBehaviour
             else
                 isInteracting = false;
         }
-
-        
     }
 }
