@@ -321,5 +321,4 @@ public static class ExtensionMethods
             yield return null;
         }
     }
-
 }

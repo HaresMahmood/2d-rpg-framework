@@ -25,7 +25,7 @@ public class SceneEdgeController : MonoBehaviour
     /// <param name="other"> The Collider2D attached to the entering object. </param>
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag(GameManager.instance.playerTag)) // If the entering object's tag is the player tag ,...
+        if (other.CompareTag(GameManager.PlayerTag())) // If the entering object's tag is the player tag ,...
             SetCurrentScene();
     }
 

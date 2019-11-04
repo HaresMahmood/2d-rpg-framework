@@ -14,7 +14,7 @@ public class EventBehaviour : ScriptableObject
                 GameManager.instance.player.GetChild(i + 1).gameObject.SetActive(false);
                 GameManager.instance.player.GetChild(i).gameObject.SetActive(true);
 
-                GameManager.instance.activePlayer = GameManager.instance.player.GetChild(i);
+                //GameManager.instance.activePlayer = GameManager.instance.player.GetChild(i);
             }
             else
             {
@@ -22,7 +22,7 @@ public class EventBehaviour : ScriptableObject
                 GameManager.instance.player.GetChild(i + 1).GetComponent<PlayerMovement>().orientation = GameManager.instance.player.GetChild(i).GetComponent<PlayerMovement>().orientation;
                 GameManager.instance.player.GetChild(i).gameObject.SetActive(false);
                 GameManager.instance.player.GetChild(i + 1).gameObject.SetActive(true);
-                GameManager.instance.activePlayer = GameManager.instance.player.GetChild(i + 1);
+                //GameManager.instance.activePlayer = GameManager.instance.player.GetChild(i + 1);
                 return;
             }
         }

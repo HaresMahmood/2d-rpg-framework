@@ -136,7 +136,12 @@ public class InventoryManager : MonoBehaviour
 
     private void InventoryManager_OnUserInput(object sender, System.EventArgs e)
     {
-        Debug.Log("[INVENTORY MANAGER:] Event function invoked (OnUserInput).");
+        #if DEBUG
+            if (GameManager.Debug())
+            {
+                Debug.Log("[INVENTORY MANAGER:] Event function called (OnUserInput).");
+            }
+        #endif
 
         if (isDirty)
         {
@@ -198,9 +203,15 @@ public class InventoryManager : MonoBehaviour
 
     public void UpdateInventory()
     {
-        Debug.Log("[INVENTORY MANAGER:] Updating inventory.");
+        #if DEBUG
+            if (GameManager.Debug())
+            {
+                Debug.Log("[INVENTORY MANAGER:] Updating inventory.");
+            }
+        #endif
         ResetInventory();
 
+        currentCategory = categories[selectedCategory];
         categoryText.SetText(currentCategory);
 
         if (inventory.items.Count > 0)
@@ -234,8 +245,6 @@ public class InventoryManager : MonoBehaviour
             itemSlot.Find("Amount").gameObject.SetActive(false);
             itemSlot.Find("Favorite").gameObject.SetActive(false);
         }
-
-        currentCategory = categories[selectedCategory];
     }
 
     private int DrawItem(Item item, int position, bool isFavorite = false)
@@ -291,33 +300,39 @@ public class InventoryManager : MonoBehaviour
         {
             if (!inContextMenu && !isDiscardingItem)
             {
-                bool hasInput = InputManager.HasInput();
-                if (hasInput)
+                if (Input.GetAxisRaw("Trigger") == 0)
                 {
-                    GameManager.instance.transform.GetComponentInChildren<InputManager>().OnUserInput += InventoryManager_OnUserInput;
-                }
-                else
-                {
-                    if (!isDirty)
+                    bool hasInput;
+                    (selectedSlot, hasInput) = InputManager.GetInput("Horizontal", "Vertical", totalSlots, selectedSlot, 1, 6);
+                    if (hasInput)
+                    {
+                        GameManager.instance.transform.GetComponentInChildren<InputManager>().OnUserInput += InventoryManager_OnUserInput;
+                    }
+                    else
                     {
                         GameManager.instance.transform.GetComponentInChildren<InputManager>().OnUserInput -= InventoryManager_OnUserInput;
                     }
                 }
-
-                if (Input.GetAxisRaw("Trigger") == 0)
-                {
-                    selectedSlot = InputManager.GetInput("Horizontal", "Vertical", totalSlots, selectedSlot, 1, 6);
-                }
                 else
                 {
-                    selectedCategory = InputManager.GetInput("Trigger", InputManager.Axis.Horizontal, (categories.Length - 1), selectedCategory);
+                    bool hasInput;
+                    (selectedCategory, hasInput) = InputManager.GetInput("Trigger", InputManager.Axis.Horizontal, (categories.Length - 1), selectedCategory);
                     isDirty = true;
+                    if (hasInput)
+                    {
+                        GameManager.instance.transform.GetComponentInChildren<InputManager>().OnUserInput += InventoryManager_OnUserInput;
+                    }
+                    else
+                    {
+                        GameManager.instance.transform.GetComponentInChildren<InputManager>().OnUserInput -= InventoryManager_OnUserInput;
+                    }
                     // TODO: Animate left and right arrows when triggers are pressed.
                 }
             }
             else if (inContextMenu)
             {
-                selectedMenuButton = InputManager.GetInput("Vertical", InputManager.Axis.Vertical, totalMenuButtons, selectedMenuButton);
+                bool hasInput;
+                (selectedMenuButton, hasInput) = InputManager.GetInput("Vertical", InputManager.Axis.Vertical, totalMenuButtons, selectedMenuButton);
             }
 
             if (!isDiscardingItem)
@@ -367,7 +382,7 @@ public class InventoryManager : MonoBehaviour
             else
             {
                 category.GetComponent<Animator>().SetBool("isSelected", true);
-                StartCoroutine(category.GetComponentInChildren<Image>().gameObject.FadeColor(GameManager.instance.accentColor, 0.1f));
+                StartCoroutine(category.GetComponentInChildren<Image>().gameObject.FadeColor(GameManager.AccentColor(), 0.1f));
             }
         }
     }
@@ -380,7 +395,13 @@ public class InventoryManager : MonoBehaviour
 
     public void ResetInventory()
     {
-        Debug.Log("[INVENTORY MANAGER:] Reseting inventory.");
+        #if DEBUG
+                if (GameManager.Debug())
+                {
+                    Debug.Log("[INVENTORY MANAGER:] Reseting inventory.");
+                }
+        #endif
+
         counter = 0; selectedSlot = 0;
         categoryItems.Clear();
         //leftAnim.Rebind(); rightAnim.Rebind();

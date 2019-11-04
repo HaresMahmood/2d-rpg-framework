@@ -20,17 +20,20 @@ public class GameManager : MonoBehaviour
     public Transform player;
 
     [UnityEngine.Header("Global Settings")]
-    public string playerTag = "Player";
-    public Transform activePlayer;
-    public Color accentColor = "51C2FC".ToColor();
-    public TMP_FontAsset dyslexiaFont;
-    public bool dyslexiaMode;
+    [SerializeField] private string playerTag = "Player";
+    [SerializeField] private Transform activePlayer;
+    [SerializeField] private Color accentColor = "51C2FC".ToColor();
+    [SerializeField] private TMP_FontAsset dyslexiaFont;
+    [SerializeField] private bool dyslexiaMode;
 
     [UnityEngine.Header("Global Data")]
     public bool playerInRange;
 
     [UnityEngine.Header("Player Data")]
-    public string playerName = "Hilliard";
+    [SerializeField] private string playerName = "Hilliard";
+
+    [UnityEngine.Header("Debug")]
+    [SerializeField] private bool debug;
 
     private Color initialColor;
 
@@ -106,5 +109,25 @@ public class GameManager : MonoBehaviour
     public static Transform Player()
     {
         return instance.activePlayer;
+    }
+
+    public static string PlayerTag()
+    {
+        return instance.playerTag;
+    }
+
+    public static string PlayeName()
+    {
+        return instance.playerName;
+    }
+
+    public static Color AccentColor()
+    {
+        return instance.accentColor;
+    }
+
+    public static bool Debug()
+    {
+        return instance.debug;
     }
 }

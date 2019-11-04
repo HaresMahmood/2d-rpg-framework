@@ -66,20 +66,21 @@ public class CharInteraction : InteractableObject
         if (rangeHandler.playerInRange && PlayerInteraction.contextBox.activeSelf)
             SetContextText("Talk");
 
+        #if DEBUG
+            if (GameManager.Debug())
+            {
+                if (Input.GetButtonDown("Cycle"))
+                {
+                    int currentLanguage = (int)language, nextLanguge = ++currentLanguage;
+                    if ((currentLanguage % DialogManager.Language.GetNames(typeof(DialogManager.Language)).Length) == 0)
+                        nextLanguge = 0;
 
+                    language = (DialogManager.Language)nextLanguge;
 
-
-        // Debug
-        if (Input.GetButtonDown("Cycle"))
-        {
-            int currentLanguage = (int)language, nextLanguge = ++currentLanguage;
-            if ((currentLanguage % DialogManager.Language.GetNames(typeof(DialogManager.Language)).Length) == 0)
-                nextLanguge = 0;
-
-            language = (DialogManager.Language)nextLanguge;
-
-            DialogManager.instance.language = language;
-        }
+                    DialogManager.instance.language = language;
+                }
+            }
+        #endif
     }
 
     private void LateUpdate()

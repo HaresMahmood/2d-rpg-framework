@@ -10,7 +10,7 @@ public class RangeHandler : MonoBehaviour
     /// <param name="other"> The Collider2D attached to the entering object. </param>
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag(GameManager.instance.playerTag))
+        if (other.CompareTag(GameManager.PlayerTag()))
         {
             playerInRange = true;
             GameManager.instance.playerInRange = true;
@@ -23,7 +23,7 @@ public class RangeHandler : MonoBehaviour
     /// <param name="other"> The Collider2D attached to the entering object. </param>
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.CompareTag(GameManager.instance.playerTag))
+        if (other.CompareTag(GameManager.PlayerTag()))
         {
             playerInRange = false;
             GameManager.instance.playerInRange = false;

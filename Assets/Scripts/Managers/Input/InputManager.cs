@@ -55,7 +55,7 @@ public class InputManager : MonoBehaviour
         return hasInput;
     }
 
-    public static int GetInput(string button, Axis axis, int totalButtons, int selectedButton, int step = 1)
+    public static (int selectedButton, bool hasInput) GetInput(string button, Axis axis, int totalButtons, int selectedButton, int step = 1)
     {
         if (Input.GetAxisRaw(button) != 0)
         {
@@ -120,11 +120,10 @@ public class InputManager : MonoBehaviour
         }
 
         instance.OnUserInput?.Invoke(instance, EventArgs.Empty);
-        return selectedButton;
-
+        return (selectedButton: selectedButton, hasInput: hasInput);
     }
 
-    public static int GetInput(string horizontal, string vertical, int totalButtons, int selectedButton, int horizontalStep = 1, int verticalStep = 1)
+    public static (int selectedButton, bool hasInput) GetInput(string horizontal, string vertical, int totalButtons, int selectedButton, int horizontalStep = 1, int verticalStep = 1)
     {
         if (Input.GetAxisRaw(horizontal) != 0)
         {
@@ -190,7 +189,7 @@ public class InputManager : MonoBehaviour
         }
 
         instance.OnUserInput?.Invoke(instance, EventArgs.Empty);
-        return selectedButton;
+        return (selectedButton: selectedButton, hasInput: hasInput);
     }
 
     /*

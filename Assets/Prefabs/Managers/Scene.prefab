@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 11494074}
   - component: {fileID: 6485641633398774407}
   m_Layer: 0
-  m_Name: SceneManager
+  m_Name: Scene
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,12 +46,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 609be66bdfadb134e9910083d3fa7251, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxNeighborDistance: 1
-  maxLoadWaitTime: 10
-  onLoading:
+  drawDistance: 1
+  loadTime: 10
+  onLoaded:
     m_PersistentCalls:
       m_Calls: []
-  onLoaded:
+  onLoading:
     m_PersistentCalls:
       m_Calls: []
   debug: 0

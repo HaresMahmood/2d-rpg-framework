@@ -78,7 +78,7 @@ public class SystemManager : MonoBehaviour
             if (Array.IndexOf(navOptions, option) == selectedNavOption)
             {
                 option.GetComponent<Animator>().SetBool("isSelected", true);
-                StartCoroutine(option.GetComponentInChildren<TextMeshProUGUI>().gameObject.FadeColor(GameManager.instance.accentColor, 0.1f));
+                StartCoroutine(option.GetComponentInChildren<TextMeshProUGUI>().gameObject.FadeColor(GameManager.AccentColor(), 0.1f));
             }
             else
             {

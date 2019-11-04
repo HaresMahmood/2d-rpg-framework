@@ -176,7 +176,7 @@ public class DialogManager : MonoBehaviour
         isTyping = true;
 
         if (sentence.ToLower().Contains("[player]"))
-            sentence = sentence.Replace("[player]", GameManager.instance.playerName);
+            sentence = sentence.Replace("[player]", GameManager.PlayeName());
 
         dialogText.SetText(sentence);
         dialogText.ForceMeshUpdate();
@@ -222,7 +222,7 @@ public class DialogManager : MonoBehaviour
         isTyping = true;
 
         if (sentence.ToLower().Contains("[player]"))
-            sentence = sentence.Replace("[player]", GameManager.instance.playerName);
+            sentence = sentence.Replace("[player]", GameManager.PlayeName());
 
         dialogText.SetText(sentence);
         dialogText.ForceMeshUpdate();

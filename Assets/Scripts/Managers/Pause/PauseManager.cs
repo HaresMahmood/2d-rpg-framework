@@ -419,7 +419,7 @@ public class PauseManager : MonoBehaviour
         {
             if (Array.IndexOf(progressMarkers, marker) == currentMenuIndex)
             {
-                marker.GetComponent<Image>().color = GameManager.instance.accentColor;
+                marker.GetComponent<Image>().color = GameManager.AccentColor();
             }
             else
             {
