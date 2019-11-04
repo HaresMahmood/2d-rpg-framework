@@ -23,7 +23,7 @@ public class InventoryManager : MonoBehaviour
 
     [HideInInspector] public GameObject inventoryContainer;
     [HideInInspector] public Transform[] grid, categoryContainer;
-    [HideInInspector] public Animator indicatorAnim, rightAnim, leftAnim;
+    [HideInInspector] public Animator indicatorAnim, arrowAnim;
     private GameObject itemIndicator, menuPanel, amountPicker, itemInfo;
     private GameObject[] menuButtons;
     private TextMeshProUGUI categoryText;
@@ -63,8 +63,7 @@ public class InventoryManager : MonoBehaviour
         amountPicker = inventoryContainer.transform.Find("Amount Picker").gameObject;
         itemInfo = inventoryContainer.transform.Find("Item Information").gameObject;
 
-        rightAnim = inventoryContainer.transform.Find("Categories/Navigation/Right").GetComponent<Animator>();
-        leftAnim = inventoryContainer.transform.Find("Categories/Navigation/Left").GetComponent<Animator>();
+        arrowAnim = inventoryContainer.transform.Find("Categories/Navigation").GetComponent<Animator>();
         indicatorAnim = itemIndicator.GetComponent<Animator>();
 
         categoryText = inventoryContainer.transform.Find("Categories/Information/Name").GetComponent<TextMeshProUGUI>();
@@ -97,7 +96,8 @@ public class InventoryManager : MonoBehaviour
                 RemoveItem(currentItem);
             }
 
-            StartCoroutine(inventoryContainer.FadeOpacity(1f, 0.1f));
+            //StartCoroutine(inventoryContainer.FadeOpacity(1f, 0.1f));
+            Fade(1f);
             PauseManager.instance.inPartyMenu = false;
             isGivingItem = false;
         }
@@ -321,12 +321,12 @@ public class InventoryManager : MonoBehaviour
                     if (hasInput)
                     {
                         GameManager.instance.transform.GetComponentInChildren<InputManager>().OnUserInput += InventoryManager_OnUserInput;
+                        StartCoroutine(AnimateArrows(arrowAnim, (int)Input.GetAxisRaw("Trigger")));
                     }
                     else
                     {
                         GameManager.instance.transform.GetComponentInChildren<InputManager>().OnUserInput -= InventoryManager_OnUserInput;
                     }
-                    // TODO: Animate left and right arrows when triggers are pressed.
                 }
             }
             else if (inContextMenu)
@@ -382,15 +382,18 @@ public class InventoryManager : MonoBehaviour
             else
             {
                 category.GetComponent<Animator>().SetBool("isSelected", true);
-                StartCoroutine(category.GetComponentInChildren<Image>().gameObject.FadeColor(GameManager.AccentColor(), 0.1f));
+                StartCoroutine(category.GetComponentInChildren<Image>().gameObject.FadeColor(GameManager.GetAccentColor(), 0.1f));
             }
         }
     }
 
-    private void AnimateArrows(Animator anim)
+    private IEnumerator AnimateArrows(Animator anim, int value)
     {
-        anim.ResetTrigger("isActive");
-        anim.SetTrigger("isActive");
+        anim.SetBool("isActive", true);
+        anim.SetFloat("Blend", value);
+        yield return new WaitForSecondsRealtime(0.1f);
+        anim.SetFloat("Blend", 0);
+        anim.SetBool("isActive", false);
     }
 
     public void ResetInventory()

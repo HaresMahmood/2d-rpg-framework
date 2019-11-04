@@ -116,12 +116,12 @@ public class GameManager : MonoBehaviour
         return instance.playerTag;
     }
 
-    public static string PlayeName()
+    public static string GetPlayerName()
     {
         return instance.playerName;
     }
 
-    public static Color AccentColor()
+    public static Color GetAccentColor()
     {
         return instance.accentColor;
     }

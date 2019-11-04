@@ -29,6 +29,8 @@ public class PauseManager : MonoBehaviour
     private string currentMenu;
     private int menuIndex, maxMenuIndex, selectedMenu = 0, currentMenuIndex = 0;
 
+    public event EventHandler OnUserInput = delegate { };
+
     #endregion
 
     #region Unity Methods
@@ -90,9 +92,9 @@ public class PauseManager : MonoBehaviour
             }
         }
 
-        InPause();
+        OnPause();
 
-        CheckForInput();
+        GetInput();
 
         if (inPartyMenu)
         {
@@ -171,7 +173,7 @@ public class PauseManager : MonoBehaviour
         isAnimating = false;
     }
 
-    public void InPause()
+    public void OnPause()
     {
         if (isPaused)
         {
@@ -218,8 +220,6 @@ public class PauseManager : MonoBehaviour
             {
                 isPaused = false;
             }
-
-
         }
         else
         {
@@ -239,52 +239,26 @@ public class PauseManager : MonoBehaviour
         }
     }
 
-    public void CheckForInput()
+    public void GetInput()
     {
         totalSlots = PartyManager.instance.party.playerParty.Count;
 
-        if (Input.GetAxisRaw("Vertical") != 0)
+        if (Input.GetAxisRaw("Face Trigger") == 0)
         {
             if (inPartyMenu)
             {
-                isAnimating = true;
-                if (!isInteracting)
+                bool hasVertInput;
+                (selectedSlot, hasVertInput) = InputManager.GetInput("Vertical", InputManager.Axis.Vertical, totalSlots, selectedSlot);
+                if (hasVertInput)
                 {
-                    if (PartyManager.instance.isActive)
-                    {
-                        if (PartyManager.instance.selectedMove != 0)
-                        {
-                            StartCoroutine(PartyManager.instance.AnimateMove(PartyManager.instance.totalMoves, PartyManager.instance.selectedMove));
-                            PartyManager.instance.selectedMove = 0;
-                        }
-                        PartyManager.instance.isDrawing = false;
-                    }
-                    
-                    if (Input.GetAxisRaw("Vertical") < 0)
-                    {
-                        if (selectedSlot < totalSlots)
-                            selectedSlot++;
-                        else
-                            selectedSlot = 0;
-                    }
-                    else if (Input.GetAxisRaw("Vertical") > 0)
-                    {
-                        if (selectedSlot > 0)
-                            selectedSlot--;
-                        else
-                        {
-                            selectedSlot = totalSlots;
-                        }
-                    }
-                    isInteracting = true;
+                    //GameManager.instance.transform.GetComponentInChildren<InputManager>().OnUserInput += PauseManager_OnUserInput;
+                    isAnimating = true;
                 }
-            }
-        }
-        else if (Input.GetAxisRaw("Horizontal") != 0)
-        {
-            isAnimating = true;
-            if (!isInteracting)
-            {
+                else
+                {
+                    //GameManager.instance.transform.GetComponentInChildren<InputManager>().OnUserInput -= PauseManager_OnUserInput;
+                }
+
                 if (Input.GetAxisRaw("Horizontal") > 0)
                 {
                     if (InventoryManager.instance.isActive)
@@ -303,64 +277,84 @@ public class PauseManager : MonoBehaviour
                     inPartyMenu = false;
                     //selectedSlot = 0;
                 }
-                else if (Input.GetAxisRaw("Horizontal") < 0)
+            }
+            else if (!inPartyMenu)
+            {
+                if (Input.GetAxisRaw("Horizontal") != 0)
                 {
-                    if (InventoryManager.instance.isActive)
+                    isAnimating = true;
+                    if (!isInteracting)
                     {
-                        if (InventoryManager.instance.selectedSlot == -1)
+                        if (Input.GetAxisRaw("Horizontal") < 0)
                         {
-                            InventoryManager.instance.Fade(0.5f);
-                            inPartyMenu = true;
+                            if (InventoryManager.instance.isActive)
+                            {
+                                if (InventoryManager.instance.selectedSlot == -1)
+                                {
+                                    InventoryManager.instance.Fade(0.5f);
+                                    inPartyMenu = true;
+                                }
+                            }
+                            else if (PartyManager.instance.isActive)
+                            {
+                                PartyManager.instance.Fade(0.8f);
+                                inPartyMenu = true;
+                            }
                         }
-                    }
-                    else if (PartyManager.instance.isActive)
-                    {
-                        PartyManager.instance.Fade(0.8f);
-                        inPartyMenu = true;
+                        isInteracting = true;
                     }
                 }
-                isInteracting = true;
+                else
+                {
+                    isInteracting = false;
+                }
             }
         }
-        else if (Input.GetAxisRaw("Face Trigger") != 0)
+        else
+        {
+            TriggerInput();
+            OnUserInput += PauseManager_OnUserInput;
+        }
+    }
+
+    private void TriggerInput()
+    {
+        /*
+        bool hasInput;
+        (currentMenuIndex, hasInput) = InputManager.GetInput("Face Trigger", InputManager.Axis.Horizontal, (menus.Length - 1), currentMenuIndex);
+        //isDirty = true;
+        if (hasInput)
+        {
+            GameManager.instance.transform.GetComponentInChildren<InputManager>().OnUserInput += PauseManager_OnUserInput;
+            currentMenu = menus[currentMenuIndex];
+            //InputManager.hasInput = false;
+            //StartCoroutine(AnimateArrows(arrowAnim, (int)Input.GetAxisRaw("Face Trigger")));
+        }
+        else
+        {
+            GameManager.instance.transform.GetComponentInChildren<InputManager>().OnUserInput -= PauseManager_OnUserInput;
+        }
+        */
+
+
+        if (Input.GetAxisRaw("Face Trigger") != 0)
         {
             if (!isInteracting)
             {
-                if (inPartyMenu)
-                {
-                    if (InventoryManager.instance.isActive)
-                    {
-                        InventoryManager.instance.Fade(1f);
-                        if (InventoryManager.instance.isGivingItem)
-                        {
-                            InventoryManager.instance.isGivingItem = false;
-                        }
-                    }
-                    else if (PartyManager.instance.isActive)
-                    {
-                        StartCoroutine(PartyManager.instance.AnimateMove(PartyManager.instance.selectedMove - 1, PartyManager.instance.selectedMove));
-                        PartyManager.instance.Fade(1f);
+                //currentMenu = menus[Array.IndexOf(menus, currentMenu) + (int)Input.GetAxisRaw("Face Trigger") % menus.Length];
+                //currentMenuIndex = Array.IndexOf(menus, currentMenu) + (int)Input.GetAxisRaw("Face Trigger") % menus.Length;
 
-                    }
-                    inPartyMenu = false;
-                    //selectedSlot = 0;
-                }
+                currentMenuIndex += (int)Input.GetAxisRaw("Face Trigger");
+                int totalMenus = menus.Length;
 
-                //if (InventoryManager.instance.isActive || PartyManager.instance.isActive)
-                for (int i = 0; i < PartyManager.instance.party.playerParty.Count; i++)
-                {
-                    Transform slot = party[i];
-                    GameObject heldItem = slot.Find("Held Item").gameObject;
-                    if (InventoryManager.instance.isActive)
-                    {
-                        StartCoroutine(heldItem.FadeOpacity(0f, 0.15f));
-                    }
-                    else if (PartyManager.instance.isActive)
-                    {
-                        StartCoroutine(heldItem.FadeOpacity(1f, 0.15f));
-                    }
-                }
+                if ((currentMenuIndex % totalMenus) == 0)
+                    currentMenuIndex = 0;
+                else if (currentMenuIndex == -1)
+                    currentMenuIndex = --totalMenus;
 
+                currentMenu = menus[currentMenuIndex];
+
+                /*
                 if (Input.GetAxisRaw("Face Trigger") > 0)
                 {
                     StartCoroutine(AnimateText());
@@ -389,13 +383,65 @@ public class PauseManager : MonoBehaviour
                         currentMenuIndex = menus.Length - 1;
                     }
                 }
+                */
+
                 isInteracting = true;
             }
         }
         else
         {
             isInteracting = false;
-            RebindText();
+        }
+
+        OnUserInput?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void PauseManager_OnUserInput(object sender, EventArgs e)
+    {
+        #if DEBUG
+                if (GameManager.Debug())
+                {
+                    Debug.Log("[PARTY MANAGER:] Event function called (OnUserInput).");
+                }
+        #endif
+
+        if (Input.GetAxisRaw("Face Trigger") != 0)
+        {
+            currentMenu = menus[currentMenuIndex];
+            if (inPartyMenu)
+            {
+                if (InventoryManager.instance.isActive)
+                {
+                    InventoryManager.instance.Fade(1f);
+                    if (InventoryManager.instance.isGivingItem)
+                    {
+                        InventoryManager.instance.isGivingItem = false;
+                    }
+                }
+                else if (PartyManager.instance.isActive)
+                {
+                    StartCoroutine(PartyManager.instance.AnimateMove(PartyManager.instance.selectedMove - 1, PartyManager.instance.selectedMove));
+                    PartyManager.instance.Fade(1f);
+
+                }
+                inPartyMenu = false;
+                //selectedSlot = 0;
+            }
+
+            //if (InventoryManager.instance.isActive || PartyManager.instance.isActive)
+            for (int i = 0; i < PartyManager.instance.party.playerParty.Count; i++)
+            {
+                Transform slot = party[i];
+                GameObject heldItem = slot.Find("Held Item").gameObject;
+                if (InventoryManager.instance.isActive)
+                {
+                    StartCoroutine(heldItem.FadeOpacity(0f, 0.15f));
+                }
+                else if (PartyManager.instance.isActive)
+                {
+                    StartCoroutine(heldItem.FadeOpacity(1f, 0.15f));
+                }
+            }
         }
     }
 
@@ -419,7 +465,7 @@ public class PauseManager : MonoBehaviour
         {
             if (Array.IndexOf(progressMarkers, marker) == currentMenuIndex)
             {
-                marker.GetComponent<Image>().color = GameManager.AccentColor();
+                marker.GetComponent<Image>().color = GameManager.GetAccentColor();
             }
             else
             {

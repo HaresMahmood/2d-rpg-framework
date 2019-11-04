@@ -11,7 +11,7 @@ public class InputManager : MonoBehaviour
     public static InputManager instance;
 
     public event EventHandler OnUserInput = delegate {};
-    public static bool hasInput = false;
+    public bool hasInput = false;
 
     public enum Axis
     {
@@ -45,21 +45,26 @@ public class InputManager : MonoBehaviour
     /// </summary>
     private void Update()
     {
-
+        //Debug.Log(HasInput());
     }
 
     #endregion
 
     public static bool HasInput()
     {
-        return hasInput;
+        return instance.hasInput;
+    }
+
+    public static void SetInput(bool input)
+    {
+        instance.hasInput = input;
     }
 
     public static (int selectedButton, bool hasInput) GetInput(string button, Axis axis, int totalButtons, int selectedButton, int step = 1)
     {
         if (Input.GetAxisRaw(button) != 0)
         {
-            if (!hasInput)
+            if (!HasInput())
             {
                 if (axis == Axis.Horizontal)
                 {
@@ -111,23 +116,23 @@ public class InputManager : MonoBehaviour
                         }
                     }
                 }
-                hasInput = true;
+                SetInput(true);
             }
         }
         else
         {
-            hasInput = false;
+            SetInput(false);
         }
 
         instance.OnUserInput?.Invoke(instance, EventArgs.Empty);
-        return (selectedButton: selectedButton, hasInput: hasInput);
+        return (selectedButton: selectedButton, hasInput: HasInput());
     }
 
     public static (int selectedButton, bool hasInput) GetInput(string horizontal, string vertical, int totalButtons, int selectedButton, int horizontalStep = 1, int verticalStep = 1)
     {
         if (Input.GetAxisRaw(horizontal) != 0)
         {
-            if (!hasInput)
+            if (!HasInput())
             {
                 if (Input.GetAxisRaw(horizontal) > 0)
                 {
@@ -151,12 +156,12 @@ public class InputManager : MonoBehaviour
                         selectedButton = totalButtons;
                     }
                 }
-                hasInput = true;
+                SetInput(true);
             }
         }
         else if (Input.GetAxisRaw(vertical) != 0)
         {
-            if (!hasInput)
+            if (!HasInput())
             {
                 if (Input.GetAxisRaw(vertical) < 0)
                 {
@@ -180,16 +185,16 @@ public class InputManager : MonoBehaviour
                         selectedButton = totalButtons;
                     }
                 }
-                hasInput = true;
+                SetInput(true);
             }
         }
         else
         {
-            hasInput = false;
+            SetInput(false);
         }
 
         instance.OnUserInput?.Invoke(instance, EventArgs.Empty);
-        return (selectedButton: selectedButton, hasInput: hasInput);
+        return (selectedButton: selectedButton, hasInput: HasInput());
     }
 
     /*
