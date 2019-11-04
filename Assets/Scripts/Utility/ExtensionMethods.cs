@@ -309,6 +309,11 @@ public static class ExtensionMethods
         EditorGUI.DrawRect(r, color);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="button"></param>
+    /// <returns></returns>
     public static IEnumerator waitForInput(string button)
     {
         bool done = false;
@@ -320,5 +325,28 @@ public static class ExtensionMethods
             }
             yield return null;
         }
+    }
+
+    public static int IncrementCircularInt(int value, int max, int increment)
+    {
+        value += increment;
+        value = Mathf.Clamp(value, -1, max);
+        try
+        {
+            if (((value) % max) == 0)
+            {
+                value = 0;
+            }
+            else if (value == -1)
+            {
+                value = --max;
+            }
+        }
+        catch (DivideByZeroException)
+        {
+            return 0;
+        }
+
+        return value;
     }
 }

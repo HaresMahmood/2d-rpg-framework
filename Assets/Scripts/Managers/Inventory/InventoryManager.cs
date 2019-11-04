@@ -233,7 +233,7 @@ public class InventoryManager : MonoBehaviour
                 }
             }
 
-            totalSlots = counter - 1;
+            totalSlots = counter;
 
             isInventoryDrawn = true;
         }
@@ -316,7 +316,7 @@ public class InventoryManager : MonoBehaviour
                 else
                 {
                     bool hasInput;
-                    (selectedCategory, hasInput) = InputManager.GetInput("Trigger", InputManager.Axis.Horizontal, (categories.Length - 1), selectedCategory);
+                    (selectedCategory, hasInput) = InputManager.GetInput("Trigger", InputManager.Axis.Horizontal, categories.Length, selectedCategory);
                     isDirty = true;
                     if (hasInput)
                     {
@@ -492,7 +492,7 @@ public class InventoryManager : MonoBehaviour
             menuButtons[i] = menuButtonObj;
         }
 
-        totalMenuButtons = menuButtons.Length - 1;
+        totalMenuButtons = menuButtons.Length;
         selectedMenuButton = 0;
 
         float menuAnimationDelay = 0.2f / menuButtons.Length;

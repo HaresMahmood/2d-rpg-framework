@@ -27,7 +27,7 @@ public class PauseManager : MonoBehaviour
     private bool isDrawingParty = false, isResetingInventory = false, isAnimating = false;
     private string[] menus = new string[] { "Missions", "Party", "Inventory", "System"};
     private string currentMenu;
-    private int menuIndex, maxMenuIndex, selectedMenu = 0, currentMenuIndex = 0;
+    public int menuIndex, maxMenuIndex, selectedMenu = 0, currentMenuIndex = 0;
 
     public event EventHandler OnUserInput = delegate { };
 
@@ -68,7 +68,7 @@ public class PauseManager : MonoBehaviour
     private void Update()
     {
         TogglePause();
-        UpdateMenu();
+        _UpdateMenu();
     }
 
     #endregion
@@ -241,7 +241,7 @@ public class PauseManager : MonoBehaviour
 
     public void GetInput()
     {
-        totalSlots = PartyManager.instance.party.playerParty.Count;
+        totalSlots = PartyManager.instance.party.playerParty.Count + 1;
 
         if (Input.GetAxisRaw("Face Trigger") == 0)
         {
@@ -289,7 +289,7 @@ public class PauseManager : MonoBehaviour
                         {
                             if (InventoryManager.instance.isActive)
                             {
-                                if (InventoryManager.instance.selectedSlot == -1)
+                                if (InventoryManager.instance.selectedSlot == 0)
                                 {
                                     InventoryManager.instance.Fade(0.5f);
                                     inPartyMenu = true;
@@ -319,80 +319,24 @@ public class PauseManager : MonoBehaviour
 
     private void TriggerInput()
     {
-        /*
-        bool hasInput;
-        (currentMenuIndex, hasInput) = InputManager.GetInput("Face Trigger", InputManager.Axis.Horizontal, (menus.Length - 1), currentMenuIndex);
-        //isDirty = true;
-        if (hasInput)
-        {
-            GameManager.instance.transform.GetComponentInChildren<InputManager>().OnUserInput += PauseManager_OnUserInput;
-            currentMenu = menus[currentMenuIndex];
-            //InputManager.hasInput = false;
-            //StartCoroutine(AnimateArrows(arrowAnim, (int)Input.GetAxisRaw("Face Trigger")));
-        }
-        else
-        {
-            GameManager.instance.transform.GetComponentInChildren<InputManager>().OnUserInput -= PauseManager_OnUserInput;
-        }
-        */
-
-
         if (Input.GetAxisRaw("Face Trigger") != 0)
         {
+            
             if (!isInteracting)
             {
-                //currentMenu = menus[Array.IndexOf(menus, currentMenu) + (int)Input.GetAxisRaw("Face Trigger") % menus.Length];
-                //currentMenuIndex = Array.IndexOf(menus, currentMenu) + (int)Input.GetAxisRaw("Face Trigger") % menus.Length;
 
-                currentMenuIndex += (int)Input.GetAxisRaw("Face Trigger");
-                int totalMenus = menus.Length;
-
-                if ((currentMenuIndex % totalMenus) == 0)
-                    currentMenuIndex = 0;
-                else if (currentMenuIndex == -1)
-                    currentMenuIndex = --totalMenus;
-
+                currentMenuIndex = ExtensionMethods.IncrementCircularInt(currentMenuIndex, menus.Length, (int)Input.GetAxisRaw("Face Trigger"));
                 currentMenu = menus[currentMenuIndex];
-
-                /*
-                if (Input.GetAxisRaw("Face Trigger") > 0)
-                {
-                    StartCoroutine(AnimateText());
-                    if (currentMenuIndex < (menus.Length - 1))
-                    {
-                        currentMenu = menus[Array.IndexOf(menus, currentMenu) + 1];
-                        currentMenuIndex++;
-                    }
-                    else
-                    {
-                        currentMenu = menus[0];
-                        currentMenuIndex = 0;
-                    }
-                }
-                else if (Input.GetAxisRaw("Face Trigger") < 0)
-                {
-                    StartCoroutine(AnimateText());
-                    if (currentMenuIndex > 0)
-                    {
-                        currentMenu = menus[Array.IndexOf(menus, currentMenu) - 1];
-                        currentMenuIndex--;
-                    }
-                    else
-                    {
-                        currentMenu = menus[menus.Length - 1];
-                        currentMenuIndex = menus.Length - 1;
-                    }
-                }
-                */
-
                 isInteracting = true;
             }
         }
         else
         {
             isInteracting = false;
+            
         }
 
+        //InputManager.GetInput("Face Trigger", InputManager.Axis.Horizontal, menus.Length, currentMenuIndex);
         OnUserInput?.Invoke(this, EventArgs.Empty);
     }
 
@@ -408,6 +352,7 @@ public class PauseManager : MonoBehaviour
         if (Input.GetAxisRaw("Face Trigger") != 0)
         {
             currentMenu = menus[currentMenuIndex];
+            StartCoroutine(AnimateText());
             if (inPartyMenu)
             {
                 if (InventoryManager.instance.isActive)
@@ -449,16 +394,11 @@ public class PauseManager : MonoBehaviour
     {
         Animator textAnimator = topPanel.transform.Find("Navigation/Current").GetComponentInChildren<Animator>();
         textAnimator.SetTrigger("isActive");
-        yield return new WaitForSecondsRealtime(textAnimator.GetAnimationTime());
-    }
-
-    private void RebindText()
-    {
-        Animator textAnimator = topPanel.transform.Find("Navigation/Current").GetComponentInChildren<Animator>();
+        yield return new WaitForSecondsRealtime(0.08f);
         textAnimator.Rebind();
     }
 
-    public void UpdateMenu()
+    public void _UpdateMenu()
     {
         Transform[] progressMarkers = topPanel.transform.Find("Navigation/Progress").GetChildren();
         foreach (Transform marker in progressMarkers)
@@ -573,7 +513,10 @@ public class PauseManager : MonoBehaviour
 
             SystemManager.instance.isActive = true;
         }
+    }
 
+    public void UpdateMenu(string currentMenu)
+    {
 
     }
 }

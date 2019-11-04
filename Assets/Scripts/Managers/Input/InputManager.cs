@@ -68,53 +68,11 @@ public class InputManager : MonoBehaviour
             {
                 if (axis == Axis.Horizontal)
                 {
-                    if (Input.GetAxisRaw(button) > 0)
-                    {
-                        if (selectedButton + (step - 1) < totalButtons)
-                        {
-                            selectedButton += step;
-                        }
-                        else
-                        {
-                            selectedButton = 0;
-                        }
-                    }
-                    else if (Input.GetAxisRaw(button) < 0)
-                    {
-                        if (selectedButton - (step - 1) > 0)
-                        {
-                            selectedButton -= step;
-                        }
-                        else
-                        {
-                            selectedButton = totalButtons;
-                        }
-                    }
+                    selectedButton = ExtensionMethods.IncrementCircularInt(selectedButton, totalButtons, ((int)Input.GetAxisRaw(button) * step));
                 }
                 else if (axis == Axis.Vertical)
                 {
-                    if (Input.GetAxisRaw(button) < 0)
-                    {
-                        if (selectedButton + (step - 1) < totalButtons)
-                        {
-                            selectedButton += step;
-                        }
-                        else
-                        {
-                            selectedButton = 0;
-                        }
-                    }
-                    else if (Input.GetAxisRaw(button) > 0)
-                    {
-                        if (selectedButton - (step - 1) > 0)
-                        {
-                            selectedButton -= step;
-                        }
-                        else
-                        {
-                            selectedButton = totalButtons;
-                        }
-                    }
+                    selectedButton = ExtensionMethods.IncrementCircularInt(selectedButton, totalButtons, -((int)Input.GetAxisRaw(button) * step));
                 }
                 SetInput(true);
             }
@@ -134,28 +92,7 @@ public class InputManager : MonoBehaviour
         {
             if (!HasInput())
             {
-                if (Input.GetAxisRaw(horizontal) > 0)
-                {
-                    if (selectedButton + (horizontalStep - 1) < totalButtons)
-                    {
-                        selectedButton += horizontalStep;
-                    }
-                    else
-                    {
-                        selectedButton = 0;
-                    }
-                }
-                else if (Input.GetAxisRaw(horizontal) < 0)
-                {
-                    if (selectedButton - (horizontalStep - 1) > 0)
-                    {
-                        selectedButton -= horizontalStep;
-                    }
-                    else
-                    {
-                        selectedButton = totalButtons;
-                    }
-                }
+                selectedButton = ExtensionMethods.IncrementCircularInt(selectedButton, totalButtons, ((int)Input.GetAxisRaw(horizontal) * horizontalStep));
                 SetInput(true);
             }
         }
@@ -163,28 +100,7 @@ public class InputManager : MonoBehaviour
         {
             if (!HasInput())
             {
-                if (Input.GetAxisRaw(vertical) < 0)
-                {
-                    if (selectedButton + (verticalStep - 1) < totalButtons)
-                    {
-                        selectedButton += verticalStep;
-                    }
-                    else
-                    {
-                        selectedButton = 0;
-                    }
-                }
-                else if (Input.GetAxisRaw(vertical) > 0)
-                {
-                    if (selectedButton - (verticalStep - 1) > 0)
-                    {
-                        selectedButton -= verticalStep;
-                    }
-                    else
-                    {
-                        selectedButton = totalButtons;
-                    }
-                }
+                selectedButton = ExtensionMethods.IncrementCircularInt(selectedButton, totalButtons, -((int)Input.GetAxisRaw(vertical) * verticalStep));
                 SetInput(true);
             }
         }
@@ -196,29 +112,4 @@ public class InputManager : MonoBehaviour
         instance.OnUserInput?.Invoke(instance, EventArgs.Empty);
         return (selectedButton: selectedButton, hasInput: HasInput());
     }
-
-    /*
-    public static void InceremntCirularInt(int min, int max, int index)
-    {
-        index = Mathf.Clamp(index, min, max);
-
-        if (selectedButton + (verticalStep - 1) < totalButtons)
-        {
-            selectedButton += verticalStep;
-        }
-        else
-        {
-            selectedButton = 0;
-        }
-
-        if (selectedButton - (verticalStep - 1) > 0)
-        {
-            selectedButton -= verticalStep;
-        }
-        else
-        {
-            selectedButton = totalButtons;
-        }
-    }
-    */
 }
