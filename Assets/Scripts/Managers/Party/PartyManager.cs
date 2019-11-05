@@ -84,7 +84,7 @@ public class PartyManager : MonoBehaviour
             indicator.SetActive(false);
         }
 
-        CheckForInput();
+        GetInput();
         if (PauseManager.instance.isPaused)
         {
             DrawStatChart(currentPokemon.stats);
@@ -279,7 +279,7 @@ public class PartyManager : MonoBehaviour
     {
         indicator.SetActive(false);
 
-        for (int i = 0; i < totalMoves + 1; i++)
+        for (int i = 0; i < totalMoves; i++)
         {
             Transform move = movePanels[i];
             Transform positioner = movePositioners[i];
@@ -319,47 +319,26 @@ public class PartyManager : MonoBehaviour
         }
     }
 
-    private void CheckForInput()
+    private void GetInput()
     {
-        totalMoves = movePanels.Length - 1;
-
-        if (!PauseManager.instance.inPartyMenu)
+        if (!PauseManager.instance.inPartyMenu && isActive)
         {
-            if (Input.GetAxisRaw("Vertical") != 0)
+            totalMoves = movePanels.Length;
+            bool hasInput;
+            (selectedMove, hasInput) = InputManager.GetInput("Vertical", InputManager.Axis.Vertical, totalMoves, selectedMove);
+            if (hasInput)
             {
-                if (!isInteracting)
-                {
-                    if (Input.GetAxisRaw("Vertical") < 0)
-                    {
-                        if (selectedMove < totalMoves)
-                        {
-                            selectedMove++;
-                            StartCoroutine(AnimateMove(selectedMove - 1, selectedMove));
-                        }
-                        else
-                        {
-                            selectedMove = 0;
-                            StartCoroutine(AnimateMove(totalMoves, selectedMove));
-                        }
-                    }
-                    else if (Input.GetAxisRaw("Vertical") > 0)
-                    {
-                        if (selectedMove > 0)
-                        {
-                            selectedMove--;
-                            StartCoroutine(AnimateMove(selectedMove + 1, selectedMove));
-                        }
-                        else
-                        {
-                            selectedMove = totalMoves;
-                            StartCoroutine(AnimateMove(0, totalMoves));
-                        }
-                    }
-                    isInteracting = true;
-                }
+                GameManager.instance.transform.GetComponentInChildren<InputManager>().OnUserInput += PartyManager_OnUserInput;
             }
             else
-                isInteracting = false;
+            {
+                GameManager.instance.transform.GetComponentInChildren<InputManager>().OnUserInput -= PartyManager_OnUserInput;
+            }
         }
+    }
+
+    private void PartyManager_OnUserInput(object sender, EventArgs e)
+    {
+        StartCoroutine(AnimateMove(selectedMove - 1, selectedMove));
     }
 }
