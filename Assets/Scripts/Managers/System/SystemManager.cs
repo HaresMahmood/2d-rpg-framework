@@ -65,7 +65,7 @@ public class SystemManager : MonoBehaviour
     {
         if (PauseManager.instance.isPaused)
         {
-            CheckForInput();
+            GetInput();
         }
     }
 
@@ -127,51 +127,28 @@ public class SystemManager : MonoBehaviour
         }
     }
 
-    private void CheckForInput()
+    private void GetInput()
     {
-        totalNavOptions = navOptions.Length - 1;
+        totalNavOptions = navOptions.Length;
 
-        if (!PauseManager.instance.inPartyMenu)
+        if (!PauseManager.instance.inPartyMenu && isActive)
         {
-            if (Input.GetAxisRaw("Vertical") != 0)
+            bool hasInput;
+            (selectedNavOption, hasInput) = InputManager.GetInput("Vertical", InputManager.Axis.Vertical, totalNavOptions, selectedNavOption);
+            if (hasInput)
             {
-                if (!isInteracting)
-                {
-                    if (Input.GetAxisRaw("Vertical") < 0)
-                    {
-                        if (selectedNavOption < totalNavOptions)
-                        {
-                            selectedNavOption++;
-                            AnimateNavigation();
-                        }
-                        else
-                        {
-                            selectedNavOption = 0;
-                            AnimateNavigation();
-                        }
-                    }
-                    else if (Input.GetAxisRaw("Vertical") > 0)
-                    {
-                        if (selectedNavOption > 0)
-                        {
-                            selectedNavOption--;
-                            AnimateNavigation();
-                        }
-                        else
-                        {
-                            selectedNavOption = totalNavOptions;
-                            AnimateNavigation();
-                        }
-                    }
-                    isInteracting = true;
-                }
+                GameManager.instance.transform.GetComponentInChildren<InputManager>().OnUserInput += PartyManager_OnUserInput;
             }
-            else if (Input.GetButtonDown("Interact"))
+            if (Input.GetButtonDown("Interact"))
             {
                 StartCoroutine(AnimateOptions());
             }
-            else
-                isInteracting = false;
         }
+    }
+
+    private void PartyManager_OnUserInput(object sender, EventArgs e)
+    {
+        AnimateNavigation();
+        GameManager.instance.transform.GetComponentInChildren<InputManager>().OnUserInput -= PartyManager_OnUserInput;
     }
 }

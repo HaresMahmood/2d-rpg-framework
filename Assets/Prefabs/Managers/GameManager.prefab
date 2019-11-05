@@ -81,6 +81,7 @@ MonoBehaviour:
   indicator: {fileID: 0}
   selectedMove: 0
   totalMoves: 0
+  lastInput: 0
   isActive: 0
   isDrawing: 0
 --- !u!1 &1588163222089477265
@@ -135,7 +136,10 @@ MonoBehaviour:
   isInteracting: 0
   selectedSlot: 0
   totalSlots: 0
-  sidebarState: 1
+  menuIndex: 0
+  maxMenuIndex: 0
+  selectedMenu: 0
+  currentMenuIndex: 0
 --- !u!1 &2542676125325423497
 GameObject:
   m_ObjectHideFlags: 0
@@ -179,6 +183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8c74eb467387394da1c735a4a779393, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hasInput: 0
 --- !u!1 &3682788949124881246
 GameObject:
   m_ObjectHideFlags: 0
@@ -460,6 +465,7 @@ GameObject:
   - component: {fileID: 5411629645143428498}
   - component: {fileID: 7945080590092970818}
   - component: {fileID: 1351163362760467619}
+  - component: {fileID: 2299819786513862701}
   m_Layer: 0
   m_Name: InventoryManager
   m_TagString: Untagged
@@ -528,6 +534,37 @@ MonoBehaviour:
   itemGrid: {fileID: 0}
   itemContainerPrefab: {fileID: 2769139777725332638, guid: e109c778a5d70ec4bbbde9c0cbcd2d6e,
     type: 3}
+--- !u!114 &2299819786513862701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8918571298998130272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1714a798b7c3f604bb81e40764141ef9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventory: {fileID: 0}
+  menuButtonPrefab: {fileID: 0}
+  inventoryContainer: {fileID: 0}
+  grid: []
+  categoryContainer: []
+  indicatorAnim: {fileID: 0}
+  arrowAnim: {fileID: 0}
+  currentItem: {fileID: 0}
+  selectedSlot: 0
+  totalSlots: 0
+  selectedCategory: 0
+  selectedMenuButton: 0
+  totalMenuButtons: 0
+  counter: 0
+  amount: 0
+  isActive: 0
+  inContextMenu: 0
+  isGivingItem: 0
+  isDiscardingItem: 0
 --- !u!1001 &3393467421920137384
 PrefabInstance:
   m_ObjectHideFlags: 0

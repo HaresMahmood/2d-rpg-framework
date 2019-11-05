@@ -60,6 +60,8 @@ public class InputManager : MonoBehaviour
         instance.hasInput = input;
     }
 
+    #region Get Input
+
     public static (int selectedButton, bool hasInput) GetInput(string button, Axis axis, int totalButtons, int selectedButton, int step = 1)
     {
         if (Input.GetAxisRaw(button) != 0)
@@ -112,4 +114,6 @@ public class InputManager : MonoBehaviour
         instance.OnUserInput?.Invoke(instance, EventArgs.Empty);
         return (selectedButton: selectedButton, hasInput: HasInput());
     }
+
+    #endregion
 }

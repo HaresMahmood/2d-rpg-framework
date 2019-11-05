@@ -17,10 +17,12 @@ public class GameManager : MonoBehaviour
     }
 
     [UnityEngine.Header("General Settings")]
+    [SerializeField] private const string playerTag = "Player";
+
+    [UnityEngine.Header("General Settings")]
     public Transform player;
 
     [UnityEngine.Header("Global Settings")]
-    [SerializeField] private string playerTag = "Player";
     [SerializeField] private Transform activePlayer;
     [SerializeField] private Color accentColor = "51C2FC".ToColor();
     [SerializeField] private TMP_FontAsset dyslexiaFont;
@@ -113,7 +115,7 @@ public class GameManager : MonoBehaviour
 
     public static string PlayerTag()
     {
-        return instance.playerTag;
+        return playerTag;
     }
 
     public static string GetPlayerName()

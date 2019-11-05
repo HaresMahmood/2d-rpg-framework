@@ -337,7 +337,7 @@ public static class ExtensionMethods
             {
                 value = 0;
             }
-            else if (value == -1)
+            else if (value < 0)
             {
                 value = --max;
             }
@@ -349,4 +349,33 @@ public static class ExtensionMethods
 
         return value;
     }
+
+    /*
+    public static int GetLength<T>(this enum target) where T : struct, Icorn
+    {
+        if (!typeof(T).IsEnum)
+        {
+        #if DEBUG
+            throw new Exception("Given type does not match required type (Enum).");
+        #endif
+        }
+
+        int length = Enum.GetNames(typeof(T)).Length;
+        return length;
+    }
+
+    public static T GetNextItem<T>(this CircularList<T> target, T item)
+    {
+        int index = target.IndexOf(item);
+        index = IncrementCircularInt(index, target.Count, 1);
+        return target[index];
+    }
+
+    public static T GetPreviousItem<T>(this CircularList<T> target, T item)
+    {
+        int index = target.IndexOf(item);
+        index = IncrementCircularInt(index, target.Count, -1);
+        return target[index];
+    }
+    */
 }

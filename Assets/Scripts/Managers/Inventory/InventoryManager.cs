@@ -32,9 +32,8 @@ public class InventoryManager : MonoBehaviour
     private List<Item> categoryItems;
     private string[] categories = new string[] { "Key", "Health", "PokéBall", "Battle", "TM", "Berry", "Other" };
     private string currentCategory;
-    //[HideInInspector]
-    public int selectedSlot = 0;
-    public int totalSlots, selectedCategory = 0, selectedMenuButton = 0, totalMenuButtons, counter, amount;
+    [HideInInspector] public int selectedSlot = 0;
+    private int totalSlots, selectedCategory = 0, selectedMenuButton = 0, totalMenuButtons, counter, amount;
 
     [HideInInspector] public bool isActive, inContextMenu = false, isGivingItem = false, isDiscardingItem = false;
     private bool isInventoryDrawn, isInteracting = false, isDirty = false;

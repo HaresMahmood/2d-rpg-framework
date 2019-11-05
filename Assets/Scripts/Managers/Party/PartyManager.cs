@@ -28,7 +28,7 @@ public class PartyManager : MonoBehaviour
     private Pokemon currentPokemon;
     private Move currentMove;
 
-    [HideInInspector] public int selectedMove, totalMoves;
+    [HideInInspector] public int selectedMove, totalMoves, lastInput;
 
     [HideInInspector] public bool isActive, isDrawing = false;
     private bool isInteracting = false;
@@ -59,7 +59,7 @@ public class PartyManager : MonoBehaviour
         Transform[] panelContainers = movesContainer.transform.GetChildren();
         movePanels = panelContainers.Where((x, i) => i % 2 == 0).ToArray();
         movePositioners = panelContainers.Where((x, i) => i % 2 != 0).ToArray();
-    
+
         radarChartMesh = partyContainer.transform.Find("Stats/Chart/Radar Mesh").GetComponent<CanvasRenderer>();
     }
 
@@ -275,8 +275,10 @@ public class PartyManager : MonoBehaviour
         radarChartMesh.SetMaterial(chartMaterial, null);
     }
 
-    public IEnumerator AnimateMove(int lastMove, int currentMove)
+    public IEnumerator AnimateMove(int currentMove, int increment)
     {
+        Transform thisMove = movePanels[currentMove];
+
         indicator.SetActive(false);
 
         for (int i = 0; i < totalMoves; i++)
@@ -307,11 +309,12 @@ public class PartyManager : MonoBehaviour
 
         LayoutRebuilder.ForceRebuildLayoutImmediate(movesContainer.GetComponent<RectTransform>());
 
-        movePanels[currentMove].GetComponent<Animator>().SetBool("isActive", true);
-        movePanels[lastMove].GetComponent<Animator>().SetBool("isActive", false);
+        thisMove.GetComponent<Animator>().SetBool("isActive", true);
+        Transform previousMove = movePanels[ExtensionMethods.IncrementCircularInt(currentMove, movePanels.Length, increment)];
 
-        yield return new WaitForSecondsRealtime(0.1f);
-        //yield return null;
+        previousMove.GetComponent<Animator>().SetBool("isActive", false);
+
+        yield return new WaitForSecondsRealtime(0.15f);
 
         if (!PauseManager.instance.inPartyMenu)
         {
@@ -326,19 +329,24 @@ public class PartyManager : MonoBehaviour
             totalMoves = movePanels.Length;
             bool hasInput;
             (selectedMove, hasInput) = InputManager.GetInput("Vertical", InputManager.Axis.Vertical, totalMoves, selectedMove);
+            if ((int)Input.GetAxisRaw("Vertical") != lastInput)
+            {
+                lastInput = (int)Input.GetAxisRaw("Vertical");
+            }
             if (hasInput)
             {
                 GameManager.instance.transform.GetComponentInChildren<InputManager>().OnUserInput += PartyManager_OnUserInput;
             }
             else
             {
-                GameManager.instance.transform.GetComponentInChildren<InputManager>().OnUserInput -= PartyManager_OnUserInput;
+                //GameManager.instance.transform.GetComponentInChildren<InputManager>().OnUserInput -= PartyManager_OnUserInput;
             }
         }
     }
 
     private void PartyManager_OnUserInput(object sender, EventArgs e)
     {
-        StartCoroutine(AnimateMove(selectedMove - 1, selectedMove));
+        StartCoroutine(AnimateMove(selectedMove, lastInput));
+        GameManager.instance.transform.GetComponentInChildren<InputManager>().OnUserInput -= PartyManager_OnUserInput;
     }
 }
