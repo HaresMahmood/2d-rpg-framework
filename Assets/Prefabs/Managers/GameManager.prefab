@@ -350,6 +350,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6002379217965659316}
   - component: {fileID: 6002379217965659317}
+  - component: {fileID: 193266337765569843}
   - component: {fileID: 7727496629757164840}
   m_Layer: 0
   m_Name: GameManager
@@ -390,7 +391,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  playerTag: Player
   activePlayer: {fileID: 0}
   accentColor: {r: 0.31764707, g: 0.7607843, b: 0.9882353, a: 1}
   dyslexiaFont: {fileID: 0}
@@ -398,6 +398,18 @@ MonoBehaviour:
   playerInRange: 0
   playerName: Hilliard
   debug: 0
+--- !u!114 &193266337765569843
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6002379217965659319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3317e8a6689efbb4c9c36908082c8883, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &7727496629757164840
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -465,7 +477,6 @@ GameObject:
   - component: {fileID: 5411629645143428498}
   - component: {fileID: 7945080590092970818}
   - component: {fileID: 1351163362760467619}
-  - component: {fileID: 2299819786513862701}
   m_Layer: 0
   m_Name: InventoryManager
   m_TagString: Untagged
@@ -509,12 +520,6 @@ MonoBehaviour:
   arrowAnim: {fileID: 0}
   currentItem: {fileID: 0}
   selectedSlot: 0
-  totalSlots: 0
-  selectedCategory: 0
-  selectedMenuButton: 0
-  totalMenuButtons: 0
-  counter: 0
-  amount: 0
   isActive: 0
   inContextMenu: 0
   isGivingItem: 0
@@ -534,37 +539,6 @@ MonoBehaviour:
   itemGrid: {fileID: 0}
   itemContainerPrefab: {fileID: 2769139777725332638, guid: e109c778a5d70ec4bbbde9c0cbcd2d6e,
     type: 3}
---- !u!114 &2299819786513862701
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8918571298998130272}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1714a798b7c3f604bb81e40764141ef9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inventory: {fileID: 0}
-  menuButtonPrefab: {fileID: 0}
-  inventoryContainer: {fileID: 0}
-  grid: []
-  categoryContainer: []
-  indicatorAnim: {fileID: 0}
-  arrowAnim: {fileID: 0}
-  currentItem: {fileID: 0}
-  selectedSlot: 0
-  totalSlots: 0
-  selectedCategory: 0
-  selectedMenuButton: 0
-  totalMenuButtons: 0
-  counter: 0
-  amount: 0
-  isActive: 0
-  inContextMenu: 0
-  isGivingItem: 0
-  isDiscardingItem: 0
 --- !u!1001 &3393467421920137384
 PrefabInstance:
   m_ObjectHideFlags: 0
