@@ -11,9 +11,9 @@ public class TimeManager : MonoBehaviour
 
     public static TimeManager instance;
 
-    public const float realSecondsPerDays = 30f; //1420f
-    public const float hoursPerDay = 24f;
-    public const float minutesPerHours = 60f;
+    private const float realSecondsPerDays = 30f; //1420f
+    private const float hoursPerDay = 24f;
+    private const float minutesPerHours = 60f;
 
     [UnityEngine.Header("Settings")]
     [SerializeField] private Format format;
@@ -41,6 +41,16 @@ public class TimeManager : MonoBehaviour
 
     #region Accessor Methods
 
+    public float GetSecondsPerDay()
+    {
+        return realSecondsPerDays;
+    }
+
+    public float GetHoursPerDay()
+    {
+        return hoursPerDay;
+    }
+
     public float GetDays()
     {
         return day;
@@ -57,6 +67,11 @@ public class TimeManager : MonoBehaviour
         return (hours: hours, minutes: minutes);
     }
     */
+
+    public float GetHours()
+    {
+        return hours;
+    }
 
     public string GetTime()
     {

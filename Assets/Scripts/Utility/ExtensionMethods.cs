@@ -121,10 +121,15 @@ public static class ExtensionMethods
     /// <returns></returns>
     public static IEnumerator FadeColor(this GameObject gameObject, Color targetColor, float duration)
     {
-        bool isImage = false, isText = false;
+        bool isLight = false, isImage = false, isText = false;
         Color color;
 
-        if (gameObject.GetComponent<Image>() != null) // If the GameObject is an image, ...
+        if (gameObject.GetComponent<Light>() != null)
+        {
+            color = gameObject.GetComponent<Light>().color; // Caches the current color and initial opacity of image.
+            isLight = true;
+        }
+        else if (gameObject.GetComponent<Image>() != null) // If the GameObject is an image, ...
         {
             color = gameObject.GetComponent<Image>().color; // Caches the current color and initial opacity of image.
             isImage = true;
@@ -150,7 +155,9 @@ public static class ExtensionMethods
 
             color = Color.Lerp(startColor, targetColor, blend); // Blends to the corresponding opacity between start & target.
 
-            if (isImage)
+            if (isLight)
+                gameObject.GetComponent<Light>().color = color;
+            else if (isImage)
                 gameObject.GetComponent<Image>().color = color;
             else if (isText)
                 gameObject.GetComponent<TextMeshProUGUI>().color = color;

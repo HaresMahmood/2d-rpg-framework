@@ -127,6 +127,12 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 766236334}
   m_PrefabAsset: {fileID: 0}
+--- !u!108 &98479757 stripped
+Light:
+  m_CorrespondingSourceObject: {fileID: 1912597392047726089, guid: 6f025e99b095771448bbee62d24fc53e,
+    type: 3}
+  m_PrefabInstance: {fileID: 1912597390910100310}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &121792242 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6868443430243160777, guid: 2ac95072c3b265541b58dc044df7fc80,
@@ -2490,6 +2496,11 @@ PrefabInstance:
       propertyPath: clockText
       value: 
       objectReference: {fileID: 1230175726}
+    - target: {fileID: 8390750325625256402, guid: 9e7cfa39ff75e5844be6b5bfc05ecfa4,
+        type: 3}
+      propertyPath: globalLight
+      value: 
+      objectReference: {fileID: 98479757}
     m_RemovedComponents:
     - {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 9e7cfa39ff75e5844be6b5bfc05ecfa4, type: 3}
