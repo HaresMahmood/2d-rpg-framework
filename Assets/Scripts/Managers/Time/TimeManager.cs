@@ -1,5 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -9,21 +9,35 @@ public class TimeManager : MonoBehaviour
 {
     #region Variables
 
-    public const float realSecondsPerDays = 1420f; //1420f
+    public static TimeManager instance;
+
+    public const float realSecondsPerDays = 30f; //1420f
     public const float hoursPerDay = 24f;
     public const float minutesPerHours = 60f;
 
+    [UnityEngine.Header("Settings")]
     [SerializeField] private Format format;
 
     private float day;
-    private float hours;
-    private float minutes;
+    [UnityEngine.Header("Values")]
+    [ReadOnly] [SerializeField] private float hours;
+    [ReadOnly] [SerializeField] private float minutes;
+
+    private bool isDirty;
+
+    public enum Period
+    {
+        AM,
+        PM
+    }
 
     public enum Format
     {
-        Twentyfour = 24,
-        Twelve = 12
+        TwentyFour,
+        Twelve
     }
+
+    #endregion
 
     #region Accessor Methods
 
@@ -37,63 +51,57 @@ public class TimeManager : MonoBehaviour
         return day % 1f;
     }
 
+    /*
     public (float hours, float minutes) GetTime()
     {
         return (hours: hours, minutes: minutes);
     }
+    */
 
-    public Format GetFormat()
+    public string GetTime()
     {
-        return format;
-    }
-
-    #endregion
-
-    #region Helper Methods
-
-    public void ConvertTime()
-    {
-        switch (format)
+        string time;
+        if (format == Format.TwentyFour)
         {
-            default: { break; };
-            case Format.Twelve:
-                {
-                    hours = format.ToString() == "AM" ? hours : (hours % (hoursPerDay / 2)) + (hoursPerDay / 2);
-                    break;
-                }
-            case Format.Twentyfour:
-                {
-                    // TODO: Not correct conversion!
-                    hours = Mathf.Clamp(hours, 0, (hoursPerDay / 2));
-                    hours = Mathf.Floor(hours /= 2);
-                    break;
-                }
+            time = $"{hours.ToString("00")}:{minutes.ToString("00")}";
         }
-    }
+        else
+        {
+            time = DateTime.ParseExact($"{hours.ToString("00")}:{minutes.ToString("00")}", "HH:mm", null).ToString("hh:mm tt");
+            if (time.ToUpper().Contains(Period.AM.ToString()))
+            {
+                time = time.Replace(Period.AM.ToString(), $"<color=#696969>{Period.AM.ToString()}</color>");
+            }
+            else
+            {
+                time = time.Replace(Period.PM.ToString(), $"<color=#696969>{Period.PM.ToString()}</color>");
+            }
+        }
 
-    #endregion
+        return time;
+    }
 
     #endregion
 
     #region Unity Methods
 
     /// <summary>
+    /// Awake is called when the script instance is being loaded.
+    /// </summary>
+    private void Awake()
+    {
+        if (instance == null)
+            instance = this;
+    }
+
+    /// <summary>
     /// Update is called once per frame.
     /// </summary>
-    protected virtual void Update()
+    private void Update()
     {
-        Format currentFormat = GetFormat();
-
         day += Time.unscaledDeltaTime / realSecondsPerDays;
-
-        if (currentFormat != format)
-        {
-            currentFormat = format;
-            ConvertTime();
-        }
-
-        hours = Mathf.Floor((GetDaysNormalized() * (int)format));
-        minutes = Mathf.Floor((((GetDaysNormalized() * (int)format) % 1f)) * minutesPerHours);
+        hours = Mathf.Floor((GetDaysNormalized() * hoursPerDay));
+        minutes = Mathf.Floor(((GetDaysNormalized() * hoursPerDay % 1f)) * minutesPerHours);
     }
 
     #endregion

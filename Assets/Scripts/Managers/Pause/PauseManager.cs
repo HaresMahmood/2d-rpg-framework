@@ -94,7 +94,7 @@ public class PauseManager : MonoBehaviour
 
         OnPause();
 
-        GetInput();
+        
 
         if (inPartyMenu)
         {
@@ -177,6 +177,8 @@ public class PauseManager : MonoBehaviour
     {
         if (isPaused)
         {
+            GetInput();
+
             pauseContainer.SetActive(true);
             CameraController.instance.GetComponent<PostprocessingBlur>().enabled = true;
             Time.timeScale = 0f;

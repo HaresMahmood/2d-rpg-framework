@@ -1,37 +1,24 @@
-﻿using System;
-using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 using TMPro;
+using System;
 
 /// <summary>
 ///
 /// </summary>
-public class TimeUserInterface : TimeManager
+public class TimeUserInterface : MonoBehaviour
 {
     #region Variables
 
     private TextMeshProUGUI clockText;
 
-    private Period period;
-
-    private bool isDirty;
-
-    private enum Period
-    {
-        AM,
-        PM
-    }
-
     #endregion
 
     #region Helper Methods
 
-    private IEnumerator IncrementPeriod(Period currentPeriod)
+    private void SetTimeText()
     {
-        int newPeriod = ExtensionMethods.IncrementCircularInt((int)currentPeriod, 2, 1);
-        period = (Period)newPeriod;
-        yield return new WaitForSecondsRealtime(2f);
-        isDirty = false;
+        string time = TimeManager.instance.GetTime();
+        clockText.SetText($"{time}");
     }
 
     #endregion
@@ -49,26 +36,12 @@ public class TimeUserInterface : TimeManager
     /// <summary>
     /// Update is called once per frame.
     /// </summary>
-    protected override void Update()
+    private void Update()
     {
-        (float hours, float minutes) = GetTime();
-
-        // Debug
-        if (GetFormat() == Format.Twelve)
+        if (PauseManager.instance.isPaused)
         {
-            if (!isDirty && (hours == 0 && minutes == 0))
-            {
-                isDirty = true;
-                StartCoroutine(IncrementPeriod(period));
-            }
-            clockText.SetText($"{hours.ToString("00")}:{minutes.ToString("00")} <color=#696969>{period.ToString()}</color>");
+            SetTimeText();
         }
-        else
-        {
-            clockText.SetText($"{hours}:{minutes}");
-        }
-
-        base.Update();
     }
 
     #endregion

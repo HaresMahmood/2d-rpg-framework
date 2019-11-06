@@ -2186,6 +2186,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 766236334}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1230175726 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8223845689855383658, guid: a6561841eebb5f7429af501c8ee03959,
+    type: 3}
+  m_PrefabInstance: {fileID: 766236334}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1331074848 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6381679706897709112, guid: 2ac95072c3b265541b58dc044df7fc80,
@@ -2475,11 +2487,11 @@ PrefabInstance:
       objectReference: {fileID: 39354650}
     - target: {fileID: 193266337765569843, guid: 9e7cfa39ff75e5844be6b5bfc05ecfa4,
         type: 3}
-      propertyPath: format
-      value: 12
-      objectReference: {fileID: 0}
+      propertyPath: clockText
+      value: 
+      objectReference: {fileID: 1230175726}
     m_RemovedComponents:
-    - {fileID: 2299819786513862701, guid: 9e7cfa39ff75e5844be6b5bfc05ecfa4, type: 3}
+    - {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 9e7cfa39ff75e5844be6b5bfc05ecfa4, type: 3}
 --- !u!1001 &1912597390910100310
 PrefabInstance:

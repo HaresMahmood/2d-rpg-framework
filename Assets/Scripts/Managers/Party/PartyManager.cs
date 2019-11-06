@@ -84,9 +84,9 @@ public class PartyManager : MonoBehaviour
             indicator.SetActive(false);
         }
 
-        GetInput();
         if (PauseManager.instance.isPaused)
         {
+            GetInput();
             DrawStatChart(currentPokemon.stats);
         }
         else if (!PauseManager.instance.isPaused && isActive)
