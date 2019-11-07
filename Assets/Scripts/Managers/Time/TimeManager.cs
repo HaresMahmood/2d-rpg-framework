@@ -16,6 +16,9 @@ public class TimeManager : MonoBehaviour
     private const float minutesPerHours = 60f;
 
     [UnityEngine.Header("Settings")]
+    #if DEBUG
+        [SerializeField] private bool pause;
+    #endif
     [SerializeField] private Format format;
 
     private float day;
@@ -114,9 +117,16 @@ public class TimeManager : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        day += Time.unscaledDeltaTime / realSecondsPerDays;
-        hours = Mathf.Floor((GetDaysNormalized() * hoursPerDay));
-        minutes = Mathf.Floor(((GetDaysNormalized() * hoursPerDay % 1f)) * minutesPerHours);
+#if DEBUG
+        if (!pause)
+        {
+#endif
+            day += Time.unscaledDeltaTime / realSecondsPerDays;
+            hours = Mathf.Floor((GetDaysNormalized() * hoursPerDay));
+            minutes = Mathf.Floor(((GetDaysNormalized() * hoursPerDay % 1f)) * minutesPerHours);
+#if DEBUG
+        }
+#endif
     }
 
     #endregion
