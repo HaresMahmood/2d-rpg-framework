@@ -47,7 +47,10 @@ public class BranchingDialogManager : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        CheckForInput();
+        if (DialogManager.instance.isActive)
+        {
+            GetInput();
+        }
 
         if (optionButtons != null)
         {
@@ -108,7 +111,7 @@ public class BranchingDialogManager : MonoBehaviour
             optionButtons[i] = optionButton;
         }
 
-        maxButtonIndex = optionButtons.Length - 1;
+        maxButtonIndex = optionButtons.Length;
         optionContainer.SetActive(true);
 
         foreach (GameObject button in optionButtons)
@@ -212,30 +215,17 @@ public class BranchingDialogManager : MonoBehaviour
         return false;
     }
 
-    private void CheckForInput()
+    private void GetInput()
     {
-        if (Input.GetAxisRaw("Vertical") != 0)
+        bool hasInput;
+        (buttonIndex, hasInput) = InputManager.GetInput("Vertical", InputManager.Axis.Vertical, maxButtonIndex, buttonIndex);
+        if (hasInput)
         {
-            if (!isInteracting)
-            {
-                if (Input.GetAxisRaw("Vertical") < 0)
-                {
-                    if (buttonIndex < maxButtonIndex)
-                        buttonIndex++;
-                    else
-                        buttonIndex = 0;
-                }
-                else if (Input.GetAxisRaw("Vertical") > 0)
-                {
-                    if (buttonIndex > 0)
-                        buttonIndex--;
-                    else
-                        buttonIndex = maxButtonIndex;
-                }
-                isInteracting = true;
-            }
+            //GameManager.instance.transform.GetComponentInChildren<InputManager>().OnUserInput += InventoryManager_OnUserInput;
         }
         else
-            isInteracting = false;
+        {
+            //GameManager.instance.transform.GetComponentInChildren<InputManager>().OnUserInput -= InventoryManager_OnUserInput;
+        }
     }
 }

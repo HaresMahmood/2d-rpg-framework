@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -11,30 +10,33 @@ public class TimeManager : MonoBehaviour
 
     public static TimeManager instance;
 
-    private const float realSecondsPerDays = 30f; //1420f
     private const float hoursPerDay = 24f;
     private const float minutesPerHours = 60f;
 
-    [UnityEngine.Header("Settings")]
-    #if DEBUG
-        [SerializeField] private bool pause;
-    #endif
+    [Header("Settings")]
+    [Range(1f, 2840f)] [SerializeField] private float realSecondsPerDay = 1420f; // 1420f - 86400f
     [SerializeField] private Format format;
 
-    private float day;
-    [UnityEngine.Header("Values")]
+    [Header("Values")]
     [ReadOnly] [SerializeField] private float hours;
     [ReadOnly] [SerializeField] private float minutes;
 
+    private float day;
+
+    #if DEBUG
+        [Header("Debug")]
+        [RenameField("Pause")] [SerializeField] private bool isPaused;
+    #endif
+
     private bool isDirty;
 
-    public enum Period
+    private enum Period
     {
         AM,
         PM
     }
 
-    public enum Format
+    private enum Format
     {
         TwentyFour,
         Twelve
@@ -46,7 +48,7 @@ public class TimeManager : MonoBehaviour
 
     public float GetSecondsPerDay()
     {
-        return realSecondsPerDays;
+        return realSecondsPerDay;
     }
 
     public float GetHoursPerDay()
@@ -118,10 +120,10 @@ public class TimeManager : MonoBehaviour
     private void Update()
     {
 #if DEBUG
-        if (!pause)
+        if (!isPaused)
         {
 #endif
-            day += Time.unscaledDeltaTime / realSecondsPerDays;
+            day += Time.unscaledDeltaTime / realSecondsPerDay;
             hours = Mathf.Floor((GetDaysNormalized() * hoursPerDay));
             minutes = Mathf.Floor(((GetDaysNormalized() * hoursPerDay % 1f)) * minutesPerHours);
 #if DEBUG

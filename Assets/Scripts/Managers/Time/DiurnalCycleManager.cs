@@ -12,16 +12,16 @@ public class DiurnalCycleManager : MonoBehaviour
     public static DiurnalCycleManager instance;
 
     private const int sunriseStart = 5;
-    private const int sunriseEnd = 7;
+    private const int sunriseEnd = 8;
     private const int noonStart = 12;
     private const int sunsetStart = 18;
     private const int sunsetEnd = 20;
     private const int midnightStart = 0;
 
-    [UnityEngine.Header("Setup")]
+    [Header("Setup")]
     [SerializeField] private Light globalLight;
 
-    [UnityEngine.Header("Settings")]
+    [Header("Settings")]
     [SerializeField] private Color day = "FFEAC9".ToColor();
     [SerializeField] private Color night = "546BAB".ToColor();
     [SerializeField] private Color twilight = "B273A2".ToColor();
@@ -47,41 +47,41 @@ public class DiurnalCycleManager : MonoBehaviour
             default: { break; }
             case (sunriseStart):
                 {
-                    duration = (sunriseEnd - sunriseStart - 1) * singleHour;
-                    StartCoroutine(globalLight.gameObject.FadeColor(twilight, duration));
+                    SetLightColor(twilight, (3 * singleHour));
                     break;
                 }
             case (sunriseEnd):
                 {
-                    duration = (noonStart - sunriseEnd - 1) * singleHour;
-                    StartCoroutine(globalLight.gameObject.FadeColor(noon, duration));
+                    SetLightColor(noon, (5 * singleHour));
                     break;
                 }
             case (noonStart):
                 {
-                    duration = (sunsetStart - noonStart - 1) * singleHour;
-                    StartCoroutine(globalLight.gameObject.FadeColor(day, duration));
+                    SetLightColor(day, (6 * singleHour));
                     break;
                 }
             case (sunsetStart):
                 {
-                    duration = (sunsetEnd - sunsetStart - 1) * singleHour;
-                    StartCoroutine(globalLight.gameObject.FadeColor(twilight, duration));
+                    SetLightColor(twilight, (2 * singleHour));
                     break;
                 }
             case (sunsetEnd):
                 {
-                    duration = (midnightStart - sunriseEnd - 1) * singleHour;
-                    StartCoroutine(globalLight.gameObject.FadeColor(midnight, duration));
+                    SetLightColor(midnight, (4 * singleHour));
                     break;
                 }
             case (midnightStart):
                 {
-                    duration = (sunriseStart - midnightStart - 1) * singleHour;
-                    StartCoroutine(globalLight.gameObject.FadeColor(night, duration));
+                    SetLightColor(night, (5 * singleHour));
                     break;
                 }
         }
+    }
+
+    private void SetLightColor(Color color, float duration)
+    {
+        StopAllCoroutines();
+        StartCoroutine(globalLight.gameObject.FadeColor(color, duration));
     }
 
     #endregion
