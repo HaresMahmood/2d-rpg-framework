@@ -419,8 +419,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5262740121637317940}
-  - component: {fileID: 8390750325625256402}
   - component: {fileID: 4835865515992457782}
+  - component: {fileID: 8390750325625256402}
+  - component: {fileID: 8720614896860940411}
   m_Layer: 0
   m_Name: Time
   m_TagString: Untagged
@@ -442,18 +443,6 @@ Transform:
   m_Father: {fileID: 6002379217965659316}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8390750325625256402
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6962648198560671853}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 47717fc1b5e07e04dbffbb4eab0b3f27, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &4835865515992457782
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -466,9 +455,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3317e8a6689efbb4c9c36908082c8883, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  realSecondsPerDay: 1420
   format: 1
   hours: 0
   minutes: 0
+  isPaused: 0
+--- !u!114 &8390750325625256402
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6962648198560671853}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47717fc1b5e07e04dbffbb4eab0b3f27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  globalLight: {fileID: 0}
+  day: {r: 1, g: 0.91764706, b: 0.7882353, a: 1}
+  night: {r: 0.32941177, g: 0.41960785, b: 0.67058825, a: 1}
+  twilight: {r: 0.69803923, g: 0.4509804, b: 0.63529414, a: 1}
+  noon: {r: 0.9882353, g: 1, b: 0.70980394, a: 1}
+  midnight: {r: 0, g: 0.11764706, b: 0.24313726, a: 1}
+  timeOfDay: 0
+--- !u!114 &8720614896860940411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6962648198560671853}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab43665c842e54748adc88e18c2f9a1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weather: 0
+  nextWeather: 0
 --- !u!1 &7329825562967326397
 GameObject:
   m_ObjectHideFlags: 0

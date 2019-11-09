@@ -315,4 +315,9 @@ public class SceneStreamManager : MonoBehaviour
     {
         instance.Unload(sceneName);
     }
+
+    public string GetActiveScene()
+    {
+        return activeScene;   
+    }
 }

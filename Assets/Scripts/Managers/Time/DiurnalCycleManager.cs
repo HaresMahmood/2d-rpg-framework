@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 /// <summary>
@@ -29,7 +28,9 @@ public class DiurnalCycleManager : MonoBehaviour
 
     private float singleHour;
 
-    private enum TimeOfDay
+    public event EventHandler OnCycleUpdate = delegate { };
+
+    public enum TimeOfDay
     {
         dawn = 5,
         morning = 8,
@@ -39,6 +40,15 @@ public class DiurnalCycleManager : MonoBehaviour
         evening = 20,
         night = 0,
         midnight = 2
+    }
+
+    #endregion
+
+    #region Accessor Methods
+
+    public TimeOfDay GetTimeOfDay()
+    {
+        return timeOfDay;
     }
 
     #endregion
@@ -55,9 +65,11 @@ public class DiurnalCycleManager : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    private void UpdateCycle()
+    public void UpdateCycle()
     {
         int time = (int)TimeManager.instance.GetHours();
+
+        OnCycleUpdate?.Invoke(this, EventArgs.Empty);
 
         switch (time)
         {
@@ -72,6 +84,7 @@ public class DiurnalCycleManager : MonoBehaviour
                 {
                     FadeLightColor(noon, (4 * singleHour));
                     timeOfDay = (TimeOfDay)time;
+                    WeatherManager.instance.ChangeWeather();
                     break;
                 }
             case ((int)TimeOfDay.noon):
@@ -84,6 +97,7 @@ public class DiurnalCycleManager : MonoBehaviour
                 {
                     FadeLightColor(day, (4 * singleHour));
                     timeOfDay = (TimeOfDay)time;
+                    WeatherManager.instance.ChangeWeather();
                     break;
                 }
             case ((int)TimeOfDay.dusk):
@@ -102,6 +116,7 @@ public class DiurnalCycleManager : MonoBehaviour
                 {
                     FadeLightColor(midnight, (2 * singleHour));
                     timeOfDay = (TimeOfDay)time;
+                    WeatherManager.instance.ChangeWeather();
                     break;
                 }
             case ((int)TimeOfDay.midnight):
@@ -135,14 +150,6 @@ public class DiurnalCycleManager : MonoBehaviour
         lightIntensity = globalLight.intensity;
 
         singleHour = TimeManager.instance.GetSecondsPerDay() / TimeManager.instance.GetHoursPerDay();
-    }
-
-    /// <summary>
-    /// Update is called once per frame.
-    /// </summary>
-    private void Update()
-    {
-        UpdateCycle();
     }
 
     #endregion

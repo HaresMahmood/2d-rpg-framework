@@ -27,9 +27,6 @@ public class TimeManager : MonoBehaviour
         [Header("Debug")]
     #endif
         [RenameField("Pause")] [SerializeField] private bool isPaused;
-   
-
-    private bool isDirty;
 
     private enum Period
     {
@@ -104,6 +101,36 @@ public class TimeManager : MonoBehaviour
 
     #endregion
 
+    #region Miscellaneous Methods
+
+    private void IncrementDays()
+    {
+        day += Time.unscaledDeltaTime / realSecondsPerDay;
+    }
+
+    private void IncrementHours()
+    {
+        if (hours != Mathf.Floor((GetDaysNormalized() * hoursPerDay)))
+        {
+            DiurnalCycleManager.instance.UpdateCycle();
+        }
+        hours = Mathf.Floor((GetDaysNormalized() * hoursPerDay));
+    }
+
+    private void IncrementMinutes()
+    {
+        minutes = Mathf.Floor(((GetDaysNormalized() * hoursPerDay % 1f)) * minutesPerHours);
+    }
+
+    private void IncrementTime()
+    {
+        IncrementDays();
+        IncrementHours();
+        IncrementMinutes();
+    }
+
+    #endregion
+
     #region Unity Methods
 
     /// <summary>
@@ -122,9 +149,7 @@ public class TimeManager : MonoBehaviour
     {
         if (!isPaused)
         {
-            day += Time.unscaledDeltaTime / realSecondsPerDay;
-            hours = Mathf.Floor((GetDaysNormalized() * hoursPerDay));
-            minutes = Mathf.Floor(((GetDaysNormalized() * hoursPerDay % 1f)) * minutesPerHours);
+            IncrementTime();
         }
     }
 
