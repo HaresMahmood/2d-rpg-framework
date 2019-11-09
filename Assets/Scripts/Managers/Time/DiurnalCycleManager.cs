@@ -11,13 +11,6 @@ public class DiurnalCycleManager : MonoBehaviour
 
     public static DiurnalCycleManager instance;
 
-    private const int sunriseStart = 5;
-    private const int sunriseEnd = 8;
-    private const int noonStart = 12;
-    private const int sunsetStart = 18;
-    private const int sunsetEnd = 20;
-    private const int midnightStart = 0;
-
     [Header("Setup")]
     [SerializeField] private Light globalLight;
 
@@ -28,10 +21,35 @@ public class DiurnalCycleManager : MonoBehaviour
     [SerializeField] private Color noon = "FCFFB5".ToColor();
     [SerializeField] private Color midnight = "001E3E".ToColor();
 
+    [Header("Values")]
+    [ReadOnly] [SerializeField] private TimeOfDay timeOfDay;
+
     private Color lightColor;
     private float lightIntensity;
 
     private float singleHour;
+
+    private enum TimeOfDay
+    {
+        dawn = 5,
+        morning = 8,
+        noon = 12,
+        afternoon = 14,
+        dusk = 18,
+        evening = 20,
+        night = 0,
+        midnight = 2
+    }
+
+    #endregion
+
+    #region Helper Methods
+
+    private void FadeLightColor(Color color, float duration)
+    {
+        StopAllCoroutines();
+        StartCoroutine(globalLight.gameObject.FadeColor(color, duration));
+    }
 
     #endregion
 
@@ -39,49 +57,60 @@ public class DiurnalCycleManager : MonoBehaviour
 
     private void UpdateCycle()
     {
-        float duration;
         int time = (int)TimeManager.instance.GetHours();
 
         switch (time)
         {
             default: { break; }
-            case (sunriseStart):
+            case ((int)TimeOfDay.dawn):
                 {
-                    SetLightColor(twilight, (3 * singleHour));
+                    FadeLightColor(day, (3 * singleHour));
+                    timeOfDay = (TimeOfDay)time;
                     break;
                 }
-            case (sunriseEnd):
+            case ((int)TimeOfDay.morning):
                 {
-                    SetLightColor(noon, (5 * singleHour));
+                    FadeLightColor(noon, (4 * singleHour));
+                    timeOfDay = (TimeOfDay)time;
                     break;
                 }
-            case (noonStart):
+            case ((int)TimeOfDay.noon):
                 {
-                    SetLightColor(day, (6 * singleHour));
+                    FadeLightColor(day, (2* singleHour));
+                    timeOfDay = (TimeOfDay)time;
                     break;
                 }
-            case (sunsetStart):
+            case ((int)TimeOfDay.afternoon):
                 {
-                    SetLightColor(twilight, (2 * singleHour));
+                    FadeLightColor(day, (4 * singleHour));
+                    timeOfDay = (TimeOfDay)time;
                     break;
                 }
-            case (sunsetEnd):
+            case ((int)TimeOfDay.dusk):
                 {
-                    SetLightColor(midnight, (4 * singleHour));
+                    FadeLightColor(twilight, (2 * singleHour));
+                    timeOfDay = (TimeOfDay)time;
                     break;
                 }
-            case (midnightStart):
+            case ((int)TimeOfDay.evening):
                 {
-                    SetLightColor(night, (5 * singleHour));
+                    FadeLightColor(night, (4 * singleHour));
+                    timeOfDay = (TimeOfDay)time;
+                    break;
+                }
+            case ((int)TimeOfDay.night):
+                {
+                    FadeLightColor(midnight, (2 * singleHour));
+                    timeOfDay = (TimeOfDay)time;
+                    break;
+                }
+            case ((int)TimeOfDay.midnight):
+                {
+                    FadeLightColor(twilight, (3 * singleHour));
+                    timeOfDay = (TimeOfDay)time;
                     break;
                 }
         }
-    }
-
-    private void SetLightColor(Color color, float duration)
-    {
-        StopAllCoroutines();
-        StartCoroutine(globalLight.gameObject.FadeColor(color, duration));
     }
 
     #endregion

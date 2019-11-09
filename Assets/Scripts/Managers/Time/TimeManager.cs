@@ -25,8 +25,9 @@ public class TimeManager : MonoBehaviour
 
     #if DEBUG
         [Header("Debug")]
-        [RenameField("Pause")] [SerializeField] private bool isPaused;
     #endif
+        [RenameField("Pause")] [SerializeField] private bool isPaused;
+   
 
     private bool isDirty;
 
@@ -119,16 +120,12 @@ public class TimeManager : MonoBehaviour
     /// </summary>
     private void Update()
     {
-#if DEBUG
         if (!isPaused)
         {
-#endif
             day += Time.unscaledDeltaTime / realSecondsPerDay;
             hours = Mathf.Floor((GetDaysNormalized() * hoursPerDay));
             minutes = Mathf.Floor(((GetDaysNormalized() * hoursPerDay % 1f)) * minutesPerHours);
-#if DEBUG
         }
-#endif
     }
 
     #endregion
