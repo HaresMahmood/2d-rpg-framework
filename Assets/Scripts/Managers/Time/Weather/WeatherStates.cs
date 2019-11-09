@@ -9,13 +9,13 @@ public class WeatherStates : MonoBehaviour
 {
     #region Variables
 
-    [SerializeField] private List<WeatherManager.Weather> weatherStates = new List<WeatherManager.Weather>();
+    [SerializeField] private List<Weather> weatherStates = new List<Weather>();
 
     #endregion
 
     #region Accessor Methods
 
-    public List<WeatherManager.Weather> GetWeatherStates()
+    public List<Weather> GetWeatherStates()
     {
         return weatherStates;
     }

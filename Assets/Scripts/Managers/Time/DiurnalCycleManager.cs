@@ -55,7 +55,16 @@ public class DiurnalCycleManager : MonoBehaviour
 
     #region Helper Methods
 
-    private void FadeLightColor(Color color, float duration)
+    public void SetColors(Color[] colors)
+    {
+        day = colors[0];
+        night = colors[1];
+        twilight = colors[2];
+        noon = colors[3];
+        midnight = colors[4];
+    }
+
+    public void FadeLightColor(Color color, float duration)
     {
         StopAllCoroutines();
         StartCoroutine(globalLight.gameObject.FadeColor(color, duration));
@@ -84,7 +93,7 @@ public class DiurnalCycleManager : MonoBehaviour
                 {
                     FadeLightColor(noon, (4 * singleHour));
                     timeOfDay = (TimeOfDay)time;
-                    WeatherManager.instance.ChangeWeather();
+                    StartCoroutine(WeatherManager.instance.ChangeWeather());
                     break;
                 }
             case ((int)TimeOfDay.noon):
@@ -97,7 +106,7 @@ public class DiurnalCycleManager : MonoBehaviour
                 {
                     FadeLightColor(day, (4 * singleHour));
                     timeOfDay = (TimeOfDay)time;
-                    WeatherManager.instance.ChangeWeather();
+                    StartCoroutine(WeatherManager.instance.ChangeWeather());
                     break;
                 }
             case ((int)TimeOfDay.dusk):
@@ -116,7 +125,7 @@ public class DiurnalCycleManager : MonoBehaviour
                 {
                     FadeLightColor(midnight, (2 * singleHour));
                     timeOfDay = (TimeOfDay)time;
-                    WeatherManager.instance.ChangeWeather();
+                    StartCoroutine(WeatherManager.instance.ChangeWeather());
                     break;
                 }
             case ((int)TimeOfDay.midnight):

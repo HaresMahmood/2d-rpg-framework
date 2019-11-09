@@ -309,6 +309,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1296562193}
   - component: {fileID: 1296562194}
+  - component: {fileID: 1296562195}
   m_Layer: 0
   m_Name: SampleScene2
   m_TagString: Untagged
@@ -348,6 +349,19 @@ MonoBehaviour:
   sceneNames:
   - SampleScene
   - SampleScene4
+--- !u!114 &1296562195
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1296562192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80ae05ad323732a4baf3b03ab31d41ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weatherStates: 030000000400000005000000
 --- !u!1 &1737153221
 GameObject:
   m_ObjectHideFlags: 0

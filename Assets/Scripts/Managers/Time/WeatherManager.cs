@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,29 +11,24 @@ public class WeatherManager : MonoBehaviour
 
     public static WeatherManager instance;
 
+    [Header("Values")]
     [ReadOnly] [SerializeField] private Weather weather;
     [ReadOnly] [SerializeField] private Weather nextWeather;
-
-    public enum Weather
-    { 
-        Sunny,
-        Cloudy,
-        Rainy,
-        Snowy,
-        Stormy,
-        Thunder,
-        Hailing,
-        Windy,
-        Foggy
-    }
 
     #endregion
 
     #region Accessor Methods
-    
+
+    /*
     public (Weather weather, Weather nextWeather)  GetWeather()
     {
         return (weather: this.weather, nextWeather: this.nextWeather);
+    }
+    */
+
+    public Weather GetCurrentWeather()
+    {
+        return weather;
     }
 
     #endregion
@@ -42,8 +37,7 @@ public class WeatherManager : MonoBehaviour
 
     private Weather SetRandomWeather(List<Weather> weatherStates)
     {
-        System.Random random = new System.Random();
-        int randomState = random.Next(weatherStates.Count);
+        int randomState = Random.Range(0, weatherStates.Count);
         return weatherStates[randomState];
     }
 
@@ -51,26 +45,50 @@ public class WeatherManager : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    public void ChangeWeather()
+    private void SetWeatherColors(Weather weather)
     {
-        //GameManager.instance.transform.GetComponentInChildren<DiurnalCycleManager>().OnCycleUpdate += WeatherManager_OnCycleUpdate;
-        List<Weather> weatherStates = new List<Weather>();
-        if (SceneStreamManager.IsSceneLoaded(SceneStreamManager.instance.GetActiveScene()))
+        switch (weather.GetState())
         {
-            weatherStates = FindObjectOfType<WeatherStates>().GetWeatherStates();
-            weather = nextWeather;
-            nextWeather = SetRandomWeather(weatherStates);
+            default: { break;  }
+            case (Weather.State.Clear):
+                {
+                    Color[] colors = new Color[] { "FFEAC9".ToColor(), "546BAB".ToColor(), "B273A2".ToColor(), "FCFFB5".ToColor(), "001E3E".ToColor() };
+                    DiurnalCycleManager.instance.SetColors(colors);
+                    break;
+                }
+            case (Weather.State.Cloudy):
+                {
+                    Color[] colors = new Color[] { "8B959A".ToColor(), "4E5E8C".ToColor(), "34617E".ToColor(), "A1A29B".ToColor(), "0A1E33".ToColor() };
+                    DiurnalCycleManager.instance.SetColors(colors);
+                    break;
+                }
+            case (Weather.State.Rainy):
+                {
+                    Color[] colors = new Color[] { "8B959A".ToColor(), "4E5E8C".ToColor(), "34617E".ToColor(), "A1A29B".ToColor(), "0A1E33".ToColor() };
+                    DiurnalCycleManager.instance.SetColors(colors);
+                    break;
+                }
         }
+
+        
     }
 
-    #endregion
-
-    #region Event Methods
-
-    private void WeatherManager_OnCycleUpdate(object sender, EventArgs e)
+    public IEnumerator ChangeWeather()
     {
-        Debug.Log("EVENT METHOD CALLED");
-        GameManager.instance.transform.GetComponentInChildren<DiurnalCycleManager>().OnCycleUpdate -= WeatherManager_OnCycleUpdate;
+        List<Weather> weatherStates = new List<Weather>();
+        yield return new WaitUntil(() => SceneStreamManager.IsSceneLoaded(SceneStreamManager.instance.GetActiveScene()));
+        weatherStates = FindObjectOfType<WeatherStates>().GetWeatherStates();
+        if (weather.GetIcon() == null)
+        {
+            weather = SetRandomWeather(weatherStates);
+        }
+        else
+        {
+            weather = nextWeather;
+        }
+        nextWeather = SetRandomWeather(weatherStates);
+
+        SetWeatherColors(weather);
     }
 
     #endregion
@@ -84,22 +102,6 @@ public class WeatherManager : MonoBehaviour
     {
         if (instance == null)
             instance = this;
-    }
-
-    /// <summary>
-    /// Start is called before the first frame update.
-    /// </summary>
-    private void Start()
-    {
-        
-    }
-
-    /// <summary>
-    /// Update is called once per frame.
-    /// </summary>
-    private void Update()
-    {
-        
     }
 
     #endregion

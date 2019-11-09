@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -150,6 +151,14 @@ public class TimeManager : MonoBehaviour
         if (!isPaused)
         {
             IncrementTime();
+        }
+
+        // TODO: Debug
+        if (PauseManager.instance.isPaused)
+        {
+            isPaused = true;
+            TimeUserInterface.instance.SetTimeText();
+            WeatherUserInterface.instance.SetWeatherUserInterface();
         }
     }
 

@@ -320,4 +320,14 @@ public class SceneStreamManager : MonoBehaviour
     {
         return activeScene;   
     }
+
+    public static bool IsLoading()
+    {
+        if (instance.loadingScenes.Count == 0)
+        {
+            Debug.Log("TRUE");
+            return true;
+        }
+        return false;
+    }
 }

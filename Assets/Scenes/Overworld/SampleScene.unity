@@ -5849,7 +5849,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80ae05ad323732a4baf3b03ab31d41ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weatherStates: 000000000100000002000000
+  weatherStates:
+  - weather: 0
+    icon: {fileID: 21300000, guid: f21aa5d0812779e48b22da17d1f35459, type: 3}
+  - weather: 1
+    icon: {fileID: 21300000, guid: 8dbf4166e708c03428b194df2f2ceadf, type: 3}
+  - weather: 2
+    icon: {fileID: 21300000, guid: 7926f139dc438f2439cabd6ba6b507a1, type: 3}
 --- !u!1 &1941039775
 GameObject:
   m_ObjectHideFlags: 0
