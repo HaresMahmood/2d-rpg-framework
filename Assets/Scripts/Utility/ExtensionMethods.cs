@@ -171,6 +171,50 @@ public static class ExtensionMethods
     /// <summary>
     /// 
     /// </summary>
+    /// <param name="targetRateOverTime"></param>
+    /// <param name="duration"></param>
+    /// <returns></returns>
+    public static IEnumerator FadeParticleSystem(this GameObject targetObject, float targetRateOverTime, float duration, bool toggleParticleSystem = false)
+    {
+        ParticleSystem particleSystem = targetObject.GetComponent<ParticleSystem>();
+        var emission = particleSystem.emission;
+        float initialRateOverTime = emission.rateOverTime.constant;
+
+        /*
+        if (!targetObject.activeSelf)
+        {
+            targetObject.SetActive(true);
+        }
+        */
+
+        float t = 0; // Tracks how many seconds we've been fading.
+        while (t < duration) // While time is less than the duration of the fade, ...
+        {
+            if (Time.timeScale == 0)
+                t += Time.unscaledDeltaTime;
+            else
+                t += Time.deltaTime;
+            float blend = Mathf.Clamp01(t / duration); // Turns the time into an interpolation factor between 0 and 1. 
+
+            initialRateOverTime = Mathf.Lerp(initialRateOverTime, targetRateOverTime, blend); // Blends to the corresponding opacity between start & target.
+            emission.rateOverTime = initialRateOverTime;
+
+            yield return null; // Wait one frame, then repeat.
+        }
+
+        /*
+        if (toggleParticleSystem)
+        {
+            bool isActive = targetObject.activeSelf;
+            isActive = !isActive;
+            targetObject.SetActive(isActive);
+        }
+        */
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
     /// <param name="transform"></param>
     /// <param name="duration"></param>
     /// <param name="targetScale"></param>

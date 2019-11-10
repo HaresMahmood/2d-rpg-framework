@@ -491,8 +491,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab43665c842e54748adc88e18c2f9a1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weather: 0
-  nextWeather: 0
+  particleSystems: {fileID: 0}
+  weather:
+    weather: 0
+    icon: {fileID: 0}
+  nextWeather:
+    weather: 0
+    icon: {fileID: 0}
 --- !u!1 &7329825562967326397
 GameObject:
   m_ObjectHideFlags: 0

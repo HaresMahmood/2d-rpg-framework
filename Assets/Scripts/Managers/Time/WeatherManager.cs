@@ -12,6 +12,9 @@ public class WeatherManager : MonoBehaviour
     public static WeatherManager instance;
 
     [Header("Values")]
+    [SerializeField] private Transform particleSystems;
+
+    [Header("Values")]
     [ReadOnly] [SerializeField] private Weather weather;
     [ReadOnly] [SerializeField] private Weather nextWeather;
 
@@ -45,6 +48,16 @@ public class WeatherManager : MonoBehaviour
 
     #region Miscellaneous Methods
 
+    private void EnableParticleSystem(string particleSystem, float particles)
+    {
+        StartCoroutine(particleSystems.Find(particleSystem).gameObject.FadeParticleSystem(particles, 0.5f, true));
+    }
+
+    private void DisableParticleSystem(string particleSystem)
+    {
+        StartCoroutine(particleSystems.Find(particleSystem).gameObject.FadeParticleSystem(0f, 0.5f, true));
+    }
+
     private void SetWeatherColors(Weather weather)
     {
         switch (weather.GetState())
@@ -54,23 +67,24 @@ public class WeatherManager : MonoBehaviour
                 {
                     Color[] colors = new Color[] { "FFEAC9".ToColor(), "546BAB".ToColor(), "B273A2".ToColor(), "FCFFB5".ToColor(), "001E3E".ToColor() };
                     DiurnalCycleManager.instance.SetColors(colors);
+                    DisableParticleSystem("Rain");
                     break;
                 }
             case (Weather.State.Cloudy):
                 {
                     Color[] colors = new Color[] { "8B959A".ToColor(), "4E5E8C".ToColor(), "34617E".ToColor(), "A1A29B".ToColor(), "0A1E33".ToColor() };
                     DiurnalCycleManager.instance.SetColors(colors);
+                    DisableParticleSystem("Rain");
                     break;
                 }
             case (Weather.State.Rainy):
                 {
                     Color[] colors = new Color[] { "8B959A".ToColor(), "4E5E8C".ToColor(), "34617E".ToColor(), "A1A29B".ToColor(), "0A1E33".ToColor() };
                     DiurnalCycleManager.instance.SetColors(colors);
+                    EnableParticleSystem("Rain", 100f);
                     break;
                 }
         }
-
-        
     }
 
     public IEnumerator ChangeWeather()
@@ -102,6 +116,14 @@ public class WeatherManager : MonoBehaviour
     {
         if (instance == null)
             instance = this;
+    }
+
+    /// <summary>
+    /// Start is called before the first frame update.
+    /// </summary>
+    private void Start()
+    {
+        StartCoroutine(ChangeWeather());
     }
 
     #endregion

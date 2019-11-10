@@ -117,6 +117,7 @@ public class DiurnalCycleManager : MonoBehaviour
                 {
                     FadeLight(twilight, (2 * singleHour));
                     timeOfDay = (TimeOfDay)time;
+                    StartCoroutine(WeatherManager.instance.ChangeWeather()); // Debug?
                     break;
                 }
             case ((int)TimeOfDay.evening):
