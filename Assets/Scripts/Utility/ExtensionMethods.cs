@@ -186,7 +186,6 @@ public static class ExtensionMethods
             targetObject.SetActive(true);
         }
         */
-
         float t = 0; // Tracks how many seconds we've been fading.
         while (t < duration) // While time is less than the duration of the fade, ...
         {
@@ -201,7 +200,6 @@ public static class ExtensionMethods
 
             yield return null; // Wait one frame, then repeat.
         }
-
         /*
         if (toggleParticleSystem)
         {

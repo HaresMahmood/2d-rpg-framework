@@ -48,14 +48,40 @@ public class WeatherManager : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    private void EnableParticleSystem(string particleSystem, float particles)
+    private void EnableParticleSystem(string particleSystem)
     {
-        StartCoroutine(particleSystems.Find(particleSystem).gameObject.FadeParticleSystem(particles, 0.5f, true));
+        Transform target = particleSystems.Find(particleSystem);
+        if (target.childCount != 0)
+        {
+            Transform[] children = target.GetChildren();
+            foreach (Transform child in children)
+            {
+                int maxParticles = child.GetComponent<ParticleSystem>().main.maxParticles;
+                StartCoroutine(child.gameObject.FadeParticleSystem(maxParticles, 0.5f, true));
+            }
+        }
+        else
+        {
+            int maxParticles = target.GetComponent<ParticleSystem>().main.maxParticles;
+            StartCoroutine(target.gameObject.FadeParticleSystem(maxParticles, 0.5f, true));
+        }
     }
 
     private void DisableParticleSystem(string particleSystem)
     {
-        StartCoroutine(particleSystems.Find(particleSystem).gameObject.FadeParticleSystem(0f, 0.5f, true));
+        Transform particles = particleSystems.Find(particleSystem);
+        if (particles.childCount != 0)
+        {
+            Transform[] children = particles.GetChildren();
+            foreach (Transform child in children)
+            {
+                StartCoroutine(child.gameObject.FadeParticleSystem(0, 0.5f, true));
+            }
+        }
+        else
+        {
+            StartCoroutine(particles.gameObject.FadeParticleSystem(0, 0.5f, true));
+        }
     }
 
     private void SetWeatherColors(Weather weather)
@@ -81,7 +107,7 @@ public class WeatherManager : MonoBehaviour
                 {
                     Color[] colors = new Color[] { "8B959A".ToColor(), "4E5E8C".ToColor(), "34617E".ToColor(), "A1A29B".ToColor(), "0A1E33".ToColor() };
                     DiurnalCycleManager.instance.SetColors(colors);
-                    EnableParticleSystem("Rain", 100f);
+                    EnableParticleSystem("Rain");
                     break;
                 }
         }
