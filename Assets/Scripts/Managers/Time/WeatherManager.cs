@@ -48,43 +48,72 @@ public class WeatherManager : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    private void EnableParticleSystem(string particleSystem)
+    private void EnableParticleSystem(string parentSystem, string subSystem, int particlesRate, bool settings = false, float startLifetime = -1f, float gravity = -1,  Vector3? transformScale = null)
     {
-        Transform target = particleSystems.Find(particleSystem);
-        if (target.childCount != 0)
+        Transform target = particleSystems.Find(parentSystem).Find(subSystem);
+        StartCoroutine(target.gameObject.FadeParticleSystem(particlesRate, 0.1f, true));
+
+        if (settings)
         {
-            Transform[] children = target.GetChildren();
-            foreach (Transform child in children)
+            ParticleSystem particleSystem = particleSystems.Find(parentSystem).Find(subSystem).GetComponent<ParticleSystem>();
+            var main = particleSystem.main;
+
+            if (transformScale != null)
             {
-                int maxParticles = child.GetComponent<ParticleSystem>().main.maxParticles;
-                StartCoroutine(child.gameObject.FadeParticleSystem(maxParticles, 0.5f, true));
+                target.localScale = (Vector3)transformScale;
             }
-        }
-        else
-        {
-            int maxParticles = target.GetComponent<ParticleSystem>().main.maxParticles;
-            StartCoroutine(target.gameObject.FadeParticleSystem(maxParticles, 0.5f, true));
+
+            if (startLifetime > -1)
+            {
+                main.startLifetime = startLifetime;
+            }
+
+            if (gravity > -1)
+            {
+                main.gravityModifier = gravity;
+            }
         }
     }
 
     private void DisableParticleSystem(string particleSystem)
     {
-        Transform particles = particleSystems.Find(particleSystem);
-        if (particles.childCount != 0)
+        Transform target = particleSystems.Find(particleSystem);
+        StartCoroutine(target.gameObject.FadeParticleSystem(0, 0.1f, true));
+    }
+
+    private void DisableAllParticleSystems()
+    {
+        ParticleSystem[] targets = particleSystems.GetComponentsInChildren<ParticleSystem>();
+        foreach (ParticleSystem target in targets)
         {
-            Transform[] children = particles.GetChildren();
-            foreach (Transform child in children)
+            if (target.emission.rateOverTime.constant > 0)
             {
-                StartCoroutine(child.gameObject.FadeParticleSystem(0, 0.5f, true));
+                StartCoroutine(target.gameObject.FadeParticleSystem(0, 0.1f, true));
             }
         }
-        else
+
+        DisableWind();
+    }
+
+    private void EnableWind(float windSpeed)
+    {
+        WindZone windZone = particleSystems.Find("Wind").GetComponent<WindZone>();
+
+        windZone.gameObject.SetActive(true);
+        windZone.windMain = windSpeed;
+    }
+
+    private void DisableWind()
+    {
+        WindZone windZone = particleSystems.Find("Wind").GetComponent<WindZone>();
+
+        if (windZone.gameObject.activeSelf)
         {
-            StartCoroutine(particles.gameObject.FadeParticleSystem(0, 0.5f, true));
+            windZone.gameObject.SetActive(false);
         }
     }
 
-    private void SetWeatherColors(Weather weather)
+    private void SetWeatherEffects(Weather weather)
     {
         switch (weather.GetState())
         {
@@ -93,21 +122,34 @@ public class WeatherManager : MonoBehaviour
                 {
                     Color[] colors = new Color[] { "FFEAC9".ToColor(), "546BAB".ToColor(), "B273A2".ToColor(), "FCFFB5".ToColor(), "001E3E".ToColor() };
                     DiurnalCycleManager.instance.SetColors(colors);
-                    DisableParticleSystem("Rain");
+                    DisableAllParticleSystems();                   
                     break;
+
                 }
             case (Weather.State.Cloudy):
                 {
                     Color[] colors = new Color[] { "8B959A".ToColor(), "4E5E8C".ToColor(), "34617E".ToColor(), "A1A29B".ToColor(), "0A1E33".ToColor() };
                     DiurnalCycleManager.instance.SetColors(colors);
-                    DisableParticleSystem("Rain");
+                    DisableAllParticleSystems();
                     break;
                 }
             case (Weather.State.Rainy):
                 {
                     Color[] colors = new Color[] { "8B959A".ToColor(), "4E5E8C".ToColor(), "34617E".ToColor(), "A1A29B".ToColor(), "0A1E33".ToColor() };
                     DiurnalCycleManager.instance.SetColors(colors);
-                    EnableParticleSystem("Rain");
+                    DisableAllParticleSystems();
+                    EnableParticleSystem("Rain", "Rain Dropplets", 100, true, 0.7f, 5f, new Vector3(0.5f, 3.75f, 1f));
+                    EnableParticleSystem("Rain", "Rain Splatter", 100);
+                    break;
+                }
+            case (Weather.State.Stormy):
+                {
+                    Color[] colors = new Color[] { "8B959A".ToColor(), "4E5E8C".ToColor(), "34617E".ToColor(), "A1A29B".ToColor(), "0A1E33".ToColor() };
+                    DiurnalCycleManager.instance.SetColors(colors);
+                    DisableAllParticleSystems();
+                    EnableParticleSystem("Rain", "Rain Dropplets", 200, true, 0.3f, 10f, new Vector3(0.5f, 7f, 1f));
+                    EnableParticleSystem("Rain", "Rain Splatter", 200);
+                    EnableWind(7.5f);
                     break;
                 }
         }
@@ -128,7 +170,7 @@ public class WeatherManager : MonoBehaviour
         }
         nextWeather = SetRandomWeather(weatherStates);
 
-        SetWeatherColors(weather);
+        SetWeatherEffects(weather);
     }
 
     #endregion
