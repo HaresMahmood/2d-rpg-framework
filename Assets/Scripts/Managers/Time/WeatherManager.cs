@@ -147,7 +147,7 @@ public class WeatherManager : MonoBehaviour
                     Color[] colors = new Color[] { "8B959A".ToColor(), "4E5E8C".ToColor(), "34617E".ToColor(), "A1A29B".ToColor(), "0A1E33".ToColor() };
                     DiurnalCycleManager.instance.SetColors(colors);
                     DisableAllParticleSystems();
-                    EnableParticleSystem("Rain", "Rain Dropplets", 200, true, 0.3f, 10f, new Vector3(0.5f, 7f, 1f));
+                    EnableParticleSystem("Rain", "Rain Dropplets", 200, true, 0.3f, 10f, new Vector3(0.5f, 10f, 1f));
                     EnableParticleSystem("Rain", "Rain Splatter", 200);
                     EnableWind(7.5f);
                     break;
