@@ -18,6 +18,8 @@ public class WeatherManager : MonoBehaviour
     [ReadOnly] [SerializeField] private Weather weather;
     [ReadOnly] [SerializeField] private Weather nextWeather;
 
+    private bool isFlashingLight;
+
     #endregion
 
     #region Accessor Methods
@@ -78,21 +80,22 @@ public class WeatherManager : MonoBehaviour
     private void DisableParticleSystem(string particleSystem)
     {
         Transform target = particleSystems.Find(particleSystem);
-        StartCoroutine(target.gameObject.FadeParticleSystem(0, 0.1f, true));
+        StartCoroutine(target.gameObject.FadeParticleSystem(0, 0.3f, true));
     }
 
-    private void DisableAllParticleSystems()
+    private void DisableAllWeatherSystems()
     {
         ParticleSystem[] targets = particleSystems.GetComponentsInChildren<ParticleSystem>();
         foreach (ParticleSystem target in targets)
         {
             if (target.emission.rateOverTime.constant > 0)
             {
-                StartCoroutine(target.gameObject.FadeParticleSystem(0, 0.1f, true));
+                StartCoroutine(target.gameObject.FadeParticleSystem(0, 0.3f, true));
             }
         }
 
         DisableWind();
+        DisableFlashLight();
     }
 
     private void EnableWind(float windSpeed)
@@ -113,16 +116,39 @@ public class WeatherManager : MonoBehaviour
         }
     }
 
+    private IEnumerator EnableFlashLight()
+    {
+        isFlashingLight = true;
+
+        while (isFlashingLight)
+        {
+            GlobalLightController lightController = DiurnalCycleManager.instance.GetGlobalLight().GetComponent<GlobalLightController>();
+            int repetitions = Random.Range(1, 3);
+            float interval = Random.Range(1f, 8.5f);
+
+            StartCoroutine(lightController.FlashLight(3.5f, 0.1f, repetitions));
+            yield return new WaitForSeconds(interval);
+        }
+    }
+    
+    private void DisableFlashLight()
+    {
+        if (isFlashingLight)
+        {
+            isFlashingLight = false;
+        }
+    }
+
     private void SetWeatherEffects(Weather weather)
     {
         switch (weather.GetState())
         {
-            default: { break;  }
+            default: { break; }
             case (Weather.State.Clear):
                 {
                     Color[] colors = new Color[] { "FFEAC9".ToColor(), "546BAB".ToColor(), "B273A2".ToColor(), "FCFFB5".ToColor(), "001E3E".ToColor() };
                     DiurnalCycleManager.instance.SetColors(colors);
-                    DisableAllParticleSystems();                   
+                    DisableAllWeatherSystems();                   
                     break;
 
                 }
@@ -130,14 +156,14 @@ public class WeatherManager : MonoBehaviour
                 {
                     Color[] colors = new Color[] { "8B959A".ToColor(), "4E5E8C".ToColor(), "34617E".ToColor(), "A1A29B".ToColor(), "0A1E33".ToColor() };
                     DiurnalCycleManager.instance.SetColors(colors);
-                    DisableAllParticleSystems();
+                    DisableAllWeatherSystems();
                     break;
                 }
             case (Weather.State.Rainy):
                 {
                     Color[] colors = new Color[] { "8B959A".ToColor(), "4E5E8C".ToColor(), "34617E".ToColor(), "A1A29B".ToColor(), "0A1E33".ToColor() };
                     DiurnalCycleManager.instance.SetColors(colors);
-                    DisableAllParticleSystems();
+                    DisableAllWeatherSystems();
                     EnableParticleSystem("Rain", "Rain Dropplets", 100, true, 0.7f, 5f, new Vector3(0.5f, 3.75f, 1f));
                     EnableParticleSystem("Rain", "Rain Splatter", 100);
                     break;
@@ -146,10 +172,11 @@ public class WeatherManager : MonoBehaviour
                 {
                     Color[] colors = new Color[] { "8B959A".ToColor(), "4E5E8C".ToColor(), "34617E".ToColor(), "A1A29B".ToColor(), "0A1E33".ToColor() };
                     DiurnalCycleManager.instance.SetColors(colors);
-                    DisableAllParticleSystems();
+                    DisableAllWeatherSystems();
                     EnableParticleSystem("Rain", "Rain Dropplets", 200, true, 0.3f, 10f, new Vector3(0.5f, 10f, 1f));
                     EnableParticleSystem("Rain", "Rain Splatter", 200);
                     EnableWind(7.5f);
+                    StartCoroutine(EnableFlashLight());
                     break;
                 }
         }
@@ -158,7 +185,11 @@ public class WeatherManager : MonoBehaviour
     public IEnumerator ChangeWeather()
     {
         List<Weather> weatherStates = new List<Weather>();
-        yield return new WaitUntil(() => SceneStreamManager.IsSceneLoaded(SceneStreamManager.instance.GetActiveScene()));
+        //yield return new WaitUntil(() => SceneStreamManager.IsSceneLoaded(SceneStreamManager.instance.GetActiveScene()));
+        while (!SceneStreamManager.IsSceneLoaded(SceneStreamManager.instance.GetActiveScene()))
+        {
+            yield return null;
+        }
         weatherStates = FindObjectOfType<WeatherStates>().GetWeatherStates();
         if (weather.GetIcon() == null)
         {
@@ -169,7 +200,6 @@ public class WeatherManager : MonoBehaviour
             weather = nextWeather;
         }
         nextWeather = SetRandomWeather(weatherStates);
-
         SetWeatherEffects(weather);
     }
 

@@ -17,8 +17,6 @@ public class PlayerMovement : MovingObject
     #region Unity Methods
     /// <summary>
     /// Update is called once per frame.
-    /// 
-    /// Overrides Update function from the MovingObject base-class.
     /// </summary>
     private void Update()
     {

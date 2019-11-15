@@ -46,6 +46,11 @@ public class DiurnalCycleManager : MonoBehaviour
 
     #region Accessor Methods
 
+    public Light GetGlobalLight()
+    {
+        return globalLight;
+    }
+
     public TimeOfDay GetTimeOfDay()
     {
         return timeOfDay;
@@ -57,21 +62,13 @@ public class DiurnalCycleManager : MonoBehaviour
 
     public void SetColors(Color[] colors)
     {
+        Color currentColor = lightColor;
+
         day = colors[0];
         night = colors[1];
         twilight = colors[2];
         noon = colors[3];
         midnight = colors[4];
-    }
-
-    public void FadeLight(Color color, float duration, float intensity = -1)
-    {
-        StopAllCoroutines();
-        StartCoroutine(globalLight.gameObject.FadeColor(color, duration));
-        if (intensity > -1 && intensity != globalLight.intensity)
-        {
-            StartCoroutine(globalLight.FadeLight(intensity, duration));
-        }
     }
 
     #endregion
@@ -95,9 +92,9 @@ public class DiurnalCycleManager : MonoBehaviour
                 }
             case ((int)TimeOfDay.morning):
                 {
+                    StartCoroutine(WeatherManager.instance.ChangeWeather());
                     FadeLight(noon, (4 * singleHour));
                     timeOfDay = (TimeOfDay)time;
-                    StartCoroutine(WeatherManager.instance.ChangeWeather());
                     break;
                 }
             case ((int)TimeOfDay.noon):
@@ -108,16 +105,16 @@ public class DiurnalCycleManager : MonoBehaviour
                 }
             case ((int)TimeOfDay.afternoon):
                 {
+                    StartCoroutine(WeatherManager.instance.ChangeWeather());
                     FadeLight(day, (4 * singleHour));
                     timeOfDay = (TimeOfDay)time;
-                    StartCoroutine(WeatherManager.instance.ChangeWeather());
                     break;
                 }
             case ((int)TimeOfDay.dusk):
                 {
+                    StartCoroutine(WeatherManager.instance.ChangeWeather()); // Debug?
                     FadeLight(twilight, (2 * singleHour));
                     timeOfDay = (TimeOfDay)time;
-                    StartCoroutine(WeatherManager.instance.ChangeWeather()); // Debug?
                     break;
                 }
             case ((int)TimeOfDay.evening):
@@ -128,9 +125,9 @@ public class DiurnalCycleManager : MonoBehaviour
                 }
             case ((int)TimeOfDay.night):
                 {
+                    StartCoroutine(WeatherManager.instance.ChangeWeather());
                     FadeLight(midnight, (2 * singleHour));
                     timeOfDay = (TimeOfDay)time;
-                    StartCoroutine(WeatherManager.instance.ChangeWeather());
                     break;
                 }
             case ((int)TimeOfDay.midnight):
@@ -140,6 +137,11 @@ public class DiurnalCycleManager : MonoBehaviour
                     break;
                 }
         }
+    }
+
+    private void FadeLight(Color color, float duration, float intensity = -1)
+    {
+        globalLight.GetComponent<GlobalLightController>().FadeLight(color, duration, intensity);
     }
 
     #endregion
