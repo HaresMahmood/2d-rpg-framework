@@ -31,11 +31,17 @@ public class GlobalLightController : MonoBehaviour
         int counter = 0;
         while (counter < repetitions)
         {
-            FadeLight(GetComponent<Light>().color, (duration / 2), intensity);
-            yield return new WaitForSeconds((duration / 2));
-            FadeLight(GetComponent<Light>().color, (duration), startIntensity);
-            yield return new WaitForSeconds((duration));
-
+            FadeLight(GetComponent<Light>().color, (duration / 4), intensity);
+            yield return new WaitForSeconds(duration /42);
+            if (counter == --repetitions)
+            {
+                FadeLight(GetComponent<Light>().color, (duration), startIntensity);
+            }
+            else
+            {
+                FadeLight(GetComponent<Light>().color, (duration / 4), startIntensity);
+                yield return new WaitForSeconds(duration / 4);
+            }
             counter++;
         }
     }

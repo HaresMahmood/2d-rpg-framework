@@ -80,7 +80,7 @@ public class WeatherManager : MonoBehaviour
     private void DisableParticleSystem(string particleSystem)
     {
         Transform target = particleSystems.Find(particleSystem);
-        StartCoroutine(target.gameObject.FadeParticleSystem(0, 0.3f, true));
+        StartCoroutine(target.gameObject.FadeParticleSystem(0, 0.1f, true));
     }
 
     private void DisableAllWeatherSystems()
@@ -90,7 +90,7 @@ public class WeatherManager : MonoBehaviour
         {
             if (target.emission.rateOverTime.constant > 0)
             {
-                StartCoroutine(target.gameObject.FadeParticleSystem(0, 0.3f, true));
+                StartCoroutine(target.gameObject.FadeParticleSystem(0, 0.1f, true));
             }
         }
 
@@ -123,10 +123,10 @@ public class WeatherManager : MonoBehaviour
         while (isFlashingLight)
         {
             GlobalLightController lightController = DiurnalCycleManager.instance.GetGlobalLight().GetComponent<GlobalLightController>();
-            int repetitions = Random.Range(1, 3);
-            float interval = Random.Range(1f, 8.5f);
+            int repetitions = Random.Range(2, 5);
+            float interval = Random.Range(1f, 15f);
 
-            StartCoroutine(lightController.FlashLight(3.5f, 0.1f, repetitions));
+            StartCoroutine(lightController.FlashLight(3f, 0.6f, repetitions));
             yield return new WaitForSeconds(interval);
         }
     }
