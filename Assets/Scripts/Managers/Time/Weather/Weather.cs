@@ -14,12 +14,12 @@ public class Weather
     {
         Clear,
         Cloudy,
-        Rainy,
-        Snowy,
+        Rainy, 
         Stormy,
         Thunder,
+        Snowy,
         Hailing,
-        Windy,
+        //Windy,
         Foggy
     }
 

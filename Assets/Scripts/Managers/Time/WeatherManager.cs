@@ -165,7 +165,8 @@ public class WeatherManager : MonoBehaviour
                     DiurnalCycleManager.instance.SetColors(colors);
                     DisableAllWeatherSystems();
                     EnableParticleSystem("Rain", "Rain Dropplets", 100, true, 0.7f, 5f, new Vector3(0.5f, 3.75f, 1f));
-                    EnableParticleSystem("Rain", "Rain Splatter", 100);
+                    EnableParticleSystem("Rain", "Rain Splatter (Sprites)", 50, true, -1f, -1f, new Vector3(0.5f, 2.5f, 1f));
+                    EnableParticleSystem("Rain", "Rain Splatter (Ground)", 100);
                     break;
                 }
             case (Weather.State.Stormy):
@@ -174,7 +175,19 @@ public class WeatherManager : MonoBehaviour
                     DiurnalCycleManager.instance.SetColors(colors);
                     DisableAllWeatherSystems();
                     EnableParticleSystem("Rain", "Rain Dropplets", 200, true, 0.3f, 10f, new Vector3(0.5f, 10f, 1f));
-                    EnableParticleSystem("Rain", "Rain Splatter", 200);
+                    EnableParticleSystem("Rain", "Rain Splatter (Sprites)", 100, true, -1f, -1f, new Vector3(0.5f, 3.5f, 1f));
+                    EnableParticleSystem("Rain", "Rain Splatter (Ground)", 200);
+                    EnableWind(7.5f);
+                    break;
+                }
+            case (Weather.State.Thunder):
+                {
+                    Color[] colors = new Color[] { "8B959A".ToColor(), "4E5E8C".ToColor(), "34617E".ToColor(), "A1A29B".ToColor(), "0A1E33".ToColor() };
+                    DiurnalCycleManager.instance.SetColors(colors);
+                    DisableAllWeatherSystems();
+                    EnableParticleSystem("Rain", "Rain Dropplets", 200, true, 0.3f, 10f, new Vector3(0.5f, 10f, 1f));
+                    EnableParticleSystem("Rain", "Rain Splatter (Sprites)", 100, true, -1f, -1f, new Vector3(0.5f, 3.5f, 1f));
+                    EnableParticleSystem("Rain", "Rain Splatter (Ground)", 200);
                     EnableWind(7.5f);
                     StartCoroutine(EnableFlashLight());
                     break;

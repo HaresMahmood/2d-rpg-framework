@@ -196,15 +196,21 @@ public abstract class MovingObject : MonoBehaviour
     {
         if (moveCollider != null)
         {
-            RaycastHit2D[] hits = new RaycastHit2D[10]; // Array to store all detected colliders withing set distance.
-            ContactFilter2D filter = new ContactFilter2D() { }; // Filter not being used at the moment.
+            RaycastHit2D[] hits = new RaycastHit2D[5]; // Array to store all detected colliders withing set distance.
+            ContactFilter2D contactFilter = new ContactFilter2D // Filters object that are only on the Obstacles sorting layer...
+            {
+                useLayerMask = true,
+                layerMask = LayerMask.NameToLayer("Obstacles")
+            };
 
-            int numHits = moveCollider.Cast(direction, filter, hits, distance); // Casts a RayCast in the direction and for the distance specified.
+            int numHits = moveCollider.Cast(direction, contactFilter, hits, distance); // Casts a RayCast in the direction and for the distance specified.
 
             for (int i = 0; i < numHits; i++)
             {
-                if (!hits[i].collider.isTrigger) // If the particular collider is not a Trigger, ...
+                if (!hits[i].collider.isTrigger && hits[i].transform.CompareTag("Collidable")) // If the particular collider is not a Trigger, ...
+                {
                     return true; // Hit blocking collision
+                }
             }
         }
 

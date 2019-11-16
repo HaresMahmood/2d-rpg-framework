@@ -77,7 +77,7 @@ public class TimeManager : MonoBehaviour
         return hours;
     }
 
-    public string GetTime()
+    public string GetTimeText()
     {
         string time;
         if (format == Format.TwentyFour)

@@ -19,7 +19,7 @@ public class TimeUserInterface : MonoBehaviour
 
     public void SetTimeText()
     {
-        string time = TimeManager.instance.GetTime();
+        string time = TimeManager.instance.GetTimeText();
         clockText.SetText($"{time}");
     }
 
