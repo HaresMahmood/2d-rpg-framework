@@ -4945,7 +4945,7 @@ GameObject:
   - component: {fileID: 6221786216356090311}
   m_Layer: 8
   m_Name: Overworld Item
-  m_TagString: Untagged
+  m_TagString: Collidable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4980,7 +4980,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b95b091463c68f142ae5289fec4d663f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 11400000, guid: 84aaa4a5e9d5ddd4c8a6918df8d6f676, type: 2}
+  overworldItem: {fileID: 0}
   duration: 0.3
 --- !u!61 &1255434374171468813
 BoxCollider2D:

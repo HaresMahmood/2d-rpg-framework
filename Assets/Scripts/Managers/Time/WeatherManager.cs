@@ -174,7 +174,7 @@ public class WeatherManager : MonoBehaviour
                     Color[] colors = new Color[] { "8B959A".ToColor(), "4E5E8C".ToColor(), "34617E".ToColor(), "A1A29B".ToColor(), "0A1E33".ToColor() };
                     DiurnalCycleManager.instance.SetColors(colors);
                     DisableAllWeatherSystems();
-                    EnableParticleSystem("Rain", "Rain Dropplets", 200, true, 0.3f, 10f, new Vector3(0.5f, 10f, 1f));
+                    EnableParticleSystem("Rain", "Rain Dropplets", 200, true, 0.3f, 10f, new Vector3(0.5f, 7.5f, 1f));
                     EnableParticleSystem("Rain", "Rain Splatter (Sprites)", 100, true, -1f, -1f, new Vector3(0.5f, 3.5f, 1f));
                     EnableParticleSystem("Rain", "Rain Splatter (Ground)", 200);
                     EnableWind(7.5f);
@@ -185,11 +185,22 @@ public class WeatherManager : MonoBehaviour
                     Color[] colors = new Color[] { "8B959A".ToColor(), "4E5E8C".ToColor(), "34617E".ToColor(), "A1A29B".ToColor(), "0A1E33".ToColor() };
                     DiurnalCycleManager.instance.SetColors(colors);
                     DisableAllWeatherSystems();
-                    EnableParticleSystem("Rain", "Rain Dropplets", 200, true, 0.3f, 10f, new Vector3(0.5f, 10f, 1f));
+                    EnableParticleSystem("Rain", "Rain Dropplets", 200, true, 0.3f, 10f, new Vector3(0.5f, 7.5f, 1f));
                     EnableParticleSystem("Rain", "Rain Splatter (Sprites)", 100, true, -1f, -1f, new Vector3(0.5f, 3.5f, 1f));
                     EnableParticleSystem("Rain", "Rain Splatter (Ground)", 200);
                     EnableWind(7.5f);
                     StartCoroutine(EnableFlashLight());
+                    break;
+                }
+            case (Weather.State.Snowy):
+                {
+                    Color[] colors = new Color[] { "8B959A".ToColor(), "4E5E8C".ToColor(), "34617E".ToColor(), "A1A29B".ToColor(), "0A1E33".ToColor() };
+                    DiurnalCycleManager.instance.SetColors(colors);
+                    DisableAllWeatherSystems();
+                    EnableParticleSystem("Snow", "Snow Flakes (Front)", 40);
+                    EnableParticleSystem("Snow", "Snow Flakes (Back)", 25);
+                    EnableParticleSystem("Snow", "Snow Flakes (Ground)", 20);
+                    EnableWind(2f);
                     break;
                 }
         }
