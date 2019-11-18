@@ -50,10 +50,10 @@ public class WeatherManager : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    private void EnableParticleSystem(string parentSystem, string subSystem, int particlesRate, bool settings = false, float startLifetime = -1f, float gravity = -1,  Vector3? transformScale = null)
+    private void EnableParticleSystem(string parentSystem, string subSystem, int particlesRate, float duration, bool settings = false, float startLifetime = -1f, float gravity = -1,  Vector3? transformScale = null)
     {
         Transform target = particleSystems.Find(parentSystem).Find(subSystem);
-        StartCoroutine(target.gameObject.FadeParticleSystem(particlesRate, 0.1f, true));
+        StartCoroutine(target.gameObject.FadeParticleSystem(particlesRate, duration, true));
 
         if (settings)
         {
@@ -90,7 +90,7 @@ public class WeatherManager : MonoBehaviour
         {
             if (target.emission.rateOverTime.constant > 0)
             {
-                StartCoroutine(target.gameObject.FadeParticleSystem(0, 0.1f, true));
+                StartCoroutine(target.gameObject.FadeParticleSystem(0, 0.001f, true));
             }
         }
 
@@ -164,9 +164,9 @@ public class WeatherManager : MonoBehaviour
                     Color[] colors = new Color[] { "8B959A".ToColor(), "4E5E8C".ToColor(), "34617E".ToColor(), "A1A29B".ToColor(), "0A1E33".ToColor() };
                     DiurnalCycleManager.instance.SetColors(colors);
                     DisableAllWeatherSystems();
-                    EnableParticleSystem("Rain", "Rain Dropplets", 100, true, 0.7f, 5f, new Vector3(0.5f, 3.75f, 1f));
-                    EnableParticleSystem("Rain", "Rain Splatter (Sprites)", 50, true, -1f, -1f, new Vector3(0.5f, 2.5f, 1f));
-                    EnableParticleSystem("Rain", "Rain Splatter (Ground)", 100);
+                    EnableParticleSystem("Rain", "Rain Dropplets", 100, 0.1f, true, 0.7f, 5f, new Vector3(0.5f, 3.75f, 1f));
+                    EnableParticleSystem("Rain", "Rain Splatter (Sprites)", 50, 0.1f, true, -1f, -1f, new Vector3(0.5f, 2.5f, 1f));
+                    EnableParticleSystem("Rain", "Rain Splatter (Ground)", 100, 0.1f);
                     break;
                 }
             case (Weather.State.Stormy):
@@ -174,9 +174,9 @@ public class WeatherManager : MonoBehaviour
                     Color[] colors = new Color[] { "8B959A".ToColor(), "4E5E8C".ToColor(), "34617E".ToColor(), "A1A29B".ToColor(), "0A1E33".ToColor() };
                     DiurnalCycleManager.instance.SetColors(colors);
                     DisableAllWeatherSystems();
-                    EnableParticleSystem("Rain", "Rain Dropplets", 200, true, 0.3f, 10f, new Vector3(0.5f, 7.5f, 1f));
-                    EnableParticleSystem("Rain", "Rain Splatter (Sprites)", 100, true, -1f, -1f, new Vector3(0.5f, 3.5f, 1f));
-                    EnableParticleSystem("Rain", "Rain Splatter (Ground)", 200);
+                    EnableParticleSystem("Rain", "Rain Dropplets", 200, 0.1f, true, 0.3f, 10f, new Vector3(0.5f, 7.5f, 1f));
+                    EnableParticleSystem("Rain", "Rain Splatter (Sprites)", 100, 0.1f, true, -1f, -1f, new Vector3(0.5f, 3.5f, 1f));
+                    EnableParticleSystem("Rain", "Rain Splatter (Ground)", 200, 0.1f);
                     EnableWind(7.5f);
                     break;
                 }
@@ -185,9 +185,9 @@ public class WeatherManager : MonoBehaviour
                     Color[] colors = new Color[] { "8B959A".ToColor(), "4E5E8C".ToColor(), "34617E".ToColor(), "A1A29B".ToColor(), "0A1E33".ToColor() };
                     DiurnalCycleManager.instance.SetColors(colors);
                     DisableAllWeatherSystems();
-                    EnableParticleSystem("Rain", "Rain Dropplets", 200, true, 0.3f, 10f, new Vector3(0.5f, 7.5f, 1f));
-                    EnableParticleSystem("Rain", "Rain Splatter (Sprites)", 100, true, -1f, -1f, new Vector3(0.5f, 3.5f, 1f));
-                    EnableParticleSystem("Rain", "Rain Splatter (Ground)", 200);
+                    EnableParticleSystem("Rain", "Rain Dropplets", 200, 0.1f, true, 0.3f, 10f, new Vector3(0.5f, 7.5f, 1f));
+                    EnableParticleSystem("Rain", "Rain Splatter (Sprites)", 100, 0.1f, true, -1f, -1f, new Vector3(0.5f, 3.5f, 1f));
+                    EnableParticleSystem("Rain", "Rain Splatter (Ground)", 200, 0.1f);
                     EnableWind(7.5f);
                     StartCoroutine(EnableFlashLight());
                     break;
@@ -197,10 +197,10 @@ public class WeatherManager : MonoBehaviour
                     Color[] colors = new Color[] { "8B959A".ToColor(), "4E5E8C".ToColor(), "34617E".ToColor(), "A1A29B".ToColor(), "0A1E33".ToColor() };
                     DiurnalCycleManager.instance.SetColors(colors);
                     DisableAllWeatherSystems();
-                    EnableParticleSystem("Snow", "Snow Flakes (Front)", 40);
-                    EnableParticleSystem("Snow", "Snow Flakes (Back)", 25);
-                    EnableParticleSystem("Snow", "Snow Flakes (Ground)", 20);
-                    EnableWind(2f);
+                    EnableParticleSystem("Snow", "Snow Flakes (Front)", 50, 0.01f);
+                    EnableParticleSystem("Snow", "Snow Flakes (Back)", 50, 0.01f);
+                    EnableParticleSystem("Snow", "Snow Flakes (Ground)", 50, 0.2f);
+                    EnableWind(0.5f);
                     break;
                 }
         }
