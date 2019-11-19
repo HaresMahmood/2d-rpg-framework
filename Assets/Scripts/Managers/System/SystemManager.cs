@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 ///
@@ -14,12 +15,16 @@ public class SystemManager : MonoBehaviour
     public static SystemManager instance;
 
     [UnityEngine.Header("Setup")]
-    public Party party;
+    // Debug
+    public GameObject indicator;
+    public GameObject generalSettings;
+    public Scrollbar scrollBar;
+    public int selectedSetting, totalSettingOptions;
 
     [UnityEngine.Header("Settings")]
     [SerializeField] private Material chartMaterial;
 
-    [HideInInspector] public GameObject systemContainer, navContainer, indicator;
+    [HideInInspector] public GameObject systemContainer, navContainer;//, indicator; // Debug
 
     private Transform[] navOptions;
     private string[] highlevelText = new string[] { "Save", "Settings", "Tutorials", "Controls", "Quit" };
@@ -66,6 +71,17 @@ public class SystemManager : MonoBehaviour
         if (PauseManager.instance.isPaused)
         {
             GetInput();
+
+            // Debug
+            Transform[] settings = generalSettings.transform.GetChildren();
+            totalSettingOptions = settings.Length;
+            if (settings[selectedSetting].childCount > 0)
+            {
+                indicator.transform.position = new Vector2(indicator.transform.position.x, settings[selectedSetting].Find("Value").position.y);
+            }
+
+            float settingTotal = (float)settings.Length;
+            scrollBar.value = 1.0f - (float)selectedSetting / settingTotal;
         }
     }
 
@@ -129,7 +145,8 @@ public class SystemManager : MonoBehaviour
 
     private void GetInput()
     {
-        totalNavOptions = navOptions.Length;
+        /*
+        totalNavOptions = navOptions.Length; // Debug
 
         if (!PauseManager.instance.inPartyMenu && isActive)
         {
@@ -144,11 +161,25 @@ public class SystemManager : MonoBehaviour
                 StartCoroutine(AnimateOptions());
             }
         }
+        */
+
+
+        // Debug
+
+        if (!PauseManager.instance.inPartyMenu && isActive)
+        {
+            bool hasInput;
+            (selectedSetting, hasInput) = InputManager.GetInput("Vertical", InputManager.Axis.Vertical, totalSettingOptions, selectedSetting);
+            if (hasInput)
+            {
+                GameManager.instance.transform.GetComponentInChildren<InputManager>().OnUserInput += PartyManager_OnUserInput;
+            }
+        }
     }
 
     private void PartyManager_OnUserInput(object sender, EventArgs e)
     {
-        AnimateNavigation();
+        //AnimateNavigation();
         GameManager.instance.transform.GetComponentInChildren<InputManager>().OnUserInput -= PartyManager_OnUserInput;
     }
 }

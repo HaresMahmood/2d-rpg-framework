@@ -199,7 +199,7 @@ public class WeatherManager : MonoBehaviour
                     DisableAllWeatherSystems();
                     EnableParticleSystem("Snow", "Snow Flakes (Front)", 50, 0.01f);
                     EnableParticleSystem("Snow", "Snow Flakes (Back)", 50, 0.01f);
-                    EnableParticleSystem("Snow", "Snow Flakes (Ground)", 20, 0.2f);
+                    EnableParticleSystem("Snow", "Snow Flakes (Ground)", 35, 0.2f);
                     EnableWind(0.5f);
                     break;
                 }
