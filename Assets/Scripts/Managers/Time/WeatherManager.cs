@@ -208,8 +208,8 @@ public class WeatherManager : MonoBehaviour
                     Color[] colors = new Color[] { "8B959A".ToColor(), "4E5E8C".ToColor(), "34617E".ToColor(), "A1A29B".ToColor(), "0A1E33".ToColor() };
                     DiurnalCycleManager.instance.SetColors(colors);
                     DisableAllWeatherSystems();
-                    EnableParticleSystem("Hail", "Hail Stones", 50, 0.01f);
-                    EnableParticleSystem("Hail", "Hail Clatter (Ground)", 20, 0.2f);
+                    EnableParticleSystem("Hail", "Hail Stones", 20, 0.01f);
+                    EnableParticleSystem("Hail", "Hail Clatter (Ground)", 25, 0.01f);
                     EnableWind(0.5f);
                     break;
                 }
