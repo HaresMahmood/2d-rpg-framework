@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,7 +20,7 @@ public class SystemManager : MonoBehaviour
     public GameObject indicator;
     public GameObject generalSettings;
     public Scrollbar scrollBar;
-    public int selectedSetting, totalSettingOptions;
+    public int selectedSetting, totalSettingOptions, totalSettingValues, selectedSettingValue;
 
     [UnityEngine.Header("Settings")]
     [SerializeField] private Material chartMaterial;
@@ -33,8 +34,10 @@ public class SystemManager : MonoBehaviour
 
     [HideInInspector] public int selectedNavOption, totalNavOptions;
 
-    [HideInInspector] public bool isActive = false, isDrawing = false, isInSettings = false;
+    [HideInInspector] public bool isActive = false, isDrawing = false, isInSettings = false, isSettingSelected = false;
     private bool isInteracting = false;
+
+    public event EventHandler OnSettingSelected = delegate { };
 
     #endregion
 
@@ -74,14 +77,19 @@ public class SystemManager : MonoBehaviour
 
             // Debug
             Transform[] settings = generalSettings.transform.GetChildren();
+            settings = settings.Where(val => val.name != "Text").ToArray();
+
+            float settingTotal = (float)settings.Length;
+            scrollBar.value = 1.0f - (float)selectedSetting / (settingTotal - 1);
+            
             totalSettingOptions = settings.Length;
             if (settings[selectedSetting].childCount > 0)
             {
                 indicator.transform.position = new Vector2(indicator.transform.position.x, settings[selectedSetting].Find("Value").position.y);
             }
 
-            float settingTotal = (float)settings.Length;
-            scrollBar.value = 1.0f - (float)selectedSetting / settingTotal;
+            totalSettingValues = settings[selectedSetting].GetComponent<SettingValue>().GetValues().Count;
+            selectedSettingValue = settings[selectedSetting].GetComponent<SettingValue>().GetValues().FindIndex(value => value == settings[selectedSetting].GetComponent<SettingValue>().GetSelectedValue());
         }
     }
 
