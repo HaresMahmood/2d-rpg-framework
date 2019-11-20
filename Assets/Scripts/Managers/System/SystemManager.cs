@@ -35,9 +35,9 @@ public class SystemManager : MonoBehaviour
     [HideInInspector] public int selectedNavOption, totalNavOptions;
 
     [HideInInspector] public bool isActive = false, isDrawing = false, isInSettings = false, isSettingSelected = false;
-    private bool isInteracting = false;
 
     public event EventHandler OnSettingSelected = delegate { };
+    private TestInput input = new TestInput();
 
     #endregion
 
@@ -74,22 +74,6 @@ public class SystemManager : MonoBehaviour
         if (PauseManager.instance.isPaused)
         {
             GetInput();
-
-            // Debug
-            Transform[] settings = generalSettings.transform.GetChildren();
-            settings = settings.Where(val => val.name != "Text").ToArray();
-
-            float settingTotal = (float)settings.Length;
-            scrollBar.value = 1.0f - (float)selectedSetting / (settingTotal - 1);
-            
-            totalSettingOptions = settings.Length;
-            if (settings[selectedSetting].childCount > 0)
-            {
-                indicator.transform.position = new Vector2(indicator.transform.position.x, settings[selectedSetting].Find("Value").position.y);
-            }
-
-            totalSettingValues = settings[selectedSetting].GetComponent<SettingValue>().GetValues().Count;
-            selectedSettingValue = settings[selectedSetting].GetComponent<SettingValue>().GetValues().FindIndex(value => value == settings[selectedSetting].GetComponent<SettingValue>().GetSelectedValue());
         }
     }
 
@@ -177,10 +161,10 @@ public class SystemManager : MonoBehaviour
         if (!PauseManager.instance.inPartyMenu && isActive)
         {
             bool hasInput;
-            (selectedSetting, hasInput) = InputManager.GetInput("Vertical", InputManager.Axis.Vertical, totalSettingOptions, selectedSetting);
+            (selectedSetting, hasInput) = input.GetInput("Vertical", TestInput.Axis.Vertical, totalSettingOptions, selectedSetting);
             if (hasInput)
             {
-                GameManager.instance.transform.GetComponentInChildren<InputManager>().OnUserInput += PartyManager_OnUserInput;
+                input.OnUserInput += PartyManager_OnUserInput;
             }
         }
     }
@@ -188,6 +172,33 @@ public class SystemManager : MonoBehaviour
     private void PartyManager_OnUserInput(object sender, EventArgs e)
     {
         //AnimateNavigation();
-        GameManager.instance.transform.GetComponentInChildren<InputManager>().OnUserInput -= PartyManager_OnUserInput;
+
+        // Debug
+        Transform[] settings = generalSettings.transform.GetChildren();
+        settings = settings.Where(val => val.name != "Text").ToArray();
+
+        float settingTotal = (float)settings.Length;
+        scrollBar.value = 1.0f - (float)selectedSetting / (settingTotal - 1);
+
+        totalSettingOptions = settings.Length;
+        if (settings[selectedSetting].childCount > 0)
+        {
+            indicator.transform.position = new Vector2(indicator.transform.position.x, settings[selectedSetting].Find("Value").position.y);
+        }
+
+        totalSettingValues = settings[selectedSetting].GetComponent<SettingValue>().GetValues().Count;
+        selectedSettingValue = settings[selectedSetting].GetComponent<SettingValue>().GetValues().FindIndex(value => value == settings[selectedSetting].GetComponent<SettingValue>().GetSelectedValue());
+        foreach (Transform setting in settings)
+        {
+            if (!(Array.IndexOf(settings, setting) == selectedSettingValue))
+            {
+                setting.GetComponent<SettingValue>().SetStatus(false);
+            }
+        }
+        settings[selectedSetting].GetComponent<SettingValue>().SetStatus(true);
+        //
+
+
+        input.OnUserInput -= PartyManager_OnUserInput;
     }
 }
