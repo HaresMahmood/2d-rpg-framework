@@ -128,7 +128,6 @@ public class SettingValue : MonoBehaviour
     /// </summary>
     private void Update()
     {
-
         GetInput();
     }
 

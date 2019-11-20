@@ -178,12 +178,14 @@ public class SystemManager : MonoBehaviour
         settings = settings.Where(val => val.name != "Text").ToArray();
 
         float settingTotal = (float)settings.Length;
-        scrollBar.value = 1.0f - (float)selectedSetting / (settingTotal - 1);
+        float targetValue = 1.0f - (float)selectedSetting / (settingTotal - 1);
+        StartCoroutine(scrollBar.LerpScrollbar(targetValue, 0.08f));
 
         totalSettingOptions = settings.Length;
         if (settings[selectedSetting].childCount > 0)
         {
             indicator.transform.position = new Vector2(indicator.transform.position.x, settings[selectedSetting].Find("Value").position.y);
+            //indicator.transform.position = settings[selectedSetting].Find("Value").position;
         }
 
         totalSettingValues = settings[selectedSetting].GetComponent<SettingValue>().GetValues().Count;

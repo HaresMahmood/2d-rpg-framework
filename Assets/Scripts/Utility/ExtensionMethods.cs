@@ -272,6 +272,31 @@ public static class ExtensionMethods
     }
     */
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name=""></param>
+    /// <param name=""></param>
+    /// <returns></returns>
+    public static IEnumerator LerpScrollbar(this Scrollbar scrollbar, float targetValue, float duration)
+    {
+        float initialValue = scrollbar.value;
+
+        float t = 0; // Tracks how many seconds we've been fading.
+        while (t < duration) // While time is less than the duration of the fade, ...
+        {
+            if (Time.timeScale == 0)
+                t += Time.unscaledDeltaTime;
+            else
+                t += Time.deltaTime;
+            float blend = Mathf.Clamp01(t / duration); // Turns the time into an interpolation factor between 0 and 1. 
+
+            scrollbar.value = Mathf.Lerp(initialValue, targetValue, blend);
+
+            yield return null; // Wait one frame, then repeat.
+        }
+    }
+
     public static IEnumerator SetResetTrigger(this Animator animator, string trigger)
     {
         float waitTime = animator.GetAnimationTime();
