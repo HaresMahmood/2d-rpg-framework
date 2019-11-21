@@ -15,19 +15,23 @@ public class SystemManager : MonoBehaviour
 
     public static SystemManager instance;
 
-    [UnityEngine.Header("Setup")]
+    [UnityEngine.Header("Setup (debug)")]
     // Debug
     public GameObject indicator;
     public GameObject generalSettings;
     public Scrollbar scrollBar;
     public int selectedSetting, totalSettingOptions, totalSettingValues, selectedSettingValue;
+    public TextMeshProUGUI descriptionText;
 
     [UnityEngine.Header("Settings")]
     [SerializeField] private Material chartMaterial;
 
+    [UnityEngine.Header("Values")]
+    [SerializeField] private ViewingMode viewingMode;
+
     [HideInInspector] public GameObject systemContainer, navContainer;//, indicator; // Debug
 
-    private Transform[] navOptions;
+    private Transform[] navOptions, originalSettings, settings;
     private string[] highlevelText = new string[] { "Save", "Settings", "Tutorials", "Controls", "Quit" };
     private string[] settingsText = new string[] { "General", "Battle", "Customization", "Accessability", "Test" };
 
@@ -38,6 +42,13 @@ public class SystemManager : MonoBehaviour
 
     public event EventHandler OnSettingSelected = delegate { };
     private TestInput input = new TestInput();
+
+    public enum ViewingMode
+    {
+        Basic,
+        Intermediate,
+        Advanced
+    }
 
     #endregion
 
@@ -62,7 +73,12 @@ public class SystemManager : MonoBehaviour
 
         navOptions = navContainer.transform.Find("Options").GetChildren();
 
+        originalSettings = generalSettings.transform.GetChildren();
+        originalSettings = originalSettings.Where(val => val.name != "Text").ToArray();
+        settings = originalSettings;
+
         selectedNavOption = 0;
+        ToggleCategory(viewingMode);
         AnimateNavigation();
     }
 
@@ -102,13 +118,17 @@ public class SystemManager : MonoBehaviour
         {
             navContainer.transform.Find("Options").GetComponent<Animator>().SetBool("isInHighlevel", false);
             navContainer.transform.Find("Options").GetComponent<Animator>().SetBool("isInSettings", true);
+            StartCoroutine(generalSettings.transform.parent.gameObject.FadeOpacity(1f, 0.3f));
+            StartCoroutine(descriptionText.gameObject.FadeOpacity(1f, 0.3f));
             isInSettings = true;
         }
         else
         {
+            isInSettings = false;
             navContainer.transform.Find("Options").GetComponent<Animator>().SetBool("isInHighlevel", true);
             navContainer.transform.Find("Options").GetComponent<Animator>().SetBool("isInSettings", false);
-            isInSettings = false;
+            StartCoroutine(generalSettings.transform.parent.gameObject.FadeOpacity(0f, 0.3f));
+            StartCoroutine(descriptionText.gameObject.FadeOpacity(0f, 0.3f));
         }
 
         yield return new WaitForSecondsRealtime(navContainer.transform.Find("Options").GetComponent<Animator>().GetAnimationTime() / 2);
@@ -138,45 +158,79 @@ public class SystemManager : MonoBehaviour
     private void GetInput()
     {
         /*
-        totalNavOptions = navOptions.Length; // Debug
-
         if (!PauseManager.instance.inPartyMenu && isActive)
         {
-            bool hasInput;
-            (selectedNavOption, hasInput) = InputManager.GetInput("Vertical", InputManager.Axis.Vertical, totalNavOptions, selectedNavOption);
-            if (hasInput)
-            {
-                GameManager.instance.transform.GetComponentInChildren<InputManager>().OnUserInput += PartyManager_OnUserInput;
-            }
-            if (Input.GetButtonDown("Interact"))
-            {
-                StartCoroutine(AnimateOptions());
-            }
+
         }
         */
-
 
         // Debug
 
         if (!PauseManager.instance.inPartyMenu && isActive)
         {
-            bool hasInput;
-            (selectedSetting, hasInput) = input.GetInput("Vertical", TestInput.Axis.Vertical, totalSettingOptions, selectedSetting);
-            if (hasInput)
+            if (!isInSettings)
             {
-                input.OnUserInput += PartyManager_OnUserInput;
+                totalNavOptions = navOptions.Length; // Debug
+
+                bool hasInput;
+                (selectedNavOption, hasInput) = input.GetInput("Vertical", TestInput.Axis.Vertical, totalNavOptions, selectedNavOption);
+                if (hasInput)
+                {
+                    input.OnUserInput += PartyManager_OnUserInput;
+                }
+                if (Input.GetButtonDown("Interact"))
+                {
+                    StartCoroutine(AnimateOptions());
+                }
+            }
+            if (isInSettings)
+            {
+                bool hasInput;
+                (selectedSetting, hasInput) = input.GetInput("Vertical", TestInput.Axis.Vertical, totalSettingOptions, selectedSetting);
+                if (hasInput)
+                {
+                    input.OnUserInput += PartyManager_OnUserInput;
+                }
+                if (Input.GetButtonDown("Toggle"))
+                {
+                    viewingMode = (ViewingMode)ExtensionMethods.IncrementCircularInt((int)viewingMode, Enum.GetNames(typeof(ViewingMode)).Length, 1);
+                    ToggleCategory(viewingMode);
+                    UpdateSettingCategory();
+                }
+                if (Input.GetButtonDown("Cancel"))
+                {
+                    StartCoroutine(AnimateOptions());
+                }
             }
         }
     }
 
-    private void PartyManager_OnUserInput(object sender, EventArgs e)
+    private void ToggleCategory(ViewingMode mode)
     {
-        //AnimateNavigation();
+        settings = originalSettings;
+        List<ViewingMode> previousMode = GetPreviousMode(mode);
+        List<Transform> values = new List<Transform>();
 
+        foreach (Transform setting in settings)
+        {
+            if (previousMode.Contains(setting.GetComponent<SettingValue>().GetViewingMode()))
+            {
+                values.Add(setting);
+                setting.gameObject.SetActive(true);
+            }
+            else
+            {
+                setting.gameObject.SetActive(false);
+            }
+        }
+
+        settings = values.ToArray();
+        selectedSettingValue = 0;
+    }
+
+    private void UpdateSettingCategory()
+    {
         // Debug
-        Transform[] settings = generalSettings.transform.GetChildren();
-        settings = settings.Where(val => val.name != "Text").ToArray();
-
         float settingTotal = (float)settings.Length;
         float targetValue = 1.0f - (float)selectedSetting / (settingTotal - 1);
         StartCoroutine(scrollBar.LerpScrollbar(targetValue, 0.08f));
@@ -184,7 +238,6 @@ public class SystemManager : MonoBehaviour
         totalSettingOptions = settings.Length;
         if (settings[selectedSetting].childCount > 0)
         {
-            //indicator.transform.position = new Vector2(indicator.transform.position.x, settings[selectedSetting].Find("Value").position.y);
             indicator.transform.position = settings[selectedSetting].Find("Value").position;
         }
 
@@ -192,15 +245,42 @@ public class SystemManager : MonoBehaviour
         selectedSettingValue = settings[selectedSetting].GetComponent<SettingValue>().GetValues().FindIndex(value => value == settings[selectedSetting].GetComponent<SettingValue>().GetSelectedValue());
         foreach (Transform setting in settings)
         {
-            if (!(Array.IndexOf(settings, setting) == selectedSettingValue))
+            if (Array.IndexOf(settings, setting) != selectedSettingValue)
             {
                 setting.GetComponent<SettingValue>().SetStatus(false);
             }
         }
         settings[selectedSetting].GetComponent<SettingValue>().SetStatus(true);
+
+        descriptionText.SetText(settings[selectedSetting].GetComponent<SettingValue>().GetDescription());
         //
+    }
+
+    private List<ViewingMode> GetPreviousMode(ViewingMode category)
+    {
+        ViewingMode previousCategory = (ViewingMode)ExtensionMethods.IncrementCircularInt((int)category, Enum.GetNames(typeof(ViewingMode)).Length, -1);
+        List<ViewingMode> previousCategories = new List<ViewingMode>();
+        if (previousCategory < category)
+        {
+            previousCategories.AddRange(GetPreviousMode(previousCategory));
+        }
+        previousCategories.Add(category);
+        return previousCategories;
+    }
+
+    private void PartyManager_OnUserInput(object sender, EventArgs e)
+    {
+        if (!isInSettings)
+        {
+            AnimateNavigation();
+        }
+        
 
 
+        if (isInSettings)
+        {
+            UpdateSettingCategory();
+        }
         input.OnUserInput -= PartyManager_OnUserInput;
     }
 }

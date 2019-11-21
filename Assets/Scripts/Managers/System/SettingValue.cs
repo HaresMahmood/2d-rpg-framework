@@ -12,9 +12,11 @@ public class SettingValue : MonoBehaviour
 {
     #region Variables
 
-    [SerializeField] private Mode mode;
+    [SerializeField] private Type type;
+    [SerializeField] private SystemManager.ViewingMode viewingMode;
     [SerializeField] private List<string> values = new List<string>();
     [SerializeField] private string defaultValue;
+    [TextArea(1,2)] [SerializeField] private string description;
     [ReadOnly] [SerializeField] private string selectedValue;
     [ReadOnly] [SerializeField] private bool isSelected;
 
@@ -24,7 +26,7 @@ public class SettingValue : MonoBehaviour
 
     [SerializeField] private int selectedIndex;
 
-    public enum Mode
+    public enum Type
     { 
         Slider,
         Carousel
@@ -34,6 +36,11 @@ public class SettingValue : MonoBehaviour
 
     #region Accessor Methods
 
+    public SystemManager.ViewingMode GetViewingMode()
+    {
+        return viewingMode;
+    }
+
     public List<string> GetValues()
     {
         return values;
@@ -42,6 +49,11 @@ public class SettingValue : MonoBehaviour
     public string GetSelectedValue()
     {
         return selectedValue;
+    }
+
+    public string GetDescription()
+    {
+        return description;
     }
 
     public bool GetStatus()
@@ -95,7 +107,7 @@ public class SettingValue : MonoBehaviour
     {
         Slider slider = transform.GetComponentInChildren<Slider>();
         float totalValues = (float)(values.Count);
-        float targetValue = 1f - (float)selectedIndex / (totalValues - 1);
+        float targetValue = 1f - (float)value / (totalValues - 1);
         StartCoroutine(LerpSlider(slider, targetValue, 0.1f));
     }
 
@@ -132,7 +144,7 @@ public class SettingValue : MonoBehaviour
     {
         selectedValue = values[selectedIndex];
         UpdateText(selectedValue);
-        if (mode == Mode.Slider)
+        if (type == Type.Slider)
         {
             UpdateSlider(selectedIndex);
         }
@@ -157,7 +169,7 @@ public class SettingValue : MonoBehaviour
         }
 
         selectedIndex = values.FindIndex(value => value == selectedValue);
-        if (mode == Mode.Slider)
+        if (type == Type.Slider)
         {
             UpdateSlider(selectedIndex);
         }

@@ -218,10 +218,12 @@ public class PauseManager : MonoBehaviour
             //isDrawingParty = false;
             //}
 
+            /*
             if (Input.GetButtonDown("Cancel"))
             {
                 isPaused = false;
             }
+            */
         }
         else
         {

@@ -212,6 +212,7 @@ public class InventoryManager : MonoBehaviour
                 Debug.Log("[INVENTORY MANAGER:] Updating inventory.");
             }
         #endif
+
         ResetInventory();
 
         currentCategory = categories[selectedCategory];
