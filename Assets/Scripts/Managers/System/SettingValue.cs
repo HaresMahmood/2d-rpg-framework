@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 ///
@@ -74,6 +75,17 @@ public class SettingValue : MonoBehaviour
         }
     }
 
+    /*
+    private void UpdateSetting(string text, int index)
+    {
+        UpdateText(text);
+        if (mode == Mode.Slider)
+        {
+            UpdateSlider(index);
+        }
+    }
+    */
+
     private void UpdateText(string value)
     {
         valueText.SetText(value);
@@ -81,11 +93,35 @@ public class SettingValue : MonoBehaviour
 
     private void UpdateSlider(int value)
     {
-        Transform slider = transform.Find("Value/Slider");
-        float normalizedValue = selectedIndex / values.Count;
-        float normalizedPosition = slider.Find("Knob").GetComponent<RectTransform>().sizeDelta.x * normalizedValue;
-        normalizedPosition = Mathf.Clamp(normalizedPosition, (slider.Find("Knob").GetComponent<RectTransform>().sizeDelta.x / 2), -(slider.Find("Knob").GetComponent<RectTransform>().sizeDelta.x / 2));
-        slider.Find("Knob").position = new Vector2(normalizedPosition, slider.Find("Knob").position.y);
+        Slider slider = transform.GetComponentInChildren<Slider>();
+        float totalValues = (float)(values.Count);
+        float targetValue = 1f - (float)selectedIndex / (totalValues - 1);
+        StartCoroutine(LerpSlider(slider, targetValue, 0.1f));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name=""></param>
+    /// <param name=""></param>
+    /// <returns></returns>
+    public IEnumerator LerpSlider(Slider slider, float targetValue, float duration)
+    {
+        float initialValue = slider.value;
+
+        float t = 0; // Tracks how many seconds we've been fading.
+        while (t < duration) // While time is less than the duration of the fade, ...
+        {
+            if (Time.timeScale == 0)
+                t += Time.unscaledDeltaTime;
+            else
+                t += Time.deltaTime;
+            float blend = Mathf.Clamp01(t / duration); // Turns the time into an interpolation factor between 0 and 1. 
+
+            slider.value = Mathf.Lerp(initialValue, targetValue, blend);
+
+            yield return null; // Wait one frame, then repeat.
+        }
     }
 
     #endregion
@@ -98,7 +134,7 @@ public class SettingValue : MonoBehaviour
         UpdateText(selectedValue);
         if (mode == Mode.Slider)
         {
-            //UpdateSlider(selectedIndex);
+            UpdateSlider(selectedIndex);
         }
         input.OnUserInput -= SettingValue_OnUserInput;
     }
@@ -121,6 +157,10 @@ public class SettingValue : MonoBehaviour
         }
 
         selectedIndex = values.FindIndex(value => value == selectedValue);
+        if (mode == Mode.Slider)
+        {
+            UpdateSlider(selectedIndex);
+        }
     }
 
     /// <summary>

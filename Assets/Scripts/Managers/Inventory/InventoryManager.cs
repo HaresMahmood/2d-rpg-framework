@@ -38,6 +38,8 @@ public class InventoryManager : MonoBehaviour
     [HideInInspector] public bool isActive, inContextMenu = false, isGivingItem = false, isDiscardingItem = false;
     private bool isInventoryDrawn, isInteracting = false, isDirty = false;
 
+    private TestInput input = new TestInput();
+
     #endregion
 
     #region Unity Methods
@@ -177,6 +179,8 @@ public class InventoryManager : MonoBehaviour
                 itemIndicator.transform.position = grid[0].position;
             }
         }
+
+        input.OnUserInput -= InventoryManager_OnUserInput;
     }
 
     #endregion
@@ -302,36 +306,28 @@ public class InventoryManager : MonoBehaviour
                 if (Input.GetAxisRaw("Trigger") == 0)
                 {
                     bool hasInput;
-                    (selectedSlot, hasInput) = InputManager.GetInput("Horizontal", "Vertical", totalSlots, selectedSlot, 1, 6);
+                    (selectedSlot, hasInput) = input.GetInput("Horizontal", "Vertical", totalSlots, selectedSlot, 1, 6);
                     if (hasInput)
                     {
-                        GameManager.instance.transform.GetComponentInChildren<InputManager>().OnUserInput += InventoryManager_OnUserInput;
-                    }
-                    else
-                    {
-                        GameManager.instance.transform.GetComponentInChildren<InputManager>().OnUserInput -= InventoryManager_OnUserInput;
+                        input.OnUserInput += InventoryManager_OnUserInput;
                     }
                 }
                 else
                 {
                     bool hasInput;
-                    (selectedCategory, hasInput) = InputManager.GetInput("Trigger", InputManager.Axis.Horizontal, categories.Length, selectedCategory);
+                    (selectedCategory, hasInput) = input.GetInput("Trigger", TestInput.Axis.Horizontal, categories.Length, selectedCategory);
                     isDirty = true;
                     if (hasInput)
                     {
-                        GameManager.instance.transform.GetComponentInChildren<InputManager>().OnUserInput += InventoryManager_OnUserInput;
+                        input.OnUserInput += InventoryManager_OnUserInput;
                         StartCoroutine(AnimateArrows(arrowAnim, (int)Input.GetAxisRaw("Trigger")));
-                    }
-                    else
-                    {
-                        GameManager.instance.transform.GetComponentInChildren<InputManager>().OnUserInput -= InventoryManager_OnUserInput;
                     }
                 }
             }
             else if (inContextMenu)
             {
                 bool hasInput;
-                (selectedMenuButton, hasInput) = InputManager.GetInput("Vertical", InputManager.Axis.Vertical, totalMenuButtons, selectedMenuButton);
+                (selectedMenuButton, hasInput) = input.GetInput("Vertical", TestInput.Axis.Vertical, totalMenuButtons, selectedMenuButton);
             }
 
             if (!isDiscardingItem)

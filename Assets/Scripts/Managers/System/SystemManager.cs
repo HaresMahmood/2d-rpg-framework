@@ -184,8 +184,8 @@ public class SystemManager : MonoBehaviour
         totalSettingOptions = settings.Length;
         if (settings[selectedSetting].childCount > 0)
         {
-            indicator.transform.position = new Vector2(indicator.transform.position.x, settings[selectedSetting].Find("Value").position.y);
-            //indicator.transform.position = settings[selectedSetting].Find("Value").position;
+            //indicator.transform.position = new Vector2(indicator.transform.position.x, settings[selectedSetting].Find("Value").position.y);
+            indicator.transform.position = settings[selectedSetting].Find("Value").position;
         }
 
         totalSettingValues = settings[selectedSetting].GetComponent<SettingValue>().GetValues().Count;
