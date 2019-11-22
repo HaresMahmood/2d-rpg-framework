@@ -17,7 +17,7 @@ public class SystemUserInterface : MonoBehaviour
 
     private TestInput input = new TestInput();
 
-    private GameObject navContainer, generalSettings, indicator;
+    private GameObject navContainer, generalSettings, customizationSettings, activeSettings, indicator;
     private Transform[] navOptions, originalSettings, settings;
     private Scrollbar scrollBar;
     private TextMeshProUGUI descriptionText;
@@ -58,6 +58,27 @@ public class SystemUserInterface : MonoBehaviour
             foreach (Transform setting in settings)
             {
                 setting.GetComponent<SettingValue>().SetStatus(false);
+            }
+            if (flags.isInSettings)
+            {
+                if (string.Equals(navOptions[selectedNavOption].name, "Customization"))
+                {
+                    transform.Find("Settings").GetComponent<ScrollRect>().content = customizationSettings.GetComponent<RectTransform>();
+                    generalSettings.SetActive(false);
+                    customizationSettings.SetActive(true);
+                    activeSettings = customizationSettings;
+                    UpdateSettingList();
+                    selectedSetting = 0;
+                }
+                else
+                {
+                    transform.Find("Settings").GetComponent<ScrollRect>().content = generalSettings.GetComponent<RectTransform>();
+                    generalSettings.SetActive(true);
+                    customizationSettings.SetActive(false);
+                    activeSettings = generalSettings;
+                    UpdateSettingList();
+                    selectedSetting = 0;
+                }
             }
         }
         else
@@ -109,6 +130,7 @@ public class SystemUserInterface : MonoBehaviour
 
     private void UpdateSettingCategory()
     {
+        //UpdateSettingList();
         float settingTotal = (float)settings.Length;
         float targetValue = 1.0f - (float)selectedSetting / (settingTotal - 1);
         StartCoroutine(scrollBar.LerpScrollbar(targetValue, 0.08f));
@@ -148,6 +170,7 @@ public class SystemUserInterface : MonoBehaviour
         foreach (Transform option in navOptions)
         {
             option.GetComponentInChildren<TextMeshProUGUI>().SetText(newText[Array.IndexOf(navOptions, option)]);
+            option.name = newText[Array.IndexOf(navOptions, option)];
         }
     }
 
@@ -247,6 +270,13 @@ public class SystemUserInterface : MonoBehaviour
         }
     }
 
+    private void UpdateSettingList()
+    {
+        originalSettings = activeSettings.transform.GetChildren();
+        originalSettings = originalSettings.Where(val => val != null && val.name != "Text").ToArray();
+        settings = originalSettings;
+    }
+
     #endregion
 
     #region Unity Methods
@@ -258,6 +288,7 @@ public class SystemUserInterface : MonoBehaviour
     {
         navContainer = transform.Find("Navigation").gameObject;
         generalSettings = transform.Find("Settings/General").gameObject;
+        customizationSettings = transform.Find("Settings/Customization").gameObject;
         indicator = transform.Find("Settings/Indicator").gameObject;
 
         navOptions = navContainer.transform.Find("Options").GetChildren();
@@ -265,9 +296,9 @@ public class SystemUserInterface : MonoBehaviour
         descriptionText = transform.Find("Description").GetComponent<TextMeshProUGUI>();
         scrollBar = transform.Find("Settings/Scrollbar").GetComponent<Scrollbar>();
 
-        originalSettings = generalSettings.transform.GetChildren();
-        originalSettings = originalSettings.Where(val => val.name != "Text").ToArray();
-        settings = originalSettings;
+        activeSettings = generalSettings;
+
+        UpdateSettingList();
 
         totalNavOptions = navOptions.Length; // Debug
 
