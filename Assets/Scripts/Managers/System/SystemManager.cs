@@ -78,7 +78,8 @@ public class SystemManager : MonoBehaviour
         settings = originalSettings;
 
         selectedNavOption = 0;
-        ToggleCategory(viewingMode);
+        ToggleViewingMode(viewingMode);
+        indicator.SetActive(false);
         AnimateNavigation();
     }
 
@@ -118,7 +119,7 @@ public class SystemManager : MonoBehaviour
         {
             navContainer.transform.Find("Options").GetComponent<Animator>().SetBool("isInHighlevel", false);
             navContainer.transform.Find("Options").GetComponent<Animator>().SetBool("isInSettings", true);
-            StartCoroutine(generalSettings.transform.parent.gameObject.FadeOpacity(1f, 0.3f));
+            StartCoroutine(generalSettings.transform.parent.gameObject.FadeOpacity(0.5f, 0.3f));
             StartCoroutine(descriptionText.gameObject.FadeOpacity(1f, 0.3f));
             isInSettings = true;
         }
@@ -185,27 +186,53 @@ public class SystemManager : MonoBehaviour
             }
             if (isInSettings)
             {
-                bool hasInput;
-                (selectedSetting, hasInput) = input.GetInput("Vertical", TestInput.Axis.Vertical, totalSettingOptions, selectedSetting);
-                if (hasInput)
+                if (!isSettingSelected)
                 {
-                    input.OnUserInput += PartyManager_OnUserInput;
+                    totalNavOptions = navOptions.Length; // Debug
+
+                    bool hasInput;
+                    (selectedNavOption, hasInput) = input.GetInput("Vertical", TestInput.Axis.Vertical, totalNavOptions, selectedNavOption);
+                    if (hasInput)
+                    {
+                        input.OnUserInput += PartyManager_OnUserInput;
+                    }
+                    if (Input.GetButtonDown("Interact"))
+                    {
+                        indicator.SetActive(true);
+                        StartCoroutine(generalSettings.transform.parent.gameObject.FadeOpacity(1f, 0.3f));
+                        isSettingSelected = true;
+                    }
+                    if (Input.GetButtonDown("Cancel"))
+                    {
+                        StartCoroutine(AnimateOptions());
+                    }
                 }
-                if (Input.GetButtonDown("Toggle"))
+                else if (isSettingSelected)
                 {
-                    viewingMode = (ViewingMode)ExtensionMethods.IncrementCircularInt((int)viewingMode, Enum.GetNames(typeof(ViewingMode)).Length, 1);
-                    ToggleCategory(viewingMode);
-                    UpdateSettingCategory();
-                }
-                if (Input.GetButtonDown("Cancel"))
-                {
-                    StartCoroutine(AnimateOptions());
+                    bool hasInput;
+                    (selectedSetting, hasInput) = input.GetInput("Vertical", TestInput.Axis.Vertical, totalSettingOptions, selectedSetting);
+                    if (hasInput)
+                    {
+                        input.OnUserInput += PartyManager_OnUserInput;
+                    }
+                    if (Input.GetButtonDown("Toggle"))
+                    {
+                        viewingMode = (ViewingMode)ExtensionMethods.IncrementCircularInt((int)viewingMode, Enum.GetNames(typeof(ViewingMode)).Length, 1);
+                        ToggleViewingMode(viewingMode);
+                        UpdateSettingCategory();
+                    }
+                    if (Input.GetButtonDown("Cancel"))
+                    {
+                        indicator.SetActive(false);
+                        StartCoroutine(generalSettings.transform.parent.gameObject.FadeOpacity(0.5f, 0.3f));
+                        isSettingSelected = false;
+                    }
                 }
             }
         }
     }
 
-    private void ToggleCategory(ViewingMode mode)
+    private void ToggleViewingMode(ViewingMode mode)
     {
         settings = originalSettings;
         List<ViewingMode> previousMode = GetPreviousMode(mode);
@@ -270,15 +297,12 @@ public class SystemManager : MonoBehaviour
 
     private void PartyManager_OnUserInput(object sender, EventArgs e)
     {
-        if (!isInSettings)
+        if (!isSettingSelected)
         {
             AnimateNavigation();
         }
-        
-
-
-        if (isInSettings)
-        {
+        else
+        { 
             UpdateSettingCategory();
         }
         input.OnUserInput -= PartyManager_OnUserInput;
