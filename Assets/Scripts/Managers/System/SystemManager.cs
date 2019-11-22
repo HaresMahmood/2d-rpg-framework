@@ -158,18 +158,9 @@ public class SystemManager : MonoBehaviour
 
     private void GetInput()
     {
-        /*
         if (!PauseManager.instance.inPartyMenu && isActive)
         {
-
-        }
-        */
-
-        // Debug
-
-        if (!PauseManager.instance.inPartyMenu && isActive)
-        {
-            if (!isInSettings)
+            if (!isSettingSelected)
             {
                 totalNavOptions = navOptions.Length; // Debug
 
@@ -181,52 +172,41 @@ public class SystemManager : MonoBehaviour
                 }
                 if (Input.GetButtonDown("Interact"))
                 {
-                    StartCoroutine(AnimateOptions());
-                }
-            }
-            if (isInSettings)
-            {
-                if (!isSettingSelected)
-                {
-                    totalNavOptions = navOptions.Length; // Debug
-
-                    bool hasInput;
-                    (selectedNavOption, hasInput) = input.GetInput("Vertical", TestInput.Axis.Vertical, totalNavOptions, selectedNavOption);
-                    if (hasInput)
+                    if (!isInSettings)
                     {
-                        input.OnUserInput += PartyManager_OnUserInput;
+                        StartCoroutine(AnimateOptions());
                     }
-                    if (Input.GetButtonDown("Interact"))
+                    else
                     {
                         indicator.SetActive(true);
                         StartCoroutine(generalSettings.transform.parent.gameObject.FadeOpacity(1f, 0.3f));
                         isSettingSelected = true;
                     }
-                    if (Input.GetButtonDown("Cancel"))
-                    {
-                        StartCoroutine(AnimateOptions());
-                    }
                 }
-                else if (isSettingSelected)
+                if (Input.GetButtonDown("Cancel") && isInSettings)
                 {
-                    bool hasInput;
-                    (selectedSetting, hasInput) = input.GetInput("Vertical", TestInput.Axis.Vertical, totalSettingOptions, selectedSetting);
-                    if (hasInput)
-                    {
-                        input.OnUserInput += PartyManager_OnUserInput;
-                    }
-                    if (Input.GetButtonDown("Toggle"))
-                    {
-                        viewingMode = (ViewingMode)ExtensionMethods.IncrementCircularInt((int)viewingMode, Enum.GetNames(typeof(ViewingMode)).Length, 1);
-                        ToggleViewingMode(viewingMode);
-                        UpdateSettingCategory();
-                    }
-                    if (Input.GetButtonDown("Cancel"))
-                    {
-                        indicator.SetActive(false);
-                        StartCoroutine(generalSettings.transform.parent.gameObject.FadeOpacity(0.5f, 0.3f));
-                        isSettingSelected = false;
-                    }
+                    StartCoroutine(AnimateOptions());
+                }
+            }
+            else
+            {
+                bool hasInput;
+                (selectedSetting, hasInput) = input.GetInput("Vertical", TestInput.Axis.Vertical, totalSettingOptions, selectedSetting);
+                if (hasInput)
+                {
+                    input.OnUserInput += PartyManager_OnUserInput;
+                }
+                if (Input.GetButtonDown("Toggle"))
+                {
+                    viewingMode = (ViewingMode)ExtensionMethods.IncrementCircularInt((int)viewingMode, Enum.GetNames(typeof(ViewingMode)).Length, 1);
+                    ToggleViewingMode(viewingMode);
+                    UpdateSettingCategory();
+                }
+                if (Input.GetButtonDown("Cancel"))
+                {
+                    indicator.SetActive(false);
+                    StartCoroutine(generalSettings.transform.parent.gameObject.FadeOpacity(0.5f, 0.3f));
+                    isSettingSelected = false;
                 }
             }
         }
@@ -253,11 +233,11 @@ public class SystemManager : MonoBehaviour
 
         settings = values.ToArray();
         selectedSettingValue = 0;
+        scrollBar.value = 1;
     }
 
     private void UpdateSettingCategory()
     {
-        // Debug
         float settingTotal = (float)settings.Length;
         float targetValue = 1.0f - (float)selectedSetting / (settingTotal - 1);
         StartCoroutine(scrollBar.LerpScrollbar(targetValue, 0.08f));
@@ -280,7 +260,6 @@ public class SystemManager : MonoBehaviour
         settings[selectedSetting].GetComponent<SettingValue>().SetStatus(true);
 
         descriptionText.SetText(settings[selectedSetting].GetComponent<SettingValue>().GetDescription());
-        //
     }
 
     private List<ViewingMode> GetPreviousMode(ViewingMode category)
