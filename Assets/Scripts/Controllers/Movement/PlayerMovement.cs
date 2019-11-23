@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 /// <summary>
 /// Moves Player to tile depending on input.
@@ -8,13 +9,17 @@
 public class PlayerMovement : MovingObject
 {
     #region Variables
+
     /// <summary>
     /// Used to determine the state of running.
     /// </summary>
     private bool isRunning, toggleRunning;
+    private float idleTimer;
+
     #endregion
 
     #region Unity Methods
+
     /// <summary>
     /// Update is called once per frame.
     /// </summary>
@@ -43,14 +48,24 @@ public class PlayerMovement : MovingObject
         if (horizontal != 0)
             vertical = 0;
 
+        /*
         if (horizontal > 0 && horizontal < 1 || vertical > 0 && vertical < 1) // If there is an input, ...
         {
             SetAnimations(horizontal, vertical); // Sets direction the player is facing in, based on input.
             StartCoroutine(CoolDown(moveTime)); // Starts cool-down timer.
+            idleTimer = 0;
         }
+        */
 
-        else if (horizontal != 0 || vertical != 0) // If there is an input, ...
+        if (horizontal != 0 || vertical != 0) // If there is an input, ...
         {
+            if (anim.GetBool("isFidgeting"))
+            {
+                anim.SetBool("isFidgeting", false);
+;           }
+
+            idleTimer = 0;
+
             if (Input.GetButton("Run"))
                 isRunning = true;
             else if (!Input.GetButton("Run") && isRunning && !toggleRunning)
@@ -72,9 +87,27 @@ public class PlayerMovement : MovingObject
             }
         }
         else
+        {
             SetMoveAnimations(); // Turns all move animations off.
+            StartCoroutine(EnableFidget());
+        }
     }
+
     #endregion
+
+    private IEnumerator EnableFidget()
+    {
+        idleTimer += Time.deltaTime;
+
+        if (idleTimer > 5f)
+        {
+            anim.SetBool("isFidgeting", true);
+            float waitTime = anim.GetAnimationTime();
+            yield return new WaitForSeconds(waitTime);
+            anim.SetBool("isFidgeting", false);
+            idleTimer = 0;
+        }
+    }
 
     /// <summary>
     /// Used to permanently toggle running, instead of holding
