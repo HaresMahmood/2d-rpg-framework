@@ -68,7 +68,6 @@ public class SystemUserInterface : MonoBehaviour
                     customizationSettings.SetActive(true);
                     activeSettings = customizationSettings;
                     UpdateSettingList();
-                    selectedSetting = 0;
                 }
                 else
                 {
@@ -77,14 +76,10 @@ public class SystemUserInterface : MonoBehaviour
                     customizationSettings.SetActive(false);
                     activeSettings = generalSettings;
                     UpdateSettingList();
-                    selectedSetting = 0;
                 }
             }
         }
-        else
-        {
-            UpdateSettingCategory();
-        }
+        UpdateSettingCategory();
         input.OnUserInput -= SystemManager_OnUserInput;
     }
 
@@ -124,7 +119,7 @@ public class SystemUserInterface : MonoBehaviour
         }
 
         settings = values.ToArray();
-        selectedSettingValue = 0;
+        //selectedSettingValue = 0;
         scrollBar.value = 1;
     }
 
@@ -141,16 +136,19 @@ public class SystemUserInterface : MonoBehaviour
             indicator.transform.position = settings[selectedSetting].Find("Value").position;
         }
 
-        totalSettingValues = settings[selectedSetting].GetComponent<SettingValue>().GetValues().Count;
-        selectedSettingValue = settings[selectedSetting].GetComponent<SettingValue>().GetValues().FindIndex(value => value == settings[selectedSetting].GetComponent<SettingValue>().GetSelectedValue());
-        foreach (Transform setting in settings)
-        {
-            if (Array.IndexOf(settings, setting) != selectedSettingValue)
+        //totalSettingValues = settings[selectedSetting].GetComponent<SettingValue>().GetValues().Count;
+        //selectedSettingValue = settings[selectedSetting].GetComponent<SettingValue>().GetValues().FindIndex(value => value == settings[selectedSetting].GetComponent<SettingValue>().GetSelectedValue());
+        //if (flags.isSettingSelected)
+        //{
+            foreach (Transform setting in settings)
             {
-                setting.GetComponent<SettingValue>().SetStatus(false);
+                if (Array.IndexOf(settings, setting) != selectedSetting)
+                {
+                    setting.GetComponent<SettingValue>().SetStatus(false);
+                }
             }
-        }
-        settings[selectedSetting].GetComponent<SettingValue>().SetStatus(true);
+            settings[selectedSetting].GetComponent<SettingValue>().SetStatus(true);
+        //}
 
         descriptionText.SetText(settings[selectedSetting].GetComponent<SettingValue>().GetDescription());
     }
@@ -275,6 +273,7 @@ public class SystemUserInterface : MonoBehaviour
         originalSettings = activeSettings.transform.GetChildren();
         originalSettings = originalSettings.Where(val => val != null && val.name != "Text").ToArray();
         settings = originalSettings;
+        selectedSetting = 0;
     }
 
     #endregion
@@ -316,6 +315,7 @@ public class SystemUserInterface : MonoBehaviour
         if (PauseManager.instance.isPaused)
         {
             GetInput();
+            //AnimateNavigation();
         }
     }
 

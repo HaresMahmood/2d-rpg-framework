@@ -24,12 +24,13 @@ public class SettingValue : MonoBehaviour
 
     private TestInput input = new TestInput();
 
-    [SerializeField] private int selectedIndex;
+    [SerializeField] private int selectedIndex; // { get { return selectedIndex; } set { selectedIndex = value; UpdateValue(); } }
 
     public enum Type
     { 
         Slider,
-        Carousel
+        Carousel,
+        Color
     }
 
     #endregion
@@ -78,11 +79,19 @@ public class SettingValue : MonoBehaviour
     {
         if (SystemManager.instance.isActive && isSelected)
         {
-            bool hasInput;
-            (selectedIndex, hasInput) = input.GetInput("Horizontal", TestInput.Axis.Horizontal, values.Count, selectedIndex);
-            if (hasInput)
+            if (type != Type.Color)
             {
-                input.OnUserInput += SettingValue_OnUserInput;
+                bool hasInput;
+                (selectedIndex, hasInput) = input.GetInput("Horizontal", TestInput.Axis.Horizontal, values.Count, selectedIndex);
+                if (hasInput)
+                {
+                    input.OnUserInput += SettingValue_OnUserInput;
+                }
+            }
+            else
+            {
+                selectedIndex = ExtensionMethods.IncrementCircularInt(selectedIndex, values.Count, ((int)Input.GetAxisRaw("Horizontal") * 2));
+                UpdateValue();
             }
         }
     }
@@ -98,9 +107,41 @@ public class SettingValue : MonoBehaviour
     }
     */
 
+     private void UpdateValue()
+    {
+        selectedValue = values[selectedIndex];
+        if (type != Type.Color)
+        {
+            UpdateText(selectedValue);
+        }
+        else
+        {
+            UpdateColor(selectedValue);
+        }
+
+        if (type != Type.Carousel)
+        {
+            UpdateSlider(selectedIndex);
+        }
+    }
+
     private void UpdateText(string value)
     {
-        valueText.SetText(value);
+        if (valueText != null)
+        {
+            valueText.SetText(value);
+        }
+    }
+
+    private void UpdateColor(string value)
+    {
+        Image valueImage = transform.Find("Value/Value").GetComponent<Image>();
+        float H, S, V;
+        Color.RGBToHSV(GameManager.GetAccentColor(), out _, out S, out V);
+        H = float.Parse(value) / 100;
+        Color color = Color.HSVToRGB(H, S, V);
+        valueImage.color = color;
+        GameManager.SetAccentColor(color);
     }
 
     private void UpdateSlider(int value)
@@ -142,12 +183,7 @@ public class SettingValue : MonoBehaviour
 
     private void SettingValue_OnUserInput(object sender, EventArgs e)
     {
-        selectedValue = values[selectedIndex];
-        UpdateText(selectedValue);
-        if (type == Type.Slider)
-        {
-            UpdateSlider(selectedIndex);
-        }
+        UpdateValue();
         input.OnUserInput -= SettingValue_OnUserInput;
     }
 
@@ -162,6 +198,17 @@ public class SettingValue : MonoBehaviour
     {
         valueText = transform.Find("Value").GetComponentInChildren<TextMeshProUGUI>();
 
+        if (type == Type.Color)
+        {
+            for (int i = 0; i < values.Count; i++)
+            {
+                values[i] = i.ToString();
+            }
+            float H;
+            Color.RGBToHSV(GameManager.GetAccentColor(), out H, out _, out _);
+            defaultValue = Mathf.RoundToInt((H * 100)).ToString();
+        }
+
         if (string.IsNullOrEmpty(selectedValue) && !string.IsNullOrEmpty(defaultValue))
         {
             selectedValue = defaultValue;
@@ -169,7 +216,7 @@ public class SettingValue : MonoBehaviour
         }
 
         selectedIndex = values.FindIndex(value => value == selectedValue);
-        if (type == Type.Slider)
+        if (type != Type.Carousel)
         {
             UpdateSlider(selectedIndex);
         }

@@ -128,6 +128,11 @@ public class GameManager : MonoBehaviour
         return instance.accentColor;
     }
 
+    public static void SetAccentColor(Color accentColor)
+    {
+        instance.accentColor = accentColor;
+    }
+
     public static bool Debug()
     {
         return instance.debug;
