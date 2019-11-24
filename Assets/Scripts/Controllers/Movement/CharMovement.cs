@@ -80,7 +80,7 @@ public class CharMovement : MovingObject
             if (bounds.bounds.Contains(transform.position + direction)) // If target-tile is withing the set boundary.
             {
                 StartCoroutine(CoolDown(moveTime)); // Starts cool-down timer.
-                CheckCollision((int)direction.x, (int)direction.y); // Moves NPC into direction if possible.
+                AttemptMove((int)direction.x, (int)direction.y); // Moves NPC into direction if possible.
 
                 CheckDecisionTime();
             }

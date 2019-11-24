@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -10,11 +11,18 @@ public class PlayerMovement : MovingObject
 {
     #region Variables
 
+    [Header("Settings")]
+    [SerializeField] [Range(1f, 30f)] private float fidgetDelay = 10f;
+
+    [Header("Values")]
+    [SerializeField] [ReadOnly] private float fidgetTimer;
+
     /// <summary>
     /// Used to determine the state of running.
     /// </summary>
     private bool isRunning, toggleRunning;
-    private float idleTimer;
+
+    private Queue<Vector2> input = new Queue<Vector2>();
 
     #endregion
 
@@ -26,12 +34,21 @@ public class PlayerMovement : MovingObject
     private void Update()
     {
         if (Input.GetButtonDown("Toggle"))
+        {
             ToggleRunning();
+        }
 
         if (!isMoving)
+        {
             SetMoveAnimations(); // Turns all move animations off.
+        }
 
         if (!canMove || isMoving || onCoolDown || onExit) return; // We wait until Player is done moving.
+
+        if (input.Count > 2)
+        {
+            input.Dequeue();
+        }
 
         //isRunning = false; // By default, Player is not running.
         canMove = true; // By default, Player is able to move.
@@ -41,47 +58,53 @@ public class PlayerMovement : MovingObject
         int vertical = 0;
 
         // To get move directions.
-        horizontal = (int)(Input.GetAxis("Horizontal"));
-        vertical = (int)(Input.GetAxis("Vertical"));
+        horizontal = (int)(Input.GetAxisRaw("Horizontal"));
+        vertical = (int)(Input.GetAxisRaw("Vertical"));
 
         // We can't go diagonally, or in both directions at the same time.
         if (horizontal != 0)
-            vertical = 0;
-
-        /*
-        if (horizontal > 0 && horizontal < 1 || vertical > 0 && vertical < 1) // If there is an input, ...
         {
-            SetAnimations(horizontal, vertical); // Sets direction the player is facing in, based on input.
-            StartCoroutine(CoolDown(moveTime)); // Starts cool-down timer.
-            idleTimer = 0;
+            vertical = 0;
         }
-        */
+
+        input.Enqueue(new Vector2(horizontal, vertical));
+
 
         if (horizontal != 0 || vertical != 0) // If there is an input, ...
         {
-            if (anim.GetBool("isFidgeting"))
-            {
-                anim.SetBool("isFidgeting", false);
-;           }
+            ResetFidget();
 
-            idleTimer = 0;
+            if (!orientation.Equals(new Vector2(horizontal, vertical)) && input.Peek().Equals(Vector2.zero))
+            {
+                SetAnimations(horizontal, vertical); // Sets direction the player is facing in, based on input.
+                StartCoroutine(CoolDown(0.1f)); // Starts cool-down timer.
+                return;
+            }
 
             if (Input.GetButton("Run"))
+            {
                 isRunning = true;
+            }
             else if (!Input.GetButton("Run") && isRunning && !toggleRunning)
+            {
                 isRunning = false;
+            }
 
             if (canMove) // If Player is able to move, ...
             {
                 SetAnimations(horizontal, vertical); // Sets direction the player is facing in, based on input.
 
                 if (isRunning)
+                {
                     moveTime = 0.2f; // Move-time when running.
+                }
                 else
+                {
                     moveTime = 0.3f; // Move-time when walking.
+                }
 
                 StartCoroutine(CoolDown(moveTime)); // Starts cool-down timer.
-                CheckCollision(horizontal, vertical); // Moves Player if possible.
+                AttemptMove(horizontal, vertical); // Moves Player if possible.
 
                 SetMoveAnimations(); // Sets animations based on if Player is walking or running.
             }
@@ -97,16 +120,27 @@ public class PlayerMovement : MovingObject
 
     private IEnumerator EnableFidget()
     {
-        idleTimer += Time.deltaTime;
+        fidgetTimer += Time.deltaTime;
 
-        if (idleTimer > 5f)
+        if (fidgetTimer > fidgetDelay)
         {
             anim.SetBool("isFidgeting", true);
+            yield return new WaitForEndOfFrame();
             float waitTime = anim.GetAnimationTime();
             yield return new WaitForSeconds(waitTime);
             anim.SetBool("isFidgeting", false);
-            idleTimer = 0;
+            fidgetTimer = 0;
         }
+    }
+
+    private void ResetFidget()
+    {
+        if (anim.GetBool("isFidgeting"))
+        {
+            anim.SetBool("isFidgeting", false);
+        }
+
+        fidgetTimer = 0;
     }
 
     /// <summary>

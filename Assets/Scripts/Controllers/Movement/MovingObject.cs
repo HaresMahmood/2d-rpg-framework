@@ -57,7 +57,7 @@ public abstract class MovingObject : MonoBehaviour
     /// </summary>
     /// <param name="xDir"> X-coordinate of the target-direction. </param>
     /// <param name="yDir"> Y-coordinate of the target-direction. </param>
-    protected virtual void CheckCollision(int xDir, int yDir)
+    protected virtual void AttemptMove(int xDir, int yDir)
     {
         // Starting position of Character.
         Vector2 startTile = transform.position;
