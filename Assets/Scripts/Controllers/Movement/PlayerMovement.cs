@@ -11,7 +11,7 @@ public class PlayerMovement : MovingObject
 {
     #region Variables
 
-    [Header("Settings")]
+    [SerializeField] [Range(0.1f, 1f)] private float runTime = 0.2f;
     [SerializeField] [Range(1f, 30f)] private float fidgetDelay = 10f;
 
     [Header("Values")]
@@ -30,9 +30,13 @@ public class PlayerMovement : MovingObject
 
     /// <summary>
     /// Update is called once per frame.
+    /// 
+    /// Overrides Update function from the MovingObject base-class.
     /// </summary>
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
+
         if (Input.GetButtonDown("Toggle"))
         {
             ToggleRunning();
@@ -45,7 +49,7 @@ public class PlayerMovement : MovingObject
 
         if (!canMove || isMoving || onCoolDown || onExit) return; // We wait until Player is done moving.
 
-        if (input.Count > 2)
+        if (input.Count > 1)
         {
             input.Dequeue();
         }
@@ -74,10 +78,9 @@ public class PlayerMovement : MovingObject
         {
             ResetFidget();
 
-            if (!orientation.Equals(new Vector2(horizontal, vertical)) && input.Peek().Equals(Vector2.zero))
+            if (!orientation.Equals(new Vector2(horizontal, vertical)) && input.Peek().Equals(Vector2.zero) && !isRunning)
             {
-                SetAnimations(horizontal, vertical); // Sets direction the player is facing in, based on input.
-                StartCoroutine(CoolDown(0.1f)); // Starts cool-down timer.
+                StartCoroutine(ChangeOrientation(horizontal, vertical, walkTime));
                 return;
             }
 
@@ -96,11 +99,11 @@ public class PlayerMovement : MovingObject
 
                 if (isRunning)
                 {
-                    moveTime = 0.2f; // Move-time when running.
+                    moveTime = runTime; // Move-time when running.
                 }
                 else
                 {
-                    moveTime = 0.3f; // Move-time when walking.
+                    moveTime = walkTime; // Move-time when walking.
                 }
 
                 StartCoroutine(CoolDown(moveTime)); // Starts cool-down timer.
@@ -118,6 +121,32 @@ public class PlayerMovement : MovingObject
 
     #endregion
 
+    private Vector2 GetInput()
+    {
+        if (input.Count > 2)
+        {
+            input.Dequeue();
+        }
+
+        // To store the direction in which Player wants to move.
+        int horizontal = 0;
+        int vertical = 0;
+
+        // To get move directions.
+        horizontal = (int)(Input.GetAxisRaw("Horizontal"));
+        vertical = (int)(Input.GetAxisRaw("Vertical"));
+
+        // We can't go diagonally, or in both directions at the same time.
+        if (horizontal != 0)
+        {
+            vertical = 0;
+        }
+
+        input.Enqueue(new Vector2(horizontal, vertical));
+
+        return new Vector2(horizontal, vertical);
+    }
+
     private IEnumerator EnableFidget()
     {
         fidgetTimer += Time.deltaTime;
@@ -125,9 +154,12 @@ public class PlayerMovement : MovingObject
         if (fidgetTimer > fidgetDelay)
         {
             anim.SetBool("isFidgeting", true);
+
             yield return new WaitForEndOfFrame();
             float waitTime = anim.GetAnimationTime();
+
             yield return new WaitForSeconds(waitTime);
+
             anim.SetBool("isFidgeting", false);
             fidgetTimer = 0;
         }
@@ -141,6 +173,32 @@ public class PlayerMovement : MovingObject
         }
 
         fidgetTimer = 0;
+    }
+
+    private IEnumerator ChangeOrientation(int horizontal, int vertical, float duration)
+    {
+        /*
+        //int counter = 0;
+        //while (counter < 10)
+        //{
+        yield return new WaitForSeconds(0.05f);
+        //    counter++;
+        //}
+
+        if (!GetInput().Equals(Vector2.zero))
+        {
+            yield break;
+        }
+        */
+
+        SetAnimations(horizontal, vertical); // Sets direction the player is facing in, based on input.
+        isMoving = true;
+        SetMoveAnimations();
+
+        yield return new WaitForSeconds(duration);
+
+        isMoving = false;
+        SetMoveAnimations();
     }
 
     /// <summary>

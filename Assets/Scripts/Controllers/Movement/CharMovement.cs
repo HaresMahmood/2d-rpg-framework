@@ -46,7 +46,7 @@ public class CharMovement : MovingObject
 
         TilemapManager.instance.GetTilemaps(this.gameObject.scene.GetRootGameObjects(), groundTiles, obstacleTiles);
 
-        moveTime = 0.3f; // Default move-time is set at the beginning.
+        moveTime = walkTime; // Default move-time is set at the beginning.
 
         // Choose a random time delay for taking a decision (changing direction, or standing in place for a while).
         decisionTimeCount = Random.Range(decisionTime.x, decisionTime.y);
@@ -60,8 +60,10 @@ public class CharMovement : MovingObject
     /// 
     /// Overrides Update function from the MovingObject base-class.
     /// </summary>
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
+
         if (!canMove || isMoving || onCoolDown || onExit) return; // We wait until NPC is done moving.
 
         if (direction == Vector3.zero)

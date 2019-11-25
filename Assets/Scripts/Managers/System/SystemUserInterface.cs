@@ -23,7 +23,7 @@ public class SystemUserInterface : MonoBehaviour
     private TextMeshProUGUI descriptionText;
 
     [HideInInspector] public int selectedNavOption, totalNavOptions;
-    private int selectedSetting, totalSettingOptions, totalSettingValues, selectedSettingValue;
+    private int selectedSetting = -1, totalSettingOptions;
 
     //private bool isInSettings = false, isSettingSelected = false;
     private Flags flags = new Flags(false, false);
@@ -79,7 +79,11 @@ public class SystemUserInterface : MonoBehaviour
                 }
             }
         }
-        UpdateSettingCategory();
+        else
+        {
+            UpdateSettingCategory();
+        }
+
         input.OnUserInput -= SystemManager_OnUserInput;
     }
 
@@ -130,26 +134,6 @@ public class SystemUserInterface : MonoBehaviour
         float targetValue = 1.0f - (float)selectedSetting / (settingTotal - 1);
         StartCoroutine(scrollBar.LerpScrollbar(targetValue, 0.08f));
 
-        totalSettingOptions = settings.Length;
-        if (settings[selectedSetting].childCount > 0)
-        {
-            indicator.transform.position = settings[selectedSetting].Find("Value").position;
-        }
-
-        //totalSettingValues = settings[selectedSetting].GetComponent<SettingValue>().GetValues().Count;
-        //selectedSettingValue = settings[selectedSetting].GetComponent<SettingValue>().GetValues().FindIndex(value => value == settings[selectedSetting].GetComponent<SettingValue>().GetSelectedValue());
-        //if (flags.isSettingSelected)
-        //{
-            foreach (Transform setting in settings)
-            {
-                if (Array.IndexOf(settings, setting) != selectedSetting)
-                {
-                    setting.GetComponent<SettingValue>().SetStatus(false);
-                }
-            }
-            settings[selectedSetting].GetComponent<SettingValue>().SetStatus(true);
-        //}
-
         descriptionText.SetText(settings[selectedSetting].GetComponent<SettingValue>().GetDescription());
     }
 
@@ -180,11 +164,13 @@ public class SystemUserInterface : MonoBehaviour
             navContainer.transform.Find("Options").GetComponent<Animator>().SetBool("isInSettings", true);
             StartCoroutine(generalSettings.transform.parent.gameObject.FadeOpacity(0.5f, 0.3f));
             StartCoroutine(descriptionText.gameObject.FadeOpacity(1f, 0.3f));
+            selectedSetting = -1;
             flags.isInSettings = true;
         }
         else
         {
             flags.isInSettings = false;
+            selectedSetting = 0;
             navContainer.transform.Find("Options").GetComponent<Animator>().SetBool("isInHighlevel", true);
             navContainer.transform.Find("Options").GetComponent<Animator>().SetBool("isInSettings", false);
             StartCoroutine(generalSettings.transform.parent.gameObject.FadeOpacity(0f, 0.3f));
@@ -236,6 +222,7 @@ public class SystemUserInterface : MonoBehaviour
                     {
                         indicator.SetActive(true);
                         StartCoroutine(generalSettings.transform.parent.gameObject.FadeOpacity(1f, 0.3f));
+                        selectedSetting = 0;
                         flags.isSettingSelected = true;
                     }
                 }
@@ -252,16 +239,19 @@ public class SystemUserInterface : MonoBehaviour
                 {
                     input.OnUserInput += SystemManager_OnUserInput;
                 }
+
                 if (Input.GetButtonDown("Toggle"))
                 {
                     SystemManager.instance.viewingMode = (SystemManager.ViewingMode)ExtensionMethods.IncrementCircularInt((int)SystemManager.instance.viewingMode, Enum.GetNames(typeof(SystemManager.ViewingMode)).Length, 1);
                     ToggleViewingMode(SystemManager.instance.viewingMode);
                     UpdateSettingCategory();
                 }
+
                 if (Input.GetButtonDown("Cancel"))
                 {
                     indicator.SetActive(false);
                     StartCoroutine(generalSettings.transform.parent.gameObject.FadeOpacity(0.5f, 0.3f));
+                    selectedSetting = -1;
                     flags.isSettingSelected = false;
                 }
             }
@@ -316,6 +306,34 @@ public class SystemUserInterface : MonoBehaviour
         {
             GetInput();
             //AnimateNavigation();
+
+            totalSettingOptions = settings.Length;
+            if (selectedSetting >= 0)
+            {
+                if (settings[selectedSetting].childCount > 0)
+                {
+                    indicator.transform.position = settings[selectedSetting].Find("Value").position;
+                }
+            }
+
+            if (selectedSetting >= 0)
+            {
+                foreach (Transform setting in settings)
+                {
+                    if (Array.IndexOf(settings, setting) != selectedSetting)
+                    {
+                        setting.GetComponent<SettingValue>().SetStatus(false);
+                    }
+                }
+                settings[selectedSetting].GetComponent<SettingValue>().SetStatus(true);
+            }
+            else
+            {
+                foreach (Transform setting in settings)
+                
+                    setting.GetComponent<SettingValue>().SetStatus(false);
+                }
+            }
         }
     }
 

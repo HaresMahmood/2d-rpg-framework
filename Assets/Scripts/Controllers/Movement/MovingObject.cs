@@ -10,6 +10,10 @@ using UnityEngine.Tilemaps;
 public abstract class MovingObject : MonoBehaviour
 {
     #region Variables
+
+    [Header("Settings")]
+    [SerializeField] [Range(0.1f, 1f)] private protected float walkTime = 0.3f;
+
     /// <summary>
     /// Lists that keep track of Tilemaps. These can
     /// be dynamically updated depending on the scene Character is in.
@@ -39,9 +43,11 @@ public abstract class MovingObject : MonoBehaviour
     /// Orientation of Character.
     /// </summary>
     [HideInInspector] public Vector2 orientation;
+
     #endregion
 
     #region Unity Methods
+
     /// <summary>
     /// Start is called before the first frame update.
     /// </summary>
@@ -50,6 +56,18 @@ public abstract class MovingObject : MonoBehaviour
         anim = GetComponent<Animator>();
         coll = GetComponent<Collider2D>();
     }
+
+    /// <summary>
+    /// Start is called before the first frame update.
+    /// </summary>
+    protected virtual void Update()
+    {
+        if (PauseManager.instance.isPaused)
+        {
+            canMove = false;
+        }
+    }
+
     #endregion
 
     /// <summary>
