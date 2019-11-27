@@ -17,7 +17,8 @@ public class SettingsUserInterface : MonoBehaviour
 
     private GameObject generalSettings, customizationSettings, activeSettings, indicator;
     public Transform[] navOptions { get; private set; }
-    private Transform[] originalSettings, settings;
+    public Transform[] settings { get; private set; }
+    private Transform[] originalSettings;
     private Scrollbar scrollBar;
     private TextMeshProUGUI descriptionText;
 
@@ -25,16 +26,16 @@ public class SettingsUserInterface : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    public void AnimateSettings()
+    public float GetAnimationTime()
     {
-        if (GetComponent<CanvasGroup>().alpha == 0)
-        {
-            StartCoroutine(gameObject.FadeOpacity(0.5f, 0.3f));
-        }
-        else
-        {
-            StartCoroutine(gameObject.FadeOpacity(0f, 0.3f));
-        }
+        float waitTime = navOptions[SettingsManager.instance.selectedNavOption].GetComponent<Animator>().GetAnimationTime();
+        return waitTime;
+    }
+
+    public void SelectSetting(float containerOpacity, bool activateIndiator)
+    {
+        indicator.SetActive(activateIndiator);
+        StartCoroutine(gameObject.FadeOpacity(containerOpacity, 0.3f));
     }
 
     public void AnimateNavigationOption(int selectedOption, int increment)
@@ -64,12 +65,13 @@ public class SettingsUserInterface : MonoBehaviour
         //SettingsManager.instance.selectedSetting = 0;
     }
 
-    public void UpdateSettingCategory()
+    public void UpdateSettings()
     {
-        //UpdateSettingList();
         float settingTotal = (float)settings.Length;
         float targetValue = 1.0f - (float)SettingsManager.instance.selectedSetting / (settingTotal - 1);
         StartCoroutine(scrollBar.LerpScrollbar(targetValue, 0.08f));
+
+        indicator.transform.position = settings[SettingsManager.instance.selectedSetting].Find("Value").position;
 
         descriptionText.SetText(settings[SettingsManager.instance.selectedSetting].GetComponent<SettingValue>().GetDescription());
     }
@@ -93,6 +95,10 @@ public class SettingsUserInterface : MonoBehaviour
         scrollBar = transform.Find("Scrollbar").GetComponent<Scrollbar>();
 
         activeSettings = generalSettings;
+
+        settings = activeSettings.transform.GetChildren().Where(val => val != null && val.name != "Text").ToArray();
+
+        //UpdateSettingList();
     }
 
     /// <summary>

@@ -78,7 +78,7 @@ public class SystemManager : MonoBehaviour
         StartCoroutine(userInterface.AnimateNavigation("isInSettings", false));
         userInterface.AnimateNavigationOption(selectedNavOption, 0);
         selectedNavOption = 0;
-        SettingsManager.instance.InitializeSettings();
+        StartCoroutine(SettingsManager.instance.InitializeSettings());
     }
 
     private void GetInput()

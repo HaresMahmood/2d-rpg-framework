@@ -21,7 +21,8 @@ public class SettingsManager : MonoBehaviour
     public string[] navigationNames { get; private set; } = new string[] { "General", "Battle", "Customization", "Accessability", "Test" };
 
     public int selectedSetting { get; private set; } = -1;
-    private int selectedNavOption, totalSettingOptions;
+    public int selectedNavOption { get; private set; }
+    private int totalSettingOptions;
 
     public Flags flags = new Flags(false, false);
 
@@ -53,6 +54,10 @@ public class SettingsManager : MonoBehaviour
 
     private void SettingsManager_OnUserInput(object sender, EventArgs e)
     {
+        if (flags.isSettingSelected)
+        {
+            
+        }
         input.OnUserInput -= SettingsManager_OnUserInput;
     }
 
@@ -98,13 +103,24 @@ public class SettingsManager : MonoBehaviour
     }
     */
 
-    public void InitializeSettings()
+    public IEnumerator InitializeSettings()
     {
-        userInterface.AnimateSettings();
+        userInterface.SelectSetting(0.5f, false);
         userInterface.UpdateNavigationOptions();
         selectedNavOption = 0;
         userInterface.AnimateNavigationOption(selectedNavOption, -1);
+
+        float waitTime = userInterface.GetAnimationTime();
+        yield return new WaitForSecondsRealtime(waitTime);
+
         flags.isActive = true;
+    }
+
+    private void ToggleSetting(float containerOpcatity, bool setActive)
+    {
+        userInterface.SelectSetting(containerOpcatity, setActive);
+        flags.isSettingSelected = setActive;
+        selectedSetting = 0;
     }
 
     private void GetInput()
@@ -120,9 +136,7 @@ public class SettingsManager : MonoBehaviour
             }
             if (Input.GetButtonDown("Interact"))
             {
-                //indicator.SetActive(true);
-                //StartCoroutine(generalSettings.transform.parent.gameObject.FadeOpacity(1f, 0.3f));
-                selectedSetting = 0;
+                ToggleSetting(1f, true);
             }
             if (Input.GetButtonDown("Cancel"))
             {
@@ -132,12 +146,13 @@ public class SettingsManager : MonoBehaviour
         else
         {
             bool hasInput;
-            (selectedSetting, hasInput) = input.GetInput("Vertical", TestInput.Axis.Vertical, totalSettingOptions, selectedSetting);
+            (selectedSetting, hasInput) = input.GetInput("Vertical", TestInput.Axis.Vertical, userInterface.settings.Length, selectedSetting);
             if (hasInput)
             {
+                userInterface.UpdateSettings();
                 //input.OnUserInput += SettingsManager_OnUserInput;
-            }
 
+            }
             if (Input.GetButtonDown("Toggle"))
             {
                 //ToggleViewingMode(SystemManager.instance.viewingMode);
@@ -146,10 +161,7 @@ public class SettingsManager : MonoBehaviour
 
             if (Input.GetButtonDown("Cancel"))
             {
-                //indicator.SetActive(false);
-                //StartCoroutine(generalSettings.transform.parent.gameObject.FadeOpacity(0.5f, 0.3f));
-                selectedSetting = -1;
-                flags.isSettingSelected = false;
+                ToggleSetting(0.5f, false);
             }
         }
     }
