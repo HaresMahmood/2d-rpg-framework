@@ -41,7 +41,7 @@ public class TimeUserInterface : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        clockText = transform.Find("Value").GetComponent<TextMeshProUGUI>();
+        clockText = transform.GetComponentInChildren<TextMeshProUGUI>();
     }
 
     #endregion

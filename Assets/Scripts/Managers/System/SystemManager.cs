@@ -15,28 +15,92 @@ public class SystemManager : MonoBehaviour
 
     public static SystemManager instance;
 
+    public SystemUserInterface userInterface { get; private set; }
+
+    private TestInput input = new TestInput();
 
     [Header("Values")]
     public ViewingMode viewingMode; //{ get; private set; }
     public bool isActive { get; set; } = false;
 
-    [HideInInspector]
-    public GameObject systemContainer
+    public GameObject systemContainer { get; private set; }
+
+    public string[] navigationNames { get; private set; } = new string[] { "Save", "Settings", "Tutorials", "Controls", "Quit" };
+
+    public int selectedNavOption { get; private set; }
+    private int totalNavOptions;
+    public Flags flags = new Flags(true, false);
+
+    #endregion
+
+    #region Structs
+
+    public struct Flags
     {
-        get;
-        private set;
+        public bool isInNavigation { get; set; }
+        public bool isInSettings { get; set; }
+
+        public Flags(bool isInNavigation, bool isInSettings)
+        {
+            this.isInNavigation = isInNavigation;
+            this.isInSettings = isInSettings;
+        }
     }
 
-    [HideInInspector]
-    public string[] highlevelText { get; private set; } = new string[] { "Save", "Settings", "Tutorials", "Controls", "Quit" };
-    [HideInInspector] 
-    public string[] settingsText { get; private set; } = new string[] { "General", "Battle", "Customization", "Accessability", "Test" };
+    #endregion
+
+    #region Enums
 
     public enum ViewingMode
     {
         Basic,
         Intermediate,
         Advanced
+    }
+
+    #endregion
+
+    #region Event Methods
+
+    private void SystemManager_OnUserInput(object sender, EventArgs e)
+    {
+        input.OnUserInput -= SystemManager_OnUserInput;
+    }
+
+    #endregion
+
+    #region Miscellaneous Methods
+
+    private void EnableSettings()
+    {
+        flags.isInNavigation = false;
+        flags.isInSettings = true;
+        StartCoroutine(userInterface.AnimateNavigation("isInSettings", false));
+        userInterface.AnimateNavigationOption(selectedNavOption, 0);
+        selectedNavOption = 0;
+        SettingsManager.instance.InitializeSettings();
+    }
+
+    private void GetInput()
+    {
+        if (isActive)
+        {
+            if (flags.isInNavigation)
+            {
+                bool hasInput;
+                (selectedNavOption, hasInput) = input.GetInput("Vertical", TestInput.Axis.Vertical, userInterface.navOptions.Length, selectedNavOption);
+                if (hasInput)
+                {
+                    userInterface.AnimateNavigationOption(selectedNavOption, (int)Input.GetAxisRaw("Vertical"));
+                    //input.OnUserInput += SystemManager_OnUserInput;
+                }
+                if (Input.GetButtonDown("Interact"))
+                {
+                    // TODO: Execute Unity-event code to determine what nav option is selected;
+                    EnableSettings();
+                }
+            }
+        }
     }
 
     #endregion
@@ -58,6 +122,7 @@ public class SystemManager : MonoBehaviour
     private void Start()
     {
         systemContainer = PauseManager.instance.pauseContainer.transform.Find("System").gameObject;
+        userInterface = systemContainer.GetComponent<SystemUserInterface>();
     }
 
     /// <summary>
@@ -65,7 +130,10 @@ public class SystemManager : MonoBehaviour
     /// </summary>
     private void Update()
     {
-
+        if (PauseManager.instance.isPaused)
+        {
+            GetInput();
+        }
     }
 
     #endregion
