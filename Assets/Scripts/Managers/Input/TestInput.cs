@@ -11,6 +11,10 @@ public class TestInput
     public event EventHandler OnUserInput = delegate { };
     public bool hasInput = false;
 
+    #endregion
+
+    #region Enums
+
     public enum Axis
     {
         Horizontal,
@@ -19,15 +23,23 @@ public class TestInput
 
     #endregion
 
+    #region Accessor Methods
+
     public bool HasInput()
     {
         return hasInput;
     }
 
+    #endregion
+
+    #region Helper Methods
+
     public void SetInput(bool input)
     {
         hasInput = input;
     }
+
+    #endregion
 
     #region Get Input
 

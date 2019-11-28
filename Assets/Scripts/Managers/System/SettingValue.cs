@@ -12,26 +12,40 @@ public class SettingValue : MonoBehaviour
 {
     #region Variables
 
-    [SerializeField] private Type type;
+    [SerializeField] private Mode type;
     [SerializeField] private SystemManager.ViewingMode viewingMode;
     [SerializeField] private List<string> values = new List<string>();
     [SerializeField] private string defaultValue;
     [TextArea(1,2)] [SerializeField] private string description;
     [ReadOnly] [SerializeField] private string selectedValue;
     [ReadOnly] [SerializeField] private bool isSelected;
+    [ReadOnly] [SerializeField] private bool isDirty;
 
     private TextMeshProUGUI valueText;
 
     private TestInput input = new TestInput();
 
-    [SerializeField] private int selectedIndex; // { get { return selectedIndex; } set { selectedIndex = value; UpdateValue(); } }
+    [SerializeField] private int selectedIndex;
 
-    public enum Type
+
+
+    #region Enums
+
+    public enum Mode
     { 
         Slider,
         Carousel,
         Color
     }
+
+    public enum Type
+    {
+        Slider,
+        Carousel,
+        Color
+    }
+
+    #endregion
 
     #endregion
 
@@ -79,38 +93,33 @@ public class SettingValue : MonoBehaviour
     {
         if (SystemManager.instance.isActive && isSelected)
         {
-            if (type != Type.Color)
+            if (type != Mode.Color)
             {
                 bool hasInput;
                 (selectedIndex, hasInput) = input.GetInput("Horizontal", TestInput.Axis.Horizontal, values.Count, selectedIndex);
+                /*
                 if (hasInput)
                 {
                     input.OnUserInput += SettingValue_OnUserInput;
                 }
+                */
             }
             else
             {
                 selectedIndex = ExtensionMethods.IncrementCircularInt(selectedIndex, values.Count, ((int)Input.GetAxisRaw("Horizontal") * 2));
-                UpdateValue();
+            }
+
+            if (Input.GetAxisRaw("Horizontal") != 0)
+            {
+                UpdateUserInterface();
             }
         }
     }
 
-    /*
-    private void UpdateSetting(string text, int index)
-    {
-        UpdateText(text);
-        if (mode == Mode.Slider)
-        {
-            UpdateSlider(index);
-        }
-    }
-    */
-
-     private void UpdateValue()
+     private void UpdateUserInterface()
     {
         selectedValue = values[selectedIndex];
-        if (type != Type.Color)
+        if (type != Mode.Color)
         {
             UpdateText(selectedValue);
         }
@@ -119,9 +128,14 @@ public class SettingValue : MonoBehaviour
             UpdateColor(selectedValue);
         }
 
-        if (type != Type.Carousel)
+        if (type != Mode.Carousel)
         {
             UpdateSlider(selectedIndex);
+        }
+
+        if (!isDirty)
+        {
+            isDirty = true;
         }
     }
 
@@ -150,6 +164,13 @@ public class SettingValue : MonoBehaviour
         float totalValues = (float)(values.Count);
         float targetValue = 1f - (float)value / (totalValues - 1);
         StartCoroutine(LerpSlider(slider, targetValue, 0.1f));
+    }
+
+    private void ResetValue()
+    {
+        selectedValue = defaultValue;
+        selectedIndex = values.IndexOf(selectedValue);
+        UpdateUserInterface();
     }
 
     /// <summary>
@@ -183,7 +204,7 @@ public class SettingValue : MonoBehaviour
 
     private void SettingValue_OnUserInput(object sender, EventArgs e)
     {
-        UpdateValue();
+        //UpdateUserInterface();
         input.OnUserInput -= SettingValue_OnUserInput;
     }
 
@@ -198,7 +219,7 @@ public class SettingValue : MonoBehaviour
     {
         valueText = transform.Find("Value").GetComponentInChildren<TextMeshProUGUI>();
 
-        if (type == Type.Color)
+        if (type == Mode.Color)
         {
             for (int i = 0; i < values.Count; i++)
             {
@@ -216,7 +237,7 @@ public class SettingValue : MonoBehaviour
         }
 
         selectedIndex = values.FindIndex(value => value == selectedValue);
-        if (type != Type.Carousel)
+        if (type != Mode.Carousel)
         {
             UpdateSlider(selectedIndex);
         }
@@ -228,6 +249,12 @@ public class SettingValue : MonoBehaviour
     private void Update()
     {
         GetInput();
+
+        // Debug
+        if (Input.GetButtonDown("Remove"))
+        {
+            ResetValue();
+        }
     }
 
     #endregion

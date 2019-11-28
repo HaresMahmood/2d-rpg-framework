@@ -20,9 +20,8 @@ public class SettingsManager : MonoBehaviour
 
     public string[] navigationNames { get; private set; } = new string[] { "General", "Battle", "Customization", "Accessability", "Test" };
 
-    public int selectedSetting { get; private set; } = -1;
-    public int selectedNavOption { get; private set; }
-    private int totalSettingOptions;
+    public int selectedSetting { get; private set; } = 0;
+    public int selectedNavOption { get; private set; } = 0;
 
     public Flags flags = new Flags(false, false);
 
@@ -105,10 +104,11 @@ public class SettingsManager : MonoBehaviour
 
     public IEnumerator InitializeSettings()
     {
-        userInterface.SelectSetting(0.5f, false);
+        userInterface.SelectSetting(0.3f, false);
         userInterface.UpdateNavigationOptions();
         selectedNavOption = 0;
         userInterface.AnimateNavigationOption(selectedNavOption, -1);
+        userInterface.UpdateSettings(0);
 
         float waitTime = userInterface.GetAnimationTime();
         yield return new WaitForSecondsRealtime(waitTime);
@@ -123,6 +123,13 @@ public class SettingsManager : MonoBehaviour
         selectedSetting = 0;
     }
 
+    private void UpdateSetting(int increment)
+    {
+        userInterface.UpdateSettings(selectedSetting);
+        userInterface.UpdateIndicator();
+        userInterface.UpdateSelectedSetting(selectedSetting, increment);
+    }
+
     private void GetInput()
     {
         if (!flags.isSettingSelected)
@@ -132,11 +139,15 @@ public class SettingsManager : MonoBehaviour
             if (hasInput)
             {
                 userInterface.AnimateNavigationOption(selectedNavOption, (int)Input.GetAxisRaw("Vertical"));
+                userInterface.UpdateSettingList(selectedNavOption, (int)Input.GetAxisRaw("Vertical"));
+                UpdateSetting(-1);
                 //input.OnUserInput += SettingsManager_OnUserInput;
             }
             if (Input.GetButtonDown("Interact"))
             {
                 ToggleSetting(1f, true);
+                userInterface.UpdateSelectedSetting(0, -1);
+
             }
             if (Input.GetButtonDown("Cancel"))
             {
@@ -149,7 +160,7 @@ public class SettingsManager : MonoBehaviour
             (selectedSetting, hasInput) = input.GetInput("Vertical", TestInput.Axis.Vertical, userInterface.settings.Length, selectedSetting);
             if (hasInput)
             {
-                userInterface.UpdateSettings();
+                UpdateSetting((int)Input.GetAxisRaw("Vertical"));
                 //input.OnUserInput += SettingsManager_OnUserInput;
 
             }
@@ -161,7 +172,8 @@ public class SettingsManager : MonoBehaviour
 
             if (Input.GetButtonDown("Cancel"))
             {
-                ToggleSetting(0.5f, false);
+                userInterface.UpdateSelectedSetting(selectedSetting, 0);
+                ToggleSetting(0.3f, false);
             }
         }
     }

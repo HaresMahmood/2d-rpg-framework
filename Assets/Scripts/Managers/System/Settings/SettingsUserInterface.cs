@@ -15,7 +15,8 @@ public class SettingsUserInterface : MonoBehaviour
 
     public event EventHandler OnSettingSelected = delegate { };
 
-    private GameObject generalSettings, customizationSettings, activeSettings, indicator;
+    private GameObject indicator;
+    public Transform[] settingCategories;
     public Transform[] navOptions { get; private set; }
     public Transform[] settings { get; private set; }
     private Transform[] originalSettings;
@@ -57,23 +58,38 @@ public class SettingsUserInterface : MonoBehaviour
         }
     }
 
-    private void UpdateSettingList()
+    public void UpdateSettingList(int selectedNavOption, int increment)
     {
-        originalSettings = activeSettings.transform.GetChildren();
-        originalSettings = originalSettings.Where(val => val != null && val.name != "Text").ToArray();
-        settings = originalSettings;
-        //SettingsManager.instance.selectedSetting = 0;
+        int previousNavOption = ExtensionMethods.IncrementCircularInt(selectedNavOption, settingCategories.Length, increment);
+
+        settingCategories[previousNavOption].gameObject.SetActive(false);
+        settingCategories[selectedNavOption].gameObject.SetActive(true);
+        
+        settings = settingCategories[selectedNavOption].GetChildren().Where(val => val != null && val.name != "Text").ToArray();
+
+        ScrollRect scrollRect = transform.GetComponent<ScrollRect>();
+        scrollRect.content = settingCategories[selectedNavOption].GetComponent<RectTransform>();
     }
 
-    public void UpdateSettings()
+    public void UpdateIndicator()
+    {
+        indicator.transform.position = settings[SettingsManager.instance.selectedSetting].Find("Value").position;
+    }
+
+    public void UpdateSelectedSetting(int selectedSetting, int increment)
+    {
+        int previousSetting = ExtensionMethods.IncrementCircularInt(selectedSetting, settings.Length, increment);
+
+        settings[selectedSetting].GetComponent<SettingValue>().SetStatus(true);
+        settings[previousSetting].GetComponent<SettingValue>().SetStatus(false);
+    }
+
+    public void UpdateSettings(int selectedSetting)
     {
         float settingTotal = (float)settings.Length;
-        float targetValue = 1.0f - (float)SettingsManager.instance.selectedSetting / (settingTotal - 1);
+        float targetValue = 1.0f - (float)selectedSetting / (settingTotal - 1);
         StartCoroutine(scrollBar.LerpScrollbar(targetValue, 0.08f));
-
-        indicator.transform.position = settings[SettingsManager.instance.selectedSetting].Find("Value").position;
-
-        descriptionText.SetText(settings[SettingsManager.instance.selectedSetting].GetComponent<SettingValue>().GetDescription());
+        descriptionText.SetText(settings[selectedSetting].GetComponent<SettingValue>().GetDescription());
     }
 
     #endregion
@@ -85,8 +101,6 @@ public class SettingsUserInterface : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        generalSettings = transform.Find("General").gameObject;
-        customizationSettings = transform.Find("Customization").gameObject;
         indicator = transform.Find("Indicator").gameObject;
 
         navOptions = transform.parent.transform.Find("Navigation/Options").GetChildren();
@@ -94,11 +108,7 @@ public class SettingsUserInterface : MonoBehaviour
         descriptionText = transform.parent.transform.Find("Description").GetComponent<TextMeshProUGUI>();
         scrollBar = transform.Find("Scrollbar").GetComponent<Scrollbar>();
 
-        activeSettings = generalSettings;
-
-        settings = activeSettings.transform.GetChildren().Where(val => val != null && val.name != "Text").ToArray();
-
-        //UpdateSettingList();
+        UpdateSettingList(0, -1);
     }
 
     /// <summary>
