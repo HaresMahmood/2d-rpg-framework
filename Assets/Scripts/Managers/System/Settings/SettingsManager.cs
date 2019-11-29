@@ -108,7 +108,7 @@ public class SettingsManager : MonoBehaviour
         userInterface.UpdateNavigationOptions();
         selectedNavOption = 0;
         userInterface.AnimateNavigationOption(selectedNavOption, -1);
-        userInterface.UpdateSettings(0);
+        userInterface.UpdateScrollbar();
 
         float waitTime = userInterface.GetAnimationTime();
         yield return new WaitForSecondsRealtime(waitTime);
@@ -123,9 +123,17 @@ public class SettingsManager : MonoBehaviour
         selectedSetting = 0;
     }
 
-    private void UpdateSetting(int increment)
+    private void UpdateSetting(int increment, bool resetScrollbar = false)
     {
-        userInterface.UpdateSettings(selectedSetting);
+        if (!resetScrollbar)
+        {
+            userInterface.UpdateScrollbar(selectedSetting);
+        }
+        else
+        {
+            selectedSetting = 0;
+            userInterface.UpdateScrollbar();
+        }
         userInterface.UpdateIndicator();
         userInterface.UpdateSelectedSetting(selectedSetting, increment);
     }
@@ -140,7 +148,7 @@ public class SettingsManager : MonoBehaviour
             {
                 userInterface.AnimateNavigationOption(selectedNavOption, (int)Input.GetAxisRaw("Vertical"));
                 userInterface.UpdateSettingList(selectedNavOption, (int)Input.GetAxisRaw("Vertical"));
-                UpdateSetting(-1);
+                UpdateSetting(-1, true);
                 //input.OnUserInput += SettingsManager_OnUserInput;
             }
             if (Input.GetButtonDown("Interact"))

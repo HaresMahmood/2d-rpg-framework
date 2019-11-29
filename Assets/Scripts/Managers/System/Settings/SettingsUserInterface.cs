@@ -83,12 +83,20 @@ public class SettingsUserInterface : MonoBehaviour
         settings[previousSetting].GetComponent<SettingValue>().SetStatus(false);
     }
 
-    public void UpdateSettings(int selectedSetting)
+    public void UpdateScrollbar(int selectedSetting = -1)
     {
-        float settingTotal = (float)settings.Length;
-        float targetValue = 1.0f - (float)selectedSetting / (settingTotal - 1);
-        StartCoroutine(scrollBar.LerpScrollbar(targetValue, 0.08f));
-        descriptionText.SetText(settings[selectedSetting].GetComponent<SettingValue>().GetDescription());
+        if (selectedSetting > -1)
+        {
+            float settingTotal = (float)settings.Length;
+            float targetValue = 1.0f - (float)selectedSetting / (settingTotal - 1);
+            StartCoroutine(scrollBar.LerpScrollbar(targetValue, 0.08f));
+
+            descriptionText.SetText(settings[selectedSetting].GetComponent<SettingValue>().GetDescription());
+        }
+        else
+        {
+            scrollBar.value = 1;
+        }
     }
 
     #endregion
