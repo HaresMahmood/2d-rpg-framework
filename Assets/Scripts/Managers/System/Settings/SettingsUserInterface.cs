@@ -19,7 +19,6 @@ public class SettingsUserInterface : MonoBehaviour
     public Transform[] settingCategories;
     public Transform[] navOptions { get; private set; }
     public Transform[] settings { get; private set; }
-    private Transform[] originalSettings;
     private Scrollbar scrollBar;
     private TextMeshProUGUI descriptionText;
 
@@ -62,13 +61,13 @@ public class SettingsUserInterface : MonoBehaviour
     {
         int previousNavOption = ExtensionMethods.IncrementCircularInt(selectedNavOption, settingCategories.Length, increment);
 
-        settingCategories[previousNavOption].gameObject.SetActive(false);
-        settingCategories[selectedNavOption].gameObject.SetActive(true);
-        
-        settings = settingCategories[selectedNavOption].GetChildren().Where(val => val != null && val.name != "Text").ToArray();
-
         ScrollRect scrollRect = transform.GetComponent<ScrollRect>();
         scrollRect.content = settingCategories[selectedNavOption].GetComponent<RectTransform>();
+
+        settingCategories[previousNavOption].gameObject.SetActive(false);
+        settingCategories[selectedNavOption].gameObject.SetActive(true);
+
+        settings = settingCategories[selectedNavOption].GetChildren().Where(val => val != null && val.name != "Text").ToArray();
     }
 
     public void UpdateIndicator()
