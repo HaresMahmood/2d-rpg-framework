@@ -99,8 +99,7 @@ public class SettingsManager : MonoBehaviour
         userInterface.AnimateNavigationOption(selectedNavOption, -1);
         userInterface.UpdateScrollbar();
 
-        float waitTime = userInterface.GetAnimationTime();
-        yield return new WaitForSecondsRealtime(waitTime);
+        yield return null;
 
         flags.isActive = true;
     }

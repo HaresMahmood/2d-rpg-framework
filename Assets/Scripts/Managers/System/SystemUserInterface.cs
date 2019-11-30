@@ -31,13 +31,18 @@ public class SystemUserInterface : MonoBehaviour
         }
     }
 
+    public void AnimateNavigationText(int selectedOption, float fontSize, float duration)
+    {
+        StartCoroutine(navOptions[selectedOption].GetComponentInChildren<TextMeshProUGUI>().LerpTextSize(fontSize, duration));
+    }
+
     public void AnimateNavigationOption(int selectedOption, int increment)
     {
         int previousOption = ExtensionMethods.IncrementCircularInt(selectedOption, navOptions.Length, increment);
 
-        navOptions[selectedOption].GetComponent<Animator>().SetBool("isSelected", true);
+        AnimateNavigationText(selectedOption, 120f, 0.1f);
         StartCoroutine(navOptions[selectedOption].GetComponentInChildren<TextMeshProUGUI>().gameObject.FadeColor(GameManager.GetAccentColor(), 0.1f));
-        navOptions[previousOption].GetComponent<Animator>().SetBool("isSelected", false);
+        AnimateNavigationText(previousOption, 110f, 0.1f);
         StartCoroutine(navOptions[previousOption].GetComponentInChildren<TextMeshProUGUI>().gameObject.FadeColor(Color.white, 0.1f));
     }
 
@@ -47,16 +52,21 @@ public class SystemUserInterface : MonoBehaviour
         {
             navContainer.transform.Find("Options").GetComponent<Animator>().SetBool("isInHighlevel", true);
             navContainer.transform.Find("Options").GetComponent<Animator>().SetBool(selectedOption, false);
-            //StartCoroutine(descriptionText.gameObject.FadeOpacity(0f, 0.3f));
         }
         else
         {
             navContainer.transform.Find("Options").GetComponent<Animator>().SetBool("isInHighlevel", false);
             navContainer.transform.Find("Options").GetComponent<Animator>().SetBool(selectedOption, true);
-            //StartCoroutine(descriptionText.gameObject.FadeOpacity(1f, 0.3f));
         }
 
-        yield return new WaitForSecondsRealtime(navContainer.transform.Find("Options").GetComponent<Animator>().GetAnimationTime() / 2);
+        // Debug
+        yield return null;
+    }
+
+    public float GetAnimationTime()
+    {
+        float waitTime = navContainer.transform.Find("Options").GetComponent<Animator>().GetAnimationTime();
+        return waitTime;
     }
 
     #endregion

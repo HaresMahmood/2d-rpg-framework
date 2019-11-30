@@ -27,7 +27,7 @@ public class SystemManager : MonoBehaviour
 
     public int selectedNavOption { get; private set; }
     private int totalNavOptions;
-    public Flags flags = new Flags(true, false);
+    public Flags flags = new Flags(true, false, false);
 
     #endregion
 
@@ -37,11 +37,13 @@ public class SystemManager : MonoBehaviour
     {
         public bool isInNavigation { get; set; }
         public bool isInSettings { get; set; }
+        public bool isSaving { get; set; }
 
-        public Flags(bool isInNavigation, bool isInSettings)
+        public Flags(bool isInNavigation, bool isInSettings,bool isSaving)
         {
             this.isInNavigation = isInNavigation;
             this.isInSettings = isInSettings;
+            this.isSaving = isSaving;
         }
     }
 
@@ -58,13 +60,14 @@ public class SystemManager : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    private void EnableSettings()
+    private IEnumerator EnableSettings()
     {
         flags.isInNavigation = false;
         flags.isInSettings = true;
         StartCoroutine(userInterface.AnimateNavigation("isInSettings", false));
         userInterface.AnimateNavigationOption(selectedNavOption, 0);
         selectedNavOption = 0;
+        yield return new WaitForSecondsRealtime(0.1f);
         StartCoroutine(SettingsManager.instance.InitializeSettings());
     }
 
@@ -84,7 +87,17 @@ public class SystemManager : MonoBehaviour
                 if (Input.GetButtonDown("Interact"))
                 {
                     // TODO: Execute Unity-event code to determine what nav option is selected;
-                    EnableSettings();
+                    if (navigationNames[selectedNavOption].Equals("Settings"))
+                    {
+                        StartCoroutine(EnableSettings());
+                    }
+                    else
+                    {
+                        flags.isInNavigation = false;
+                        flags.isSaving = true;
+                        StartCoroutine(userInterface.AnimateNavigation("isSaving", false));
+                        userInterface.AnimateNavigationText(selectedNavOption, 170f, 0.1f);
+                    }
                 }
             }
         }

@@ -297,6 +297,32 @@ public static class ExtensionMethods
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="text"></param>
+    /// <param name="targetSize"></param>
+    /// <param name="duration"></param>
+    /// <returns></returns>
+    public static IEnumerator LerpTextSize(this TextMeshProUGUI text, float targetSize, float duration)
+    {
+        float startSize = text.fontSize; // Creates a value of the initial opacity.
+
+        float t = 0; // Tracks how many seconds we've been fading.
+        while (t < duration) // While time is less than the duration of the fade, ...
+        {
+            if (Time.timeScale == 0)
+                t += Time.unscaledDeltaTime;
+            else
+                t += Time.deltaTime;
+            float blend = Mathf.Clamp01(t / duration); // Turns the time into an interpolation factor between 0 and 1. 
+
+            text.fontSize = Mathf.Lerp(startSize, targetSize, blend); // Blends to the corresponding opacity between start & target.
+
+            yield return null; // Wait one frame, then repeat.
+        }
+    }
+
     public static IEnumerator SetResetTrigger(this Animator animator, string trigger)
     {
         float waitTime = animator.GetAnimationTime();

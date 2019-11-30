@@ -39,13 +39,18 @@ public class SettingsUserInterface : MonoBehaviour
         StartCoroutine(gameObject.FadeOpacity(containerOpacity, 0.3f));
     }
 
+    public void AnimateNavigationText(int selectedOption, float fontSize, float duration)
+    {
+        StartCoroutine(navOptions[selectedOption].GetComponentInChildren<TextMeshProUGUI>().LerpTextSize(fontSize, duration));
+    }
+
     public void AnimateNavigationOption(int selectedOption, int increment)
     {
         int previousOption = ExtensionMethods.IncrementCircularInt(selectedOption, navOptions.Length, increment);
 
-        navOptions[selectedOption].GetComponent<Animator>().SetBool("isSelected", true);
+        AnimateNavigationText(selectedOption, 120f, 0.1f);
         StartCoroutine(navOptions[selectedOption].GetComponentInChildren<TextMeshProUGUI>().gameObject.FadeColor(GameManager.GetAccentColor(), 0.1f));
-        navOptions[previousOption].GetComponent<Animator>().SetBool("isSelected", false);
+        AnimateNavigationText(previousOption, 110f, 0.1f);
         StartCoroutine(navOptions[previousOption].GetComponentInChildren<TextMeshProUGUI>().gameObject.FadeColor(Color.white, 0.1f));
     }
 

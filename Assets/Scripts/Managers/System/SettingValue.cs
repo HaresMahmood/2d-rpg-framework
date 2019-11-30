@@ -25,7 +25,7 @@ public class SettingValue : MonoBehaviour
 
     private TestInput input = new TestInput();
 
-    [SerializeField] private int selectedIndex;
+    private int selectedIndex;
 
 
 
@@ -106,7 +106,7 @@ public class SettingValue : MonoBehaviour
             }
             else
             {
-                selectedIndex = ExtensionMethods.IncrementCircularInt(selectedIndex, values.Count, ((int)Input.GetAxisRaw("Horizontal") * 2));
+                selectedIndex = ExtensionMethods.IncrementCircularInt(selectedIndex, values.Count, (int)Input.GetAxisRaw("Horizontal"));
             }
 
             if (Input.GetAxisRaw("Horizontal") != 0)
