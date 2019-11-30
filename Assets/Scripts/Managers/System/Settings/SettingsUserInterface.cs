@@ -18,6 +18,7 @@ public class SettingsUserInterface : MonoBehaviour
     private GameObject indicator;
     public Transform[] settingCategories;
     public Transform[] navOptions { get; private set; }
+    private List<List<Transform>> originalSettings { get; set; } = new List<List<Transform>>();
     public Transform[] settings { get; private set; }
     private Scrollbar scrollBar;
     private TextMeshProUGUI descriptionText;
@@ -48,6 +49,34 @@ public class SettingsUserInterface : MonoBehaviour
         StartCoroutine(navOptions[previousOption].GetComponentInChildren<TextMeshProUGUI>().gameObject.FadeColor(Color.white, 0.1f));
     }
 
+    public void ToggleViewingMode(int selectedNavOption, SettingsManager.ViewingMode mode)
+    {
+        indicator.SetActive(false); // Debug
+
+        settings = originalSettings[selectedNavOption].ToArray();
+        List<SettingsManager.ViewingMode> previousMode = SettingsManager.instance.GetPreviousMode(mode);
+        List<Transform> values = new List<Transform>();
+
+        foreach (Transform setting in settings)
+        {
+            if (previousMode.Contains(setting.GetComponent<SettingValue>().GetViewingMode()))
+            {
+                values.Add(setting);
+                setting.gameObject.SetActive(true);
+            }
+            else
+            {
+                setting.gameObject.SetActive(false);
+            }
+        }
+
+        settings = values.ToArray();
+
+        // Debug
+        //UpdateIndicator();
+        indicator.SetActive(true);
+    }
+
     public void UpdateNavigationOptions()
     {
         foreach (Transform option in navOptions)
@@ -67,7 +96,7 @@ public class SettingsUserInterface : MonoBehaviour
         settingCategories[previousNavOption].gameObject.SetActive(false);
         settingCategories[selectedNavOption].gameObject.SetActive(true);
 
-        settings = settingCategories[selectedNavOption].GetChildren().Where(val => val != null && val.name != "Text").ToArray();
+        ToggleViewingMode(selectedNavOption, SettingsManager.instance.viewingMode);
     }
 
     public void UpdateIndicator()
@@ -99,6 +128,11 @@ public class SettingsUserInterface : MonoBehaviour
         }
     }
 
+    public void SetSettings(int selectedNavOption)
+    {
+        originalSettings.Add(settingCategories[selectedNavOption].GetChildren().Where(val => val != null && val.name != "Text").ToList());
+    }
+
     #endregion
 
     #region Unity Methods
@@ -115,6 +149,11 @@ public class SettingsUserInterface : MonoBehaviour
         descriptionText = transform.parent.transform.Find("Description").GetComponent<TextMeshProUGUI>();
         scrollBar = transform.Find("Scrollbar").GetComponent<Scrollbar>();
 
+        foreach (Transform option in settingCategories)
+        {
+            SetSettings(Array.IndexOf(settingCategories, option));
+        }
+
         UpdateSettingList(0, -1);
     }
 
@@ -123,7 +162,8 @@ public class SettingsUserInterface : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        
+        // Debug
+        UpdateIndicator();
     }
 
     #endregion

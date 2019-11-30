@@ -19,8 +19,6 @@ public class SystemManager : MonoBehaviour
 
     private TestInput input = new TestInput();
 
-    [Header("Values")]
-    public ViewingMode viewingMode; //{ get; private set; }
     public bool isActive { get; set; } = false;
 
     public GameObject systemContainer { get; private set; }
@@ -45,17 +43,6 @@ public class SystemManager : MonoBehaviour
             this.isInNavigation = isInNavigation;
             this.isInSettings = isInSettings;
         }
-    }
-
-    #endregion
-
-    #region Enums
-
-    public enum ViewingMode
-    {
-        Basic,
-        Intermediate,
-        Advanced
     }
 
     #endregion

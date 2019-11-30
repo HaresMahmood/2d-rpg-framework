@@ -12,6 +12,9 @@ public class SettingsManager : MonoBehaviour
 
     public static SettingsManager instance;
 
+    [Header("Values")]
+    public ViewingMode viewingMode;
+
     private GameObject settingsContainer;
 
     private TestInput input = new TestInput();
@@ -49,6 +52,17 @@ public class SettingsManager : MonoBehaviour
 
     #endregion
 
+    #region Enums
+
+    public enum ViewingMode
+    {
+        Basic,
+        Intermediate,
+        Advanced
+    }
+
+    #endregion
+
     #region Event Methods
 
     private void SettingsManager_OnUserInput(object sender, EventArgs e)
@@ -65,10 +79,10 @@ public class SettingsManager : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    private List<SystemManager.ViewingMode> GetPreviousMode(SystemManager.ViewingMode category)
+    public List<ViewingMode> GetPreviousMode(ViewingMode category)
     {
-        SystemManager.ViewingMode previousCategory = (SystemManager.ViewingMode)ExtensionMethods.IncrementCircularInt((int)category, Enum.GetNames(typeof(SystemManager.ViewingMode)).Length, -1);
-        List<SystemManager.ViewingMode> previousCategories = new List<SystemManager.ViewingMode>();
+        ViewingMode previousCategory = (ViewingMode)ExtensionMethods.IncrementCircularInt((int)category, Enum.GetNames(typeof(ViewingMode)).Length, -1);
+        List<ViewingMode> previousCategories = new List<ViewingMode>();
         if (previousCategory < category)
         {
             previousCategories.AddRange(GetPreviousMode(previousCategory));
@@ -76,31 +90,6 @@ public class SettingsManager : MonoBehaviour
         previousCategories.Add(category);
         return previousCategories;
     }
-
-    /*
-    private void ToggleViewingMode(SystemManager.ViewingMode mode)
-    {
-        settings = originalSettings;
-        List<SystemManager.ViewingMode> previousMode = GetPreviousMode(mode);
-        List<Transform> values = new List<Transform>();
-
-        foreach (Transform setting in settings)
-        {
-            if (previousMode.Contains(setting.GetComponent<SettingValue>().GetViewingMode()))
-            {
-                values.Add(setting);
-                setting.gameObject.SetActive(true);
-            }
-            else
-            {
-                setting.gameObject.SetActive(false);
-            }
-        }
-
-        settings = values.ToArray();
-        scrollBar.value = 1;
-    }
-    */
 
     public IEnumerator InitializeSettings()
     {
@@ -174,8 +163,9 @@ public class SettingsManager : MonoBehaviour
             }
             if (Input.GetButtonDown("Toggle"))
             {
-                //ToggleViewingMode(SystemManager.instance.viewingMode);
-                //UpdateSettingCategory();
+                viewingMode = (ViewingMode)ExtensionMethods.IncrementCircularInt((int)viewingMode, Enum.GetValues(typeof(ViewingMode)).Length, 1);
+                userInterface.ToggleViewingMode(selectedNavOption, viewingMode);
+                UpdateSetting(-1, true);
             }
 
             if (Input.GetButtonDown("Cancel"))

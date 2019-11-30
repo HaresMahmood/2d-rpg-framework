@@ -13,7 +13,7 @@ public class SettingValue : MonoBehaviour
     #region Variables
 
     [SerializeField] private Mode type;
-    [SerializeField] private SystemManager.ViewingMode viewingMode;
+    [SerializeField] private SettingsManager.ViewingMode viewingMode;
     [SerializeField] private List<string> values = new List<string>();
     [SerializeField] private string defaultValue;
     [TextArea(1,2)] [SerializeField] private string description;
@@ -51,7 +51,7 @@ public class SettingValue : MonoBehaviour
 
     #region Accessor Methods
 
-    public SystemManager.ViewingMode GetViewingMode()
+    public SettingsManager.ViewingMode GetViewingMode()
     {
         return viewingMode;
     }
