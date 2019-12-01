@@ -96,7 +96,7 @@ public class SystemManager : MonoBehaviour
                         flags.isInNavigation = false;
                         flags.isSaving = true;
                         StartCoroutine(userInterface.AnimateNavigation("isSaving", false));
-                        userInterface.AnimateNavigationText(selectedNavOption, 170f, 0.1f);
+                        userInterface.AnimateNavigationText(selectedNavOption, 200f, 0.1f);
                     }
                 }
             }
