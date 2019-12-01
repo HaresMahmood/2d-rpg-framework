@@ -21,7 +21,7 @@ public class Stairs : MonoBehaviour
     {
         if (other.CompareTag(GameManager.PlayerTag()))
         {
-            GameManager.Player().GetComponent<PlayerMovement>().moveTime += 0.1f;
+            GameManager.Player().GetComponent<PlayerMovement>().moveTime += 0.15f;
         }
     }
 
@@ -33,7 +33,7 @@ public class Stairs : MonoBehaviour
     {
         if (other.CompareTag(GameManager.PlayerTag()))
         {
-            GameManager.Player().GetComponent<PlayerMovement>().moveTime -= 0.1f;
+            GameManager.Player().GetComponent<PlayerMovement>().moveTime -= 0.15f;
         }
     }
 

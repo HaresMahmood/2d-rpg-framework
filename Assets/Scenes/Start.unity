@@ -217,7 +217,7 @@ PrefabInstance:
     - target: {fileID: 192434623272974935, guid: a6561841eebb5f7429af501c8ee03959,
         type: 3}
       propertyPath: settingCategories.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 192434623272974935, guid: a6561841eebb5f7429af501c8ee03959,
         type: 3}
@@ -227,6 +227,11 @@ PrefabInstance:
     - target: {fileID: 192434623272974935, guid: a6561841eebb5f7429af501c8ee03959,
         type: 3}
       propertyPath: settingCategories.Array.data[1]
+      value: 
+      objectReference: {fileID: 1976729316}
+    - target: {fileID: 192434623272974935, guid: a6561841eebb5f7429af501c8ee03959,
+        type: 3}
+      propertyPath: settingCategories.Array.data[2]
       value: 
       objectReference: {fileID: 2101113556}
     - target: {fileID: 265457805234714485, guid: a6561841eebb5f7429af501c8ee03959,
@@ -2837,6 +2842,12 @@ MonoBehaviour:
 --- !u!1 &1826388522 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1388657039228808272, guid: a6561841eebb5f7429af501c8ee03959,
+    type: 3}
+  m_PrefabInstance: {fileID: 766236334}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &1976729316 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 1292983779151203500, guid: a6561841eebb5f7429af501c8ee03959,
     type: 3}
   m_PrefabInstance: {fileID: 766236334}
   m_PrefabAsset: {fileID: 0}
