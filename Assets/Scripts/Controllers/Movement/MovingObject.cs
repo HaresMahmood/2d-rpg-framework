@@ -103,7 +103,7 @@ public abstract class MovingObject : MonoBehaviour
                 hasObstacle = true;
         }
 
-        if (GetCharacter(coll, direction, 1f))
+        if (GetCollider(coll, direction, 1f))
             hasChar = true; // If a character is standing on the target-tile, ...
 
         // If Character starts movement from a ground-tile.
@@ -210,7 +210,7 @@ public abstract class MovingObject : MonoBehaviour
     /// <param name="direction"> Direction Character is facing towards. </param>
     /// <param name="distance"> Maximum distance the character that is being checked can be located. </param>
     /// <returns> Boolean. </returns>
-    public static bool GetCharacter(Collider2D moveCollider, Vector2 direction, float distance)
+    public static bool GetCollider(Collider2D moveCollider, Vector2 direction, float distance)
     {
         if (moveCollider != null)
         {

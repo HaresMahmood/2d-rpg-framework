@@ -29,6 +29,18 @@ public class PlayerMovement : MovingObject
     #region Unity Methods
 
     /// <summary>
+    /// Start is called before the first frame update.
+    /// 
+    /// Overrides Start function from the MovingObject base-class.
+    /// </summary>
+    protected override void Start()
+    {
+        SetMoveTimes();
+
+        base.Start(); // Calls the Start function of the MovingObject base-class.
+    }
+
+    /// <summary>
     /// Update is called once per frame.
     /// 
     /// Overrides Update function from the MovingObject base-class.
@@ -96,15 +108,6 @@ public class PlayerMovement : MovingObject
             if (canMove) // If Player is able to move, ...
             {
                 SetAnimations(horizontal, vertical); // Sets direction the player is facing in, based on input.
-
-                if (isRunning)
-                {
-                    moveTime = runTime; // Move-time when running.
-                }
-                else
-                {
-                    moveTime = walkTime; // Move-time when walking.
-                }
 
                 StartCoroutine(CoolDown(moveTime)); // Starts cool-down timer.
                 AttemptMove(horizontal, vertical); // Moves Player if possible.
@@ -212,6 +215,20 @@ public class PlayerMovement : MovingObject
         {
             isRunning = !isRunning;
             toggleRunning = !toggleRunning;
+        }
+
+        SetMoveTimes();
+    }
+
+    private void SetMoveTimes()
+    {
+        if (isRunning)
+        {
+            moveTime = runTime; // Move-time when running.
+        }
+        else
+        {
+            moveTime = walkTime; // Move-time when walking.
         }
     }
 

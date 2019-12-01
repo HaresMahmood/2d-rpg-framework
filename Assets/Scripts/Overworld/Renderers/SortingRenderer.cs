@@ -7,7 +7,6 @@ public class SortingRenderer : MonoBehaviour
     private Renderer rend;
     private int baseSortingOrder = 500, offset = -1;
     private float timer, maxTimer = 0.1f;
-    [SerializeField] public bool runOnce;
 
     #endregion
 
@@ -31,8 +30,10 @@ public class SortingRenderer : MonoBehaviour
         {
             timer = maxTimer;
             rend.sortingOrder = (int)(baseSortingOrder - transform.position.y - offset);
+            /*
             if (runOnce)
                 Destroy(this);
+            */
         }
     }
 

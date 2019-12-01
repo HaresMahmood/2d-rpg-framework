@@ -35,6 +35,7 @@ public class CharMovement : MovingObject
     #endregion
 
     #region Unity Methods
+
     /// <summary>
     /// Start is called before the first frame update.
     /// 
