@@ -37,13 +37,13 @@ public class SystemManager : MonoBehaviour
     {
         public bool isInNavigation { get; set; }
         public bool isInSettings { get; set; }
-        public bool isSaving { get; set; }
+        public bool isInSave { get; set; }
 
-        public Flags(bool isInNavigation, bool isInSettings,bool isSaving)
+        public Flags(bool isInNavigation, bool isInSettings,bool isInSave)
         {
             this.isInNavigation = isInNavigation;
             this.isInSettings = isInSettings;
-            this.isSaving = isSaving;
+            this.isInSave = isInSave;
         }
     }
 
@@ -59,6 +59,30 @@ public class SystemManager : MonoBehaviour
     #endregion
 
     #region Miscellaneous Methods
+
+    private IEnumerator EnableSave()
+    {
+        flags.isInNavigation = false;
+        flags.isInSave = true;
+        StartCoroutine(userInterface.AnimateNavigation("isInSave", false));
+        userInterface.AnimateNavigationText(selectedNavOption, 185, 0.2f);
+        //userInterface.AnimateNavigationOption(selectedNavOption, 0);
+        selectedNavOption = 0;
+        yield return new WaitForSecondsRealtime(0.1f);
+        StartCoroutine(SaveManager.instance.InitializeSave());
+    }
+
+    public IEnumerator DisableSave()
+    {
+        StartCoroutine(userInterface.AnimateNavigation("isInSave", true));
+        userInterface.AnimateNavigationText(selectedNavOption, 120, 0.2f);
+        selectedNavOption = 0;
+
+        yield return null;
+
+        flags.isInNavigation = true;
+        flags.isInSave = false;
+    }
 
     private IEnumerator EnableSettings()
     {
@@ -93,10 +117,7 @@ public class SystemManager : MonoBehaviour
                     }
                     else
                     {
-                        flags.isInNavigation = false;
-                        flags.isSaving = true;
-                        StartCoroutine(userInterface.AnimateNavigation("isSaving", false));
-                        userInterface.AnimateNavigationText(selectedNavOption, 185, 0.2f);
+                        StartCoroutine(EnableSave());
                     }
                 }
             }

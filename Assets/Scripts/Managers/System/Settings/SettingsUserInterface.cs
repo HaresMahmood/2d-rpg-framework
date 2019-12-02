@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -149,7 +148,7 @@ public class SettingsUserInterface : MonoBehaviour
     {
         indicator = transform.Find("Indicator").gameObject;
 
-        navOptions = transform.parent.transform.Find("Navigation/Options").GetChildren();
+        navOptions = transform.parent.Find("Navigation/Options").GetChildren();
 
         descriptionText = transform.parent.transform.Find("Description").GetComponent<TextMeshProUGUI>();
         scrollBar = transform.Find("Scrollbar").GetComponent<Scrollbar>();
