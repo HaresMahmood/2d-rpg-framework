@@ -21,7 +21,7 @@ public class SettingsManager : MonoBehaviour
 
     private SettingsUserInterface userInterface;
 
-    public string[] navigationNames { get; private set; } = new string[] { "General", "Battle", "Customization", "Accessability", "Test" };
+    public string[] navigationNames { get; private set; } = new string[] { "General", "Battle", "Customization", "Accessability", "Controlls" };
 
     public int selectedSetting { get; private set; } = 0;
     public int selectedNavOption { get; private set; } = 0;
