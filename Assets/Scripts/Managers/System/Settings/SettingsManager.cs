@@ -97,11 +97,31 @@ public class SettingsManager : MonoBehaviour
         userInterface.UpdateNavigationOptions();
         selectedNavOption = 0;
         userInterface.AnimateNavigationOption(selectedNavOption, -1);
-        userInterface.UpdateScrollbar();
+        userInterface.UpdateSettingList(selectedNavOption, -1);
+        UpdateSetting(-1, true);
 
         yield return null;
 
         flags.isActive = true;
+    }
+
+    public IEnumerator DisableSettings()
+    {
+        userInterface.SelectSetting(0f, false);
+        yield return new WaitForSecondsRealtime(0.15f);
+
+        flags.isActive = false;
+
+        StartCoroutine(SystemManager.instance.DisableSettings());
+
+        yield return new WaitForSecondsRealtime(0.1f);
+
+        userInterface.UpdateSettingList(selectedNavOption, 0);
+
+        if (selectedNavOption != 0)
+        {
+            userInterface.AnimateNavigationOption(selectedNavOption, 0);
+        }
     }
 
     private void ToggleSetting(float containerOpcatity, bool setActive)
@@ -147,7 +167,7 @@ public class SettingsManager : MonoBehaviour
             }
             if (Input.GetButtonDown("Cancel"))
             {
-                //StartCoroutine(systemUserInterface.AnimateNavigation());
+                StartCoroutine(DisableSettings());
             }
         }
         else

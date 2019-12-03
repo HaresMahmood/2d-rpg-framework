@@ -22,7 +22,7 @@ public class SystemUserInterface : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    private void UpdateNavigation()
+    public void UpdateNavigation()
     {
         foreach (Transform option in navOptions)
         {

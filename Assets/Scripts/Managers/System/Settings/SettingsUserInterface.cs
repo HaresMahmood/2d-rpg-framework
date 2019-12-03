@@ -35,7 +35,7 @@ public class SettingsUserInterface : MonoBehaviour
     public void SelectSetting(float containerOpacity, bool activateIndiator)
     {
         indicator.SetActive(activateIndiator);
-        StartCoroutine(gameObject.FadeOpacity(containerOpacity, 0.3f));
+        StartCoroutine(gameObject.FadeOpacity(containerOpacity, 0.15f));
     }
 
     public void AnimateNavigationText(int selectedOption, float fontSize, float duration)
@@ -55,8 +55,6 @@ public class SettingsUserInterface : MonoBehaviour
 
     public void ToggleViewingMode(int selectedNavOption, SettingsManager.ViewingMode mode)
     {
-        indicator.SetActive(false); // Debug
-
         settings = originalSettings[selectedNavOption].ToArray();
         List<SettingsManager.ViewingMode> previousMode = SettingsManager.instance.GetPreviousMode(mode);
         List<Transform> values = new List<Transform>();
@@ -75,10 +73,6 @@ public class SettingsUserInterface : MonoBehaviour
         }
 
         settings = values.ToArray();
-
-        // Debug
-        //UpdateIndicator();
-        indicator.SetActive(true);
     }
 
     public void UpdateNavigationOptions()
@@ -97,8 +91,8 @@ public class SettingsUserInterface : MonoBehaviour
         ScrollRect scrollRect = transform.GetComponent<ScrollRect>();
         scrollRect.content = settingCategories[selectedNavOption].GetComponent<RectTransform>();
 
-        settingCategories[previousNavOption].gameObject.SetActive(false);
         settingCategories[selectedNavOption].gameObject.SetActive(true);
+        settingCategories[previousNavOption].gameObject.SetActive(false);
 
         ToggleViewingMode(selectedNavOption, SettingsManager.instance.viewingMode);
     }

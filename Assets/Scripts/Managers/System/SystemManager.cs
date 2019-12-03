@@ -95,6 +95,20 @@ public class SystemManager : MonoBehaviour
         StartCoroutine(SettingsManager.instance.InitializeSettings());
     }
 
+    public IEnumerator DisableSettings()
+    {
+        StartCoroutine(userInterface.AnimateNavigation("isInSettings", true));
+
+        selectedNavOption = 0;
+
+        yield return new WaitForSecondsRealtime(0.1f);
+
+        userInterface.AnimateNavigationOption(selectedNavOption, -1);
+        userInterface.UpdateNavigation();
+        flags.isInSettings = false;
+        flags.isInNavigation = true;
+    }
+
     private void GetInput()
     {
         if (isActive)
