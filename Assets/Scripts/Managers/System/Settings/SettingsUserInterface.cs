@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -84,17 +85,14 @@ public class SettingsUserInterface : MonoBehaviour
         }
     }
 
-    public void UpdateSettingList(int selectedNavOption, int increment)
+    public void UpdateSettingList(int selectedCategory, int increment)
     {
-        int previousNavOption = ExtensionMethods.IncrementCircularInt(selectedNavOption, settingCategories.Length, increment);
+        int previousCategory = ExtensionMethods.IncrementCircularInt(selectedCategory, settingCategories.Length, increment);
 
         ScrollRect scrollRect = transform.GetComponent<ScrollRect>();
-        scrollRect.content = settingCategories[selectedNavOption].GetComponent<RectTransform>();
+        scrollRect.content = settingCategories[selectedCategory].GetComponent<RectTransform>();
 
-        settingCategories[selectedNavOption].gameObject.SetActive(true);
-        settingCategories[previousNavOption].gameObject.SetActive(false);
-
-        ToggleViewingMode(selectedNavOption, SettingsManager.instance.viewingMode);
+        StartCoroutine(ChangeCategory(selectedCategory, previousCategory));
     }
 
     public void UpdateIndicator()
@@ -108,6 +106,31 @@ public class SettingsUserInterface : MonoBehaviour
 
         settings[selectedSetting].GetComponent<SettingValue>().SetStatus(true);
         settings[previousSetting].GetComponent<SettingValue>().SetStatus(false);
+    }
+
+    private IEnumerator ChangeCategory(int selectedCategory, int previousCategory)
+    {
+        yield return null; UpdateScrollbar();
+
+        FadeCategory(settingCategories[previousCategory], 0f, 0.05f);
+        StartCoroutine(scrollBar.gameObject.FadeOpacity(0f, 0.05f));
+        //indicator.SetActive(false);
+        yield return new WaitForSecondsRealtime(0.05f);
+        settingCategories[previousCategory].gameObject.SetActive(false);
+
+        ToggleViewingMode(selectedCategory, SettingsManager.instance.viewingMode);
+
+        yield return new WaitForSecondsRealtime(0.1f);
+
+        settingCategories[selectedCategory].gameObject.SetActive(true);
+        FadeCategory(settingCategories[selectedCategory], 1f, 0.05f);
+        StartCoroutine(scrollBar.gameObject.FadeOpacity(1f, 0.05f));
+        //indicator.SetActive(true);
+    }
+
+    private void FadeCategory(Transform category, float opacity, float duration)
+    {
+        StartCoroutine(category.gameObject.FadeOpacity(opacity, duration));
     }
 
     public void UpdateScrollbar(int selectedSetting = -1)

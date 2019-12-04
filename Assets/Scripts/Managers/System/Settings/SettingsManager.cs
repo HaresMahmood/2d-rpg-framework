@@ -157,7 +157,6 @@ public class SettingsManager : MonoBehaviour
                 userInterface.AnimateNavigationOption(selectedNavOption, (int)Input.GetAxisRaw("Vertical"));
                 userInterface.UpdateSettingList(selectedNavOption, (int)Input.GetAxisRaw("Vertical"));
                 UpdateSetting(-1, true);
-                //input.OnUserInput += SettingsManager_OnUserInput;
             }
             if (Input.GetButtonDown("Interact"))
             {
@@ -177,21 +176,20 @@ public class SettingsManager : MonoBehaviour
             if (hasInput)
             {
                 UpdateSetting((int)Input.GetAxisRaw("Vertical"));
-                //input.OnUserInput += SettingsManager_OnUserInput;
 
             }
-            if (Input.GetButtonDown("Toggle"))
-            {
-                viewingMode = (ViewingMode)ExtensionMethods.IncrementCircularInt((int)viewingMode, Enum.GetValues(typeof(ViewingMode)).Length, 1);
-                userInterface.ToggleViewingMode(selectedNavOption, viewingMode);
-                UpdateSetting(-1, true);
-            }
-
             if (Input.GetButtonDown("Cancel"))
             {
                 userInterface.UpdateSelectedSetting(selectedSetting, 0);
                 ToggleSetting(0.3f, false);
             }
+        }
+
+        if (Input.GetButtonDown("Toggle"))
+        {
+            viewingMode = (ViewingMode)ExtensionMethods.IncrementCircularInt((int)viewingMode, Enum.GetValues(typeof(ViewingMode)).Length, 1);
+            userInterface.UpdateSettingList(selectedNavOption, 0);
+            UpdateSetting(-1, true);
         }
     }
 
