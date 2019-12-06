@@ -213,9 +213,9 @@ public class SettingValue : MonoBehaviour
     #region Unity Methods
 
     /// <summary>
-    /// Start is called before the first frame update.
+    /// Awake is called when the script instance is being loaded.
     /// </summary>
-    private void Start()
+    private void Awake()
     {
         valueText = transform.Find("Value").GetComponentInChildren<TextMeshProUGUI>();
 

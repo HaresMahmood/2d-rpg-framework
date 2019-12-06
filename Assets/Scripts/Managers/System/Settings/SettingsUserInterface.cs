@@ -20,6 +20,7 @@ public class SettingsUserInterface : MonoBehaviour
     public Transform[] navOptions { get; private set; }
     private List<List<Transform>> originalSettings { get; set; } = new List<List<Transform>>();
     public Transform[] settings { get; private set; }
+    private ScrollRect scrollRect;
     private Scrollbar scrollBar;
     private TextMeshProUGUI descriptionText;
 
@@ -92,12 +93,15 @@ public class SettingsUserInterface : MonoBehaviour
         ScrollRect scrollRect = transform.GetComponent<ScrollRect>();
         scrollRect.content = settingCategories[selectedCategory].GetComponent<RectTransform>();
 
-        StartCoroutine(ChangeCategory(selectedCategory, previousCategory));
+        StartCoroutine(ChangeCategory(selectedCategory, previousCategory, 0.05f));
     }
 
     public void UpdateIndicator()
     {
-        indicator.transform.position = settings[SettingsManager.instance.selectedSetting].Find("Value").position;
+        if (indicator.activeSelf)
+        {
+            indicator.transform.position = settings[SettingsManager.instance.selectedSetting].Find("Value").position;
+        }
     }
 
     public void UpdateSelectedSetting(int selectedSetting, int increment)
@@ -108,24 +112,27 @@ public class SettingsUserInterface : MonoBehaviour
         settings[previousSetting].GetComponent<SettingValue>().SetStatus(false);
     }
 
-    private IEnumerator ChangeCategory(int selectedCategory, int previousCategory)
+    private IEnumerator ChangeCategory(int selectedCategory, int previousCategory, float waitTime)
     {
-        yield return null; UpdateScrollbar();
-
-        FadeCategory(settingCategories[previousCategory], 0f, 0.05f);
-        StartCoroutine(scrollBar.gameObject.FadeOpacity(0f, 0.05f));
-        //indicator.SetActive(false);
-        yield return new WaitForSecondsRealtime(0.05f);
+        indicator.GetComponent<Animator>().enabled = false;
+        StartCoroutine(indicator.FadeOpacity(0f, waitTime));
+        FadeCategory(settingCategories[previousCategory], 0f, waitTime);
+        StartCoroutine(scrollBar.gameObject.FadeOpacity(0f, waitTime));
+        yield return new WaitForSecondsRealtime(waitTime);
         settingCategories[previousCategory].gameObject.SetActive(false);
+        scrollRect.enabled = false;
 
         ToggleViewingMode(selectedCategory, SettingsManager.instance.viewingMode);
 
-        yield return new WaitForSecondsRealtime(0.1f);
-
+        yield return new WaitForSecondsRealtime(waitTime * 2);
         settingCategories[selectedCategory].gameObject.SetActive(true);
-        FadeCategory(settingCategories[selectedCategory], 1f, 0.05f);
-        StartCoroutine(scrollBar.gameObject.FadeOpacity(1f, 0.05f));
-        //indicator.SetActive(true);
+
+        scrollRect.enabled = true;
+        yield return null; UpdateScrollbar();
+
+        FadeCategory(settingCategories[selectedCategory], 1f, waitTime);
+        StartCoroutine(scrollBar.gameObject.FadeOpacity(1f, waitTime));
+        yield return new WaitForSecondsRealtime(waitTime); indicator.GetComponent<Animator>().enabled = true;
     }
 
     private void FadeCategory(Transform category, float opacity, float duration)
@@ -168,6 +175,7 @@ public class SettingsUserInterface : MonoBehaviour
         navOptions = transform.parent.Find("Navigation/Options").GetChildren();
 
         descriptionText = transform.parent.transform.Find("Description").GetComponent<TextMeshProUGUI>();
+        scrollRect = transform.GetComponent<ScrollRect>();
         scrollBar = transform.Find("Scrollbar").GetComponent<Scrollbar>();
 
         foreach (Transform option in settingCategories)

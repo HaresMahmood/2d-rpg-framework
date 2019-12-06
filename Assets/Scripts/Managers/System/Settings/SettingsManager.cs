@@ -21,7 +21,7 @@ public class SettingsManager : MonoBehaviour
 
     private SettingsUserInterface userInterface;
 
-    public string[] navigationNames { get; private set; } = new string[] { "General", "Battle", "Customization", "Accessability", "Controlls" };
+    public string[] navigationNames { get; private set; } = new string[] { "General", "Battle", "Customization", "Accessibility", "Controlls" };
 
     public int selectedSetting { get; private set; } = 0;
     public int selectedNavOption { get; private set; } = 0;
@@ -98,7 +98,7 @@ public class SettingsManager : MonoBehaviour
         selectedNavOption = 0;
         userInterface.AnimateNavigationOption(selectedNavOption, -1);
         userInterface.UpdateSettingList(selectedNavOption, -1);
-        UpdateSetting(-1, true);
+        UpdateSetting(0, true);
 
         yield return null;
 
@@ -156,7 +156,7 @@ public class SettingsManager : MonoBehaviour
             {
                 userInterface.AnimateNavigationOption(selectedNavOption, (int)Input.GetAxisRaw("Vertical"));
                 userInterface.UpdateSettingList(selectedNavOption, (int)Input.GetAxisRaw("Vertical"));
-                UpdateSetting(-1, true);
+                UpdateSetting(0, true);
             }
             if (Input.GetButtonDown("Interact"))
             {
@@ -189,7 +189,7 @@ public class SettingsManager : MonoBehaviour
         {
             viewingMode = (ViewingMode)ExtensionMethods.IncrementCircularInt((int)viewingMode, Enum.GetValues(typeof(ViewingMode)).Length, 1);
             userInterface.UpdateSettingList(selectedNavOption, 0);
-            UpdateSetting(-1, true);
+            UpdateSetting(-1, false);
         }
     }
 
