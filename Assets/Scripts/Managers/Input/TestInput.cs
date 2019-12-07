@@ -43,7 +43,7 @@ public class TestInput
 
     #region Get Input
 
-    public (int selectedButton, bool hasInput) GetInput(string button, Axis axis, int totalButtons, int selectedButton, int step = 1)
+    public (int selectedButton, bool hasInput) GetInput(string button, Axis axis, int totalButtons, int selectedButton, bool isBounded = false, int step = 1)
     {
         if (Input.GetAxisRaw(button) != 0)
         {
@@ -51,11 +51,12 @@ public class TestInput
             {
                 if (axis == Axis.Horizontal)
                 {
-                    selectedButton = ExtensionMethods.IncrementCircularInt(selectedButton, totalButtons, ((int)Input.GetAxisRaw(button) * step));
+
+                    selectedButton = ExtensionMethods.IncrementInt(selectedButton, 0, totalButtons, ((int)Input.GetAxisRaw(button) * step), isBounded);
                 }
                 else if (axis == Axis.Vertical)
                 {
-                    selectedButton = ExtensionMethods.IncrementCircularInt(selectedButton, totalButtons, -((int)Input.GetAxisRaw(button) * step));
+                    selectedButton = ExtensionMethods.IncrementInt(selectedButton, 0, totalButtons, -((int)Input.GetAxisRaw(button) * step), isBounded);
                 }
                 SetInput(true);
             }
@@ -69,13 +70,13 @@ public class TestInput
         return (selectedButton: selectedButton, hasInput: HasInput());
     }
 
-    public (int selectedButton, bool hasInput) GetInput(string horizontal, string vertical, int totalButtons, int selectedButton, int horizontalStep = 1, int verticalStep = 1)
+    public (int selectedButton, bool hasInput) GetInput(string horizontal, string vertical, int totalButtons, int selectedButton, bool isBounded = false, int horizontalStep = 1, int verticalStep = 1)
     {
         if (Input.GetAxisRaw(horizontal) != 0)
         {
             if (!HasInput())
             {
-                selectedButton = ExtensionMethods.IncrementCircularInt(selectedButton, totalButtons, ((int)Input.GetAxisRaw(horizontal) * horizontalStep));
+                selectedButton = ExtensionMethods.IncrementInt(selectedButton, 0, totalButtons, ((int)Input.GetAxisRaw(horizontal) * horizontalStep), isBounded);
                 SetInput(true);
             }
         }
@@ -83,7 +84,7 @@ public class TestInput
         {
             if (!HasInput())
             {
-                selectedButton = ExtensionMethods.IncrementCircularInt(selectedButton, totalButtons, -((int)Input.GetAxisRaw(vertical) * verticalStep));
+                selectedButton = ExtensionMethods.IncrementInt(selectedButton, 0, totalButtons, -((int)Input.GetAxisRaw(vertical) * verticalStep), isBounded);
                 SetInput(true);
             }
         }

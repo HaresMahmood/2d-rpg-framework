@@ -310,7 +310,7 @@ public class PartyManager : MonoBehaviour
         LayoutRebuilder.ForceRebuildLayoutImmediate(movesContainer.GetComponent<RectTransform>());
 
         thisMove.GetComponent<Animator>().SetBool("isActive", true);
-        Transform previousMove = movePanels[ExtensionMethods.IncrementCircularInt(currentMove, movePanels.Length, increment)];
+        Transform previousMove = movePanels[ExtensionMethods.IncrementInt(currentMove, 0, movePanels.Length, increment)];
 
         previousMove.GetComponent<Animator>().SetBool("isActive", false);
 

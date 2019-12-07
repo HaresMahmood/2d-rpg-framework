@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -475,28 +474,50 @@ public static class ExtensionMethods
         }
     }
 
-    public static int IncrementCircularInt(int value, int max, int increment)
+    public static int IncrementInt(int value, int min, int max, int increment, bool isBounded = false)
     {
         value += increment;
-        value = Mathf.Clamp(value, -1, max);
-        try
+        
+        if (!isBounded)
         {
-            if (((value) % max) == 0)
+            try
             {
-                value = 0;
+                if (((value) % max) == 0)
+                {
+                    value = 0;
+                }
+                else if (value < 0)
+                {
+                    value = --max;
+                }
             }
-            else if (value < 0)
+            catch (DivideByZeroException)
             {
-                value = --max;
+                return 0;
             }
         }
-        catch (DivideByZeroException)
-        {
-            return 0;
-        }
+        
+        max -= isBounded == false ? 0 : 1;
+        value = Mathf.Clamp(value, min, max);
 
         return value;
     }
+
+    /*
+    public static IEnumerator AnimateIndicator(this GameObject indicator, float waitTime)
+    {
+        Animator indicatorAnimator = indicator.GetComponent<Animator>();
+
+        indicatorAnimator.enabled = false;
+        StartCoroutine(indicator.FadeOpacity(0f, waitTime));
+        yield return new WaitForSecondsRealtime(waitTime);
+
+        indicator.transform.position = settings[selectedSetting].Find("Value").position;
+        yield return null;
+
+        indicatorAnimator.enabled = true;
+    }
+    */
 
     /*
     public static int GetLength<T>(this enum target) where T : struct, Icorn

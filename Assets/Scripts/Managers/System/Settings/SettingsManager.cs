@@ -81,7 +81,7 @@ public class SettingsManager : MonoBehaviour
 
     public List<ViewingMode> GetPreviousMode(ViewingMode category)
     {
-        ViewingMode previousCategory = (ViewingMode)ExtensionMethods.IncrementCircularInt((int)category, Enum.GetNames(typeof(ViewingMode)).Length, -1);
+        ViewingMode previousCategory = (ViewingMode)ExtensionMethods.IncrementInt((int)category, 0, Enum.GetNames(typeof(ViewingMode)).Length, -1);
         List<ViewingMode> previousCategories = new List<ViewingMode>();
         if (previousCategory < category)
         {
@@ -116,7 +116,7 @@ public class SettingsManager : MonoBehaviour
 
         yield return new WaitForSecondsRealtime(0.1f);
 
-        userInterface.UpdateSettingList(selectedNavOption, 0);
+        userInterface.UpdateSettingList(selectedNavOption, 0, false);
 
         if (selectedNavOption != 0)
         {
@@ -142,8 +142,8 @@ public class SettingsManager : MonoBehaviour
             selectedSetting = 0;
             userInterface.UpdateScrollbar();
         }
-        userInterface.UpdateIndicator();
         userInterface.UpdateSelectedSetting(selectedSetting, increment);
+        StartCoroutine(userInterface.UpdateIndicator(selectedSetting, 0.1f));
     }
 
     private void GetInput()
@@ -187,9 +187,9 @@ public class SettingsManager : MonoBehaviour
 
         if (Input.GetButtonDown("Toggle"))
         {
-            viewingMode = (ViewingMode)ExtensionMethods.IncrementCircularInt((int)viewingMode, Enum.GetValues(typeof(ViewingMode)).Length, 1);
+            viewingMode = (ViewingMode)ExtensionMethods.IncrementInt((int)viewingMode, 0, Enum.GetValues(typeof(ViewingMode)).Length, 1);
             userInterface.UpdateSettingList(selectedNavOption, 0);
-            UpdateSetting(-1, false);
+            UpdateSetting(-1);
         }
     }
 

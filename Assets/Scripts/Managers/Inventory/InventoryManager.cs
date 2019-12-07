@@ -307,7 +307,7 @@ public class InventoryManager : MonoBehaviour
                 if (Input.GetAxisRaw("Trigger") == 0)
                 {
                     bool hasInput;
-                    (selectedSlot, hasInput) = input.GetInput("Horizontal", "Vertical", totalSlots, selectedSlot, 1, 6);
+                    (selectedSlot, hasInput) = input.GetInput("Horizontal", "Vertical", totalSlots, selectedSlot, false, 1, 6);
                     if (hasInput)
                     {
                         input.OnUserInput += InventoryManager_OnUserInput;

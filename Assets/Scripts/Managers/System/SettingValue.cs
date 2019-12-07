@@ -12,7 +12,7 @@ public class SettingValue : MonoBehaviour
 {
     #region Variables
 
-    [SerializeField] private Mode type;
+    [SerializeField] private Type type;
     [SerializeField] private SettingsManager.ViewingMode viewingMode;
     [SerializeField] private List<string> values = new List<string>();
     [SerializeField] private string defaultValue;
@@ -31,15 +31,8 @@ public class SettingValue : MonoBehaviour
 
     #region Enums
 
-    public enum Mode
-    { 
-        Slider,
-        Carousel,
-        Color
-    }
-
     public enum Type
-    {
+    { 
         Slider,
         Carousel,
         Color
@@ -93,20 +86,13 @@ public class SettingValue : MonoBehaviour
     {
         if (SystemManager.instance.isActive && isSelected)
         {
-            if (type != Mode.Color)
+            if (type != Type.Color)
             {
-                bool hasInput;
-                (selectedIndex, hasInput) = input.GetInput("Horizontal", TestInput.Axis.Horizontal, values.Count, selectedIndex);
-                /*
-                if (hasInput)
-                {
-                    input.OnUserInput += SettingValue_OnUserInput;
-                }
-                */
+                (selectedIndex, _) = input.GetInput("Horizontal", TestInput.Axis.Horizontal, values.Count, selectedIndex, type == Type.Slider);
             }
             else
             {
-                selectedIndex = ExtensionMethods.IncrementCircularInt(selectedIndex, values.Count, (int)Input.GetAxisRaw("Horizontal"));
+                selectedIndex = ExtensionMethods.IncrementInt(selectedIndex, 0, values.Count, (int)Input.GetAxisRaw("Horizontal"), true);
             }
 
             if (Input.GetAxisRaw("Horizontal") != 0)
@@ -119,7 +105,7 @@ public class SettingValue : MonoBehaviour
      private void UpdateUserInterface()
     {
         selectedValue = values[selectedIndex];
-        if (type != Mode.Color)
+        if (type != Type.Color)
         {
             UpdateText(selectedValue);
         }
@@ -128,7 +114,7 @@ public class SettingValue : MonoBehaviour
             UpdateColor(selectedValue);
         }
 
-        if (type != Mode.Carousel)
+        if (type != Type.Carousel)
         {
             UpdateSlider(selectedIndex);
         }
@@ -163,7 +149,8 @@ public class SettingValue : MonoBehaviour
         Slider slider = transform.GetComponentInChildren<Slider>();
         float totalValues = (float)(values.Count);
         float targetValue = 1f - (float)value / (totalValues - 1);
-        StartCoroutine(LerpSlider(slider, targetValue, 0.1f));
+
+        StartCoroutine(slider.LerpSlider(targetValue, 0.15f));
     }
 
     private void ResetValue()
@@ -171,31 +158,6 @@ public class SettingValue : MonoBehaviour
         selectedValue = defaultValue;
         selectedIndex = values.IndexOf(selectedValue);
         UpdateUserInterface();
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name=""></param>
-    /// <param name=""></param>
-    /// <returns></returns>
-    public IEnumerator LerpSlider(Slider slider, float targetValue, float duration)
-    {
-        float initialValue = slider.value;
-
-        float t = 0; // Tracks how many seconds we've been fading.
-        while (t < duration) // While time is less than the duration of the fade, ...
-        {
-            if (Time.timeScale == 0)
-                t += Time.unscaledDeltaTime;
-            else
-                t += Time.deltaTime;
-            float blend = Mathf.Clamp01(t / duration); // Turns the time into an interpolation factor between 0 and 1. 
-
-            slider.value = Mathf.Lerp(initialValue, targetValue, blend);
-
-            yield return null; // Wait one frame, then repeat.
-        }
     }
 
     #endregion
@@ -219,7 +181,7 @@ public class SettingValue : MonoBehaviour
     {
         valueText = transform.Find("Value").GetComponentInChildren<TextMeshProUGUI>();
 
-        if (type == Mode.Color)
+        if (type == Type.Color)
         {
             for (int i = 0; i < values.Count; i++)
             {
@@ -237,7 +199,7 @@ public class SettingValue : MonoBehaviour
         }
 
         selectedIndex = values.FindIndex(value => value == selectedValue);
-        if (type != Mode.Carousel)
+        if (type != Type.Carousel)
         {
             UpdateSlider(selectedIndex);
         }

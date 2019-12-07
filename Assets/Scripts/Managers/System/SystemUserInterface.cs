@@ -38,7 +38,7 @@ public class SystemUserInterface : MonoBehaviour
 
     public void AnimateNavigationOption(int selectedOption, int increment)
     {
-        int previousOption = ExtensionMethods.IncrementCircularInt(selectedOption, navOptions.Length, increment);
+        int previousOption = ExtensionMethods.IncrementInt(selectedOption, 0, navOptions.Length, increment);
 
         AnimateNavigationText(selectedOption, 120f, 0.1f);
         StartCoroutine(navOptions[selectedOption].GetComponentInChildren<TextMeshProUGUI>().gameObject.FadeColor(GameManager.GetAccentColor(), 0.1f));

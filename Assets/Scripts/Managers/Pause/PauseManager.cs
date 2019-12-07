@@ -329,7 +329,7 @@ public class PauseManager : MonoBehaviour
             if (!isInteracting)
             {
 
-                currentMenuIndex = ExtensionMethods.IncrementCircularInt(currentMenuIndex, menus.Length, (int)Input.GetAxisRaw("Face Trigger"));
+                currentMenuIndex = ExtensionMethods.IncrementInt(currentMenuIndex, 0, menus.Length, (int)Input.GetAxisRaw("Face Trigger"));
                 currentMenu = menus[currentMenuIndex];
                 isInteracting = true;
             }
