@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 /// <summary>
 ///
@@ -12,8 +13,11 @@ public class SettingsManager : MonoBehaviour
 
     public static SettingsManager instance;
 
+    [Header("Setup")]
+    public TextMeshProUGUI modeText;
+
     [Header("Values")]
-    public ViewingMode viewingMode;
+    [ReadOnly] public ViewingMode viewingMode;
 
     private GameObject settingsContainer;
 
@@ -99,6 +103,7 @@ public class SettingsManager : MonoBehaviour
         userInterface.AnimateNavigationOption(selectedNavOption, -1);
         userInterface.UpdateSettingList(selectedNavOption, -1);
         UpdateSetting(0, true);
+        AnimateModeText();
 
         yield return null;
 
@@ -146,6 +151,11 @@ public class SettingsManager : MonoBehaviour
         StartCoroutine(userInterface.UpdateIndicator(selectedSetting, 0.1f));
     }
 
+    private void AnimateModeText()
+    {
+        modeText.SetText(viewingMode.ToString().ToLower());
+    }
+
     private void GetInput()
     {
         if (!flags.isSettingSelected)
@@ -190,6 +200,8 @@ public class SettingsManager : MonoBehaviour
             viewingMode = (ViewingMode)ExtensionMethods.IncrementInt((int)viewingMode, 0, Enum.GetValues(typeof(ViewingMode)).Length, 1);
             userInterface.UpdateSettingList(selectedNavOption, 0);
             UpdateSetting(-1);
+            AnimateModeText();
+
         }
     }
 

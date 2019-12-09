@@ -67,7 +67,7 @@ public class TestInput
         }
 
         OnUserInput?.Invoke(this, EventArgs.Empty);
-        return (selectedButton: selectedButton, hasInput: HasInput());
+        return (selectedButton, hasInput: HasInput());
     }
 
     public (int selectedButton, bool hasInput) GetInput(string horizontal, string vertical, int totalButtons, int selectedButton, bool isBounded = false, int horizontalStep = 1, int verticalStep = 1)
@@ -94,7 +94,7 @@ public class TestInput
         }
 
         OnUserInput?.Invoke(this, EventArgs.Empty);
-        return (selectedButton: selectedButton, hasInput: HasInput());
+        return (selectedButton, hasInput: HasInput());
     }
 
     #endregion
