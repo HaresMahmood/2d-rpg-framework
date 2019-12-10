@@ -17,6 +17,7 @@ public class InventoryManager : MonoBehaviour
 
     [UnityEngine.Header("Setup")]
     public Inventory inventory;
+    [SerializeField] private List<PanelButton> buttons = new List<PanelButton>();
 
     [UnityEngine.Header("Settings")]
     [SerializeField] private GameObject menuButtonPrefab;
@@ -184,6 +185,13 @@ public class InventoryManager : MonoBehaviour
     }
 
     #endregion
+
+    // TODO: OnActive() 2.0
+    public void AnimateBottomPanel()
+    {
+        StartCoroutine(FindObjectOfType<BottomPanelUserInterface>().ChangePanelButtons(buttons));
+    }
+
     private void OnActive()
     {
         if (PauseManager.instance.isPaused)

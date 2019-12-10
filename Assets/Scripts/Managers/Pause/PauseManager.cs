@@ -39,6 +39,9 @@ public class PauseManager : MonoBehaviour
     {
         if (instance == null)
             instance = this;
+
+
+
     }
 
     /// <summary>
@@ -60,6 +63,8 @@ public class PauseManager : MonoBehaviour
         currentMenuIndex = 2;
         maxMenuIndex = menus.Length - 1;
         isPaused = false;
+
+        UpdateMenu();
     }
 
     /// <summary>
@@ -68,7 +73,6 @@ public class PauseManager : MonoBehaviour
     private void Update()
     {
         TogglePause();
-        _UpdateMenu();
     }
 
     #endregion
@@ -317,6 +321,7 @@ public class PauseManager : MonoBehaviour
         else
         {
             TriggerInput();
+            
             OnUserInput += PauseManager_OnUserInput;
         }
     }
@@ -391,6 +396,7 @@ public class PauseManager : MonoBehaviour
                     StartCoroutine(heldItem.FadeOpacity(1f, 0.15f));
                 }
             }
+            UpdateMenu();
         }
     }
 
@@ -402,7 +408,7 @@ public class PauseManager : MonoBehaviour
         textAnimator.Rebind();
     }
 
-    public void _UpdateMenu()
+    public void UpdateMenu()
     {
         Transform[] progressMarkers = topPanel.transform.Find("Navigation/Progress").GetChildren();
         foreach (Transform marker in progressMarkers)
@@ -495,6 +501,7 @@ public class PauseManager : MonoBehaviour
             }
 
             InventoryManager.instance.isActive = true;
+            InventoryManager.instance.AnimateBottomPanel();
         }
         else if (currentMenu == menus[3])
         {
@@ -516,6 +523,7 @@ public class PauseManager : MonoBehaviour
             }
 
             SystemManager.instance.isActive = true;
+            SystemManager.instance.OnActive();
         }
     }
 

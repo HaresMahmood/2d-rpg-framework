@@ -14,6 +14,7 @@ public class SettingsManager : MonoBehaviour
     public static SettingsManager instance;
 
     [Header("Setup")]
+    [SerializeField] public List<PanelButton> buttons = new List<PanelButton>();
     public TextMeshProUGUI modeText;
 
     [Header("Values")]
@@ -95,6 +96,11 @@ public class SettingsManager : MonoBehaviour
         return previousCategories;
     }
 
+    public void OnActive()
+    {
+        StartCoroutine(FindObjectOfType<BottomPanelUserInterface>().ChangePanelButtons(buttons));
+    }
+
     public IEnumerator InitializeSettings()
     {
         userInterface.SelectSetting(0.3f, false);
@@ -104,6 +110,7 @@ public class SettingsManager : MonoBehaviour
         userInterface.UpdateSettingList(selectedNavOption, -1);
         UpdateSetting(0, true);
         AnimateModeText();
+        OnActive();
 
         yield return null;
 

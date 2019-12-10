@@ -7,15 +7,6 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    /// <summary>
-    /// Awake is called when the script instance is being loaded.
-    /// </summary>
-    private void Awake()
-    {
-        if (instance == null)
-            instance = this;
-    }
-
     [UnityEngine.Header("General Settings")]
     [SerializeField] private const string playerTag = "Player";
 
@@ -45,8 +36,13 @@ public class GameManager : MonoBehaviour
         public static Color accentColor;
     }
 
-    private void Start()
+    private void Awake()
     {
+        if (instance == null)
+            instance = this;
+
+
+
         if (player != null)
         {
             for (int i = 0; i < player.childCount; i++)

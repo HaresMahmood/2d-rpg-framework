@@ -15,6 +15,9 @@ public class SystemManager : MonoBehaviour
 
     public static SystemManager instance;
 
+    [Header("Setup")]
+    [SerializeField] private List<PanelButton> buttons = new List<PanelButton>();
+
     public SystemUserInterface userInterface { get; private set; }
 
     private TestInput input = new TestInput();
@@ -59,6 +62,11 @@ public class SystemManager : MonoBehaviour
     #endregion
 
     #region Miscellaneous Methods
+    
+    public void OnActive()
+    {
+        StartCoroutine(FindObjectOfType<BottomPanelUserInterface>().ChangePanelButtons(buttons));
+    }
 
     private IEnumerator EnableSave()
     {
@@ -105,6 +113,7 @@ public class SystemManager : MonoBehaviour
 
         userInterface.AnimateNavigationOption(selectedNavOption, -1);
         userInterface.UpdateNavigation();
+        OnActive();
         flags.isInSettings = false;
         flags.isInNavigation = true;
     }
