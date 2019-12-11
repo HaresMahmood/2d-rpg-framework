@@ -15,7 +15,6 @@ public class SettingsManager : MonoBehaviour
 
     [Header("Setup")]
     [SerializeField] public List<PanelButton> buttons = new List<PanelButton>();
-    public TextMeshProUGUI modeText;
 
     [Header("Values")]
     [ReadOnly] public ViewingMode viewingMode;
@@ -160,7 +159,7 @@ public class SettingsManager : MonoBehaviour
 
     private void AnimateModeText()
     {
-        modeText.SetText(viewingMode.ToString().ToLower());
+        StartCoroutine(FindObjectOfType<BottomPanelUserInterface>().AnimateValue(viewingMode.ToString(), 1f));
     }
 
     private void GetInput()
@@ -208,7 +207,6 @@ public class SettingsManager : MonoBehaviour
             userInterface.UpdateSettingList(selectedNavOption, 0);
             UpdateSetting(-1);
             AnimateModeText();
-
         }
     }
 

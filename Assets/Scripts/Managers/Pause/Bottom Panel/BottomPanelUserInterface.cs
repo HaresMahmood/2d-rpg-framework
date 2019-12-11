@@ -12,24 +12,29 @@ public class BottomPanelUserInterface : MonoBehaviour
 {
     #region Variables
 
-     [Range(0.01f, 0.2f)] [SerializeField] private float animationTime;
+    [Header("Settings")]
+    [Range(0.01f, 0.2f)] [SerializeField] private float animationTime;
+
+    private Transform[] buttons;
+    private Animator valueAnimator;
 
     #endregion
 
     #region Miscellaneous Methods
 
-    public IEnumerator ChangePanelButtons(List<PanelButton> buttons)
+    public IEnumerator ChangePanelButtons(List<PanelButton> panelButtons)
     {
         foreach (Transform button in transform.Find("Buttons").GetChildren())
         {
             StartCoroutine(button.gameObject.FadeOpacity(0f, animationTime));
             yield return new WaitForSecondsRealtime(animationTime);
 
-            if (Array.IndexOf(transform.Find("Buttons").GetChildren(), button) < buttons.Count)
+            if (Array.IndexOf(transform.Find("Buttons").GetChildren(), button) < panelButtons.Count)
             {
                 button.GetComponent<LayoutElement>().ignoreLayout = false;
-                button.GetComponentInChildren<Image>().sprite = buttons[Array.IndexOf(transform.Find("Buttons").GetChildren(), button)].sprite;
-                button.GetComponentInChildren<TextMeshProUGUI>().SetText(buttons[Array.IndexOf(transform.Find("Buttons").GetChildren(), button)].text);
+                button.GetComponentInChildren<Image>().sprite = panelButtons[Array.IndexOf(buttons, button)].sprite;
+                button.GetComponentInChildren<TextMeshProUGUI>().SetText(panelButtons[Array.IndexOf(buttons, button)].text);
+                button.GetComponentInChildren<AutoTextWidth>().UpdateWidth(button.GetComponentInChildren<TextMeshProUGUI>().text);
             }
             else
             {
@@ -41,16 +46,44 @@ public class BottomPanelUserInterface : MonoBehaviour
 
         yield return new WaitForSecondsRealtime(animationTime * 1.5f);
 
-        for (int i = 0; i < buttons.Count; i++)
+        for (int i = 0; i < panelButtons.Count; i++)
         {
             StartCoroutine(transform.Find("Buttons").GetChildren()[i].gameObject.FadeOpacity(1f, animationTime));
             yield return new WaitForSecondsRealtime(animationTime);
         }
     }
 
+    public IEnumerator AnimateValue(string text, float waitTime)
+    {
+        StopAllCoroutines();
+        valueAnimator.GetComponent<TextMeshProUGUI>().SetText(text);
+        valueAnimator.SetBool("isToggling", true);
+        valueAnimator.gameObject.SetActive(true);
+
+        float animationTime = valueAnimator.GetAnimationTime();
+        waitTime = waitTime < animationTime ? animationTime : waitTime;
+
+        yield return new WaitForSecondsRealtime(waitTime);
+
+        valueAnimator.SetBool("isToggling", false); yield return null;
+        animationTime = valueAnimator.GetAnimationTime();
+        yield return new WaitForSecondsRealtime(animationTime);
+        valueAnimator.gameObject.SetActive(false);
+    }
+
     #endregion
 
     #region Unity Methods
+
+    /// <summary>
+    /// Awake is called when the script instance is being loaded.
+    /// </summary>
+    private void Awake()
+    {
+        buttons = transform.Find("Buttons").GetChildren();
+        valueAnimator = buttons[(buttons.Length - 1)].GetComponentInChildren<Animator>();
+        valueAnimator.gameObject.SetActive(false);
+    }
 
     /// <summary>
     /// Start is called before the first frame update.

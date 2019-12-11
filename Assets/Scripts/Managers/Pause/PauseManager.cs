@@ -63,8 +63,6 @@ public class PauseManager : MonoBehaviour
         currentMenuIndex = 2;
         maxMenuIndex = menus.Length - 1;
         isPaused = false;
-
-        UpdateMenu();
     }
 
     /// <summary>
@@ -94,6 +92,7 @@ public class PauseManager : MonoBehaviour
                     }
                 }
             }
+            UpdateMenu();
         }
 
         OnPause();

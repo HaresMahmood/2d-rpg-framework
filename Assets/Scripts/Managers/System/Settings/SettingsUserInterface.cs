@@ -216,5 +216,14 @@ public class SettingsUserInterface : MonoBehaviour
         UpdateSettingList(0, -1);
     }
 
+
+    /*
+    // Debug
+    private void Update()
+    {
+        StartCoroutine(UpdateIndicator(SettingsManager.instance.selectedSetting, 0.1f));
+    }
+    */
+
     #endregion
 }

@@ -17,10 +17,7 @@ public class AutoTextWidth : MonoBehaviour
     public void UpdateWidth(string text)
     {
         Vector2 textSize = new Vector2(textComponent.GetPreferredValues(text).x, textComponent.rectTransform.sizeDelta.y);
-        if (textSize.x > 215f)
-        {
-            textComponent.rectTransform.sizeDelta = textSize;
-        }
+        textComponent.rectTransform.sizeDelta = textSize;
     }
 
     #endregion

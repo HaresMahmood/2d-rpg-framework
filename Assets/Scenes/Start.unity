@@ -140,18 +140,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1198252227}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &179172616 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 344996507172980406, guid: a6561841eebb5f7429af501c8ee03959,
-    type: 3}
-  m_PrefabInstance: {fileID: 766236334}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &326511736 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3682788949124881246, guid: 9e7cfa39ff75e5844be6b5bfc05ecfa4,
@@ -177,9 +165,8 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 0d40ea98e00c9e140a64b62bc3e361af, type: 3}
   - text: Reset to default
     sprite: {fileID: 21300000, guid: 633b6632c07e05b4e93f3cc2b2391cb0, type: 3}
-  - text: 'Toggle mode:'
+  - text: Change mode
     sprite: {fileID: 21300000, guid: 2530a1c673d62f345a2be841b5afc5bb, type: 3}
-  modeText: {fileID: 179172616}
   viewingMode: 0
 --- !u!114 &326511740
 MonoBehaviour:
@@ -377,6 +364,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.pageCount
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 730979738059126625, guid: a6561841eebb5f7429af501c8ee03959,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 808326009772921286, guid: a6561841eebb5f7429af501c8ee03959,
         type: 3}
@@ -1881,7 +1873,7 @@ PrefabInstance:
     - target: {fileID: 7546561496917375480, guid: a6561841eebb5f7429af501c8ee03959,
         type: 3}
       propertyPath: animationTime
-      value: 0.05
+      value: 0.08
       objectReference: {fileID: 0}
     - target: {fileID: 7708649303647861060, guid: a6561841eebb5f7429af501c8ee03959,
         type: 3}
@@ -3294,7 +3286,7 @@ PrefabInstance:
     - target: {fileID: 7945080590092970818, guid: 9e7cfa39ff75e5844be6b5bfc05ecfa4,
         type: 3}
       propertyPath: buttons.Array.data[3].text
-      value: 'Sort by:'
+      value: Sort items
       objectReference: {fileID: 0}
     - target: {fileID: 7945080590092970818, guid: 9e7cfa39ff75e5844be6b5bfc05ecfa4,
         type: 3}
