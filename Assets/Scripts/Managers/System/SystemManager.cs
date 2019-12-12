@@ -100,7 +100,7 @@ public class SystemManager : MonoBehaviour
         userInterface.AnimateNavigationOption(selectedNavOption, 0);
         selectedNavOption = 0;
         yield return new WaitForSecondsRealtime(0.1f);
-        StartCoroutine(SettingsManager.instance.InitializeSettings());
+        StartCoroutine(SettingsManager.instance.OnActive());
     }
 
     public IEnumerator DisableSettings()

@@ -131,6 +131,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseContainer: {fileID: 0}
+  sidePanel: {fileID: 0}
+  topPanel: {fileID: 0}
+  indicator: {fileID: 0}
   isPaused: 0
   inPartyMenu: 0
   isInteracting: 0
@@ -227,7 +230,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aeec81b4d8b91b499e78f5d3f1fb3bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  viewingMode: 0
+  buttons: []
 --- !u!1 &3787010750625582226
 GameObject:
   m_ObjectHideFlags: 0
@@ -577,7 +580,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f17c27e0ef6e0dd4b975dd7ba77c39db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventory: {fileID: 0}
+  inventory: {fileID: 11400000, guid: 5a47d2040f5278546be326f7821df575, type: 2}
+  buttons:
+  - text: Back
+    sprite: {fileID: 21300000, guid: d4e0beb796148d84886877025f53b4fb, type: 3}
+  - text: Select
+    sprite: {fileID: 21300000, guid: 0d40ea98e00c9e140a64b62bc3e361af, type: 3}
+  - text: Remove item
+    sprite: {fileID: 21300000, guid: 633b6632c07e05b4e93f3cc2b2391cb0, type: 3}
+  - text: Sort items
+    sprite: {fileID: 21300000, guid: 2530a1c673d62f345a2be841b5afc5bb, type: 3}
   menuButtonPrefab: {fileID: 2042213031241034387, guid: f7c192d6a4a58cc4084a1be14bafc297,
     type: 3}
   inventoryContainer: {fileID: 0}
@@ -613,6 +625,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6002379217965659316}
     m_Modifications:
+    - target: {fileID: 139962, guid: 8b53136e5280ec64dbecbea97981cbcc, type: 3}
+      propertyPath: m_Name
+      value: SceneManager
+      objectReference: {fileID: 0}
     - target: {fileID: 475698, guid: 8b53136e5280ec64dbecbea97981cbcc, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -656,10 +672,6 @@ PrefabInstance:
     - target: {fileID: 475698, guid: 8b53136e5280ec64dbecbea97981cbcc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 139962, guid: 8b53136e5280ec64dbecbea97981cbcc, type: 3}
-      propertyPath: m_Name
-      value: SceneManager
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8b53136e5280ec64dbecbea97981cbcc, type: 3}
@@ -751,6 +763,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7423616054217241068}
     m_Modifications:
+    - target: {fileID: 4393373215081512009, guid: 9a4a35e1ee815e94aba492035bbaaf48,
+        type: 3}
+      propertyPath: m_Name
+      value: Health
+      objectReference: {fileID: 0}
     - target: {fileID: 5936161408528348728, guid: 9a4a35e1ee815e94aba492035bbaaf48,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -805,11 +822,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4393373215081512009, guid: 9a4a35e1ee815e94aba492035bbaaf48,
-        type: 3}
-      propertyPath: m_Name
-      value: Health
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9a4a35e1ee815e94aba492035bbaaf48, type: 3}

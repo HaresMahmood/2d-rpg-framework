@@ -22,6 +22,6 @@ public class HealthBehavior : MonoBehaviour
         else
             InventoryManager.instance.inventory.items.Remove(item);
 
-        InventoryManager.instance.UpdateInventory();
+        //InventoryManager.instance.UpdateInventory();
     }
 }
