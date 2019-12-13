@@ -23,12 +23,19 @@ public class InventoryUserInterface : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    public void UpdateIndicator(int selectedItem)
+    public IEnumerator UpdateIndicator(int selectedItem, float animationDuration)
     {
+        indicatorAnimator.enabled = false;
+        StartCoroutine(indicator.FadeOpacity(0f, animationDuration));
+        yield return new WaitForSecondsRealtime(animationDuration);
+
         indicator.transform.position = itemGrid[selectedItem].Find("Slot").position;
+        yield return null;
+
+        indicatorAnimator.enabled = true;
     }
 
-    public void UpdateCategoryItems(Inventory inventory, int selectedCategory)
+    public void UpdateCategoryItems(Inventory inventory, int selectedCategory, float animationTime)
     {
         int counter = 0;
 
@@ -65,12 +72,12 @@ public class InventoryUserInterface : MonoBehaviour
             isEmpty = true;
             indicator.SetActive(false);
             StartCoroutine(emptyGrid.FadeOpacity(1f, 0.1f));
-            StartCoroutine(transform.Find("Item Grid").gameObject.FadeOpacity(0f, 0.1f));
+            StartCoroutine(transform.Find("Item Grid").gameObject.FadeOpacity(0f, animationTime));
         }
         else
         {
             isEmpty = false;
-            StartCoroutine(transform.Find("Item Grid").gameObject.FadeOpacity(1f, 0.1f));
+            StartCoroutine(transform.Find("Item Grid").gameObject.FadeOpacity(1f, animationTime));
             StartCoroutine(emptyGrid.FadeOpacity(0f, 0.1f));
             indicator.SetActive(true);
         }
@@ -78,7 +85,7 @@ public class InventoryUserInterface : MonoBehaviour
         for (int i = counter; i < itemGrid.Length; i++)
         {
             //itemGrid[i].Find("Slot").gameObject.SetActive(false);
-            StartCoroutine(itemGrid[i].Find("Slot").gameObject.FadeOpacity(0f, 0.1f));
+            StartCoroutine(itemGrid[i].Find("Slot").gameObject.FadeOpacity(0f, animationTime));
         }
     }
 
@@ -92,7 +99,7 @@ public class InventoryUserInterface : MonoBehaviour
         itemSlot.Find("Favorite").gameObject.SetActive(isFavorite);
         itemSlot.Find("New").gameObject.SetActive(item.isNew);itemSlot.gameObject.SetActive(true);
 
-        StartCoroutine(itemSlot.gameObject.FadeOpacity(1f, 0.1f));
+        StartCoroutine(itemSlot.gameObject.FadeOpacity(1f, 0.15f));
 
         position++;
 
@@ -113,25 +120,48 @@ public class InventoryUserInterface : MonoBehaviour
         categoryItems.Clear();
     }
 
-    public void UpdateCategoryName(int selectedCategory)
+    public IEnumerator UpdateCategoryName(int selectedCategory, float animationTime)
     {
+        StartCoroutine(categoryText.transform.parent.gameObject.FadeOpacity(0f, animationTime));
+        yield return new WaitForSecondsRealtime(animationTime);
         categoryText.SetText(InventoryManager.instance.categoryNames[selectedCategory]);
+        categoryText.transform.parent.position = new Vector2(categoryIcons[selectedCategory].position.x, categoryText.transform.parent.position.y);
+        StartCoroutine(categoryText.transform.parent.gameObject.FadeOpacity(1f, animationTime));
     }
 
-    public void UpdateDescription(int selectedItem)
+    public IEnumerator UpdateDescription(int selectedItem, float animationTime)
     {
         if (categoryItems.Count > 0)
         {
-            informationPanel.SetActive(true);
+            StartCoroutine(informationPanel.transform.Find("Information (Vertical)").gameObject.FadeOpacity(0f, animationTime));
+
+            yield return new WaitForSecondsRealtime(animationTime);
+
             informationPanel.transform.Find("Information (Vertical)/Name/Item Name").GetComponent<TextMeshProUGUI>().SetText(categoryItems[selectedItem].name);
             informationPanel.transform.Find("Information (Vertical)/Description/Item Description").GetComponent<TextMeshProUGUI>().SetText(categoryItems[selectedItem].description);
+
+            StartCoroutine(informationPanel.transform.Find("Information (Vertical)").gameObject.FadeOpacity(1f, animationTime));
         }
-        /*
-        else if (item == null)
+        else
         {
-            informationPanel.SetActive(false);
+            StartCoroutine(informationPanel.transform.Find("Information (Vertical)").gameObject.FadeOpacity(0f, animationTime));
         }
-        */
+    }
+
+    public void UpdateSelectedCategory(Inventory inventory, int selectedCategory, int increment)
+    {
+        AnimateCategoryIcons(selectedCategory, -increment);
+        ResetCategoryItems();
+        UpdateCategoryItems(inventory, selectedCategory, 0.15f);
+        StartCoroutine(UpdateCategoryName(selectedCategory, 0.1f));
+        StartCoroutine(AnimateArrows(increment));
+        UpdateSelectedItem(0);
+    }
+
+    public void UpdateSelectedItem(int selectedItem)
+    {
+        StartCoroutine(UpdateIndicator(selectedItem, 0.1f));
+        StartCoroutine(UpdateDescription(selectedItem, 0.07f));
     }
 
     public void AnimateCategoryIcons(int selectedCategory, int increment)
@@ -185,6 +215,8 @@ public class InventoryUserInterface : MonoBehaviour
         categoryText = transform.Find("Categories/Information/Name").GetComponent<TextMeshProUGUI>();
         itemGrid = transform.Find("Item Grid").GetChildren();
         categoryIcons = transform.Find("Categories/Category Icons").GetChildren();
+
+        UpdateSelectedCategory(InventoryManager.instance.inventory, 0, -1);
 
         LayoutRebuilder.ForceRebuildLayoutImmediate(informationPanel.transform.Find("Information (Vertical)").GetComponent<RectTransform>());
     }

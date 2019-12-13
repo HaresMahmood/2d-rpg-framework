@@ -59,25 +59,18 @@ public class InventoryManager : MonoBehaviour
 
     public void OnActive()
     {
-        UpdateSelectedCategory(-1);
         StartCoroutine(FindObjectOfType<BottomPanelUserInterface>().ChangePanelButtons(buttons));
     }
 
     private void UpdateSelectedCategory(int increment)
     {
         selectedItem = 0;
-        userInterface.AnimateCategoryIcons(selectedCategory, -increment);
-        userInterface.ResetCategoryItems();
-        userInterface.UpdateCategoryItems(inventory, selectedCategory);
-        userInterface.UpdateCategoryName(selectedCategory);
-        StartCoroutine(userInterface.AnimateArrows(increment));
-        UpdateSelectedItem(0);
+        userInterface.UpdateSelectedCategory(inventory, selectedCategory, increment);
     }
 
     private void UpdateSelectedItem(int selectedItem)
     {
-        userInterface.UpdateIndicator(selectedItem);
-        userInterface.UpdateDescription(selectedItem);
+        userInterface.UpdateSelectedItem(selectedItem);
     }
 
     private void GetInput()
@@ -140,6 +133,8 @@ public class InventoryManager : MonoBehaviour
         {
             categoryNames.Add(((Item.Category)i).ToString());
         }
+
+        OnActive();
     }
 
     /// <summary>

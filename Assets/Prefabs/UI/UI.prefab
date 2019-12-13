@@ -290,6 +290,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 692527618044401574}
+  - component: {fileID: 2651447941382262583}
   - component: {fileID: 490849645843416685}
   - component: {fileID: 4734426374978155011}
   m_Layer: 5
@@ -320,6 +321,18 @@ RectTransform:
   m_AnchoredPosition: {x: -915, y: 180}
   m_SizeDelta: {x: 0, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &2651447941382262583
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 55626194970339591}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!114 &490849645843416685
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18247,6 +18260,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8309470005417372160}
+  - component: {fileID: 8937277120379721274}
   m_Layer: 5
   m_Name: Information
   m_TagString: Untagged
@@ -18272,9 +18286,21 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -878, y: 686}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &8937277120379721274
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1731245768724565967}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1741081709937201126
 GameObject:
   m_ObjectHideFlags: 0
@@ -33230,7 +33256,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3997254194077798862
 RectTransform:
   m_ObjectHideFlags: 0
@@ -33247,7 +33273,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -325, y: 710}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 700, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &207684358729114189
@@ -34895,7 +34921,7 @@ GameObject:
   - component: {fileID: 6105145950890586712}
   - component: {fileID: 6041973105566836263}
   m_Layer: 5
-  m_Name: Ohter
+  m_Name: Other
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -52507,7 +52533,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -325, y: 710}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 700, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4965707462823086988
@@ -64729,7 +64755,7 @@ GameObject:
   - component: {fileID: 3125154812108879580}
   - component: {fileID: 8635603176975439095}
   m_Layer: 5
-  m_Name: "Pok\xE9ball"
+  m_Name: "Pok\xE9 Ball"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
