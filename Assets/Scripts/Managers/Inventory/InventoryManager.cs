@@ -67,8 +67,9 @@ public class InventoryManager : MonoBehaviour
     {
         selectedItem = 0;
         userInterface.AnimateCategoryIcons(selectedCategory, -increment);
-        userInterface.ResetInventory();
-        userInterface.UpdateInventory(inventory, selectedCategory);
+        userInterface.ResetCategoryItems();
+        userInterface.UpdateCategoryItems(inventory, selectedCategory);
+        userInterface.UpdateCategoryName(selectedCategory);
         StartCoroutine(userInterface.AnimateArrows(increment));
         UpdateSelectedItem(0);
     }

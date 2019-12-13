@@ -28,18 +28,16 @@ public class InventoryUserInterface : MonoBehaviour
         indicator.transform.position = itemGrid[selectedItem].Find("Slot").position;
     }
 
-    public void UpdateInventory(Inventory inventory, int selectedCategory)
+    public void UpdateCategoryItems(Inventory inventory, int selectedCategory)
     {
         int counter = 0;
 
         #if DEBUG
                 if (GameManager.Debug())
                 {
-                    Debug.Log("[INVENTORY MANAGER:] Updating inventory.");
+                    Debug.Log("[INVENTORY MANAGER:] Updating category items.");
                 }
         #endif
-
-        categoryText.SetText(InventoryManager.instance.categoryNames[selectedCategory]);
 
         if (inventory.items.Count > 0)
         {
@@ -103,16 +101,21 @@ public class InventoryUserInterface : MonoBehaviour
         return position;
     }
 
-    public void ResetInventory()
+    public void ResetCategoryItems()
     {
         #if DEBUG
                 if (GameManager.Debug())
                 {
-                    Debug.Log("[INVENTORY MANAGER:] Reseting inventory.");
+                    Debug.Log("[INVENTORY MANAGER:] Reseting category items.");
                 }
         #endif
 
         categoryItems.Clear();
+    }
+
+    public void UpdateCategoryName(int selectedCategory)
+    {
+        categoryText.SetText(InventoryManager.instance.categoryNames[selectedCategory]);
     }
 
     public void UpdateDescription(int selectedItem)
