@@ -66,23 +66,30 @@ public class InventoryManager : MonoBehaviour
     private void UpdateSelectedCategory(int increment)
     {
         selectedItem = 0;
-        userInterface.AnimateCategoryIcons(selectedCategory, increment);
+        userInterface.AnimateCategoryIcons(selectedCategory, -increment);
         userInterface.ResetInventory();
         userInterface.UpdateInventory(inventory, selectedCategory);
-        userInterface.UpdateIndicator(0);
+        StartCoroutine(userInterface.AnimateArrows(increment));
+        UpdateSelectedItem(0);
+    }
+
+    private void UpdateSelectedItem(int selectedItem)
+    {
+        userInterface.UpdateIndicator(selectedItem);
+        userInterface.UpdateDescription(selectedItem);
     }
 
     private void GetInput()
     {
         if (!flags.isItemSelected)
         {
-            if (Input.GetAxisRaw("Trigger") == 0)
+            if (Input.GetAxisRaw("Trigger") == 0) // TODO: Very ugly!
             {
                 bool hasInput;
                 (selectedItem, hasInput) = input.GetInput("Horizontal", "Vertical", userInterface.categoryItems.Count, selectedItem, false, 1, 6);
                 if (hasInput)
                 {
-                    userInterface.UpdateIndicator(selectedItem);
+                    UpdateSelectedItem(selectedItem);
                 }
             }
             else
@@ -92,7 +99,7 @@ public class InventoryManager : MonoBehaviour
                 flags.isDirty = true;
                 if (hasInput)
                 {
-                    UpdateSelectedCategory(-(int)Input.GetAxisRaw("Trigger"));
+                    UpdateSelectedCategory((int)Input.GetAxisRaw("Trigger"));
                 }
             }
 

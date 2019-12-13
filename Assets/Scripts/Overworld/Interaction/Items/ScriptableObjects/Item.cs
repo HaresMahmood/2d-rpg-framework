@@ -19,7 +19,7 @@ public class Item : ScriptableObject
     {
         Key,
         Health,
-        PokéBall,
+        PokéBalls,
         Battle,
         TM,
         Berry,

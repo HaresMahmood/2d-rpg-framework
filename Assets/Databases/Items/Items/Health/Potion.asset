@@ -10,12 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 67de09d52199d944d92ac06b5078ab34, type: 3}
-  m_Name: Ultraball
+  m_Name: Potion
   m_EditorClassIdentifier: 
-  name: Ultraball
-  id: 8
-  description: Test 9
-  sprite: {fileID: 21300000, guid: 0c05a5828361cbe44b17d2afbb4e406f, type: 3}
-  category: 2
-  amount: 2
-  action: {fileID: 11400000, guid: c01c82a737fa2674f956e82665dfd381, type: 2}
+  name: Potion
+  id: 3
+  description: "A spray-type medicine for treating wounds. It can be used to restore
+    20 HP to a single Pok\xE9mon."
+  sprite: {fileID: -2017323211661843852, guid: 7233ad1b3e5ed1d46b02dce8aa6ace9c, type: 3}
+  effect: 
+  category: 1
+  amount: 80
+  behavior: {fileID: 0}
+  isFavorite: 0
+  isNew: 0

@@ -10,14 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 67de09d52199d944d92ac06b5078ab34, type: 3}
-  m_Name: Lemonade
+  m_Name: Max Revive
   m_EditorClassIdentifier: 
-  name: Lemonade
-  id: 2
-  description: Test 2
-  sprite: {fileID: 21300000, guid: 4e307bcc9d0183d4b9596ce20b4ac8ff, type: 3}
+  name: Max Revive
+  id: 4
+  description: "A medicine that can be used to revive a single Pok\xE9mon that has
+    fainted. It also fully restores the Pok\xE9mon's max HP."
+  sprite: {fileID: 419213115796107100, guid: 7233ad1b3e5ed1d46b02dce8aa6ace9c, type: 3}
+  effect: 
   category: 1
-  amount: 77
-  isFavorite: 1
-  action: {fileID: 11400000, guid: 0737da82a29347d4c97758959e413251, type: 2}
+  amount: 24
+  behavior: {fileID: 0}
+  isFavorite: 0
   isNew: 0
