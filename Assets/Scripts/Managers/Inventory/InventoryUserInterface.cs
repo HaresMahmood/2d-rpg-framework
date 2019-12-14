@@ -161,9 +161,9 @@ public class InventoryUserInterface : MonoBehaviour
     public void UpdateSelectedCategory(Inventory inventory, int selectedCategory, int increment)
     {
         StopAllCoroutines();
-        AnimateCategoryIcons(selectedCategory, -increment); StartCoroutine(AnimateArrows(increment));
+        AnimateCategory(selectedCategory, increment);
         StartCoroutine(UpdateCategoryName(selectedCategory, 0.1f));
-        ResetCategoryItems();
+        ResetCategoryItems(); 
         StartCoroutine(UpdateCategoryItems(inventory, selectedCategory, 0.15f, 0.03f));
         UpdateSelectedItem(0);
     }
@@ -174,7 +174,7 @@ public class InventoryUserInterface : MonoBehaviour
         StartCoroutine(UpdateDescription(selectedItem, 0.07f));
     }
 
-    public void AnimateCategoryIcons(int selectedCategory, int increment)
+    public void AnimateCategoryPosition(int selectedCategory, int increment)
     {
         int previousCategory = ExtensionMethods.IncrementInt(selectedCategory, 0, categoryIcons.Length, increment);
 
@@ -182,6 +182,33 @@ public class InventoryUserInterface : MonoBehaviour
         StartCoroutine(categoryIcons[selectedCategory].GetComponentInChildren<Image>().gameObject.FadeColor(GameManager.GetAccentColor(), 0.1f));
         categoryIcons[previousCategory].GetComponent<Animator>().SetBool("isSelected", false);
         StartCoroutine(categoryIcons[previousCategory].GetComponentInChildren<Image>().gameObject.FadeColor(Color.white, 0.1f));
+    }
+
+    private IEnumerator AnimateCategoryIcon(int selectedCategory, int increment)
+    {
+        int previousCategory = ExtensionMethods.IncrementInt(selectedCategory, 0, categoryIcons.Length, increment);
+        Animator selectedAnimator = categoryIcons[selectedCategory].Find("Icon").GetComponent<Animator>();
+        Animator previousAnimator = categoryIcons[previousCategory].Find("Icon").GetComponent<Animator>();
+
+        if (selectedAnimator != null) // Debug.
+        {
+            if (previousAnimator != null && previousAnimator.GetBool("isSelected"))
+            {
+                previousAnimator.SetBool("isSelected", false);
+            }
+
+            selectedAnimator.SetBool("isSelected", true);
+            yield return null; float animationTime = selectedAnimator.GetAnimationTime();
+            yield return new WaitForSecondsRealtime(animationTime);
+            selectedAnimator.SetBool("isSelected", false);
+        }
+    }
+
+    private void AnimateCategory(int selectedCategory, int increment)
+    {
+        AnimateCategoryPosition(selectedCategory, -increment);
+        StartCoroutine(AnimateCategoryIcon(selectedCategory, -increment));
+        //StartCoroutine(AnimateArrows(increment));
     }
 
     public IEnumerator AnimateArrows(int increment)
@@ -220,7 +247,7 @@ public class InventoryUserInterface : MonoBehaviour
         emptyGrid = transform.Find("Empty Grid").gameObject;
         informationAnimator = informationPanel.GetComponent<Animator>();
         indicatorAnimator = indicator.GetComponent<Animator>();
-        arrowAnimator = transform.Find("Categories/Navigation").GetComponent<Animator>();
+        //arrowAnimator = transform.Find("Categories/Navigation").GetComponent<Animator>();
 
         categoryText = transform.Find("Categories/Information/Name").GetComponent<TextMeshProUGUI>();
         itemGrid = transform.Find("Item Grid").GetChildren();
