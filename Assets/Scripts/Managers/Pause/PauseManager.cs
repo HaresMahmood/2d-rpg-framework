@@ -13,14 +13,17 @@ public class PauseManager : MonoBehaviour
 
     public static PauseManager instance;
 
-    [UnityEngine.Header("Setup")]
+    [Header("Setup")]
     public GameObject pauseContainer;
 
-    private GameObject sidePanel, topPanel, indicator;
+    [Header("Values")]
+    public bool isPaused;
+
+    public GameObject sidePanel, topPanel, indicator;
     private Transform[] party;
     private Animator pauseAnimator, spriteAnimator;
 
-    [HideInInspector] public bool isPaused, inPartyMenu = false, isInteracting = false;
+    [HideInInspector] public bool inPartyMenu = false, isInteracting = false;
 
     [HideInInspector] public int selectedSlot, totalSlots;
 
@@ -39,9 +42,6 @@ public class PauseManager : MonoBehaviour
     {
         if (instance == null)
             instance = this;
-
-
-
     }
 
     /// <summary>
@@ -230,7 +230,7 @@ public class PauseManager : MonoBehaviour
         }
         else
         {
-            ResetInventory();
+            //ResetInventory();
             pauseContainer.SetActive(false);
             CameraController.instance.GetComponent<PostprocessingBlur>().enabled = false;
             Time.timeScale = 1f;
@@ -238,6 +238,7 @@ public class PauseManager : MonoBehaviour
         }
     }
 
+    /*
     private void ResetInventory()
     {
         foreach (Transform category in InventoryManager.instance.categoryContainer)
@@ -245,6 +246,7 @@ public class PauseManager : MonoBehaviour
             category.GetComponent<Animator>().Rebind();
         }
     }
+    */
 
     public void GetInput()
     {
@@ -270,11 +272,13 @@ public class PauseManager : MonoBehaviour
                 {
                     if (InventoryManager.instance.isActive)
                     {
+                        /*
                         InventoryManager.instance.Fade(1f);
                         if (InventoryManager.instance.isGivingItem)
                         {
                             InventoryManager.instance.isGivingItem = false;
                         }
+                        */
                     }
                     else if (PartyManager.instance.isActive)
                     {
@@ -296,9 +300,9 @@ public class PauseManager : MonoBehaviour
                         {
                             if (InventoryManager.instance.isActive)
                             {
-                                if (InventoryManager.instance.selectedSlot == 0)
+                                if (InventoryManager.instance.selectedItem == 0)
                                 {
-                                    InventoryManager.instance.Fade(0.5f);
+                                    //InventoryManager.instance.Fade(0.5f);
                                     inPartyMenu = true;
                                 }
                             }
@@ -365,11 +369,13 @@ public class PauseManager : MonoBehaviour
             {
                 if (InventoryManager.instance.isActive)
                 {
+                    /*
                     InventoryManager.instance.Fade(1f);
                     if (InventoryManager.instance.isGivingItem)
                     {
                         InventoryManager.instance.isGivingItem = false;
                     }
+                    */
                 }
                 else if (PartyManager.instance.isActive)
                 {
@@ -500,7 +506,7 @@ public class PauseManager : MonoBehaviour
             }
 
             InventoryManager.instance.isActive = true;
-            InventoryManager.instance.AnimateBottomPanel();
+            //InventoryManager.instance.OnActive();
         }
         else if (currentMenu == menus[3])
         {

@@ -8,17 +8,18 @@ public class Item : ScriptableObject
     public int id;
     public string description;
     public Sprite sprite;
+    public string effect;
     public Category category;
     public int amount;
+    public ItemBehavior behavior;
     public bool isFavorite;
-    public ItemBehavior action;
     public bool isNew;
 
     public enum Category
     {
         Key,
         Health,
-        PokéBall,
+        PokéBalls,
         Battle,
         TM,
         Berry,

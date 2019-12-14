@@ -45,6 +45,9 @@ public class TestInput
 
     public (int selectedButton, bool hasInput) GetInput(string button, Axis axis, int totalButtons, int selectedButton, bool isBounded = false, int step = 1)
     {
+        int startValue = selectedButton;
+        bool hasInput = false;
+
         if (Input.GetAxisRaw(button) != 0)
         {
             if (!HasInput())
@@ -67,11 +70,16 @@ public class TestInput
         }
 
         OnUserInput?.Invoke(this, EventArgs.Empty);
-        return (selectedButton, hasInput: HasInput());
+
+        if (startValue != selectedButton) hasInput = true;
+        return (selectedButton, hasInput);
     }
 
     public (int selectedButton, bool hasInput) GetInput(string horizontal, string vertical, int totalButtons, int selectedButton, bool isBounded = false, int horizontalStep = 1, int verticalStep = 1)
     {
+        int startValue = selectedButton;
+        bool hasInput = false;
+
         if (Input.GetAxisRaw(horizontal) != 0)
         {
             if (!HasInput())
@@ -94,7 +102,9 @@ public class TestInput
         }
 
         OnUserInput?.Invoke(this, EventArgs.Empty);
-        return (selectedButton, hasInput: HasInput());
+
+        if (startValue != selectedButton) hasInput = true;
+        return (selectedButton, hasInput);
     }
 
     #endregion

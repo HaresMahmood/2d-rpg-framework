@@ -9,18 +9,18 @@ public class DefaultBehavior : MonoBehaviour
 {
     public void DiscardItem(Item item)
     {
-        InventoryManager.instance.isDiscardingItem = true;
+        //InventoryManager.instance.isDiscardingItem = true;
     }
 
     public void GiveItem(Item item)
     {
-        InventoryManager.instance.GiveItem(item);
+        //InventoryManager.instance.GiveItem(item);
     }
 
     public void MakeFavorite(Item item)
     {
         item.isFavorite = !item.isFavorite;
-        InventoryManager.instance.UpdateInventory();
+        //InventoryManager.instance.UpdateInventory();
         //InventoryManager.instance.currentItem = item;
     }
 

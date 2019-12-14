@@ -25,7 +25,7 @@ public class SettingsManager : MonoBehaviour
 
     private SettingsUserInterface userInterface;
 
-    public string[] navigationNames { get; private set; } = new string[] { "General", "Battle", "Customization", "Accessibility", "Controlls" };
+    public string[] navigationNames { get; private set; } = new string[] { "General", "Battle", "Customization", "Accessibility", "Controls" };
 
     public int selectedSetting { get; private set; } = 0;
     public int selectedNavOption { get; private set; } = 0;
@@ -83,6 +83,22 @@ public class SettingsManager : MonoBehaviour
 
     #region Miscellaneous Methods
 
+    public IEnumerator OnActive()
+    {
+        userInterface.SelectSetting(0.3f, false);
+        userInterface.UpdateNavigationOptions();
+        selectedNavOption = 0;
+        userInterface.AnimateNavigationOption(selectedNavOption, -1);
+        userInterface.UpdateSettingList(selectedNavOption, -1);
+        UpdateSetting(0, true);
+        AnimateModeText();
+        StartCoroutine(FindObjectOfType<BottomPanelUserInterface>().ChangePanelButtons(buttons));
+
+        yield return null;
+
+        flags.isActive = true;
+    }
+
     public List<ViewingMode> GetPreviousMode(ViewingMode category)
     {
         ViewingMode previousCategory = (ViewingMode)ExtensionMethods.IncrementInt((int)category, 0, Enum.GetNames(typeof(ViewingMode)).Length, -1);
@@ -93,27 +109,6 @@ public class SettingsManager : MonoBehaviour
         }
         previousCategories.Add(category);
         return previousCategories;
-    }
-
-    public void OnActive()
-    {
-        StartCoroutine(FindObjectOfType<BottomPanelUserInterface>().ChangePanelButtons(buttons));
-    }
-
-    public IEnumerator InitializeSettings()
-    {
-        userInterface.SelectSetting(0.3f, false);
-        userInterface.UpdateNavigationOptions();
-        selectedNavOption = 0;
-        userInterface.AnimateNavigationOption(selectedNavOption, -1);
-        userInterface.UpdateSettingList(selectedNavOption, -1);
-        UpdateSetting(0, true);
-        AnimateModeText();
-        OnActive();
-
-        yield return null;
-
-        flags.isActive = true;
     }
 
     public IEnumerator DisableSettings()
