@@ -99,7 +99,7 @@ public class InventoryManager : MonoBehaviour
 
             if (Input.GetButtonDown("Interact"))
             {
-                userInterface.AnimateItemSelection();
+                userInterface.AnimateItemSelection(selectedItem, 0.2f);
             }
         }
         else

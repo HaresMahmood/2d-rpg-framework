@@ -225,9 +225,19 @@ public class InventoryUserInterface : MonoBehaviour
         arrowAnimator.SetBool("isActive", false);
     }
 
-    public void AnimateItemSelection(int selectedItem = -1)
+    public void AnimateItemSelection(int selectedItem, float animationTime)
     {
         // Fade side-panel, target sprite and rest of inventory.
+        indicator.SetActive(false);
+        PauseManager.instance.pauseContainer.transform.Find("Target Sprite").GetComponent<Animator>().enabled = false;
+        StartCoroutine(PauseManager.instance.pauseContainer.transform.Find("Target Sprite").gameObject.FadeOpacity(0.3f, animationTime));
+        StartCoroutine(transform.Find("Item Grid").gameObject.FadeOpacity(0.3f, animationTime));
+        StartCoroutine(PauseManager.instance.sidePanel.FadeOpacity(0.3f, animationTime));
+
+        informationPanel.transform.Find("Information (Horizontal)/Name/Item Name").GetComponent<TextMeshProUGUI>().SetText(categoryItems[selectedItem].name);
+        informationPanel.transform.Find("Information (Horizontal)/Name/Icon").GetComponent<Image>().sprite = categoryItems[selectedItem].sprite;
+        informationPanel.transform.Find("Information (Horizontal)/Description/Item Description").GetComponent<TextMeshProUGUI>().SetText(categoryItems[selectedItem].description);
+        informationPanel.transform.Find("Information (Horizontal)/Amount/Value").GetComponent<TextMeshProUGUI>().SetText(categoryItems[selectedItem].amount.ToString());
 
         informationAnimator.SetBool("Selected", true);
     }
