@@ -80,7 +80,7 @@ public class InventoryManager : MonoBehaviour
             if (Input.GetAxisRaw("Trigger") == 0) // TODO: Very ugly!
             {
                 bool hasInput;
-                (selectedItem, hasInput) = input.GetInput("Horizontal", "Vertical", userInterface.categoryItems.Count, selectedItem, false, 1, 6);
+                (selectedItem, hasInput) = input.GetInput("Horizontal", "Vertical", userInterface.categoryItems.Count, selectedItem, true, 1, 7);
                 if (hasInput)
                 {
                     UpdateSelectedItem(selectedItem);

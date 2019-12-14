@@ -13,7 +13,7 @@ public class InventoryEditor : Editor
 
     private bool sameItem = false;
     private int tab = 0;
-    private string[] categories = new string[] { "Key", "Health", "PokéBall", "Battle", "TM", "Berry", "Other" };
+    private string[] categories = new string[] { "Key", "Health", "PokéBalls", "Battle", "TM", "Berry", "Other" };
 
     #endregion
 

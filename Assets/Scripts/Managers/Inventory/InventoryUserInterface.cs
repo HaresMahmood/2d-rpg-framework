@@ -35,10 +35,8 @@ public class InventoryUserInterface : MonoBehaviour
         indicatorAnimator.enabled = true;
     }
 
-    public void UpdateCategoryItems(Inventory inventory, int selectedCategory, float animationTime)
+    public IEnumerator UpdateCategoryItems(Inventory inventory, int selectedCategory, float animationTime, float delay)
     {
-        int counter = 0;
-
         #if DEBUG
                 if (GameManager.Debug())
                 {
@@ -46,50 +44,50 @@ public class InventoryUserInterface : MonoBehaviour
                 }
         #endif
 
-        if (inventory.items.Count > 0)
-        {
-            foreach (Item item in inventory.items)
-            {
-                if (item.category.ToString().Equals(InventoryManager.instance.categoryNames[selectedCategory]) && item.isFavorite)
-                {
-                    counter = DrawItem(item, counter, true);
-                    //yield return new WaitForSecondsRealtime(0.07f);
-                }
-            }
+        // Debug
 
-            for (int i = counter; i < inventory.items.Count; i++)
+        foreach (Item item in inventory.items)
+        {
+            if (item.category.ToString().Equals(InventoryManager.instance.categoryNames[selectedCategory]))
             {
-                if (inventory.items[i].category.ToString().Equals(InventoryManager.instance.categoryNames[selectedCategory]) && !inventory.items[i].isFavorite)
-                {
-                    counter = DrawItem(inventory.items[i], counter);
-                    //yield return new WaitForSecondsRealtime(0.07f);
-                }
+                categoryItems.Add(item);
             }
         }
 
-        if ((inventory.items.Count < 1 || categoryItems.Count < 1) && !isEmpty)
+        if (categoryItems.Count > 0)
         {
-            isEmpty = true;
-            indicator.SetActive(false);
-            StartCoroutine(emptyGrid.FadeOpacity(1f, 0.1f));
-            StartCoroutine(transform.Find("Item Grid").gameObject.FadeOpacity(0f, animationTime));
+            int max = categoryItems.Count > 28 ? 28 : categoryItems.Count;
+
+            StartCoroutine(transform.Find("Item Grid").gameObject.FadeOpacity(1f, animationTime));
+            StartCoroutine(emptyGrid.FadeOpacity(0f, animationTime));
+            indicator.SetActive(true);
+
+            yield return new WaitForSecondsRealtime(animationTime);
+
+            for (int i = 0; i < max; i++)
+            {
+                StartCoroutine(itemGrid[i].Find("Slot").gameObject.FadeOpacity(0f, animationTime));
+                DrawItem(categoryItems[i], i, animationTime);
+                yield return new WaitForSecondsRealtime(delay);
+            }
+
+            if (max < categoryItems.Count)
+            {
+                for (int i = max; i < categoryItems.Count; i++)
+                {
+                    DrawItem(categoryItems[i], i);
+                }
+            }
         }
         else
         {
-            isEmpty = false;
-            StartCoroutine(transform.Find("Item Grid").gameObject.FadeOpacity(1f, animationTime));
-            StartCoroutine(emptyGrid.FadeOpacity(0f, 0.1f));
-            indicator.SetActive(true);
-        }
-
-        for (int i = counter; i < itemGrid.Length; i++)
-        {
-            //itemGrid[i].Find("Slot").gameObject.SetActive(false);
-            StartCoroutine(itemGrid[i].Find("Slot").gameObject.FadeOpacity(0f, animationTime));
+            indicator.SetActive(false);
+            StartCoroutine(emptyGrid.FadeOpacity(1f, animationTime));
+            StartCoroutine(transform.Find("Item Grid").gameObject.FadeOpacity(0f, animationTime));
         }
     }
 
-    private int DrawItem(Item item, int position, bool isFavorite = false)
+    private int DrawItem(Item item, int position, float animationTime = -1, bool isFavorite = false)
     {
         Transform itemSlot = itemGrid[position].Find("Slot");
 
@@ -99,11 +97,18 @@ public class InventoryUserInterface : MonoBehaviour
         itemSlot.Find("Favorite").gameObject.SetActive(isFavorite);
         itemSlot.Find("New").gameObject.SetActive(item.isNew);itemSlot.gameObject.SetActive(true);
 
-        StartCoroutine(itemSlot.gameObject.FadeOpacity(1f, 0.15f));
+        if (animationTime > -1)
+        {
+            StartCoroutine(itemSlot.gameObject.FadeOpacity(1f, animationTime));
+        }
+        else
+        {
+            itemSlot.GetComponent<CanvasGroup>().alpha = 1f;
+        }
 
         position++;
 
-        categoryItems.Add(item);
+        //categoryItems.Add(item);
 
         return position;
     }
@@ -116,6 +121,11 @@ public class InventoryUserInterface : MonoBehaviour
                     Debug.Log("[INVENTORY MANAGER:] Reseting category items.");
                 }
         #endif
+
+        foreach (Item item in categoryItems)
+        {
+            itemGrid[categoryItems.IndexOf(item)].Find("Slot").GetComponent<CanvasGroup>().alpha = 0f;
+        }
 
         categoryItems.Clear();
     }
@@ -150,11 +160,11 @@ public class InventoryUserInterface : MonoBehaviour
 
     public void UpdateSelectedCategory(Inventory inventory, int selectedCategory, int increment)
     {
-        AnimateCategoryIcons(selectedCategory, -increment);
-        ResetCategoryItems();
-        UpdateCategoryItems(inventory, selectedCategory, 0.15f);
+        StopAllCoroutines();
+        AnimateCategoryIcons(selectedCategory, -increment); StartCoroutine(AnimateArrows(increment));
         StartCoroutine(UpdateCategoryName(selectedCategory, 0.1f));
-        StartCoroutine(AnimateArrows(increment));
+        ResetCategoryItems();
+        StartCoroutine(UpdateCategoryItems(inventory, selectedCategory, 0.15f, 0.03f));
         UpdateSelectedItem(0);
     }
 
@@ -226,7 +236,7 @@ public class InventoryUserInterface : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        
+
     }
 
     #endregion
