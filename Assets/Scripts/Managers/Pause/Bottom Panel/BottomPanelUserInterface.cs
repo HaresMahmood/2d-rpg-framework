@@ -24,12 +24,12 @@ public class BottomPanelUserInterface : MonoBehaviour
 
     public IEnumerator ChangePanelButtons(List<PanelButton> panelButtons)
     {
-        foreach (Transform button in transform.Find("Buttons").GetChildren())
+        foreach (Transform button in buttons)
         {
             StartCoroutine(button.gameObject.FadeOpacity(0f, animationTime));
-            yield return new WaitForSecondsRealtime(animationTime);
+            yield return new WaitForSecondsRealtime(animationTime / 2);
 
-            if (Array.IndexOf(transform.Find("Buttons").GetChildren(), button) < panelButtons.Count)
+            if (Array.IndexOf(buttons, button) < panelButtons.Count)
             {
                 button.GetComponent<LayoutElement>().ignoreLayout = false;
                 button.GetComponentInChildren<Image>().sprite = panelButtons[Array.IndexOf(buttons, button)].sprite;
@@ -48,8 +48,8 @@ public class BottomPanelUserInterface : MonoBehaviour
 
         for (int i = 0; i < panelButtons.Count; i++)
         {
-            StartCoroutine(transform.Find("Buttons").GetChildren()[i].gameObject.FadeOpacity(1f, animationTime));
-            yield return new WaitForSecondsRealtime(animationTime);
+            StartCoroutine(buttons[i].gameObject.FadeOpacity(1f, animationTime));
+            yield return new WaitForSecondsRealtime(animationTime / 2);
         }
     }
 

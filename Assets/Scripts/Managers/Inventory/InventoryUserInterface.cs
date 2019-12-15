@@ -14,11 +14,13 @@ public class InventoryUserInterface : MonoBehaviour
     #region Variables
 
     private Transform[] itemGrid, categoryIcons;
+    private List<Transform> menuButtons = new List<Transform>();
     private Animator informationAnimator, indicatorAnimator, arrowAnimator;
     private GameObject emptyGrid, informationPanel, indicator;
     private TextMeshProUGUI categoryText;
 
     public List<Item> categoryItems { get; private set; } = new List<Item>();
+    public List<ItemBehavior.BehaviorData> itemButtons { get; private set; } = new List<ItemBehavior.BehaviorData>();
 
     private bool isEmpty;
     #endregion
@@ -63,13 +65,14 @@ public class InventoryUserInterface : MonoBehaviour
         }
     }
 
-    private IEnumerator UpdateIndicator(int selectedItem, float animationDuration)
+    public IEnumerator UpdateIndicator(int selectedValue, float animationDuration, bool isSubMenu = false)
     {
         indicatorAnimator.enabled = false;
         StartCoroutine(indicator.FadeOpacity(0f, animationDuration));
         yield return new WaitForSecondsRealtime(animationDuration);
 
-        indicator.transform.position = itemGrid[selectedItem].Find("Slot").position;
+        indicator.transform.position = !isSubMenu ? itemGrid[selectedValue].Find("Slot").position : menuButtons[selectedValue].position;
+        indicator.GetComponent<RectTransform>().sizeDelta = !isSubMenu ? itemGrid[selectedValue].GetComponent<RectTransform>().sizeDelta : menuButtons[selectedValue].GetComponent<RectTransform>().sizeDelta;
         yield return null;
 
         indicatorAnimator.enabled = true;
@@ -273,27 +276,85 @@ public class InventoryUserInterface : MonoBehaviour
         arrowAnimator.SetBool("isActive", false);
     }
 
-    public void AnimateItemSelection(int selectedItem, float animationTime)
+    public void AnimateItemSelection(float animationTime, int selectedItem = -1)
     {
-        // Fade side-panel, target sprite and rest of inventory.
-        indicator.SetActive(false);
-        PauseManager.instance.pauseContainer.transform.Find("Target Sprite").GetComponent<Animator>().enabled = false;
-        StartCoroutine(PauseManager.instance.pauseContainer.transform.Find("Target Sprite").gameObject.FadeOpacity(0.3f, animationTime));
-        StartCoroutine(transform.Find("Item Grid").gameObject.FadeOpacity(0.3f, animationTime));
-        StartCoroutine(PauseManager.instance.sidePanel.FadeOpacity(0.3f, animationTime));
+        if (selectedItem > -1)
+        {
+            PauseManager.instance.pauseContainer.transform.Find("Target Sprite").GetComponent<Animator>().enabled = false;
+            StartCoroutine(PauseManager.instance.pauseContainer.transform.Find("Target Sprite").gameObject.FadeOpacity(0.3f, animationTime));
+            StartCoroutine(transform.Find("Item Grid").gameObject.FadeOpacity(0.3f, animationTime));
+            StartCoroutine(PauseManager.instance.sidePanel.FadeOpacity(0.3f, animationTime));
 
-        informationPanel.transform.Find("Information (Horizontal)/Name/Item Name").GetComponent<TextMeshProUGUI>().SetText(categoryItems[selectedItem].name);
-        informationPanel.transform.Find("Information (Horizontal)/Name/Icon").GetComponent<Image>().sprite = categoryItems[selectedItem].sprite;
-        informationPanel.transform.Find("Information (Horizontal)/Description/Item Description").GetComponent<TextMeshProUGUI>().SetText(categoryItems[selectedItem].description);
-        informationPanel.transform.Find("Information (Horizontal)/Amount/Value").GetComponent<TextMeshProUGUI>().SetText(categoryItems[selectedItem].amount.ToString());
+            informationPanel.transform.Find("Information (Horizontal)/Name/Item Name").GetComponent<TextMeshProUGUI>().SetText(categoryItems[selectedItem].name);
+            informationPanel.transform.Find("Information (Horizontal)/Name/Icon").GetComponent<Image>().sprite = categoryItems[selectedItem].sprite;
+            informationPanel.transform.Find("Information (Horizontal)/Description/Item Description").GetComponent<TextMeshProUGUI>().SetText(categoryItems[selectedItem].description);
+            informationPanel.transform.Find("Information (Horizontal)/Amount/Value").GetComponent<TextMeshProUGUI>().SetText(categoryItems[selectedItem].amount.ToString());
 
-        informationAnimator.SetBool("Selected", true);
+            informationAnimator.SetBool("Selected", true);
+
+            StartCoroutine(AnimateMenuButtons(0.1f, categoryItems[selectedItem]));
+
+            StartCoroutine(UpdateIndicator(0, 0.2f, true));
+        }
+        else
+        {
+            StartCoroutine(AnimateMenuButtons(0.1f));
+
+            informationAnimator.SetBool("Selected", false);
+
+            PauseManager.instance.pauseContainer.transform.Find("Target Sprite").GetComponent<Animator>().enabled = true;
+            StartCoroutine(PauseManager.instance.pauseContainer.transform.Find("Target Sprite").gameObject.FadeOpacity(1f, animationTime));
+            StartCoroutine(transform.Find("Item Grid").gameObject.FadeOpacity(1f, animationTime));
+            StartCoroutine(PauseManager.instance.sidePanel.FadeOpacity(1f, animationTime));
+
+            StartCoroutine(UpdateIndicator(InventoryManager.instance.selectedItem, 0.2f));
+        }
     }
 
     private void AnimateSortingMethodText(InventoryManager.SortingMethod sortingMethod)
     {
         string value = string.Concat(sortingMethod.ToString().Select(x => Char.IsUpper(x) ? " " + x : x.ToString())).TrimStart(' '); // .FirstToUpper()
         StartCoroutine(FindObjectOfType<BottomPanelUserInterface>().AnimateValue(value, 1f));
+    }
+
+    private IEnumerator AnimateMenuButtons(float animationTime, Item item = null)
+    {
+        List<Transform> buttons = informationPanel.transform.Find("Information (Horizontal)/Buttons").GetChildren().ToList();
+
+        if (item != null)
+        {
+            itemButtons = item.behavior.behaviorData;
+
+            foreach (Transform button in buttons)
+            {
+                button.GetComponent<CanvasGroup>().alpha = 0;
+
+                if (buttons.IndexOf(button) < itemButtons.Count)
+                {
+                    menuButtons.Add(button);
+                    button.GetComponent<LayoutElement>().ignoreLayout = false;
+                    button.GetComponentInChildren<TextMeshProUGUI>().SetText(itemButtons[buttons.IndexOf(button)].buttonName);
+                    StartCoroutine(button.gameObject.FadeOpacity(1f, animationTime));
+                    yield return new WaitForSecondsRealtime(animationTime / 2);
+                }
+                else
+                {
+                    button.GetComponent<LayoutElement>().ignoreLayout = true;
+                }
+
+                LayoutRebuilder.ForceRebuildLayoutImmediate(informationPanel.transform.Find("Information (Horizontal)/Buttons").GetComponent<RectTransform>());
+            }
+        }
+        else
+        {
+            menuButtons.Clear();
+
+            for (int i = 0; i < itemButtons.Count; i++)
+            {
+                StartCoroutine(buttons[i].gameObject.FadeOpacity(0f, animationTime));
+                yield return new WaitForSecondsRealtime(animationTime / 2);
+            }
+        }
     }
 
     #endregion

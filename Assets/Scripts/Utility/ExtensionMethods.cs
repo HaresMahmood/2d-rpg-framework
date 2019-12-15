@@ -498,7 +498,7 @@ public static class ExtensionMethods
             }
         }
 
-        max -= isBounded == false ? 0 : 1;
+        max -= !isBounded ? 0 : 1;
         value = Mathf.Clamp(value, min, max);
 
         return value;

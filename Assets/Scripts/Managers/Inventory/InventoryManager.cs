@@ -31,6 +31,7 @@ public class InventoryManager : MonoBehaviour
 
     [HideInInspector] public int selectedItem = 0;
     private int selectedCategory = 0;
+    private int selectedButton = 0;
 
     [HideInInspector] public bool isActive;
 
@@ -87,6 +88,11 @@ public class InventoryManager : MonoBehaviour
         userInterface.UpdateSelectedItem(selectedItem);
     }
 
+    private void UpdateSelectedButton(int selectedButton)
+    {
+        StartCoroutine(userInterface.UpdateIndicator(selectedButton, 0.1f, true));
+    }
+
     private void GetInput()
     {
         if (!flags.isItemSelected)
@@ -113,7 +119,8 @@ public class InventoryManager : MonoBehaviour
 
             if (Input.GetButtonDown("Interact"))
             {
-                userInterface.AnimateItemSelection(selectedItem, 0.2f);
+                userInterface.AnimateItemSelection(0.2f, selectedItem);
+                flags.isItemSelected = true;
             }
 
             if (Input.GetButtonDown("Toggle"))
@@ -126,6 +133,27 @@ public class InventoryManager : MonoBehaviour
         else
         {
             // Setting is Selected
+
+            bool hasInput;
+            (selectedButton, hasInput) = input.GetInput("Horizontal", TestInput.Axis.Horizontal, userInterface.itemButtons.Count, selectedButton);
+            if (hasInput)
+            {
+                UpdateSelectedButton(selectedButton);
+            }
+
+            /*
+            if (Input.GetButtonDown("Interact"))
+            {
+                userInterface.AnimateItemSelection(selectedItem, 0.2f);
+            }
+            */
+
+            if (Input.GetButtonDown("Cancel"))
+            {
+                userInterface.AnimateItemSelection(0.2f);
+                flags.isItemSelected = false;
+                selectedButton = 0;
+            }
         }
     }
 

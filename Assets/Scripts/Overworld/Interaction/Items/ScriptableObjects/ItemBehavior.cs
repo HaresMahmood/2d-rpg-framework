@@ -12,7 +12,7 @@ public class ItemBehavior : ScriptableObject
     [System.Serializable]
     public class BehaviorData
     {
-        public string menuOption;
+        public string buttonName;
         public ItemEventHandler.ItemEvent behaviorEvent;
     }
 
