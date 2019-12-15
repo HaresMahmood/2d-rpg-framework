@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,7 +25,45 @@ public class InventoryUserInterface : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    public IEnumerator UpdateIndicator(int selectedItem, float animationDuration)
+    private void ApplySortingMethod(Inventory inventory, InventoryManager.SortingMethod sortingMethod)
+    {
+        switch (sortingMethod)
+        {
+            default: { break; }
+            case (InventoryManager.SortingMethod.AToZ):
+                {
+                    inventory.items.Sort((item1, item2) => string.Compare(item1.name, item2.name));
+                    break;
+                }
+            case (InventoryManager.SortingMethod.ZToA):
+                {
+                    inventory.items.Sort((item1, item2) => string.Compare(item2.name, item1.name));
+                    break;
+                }
+            case (InventoryManager.SortingMethod.AmountAscending):
+                {
+                    inventory.items.Sort((item1, item2) => item1.amount.CompareTo(item2.amount));
+                    break;
+                }
+            case (InventoryManager.SortingMethod.AmountDescending):
+                {
+                    inventory.items.Sort((item1, item2) => item2.amount.CompareTo(item1.amount));
+                    break;
+                }
+            case (InventoryManager.SortingMethod.FavoriteFirst):
+                {
+                    inventory.items.Sort((item1, item2) => item1.isFavorite.CompareTo(item2.isFavorite)); // Not working.
+                    break;
+                }
+            case (InventoryManager.SortingMethod.NewFirst):
+                {
+                    inventory.items.Sort((item1, item2) => item1.isNew.CompareTo(item2.isNew)); // Not working.
+                    break;
+                }
+        }
+    }
+
+    private IEnumerator UpdateIndicator(int selectedItem, float animationDuration)
     {
         indicatorAnimator.enabled = false;
         StartCoroutine(indicator.FadeOpacity(0f, animationDuration));
@@ -35,16 +75,14 @@ public class InventoryUserInterface : MonoBehaviour
         indicatorAnimator.enabled = true;
     }
 
-    public IEnumerator UpdateCategoryItems(Inventory inventory, int selectedCategory, float animationTime, float delay)
+    private IEnumerator UpdateCategoryItems(Inventory inventory, int selectedCategory, float animationTime, float delay)
     {
-        #if DEBUG
-                if (GameManager.Debug())
-                {
-                    Debug.Log("[INVENTORY MANAGER:] Updating category items.");
-                }
-        #endif
-
-        // Debug
+#if DEBUG
+        if (GameManager.Debug())
+        {
+            Debug.Log("[INVENTORY MANAGER:] Updating category items.");
+        }
+#endif
 
         foreach (Item item in inventory.items)
         {
@@ -113,7 +151,7 @@ public class InventoryUserInterface : MonoBehaviour
         return position;
     }
 
-    public void ResetCategoryItems()
+    private void ResetCategoryItems()
     {
         #if DEBUG
                 if (GameManager.Debug())
@@ -130,7 +168,7 @@ public class InventoryUserInterface : MonoBehaviour
         categoryItems.Clear();
     }
 
-    public IEnumerator UpdateCategoryName(int selectedCategory, float animationTime)
+    private IEnumerator UpdateCategoryName(int selectedCategory, float animationTime)
     {
         StartCoroutine(categoryText.transform.parent.gameObject.FadeOpacity(0f, animationTime));
         yield return new WaitForSecondsRealtime(animationTime);
@@ -139,7 +177,7 @@ public class InventoryUserInterface : MonoBehaviour
         StartCoroutine(categoryText.transform.parent.gameObject.FadeOpacity(1f, animationTime));
     }
 
-    public IEnumerator UpdateDescription(int selectedItem, float animationTime)
+    private IEnumerator UpdateDescription(int selectedItem, float animationTime)
     {
         if (categoryItems.Count > 0)
         {
@@ -174,7 +212,17 @@ public class InventoryUserInterface : MonoBehaviour
         StartCoroutine(UpdateDescription(selectedItem, 0.07f));
     }
 
-    public void AnimateCategoryPosition(int selectedCategory, int increment)
+    public void UpdateSortingMethod(Inventory inventory, InventoryManager.SortingMethod sortingMethod, int selectedCategory)
+    {
+        AnimateSortingMethodText(sortingMethod);
+        ApplySortingMethod(inventory, sortingMethod);
+        ResetCategoryItems();
+        StartCoroutine(UpdateCategoryItems(inventory, selectedCategory, 0.15f, 0.03f));
+        UpdateSelectedItem(0);
+
+    }
+
+    private void AnimateCategoryPosition(int selectedCategory, int increment)
     {
         int previousCategory = ExtensionMethods.IncrementInt(selectedCategory, 0, categoryIcons.Length, increment);
 
@@ -211,7 +259,7 @@ public class InventoryUserInterface : MonoBehaviour
         //StartCoroutine(AnimateArrows(increment));
     }
 
-    public IEnumerator AnimateArrows(int increment)
+    private IEnumerator AnimateArrows(int increment)
     {
         arrowAnimator.SetBool("isActive", true);
         arrowAnimator.SetFloat("Blend", increment);
@@ -240,6 +288,12 @@ public class InventoryUserInterface : MonoBehaviour
         informationPanel.transform.Find("Information (Horizontal)/Amount/Value").GetComponent<TextMeshProUGUI>().SetText(categoryItems[selectedItem].amount.ToString());
 
         informationAnimator.SetBool("Selected", true);
+    }
+
+    private void AnimateSortingMethodText(InventoryManager.SortingMethod sortingMethod)
+    {
+        string value = string.Concat(sortingMethod.ToString().Select(x => Char.IsUpper(x) ? " " + x : x.ToString())).TrimStart(' '); // .FirstToUpper()
+        StartCoroutine(FindObjectOfType<BottomPanelUserInterface>().AnimateValue(value, 1f));
     }
 
     #endregion

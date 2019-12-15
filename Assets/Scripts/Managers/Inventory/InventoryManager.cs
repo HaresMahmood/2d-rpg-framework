@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
-using UnityEditor;
 
 /// <summary>
 ///
@@ -17,21 +13,24 @@ public class InventoryManager : MonoBehaviour
 
     public List<string> categoryNames { get; private set; } = new List<string>();
 
-    [UnityEngine.Header("Setup")]
+    [Header("Setup")]
     public Inventory inventory;
-    [SerializeField] private List<PanelButton> buttons = new List<PanelButton>();
+    public List<PanelButton> buttons = new List<PanelButton>();
 
-    [UnityEngine.Header("Settings")]
+    [Header("Settings")]
     [SerializeField] private GameObject menuButtonPrefab;
 
-    public GameObject inventoryContainer ;
+    [Header("Values")]
+    [SerializeField] private SortingMethod sortingMethod = SortingMethod.None;
 
     private InventoryUserInterface userInterface;
     private TestInput input = new TestInput();
     public Flags flags = new Flags(false, false, false);
 
-    public int selectedItem = 0;
-    public int selectedCategory = 0;
+    private GameObject inventoryContainer;
+
+    [HideInInspector] public int selectedItem = 0;
+    private int selectedCategory = 0;
 
     [HideInInspector] public bool isActive;
 
@@ -51,6 +50,21 @@ public class InventoryManager : MonoBehaviour
             this.isItemSelected = isItemSelected;
             this.isDirty = isDirty;
         }
+    }
+
+    #endregion
+
+    #region Enums
+
+    public enum SortingMethod
+    {
+        None,
+        AToZ,
+        ZToA,
+        AmountAscending,
+        AmountDescending,
+        FavoriteFirst,
+        NewFirst
     }
 
     #endregion
@@ -100,6 +114,13 @@ public class InventoryManager : MonoBehaviour
             if (Input.GetButtonDown("Interact"))
             {
                 userInterface.AnimateItemSelection(selectedItem, 0.2f);
+            }
+
+            if (Input.GetButtonDown("Toggle"))
+            {
+                sortingMethod = (SortingMethod)ExtensionMethods.IncrementInt((int)sortingMethod, 0, Enum.GetValues(typeof(SortingMethod)).Length, 1);
+                if (sortingMethod == SortingMethod.None) sortingMethod = SortingMethod.AToZ;
+                userInterface.UpdateSortingMethod(inventory, sortingMethod, selectedCategory);
             }
         }
         else

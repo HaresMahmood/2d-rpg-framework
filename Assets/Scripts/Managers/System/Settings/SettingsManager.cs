@@ -80,7 +80,6 @@ public class SettingsManager : MonoBehaviour
 
     #endregion
 
-
     #region Miscellaneous Methods
 
     public IEnumerator OnActive()
@@ -152,7 +151,7 @@ public class SettingsManager : MonoBehaviour
         StartCoroutine(userInterface.UpdateIndicator(selectedSetting, 0.1f));
     }
 
-    private void AnimateModeText()
+    private void AnimateModeText() // TODO: To user interface.
     {
         StartCoroutine(FindObjectOfType<BottomPanelUserInterface>().AnimateValue(viewingMode.ToString(), 1f));
     }

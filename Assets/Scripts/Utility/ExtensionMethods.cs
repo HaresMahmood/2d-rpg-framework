@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -477,7 +478,7 @@ public static class ExtensionMethods
     public static int IncrementInt(int value, int min, int max, int increment, bool isBounded = false)
     {
         value += increment;
-        
+
         if (!isBounded)
         {
             try
@@ -496,11 +497,21 @@ public static class ExtensionMethods
                 return 0;
             }
         }
-        
+
         max -= isBounded == false ? 0 : 1;
         value = Mathf.Clamp(value, min, max);
 
         return value;
+    }
+
+    public static string FirstToUpper(this string input)
+    {
+        switch (input)
+        {
+            case null: throw new ArgumentNullException(nameof(input));
+            case "": throw new ArgumentException($"{nameof(input)} cannot be empty");
+            default: return input.First().ToString().ToUpper() + input.Substring(1);
+        }
     }
 
     /*

@@ -90,7 +90,9 @@ public class BottomPanelUserInterface : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        
+        // Sets bottom panel buttons to first screen user will see.
+
+        StartCoroutine(ChangePanelButtons(InventoryManager.instance.buttons));
     }
 
     /// <summary>
