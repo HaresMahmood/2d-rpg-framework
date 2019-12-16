@@ -27,7 +27,7 @@ public class PauseManager : MonoBehaviour
 
     public GameObject pauseContainer { get; private set; }
 
-    public int selectedPartyMember;
+    public int selectedSlot;
     public int selectedMenu;
 
     //public event EventHandler OnUserInput = delegate { };
@@ -58,9 +58,21 @@ public class PauseManager : MonoBehaviour
         userInterface.TogglePauseMenu(flags.isActive);
 
         selectedMenu = 2;
-        UpdateMenus(2, -1, 0.1f, false);
+        if (flags.isActive)
+        {
+            UpdateMenus(2, -1, 0.1f, false);
+            userInterface.PopulateSideBar(PartyManager.instance.party);
+        }
 
         InventoryManager.instance.flags.isActive = flags.isActive;
+    }
+
+    public void InitializeSidePanel()
+    {
+        selectedSlot = 0;
+        userInterface.AnimatePartySlot(0, -1);
+        // yield return null; 
+        flags.isInPartyMenu = true;
     }
 
     private void UpdateMenus(int selectedMenu, int increment, float animationDuration, bool animate = true)
@@ -73,7 +85,7 @@ public class PauseManager : MonoBehaviour
         if (!flags.isInPartyMenu)
         {
             bool hasInput;
-            (selectedMenu, hasInput) = InputManager.GetInput("Face Trigger", InputManager.Axis.Horizontal, menuNames.Length, selectedMenu);
+            (selectedMenu, hasInput) = input.GetInput("Face Trigger", TestInput.Axis.Horizontal, menuNames.Length, selectedMenu);
             if (hasInput)
             {
                 UpdateMenus(selectedMenu, -(int)Input.GetAxisRaw("Face Trigger"), 0.1f);
@@ -81,7 +93,19 @@ public class PauseManager : MonoBehaviour
         }
         else
         {
-            // In party sub-mebu.
+            bool hasInput;
+            (selectedSlot, hasInput) = input.GetInput("Vertical", TestInput.Axis.Vertical, PartyManager.instance.party.playerParty.Count, selectedSlot);
+            if (hasInput)
+            {
+                userInterface.AnimatePartySlot(selectedSlot, (int)Input.GetAxisRaw("Vertical"));
+            }
+
+            if (Input.GetAxisRaw("Horizontal") > 0)
+            {
+                flags.isInPartyMenu = false;
+                userInterface.AnimatePartySlot(selectedSlot, 0);
+                InventoryManager.instance.flags.isActive = true; // Debug
+            }
         }
 
         if (Input.GetButtonDown("Start"))

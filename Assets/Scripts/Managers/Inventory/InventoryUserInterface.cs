@@ -128,6 +128,7 @@ public class InventoryUserInterface : MonoBehaviour
         }
     }
 
+    // TODO: Move to seperate ItemSlot-class.
     private int DrawItem(Item item, int position, float animationTime = -1, bool isFavorite = false)
     {
         Transform itemSlot = itemGrid[position].Find("Slot");

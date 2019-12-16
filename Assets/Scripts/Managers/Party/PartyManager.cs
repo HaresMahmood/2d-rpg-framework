@@ -11,14 +11,24 @@ using UnityEngine.UI;
 /// </summary>
 public class PartyManager : MonoBehaviour
 {
-    /*
-    #region Variables
+    
+//    #region Variables
 
     public static PartyManager instance;
 
     [UnityEngine.Header("Setup")]
     public Party party;
 
+    /// <summary>
+    /// Awake is called when the script instance is being loaded.
+    /// </summary>
+    private void Awake()
+    {
+        if (instance == null)
+            instance = this;
+    }
+
+    /*
     [UnityEngine.Header("Settings")]
     [SerializeField] private Material chartMaterial;
 
@@ -37,15 +47,6 @@ public class PartyManager : MonoBehaviour
     #endregion
 
     #region Unity Methods
-
-    /// <summary>
-    /// Awake is called when the script instance is being loaded.
-    /// </summary>
-    private void Awake()
-    {
-        if (instance == null)
-            instance = this;
-    }
 
     /// <summary>
     /// Start is called before the first frame update.

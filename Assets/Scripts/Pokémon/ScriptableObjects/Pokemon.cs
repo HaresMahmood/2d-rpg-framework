@@ -9,6 +9,7 @@ public class Pokemon : ScriptableObject
     public int level;
     [Range(0f, 200f)] public float exp;
     public float totalExp = 200;
+    public float totalHealth;
     public string category;
     public string dexEntry;
     public string ability;
@@ -26,7 +27,7 @@ public class Pokemon : ScriptableObject
     [System.Serializable]
     public class Stats
     {
-        public int hp;
+        public int health;
         public int attack;
         public int defence;
         public int spAttack;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -73,6 +74,20 @@ public class InventoryManager : MonoBehaviour
         StartCoroutine(FindObjectOfType<BottomPanelUserInterface>().ChangePanelButtons(buttons));
     }
 
+    public IEnumerator ActiveSidePanel(float delay)
+    {
+        // Debug
+        if (selectedItem == 0)
+        {
+            yield return new WaitForSecondsRealtime(delay);
+            if (Input.GetAxisRaw("Horizontal") == -1)
+            {
+                flags.isActive = false;
+                PauseManager.instance.InitializeSidePanel();
+            }
+        }
+    }
+
     private void UpdateSelectedCategory(int increment)
     {
         selectedItem = 0;
@@ -125,6 +140,8 @@ public class InventoryManager : MonoBehaviour
                 if (sortingMethod == SortingMethod.None) sortingMethod = SortingMethod.AToZ;
                 userInterface.UpdateSortingMethod(inventory, sortingMethod, selectedCategory);
             }
+
+            StartCoroutine(ActiveSidePanel(0.2f));
         }
         else
         {

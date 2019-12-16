@@ -497,8 +497,15 @@ public static class ExtensionMethods
                 return 0;
             }
         }
+        else
+        {
+            if (increment > max)
+            {
+                return value -= increment;
+            }
+        }
 
-        max -= !isBounded ? 0 : 1;
+        max -= isBounded ? 1 : 0;
         value = Mathf.Clamp(value, min, max);
 
         return value;

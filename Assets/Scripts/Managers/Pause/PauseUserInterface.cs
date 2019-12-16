@@ -28,6 +28,15 @@ public class PauseUserInterface : MonoBehaviour
         pauseContainer.SetActive(state);
     }
 
+    // TODO: Move to PartyManager?
+    public void PopulateSideBar(Party party)
+    {
+        foreach (Pokemon pokemon in party.playerParty)
+        {
+            partySlots[party.playerParty.IndexOf(pokemon)].GetComponent<PartySlot>().PopulateSlot(pokemon);
+        }
+    }
+
     private void SetMenuText(int selectedMenu, int increment, bool animate)
     {
         TextMeshProUGUI currentText = menuNavigation.transform.Find("Current").GetComponentInChildren<TextMeshProUGUI>();
@@ -114,9 +123,9 @@ public class PauseUserInterface : MonoBehaviour
 
     }
 
-    private void AnimatePartySlot(int selectedSlot, int increment)
+    public void AnimatePartySlot(int selectedSlot, int increment)
     {
-        int previousSlot = ExtensionMethods.IncrementInt(selectedSlot, 0, partySlots.Length, increment);
+        int previousSlot = ExtensionMethods.IncrementInt(selectedSlot, 0, PartyManager.instance.party.playerParty.Count, increment);
 
         partySlots[selectedSlot].GetComponent<Animator>().SetBool("isSelected", true);
         partySlots[previousSlot].GetComponent<Animator>().SetBool("isSelected", false);
