@@ -10,9 +10,9 @@ public class HealthBehavior : MonoBehaviour
 {
     public void AddHealth(Item item)
     {
-        if (item.id == 1)
+        if (item.ID == 1)
             Debug.Log("Added " + 50 + "HP.");
-        else if (item.id == 2)
+        else if (item.ID == 2)
             Debug.Log("Added " + 1000 + "HP.");
         else
             Debug.Log("Added " + 100 + "HP.");
@@ -21,7 +21,5 @@ public class HealthBehavior : MonoBehaviour
             item.amount--;
         else
             InventoryManager.instance.inventory.items.Remove(item);
-
-        //InventoryManager.instance.UpdateInventory();
     }
 }

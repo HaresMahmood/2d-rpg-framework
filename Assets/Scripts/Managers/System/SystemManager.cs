@@ -11,26 +11,26 @@ using UnityEngine.UI;
 /// </summary>
 public class SystemManager : MonoBehaviour
 {
+    #region Constants
+
+    public readonly string[] navigationNames = new string[] { "Save", "Settings", "Tutorials", "Controls", "Quit" };
+
+    #endregion
+
     #region Variables
 
     public static SystemManager instance;
 
     [Header("Setup")]
+    [SerializeField] private SystemUserInterface userInterface;
     [SerializeField] private List<PanelButton> buttons = new List<PanelButton>();
 
-    public SystemUserInterface userInterface { get; private set; }
-
     private TestInput input = new TestInput();
+     public Flags flags = new Flags(true, false, false);
 
     public bool isActive { get; set; } = false;
 
-    public GameObject systemContainer { get; private set; }
-
-    public string[] navigationNames { get; private set; } = new string[] { "Save", "Settings", "Tutorials", "Controls", "Quit" };
-
     public int selectedNavOption { get; private set; }
-    private int totalNavOptions;
-    public Flags flags = new Flags(true, false, false);
 
     #endregion
 
@@ -165,8 +165,7 @@ public class SystemManager : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        systemContainer = PauseManager.instance.pauseContainer.transform.Find("System").gameObject;
-        userInterface = systemContainer.GetComponent<SystemUserInterface>();
+
     }
 
     /// <summary>
@@ -174,7 +173,7 @@ public class SystemManager : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        if (PauseManager.instance.isPaused)
+        if (PauseManager.instance.flags.isActive)
         {
             GetInput();
         }

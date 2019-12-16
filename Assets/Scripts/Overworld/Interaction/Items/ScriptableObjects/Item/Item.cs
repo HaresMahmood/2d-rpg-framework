@@ -1,28 +1,41 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Item", menuName = "Inventory/Item")]
+[CreateAssetMenu(fileName = "New Item", menuName = "Inventory/Item/Generic")]
 public class Item : ScriptableObject
 {
-    public new string name;
-    public int id;
+    #region Fields
+
+    public string Name;
+    public int ID;
+
+    #endregion
+
+    #region Variables
+
     public string description;
     public Sprite sprite;
     public string effect;
     public Category category;
     public int amount;
-    public ItemBehavior behavior;
     public bool isFavorite;
     public bool isNew;
+
+    public ItemBehavior behavior;
+
+    #endregion
+
+    #region Enums
 
     public enum Category
     {
         Key,
         Health,
-        PokéBalls,
+        Poké_Balls,
         Battle,
         TM,
         Berry,
         Other
     }
+
+    #endregion
 }

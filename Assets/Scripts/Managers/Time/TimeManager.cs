@@ -14,6 +14,9 @@ public class TimeManager : MonoBehaviour
     private const float hoursPerDay = 24f;
     private const float minutesPerHours = 60f;
 
+    [Header("Setup")]
+    [SerializeField] private TimeUserInterface userInterface;
+
     [Header("Settings")]
     [Range(1f, 2840f)] [SerializeField] private float realSecondsPerDay = 1420f; // 1420f - 86400f
     [SerializeField] private Format format;
@@ -154,10 +157,10 @@ public class TimeManager : MonoBehaviour
         }
 
         // TODO: Debug
-        if (PauseManager.instance.isPaused)
+        if (PauseManager.instance.flags.isActive)
         {
             isPaused = true;
-            TimeUserInterface.instance.SetTimeText();
+            userInterface.SetTimeText(GetTimeText());
             WeatherUserInterface.instance.SetWeatherUserInterface();
         }
     }

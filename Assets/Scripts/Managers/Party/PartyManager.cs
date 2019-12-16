@@ -11,6 +11,7 @@ using UnityEngine.UI;
 /// </summary>
 public class PartyManager : MonoBehaviour
 {
+    /*
     #region Variables
 
     public static PartyManager instance;
@@ -21,7 +22,7 @@ public class PartyManager : MonoBehaviour
     [UnityEngine.Header("Settings")]
     [SerializeField] private Material chartMaterial;
 
-    [HideInInspector] public GameObject partyContainer, indicator;
+    [HideInInspector] public GameObject indicator;
     private GameObject informationContainer, movesContainer;
     private Transform[] movePanels, movePositioners;
     private CanvasRenderer radarChartMesh;
@@ -50,8 +51,7 @@ public class PartyManager : MonoBehaviour
     /// Start is called before the first frame update.
     /// </summary>
     private void Start()
-    {
-        partyContainer = PauseManager.instance.pauseContainer.transform.Find("Party").gameObject;
+    { 
         informationContainer = partyContainer.transform.Find("Information").gameObject;
         movesContainer = partyContainer.transform.Find("Moves").gameObject;
         indicator = partyContainer.transform.Find("Indicator").gameObject;
@@ -68,6 +68,7 @@ public class PartyManager : MonoBehaviour
     /// </summary>
     private void Update()
     {
+        /*
         if (PauseManager.instance.selectedSlot < party.playerParty.Count)
         {
             currentPokemon = party.playerParty[PauseManager.instance.selectedSlot];
@@ -157,7 +158,7 @@ public class PartyManager : MonoBehaviour
         progress.Find("Experience/Experience/Exp").GetComponent<TextMeshProUGUI>().SetText(pokemon.exp.ToString());
         progress.Find("Experience/Experience/To Next").GetComponent<TextMeshProUGUI>().SetText("TO NEXT   " + (pokemon.totalExp - pokemon.exp).ToString());
         StartCoroutine(progress.Find("Experience/Experience/Bar/Amount").LerpScale(new Vector2((pokemon.exp / pokemon.totalExp), 1), 0.3f));
-        item.Find("Item Name").GetComponent<TextMeshProUGUI>().SetText(pokemon.heldItem.name);
+        item.Find("Item Name").GetComponent<TextMeshProUGUI>().SetText(pokemon.heldItem.Name);
         item.Find("Item Sprite").GetComponent<Image>().sprite = pokemon.heldItem.sprite;
     }
 
@@ -208,7 +209,7 @@ public class PartyManager : MonoBehaviour
         }
 
         StartCoroutine(PauseManager.instance.pauseContainer.transform.Find("Target Sprite").gameObject.FadeOpacity(opacity, 0.1f));
-        */
+        
     }
 
     private void DrawStatChart(Pokemon.Stats stats)
@@ -349,4 +350,5 @@ public class PartyManager : MonoBehaviour
         StartCoroutine(AnimateMove(selectedMove, lastInput));
         GameManager.instance.transform.GetComponentInChildren<InputManager>().OnUserInput -= PartyManager_OnUserInput;
     }
+    */
 }

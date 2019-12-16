@@ -14,23 +14,20 @@ public class SettingsManager : MonoBehaviour
     public static SettingsManager instance;
 
     [Header("Setup")]
+    [SerializeField] private SettingsUserInterface userInterface;
     [SerializeField] public List<PanelButton> buttons = new List<PanelButton>();
+
 
     [Header("Values")]
     [ReadOnly] public ViewingMode viewingMode;
 
-    private GameObject settingsContainer;
-
     private TestInput input = new TestInput();
-
-    private SettingsUserInterface userInterface;
+    public Flags flags = new Flags(false, false);
 
     public string[] navigationNames { get; private set; } = new string[] { "General", "Battle", "Customization", "Accessibility", "Controls" };
 
     public int selectedSetting { get; private set; } = 0;
     public int selectedNavOption { get; private set; } = 0;
-
-    public Flags flags = new Flags(false, false);
 
     #endregion
 
@@ -222,8 +219,7 @@ public class SettingsManager : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        settingsContainer = PauseManager.instance.pauseContainer.transform.Find("System/Settings").gameObject;
-        userInterface = settingsContainer.GetComponent<SettingsUserInterface>();
+
     }
 
     /// <summary>
@@ -231,7 +227,7 @@ public class SettingsManager : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        if (PauseManager.instance.isPaused && SystemManager.instance.isActive && flags.isActive)
+        if (PauseManager.instance.flags.isActive && SystemManager.instance.isActive && flags.isActive)
         {
             GetInput();
         }

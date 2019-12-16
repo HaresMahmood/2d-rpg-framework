@@ -45,7 +45,7 @@ public class OverworldItemManager : MonoBehaviour
         if (!InventoryManager.instance.inventory.items.Contains(item))
             InventoryManager.instance.inventory.items.Add(item);
 
-        InventoryManager.instance.inventory.items.Find(i => i.id == item.id).amount++;
+        InventoryManager.instance.inventory.items.Find(i => i.ID == item.ID).amount++;
 
         DisplayItem(item);
         //overworldItem.isPickedUp = true;
@@ -60,7 +60,7 @@ public class OverworldItemManager : MonoBehaviour
         containerObj.name = "Overworld Item Container";
         containerObj.transform.SetParent(itemGrid.transform, false);
 
-        containerObj.transform.Find("Overworld Item Container/Item/Name").GetComponent<TextMeshProUGUI>().text = item.name;
+        containerObj.transform.Find("Overworld Item Container/Item/Name").GetComponent<TextMeshProUGUI>().text = item.Name;
         containerObj.transform.Find("Overworld Item Container/Item/Category").GetComponent<TextMeshProUGUI>().text = item.category.ToString().ToUpper();
         containerObj.transform.Find("Overworld Item Container/Item/Sprite").GetComponent<Image>().sprite = item.sprite;
 

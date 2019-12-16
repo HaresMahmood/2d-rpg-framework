@@ -9,72 +9,89 @@ using UnityEngine.UI;
 /// </summary>
 public class PauseManager : MonoBehaviour
 {
+    #region Constants
+
+    public readonly string[] menuNames = new string[] { "Missions", "Party", "Inventory", "System" };
+
+    #endregion
+
     #region Variables
 
     public static PauseManager instance;
 
     [Header("Setup")]
-    public GameObject pauseContainer;
+    [SerializeField] private PauseUserInterface userInterface;
 
-    [Header("Values")]
-    public bool isPaused;
+    private TestInput input = new TestInput();
+    public Flags flags = new Flags(false, false);
 
-    public GameObject sidePanel, topPanel, indicator;
-    private Transform[] party;
-    private Animator pauseAnimator, spriteAnimator;
+    public GameObject pauseContainer { get; private set; }
 
-    [HideInInspector] public bool inPartyMenu = false, isInteracting = false;
+    public int selectedPartyMember;
+    public int selectedMenu;
 
-    [HideInInspector] public int selectedSlot, totalSlots;
-
-    private bool isDrawingParty = false, isResetingInventory = false, isAnimating = false;
-    private string[] menus = new string[] { "Missions", "Party", "Inventory", "System"};
-    private string currentMenu;
-    public int menuIndex, maxMenuIndex, selectedMenu = 0, currentMenuIndex = 0;
-
-    public event EventHandler OnUserInput = delegate { };
+    //public event EventHandler OnUserInput = delegate { };
 
     #endregion
 
-    #region Unity Methods
+    #region Structs
 
-    private void Awake()
+    public struct Flags
     {
-        if (instance == null)
-            instance = this;
-    }
+        public bool isActive { get; set; }
+        public bool isInPartyMenu { get; set; }
 
-    /// <summary>
-    /// Start is called before the first frame update.
-    /// </summary>
-    private void Start()
-    {
-        pauseContainer.SetActive(false);
-        sidePanel = pauseContainer.transform.Find("Side Panel").gameObject;
-        topPanel = pauseContainer.transform.Find("Top Panel").gameObject;
-        indicator = sidePanel.transform.Find("Indicators").gameObject;
-
-        pauseAnimator = pauseContainer.GetComponent<Animator>();
-        spriteAnimator = pauseContainer.transform.Find("Target Sprite").GetComponent<Animator>();
-
-        party = sidePanel.transform.Find("Party").transform.GetChildren();
-
-        currentMenu = menus[2];
-        currentMenuIndex = 2;
-        maxMenuIndex = menus.Length - 1;
-        isPaused = false;
-    }
-
-    /// <summary>
-    /// Update is called once per frame.
-    /// </summary>
-    private void Update()
-    {
-        TogglePause();
+        public Flags(bool isActive, bool isInParty)
+        {
+            this.isActive = isActive;
+            this.isInPartyMenu = isInParty;
+        }
     }
 
     #endregion
 
+    #region Miscellaneous Methods
+
+    private void OnActive()
+    {
+        Time.timeScale = flags.isActive ? 0 : 1;
+        userInterface.TogglePauseMenu(flags.isActive);
+
+        selectedMenu = 2;
+        UpdateMenus(2, -1, 0.1f, false);
+
+        InventoryManager.instance.flags.isActive = flags.isActive;
+    }
+
+    private void UpdateMenus(int selectedMenu, int increment, float animationDuration, bool animate = true)
+    {
+        userInterface.UpdateMenus(selectedMenu, increment, animationDuration, animate);
+    }
+
+    private void GetInput()
+    {
+        if (!flags.isInPartyMenu)
+        {
+            bool hasInput;
+            (selectedMenu, hasInput) = InputManager.GetInput("Face Trigger", InputManager.Axis.Horizontal, menuNames.Length, selectedMenu);
+            if (hasInput)
+            {
+                UpdateMenus(selectedMenu, -(int)Input.GetAxisRaw("Face Trigger"), 0.1f);
+            }
+        }
+        else
+        {
+            // In party sub-mebu.
+        }
+
+        if (Input.GetButtonDown("Start"))
+        {
+            flags.isActive = !flags.isActive;
+            OnActive();
+        }
+    }
+
+    /*
     public void TogglePause()
     {
         if (Input.GetButtonDown("Start") && !DialogManager.instance.isActive)
@@ -143,39 +160,6 @@ public class PauseManager : MonoBehaviour
         }
     }
 
-    private IEnumerator AnimateSlots(int slot, bool state)
-    {
-        if (isAnimating)
-        {
-            indicator.SetActive(false);
-
-            party[slot].GetComponent<Animator>().SetBool("isSelected", state);
-
-
-            if (inPartyMenu)
-            {
-                if (selectedSlot > (PartyManager.instance.party.playerParty.Count - 1))
-                {
-                    indicator.transform.Find("Party Indicator").gameObject.SetActive(false);
-                    indicator.transform.Find("Round Indicator").gameObject.SetActive(false);
-                    indicator.transform.position = sidePanel.transform.Find("Edit").position;
-                    indicator.transform.Find("Edit Indicator").gameObject.SetActive(true);
-                }
-                else
-                {
-                    indicator.transform.Find("Edit Indicator").gameObject.SetActive(false);
-                    indicator.transform.Find("Round Indicator").gameObject.SetActive(false);
-                    indicator.transform.position = new Vector2(indicator.transform.position.x, party[selectedSlot].position.y);
-                    indicator.transform.Find("Party Indicator").gameObject.SetActive(true);
-                }
-
-                yield return new WaitForSecondsRealtime(0.15f);
-                indicator.SetActive(true);
-            }
-        }
-        isAnimating = false;
-    }
-
     public void OnPause()
     {
         if (isPaused)
@@ -226,7 +210,6 @@ public class PauseManager : MonoBehaviour
             {
                 isPaused = false;
             }
-            */
         }
         else
         {
@@ -245,111 +228,6 @@ public class PauseManager : MonoBehaviour
         {
             category.GetComponent<Animator>().Rebind();
         }
-    }
-    */
-
-    public void GetInput()
-    {
-        totalSlots = PartyManager.instance.party.playerParty.Count + 1;
-
-        if (Input.GetAxisRaw("Face Trigger") == 0)
-        {
-            if (inPartyMenu)
-            {
-                bool hasVertInput;
-                (selectedSlot, hasVertInput) = InputManager.GetInput("Vertical", InputManager.Axis.Vertical, totalSlots, selectedSlot);
-                if (hasVertInput)
-                {
-                    //GameManager.instance.transform.GetComponentInChildren<InputManager>().OnUserInput += PauseManager_OnUserInput;
-                    isAnimating = true;
-                }
-                else
-                {
-                    //GameManager.instance.transform.GetComponentInChildren<InputManager>().OnUserInput -= PauseManager_OnUserInput;
-                }
-
-                if (Input.GetAxisRaw("Horizontal") > 0)
-                {
-                    if (InventoryManager.instance.isActive)
-                    {
-                        /*
-                        InventoryManager.instance.Fade(1f);
-                        if (InventoryManager.instance.isGivingItem)
-                        {
-                            InventoryManager.instance.isGivingItem = false;
-                        }
-                        */
-                    }
-                    else if (PartyManager.instance.isActive)
-                    {
-                        PartyManager.instance.Fade(1f);
-                        PartyManager.instance.indicator.SetActive(true);
-                    }
-                    inPartyMenu = false;
-                    //selectedSlot = 0;
-                }
-            }
-            else if (!inPartyMenu)
-            {
-                if (Input.GetAxisRaw("Horizontal") != 0)
-                {
-                    isAnimating = true;
-                    if (!isInteracting)
-                    {
-                        if (Input.GetAxisRaw("Horizontal") < 0)
-                        {
-                            if (InventoryManager.instance.isActive)
-                            {
-                                if (InventoryManager.instance.selectedItem == 0)
-                                {
-                                    //InventoryManager.instance.Fade(0.5f);
-                                    inPartyMenu = true;
-                                }
-                            }
-                            else if (PartyManager.instance.isActive)
-                            {
-                                PartyManager.instance.Fade(0.8f);
-                                inPartyMenu = true;
-                            }
-                        }
-                        isInteracting = true;
-                    }
-                }
-                else
-                {
-                    isInteracting = false;
-                }
-            }
-        }
-        else
-        {
-            TriggerInput();
-            
-            OnUserInput += PauseManager_OnUserInput;
-        }
-    }
-
-    private void TriggerInput()
-    {
-        if (Input.GetAxisRaw("Face Trigger") != 0)
-        {
-            
-            if (!isInteracting)
-            {
-
-                currentMenuIndex = ExtensionMethods.IncrementInt(currentMenuIndex, 0, menus.Length, (int)Input.GetAxisRaw("Face Trigger"));
-                currentMenu = menus[currentMenuIndex];
-                isInteracting = true;
-            }
-        }
-        else
-        {
-            isInteracting = false;
-            
-        }
-
-        //InputManager.GetInput("Face Trigger", InputManager.Axis.Horizontal, menus.Length, currentMenuIndex);
-        OnUserInput?.Invoke(this, EventArgs.Empty);
     }
 
     private void PauseManager_OnUserInput(object sender, EventArgs e)
@@ -375,7 +253,6 @@ public class PauseManager : MonoBehaviour
                     {
                         InventoryManager.instance.isGivingItem = false;
                     }
-                    */
                 }
                 else if (PartyManager.instance.isActive)
                 {
@@ -536,4 +413,39 @@ public class PauseManager : MonoBehaviour
     {
 
     }
+
+    */
+    #endregion
+
+    #region Unity Methods
+
+    /// <summary>
+    /// Awake is called when the script instance is being loaded.
+    /// </summary>
+    private void Awake()
+    {
+        if (instance == null)
+            instance = this;
+    }
+
+    /// <summary>
+    /// Start is called before the first frame update.
+    /// </summary>
+    private void Start()
+    {
+
+    }
+
+    /// <summary>
+    /// Update is called once per frame.
+    /// </summary>
+    private void Update()
+    {
+        if (!DialogManager.instance.isActive)
+        {
+            GetInput();
+        }
+    }
+
+    #endregion
 }

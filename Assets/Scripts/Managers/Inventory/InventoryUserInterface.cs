@@ -34,12 +34,12 @@ public class InventoryUserInterface : MonoBehaviour
             default: { break; }
             case (InventoryManager.SortingMethod.AToZ):
                 {
-                    inventory.items.Sort((item1, item2) => string.Compare(item1.name, item2.name));
+                    inventory.items.Sort((item1, item2) => string.Compare(item1.Name, item2.Name));
                     break;
                 }
             case (InventoryManager.SortingMethod.ZToA):
                 {
-                    inventory.items.Sort((item1, item2) => string.Compare(item2.name, item1.name));
+                    inventory.items.Sort((item1, item2) => string.Compare(item2.Name, item1.Name));
                     break;
                 }
             case (InventoryManager.SortingMethod.AmountAscending):
@@ -80,12 +80,12 @@ public class InventoryUserInterface : MonoBehaviour
 
     private IEnumerator UpdateCategoryItems(Inventory inventory, int selectedCategory, float animationTime, float delay)
     {
-#if DEBUG
-        if (GameManager.Debug())
-        {
-            Debug.Log("[INVENTORY MANAGER:] Updating category items.");
-        }
-#endif
+        #if DEBUG
+                if (GameManager.Debug())
+                {
+                    Debug.Log("[INVENTORY MANAGER:] Updating category items.");
+                }
+        #endif
 
         foreach (Item item in inventory.items)
         {
@@ -175,7 +175,7 @@ public class InventoryUserInterface : MonoBehaviour
     {
         StartCoroutine(categoryText.transform.parent.gameObject.FadeOpacity(0f, animationTime));
         yield return new WaitForSecondsRealtime(animationTime);
-        categoryText.SetText(InventoryManager.instance.categoryNames[selectedCategory]);
+        categoryText.SetText(InventoryManager.instance.categoryNames[selectedCategory].Replace('_', ' ')); yield return null;
         categoryText.transform.parent.position = new Vector2(categoryIcons[selectedCategory].position.x, categoryText.transform.parent.position.y);
         StartCoroutine(categoryText.transform.parent.gameObject.FadeOpacity(1f, animationTime));
     }
@@ -188,7 +188,7 @@ public class InventoryUserInterface : MonoBehaviour
 
             yield return new WaitForSecondsRealtime(animationTime);
 
-            informationPanel.transform.Find("Information (Vertical)/Name/Item Name").GetComponent<TextMeshProUGUI>().SetText(categoryItems[selectedItem].name);
+            informationPanel.transform.Find("Information (Vertical)/Name/Item Name").GetComponent<TextMeshProUGUI>().SetText(categoryItems[selectedItem].Name);
             informationPanel.transform.Find("Information (Vertical)/Description/Item Description").GetComponent<TextMeshProUGUI>().SetText(categoryItems[selectedItem].description);
 
             StartCoroutine(informationPanel.transform.Find("Information (Vertical)").gameObject.FadeOpacity(1f, animationTime));
@@ -276,52 +276,47 @@ public class InventoryUserInterface : MonoBehaviour
         arrowAnimator.SetBool("isActive", false);
     }
 
-    public void AnimateItemSelection(float animationTime, int selectedItem = -1)
+    public IEnumerator AnimateItemSelection(float animationTime, int selectedItem = -1)
     {
         if (selectedItem > -1)
         {
             PauseManager.instance.pauseContainer.transform.Find("Target Sprite").GetComponent<Animator>().enabled = false;
             StartCoroutine(PauseManager.instance.pauseContainer.transform.Find("Target Sprite").gameObject.FadeOpacity(0.3f, animationTime));
             StartCoroutine(transform.Find("Item Grid").gameObject.FadeOpacity(0.3f, animationTime));
-            StartCoroutine(PauseManager.instance.sidePanel.FadeOpacity(0.3f, animationTime));
+            StartCoroutine(PauseManager.instance.pauseContainer.transform.Find("Side Panel").gameObject.FadeOpacity(0.3f, animationTime));
 
-            informationPanel.transform.Find("Information (Horizontal)/Name/Item Name").GetComponent<TextMeshProUGUI>().SetText(categoryItems[selectedItem].name);
+            informationPanel.transform.Find("Information (Horizontal)/Name/Item Name").GetComponent<TextMeshProUGUI>().SetText(categoryItems[selectedItem].Name);
             informationPanel.transform.Find("Information (Horizontal)/Name/Icon").GetComponent<Image>().sprite = categoryItems[selectedItem].sprite;
             informationPanel.transform.Find("Information (Horizontal)/Description/Item Description").GetComponent<TextMeshProUGUI>().SetText(categoryItems[selectedItem].description);
             informationPanel.transform.Find("Information (Horizontal)/Amount/Value").GetComponent<TextMeshProUGUI>().SetText(categoryItems[selectedItem].amount.ToString());
 
             informationAnimator.SetBool("Selected", true);
+            yield return new WaitForSecondsRealtime(0.2f);
 
             StartCoroutine(AnimateMenuButtons(0.1f, categoryItems[selectedItem]));
-
-            StartCoroutine(UpdateIndicator(0, 0.2f, true));
+            StartCoroutine(UpdateIndicator(0, 0.1f, true));
         }
         else
         {
             StartCoroutine(AnimateMenuButtons(0.1f));
+            yield return new WaitForSecondsRealtime(0.2f);
+
+            StartCoroutine(UpdateIndicator(InventoryManager.instance.selectedItem, 0.2f));
 
             informationAnimator.SetBool("Selected", false);
 
             PauseManager.instance.pauseContainer.transform.Find("Target Sprite").GetComponent<Animator>().enabled = true;
             StartCoroutine(PauseManager.instance.pauseContainer.transform.Find("Target Sprite").gameObject.FadeOpacity(1f, animationTime));
             StartCoroutine(transform.Find("Item Grid").gameObject.FadeOpacity(1f, animationTime));
-            StartCoroutine(PauseManager.instance.sidePanel.FadeOpacity(1f, animationTime));
-
-            StartCoroutine(UpdateIndicator(InventoryManager.instance.selectedItem, 0.2f));
+            StartCoroutine(PauseManager.instance.pauseContainer.transform.Find("Side Panel").gameObject.FadeOpacity(1f, animationTime));
         }
-    }
-
-    private void AnimateSortingMethodText(InventoryManager.SortingMethod sortingMethod)
-    {
-        string value = string.Concat(sortingMethod.ToString().Select(x => Char.IsUpper(x) ? " " + x : x.ToString())).TrimStart(' '); // .FirstToUpper()
-        StartCoroutine(FindObjectOfType<BottomPanelUserInterface>().AnimateValue(value, 1f));
     }
 
     private IEnumerator AnimateMenuButtons(float animationTime, Item item = null)
     {
         List<Transform> buttons = informationPanel.transform.Find("Information (Horizontal)/Buttons").GetChildren().ToList();
 
-        if (item != null)
+        if (item != null) // && item is Consumable
         {
             itemButtons = item.behavior.behaviorData;
 
@@ -357,6 +352,12 @@ public class InventoryUserInterface : MonoBehaviour
         }
     }
 
+    private void AnimateSortingMethodText(InventoryManager.SortingMethod sortingMethod)
+    {
+        string value = string.Concat(sortingMethod.ToString().Select(x => Char.IsUpper(x) ? " " + x : x.ToString())).TrimStart(' '); // .FirstToUpper()
+        StartCoroutine(FindObjectOfType<BottomPanelUserInterface>().AnimateValue(value, 1f));
+    }
+
     #endregion
 
     #region Unity Methods
@@ -378,7 +379,7 @@ public class InventoryUserInterface : MonoBehaviour
         itemGrid = transform.Find("Item Grid").GetChildren();
         categoryIcons = transform.Find("Categories/Category Icons").GetChildren();
 
-        UpdateSelectedCategory(InventoryManager.instance.inventory, 0, -1);
+        UpdateSelectedCategory(InventoryManager.instance.inventory, 0, 1);
 
         LayoutRebuilder.ForceRebuildLayoutImmediate(informationPanel.transform.Find("Information (Vertical)").GetComponent<RectTransform>());
     }

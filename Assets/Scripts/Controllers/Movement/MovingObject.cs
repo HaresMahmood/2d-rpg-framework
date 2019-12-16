@@ -62,10 +62,13 @@ public abstract class MovingObject : MonoBehaviour
     /// </summary>
     protected virtual void Update()
     {
-        if (PauseManager.instance.isPaused)
+        // Debug
+        /*
+        if (PauseManager.instance.flags.isActive)
         {
             canMove = false;
         }
+        */
     }
 
     #endregion

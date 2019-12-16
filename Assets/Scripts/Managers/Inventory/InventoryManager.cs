@@ -15,6 +15,7 @@ public class InventoryManager : MonoBehaviour
 
     [Header("Setup")]
     public Inventory inventory;
+    [SerializeField] private InventoryUserInterface userInterface;
     public List<PanelButton> buttons = new List<PanelButton>();
 
     [Header("Settings")]
@@ -23,17 +24,12 @@ public class InventoryManager : MonoBehaviour
     [Header("Values")]
     [SerializeField] private SortingMethod sortingMethod = SortingMethod.None;
 
-    private InventoryUserInterface userInterface;
     private TestInput input = new TestInput();
     public Flags flags = new Flags(false, false, false);
-
-    private GameObject inventoryContainer;
 
     [HideInInspector] public int selectedItem = 0;
     private int selectedCategory = 0;
     private int selectedButton = 0;
-
-    [HideInInspector] public bool isActive;
 
     #endregion
 
@@ -119,7 +115,7 @@ public class InventoryManager : MonoBehaviour
 
             if (Input.GetButtonDown("Interact"))
             {
-                userInterface.AnimateItemSelection(0.2f, selectedItem);
+                StartCoroutine(userInterface.AnimateItemSelection(0.2f, selectedItem));
                 flags.isItemSelected = true;
             }
 
@@ -150,7 +146,7 @@ public class InventoryManager : MonoBehaviour
 
             if (Input.GetButtonDown("Cancel"))
             {
-                userInterface.AnimateItemSelection(0.2f);
+                StartCoroutine(userInterface.AnimateItemSelection(0.2f));
                 flags.isItemSelected = false;
                 selectedButton = 0;
             }
@@ -175,9 +171,6 @@ public class InventoryManager : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        inventoryContainer = PauseManager.instance.pauseContainer.transform.Find("Inventory").gameObject;
-        userInterface = inventoryContainer.GetComponent<InventoryUserInterface>();
-
         for (int i = 0; i < Enum.GetNames(typeof(Item.Category)).Length; i++)
         {
             categoryNames.Add(((Item.Category)i).ToString());
@@ -241,8 +234,8 @@ public class InventoryManager : MonoBehaviour
                 isInteracting = false;
         }
         */
-
-        if (PauseManager.instance.isPaused && !PauseManager.instance.inPartyMenu && isActive)
+        // !PauseManager.instance.inPartyMenu 
+        if (PauseManager.instance.flags.isActive && flags.isActive)
         {
             GetInput();
         }

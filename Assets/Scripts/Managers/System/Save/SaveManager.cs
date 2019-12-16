@@ -106,7 +106,7 @@ public class SaveManager : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        if (PauseManager.instance.isPaused && SystemManager.instance.isActive && flags.isActive)
+        if (PauseManager.instance.flags.isActive && SystemManager.instance.isActive && flags.isActive)
         {
             GetInput();
         }
