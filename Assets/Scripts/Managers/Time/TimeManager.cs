@@ -82,7 +82,7 @@ public class TimeManager : MonoBehaviour
         {
             string time;
             string[] splitTime;
-            time = DateTime.ParseExact($"{this.hours.ToString("00")}:{this.minutes.ToString("00")}", "hh:mm", null).ToString("hh:mm:tt");
+            time = DateTime.ParseExact($"{this.hours.ToString("00")}:{this.minutes.ToString("00")}", "HH:mm", null).ToString("hh:mm:tt");
             splitTime = time.Split(':');
 
             hours = splitTime[0];

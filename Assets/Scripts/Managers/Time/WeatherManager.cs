@@ -251,11 +251,6 @@ public class WeatherManager : MonoBehaviour
 
         List<WeatherState> weatherStates = FindObjectOfType<WeatherStates>().GetWeatherStates();
 
-        foreach (WeatherState weather in weatherStates)
-        {
-            Debug.Log(weather);
-        }
-
         if (weather == WeatherState.None)
         {
             weather = SetRandomWeather(weatherStates);
