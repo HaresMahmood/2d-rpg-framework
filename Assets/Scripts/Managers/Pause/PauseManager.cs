@@ -61,6 +61,9 @@ public class PauseManager : MonoBehaviour
         {
             UpdateMenus(2, -1, 0.1f, false);
             userInterface.PopulateSideBar(PartyManager.instance.party);
+
+            TimeManager.instance.UpdateTimeUserInterface();
+            WeatherManager.instance.UpdateWeahterUserInterface();
         }
         else
         {
@@ -70,6 +73,8 @@ public class PauseManager : MonoBehaviour
                 userInterface.UpdateSidePanel(selectedSlot, 0, 0.15f);
                 selectedSlot = 0;
             }
+
+            TimeManager.instance.SetPause(false);
         }
 
         InventoryManager.instance.flags.isActive = flags.isActive;

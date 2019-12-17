@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,6 +16,7 @@ public class WeatherManager : MonoBehaviour
     [SerializeField] private Transform particleSystems;
 
     [Header("Values")]
+    [ReadOnly] [SerializeField] private WeatherState previousWeather;
     [ReadOnly] [SerializeField] private WeatherState weather;
     [ReadOnly] [SerializeField] private WeatherState nextWeather;
 
@@ -28,6 +28,7 @@ public class WeatherManager : MonoBehaviour
 
     public enum WeatherState
     {
+        None,
         Clear,
         Clouded,
         Rain,
@@ -51,7 +52,7 @@ public class WeatherManager : MonoBehaviour
 
     public WeatherState GetCurrentWeather()
     {
-        return (WeatherState)weather;
+        return weather;
     }
 
     #endregion
@@ -60,8 +61,9 @@ public class WeatherManager : MonoBehaviour
 
     private WeatherState SetRandomWeather(List<WeatherState> weatherStates)
     {
-        int randomState = UnityEngine.Random.Range(0, weatherStates.Count);
-        return (WeatherState)randomState;
+        int randomState = Random.Range(0, weatherStates.Count);
+
+        return weatherStates[randomState];
     }
 
     #endregion
@@ -141,8 +143,8 @@ public class WeatherManager : MonoBehaviour
         while (isFlashingLight)
         {
             GlobalLightController lightController = DiurnalCycleManager.instance.GetGlobalLight().GetComponent<GlobalLightController>();
-            int repetitions = UnityEngine.Random.Range(2, 5);
-            float interval = UnityEngine.Random.Range(1f, 15f);
+            int repetitions = Random.Range(2, 5);
+            float interval = Random.Range(1f, 15f);
 
             StartCoroutine(lightController.FlashLight(3f, 0.6f, repetitions));
             yield return new WaitForSeconds(interval);
@@ -234,30 +236,38 @@ public class WeatherManager : MonoBehaviour
         }
     }
 
+    public void UpdateWeahterUserInterface()
+    {
+        userInterface.SetWeatherUserInterface(weather, previousWeather);
+    }
+
     public IEnumerator ChangeWeather()
     {
-        List<WeatherState> weatherStates = new List<WeatherState>();
         //yield return new WaitUntil(() => SceneStreamManager.IsSceneLoaded(SceneStreamManager.instance.GetActiveScene()));
         while (!SceneStreamManager.IsSceneLoaded(SceneStreamManager.instance.GetActiveScene()))
         {
             yield return null;
         }
-        weatherStates = FindObjectOfType<WeatherStates>().GetWeatherStates();
-        if (weather == null)
+
+        List<WeatherState> weatherStates = FindObjectOfType<WeatherStates>().GetWeatherStates();
+
+        foreach (WeatherState weather in weatherStates)
+        {
+            Debug.Log(weather);
+        }
+
+        if (weather == WeatherState.None)
         {
             weather = SetRandomWeather(weatherStates);
+            nextWeather = SetRandomWeather(weatherStates);
         }
         else
         {
+            previousWeather = weather;
             weather = nextWeather;
         }
         nextWeather = SetRandomWeather(weatherStates);
-        SetWeatherEffects((WeatherState)weather);
-
-        if (PauseManager.instance.flags.isActive)
-        {
-            userInterface.SetWeatherUserInterface((WeatherState)weather);
-        }
+        SetWeatherEffects(weather);
     }
 
     #endregion

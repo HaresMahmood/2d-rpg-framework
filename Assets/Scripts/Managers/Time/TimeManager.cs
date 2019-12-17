@@ -22,15 +22,11 @@ public class TimeManager : MonoBehaviour
     [SerializeField] private Format format;
 
     [Header("Values")]
+    [RenameField("Pause")] [SerializeField] private bool isPaused;
     [ReadOnly] [SerializeField] private float hours;
     [ReadOnly] [SerializeField] private float minutes;
 
     private float day;
-
-    #if DEBUG
-        [Header("Debug")]
-    #endif
-        [RenameField("Pause")] [SerializeField] private bool isPaused;
 
     #endregion
 
@@ -99,6 +95,15 @@ public class TimeManager : MonoBehaviour
 
     #endregion
 
+    #region Helper Methods
+
+    public void SetPause(bool isPaused)
+    {
+        this.isPaused = isPaused;
+    }
+
+    #endregion
+
     #region Miscellaneous Methods
 
     private void IncrementDays()
@@ -127,6 +132,13 @@ public class TimeManager : MonoBehaviour
         IncrementMinutes();
     }
 
+    public void UpdateTimeUserInterface()
+    {
+        isPaused = true;
+        (string hours, string minutes, string period) = GetTimeText();
+        userInterface.SetTimeText(hours, minutes, period);
+    }
+
     #endregion
 
     #region Unity Methods
@@ -148,14 +160,6 @@ public class TimeManager : MonoBehaviour
         if (!isPaused)
         {
             IncrementTime();
-        }
-
-        // TODO: Debug
-        if (PauseManager.instance.flags.isActive)
-        {
-            isPaused = true;
-            (string hours, string minutes, string period) = GetTimeText();
-            userInterface.SetTimeText(hours, minutes, period);
         }
     }
 

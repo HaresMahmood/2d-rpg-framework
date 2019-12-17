@@ -9,9 +9,8 @@ public class WeatherUserInterface : MonoBehaviour
 {
     #region Variables
 
+    private Transform weatherStateContainers;
     private TextMeshProUGUI weatherText;
-
-    private Transform[] weatherStateAnimations;
 
     #endregion
 
@@ -22,15 +21,16 @@ public class WeatherUserInterface : MonoBehaviour
         weatherText.SetText(weather.ToString());
     }
 
-    private void SetWeatherAnimation(WeatherManager.WeatherState weather)
+    private void SetWeatherAnimation(WeatherManager.WeatherState currentWeather, WeatherManager.WeatherState previousWeather)
     {
-        weatherText.SetText(weather.ToString());
+        weatherStateContainers.Find(previousWeather.ToString()).gameObject.SetActive(false);
+        weatherStateContainers.Find(currentWeather.ToString()).gameObject.SetActive(true);
     }
 
-    public void SetWeatherUserInterface(WeatherManager.WeatherState weather)
+    public void SetWeatherUserInterface(WeatherManager.WeatherState weather, WeatherManager.WeatherState previousWeather)
     {
         SetWeatherText(weather);
-        SetWeatherAnimation(weather);
+        SetWeatherAnimation(weather, previousWeather);
     }
 
     #endregion
@@ -41,9 +41,9 @@ public class WeatherUserInterface : MonoBehaviour
     /// Awake is called when the script instance is being loaded.
     /// </summary>
     private void Awake()
-    { 
+    {
+        weatherStateContainers = transform.Find("Weather States");
         weatherText = GetComponentInChildren<TextMeshProUGUI>();
-        //weatherStateAnimations = 
     }
 
     #endregion
