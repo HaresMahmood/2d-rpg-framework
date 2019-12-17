@@ -57,11 +57,19 @@ public class PauseManager : MonoBehaviour
         Time.timeScale = flags.isActive ? 0 : 1;
         userInterface.TogglePauseMenu(flags.isActive);
 
-        selectedMenu = 2;
         if (flags.isActive)
         {
             UpdateMenus(2, -1, 0.1f, false);
             userInterface.PopulateSideBar(PartyManager.instance.party);
+        }
+        else
+        {
+            if (flags.isInPartyMenu)
+            {
+                flags.isInPartyMenu = false;
+                userInterface.UpdateSidePanel(selectedSlot, 0, 0.15f);
+                selectedSlot = 0;
+            }
         }
 
         InventoryManager.instance.flags.isActive = flags.isActive;
@@ -70,7 +78,7 @@ public class PauseManager : MonoBehaviour
     public void InitializeSidePanel()
     {
         selectedSlot = 0;
-        userInterface.AnimatePartySlot(0, -1);
+        userInterface.UpdateSidePanel(0, -1, 0.15f);
         // yield return null; 
         flags.isInPartyMenu = true;
     }
@@ -88,22 +96,23 @@ public class PauseManager : MonoBehaviour
             (selectedMenu, hasInput) = input.GetInput("Face Trigger", TestInput.Axis.Horizontal, menuNames.Length, selectedMenu);
             if (hasInput)
             {
-                UpdateMenus(selectedMenu, -(int)Input.GetAxisRaw("Face Trigger"), 0.1f);
+                UpdateMenus(selectedMenu, -(int)Input.GetAxisRaw("Face Trigger"), 0.15f);
             }
         }
         else
         {
             bool hasInput;
-            (selectedSlot, hasInput) = input.GetInput("Vertical", TestInput.Axis.Vertical, PartyManager.instance.party.playerParty.Count, selectedSlot);
+            (selectedSlot, hasInput) = input.GetInput("Vertical", TestInput.Axis.Vertical, (PartyManager.instance.party.playerParty.Count + 1), selectedSlot);
             if (hasInput)
             {
-                userInterface.AnimatePartySlot(selectedSlot, (int)Input.GetAxisRaw("Vertical"));
+                userInterface.UpdateSidePanel(selectedSlot, (int)Input.GetAxisRaw("Vertical"), 0.1f);
             }
 
             if (Input.GetAxisRaw("Horizontal") > 0)
             {
                 flags.isInPartyMenu = false;
-                userInterface.AnimatePartySlot(selectedSlot, 0);
+                userInterface.UpdateSidePanel(selectedSlot, 0, 0.15f);
+                selectedSlot = 0;
                 InventoryManager.instance.flags.isActive = true; // Debug
             }
         }
@@ -457,7 +466,7 @@ public class PauseManager : MonoBehaviour
     /// </summary>
     private void Start()
     {
-
+        selectedMenu = 2;
     }
 
     /// <summary>

@@ -691,11 +691,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80ae05ad323732a4baf3b03ab31d41ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weatherStates:
-  - weather: 1
-    icon: {fileID: 21300000, guid: 8dbf4166e708c03428b194df2f2ceadf, type: 3}
-  - weather: 2
-    icon: {fileID: 21300000, guid: 7926f139dc438f2439cabd6ba6b507a1, type: 3}
+  weatherStates: 0200000000000000
 --- !u!114 &640206077
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1366,7 +1362,7 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 0
-      m_TileSpriteIndex: 0
+      m_TileSpriteIndex: 8
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -1375,7 +1371,7 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 1
-      m_TileSpriteIndex: 1
+      m_TileSpriteIndex: 6
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -1410,27 +1406,27 @@ Tilemap:
   - m_RefCount: 0
     m_Data: {fileID: 0}
   m_TileSpriteArray:
-  - m_RefCount: 1
-    m_Data: {fileID: 3850898912043246938, guid: 1ad6e0d7eafd46e499c7e1355bda95a0,
-      type: 3}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
   - m_RefCount: 1
     m_Data: {fileID: 7647239250040192976, guid: 1ad6e0d7eafd46e499c7e1355bda95a0,
       type: 3}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
   - m_RefCount: 1
     m_Data: {fileID: -8627760464868761204, guid: 1ad6e0d7eafd46e499c7e1355bda95a0,
       type: 3}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
+  - m_RefCount: 1
+    m_Data: {fileID: 3850898912043246938, guid: 1ad6e0d7eafd46e499c7e1355bda95a0,
+      type: 3}
   m_TileMatrixArray:
   - m_RefCount: 3
     m_Data:

@@ -32,11 +32,9 @@ public class TimeManager : MonoBehaviour
     #endif
         [RenameField("Pause")] [SerializeField] private bool isPaused;
 
-    private enum Period
-    {
-        AM,
-        PM
-    }
+    #endregion
+
+    #region Enums
 
     private enum Format
     {
@@ -68,39 +66,35 @@ public class TimeManager : MonoBehaviour
         return day % 1f;
     }
 
-    /*
-    public (float hours, float minutes) GetTime()
-    {
-        return (hours: hours, minutes: minutes);
-    }
-    */
-
     public float GetHours()
     {
         return hours;
     }
 
-    public string GetTimeText()
+    public (string hours, string minutes, string period) GetTimeText()
     {
-        string time;
+        string hours = null;
+        string minutes = null;
+        string period = null;
+
         if (format == Format.TwentyFour)
         {
-            time = $"{hours.ToString("00")}:{minutes.ToString("00")}";
+            hours = this.hours.ToString("00");
+            minutes = this.minutes.ToString("00");
         }
         else
         {
-            time = DateTime.ParseExact($"{hours.ToString("00")}:{minutes.ToString("00")}", "HH:mm", null).ToString("hh:mm tt");
-            if (time.ToUpper().Contains(Period.AM.ToString()))
-            {
-                time = time.Replace(Period.AM.ToString(), $"<color=#696969>{Period.AM.ToString()}</color>");
-            }
-            else
-            {
-                time = time.Replace(Period.PM.ToString(), $"<color=#696969>{Period.PM.ToString()}</color>");
-            }
+            string time;
+            string[] splitTime;
+            time = DateTime.ParseExact($"{this.hours.ToString("00")}:{this.minutes.ToString("00")}", "hh:mm", null).ToString("hh:mm:tt");
+            splitTime = time.Split(':');
+
+            hours = splitTime[0];
+            minutes = splitTime[1];
+            period = splitTime[2].ToUpper();
         }
 
-        return time;
+        return (hours, minutes, period);
     }
 
     #endregion
@@ -160,8 +154,8 @@ public class TimeManager : MonoBehaviour
         if (PauseManager.instance.flags.isActive)
         {
             isPaused = true;
-            userInterface.SetTimeText(GetTimeText());
-            WeatherUserInterface.instance.SetWeatherUserInterface();
+            (string hours, string minutes, string period) = GetTimeText();
+            userInterface.SetTimeText(hours, minutes, period);
         }
     }
 

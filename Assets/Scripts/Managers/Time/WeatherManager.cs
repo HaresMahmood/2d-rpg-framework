@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,14 +12,31 @@ public class WeatherManager : MonoBehaviour
 
     public static WeatherManager instance;
 
-    [Header("Values")]
+    [Header("Setup")]
+    [SerializeField] private WeatherUserInterface userInterface;
     [SerializeField] private Transform particleSystems;
 
     [Header("Values")]
-    [ReadOnly] [SerializeField] private Weather weather;
-    [ReadOnly] [SerializeField] private Weather nextWeather;
+    [ReadOnly] [SerializeField] private WeatherState weather;
+    [ReadOnly] [SerializeField] private WeatherState nextWeather;
 
     private bool isFlashingLight;
+
+    #endregion
+
+    #region Enums
+
+    public enum WeatherState
+    {
+        Clear,
+        Clouded,
+        Rain,
+        Storm,
+        Thunder,
+        Snow,
+        Hail,
+        Fog
+    }
 
     #endregion
 
@@ -31,19 +49,19 @@ public class WeatherManager : MonoBehaviour
     }
     */
 
-    public Weather GetCurrentWeather()
+    public WeatherState GetCurrentWeather()
     {
-        return weather;
+        return (WeatherState)weather;
     }
 
     #endregion
 
     #region Helper Methods
 
-    private Weather SetRandomWeather(List<Weather> weatherStates)
+    private WeatherState SetRandomWeather(List<WeatherState> weatherStates)
     {
-        int randomState = Random.Range(0, weatherStates.Count);
-        return weatherStates[randomState];
+        int randomState = UnityEngine.Random.Range(0, weatherStates.Count);
+        return (WeatherState)randomState;
     }
 
     #endregion
@@ -123,8 +141,8 @@ public class WeatherManager : MonoBehaviour
         while (isFlashingLight)
         {
             GlobalLightController lightController = DiurnalCycleManager.instance.GetGlobalLight().GetComponent<GlobalLightController>();
-            int repetitions = Random.Range(2, 5);
-            float interval = Random.Range(1f, 15f);
+            int repetitions = UnityEngine.Random.Range(2, 5);
+            float interval = UnityEngine.Random.Range(1f, 15f);
 
             StartCoroutine(lightController.FlashLight(3f, 0.6f, repetitions));
             yield return new WaitForSeconds(interval);
@@ -139,12 +157,12 @@ public class WeatherManager : MonoBehaviour
         }
     }
 
-    private void SetWeatherEffects(Weather weather)
+    private void SetWeatherEffects(WeatherState weather)
     {
-        switch (weather.GetState())
+        switch (weather)
         {
             default: { break; }
-            case (Weather.State.Clear):
+            case (WeatherState.Clear):
                 {
                     Color[] colors = new Color[] { "FFEAC9".ToColor(), "546BAB".ToColor(), "B273A2".ToColor(), "FCFFB5".ToColor(), "001E3E".ToColor() };
                     DiurnalCycleManager.instance.SetColors(colors);
@@ -152,14 +170,14 @@ public class WeatherManager : MonoBehaviour
                     break;
 
                 }
-            case (Weather.State.Cloudy):
+            case (WeatherState.Clouded):
                 {
                     Color[] colors = new Color[] { "8B959A".ToColor(), "4E5E8C".ToColor(), "34617E".ToColor(), "A1A29B".ToColor(), "0A1E33".ToColor() };
                     DiurnalCycleManager.instance.SetColors(colors);
                     DisableAllWeatherSystems();
                     break;
                 }
-            case (Weather.State.Rainy):
+            case (WeatherState.Rain):
                 {
                     Color[] colors = new Color[] { "8B959A".ToColor(), "4E5E8C".ToColor(), "34617E".ToColor(), "A1A29B".ToColor(), "0A1E33".ToColor() };
                     DiurnalCycleManager.instance.SetColors(colors);
@@ -169,7 +187,7 @@ public class WeatherManager : MonoBehaviour
                     EnableParticleSystem("Rain", "Rain Splatter (Ground)", 100, 0.1f);
                     break;
                 }
-            case (Weather.State.Stormy):
+            case (WeatherState.Storm):
                 {
                     Color[] colors = new Color[] { "8B959A".ToColor(), "4E5E8C".ToColor(), "34617E".ToColor(), "A1A29B".ToColor(), "0A1E33".ToColor() };
                     DiurnalCycleManager.instance.SetColors(colors);
@@ -180,7 +198,7 @@ public class WeatherManager : MonoBehaviour
                     EnableWind(7.5f);
                     break;
                 }
-            case (Weather.State.Thunder):
+            case (WeatherState.Thunder):
                 {
                     Color[] colors = new Color[] { "8B959A".ToColor(), "4E5E8C".ToColor(), "34617E".ToColor(), "A1A29B".ToColor(), "0A1E33".ToColor() };
                     DiurnalCycleManager.instance.SetColors(colors);
@@ -192,7 +210,7 @@ public class WeatherManager : MonoBehaviour
                     StartCoroutine(EnableFlashLight());
                     break;
                 }
-            case (Weather.State.Snowy):
+            case (WeatherState.Snow):
                 {
                     Color[] colors = new Color[] { "8B959A".ToColor(), "4E5E8C".ToColor(), "34617E".ToColor(), "A1A29B".ToColor(), "0A1E33".ToColor() };
                     DiurnalCycleManager.instance.SetColors(colors);
@@ -203,7 +221,7 @@ public class WeatherManager : MonoBehaviour
                     EnableWind(0.5f);
                     break;
                 }
-            case (Weather.State.Hailing):
+            case (WeatherState.Hail):
                 {
                     Color[] colors = new Color[] { "8B959A".ToColor(), "4E5E8C".ToColor(), "34617E".ToColor(), "A1A29B".ToColor(), "0A1E33".ToColor() };
                     DiurnalCycleManager.instance.SetColors(colors);
@@ -218,14 +236,14 @@ public class WeatherManager : MonoBehaviour
 
     public IEnumerator ChangeWeather()
     {
-        List<Weather> weatherStates = new List<Weather>();
+        List<WeatherState> weatherStates = new List<WeatherState>();
         //yield return new WaitUntil(() => SceneStreamManager.IsSceneLoaded(SceneStreamManager.instance.GetActiveScene()));
         while (!SceneStreamManager.IsSceneLoaded(SceneStreamManager.instance.GetActiveScene()))
         {
             yield return null;
         }
         weatherStates = FindObjectOfType<WeatherStates>().GetWeatherStates();
-        if (weather.GetIcon() == null)
+        if (weather == null)
         {
             weather = SetRandomWeather(weatherStates);
         }
@@ -234,7 +252,12 @@ public class WeatherManager : MonoBehaviour
             weather = nextWeather;
         }
         nextWeather = SetRandomWeather(weatherStates);
-        SetWeatherEffects(weather);
+        SetWeatherEffects((WeatherState)weather);
+
+        if (PauseManager.instance.flags.isActive)
+        {
+            userInterface.SetWeatherUserInterface((WeatherState)weather);
+        }
     }
 
     #endregion

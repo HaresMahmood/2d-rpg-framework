@@ -23,6 +23,30 @@ public class PartySlot : MonoBehaviour
 
     #region Miscellaneous Methods
 
+    private void ResetSlot()
+    {
+        informationContainer.SetActive(false);
+        menuSprite.gameObject.SetActive(false);
+        itemSprite.gameObject.SetActive(false);
+        healthBar.gameObject.SetActive(false);
+
+        UpdateBaseColor(false);
+    }
+
+    private void UpdateHealthbarColor()
+    {
+        float value = healthBar.value;
+        string color = value > 0.5f ? "#03fc4e" : (value > 0.25f ? "#FFB600" : "#FF1300"); // Green, yellow/orange and red respectively
+
+        StartCoroutine(healthBar.fillRect.gameObject.FadeColor(color.ToColor(), 0.15f));
+    }
+
+    private void UpdateBaseColor(bool isFainted)
+    {
+        string color = isFainted ? "#FFFFFF" : "#FF1300"; // White and red respectively
+        StartCoroutine(slot.gameObject.FadeColor(color.ToColor(), 0.15f));
+    }
+
     public void PopulateSlot(Pokemon pokemon)
     {
         PopulateSlot(pokemon.menuSprite, pokemon.heldItem.sprite, pokemon.totalHealth, pokemon.stats.health, pokemon.name, pokemon.level);
@@ -33,7 +57,17 @@ public class PartySlot : MonoBehaviour
         this.menuSprite.sprite = menuSprite;
         this.itemSprite.sprite = itemSprite;
 
-        healthBar.value = (health / totalHealth);
+        if (health > 0)
+        {
+            healthBar.gameObject.SetActive(true);
+            healthBar.value = (health / totalHealth);
+            UpdateHealthbarColor();
+        }
+        else
+        {
+            UpdateBaseColor(true);
+            healthBar.gameObject.SetActive(false);
+        }
 
         nameText.SetText(name);
         levelText.SetText(level.ToString());
@@ -41,7 +75,6 @@ public class PartySlot : MonoBehaviour
         informationContainer.gameObject.SetActive(true);
         this.menuSprite.gameObject.SetActive(true);
         this.itemSprite.gameObject.SetActive(true);
-        healthBar.gameObject.SetActive(true);
     }
 
     #endregion

@@ -61,32 +61,36 @@ public class PauseUserInterface : MonoBehaviour
         StartCoroutine(progress[previousMenu].gameObject.FadeColor("#696969".ToColor(), animationDuration));
     }
 
-    private IEnumerator UpdateIndicator(int selectedSlot, float animationDuration)
+    private IEnumerator UpdateIndicator(int selectedSlot, int increment, float animationDuration)
     {
         indicatorAnimator.enabled = false;
         StartCoroutine(indicator.FadeOpacity(0f, animationDuration));
-        yield return new WaitForSecondsRealtime(animationDuration);
 
-        indicator.transform.position = partySlots[selectedSlot].position;
-
-        if (selectedSlot > (1)) // PartyManager.instance.party.playerParty.Count
+        if (increment != 0)
         {
-            indicator.transform.Find("Party Indicator").gameObject.SetActive(false);
-            indicator.transform.Find("Round Indicator").gameObject.SetActive(false);
-            indicator.transform.position = sidePanel.transform.Find("Edit").position;
-            indicator.transform.Find("Edit Indicator").gameObject.SetActive(true);
-        }
-        else
-        {
-            indicator.transform.Find("Edit Indicator").gameObject.SetActive(false);
-            indicator.transform.Find("Round Indicator").gameObject.SetActive(false);
-            indicator.transform.position = new Vector2(indicator.transform.position.x, partySlots[selectedSlot].position.y);
-            indicator.transform.Find("Party Indicator").gameObject.SetActive(true);
-        }
+            yield return new WaitForSecondsRealtime(animationDuration);
 
-        yield return null;
+            indicator.transform.position = partySlots[selectedSlot].position;
 
-        indicatorAnimator.enabled = true;
+            if (selectedSlot >= PartyManager.instance.party.playerParty.Count)
+            {
+                indicator.transform.Find("Party Indicator").gameObject.SetActive(false);
+                indicator.transform.position = sidePanel.transform.Find("Edit").position;
+                indicator.transform.Find("Edit Indicator").gameObject.SetActive(true);
+
+                int previousSlot = ExtensionMethods.IncrementInt(selectedSlot, 0, (PartyManager.instance.party.playerParty.Count + 1), increment);
+                AnimatePartySlot(previousSlot, 0);
+            }
+            else
+            {
+                indicator.transform.Find("Edit Indicator").gameObject.SetActive(false);
+                indicator.transform.position = new Vector2(indicator.transform.position.x, partySlots[selectedSlot].position.y);
+                indicator.transform.Find("Party Indicator").gameObject.SetActive(true);
+            }
+
+            yield return null;
+            indicatorAnimator.enabled = true;
+        }
     }
 
     public void UpdateMenus(int selectedMenu, int increment, float animationDuration, bool animate = true)
@@ -97,6 +101,12 @@ public class PauseUserInterface : MonoBehaviour
         {
             StartCoroutine(AnimateMenus(selectedMenu, increment));
         }
+    }
+
+    public void UpdateSidePanel(int selectedSlot, int increment, float animationDuration)
+    {
+        AnimatePartySlot(selectedSlot, increment);
+        StartCoroutine(UpdateIndicator(selectedSlot, increment, animationDuration));
     }
 
     private IEnumerator AnimateMenus(int selectedMenu, int increment)
@@ -123,12 +133,15 @@ public class PauseUserInterface : MonoBehaviour
 
     }
 
-    public void AnimatePartySlot(int selectedSlot, int increment)
+    private void AnimatePartySlot(int selectedSlot, int increment)
     {
-        int previousSlot = ExtensionMethods.IncrementInt(selectedSlot, 0, PartyManager.instance.party.playerParty.Count, increment);
+        if (selectedSlot < PartyManager.instance.party.playerParty.Count)
+        {
+            int previousSlot = ExtensionMethods.IncrementInt(selectedSlot, 0, PartyManager.instance.party.playerParty.Count, increment);
 
-        partySlots[selectedSlot].GetComponent<Animator>().SetBool("isSelected", true);
-        partySlots[previousSlot].GetComponent<Animator>().SetBool("isSelected", false);
+            partySlots[selectedSlot].GetComponent<Animator>().SetBool("isSelected", true);
+            partySlots[previousSlot].GetComponent<Animator>().SetBool("isSelected", false);
+        }
     }
 
     #endregion

@@ -9,22 +9,28 @@ public class WeatherUserInterface : MonoBehaviour
 {
     #region Variables
 
-    public static WeatherUserInterface instance;
-
     private TextMeshProUGUI weatherText;
-    private Image weatherIcon;
+
+    private Transform[] weatherStateAnimations;
 
     #endregion
 
     #region Helper Methods
 
-    public void SetWeatherUserInterface()
+    private void SetWeatherText(WeatherManager.WeatherState weather)
     {
-        Weather weather = WeatherManager.instance.GetCurrentWeather();
-        string text = weather.GetState().ToString();
-        Sprite icon = weather.GetIcon();
-        weatherText.SetText($"{text}");
-        weatherIcon.sprite = icon;
+        weatherText.SetText(weather.ToString());
+    }
+
+    private void SetWeatherAnimation(WeatherManager.WeatherState weather)
+    {
+        weatherText.SetText(weather.ToString());
+    }
+
+    public void SetWeatherUserInterface(WeatherManager.WeatherState weather)
+    {
+        SetWeatherText(weather);
+        SetWeatherAnimation(weather);
     }
 
     #endregion
@@ -35,18 +41,9 @@ public class WeatherUserInterface : MonoBehaviour
     /// Awake is called when the script instance is being loaded.
     /// </summary>
     private void Awake()
-    {
-        if (instance == null)
-            instance = this;
-    }
-
-    /// <summary>
-    /// Start is called before the first frame update.
-    /// </summary>
-    private void Start()
-    {
+    { 
         weatherText = GetComponentInChildren<TextMeshProUGUI>();
-        weatherIcon = GetComponentInChildren<Image>();
+        //weatherStateAnimations = 
     }
 
     #endregion
