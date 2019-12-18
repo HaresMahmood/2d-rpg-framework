@@ -383,6 +383,8 @@ public class InventoryUserInterface : MonoBehaviour
         UpdateSelectedCategory(InventoryManager.instance.inventory, 0, 1);
 
         LayoutRebuilder.ForceRebuildLayoutImmediate(informationPanel.transform.Find("Information (Vertical)").GetComponent<RectTransform>());
+
+        StartCoroutine(FindObjectOfType<BottomPanelUserInterface>().ChangePanelButtons(InventoryManager.instance.buttons));
     }
 
     /// <summary>

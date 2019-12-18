@@ -11,15 +11,13 @@ public class SaveManager : MonoBehaviour
 
     public static SaveManager instance;
 
-    private GameObject saveContainer;
+    [Header("Setup")]
+    [SerializeField] private SaveUserInterface userInterface;
 
     private TestInput input = new TestInput();
-
-    private SaveUserInterface userInterface;
+    public Flags flags = new Flags(false, false, false);
 
     public int selectedOption { get; private set; } = 0;
-
-    public Flags flags = new Flags(false, false, false);
 
     #endregion
 
@@ -97,8 +95,7 @@ public class SaveManager : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        saveContainer = PauseManager.instance.pauseContainer.transform.Find("System/Save").gameObject;
-        userInterface = saveContainer.GetComponent<SaveUserInterface>();
+
     }
 
     /// <summary>

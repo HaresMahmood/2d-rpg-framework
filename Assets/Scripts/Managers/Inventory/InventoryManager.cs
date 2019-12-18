@@ -69,10 +69,12 @@ public class InventoryManager : MonoBehaviour
 
     #region Miscellaneous Methods
 
+    /*
     public void OnActive()
     {
         StartCoroutine(FindObjectOfType<BottomPanelUserInterface>().ChangePanelButtons(buttons));
     }
+    */
 
     public IEnumerator ActiveSidePanel(float delay)
     {
@@ -193,7 +195,7 @@ public class InventoryManager : MonoBehaviour
             categoryNames.Add(((Item.Category)i).ToString());
         }
 
-        OnActive();
+        //OnActive();
     }
 
     /// <summary>

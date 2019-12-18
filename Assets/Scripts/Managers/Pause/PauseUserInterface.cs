@@ -39,9 +39,9 @@ public class PauseUserInterface : MonoBehaviour
 
     private void SetMenuText(int selectedMenu, int increment, bool animate)
     {
-        TextMeshProUGUI currentText = menuNavigation.transform.Find("Current").GetComponentInChildren<TextMeshProUGUI>();
-        TextMeshProUGUI previousText = menuNavigation.transform.Find("Previous").GetComponentInChildren<TextMeshProUGUI>();
-        TextMeshProUGUI nextText = menuNavigation.transform.Find("Next").GetComponentInChildren<TextMeshProUGUI>();
+        TextMeshProUGUI currentText = menuNavigation.transform.Find("Middle/Current").GetComponentInChildren<TextMeshProUGUI>();
+        TextMeshProUGUI previousText = menuNavigation.transform.Find("Left/Previous").GetComponentInChildren<TextMeshProUGUI>();
+        TextMeshProUGUI nextText = menuNavigation.transform.Find("Right/Next").GetComponentInChildren<TextMeshProUGUI>();
 
         int previousMenu = ExtensionMethods.IncrementInt(selectedMenu, 0, PauseManager.instance.menuNames.Length, increment);
         int nextMenu = ExtensionMethods.IncrementInt(selectedMenu, 0, PauseManager.instance.menuNames.Length, -increment);
@@ -53,7 +53,7 @@ public class PauseUserInterface : MonoBehaviour
 
     private void UpdateNavigationProgress(int selectedMenu, int increment, float animationDuration)
     {
-        Transform[] progress = menuNavigation.transform.Find("Progress").GetChildren();
+        Transform[] progress = menuNavigation.transform.Find("Middle/Progress").GetChildren();
 
         int previousMenu = ExtensionMethods.IncrementInt(selectedMenu, 0, PauseManager.instance.menuNames.Length, increment);
 
