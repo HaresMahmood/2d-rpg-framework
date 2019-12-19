@@ -65,6 +65,24 @@ public class InventoryUserInterface : MonoBehaviour
         }
     }
 
+    public void FadeInventory(float opacity, float animationDuration, bool fadeSidePanel = false)
+    {
+        bool isSpriteActive = opacity == 1f ? true : false;
+        FindObjectOfType<PauseUserInterface>().pauseContainer.transform.Find("Target Sprite").GetComponent<Animator>().enabled = isSpriteActive;
+        StartCoroutine(FindObjectOfType<PauseUserInterface>().pauseContainer.transform.Find("Target Sprite").gameObject.FadeOpacity(opacity, animationDuration));
+
+        StartCoroutine(transform.Find("Middle").gameObject.FadeOpacity(opacity, animationDuration));
+
+        if (fadeSidePanel)
+        {
+            StartCoroutine(FindObjectOfType<PauseUserInterface>().pauseContainer.transform.Find("Side Panel").gameObject.FadeOpacity(opacity, animationDuration));
+        }
+        else
+        {
+            StartCoroutine(informationPanel.FadeOpacity(opacity, animationDuration));
+        }
+    }
+
     public IEnumerator UpdateIndicator(int selectedValue, float animationDuration, bool isSubMenu = false)
     {
         indicatorAnimator.enabled = false;
@@ -99,7 +117,7 @@ public class InventoryUserInterface : MonoBehaviour
         {
             int max = categoryItems.Count > 28 ? 28 : categoryItems.Count;
 
-            StartCoroutine(transform.Find("Item Grid").gameObject.FadeOpacity(1f, animationTime));
+            StartCoroutine(transform.Find("Middle/Grid/Item Grid").gameObject.FadeOpacity(1f, animationTime));
             StartCoroutine(emptyGrid.FadeOpacity(0f, animationTime));
             indicator.SetActive(true);
 
@@ -124,7 +142,7 @@ public class InventoryUserInterface : MonoBehaviour
         {
             indicator.SetActive(false);
             StartCoroutine(emptyGrid.FadeOpacity(1f, animationTime));
-            StartCoroutine(transform.Find("Item Grid").gameObject.FadeOpacity(0f, animationTime));
+            StartCoroutine(transform.Find("Middle/Grid/Item Grid").gameObject.FadeOpacity(0f, animationTime));
         }
     }
 
@@ -281,10 +299,7 @@ public class InventoryUserInterface : MonoBehaviour
     {
         if (selectedItem > -1)
         {
-            PauseManager.instance.pauseContainer.transform.Find("Target Sprite").GetComponent<Animator>().enabled = false;
-            StartCoroutine(PauseManager.instance.pauseContainer.transform.Find("Target Sprite").gameObject.FadeOpacity(0.3f, animationTime));
-            StartCoroutine(transform.Find("Item Grid").gameObject.FadeOpacity(0.3f, animationTime));
-            StartCoroutine(PauseManager.instance.pauseContainer.transform.Find("Side Panel").gameObject.FadeOpacity(0.3f, animationTime));
+            FadeInventory(0.3f, animationTime, true);
 
             informationPanel.transform.Find("Information (Horizontal)/Name/Item Name").GetComponent<TextMeshProUGUI>().SetText(categoryItems[selectedItem].Name);
             informationPanel.transform.Find("Information (Horizontal)/Name/Icon").GetComponent<Image>().sprite = categoryItems[selectedItem].sprite;
@@ -306,10 +321,7 @@ public class InventoryUserInterface : MonoBehaviour
 
             informationAnimator.SetBool("Selected", false);
 
-            PauseManager.instance.pauseContainer.transform.Find("Target Sprite").GetComponent<Animator>().enabled = true;
-            StartCoroutine(PauseManager.instance.pauseContainer.transform.Find("Target Sprite").gameObject.FadeOpacity(1f, animationTime));
-            StartCoroutine(transform.Find("Item Grid").gameObject.FadeOpacity(1f, animationTime));
-            StartCoroutine(PauseManager.instance.pauseContainer.transform.Find("Side Panel").gameObject.FadeOpacity(1f, animationTime));
+            FadeInventory(1f, animationTime, true);
         }
     }
 
@@ -371,14 +383,14 @@ public class InventoryUserInterface : MonoBehaviour
         informationPanel = transform.Find("Item Information").gameObject;
         indicator = transform.Find("Indicator").gameObject;
 
-        emptyGrid = transform.Find("Empty Grid").gameObject;
+        emptyGrid = transform.Find("Middle/Grid/Empty Grid").gameObject;
         informationAnimator = informationPanel.GetComponent<Animator>();
         indicatorAnimator = indicator.GetComponent<Animator>();
         //arrowAnimator = transform.Find("Categories/Navigation").GetComponent<Animator>();
 
-        categoryText = transform.Find("Categories/Information/Name").GetComponent<TextMeshProUGUI>();
-        itemGrid = transform.Find("Item Grid").GetChildren();
-        categoryIcons = transform.Find("Categories/Category Icons").GetChildren();
+        categoryText = transform.Find("Middle/Categories/Information/Name").GetComponent<TextMeshProUGUI>();
+        itemGrid = transform.Find("Middle/Grid/Item Grid").GetChildren();
+        categoryIcons = transform.Find("Middle/Categories/Category Icons").GetChildren();
 
         UpdateSelectedCategory(InventoryManager.instance.inventory, 0, 1);
 

@@ -55,6 +55,7 @@ public class PauseManager : MonoBehaviour
     private void OnActive()
     {
         Time.timeScale = flags.isActive ? 0 : 1;
+        CameraController.instance.GetComponent<PostprocessingBlur>().enabled = flags.isActive;
         userInterface.TogglePauseMenu(flags.isActive);
 
         if (flags.isActive)
@@ -118,7 +119,7 @@ public class PauseManager : MonoBehaviour
                 flags.isInPartyMenu = false;
                 userInterface.UpdateSidePanel(selectedSlot, 0, 0.15f);
                 selectedSlot = 0;
-                InventoryManager.instance.flags.isActive = true; // Debug
+                InventoryManager.instance.DeactivateSidePanel();
             }
         }
 

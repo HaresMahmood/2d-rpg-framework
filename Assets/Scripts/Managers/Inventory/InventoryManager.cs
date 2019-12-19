@@ -85,9 +85,16 @@ public class InventoryManager : MonoBehaviour
             if (Input.GetAxisRaw("Horizontal") == -1)
             {
                 flags.isActive = false;
+                userInterface.FadeInventory(0.3f, 0.15f);
                 PauseManager.instance.InitializeSidePanel();
             }
         }
+    }
+
+    public void DeactivateSidePanel()
+    {
+        flags.isActive = true;
+        userInterface.FadeInventory(1f, 0.15f);
     }
 
     private void UpdateSelectedCategory(int increment)
