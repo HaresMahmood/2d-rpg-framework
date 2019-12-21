@@ -19,16 +19,13 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private InventoryUserInterface userInterface;
     public List<PanelButton> buttons = new List<PanelButton>();
 
-    [Header("Settings")]
-    [SerializeField] private GameObject menuButtonPrefab;
-
     [Header("Values")]
     [SerializeField] private SortingMethod sortingMethod = SortingMethod.None;
 
-    private TestInput input = new TestInput();
+    private readonly TestInput input = new TestInput();
     public Flags flags = new Flags(false, false, false);
 
-    [HideInInspector] public int selectedItem = 0;
+    public int selectedItem { get; private set; } = 0; // TODO: Should be private field
     private int selectedCategory = 0;
     private int selectedButton = 0;
 
@@ -97,6 +94,13 @@ public class InventoryManager : MonoBehaviour
         userInterface.FadeInventory(1f, 0.15f);
     }
 
+    public void CloseMenu(int selectedButton = -1)
+    {
+        userInterface.CloseMenu(selectedButton);
+        flags.isItemSelected = false;
+        this.selectedButton = 0;
+    }
+
     private void UpdateSelectedCategory(int increment)
     {
         selectedItem = 0;
@@ -154,8 +158,6 @@ public class InventoryManager : MonoBehaviour
         }
         else
         {
-            // Setting is Selected
-
             bool hasInput;
             (selectedButton, hasInput) = input.GetInput("Horizontal", TestInput.Axis.Horizontal, userInterface.itemButtons.Count, selectedButton);
             if (hasInput)
@@ -163,18 +165,14 @@ public class InventoryManager : MonoBehaviour
                 UpdateSelectedButton(selectedButton);
             }
 
-            /*
             if (Input.GetButtonDown("Interact"))
             {
-                userInterface.AnimateItemSelection(selectedItem, 0.2f);
+                CloseMenu(selectedButton);
             }
-            */
 
             if (Input.GetButtonDown("Cancel"))
             {
-                StartCoroutine(userInterface.AnimateItemSelection(0.2f));
-                flags.isItemSelected = false;
-                selectedButton = 0;
+                CloseMenu();
             }
         }
     }

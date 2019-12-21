@@ -20,9 +20,8 @@ public class InventoryUserInterface : MonoBehaviour
     private TextMeshProUGUI categoryText;
 
     public List<Item> categoryItems { get; private set; } = new List<Item>();
-    public List<ItemBehavior.BehaviorData> itemButtons { get; private set; } = new List<ItemBehavior.BehaviorData>();
+    public List<ItemBehavior> itemButtons { get; private set; } = new List<ItemBehavior>();
 
-    private bool isEmpty;
     #endregion
 
     #region Miscellaneous Methods
@@ -81,6 +80,90 @@ public class InventoryUserInterface : MonoBehaviour
         {
             StartCoroutine(informationPanel.FadeOpacity(opacity, animationDuration));
         }
+    }
+
+    private void UseItem(Item item)
+    {
+        Debug.Log($"Using item: {item}");
+    }
+
+    private void GiveItem(Item item)
+    {
+        Debug.Log($"Giving item: {item}");
+    }
+
+    private List<ItemBehavior> CreateHealthButtons(Item item)
+    {
+        List<ItemBehavior> behavior = new List<ItemBehavior>
+        {
+            new ItemBehavior("Use"),
+            new ItemBehavior("Give")
+        };
+        behavior[0].behaviorEvent.AddListener(delegate { UseItem(item); });
+        behavior[1].behaviorEvent.AddListener(delegate { GiveItem(item); });
+
+        return behavior;
+    }
+
+    private void FavoriteItem(Item item)
+    {
+        Debug.Log($"Favorite-ing item: {item}");
+        item.isFavorite = !item.isFavorite;
+    }
+
+    private void DiscardItem(Item item) // TODO: Move all these classes to Item-class.
+    {
+        Debug.Log($"Discarding item: {item}");
+    }
+
+    private List<ItemBehavior> CreateGenericButtons(Item item)
+    {
+        List<ItemBehavior> behavior = new List<ItemBehavior>
+        {
+            new ItemBehavior(item.isFavorite ? "Remove favorite" : "Make favorite"),
+            new ItemBehavior("Discard"),
+            new ItemBehavior("Cancel")
+        };
+        behavior[0].behaviorEvent.AddListener(delegate { FavoriteItem(item); });
+        behavior[1].behaviorEvent.AddListener(delegate { DiscardItem(item); });
+
+        return behavior;
+    }
+
+    private List<ItemBehavior> CreateMenuButtons(Item item)
+    {
+        List<ItemBehavior> behavior = new List<ItemBehavior>();
+
+        switch (item.category)
+        {
+            default: { break; }
+            case (Item.Category.Health):
+                {
+                    behavior = CreateHealthButtons(item);
+                    break;
+                }
+            case (Item.Category.Berry):
+                {
+                    behavior = CreateHealthButtons(item);
+                    break;
+                }
+        }
+
+        behavior.AddRange(CreateGenericButtons(item));
+
+        return behavior;
+    }
+
+    public void CloseMenu(int selectedButton = -1, float animationDuration = 0.2f)
+    {
+        if (selectedButton > -1)
+        {
+            itemButtons[selectedButton].behaviorEvent.Invoke();
+        }
+        //else
+        //{
+            StartCoroutine(AnimateItemSelection(animationDuration));
+        //}
     }
 
     public IEnumerator UpdateIndicator(int selectedValue, float animationDuration, bool isSubMenu = false)
@@ -329,9 +412,9 @@ public class InventoryUserInterface : MonoBehaviour
     {
         List<Transform> buttons = informationPanel.transform.Find("Information (Horizontal)/Buttons").GetChildren().ToList();
 
-        if (item != null) // && item is Consumable
+        if (item != null)
         {
-            itemButtons = item.behavior.behaviorData;
+            itemButtons = CreateMenuButtons(item);
 
             foreach (Transform button in buttons)
             {

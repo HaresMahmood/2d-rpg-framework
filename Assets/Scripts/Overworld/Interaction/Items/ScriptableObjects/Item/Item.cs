@@ -20,8 +20,6 @@ public class Item : ScriptableObject
     public bool isFavorite;
     public bool isNew;
 
-    public ItemBehavior behavior;
-
     #endregion
 
     #region Enums
