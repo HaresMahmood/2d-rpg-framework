@@ -5,8 +5,18 @@ public class Item : ScriptableObject
 {
     #region Fields
 
+    [SerializeField] private int id; // PropertyBackingField, RevealProperty("ID")
+
+    #endregion
+
+    #region Properties
+
     public string Name;
-    public int ID;
+    public int ID
+    {
+        get { return id; }
+        private set { id = value; }
+    }
 
     #endregion
 
