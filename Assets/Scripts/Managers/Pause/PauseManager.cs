@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using TMPro;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 /// <summary>
 ///
@@ -23,7 +19,7 @@ public class PauseManager : MonoBehaviour
     [SerializeField] private PauseUserInterface userInterface;
 
     private TestInput input = new TestInput();
-    public Flags flags = new Flags(false, false);
+    public Flags flags = new Flags(false, false, false, false);
 
     public GameObject pauseContainer { get; private set; }
 
@@ -40,11 +36,15 @@ public class PauseManager : MonoBehaviour
     {
         public bool isActive { get; set; }
         public bool isInPartyMenu { get; set; }
+        public bool isUsingItem { get; set; }
+        public bool isGivingItem { get; set; }
 
-        public Flags(bool isActive, bool isInParty)
+        public Flags(bool isActive, bool isInParty, bool isUsingItem, bool isGivingItem)
         {
             this.isActive = isActive;
             this.isInPartyMenu = isInParty;
+            this.isUsingItem = isUsingItem;
+            this.isGivingItem = isGivingItem;
         }
     }
 
@@ -89,9 +89,34 @@ public class PauseManager : MonoBehaviour
         flags.isInPartyMenu = true;
     }
 
+    private void DeactivateSidePanel()
+    {
+        flags.isInPartyMenu = false;
+        userInterface.UpdateSidePanel(selectedSlot, 0, 0.15f);
+        selectedSlot = 0;
+        if (InventoryManager.instance.flags.isItemSelected)
+        {
+            InventoryManager.instance.CloseMenu();
+        }
+        StartCoroutine(InventoryManager.instance.DeactivateSidePanel(0.2f));
+    }
+
     private void UpdateMenus(int selectedMenu, int increment, float animationDuration, bool animate = true)
     {
         userInterface.UpdateMenus(selectedMenu, increment, animationDuration, animate);
+    }
+
+    private void ApplyItemBehavior()
+    {
+        if (flags.isUsingItem)
+        {
+            // Add to HP.
+        }
+        else if (flags.isGivingItem)
+        {
+            PartyManager.instance.party.playerParty[selectedSlot].heldItem = InventoryManager.instance.selectedItem;
+            userInterface.PopulateSideBar(PartyManager.instance.party);
+        }
     }
 
     private void GetInput()
@@ -116,10 +141,18 @@ public class PauseManager : MonoBehaviour
 
             if (Input.GetAxisRaw("Horizontal") > 0)
             {
-                flags.isInPartyMenu = false;
-                userInterface.UpdateSidePanel(selectedSlot, 0, 0.15f);
-                selectedSlot = 0;
-                InventoryManager.instance.DeactivateSidePanel();
+                DeactivateSidePanel();
+            }
+
+            if (Input.GetButtonDown("Interact"))
+            {
+                if (flags.isUsingItem)
+                {
+                    PartyManager.instance.party.playerParty[selectedSlot].heldItem = InventoryManager.instance.selectedItem;
+                    userInterface.PopulateSideBar(PartyManager.instance.party);
+                }
+
+                DeactivateSidePanel();
             }
         }
 

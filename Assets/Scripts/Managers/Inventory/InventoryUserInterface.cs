@@ -72,6 +72,9 @@ public class InventoryUserInterface : MonoBehaviour
 
         StartCoroutine(transform.Find("Middle").gameObject.FadeOpacity(opacity, animationDuration));
 
+        int indicatorActive = opacity == 1f ? InventoryManager.instance.selectedSlot : -1;
+        StartCoroutine(UpdateIndicator(0.1f, indicatorActive));
+
         if (fadeSidePanel)
         {
             StartCoroutine(FindObjectOfType<PauseUserInterface>().pauseContainer.transform.Find("Side Panel").gameObject.FadeOpacity(opacity, animationDuration));
@@ -82,14 +85,32 @@ public class InventoryUserInterface : MonoBehaviour
         }
     }
 
-    private void UseItem(Item item)
+    private IEnumerator ActivateSidePanel()
     {
-        Debug.Log($"Using item: {item}");
+        StartCoroutine(AnimateMenuButtons(0.1f));
+        yield return new WaitForSecondsRealtime(0.1f);
+        informationAnimator.SetBool("isUsingItem", true);
+        StartCoroutine(UpdateIndicator(0.1f));
+    }
+
+    private void UseItem()
+    {
+        informationPanel.transform.Find("Information (Horizontal)/Text").GetComponentInChildren<TextMeshProUGUI>().SetText("Select a Pokémon to use item on.");
+        StartCoroutine(ActivateSidePanel());
+        InventoryManager.instance.ActiveSidePanel();
+        StartCoroutine(FindObjectOfType<PauseUserInterface>().pauseContainer.transform.Find("Side Panel").gameObject.FadeOpacity(1f, 0.15f));
+        PauseManager.instance.flags.isUsingItem = true;
     }
 
     private void GiveItem(Item item)
     {
-        Debug.Log($"Giving item: {item}");
+        // TODO: Same as above.
+
+        informationPanel.transform.Find("Information (Horizontal)/Text").GetComponentInChildren<TextMeshProUGUI>().SetText("Select a Pokémon to use item on.");
+        StartCoroutine(ActivateSidePanel());
+        InventoryManager.instance.ActiveSidePanel();
+        StartCoroutine(FindObjectOfType<PauseUserInterface>().pauseContainer.transform.Find("Side Panel").gameObject.FadeOpacity(1f, 0.15f));
+        PauseManager.instance.flags.isUsingItem = true;
     }
 
     private List<ItemBehavior> CreateHealthButtons(Item item)
@@ -99,7 +120,7 @@ public class InventoryUserInterface : MonoBehaviour
             new ItemBehavior("Use"),
             new ItemBehavior("Give")
         };
-        behavior[0].behaviorEvent.AddListener(delegate { UseItem(item); });
+        behavior[0].behaviorEvent.AddListener(delegate { UseItem(); });
         behavior[1].behaviorEvent.AddListener(delegate { GiveItem(item); });
 
         return behavior;
@@ -160,23 +181,26 @@ public class InventoryUserInterface : MonoBehaviour
         {
             itemButtons[selectedButton].behaviorEvent.Invoke();
         }
-        //else
-        //{
+        else
+        {
             StartCoroutine(AnimateItemSelection(animationDuration));
-        //}
+        }
     }
 
-    public IEnumerator UpdateIndicator(int selectedValue, float animationDuration, bool isSubMenu = false)
+    public IEnumerator UpdateIndicator(float animationDuration, int selectedValue = -1, bool isSubMenu = false)
     {
         indicatorAnimator.enabled = false;
         StartCoroutine(indicator.FadeOpacity(0f, animationDuration));
-        yield return new WaitForSecondsRealtime(animationDuration);
+        if (selectedValue > -1)
+        {
+            yield return new WaitForSecondsRealtime(animationDuration);
 
-        indicator.transform.position = !isSubMenu ? itemGrid[selectedValue].Find("Slot").position : menuButtons[selectedValue].position;
-        indicator.GetComponent<RectTransform>().sizeDelta = !isSubMenu ? itemGrid[selectedValue].GetComponent<RectTransform>().sizeDelta : menuButtons[selectedValue].GetComponent<RectTransform>().sizeDelta;
-        yield return null;
+            indicator.transform.position = !isSubMenu ? itemGrid[selectedValue].Find("Slot").position : menuButtons[selectedValue].position;
+            indicator.GetComponent<RectTransform>().sizeDelta = !isSubMenu ? itemGrid[selectedValue].GetComponent<RectTransform>().sizeDelta : menuButtons[selectedValue].GetComponent<RectTransform>().sizeDelta;
+            yield return null;
 
-        indicatorAnimator.enabled = true;
+            indicatorAnimator.enabled = true;
+        }
     }
 
     private IEnumerator UpdateCategoryItems(Inventory inventory, int selectedCategory, float animationTime, float delay)
@@ -313,8 +337,9 @@ public class InventoryUserInterface : MonoBehaviour
 
     public void UpdateSelectedItem(int selectedItem)
     {
-        StartCoroutine(UpdateIndicator(selectedItem, 0.1f));
-        StartCoroutine(UpdateDescription(selectedItem, 0.07f));
+        StartCoroutine(UpdateIndicator(0.1f, selectedItem));
+        StartCoroutine(UpdateDescription(selectedItem, 0.1f));
+        InventoryManager.instance.selectedItem = categoryItems[selectedItem];
     }
 
     public void UpdateSortingMethod(Inventory inventory, InventoryManager.SortingMethod sortingMethod, int selectedCategory)
@@ -393,18 +418,27 @@ public class InventoryUserInterface : MonoBehaviour
             yield return new WaitForSecondsRealtime(0.2f);
 
             StartCoroutine(AnimateMenuButtons(0.1f, categoryItems[selectedItem]));
-            StartCoroutine(UpdateIndicator(0, 0.1f, true));
+            StartCoroutine(UpdateIndicator(0.1f, 0, true));
         }
         else
         {
-            StartCoroutine(AnimateMenuButtons(0.1f));
-            yield return new WaitForSecondsRealtime(0.2f);
+            if (!informationAnimator.GetBool("isUsingItem"))
+            {
+                StartCoroutine(AnimateMenuButtons(0.1f));
+                yield return new WaitForSecondsRealtime(0.2f);
 
-            StartCoroutine(UpdateIndicator(InventoryManager.instance.selectedItem, 0.2f));
+                informationAnimator.SetBool("Selected", false);
 
-            informationAnimator.SetBool("Selected", false);
+                FadeInventory(1f, animationTime, true);
+            }
+            else
+            {
+                informationAnimator.SetBool("isUsingItem", false);
+                yield return new WaitForSecondsRealtime(0.1f);
+                informationAnimator.SetBool("Selected", false);
+            }
 
-            FadeInventory(1f, animationTime, true);
+            StartCoroutine(UpdateIndicator(0.1f, InventoryManager.instance.selectedSlot));
         }
     }
 
@@ -438,7 +472,7 @@ public class InventoryUserInterface : MonoBehaviour
         }
         else
         {
-            menuButtons.Clear();
+            itemButtons.Clear();
 
             for (int i = 0; i < itemButtons.Count; i++)
             {

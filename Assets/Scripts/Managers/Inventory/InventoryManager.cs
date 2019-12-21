@@ -25,7 +25,9 @@ public class InventoryManager : MonoBehaviour
     private readonly TestInput input = new TestInput();
     public Flags flags = new Flags(false, false, false);
 
-    public int selectedItem { get; private set; } = 0; // TODO: Should be private field
+    public Item selectedItem { get; set; }
+
+    public int selectedSlot { get; private set; } = 0; // TODO: Should be private field
     private int selectedCategory = 0;
     private int selectedButton = 0;
 
@@ -66,17 +68,16 @@ public class InventoryManager : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    /*
-    public void OnActive()
+    public void ActiveSidePanel()
     {
-        StartCoroutine(FindObjectOfType<BottomPanelUserInterface>().ChangePanelButtons(buttons));
+        flags.isActive = false;
+        PauseManager.instance.InitializeSidePanel();
     }
-    */
 
     public IEnumerator ActiveSidePanel(float delay)
     {
         // Debug
-        if (selectedItem == 0)
+        if (selectedSlot == 0)
         {
             yield return new WaitForSecondsRealtime(delay);
             if (Input.GetAxisRaw("Horizontal") == -1)
@@ -88,22 +89,23 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    public void DeactivateSidePanel()
+    public IEnumerator DeactivateSidePanel(float delay)
     {
-        flags.isActive = true;
         userInterface.FadeInventory(1f, 0.15f);
+        yield return new WaitForSecondsRealtime(delay); flags.isActive = true;
     }
 
     public void CloseMenu(int selectedButton = -1)
     {
-        userInterface.CloseMenu(selectedButton);
-        flags.isItemSelected = false;
+        flags.isItemSelected = selectedButton > -1 ? true : false;
         this.selectedButton = 0;
+
+        userInterface.CloseMenu(selectedButton);
     }
 
     private void UpdateSelectedCategory(int increment)
     {
-        selectedItem = 0;
+        selectedSlot = 0;
         userInterface.UpdateSelectedCategory(inventory, selectedCategory, increment);
     }
 
@@ -114,7 +116,7 @@ public class InventoryManager : MonoBehaviour
 
     private void UpdateSelectedButton(int selectedButton)
     {
-        StartCoroutine(userInterface.UpdateIndicator(selectedButton, 0.1f, true));
+        StartCoroutine(userInterface.UpdateIndicator(0.1f, selectedButton, true));
     }
 
     private void GetInput()
@@ -124,10 +126,10 @@ public class InventoryManager : MonoBehaviour
             if (Input.GetAxisRaw("Trigger") == 0) // TODO: Very ugly!
             {
                 bool hasInput;
-                (selectedItem, hasInput) = input.GetInput("Horizontal", "Vertical", userInterface.categoryItems.Count, selectedItem, true, 1, 7);
+                (selectedSlot, hasInput) = input.GetInput("Horizontal", "Vertical", userInterface.categoryItems.Count, selectedSlot, true, 1, 7);
                 if (hasInput)
                 {
-                    UpdateSelectedItem(selectedItem);
+                    UpdateSelectedItem(selectedSlot);
                 }
             }
             else
@@ -143,7 +145,7 @@ public class InventoryManager : MonoBehaviour
 
             if (Input.GetButtonDown("Interact"))
             {
-                StartCoroutine(userInterface.AnimateItemSelection(0.2f, selectedItem));
+                StartCoroutine(userInterface.AnimateItemSelection(0.2f, selectedSlot));
                 flags.isItemSelected = true;
             }
 
@@ -199,8 +201,6 @@ public class InventoryManager : MonoBehaviour
         {
             categoryNames.Add(((Item.Category)i).ToString());
         }
-
-        //OnActive();
     }
 
     /// <summary>
@@ -208,112 +208,11 @@ public class InventoryManager : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        /*
-        OnActive();
-
-        if (Input.GetButtonDown("Interact") && isGivingItem && !isDiscardingItem)
-        {
-            if (PartyManager.instance.party.playerParty[PauseManager.instance.selectedSlot].heldItem != currentItem)
-            {
-                PartyManager.instance.party.playerParty[PauseManager.instance.selectedSlot].heldItem = currentItem;
-                EditorUtility.SetDirty(PartyManager.instance.party.playerParty[PauseManager.instance.selectedSlot]); //TODO: Debug
-
-                RemoveItem(currentItem);
-            }
-
-            //StartCoroutine(inventoryContainer.FadeOpacity(1f, 0.1f));
-            Fade(1f);
-            PauseManager.instance.inPartyMenu = false;
-            isGivingItem = false;
-        }
-
-        if (!isDiscardingItem)
-            amountPicker.SetActive(false);
-        else
-        {
-            StartCoroutine(DiscardItem(currentItem, amount));
-
-            if (Input.GetAxisRaw("Vertical") != 0)
-            {
-                if (!isInteracting)
-                {
-                    if (Input.GetAxisRaw("Vertical") < 0)
-                    {
-                        if (amount > 1)
-                            amount--;
-                        else
-                            amount = currentItem.amount;
-                    }
-                    else if (Input.GetAxisRaw("Vertical") > 0)
-                    {
-                        if (amount < currentItem.amount)
-                            amount++;
-                        else
-                            amount = 1;
-                    }
-                    isInteracting = true;
-                }
-            }
-            else
-                isInteracting = false;
-        }
-        */
-        // !PauseManager.instance.inPartyMenu 
         if (PauseManager.instance.flags.isActive && flags.isActive)
         {
             GetInput();
         }
     }
-
-    /*
-    private void InventoryManager_OnUserInput(object sender, System.EventArgs e)
-    {
-#if DEBUG
-        if (GameManager.Debug())
-        {
-            Debug.Log("[INVENTORY MANAGER:] Event function called (OnUserInput).");
-        }
-#endif
-
-        if (isDirty)
-        {
-            UpdateInventory();
-            AnimateCategory();
-            isDirty = false;
-        }
-
-        if (categoryItems.Count > 0)
-        {
-            if (selectedSlot > -1)
-            {
-                currentItem = categoryItems[selectedSlot];
-            }
-            else
-            {
-                currentItem = categoryItems[0];
-            }
-            SetDescription(currentItem);
-        }
-        else if (categoryItems.Count == 0 || currentItem == null)
-        {
-            SetDescription();
-        }
-
-        if (itemIndicator.activeSelf)
-        {
-            if (selectedSlot > -1)
-            {
-                itemIndicator.transform.position = grid[selectedSlot].position;
-            }
-            else
-            {
-                itemIndicator.transform.position = grid[0].position;
-            }
-        }
-
-        input.OnUserInput -= InventoryManager_OnUserInput;
-    }
-    */
 
     #endregion
 }
