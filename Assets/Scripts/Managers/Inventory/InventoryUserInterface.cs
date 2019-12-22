@@ -24,7 +24,45 @@ public class InventoryUserInterface : MonoBehaviour
 
     #endregion
 
+    #region Behavior Definitions
+
+    public void Use()
+    {
+        informationPanel.transform.Find("Information (Horizontal)/Text").GetComponentInChildren<TextMeshProUGUI>().SetText("Select a Pokémon to use item on.");
+        StartCoroutine(ActivateSidePanel());
+        PauseManager.instance.flags.isUsingItem = true;
+    }
+
+    public void Give()
+    {
+        informationPanel.transform.Find("Information (Horizontal)/Text").GetComponentInChildren<TextMeshProUGUI>().SetText("Select a Pokémon to give item to.");
+        StartCoroutine(ActivateSidePanel());
+        PauseManager.instance.flags.isGivingItem = true;
+    }
+
+    public void Favorite(Item item)
+    {
+        item.isFavorite = !item.isFavorite;
+    }
+
+    public void Discard(Item item)
+    {
+        Debug.Log($"Discarding item: {item}");
+    }
+
+    #endregion
+
     #region Miscellaneous Methods
+
+    private IEnumerator ActivateSidePanel()
+    {
+        StartCoroutine(AnimateMenuButtons(0.1f));
+        yield return new WaitForSecondsRealtime(0.1f);
+        informationAnimator.SetBool("isUsingItem", true);
+        StartCoroutine(UpdateIndicator());
+        InventoryManager.instance.ActiveSidePanel();
+        StartCoroutine(FindObjectOfType<PauseUserInterface>().pauseContainer.transform.Find("Side Panel").gameObject.FadeOpacity(1f, 0.15f));
+    }
 
     private void ApplySortingMethod(Inventory inventory, InventoryManager.SortingMethod sortingMethod)
     {
@@ -64,118 +102,36 @@ public class InventoryUserInterface : MonoBehaviour
         }
     }
 
-    public void FadeInventory(float opacity, float animationDuration, bool fadeSidePanel = false)
+    /// <summary>
+    /// Dynamically fades the opacity of the indicator, item grid, character sprite and side panel/information panel.
+    /// </summary>
+    /// <param name="opacity"> The target opacity of the inventory user interface. </param>
+    /// <param name="duration"> The duration of the fade. Defaults to 0.2f. </param>
+    /// <param name="fadeSidePanel"> Specifies whether the side panel, or the information panel should be fades. Defaults to false. </param>
+    public void FadeUserInterface(float opacity, float duration = 0.2f, bool fadeSidePanel = false)
     {
-        bool isSpriteActive = opacity == 1f ? true : false;
-        FindObjectOfType<PauseUserInterface>().pauseContainer.transform.Find("Target Sprite").GetComponent<Animator>().enabled = isSpriteActive;
-        StartCoroutine(FindObjectOfType<PauseUserInterface>().pauseContainer.transform.Find("Target Sprite").gameObject.FadeOpacity(opacity, animationDuration));
-
-        StartCoroutine(transform.Find("Middle").gameObject.FadeOpacity(opacity, animationDuration));
-
         int indicatorActive = opacity == 1f ? InventoryManager.instance.selectedSlot : -1;
-        StartCoroutine(UpdateIndicator(0.1f, indicatorActive));
+        StartCoroutine(UpdateIndicator(indicatorActive));
+
+        StartCoroutine(transform.Find("Middle").gameObject.FadeOpacity(opacity, duration));
+        FindObjectOfType<PauseUserInterface>().FadeCharacterSprite(opacity, duration);
 
         if (fadeSidePanel)
         {
-            StartCoroutine(FindObjectOfType<PauseUserInterface>().pauseContainer.transform.Find("Side Panel").gameObject.FadeOpacity(opacity, animationDuration));
+            FindObjectOfType<PauseUserInterface>().FadeSidePanel(opacity, duration);
         }
         else
         {
-            StartCoroutine(informationPanel.FadeOpacity(opacity, animationDuration));
+            StartCoroutine(informationPanel.FadeOpacity(opacity, duration));
         }
     }
 
-    private IEnumerator ActivateSidePanel()
-    {
-        StartCoroutine(AnimateMenuButtons(0.1f));
-        yield return new WaitForSecondsRealtime(0.1f);
-        informationAnimator.SetBool("isUsingItem", true);
-        StartCoroutine(UpdateIndicator(0.1f));
-    }
-
-    private void UseItem()
-    {
-        informationPanel.transform.Find("Information (Horizontal)/Text").GetComponentInChildren<TextMeshProUGUI>().SetText("Select a Pokémon to use item on.");
-        StartCoroutine(ActivateSidePanel());
-        InventoryManager.instance.ActiveSidePanel();
-        StartCoroutine(FindObjectOfType<PauseUserInterface>().pauseContainer.transform.Find("Side Panel").gameObject.FadeOpacity(1f, 0.15f));
-        PauseManager.instance.flags.isUsingItem = true;
-    }
-
-    private void GiveItem(Item item)
-    {
-        // TODO: Same as above.
-
-        informationPanel.transform.Find("Information (Horizontal)/Text").GetComponentInChildren<TextMeshProUGUI>().SetText("Select a Pokémon to use item on.");
-        StartCoroutine(ActivateSidePanel());
-        InventoryManager.instance.ActiveSidePanel();
-        StartCoroutine(FindObjectOfType<PauseUserInterface>().pauseContainer.transform.Find("Side Panel").gameObject.FadeOpacity(1f, 0.15f));
-        PauseManager.instance.flags.isUsingItem = true;
-    }
-
-    private List<ItemBehavior> CreateHealthButtons(Item item)
-    {
-        List<ItemBehavior> behavior = new List<ItemBehavior>
-        {
-            new ItemBehavior("Use"),
-            new ItemBehavior("Give")
-        };
-        behavior[0].behaviorEvent.AddListener(delegate { UseItem(); });
-        behavior[1].behaviorEvent.AddListener(delegate { GiveItem(item); });
-
-        return behavior;
-    }
-
-    private void FavoriteItem(Item item)
-    {
-        Debug.Log($"Favorite-ing item: {item}");
-        item.isFavorite = !item.isFavorite;
-    }
-
-    private void DiscardItem(Item item) // TODO: Move all these classes to Item-class.
-    {
-        Debug.Log($"Discarding item: {item}");
-    }
-
-    private List<ItemBehavior> CreateGenericButtons(Item item)
-    {
-        List<ItemBehavior> behavior = new List<ItemBehavior>
-        {
-            new ItemBehavior(item.isFavorite ? "Remove favorite" : "Make favorite"),
-            new ItemBehavior("Discard"),
-            new ItemBehavior("Cancel")
-        };
-        behavior[0].behaviorEvent.AddListener(delegate { FavoriteItem(item); });
-        behavior[1].behaviorEvent.AddListener(delegate { DiscardItem(item); });
-
-        return behavior;
-    }
-
-    private List<ItemBehavior> CreateMenuButtons(Item item)
-    {
-        List<ItemBehavior> behavior = new List<ItemBehavior>();
-
-        switch (item.category)
-        {
-            default: { break; }
-            case (Item.Category.Health):
-                {
-                    behavior = CreateHealthButtons(item);
-                    break;
-                }
-            case (Item.Category.Berry):
-                {
-                    behavior = CreateHealthButtons(item);
-                    break;
-                }
-        }
-
-        behavior.AddRange(CreateGenericButtons(item));
-
-        return behavior;
-    }
-
-    public void CloseMenu(int selectedButton = -1, float animationDuration = 0.2f)
+    /// <summary>
+    /// Closes the item sub menu. Invokes UnityEvent method if applicable.
+    /// </summary>
+    /// <param name="selectedButton"> Index of the button currently selected. Defaults to -1 (null/no button). </param>
+    /// <param name="duration"> Duration of the animations. </param>
+    public void CloseSubMenu(int selectedButton = -1, float duration = 0.2f)
     {
         if (selectedButton > -1)
         {
@@ -183,27 +139,43 @@ public class InventoryUserInterface : MonoBehaviour
         }
         else
         {
-            StartCoroutine(AnimateItemSelection(animationDuration));
+            StartCoroutine(AnimateItemSelection(duration));
         }
     }
 
-    public IEnumerator UpdateIndicator(float animationDuration, int selectedValue = -1, bool isSubMenu = false)
+    /// <summary>
+    /// Animates and updates the position of the indicator. Dynamically changes position and size of indicator depending on what situation it is used for. If no value is selected, the indicator completely fades out.
+    /// </summary>
+    /// <param name="selectedValue"> Index of the value currently selected. Defaults to -1 (null/no value). </param>
+    /// <param name="duration"> Duration of the animation/fade. </param>
+    /// <param name="isInSubMenu"> Whether or not the indicator is used in the sub menu. Defaults to false. </param>
+    /// <returns>  </returns>
+    public IEnumerator UpdateIndicator(int selectedValue = -1, float duration = 0.1f, bool isInSubMenu = false)
     {
         indicatorAnimator.enabled = false;
-        StartCoroutine(indicator.FadeOpacity(0f, animationDuration));
+        StartCoroutine(indicator.FadeOpacity(0f, duration));
+
         if (selectedValue > -1)
         {
-            yield return new WaitForSecondsRealtime(animationDuration);
+            yield return new WaitForSecondsRealtime(duration);
 
-            indicator.transform.position = !isSubMenu ? itemGrid[selectedValue].Find("Slot").position : menuButtons[selectedValue].position;
-            indicator.GetComponent<RectTransform>().sizeDelta = !isSubMenu ? itemGrid[selectedValue].GetComponent<RectTransform>().sizeDelta : menuButtons[selectedValue].GetComponent<RectTransform>().sizeDelta;
+            indicator.transform.position = !isInSubMenu ? itemGrid[selectedValue].Find("Information").position : menuButtons[selectedValue].position;
+            indicator.GetComponent<RectTransform>().sizeDelta = !isInSubMenu ? itemGrid[selectedValue].GetComponent<RectTransform>().sizeDelta : menuButtons[selectedValue].GetComponent<RectTransform>().sizeDelta;
             yield return null;
 
             indicatorAnimator.enabled = true;
         }
     }
 
-    private IEnumerator UpdateCategoryItems(Inventory inventory, int selectedCategory, float animationTime, float delay)
+    /// <summary>
+    /// Updates the items being displayed in the selected category.
+    /// </summary>
+    /// <param name="inventory"> Inventory of items. </param>
+    /// <param name="selectedCategory"> Index of the category currently selected. </param>
+    /// <param name="duration"> Duration of the animations. </param>
+    /// <param name="delay"> Duration at which items should be animated. </param>
+    /// <returns></returns>
+    private IEnumerator UpdateCategoryItems(Inventory inventory, int selectedCategory, float duration = 0.15f, float delay = 0.03f)
     {
         #if DEBUG
                 if (GameManager.Debug())
@@ -212,28 +184,20 @@ public class InventoryUserInterface : MonoBehaviour
                 }
         #endif
 
-        foreach (Item item in inventory.items)
-        {
-            if (item.category.ToString().Equals(InventoryManager.instance.categoryNames[selectedCategory]))
-            {
-                categoryItems.Add(item);
-            }
-        }
+        categoryItems = inventory.items.Where(item => item.category.ToString().Equals(InventoryManager.instance.categoryNames[selectedCategory])).ToList();
 
         if (categoryItems.Count > 0)
         {
             int max = categoryItems.Count > 28 ? 28 : categoryItems.Count;
 
-            StartCoroutine(transform.Find("Middle/Grid/Item Grid").gameObject.FadeOpacity(1f, animationTime));
-            StartCoroutine(emptyGrid.FadeOpacity(0f, animationTime));
+            StartCoroutine(transform.Find("Middle/Grid/Item Grid").gameObject.FadeOpacity(1f, duration));
+            StartCoroutine(emptyGrid.FadeOpacity(0f, duration));
             indicator.SetActive(true);
-
-            yield return new WaitForSecondsRealtime(animationTime);
+            yield return new WaitForSecondsRealtime(duration);
 
             for (int i = 0; i < max; i++)
             {
-                StartCoroutine(itemGrid[i].Find("Slot").gameObject.FadeOpacity(0f, animationTime));
-                DrawItem(categoryItems[i], i, animationTime);
+                itemGrid[i].GetComponent<ItemSlot>().PopulateSlot(categoryItems[i], duration);
                 yield return new WaitForSecondsRealtime(delay);
             }
 
@@ -241,43 +205,17 @@ public class InventoryUserInterface : MonoBehaviour
             {
                 for (int i = max; i < categoryItems.Count; i++)
                 {
-                    DrawItem(categoryItems[i], i);
+                    itemGrid[i].GetComponent<ItemSlot>().PopulateSlot(categoryItems[i]);
                 }
             }
         }
         else
         {
+            //StartCoroutine(UpdateIndicator());
             indicator.SetActive(false);
-            StartCoroutine(emptyGrid.FadeOpacity(1f, animationTime));
-            StartCoroutine(transform.Find("Middle/Grid/Item Grid").gameObject.FadeOpacity(0f, animationTime));
+            StartCoroutine(emptyGrid.FadeOpacity(1f, duration));
+            StartCoroutine(transform.Find("Middle/Grid/Item Grid").gameObject.FadeOpacity(0f, duration));
         }
-    }
-
-    // TODO: Move to seperate ItemSlot-class.
-    private int DrawItem(Item item, int position, float animationTime = -1, bool isFavorite = false)
-    {
-        Transform itemSlot = itemGrid[position].Find("Slot");
-
-        itemSlot.gameObject.SetActive(true);
-        itemSlot.Find("Sprite").GetComponent<Image>().sprite = item.sprite;
-        itemSlot.Find("Amount").GetComponentInChildren<TextMeshProUGUI>().SetText(item.amount.ToString());
-        itemSlot.Find("Favorite").gameObject.SetActive(isFavorite);
-        itemSlot.Find("New").gameObject.SetActive(item.isNew);itemSlot.gameObject.SetActive(true);
-
-        if (animationTime > -1)
-        {
-            StartCoroutine(itemSlot.gameObject.FadeOpacity(1f, animationTime));
-        }
-        else
-        {
-            itemSlot.GetComponent<CanvasGroup>().alpha = 1f;
-        }
-
-        position++;
-
-        //categoryItems.Add(item);
-
-        return position;
     }
 
     private void ResetCategoryItems()
@@ -289,12 +227,10 @@ public class InventoryUserInterface : MonoBehaviour
                 }
         #endif
 
-        foreach (Item item in categoryItems)
+        foreach (Transform slot in itemGrid)
         {
-            itemGrid[categoryItems.IndexOf(item)].Find("Slot").GetComponent<CanvasGroup>().alpha = 0f;
+            slot.GetComponent<ItemSlot>().AnimateSlot(0f);
         }
-
-        categoryItems.Clear();
     }
 
     private IEnumerator UpdateCategoryName(int selectedCategory, float animationTime)
@@ -337,9 +273,9 @@ public class InventoryUserInterface : MonoBehaviour
 
     public void UpdateSelectedItem(int selectedItem)
     {
-        StartCoroutine(UpdateIndicator(0.1f, selectedItem));
+        StartCoroutine(UpdateIndicator(selectedItem));
         StartCoroutine(UpdateDescription(selectedItem, 0.1f));
-        InventoryManager.instance.selectedItem = categoryItems[selectedItem];
+        //InventoryManager.instance.selectedItem = categoryItems[selectedItem];
     }
 
     public void UpdateSortingMethod(Inventory inventory, InventoryManager.SortingMethod sortingMethod, int selectedCategory)
@@ -407,7 +343,7 @@ public class InventoryUserInterface : MonoBehaviour
     {
         if (selectedItem > -1)
         {
-            FadeInventory(0.3f, animationTime, true);
+            FadeUserInterface(0.3f, animationTime, true);
 
             informationPanel.transform.Find("Information (Horizontal)/Name/Item Name").GetComponent<TextMeshProUGUI>().SetText(categoryItems[selectedItem].Name);
             informationPanel.transform.Find("Information (Horizontal)/Name/Icon").GetComponent<Image>().sprite = categoryItems[selectedItem].sprite;
@@ -418,7 +354,7 @@ public class InventoryUserInterface : MonoBehaviour
             yield return new WaitForSecondsRealtime(0.2f);
 
             StartCoroutine(AnimateMenuButtons(0.1f, categoryItems[selectedItem]));
-            StartCoroutine(UpdateIndicator(0.1f, 0, true));
+            StartCoroutine(UpdateIndicator(0, 0.1f, true));
         }
         else
         {
@@ -429,7 +365,7 @@ public class InventoryUserInterface : MonoBehaviour
 
                 informationAnimator.SetBool("Selected", false);
 
-                FadeInventory(1f, animationTime, true);
+                FadeUserInterface(1f, animationTime, true);
             }
             else
             {
@@ -438,7 +374,7 @@ public class InventoryUserInterface : MonoBehaviour
                 informationAnimator.SetBool("Selected", false);
             }
 
-            StartCoroutine(UpdateIndicator(0.1f, InventoryManager.instance.selectedSlot));
+            StartCoroutine(UpdateIndicator(InventoryManager.instance.selectedSlot));
         }
     }
 
@@ -448,7 +384,7 @@ public class InventoryUserInterface : MonoBehaviour
 
         if (item != null)
         {
-            itemButtons = CreateMenuButtons(item);
+            itemButtons = item.GenerateButtons();
 
             foreach (Transform button in buttons)
             {

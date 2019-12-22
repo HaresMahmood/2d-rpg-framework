@@ -11,7 +11,7 @@ public class PauseUserInterface : MonoBehaviour
     #region Variables
 
     public GameObject pauseContainer { get; private set; }
-    private GameObject menuNavigation, targetSprite, sidePanel, indicator;
+    private GameObject menuNavigation, characterSprite, sidePanel, indicator;
     private Animator indicatorAnimator, pauseAnimator, spriteAnimator;
 
     private Transform[] menus;
@@ -22,6 +22,19 @@ public class PauseUserInterface : MonoBehaviour
     #endregion
 
     #region Miscellaneous Methods
+
+    // TODO: Move to seperate class?
+    public void FadeCharacterSprite(float opacity, float duration)
+    {
+        bool isSpriteActive = opacity == 1f ? true : false;
+        characterSprite.GetComponent<Animator>().enabled = isSpriteActive;
+        StartCoroutine(characterSprite.FadeOpacity(opacity, duration));
+    }
+
+    public void FadeSidePanel(float opacity, float duration)
+    {
+        StartCoroutine(sidePanel.FadeOpacity(opacity, duration));
+    }
 
     public void TogglePauseMenu(bool state)
     {
@@ -128,7 +141,7 @@ public class PauseUserInterface : MonoBehaviour
         menus[previousMenu].gameObject.SetActive(false);
     }
 
-    private void AnimateTargetSprite(int selectedMenu, int increment)
+    private void AnimateCharacterSprite(int selectedMenu, int increment)
     {
 
     }
@@ -146,15 +159,7 @@ public class PauseUserInterface : MonoBehaviour
 
     #endregion
 
-    #region Unity Methods#
-
-    /// <summary>
-    /// Awake is called when the script instance is being loaded.
-    /// </summary>
-    private void Awake()
-    {
-
-    }
+    #region Unity Methods
 
     /// <summary>
     /// Start is called before the first frame update.
@@ -163,13 +168,13 @@ public class PauseUserInterface : MonoBehaviour
     {
         pauseContainer = transform.gameObject;
         menuNavigation = transform.Find("Top Panel").Find("Navigation").gameObject;
-        targetSprite = transform.Find("Target Sprite").gameObject;
+        characterSprite = transform.Find("Character Sprite").gameObject;
         sidePanel = transform.Find("Side Panel").gameObject;
         indicator = sidePanel.transform.Find("Indicators").gameObject;
 
         indicatorAnimator = indicator.GetComponent<Animator>();
         pauseAnimator = pauseContainer.GetComponent<Animator>();
-        spriteAnimator = pauseContainer.transform.Find("Target Sprite").GetComponent<Animator>();
+        spriteAnimator = characterSprite.GetComponent<Animator>();
 
         menus = transform.Find("Menus").transform.GetChildren();
         partySlots = sidePanel.transform.Find("Party").transform.GetChildren();

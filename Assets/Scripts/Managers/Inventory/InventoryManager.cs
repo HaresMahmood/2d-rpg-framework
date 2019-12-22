@@ -25,8 +25,6 @@ public class InventoryManager : MonoBehaviour
     private readonly TestInput input = new TestInput();
     public Flags flags = new Flags(false, false, false);
 
-    public Item selectedItem { get; set; }
-
     public int selectedSlot { get; private set; } = 0; // TODO: Should be private field
     private int selectedCategory = 0;
     private int selectedButton = 0;
@@ -76,14 +74,13 @@ public class InventoryManager : MonoBehaviour
 
     public IEnumerator ActiveSidePanel(float delay)
     {
-        // Debug
-        if (selectedSlot == 0)
+        if (selectedSlot % 7 == 0 || selectedSlot == 0) // Debug
         {
             yield return new WaitForSecondsRealtime(delay);
             if (Input.GetAxisRaw("Horizontal") == -1)
             {
                 flags.isActive = false;
-                userInterface.FadeInventory(0.3f, 0.15f);
+                userInterface.FadeUserInterface(0.3f, 0.15f);
                 PauseManager.instance.InitializeSidePanel();
             }
         }
@@ -91,16 +88,16 @@ public class InventoryManager : MonoBehaviour
 
     public IEnumerator DeactivateSidePanel(float delay)
     {
-        userInterface.FadeInventory(1f, 0.15f);
+        userInterface.FadeUserInterface(1f, 0.15f);
         yield return new WaitForSecondsRealtime(delay); flags.isActive = true;
     }
 
-    public void CloseMenu(int selectedButton = -1)
+    public void CloseSelectionMenu(int selectedButton = -1)
     {
         flags.isItemSelected = selectedButton > -1 ? true : false;
         this.selectedButton = 0;
 
-        userInterface.CloseMenu(selectedButton);
+        userInterface.CloseSubMenu(selectedButton);
     }
 
     private void UpdateSelectedCategory(int increment)
@@ -116,7 +113,7 @@ public class InventoryManager : MonoBehaviour
 
     private void UpdateSelectedButton(int selectedButton)
     {
-        StartCoroutine(userInterface.UpdateIndicator(0.1f, selectedButton, true));
+        StartCoroutine(userInterface.UpdateIndicator(selectedButton, 0.1f, true));
     }
 
     private void GetInput()
@@ -169,12 +166,12 @@ public class InventoryManager : MonoBehaviour
 
             if (Input.GetButtonDown("Interact"))
             {
-                CloseMenu(selectedButton);
+                CloseSelectionMenu(selectedButton);
             }
 
             if (Input.GetButtonDown("Cancel"))
             {
-                CloseMenu();
+                CloseSelectionMenu();
             }
         }
     }
