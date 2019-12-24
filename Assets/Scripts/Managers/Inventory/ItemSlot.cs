@@ -68,13 +68,5 @@ public class ItemSlot : MonoBehaviour
         slot.gameObject.SetActive(false);
     }
 
-    /// <summary>
-    /// Start is called before the first frame update.
-    /// </summary>
-    private void Start()
-    {
-
-    }
-
     #endregion
 }

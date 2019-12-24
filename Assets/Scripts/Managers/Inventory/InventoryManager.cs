@@ -142,7 +142,7 @@ public class InventoryManager : MonoBehaviour
 
             if (Input.GetButtonDown("Interact"))
             {
-                StartCoroutine(userInterface.AnimateItemSelection(0.2f, selectedSlot));
+                StartCoroutine(userInterface.AnimateItemSelection(selectedSlot));
                 flags.isItemSelected = true;
             }
 
