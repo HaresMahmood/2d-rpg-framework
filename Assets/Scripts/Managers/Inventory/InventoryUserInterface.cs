@@ -53,6 +53,11 @@ public class InventoryUserInterface : MonoBehaviour
 
     #region Miscellaneous Methods
 
+    public void OnActive()
+    {
+
+    }
+
     private IEnumerator ActivateSidePanel()
     {
         StartCoroutine(informationPanel.GetComponent<ItemInformation>().AnimateMenuButtons());
