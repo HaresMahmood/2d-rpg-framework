@@ -113,6 +113,7 @@ public class PauseUserInterface : MonoBehaviour
         if (animate)
         {
             StartCoroutine(AnimateMenus(selectedMenu, increment));
+            AnimateCharacterSprite(selectedMenu, increment);
         }
     }
 
@@ -143,7 +144,11 @@ public class PauseUserInterface : MonoBehaviour
 
     private void AnimateCharacterSprite(int selectedMenu, int increment)
     {
+        int previousMenu = ExtensionMethods.IncrementInt(selectedMenu, 0, PauseManager.instance.menuNames.Length, increment);
+        string activeMenu = $"isIn{PauseManager.instance.menuNames[selectedMenu]}"; ;
+        string inactiveMenu = $"isIn{PauseManager.instance.menuNames[previousMenu]}";
 
+        characterSprite.GetComponent<CharacterSpriteController>().SetAnimation(activeMenu, inactiveMenu);
     }
 
     private void AnimatePartySlot(int selectedSlot, int increment)
