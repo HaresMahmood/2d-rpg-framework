@@ -15,6 +15,17 @@ public class ItemInteraction : InteractableObject
 
     #endregion
 
+    private void AddItem()
+    {
+       OverworldItemManager.instance.AddItem(overworldItem);
+    }
+
+    private void AnimateLight(float duration)
+    {
+        OverworldItemController.instance.FadeItem(0f, duration);
+        Destroy(this.gameObject, duration);
+    }
+
     #region Unity Methods
 
     private void Start()
@@ -42,19 +53,8 @@ public class ItemInteraction : InteractableObject
         }
 
         if (rangeHandler.playerInRange && PlayerInteraction.contextBox.activeSelf)
-            SetContextText("Pick up");
+            SetContextText("Take");
     }
 
     #endregion
-
-    private void AddItem()
-    {
-       OverworldItemManager.instance.AddItem(overworldItem);
-    }
-
-    private void AnimateLight(float duration)
-    {
-        OverworldItemController.instance.FadeItem(0f, duration);
-        Destroy(this.gameObject, duration);
-    }
 }
