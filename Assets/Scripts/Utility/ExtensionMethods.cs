@@ -442,6 +442,14 @@ public static class ExtensionMethods
         return firstChildren;
     }
 
+    public static Transform FindSibling(this Transform source, string target)
+    {
+        Transform parent = source.parent;
+        Transform sibling = parent.Find(target);
+
+        return sibling;
+    }
+
     /// <summary>
     /// 
     /// </summary>

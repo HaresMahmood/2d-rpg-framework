@@ -53,13 +53,6 @@ public class InventoryUserInterface : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    /*
-    public void OnActive(string inactiveMenu)
-    {
-        FindObjectOfType<CharacterSpriteController>().SetAnimation("isInInventory", inactiveMenu);
-    }
-    */
-
     private IEnumerator ActivateSidePanel()
     {
         StartCoroutine(informationPanel.GetComponent<ItemInformation>().AnimateMenuButtons());

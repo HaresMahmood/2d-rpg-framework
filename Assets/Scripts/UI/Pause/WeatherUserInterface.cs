@@ -9,7 +9,7 @@ public class WeatherUserInterface : MonoBehaviour
 {
     #region Variables
 
-    private Transform weatherStateContainers;
+    private WeatherIconController weatherIcons;
     private TextMeshProUGUI weatherText;
 
     #endregion
@@ -21,16 +21,10 @@ public class WeatherUserInterface : MonoBehaviour
         weatherText.SetText(weather.ToString());
     }
 
-    private void SetWeatherAnimation(WeatherManager.WeatherState currentWeather, WeatherManager.WeatherState previousWeather)
-    {
-        weatherStateContainers.Find(previousWeather.ToString()).gameObject.SetActive(false);
-        weatherStateContainers.Find(currentWeather.ToString()).gameObject.SetActive(true);
-    }
-
     public void SetWeatherUserInterface(WeatherManager.WeatherState weather, WeatherManager.WeatherState previousWeather)
     {
         SetWeatherText(weather);
-        SetWeatherAnimation(weather, previousWeather);
+        weatherIcons.SetWeatherAnimation(weather, previousWeather);
     }
 
     #endregion
@@ -42,7 +36,7 @@ public class WeatherUserInterface : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        weatherStateContainers = transform.Find("Weather States");
+        weatherIcons = transform.parent.FindSibling("Weather Icons").GetComponent<WeatherIconController>();
         weatherText = GetComponentInChildren<TextMeshProUGUI>();
     }
 
