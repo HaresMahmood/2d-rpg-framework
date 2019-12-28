@@ -227,7 +227,7 @@ public class SettingsManager : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        if (PauseManager.instance.flags.isActive && SystemManager.instance.isActive && flags.isActive)
+        if (PauseManager.instance.flags.isActive && SystemManager.instance.flags.isActive && flags.isActive)
         {
             GetInput();
         }

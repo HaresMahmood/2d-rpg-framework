@@ -23,7 +23,34 @@ public class PauseUserInterface : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    // TODO: Move to seperate class?
+    private void ActivateMenus(int selectedValue, bool state)
+    {
+        // Debug
+        switch (selectedValue)
+        {
+            default: { break; }
+            case (0):
+                {
+                    break;
+                }
+            case (1):
+                {
+                    
+                    break;
+                }
+            case (2):
+                {
+                    FindObjectOfType<InventoryManager>().flags.isActive = state;
+                    break;
+                }
+            case (3):
+                {
+                    FindObjectOfType<SystemManager>().flags.isActive = state;
+                    break;
+                }
+        }
+    }
+
     public void FadeCharacterSprite(float opacity, float duration)
     {
         bool isSpriteActive = opacity == 1f ? true : false;
@@ -108,13 +135,18 @@ public class PauseUserInterface : MonoBehaviour
 
     public void UpdateMenus(int selectedMenu, int increment, float animationDuration, bool animate = true)
     {
+        int previousMenu = ExtensionMethods.IncrementInt(selectedMenu, 0, PauseManager.instance.menuNames.Length, increment);
+
         UpdateNavigationProgress(selectedMenu, increment, animationDuration);
         SetMenuText(selectedMenu, increment, animate);
         if (animate)
         {
-            StartCoroutine(AnimateMenus(selectedMenu, increment));
-            AnimateCharacterSprite(selectedMenu, increment);
+            StartCoroutine(AnimateMenus(selectedMenu, previousMenu, increment));
+            AnimateCharacterSprite(selectedMenu, previousMenu, increment);
         }
+
+        ActivateMenus(selectedMenu, true);
+        ActivateMenus(previousMenu, false);
     }
 
     public void UpdateSidePanel(int selectedSlot, int increment, float animationDuration)
@@ -123,11 +155,8 @@ public class PauseUserInterface : MonoBehaviour
         StartCoroutine(UpdateIndicator(selectedSlot, increment, animationDuration));
     }
 
-    private IEnumerator AnimateMenus(int selectedMenu, int increment)
+    private IEnumerator AnimateMenus(int selectedMenu, int previousMenu, int increment)
     {
-        selectedMenu--; // Debug;
-        int previousMenu = ExtensionMethods.IncrementInt(selectedMenu, 0, PauseManager.instance.menuNames.Length, increment);
-
         menus[selectedMenu].gameObject.SetActive(true); yield return null;
 
         menus[selectedMenu].GetComponent<Animator>().SetFloat(blend, increment);
@@ -142,9 +171,8 @@ public class PauseUserInterface : MonoBehaviour
         menus[previousMenu].gameObject.SetActive(false);
     }
 
-    private void AnimateCharacterSprite(int selectedMenu, int increment)
+    private void AnimateCharacterSprite(int selectedMenu, int previousMenu, int increment)
     {
-        int previousMenu = ExtensionMethods.IncrementInt(selectedMenu, 0, PauseManager.instance.menuNames.Length, increment);
         string activeMenu = $"isIn{PauseManager.instance.menuNames[selectedMenu]}"; ;
         string inactiveMenu = $"isIn{PauseManager.instance.menuNames[previousMenu]}";
 

@@ -23,12 +23,12 @@ public class SystemManager : MonoBehaviour
 
     [Header("Setup")]
     [SerializeField] private SystemUserInterface userInterface;
-    [SerializeField] private List<PanelButton> buttons = new List<PanelButton>();
+    public List<PanelButton> buttons = new List<PanelButton>();
+
+    [Header("Values")]
 
     private TestInput input = new TestInput();
-     public Flags flags = new Flags(true, false, false);
-
-    public bool isActive { get; set; } = false;
+    public Flags flags = new Flags(false, true, false, false);
 
     public int selectedNavOption { get; private set; }
 
@@ -38,12 +38,14 @@ public class SystemManager : MonoBehaviour
 
     public struct Flags
     {
+        public bool isActive { get; set; }
         public bool isInNavigation { get; set; }
         public bool isInSettings { get; set; }
         public bool isInSave { get; set; }
 
-        public Flags(bool isInNavigation, bool isInSettings,bool isInSave)
+        public Flags(bool isActive, bool isInNavigation, bool isInSettings,bool isInSave)
         {
+            this.isActive = isActive;
             this.isInNavigation = isInNavigation;
             this.isInSettings = isInSettings;
             this.isInSave = isInSave;
@@ -62,11 +64,6 @@ public class SystemManager : MonoBehaviour
     #endregion
 
     #region Miscellaneous Methods
-    
-    public void OnActive()
-    {
-        StartCoroutine(FindObjectOfType<BottomPanelUserInterface>().ChangePanelButtons(buttons));
-    }
 
     private IEnumerator EnableSave()
     {
@@ -113,35 +110,32 @@ public class SystemManager : MonoBehaviour
 
         userInterface.AnimateNavigationOption(selectedNavOption, -1);
         userInterface.UpdateNavigation();
-        OnActive();
+        StartCoroutine(FindObjectOfType<BottomPanelUserInterface>().ChangePanelButtons(buttons));
         flags.isInSettings = false;
         flags.isInNavigation = true;
     }
 
     private void GetInput()
     {
-        if (isActive)
+        if (flags.isInNavigation)
         {
-            if (flags.isInNavigation)
+            bool hasInput;
+            (selectedNavOption, hasInput) = input.GetInput("Vertical", TestInput.Axis.Vertical, userInterface.navOptions.Length, selectedNavOption);
+            if (hasInput)
             {
-                bool hasInput;
-                (selectedNavOption, hasInput) = input.GetInput("Vertical", TestInput.Axis.Vertical, userInterface.navOptions.Length, selectedNavOption);
-                if (hasInput)
+                userInterface.AnimateNavigationOption(selectedNavOption, (int)Input.GetAxisRaw("Vertical"));
+            }
+
+            if (Input.GetButtonDown("Interact"))
+            {
+                // TODO: Execute Unity-event code to determine what nav option is selected;
+                if (navigationNames[selectedNavOption].Equals("Settings"))
                 {
-                    userInterface.AnimateNavigationOption(selectedNavOption, (int)Input.GetAxisRaw("Vertical"));
-                    //input.OnUserInput += SystemManager_OnUserInput;
+                    StartCoroutine(EnableSettings());
                 }
-                if (Input.GetButtonDown("Interact"))
+                else
                 {
-                    // TODO: Execute Unity-event code to determine what nav option is selected;
-                    if (navigationNames[selectedNavOption].Equals("Settings"))
-                    {
-                        StartCoroutine(EnableSettings());
-                    }
-                    else
-                    {
-                        StartCoroutine(EnableSave());
-                    }
+                    StartCoroutine(EnableSave());
                 }
             }
         }
@@ -161,22 +155,16 @@ public class SystemManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Start is called before the first frame update.
-    /// </summary>
-    private void Start()
-    {
-
-    }
-
-    /// <summary>
     /// Update is called once per frame.
     /// </summary>
     private void Update()
     {
-        if (PauseManager.instance.flags.isActive)
+        if (PauseManager.instance.flags.isActive && flags.isActive)
         {
             GetInput();
         }
+
+
     }
 
     #endregion

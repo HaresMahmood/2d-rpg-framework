@@ -34,13 +34,5 @@ public class CharacterSpriteController : MonoBehaviour
         animator = transform.GetComponent<Animator>();
     }
 
-    /// <summary>
-    /// Update is called once per frame.
-    /// </summary>
-    private void Update()
-    {
-        
-    }
-
     #endregion
 }

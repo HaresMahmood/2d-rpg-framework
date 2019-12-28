@@ -84,7 +84,7 @@ public class SettingValue : MonoBehaviour
 
     private void GetInput()
     {
-        if (SystemManager.instance.isActive && isSelected)
+        if (SystemManager.instance.flags.isActive && isSelected)
         {
             if (type != Type.Color)
             {

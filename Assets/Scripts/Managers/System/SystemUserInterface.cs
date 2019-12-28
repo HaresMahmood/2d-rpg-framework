@@ -82,6 +82,8 @@ public class SystemUserInterface : MonoBehaviour
         navOptions = navContainer.transform.Find("Options").GetChildren();
 
         AnimateNavigationOption(0, -1);
+
+        StartCoroutine(FindObjectOfType<BottomPanelUserInterface>().ChangePanelButtons(SystemManager.instance.buttons));
     }
 
     /// <summary>
