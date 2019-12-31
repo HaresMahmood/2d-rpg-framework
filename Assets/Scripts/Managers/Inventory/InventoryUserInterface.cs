@@ -296,27 +296,27 @@ public class InventoryUserInterface : MonoBehaviour
 
     private void AnimateCategoryColor(int selectedCategory, int previousCategory)
     {
-        if (categoryIcons[selectedCategory].GetComponentsInChildren<Image>().Length == 1)
+        if (categoryIcons[selectedCategory].Find("Icon").GetChildren().Length == 0)
         {
             StartCoroutine(categoryIcons[selectedCategory].GetComponentInChildren<Image>().gameObject.FadeColor(GameManager.GetAccentColor(), 0.1f));
         }
         else
         {
-            foreach (Transform child in categoryIcons[selectedCategory].GetChildren())
+            foreach (Transform child in categoryIcons[selectedCategory].Find("Icon").GetChildren())
             {
                 StartCoroutine(child.gameObject.FadeColor(GameManager.GetAccentColor(), 0.1f));
             }
         }
 
-        if (categoryIcons[previousCategory].GetComponentsInChildren<Image>().Length == 1)
+        if (categoryIcons[previousCategory].Find("Icon").GetChildren().Length == 0)
         {
             StartCoroutine(categoryIcons[previousCategory].GetComponentInChildren<Image>().gameObject.FadeColor(Color.white, 0.1f));
         }
         else
         {
-            foreach (Transform child in categoryIcons[previousCategory].GetChildren())
+            foreach (Transform child in categoryIcons[previousCategory].Find("Icon").GetChildren())
             {
-                StartCoroutine(child.gameObject.FadeColor(GameManager.GetAccentColor(), 0.1f));
+                StartCoroutine(child.gameObject.FadeColor(Color.white, 0.1f));
             }
         }
     }
@@ -342,11 +342,11 @@ public class InventoryUserInterface : MonoBehaviour
 
     private void AnimateCategory(int selectedCategory, int increment)
     {
-        int previousCategory = ExtensionMethods.IncrementInt(selectedCategory, 0, categoryIcons.Length, increment);
+        int previousCategory = ExtensionMethods.IncrementInt(selectedCategory, 0, categoryIcons.Length, -increment);
 
         AnimateCategoryPosition(selectedCategory, previousCategory, -increment);
-        StartCoroutine(AnimateCategoryIcon(selectedCategory, previousCategory, -increment));
         AnimateCategoryColor(selectedCategory, previousCategory);
+        StartCoroutine(AnimateCategoryIcon(selectedCategory, previousCategory, -increment));
         //StartCoroutine(AnimateArrows(increment));
     }
 
