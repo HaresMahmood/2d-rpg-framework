@@ -29,7 +29,7 @@ public class InventoryManager : MonoBehaviour
 
     public int selectedSlot { get; private set; } = 0; // TODO: Should be private field
     private int selectedCategory = 0;
-    private int selectedButton = 0;
+    public int selectedButton { get; private set; } = 0;
 
     #endregion
 
@@ -96,10 +96,10 @@ public class InventoryManager : MonoBehaviour
 
     public void CloseSelectionMenu(int selectedButton = -1)
     {
+        userInterface.CloseSubMenu(selectedButton);
+
         flags.isItemSelected = selectedButton > -1 ? true : false;
         this.selectedButton = selectedButton > -1 ? this.selectedButton : 0;
-
-        userInterface.CloseSubMenu(selectedButton);
     }
 
     private void UpdateSelectedCategory(int increment)

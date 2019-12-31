@@ -121,7 +121,7 @@ public class ItemInformation : MonoBehaviour
         }
         else
         {
-            UpdateSelectedButton(0, 0);
+            UpdateSelectedButton(InventoryManager.instance.selectedButton, 0);
 
             for (int i = 0; (i < buttons.Length || buttons[i].GetComponent<CanvasGroup>().alpha < 1); i++)
             {

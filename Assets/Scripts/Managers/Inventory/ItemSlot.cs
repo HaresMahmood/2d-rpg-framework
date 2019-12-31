@@ -36,7 +36,7 @@ public class ItemSlot : MonoBehaviour
         }
     }
 
-    public void PopulateSlot(Item item, float duration = -1)
+    public void PopulateSlot(Item item, float duration = -1, bool animate = true) // TODO: Make cleaner (no bool)
     {
         slot.gameObject.SetActive(true);
 
@@ -45,7 +45,10 @@ public class ItemSlot : MonoBehaviour
         favoriteTag.SetActive(item.isFavorite);
         newTag.SetActive(item.isNew);
 
-        AnimateSlot(1f, duration);
+        if (animate)
+        {
+            AnimateSlot(1f, duration);
+        }
     }
 
     #endregion

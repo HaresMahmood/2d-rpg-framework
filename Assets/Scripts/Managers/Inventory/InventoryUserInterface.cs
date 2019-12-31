@@ -30,6 +30,7 @@ public class InventoryUserInterface : MonoBehaviour
         informationPanel.transform.Find("Information (Horizontal)/Text").GetComponentInChildren<TextMeshProUGUI>().SetText("Select a Pokémon to use item on.");
         StartCoroutine(ActivateSidePanel());
         PauseManager.instance.flags.isUsingItem = true;
+        PauseManager.instance.flags.isGivingItem = false;
     }
 
     public void Give()
@@ -37,6 +38,7 @@ public class InventoryUserInterface : MonoBehaviour
         informationPanel.transform.Find("Information (Horizontal)/Text").GetComponentInChildren<TextMeshProUGUI>().SetText("Select a Pokémon to give item to.");
         StartCoroutine(ActivateSidePanel());
         PauseManager.instance.flags.isGivingItem = true;
+        PauseManager.instance.flags.isUsingItem = false;
     }
 
     public void Favorite(Item item)
@@ -45,6 +47,7 @@ public class InventoryUserInterface : MonoBehaviour
         Color favoriteColor = item.isFavorite ? "#EAC03E".ToColor() : "#FFFFFF".ToColor();
         StartCoroutine(GetComponentInChildren<ItemInformation>().buttons[itemButtons.IndexOf(itemButtons.Find(b => b.buttonName == "Favorite"))].Find("Big Icon/Icon").gameObject.FadeColor(favoriteColor, 0.1f));
         StartCoroutine(GetComponentInChildren<ItemInformation>().buttons[itemButtons.IndexOf(itemButtons.Find(b => b.buttonName == "Favorite"))].Find("Small Icon/Icon").gameObject.FadeColor(favoriteColor, 0.1f));
+        UpdateItem(InventoryManager.instance.selectedSlot);
     }
 
     public void Discard(Item item)
@@ -224,7 +227,7 @@ public class InventoryUserInterface : MonoBehaviour
 
     public void UpdateItem(int selectedSlot)
     {
-        itemGrid[selectedSlot].GetComponent<ItemSlot>().PopulateSlot(categoryItems[selectedSlot]);
+        itemGrid[selectedSlot].GetComponent<ItemSlot>().PopulateSlot(categoryItems[selectedSlot], -1, false);
     }
 
     /// <summary>
