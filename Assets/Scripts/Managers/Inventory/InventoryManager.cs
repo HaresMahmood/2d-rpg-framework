@@ -95,7 +95,7 @@ public class InventoryManager : MonoBehaviour
     public void CloseSelectionMenu(int selectedButton = -1)
     {
         flags.isItemSelected = selectedButton > -1 ? true : false;
-        this.selectedButton = 0;
+        this.selectedButton = selectedButton > -1 ? this.selectedButton : 0;
 
         userInterface.CloseSubMenu(selectedButton);
     }

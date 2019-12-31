@@ -114,6 +114,10 @@ public class ItemInformation : MonoBehaviour
                     buttons[i].gameObject.SetActive(false);
                 }
             }
+
+            Color favoriteColor = item.isFavorite ? "#EAC03E".ToColor() : "#FFFFFF".ToColor();
+            StartCoroutine(buttons[itemButtons.IndexOf(itemButtons.Find(b => b.buttonName == "Favorite"))].Find("Big Icon/Icon").gameObject.FadeColor(favoriteColor, 0.1f));
+            StartCoroutine(buttons[itemButtons.IndexOf(itemButtons.Find(b => b.buttonName == "Favorite"))].Find("Small Icon/Icon").gameObject.FadeColor(favoriteColor, 0.1f));
         }
         else
         {

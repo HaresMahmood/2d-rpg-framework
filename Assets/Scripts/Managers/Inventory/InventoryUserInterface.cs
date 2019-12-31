@@ -42,6 +42,9 @@ public class InventoryUserInterface : MonoBehaviour
     public void Favorite(Item item)
     {
         item.isFavorite = !item.isFavorite;
+        Color favoriteColor = item.isFavorite ? "#EAC03E".ToColor() : "#FFFFFF".ToColor();
+        StartCoroutine(GetComponentInChildren<ItemInformation>().buttons[itemButtons.IndexOf(itemButtons.Find(b => b.buttonName == "Favorite"))].Find("Big Icon/Icon").gameObject.FadeColor(favoriteColor, 0.1f));
+        StartCoroutine(GetComponentInChildren<ItemInformation>().buttons[itemButtons.IndexOf(itemButtons.Find(b => b.buttonName == "Favorite"))].Find("Small Icon/Icon").gameObject.FadeColor(favoriteColor, 0.1f));
     }
 
     public void Discard(Item item)
