@@ -10,10 +10,12 @@ using UnityEngine.Events;
 public class ItemBehavior
 {
     public string buttonName;
+    public Sprite iconSprite;
     public UnityEvent behaviorEvent = new UnityEvent();
 
-    public ItemBehavior(string buttonName)
+    public ItemBehavior(string buttonName, Sprite iconSprite)
     {
         this.buttonName = buttonName;
+        this.iconSprite = iconSprite;
     }
 }

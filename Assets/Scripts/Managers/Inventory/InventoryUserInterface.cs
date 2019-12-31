@@ -270,6 +270,11 @@ public class InventoryUserInterface : MonoBehaviour
         StartCoroutine(informationPanel.GetComponent<ItemInformation>().SetInformation(categoryItems.Count == 0 ? null : categoryItems[selectedItem]));
     }
 
+    public void UpdateSelectedButton(int selectedButton, int increment)
+    {
+        informationPanel.GetComponent<ItemInformation>().UpdateSelectedButton(selectedButton, increment);
+    }
+
     public void UpdateSortingMethod(Inventory inventory, InventoryManager.SortingMethod sortingMethod, int selectedCategory)
     {
         AnimateSortingMethodText(sortingMethod);

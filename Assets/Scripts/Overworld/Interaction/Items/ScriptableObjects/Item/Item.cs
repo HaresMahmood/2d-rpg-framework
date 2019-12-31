@@ -6,7 +6,7 @@ public class Item : ScriptableObject
 {
     #region Fields
 
-    [SerializeField] private int id; // PropertyBackingField, RevealProperty("ID")
+    [SerializeField] private int id;
 
     #endregion
 
@@ -54,8 +54,8 @@ public class Item : ScriptableObject
     {
         List<ItemBehavior> behavior = new List<ItemBehavior>
         {
-            new ItemBehavior("Use"),
-            new ItemBehavior("Give")
+            new ItemBehavior("Use", InventoryMenuIcons.instance.Icons[3]),
+            new ItemBehavior("Give", InventoryMenuIcons.instance.Icons[4])
         };
         behavior[0].behaviorEvent.AddListener(delegate { FindObjectOfType<InventoryUserInterface>().Use(); });
         behavior[1].behaviorEvent.AddListener(delegate { FindObjectOfType<InventoryUserInterface>().Give(); });
@@ -67,9 +67,9 @@ public class Item : ScriptableObject
     {
         List<ItemBehavior> behavior = new List<ItemBehavior>
         {
-            new ItemBehavior("Favorite"),
-            new ItemBehavior("Discard"),
-            new ItemBehavior("Cancel")
+            new ItemBehavior("Favorite", InventoryMenuIcons.instance.Icons[0]),
+            new ItemBehavior("Discard", InventoryMenuIcons.instance.Icons[1]),
+            new ItemBehavior("Cancel", InventoryMenuIcons.instance.Icons[2])
         };
         behavior[0].behaviorEvent.AddListener(delegate { FindObjectOfType<InventoryUserInterface>().Favorite(item); });
         behavior[1].behaviorEvent.AddListener(delegate { FindObjectOfType<InventoryUserInterface>().Discard(item); });

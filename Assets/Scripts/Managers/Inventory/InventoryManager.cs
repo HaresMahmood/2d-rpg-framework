@@ -111,9 +111,10 @@ public class InventoryManager : MonoBehaviour
         userInterface.UpdateSelectedItem(selectedItem);
     }
 
-    private void UpdateSelectedButton(int selectedButton)
+    private void UpdateSelectedButton(int selectedButton, int increment)
     {
         StartCoroutine(userInterface.UpdateIndicator(selectedButton, 0.1f, true));
+        userInterface.UpdateSelectedButton(selectedButton, increment);
     }
 
     private void GetInput()
@@ -161,7 +162,7 @@ public class InventoryManager : MonoBehaviour
             (selectedButton, hasInput) = input.GetInput("Horizontal", TestInput.Axis.Horizontal, userInterface.itemButtons.Count, selectedButton);
             if (hasInput)
             {
-                UpdateSelectedButton(selectedButton);
+                UpdateSelectedButton(selectedButton, -(int)Input.GetAxisRaw("Horizontal"));
             }
 
             if (Input.GetButtonDown("Interact"))

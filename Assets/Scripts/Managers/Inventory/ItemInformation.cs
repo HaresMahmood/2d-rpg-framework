@@ -69,6 +69,14 @@ public class ItemInformation : MonoBehaviour
         }
     }
 
+    public void UpdateSelectedButton(int selectedButton, int increment)
+    {
+        int previousButton = ExtensionMethods.IncrementInt(selectedButton, 0, buttons.Length, increment);
+
+        buttons[selectedButton].GetComponent<Animator>().SetBool("isSelected", true);
+        buttons[previousButton].GetComponent<Animator>().SetBool("isSelected", false);
+    }
+
     /// <summary>
     /// Sets correct information for and animates sub-menu buttons.
     /// </summary>
@@ -83,6 +91,8 @@ public class ItemInformation : MonoBehaviour
             List<ItemBehavior> itemButtons = item.GenerateButtons(); 
             FindObjectOfType<InventoryUserInterface>().itemButtons = itemButtons;
 
+            UpdateSelectedButton(0, -1);
+
             for (int i = 0; i < itemButtons.Count; i++)
             {
                 buttons[i].gameObject.SetActive(true);
@@ -92,6 +102,9 @@ public class ItemInformation : MonoBehaviour
                 if (Array.IndexOf(buttons, buttons[i]) < itemButtons.Count)
                 {
                     buttons[i].GetComponentInChildren<TextMeshProUGUI>().SetText(itemButtons[i].buttonName);
+                    buttons[i].Find("Small Icon").GetComponentInChildren<Image>().sprite = itemButtons[i].iconSprite;
+                    buttons[i].Find("Big Icon").GetComponentInChildren<Image>().sprite = itemButtons[i].iconSprite;
+
                     StartCoroutine(buttons[i].gameObject.FadeOpacity(1f, duration));
 
                     yield return new WaitForSecondsRealtime(delay);
@@ -104,6 +117,8 @@ public class ItemInformation : MonoBehaviour
         }
         else
         {
+            UpdateSelectedButton(0, 0);
+
             for (int i = 0; (i < buttons.Length || buttons[i].GetComponent<CanvasGroup>().alpha < 1); i++)
             {
                 StartCoroutine(buttons[i].gameObject.FadeOpacity(0f, duration));
