@@ -288,19 +288,41 @@ public class InventoryUserInterface : MonoBehaviour
 
     }
 
-    private void AnimateCategoryPosition(int selectedCategory, int increment)
+    private void AnimateCategoryPosition(int selectedCategory, int previousCategory, int increment)
     {
-        int previousCategory = ExtensionMethods.IncrementInt(selectedCategory, 0, categoryIcons.Length, increment);
-
         categoryIcons[selectedCategory].GetComponent<Animator>().SetBool("isSelected", true);
-        StartCoroutine(categoryIcons[selectedCategory].GetComponentInChildren<Image>().gameObject.FadeColor(GameManager.GetAccentColor(), 0.1f));
         categoryIcons[previousCategory].GetComponent<Animator>().SetBool("isSelected", false);
-        StartCoroutine(categoryIcons[previousCategory].GetComponentInChildren<Image>().gameObject.FadeColor(Color.white, 0.1f));
     }
 
-    private IEnumerator AnimateCategoryIcon(int selectedCategory, int increment)
+    private void AnimateCategoryColor(int selectedCategory, int previousCategory)
     {
-        int previousCategory = ExtensionMethods.IncrementInt(selectedCategory, 0, categoryIcons.Length, increment);
+        if (categoryIcons[selectedCategory].GetComponentsInChildren<Image>().Length == 1)
+        {
+            StartCoroutine(categoryIcons[selectedCategory].GetComponentInChildren<Image>().gameObject.FadeColor(GameManager.GetAccentColor(), 0.1f));
+        }
+        else
+        {
+            foreach (Transform child in categoryIcons[selectedCategory].GetChildren())
+            {
+                StartCoroutine(child.gameObject.FadeColor(GameManager.GetAccentColor(), 0.1f));
+            }
+        }
+
+        if (categoryIcons[previousCategory].GetComponentsInChildren<Image>().Length == 1)
+        {
+            StartCoroutine(categoryIcons[previousCategory].GetComponentInChildren<Image>().gameObject.FadeColor(Color.white, 0.1f));
+        }
+        else
+        {
+            foreach (Transform child in categoryIcons[previousCategory].GetChildren())
+            {
+                StartCoroutine(child.gameObject.FadeColor(GameManager.GetAccentColor(), 0.1f));
+            }
+        }
+    }
+
+    private IEnumerator AnimateCategoryIcon(int selectedCategory, int previousCategory, int increment)
+    {
         Animator selectedAnimator = categoryIcons[selectedCategory].Find("Icon").GetComponent<Animator>();
         Animator previousAnimator = categoryIcons[previousCategory].Find("Icon").GetComponent<Animator>();
 
@@ -320,8 +342,11 @@ public class InventoryUserInterface : MonoBehaviour
 
     private void AnimateCategory(int selectedCategory, int increment)
     {
-        AnimateCategoryPosition(selectedCategory, -increment);
-        StartCoroutine(AnimateCategoryIcon(selectedCategory, -increment));
+        int previousCategory = ExtensionMethods.IncrementInt(selectedCategory, 0, categoryIcons.Length, increment);
+
+        AnimateCategoryPosition(selectedCategory, previousCategory, -increment);
+        StartCoroutine(AnimateCategoryIcon(selectedCategory, previousCategory, -increment));
+        AnimateCategoryColor(selectedCategory, previousCategory);
         //StartCoroutine(AnimateArrows(increment));
     }
 
