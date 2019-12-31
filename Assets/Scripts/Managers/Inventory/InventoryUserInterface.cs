@@ -222,6 +222,11 @@ public class InventoryUserInterface : MonoBehaviour
         }
     }
 
+    public void UpdateItem(int selectedSlot)
+    {
+        itemGrid[selectedSlot].GetComponent<ItemSlot>().PopulateSlot(categoryItems[selectedSlot]);
+    }
+
     /// <summary>
     /// Resets the opacity of all items in the selected category.
     /// </summary>
@@ -269,6 +274,7 @@ public class InventoryUserInterface : MonoBehaviour
 
     public void UpdateSelectedItem(int selectedItem)
     {
+        if (categoryItems.Count != 0) InventoryManager.instance.selectedItem = categoryItems[selectedItem];
         StartCoroutine(UpdateIndicator(selectedItem));
         StartCoroutine(informationPanel.GetComponent<ItemInformation>().SetInformation(categoryItems.Count == 0 ? null : categoryItems[selectedItem]));
     }

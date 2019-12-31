@@ -25,6 +25,8 @@ public class InventoryManager : MonoBehaviour
     private readonly TestInput input = new TestInput();
     public Flags flags = new Flags(false, false, false);
 
+    public Item selectedItem { get; set; }
+
     public int selectedSlot { get; private set; } = 0; // TODO: Should be private field
     private int selectedCategory = 0;
     private int selectedButton = 0;
@@ -115,6 +117,11 @@ public class InventoryManager : MonoBehaviour
     {
         StartCoroutine(userInterface.UpdateIndicator(selectedButton, 0.1f, true));
         userInterface.UpdateSelectedButton(selectedButton, increment);
+    }
+
+    public void UpdateItem()
+    {
+        userInterface.UpdateItem(selectedSlot);
     }
 
     private void GetInput()

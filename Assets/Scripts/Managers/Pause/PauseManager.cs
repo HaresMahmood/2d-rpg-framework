@@ -54,7 +54,9 @@ public class PauseManager : MonoBehaviour
 
     private void Use(Item item)
     {
-
+        item.amount--;
+        PartyManager.instance.party.playerParty[selectedSlot].stats.health = (int)PartyManager.instance.party.playerParty[selectedSlot].totalHealth;
+        userInterface.PopulateSideBar(PartyManager.instance.party);
     }
 
     private void Give(Item item)
@@ -161,7 +163,8 @@ public class PauseManager : MonoBehaviour
 
             if (Input.GetButtonDown("Interact"))
             {
-                //ApplyItemBehavior(InventoryManager.instance.selectedItem);
+                ApplyItemBehavior(InventoryManager.instance.selectedItem);
+                InventoryManager.instance.UpdateItem();
                 DeactivateSidePanel();
             }
         }
