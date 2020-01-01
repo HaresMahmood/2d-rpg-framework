@@ -18,13 +18,13 @@ public class PauseManager : MonoBehaviour
     [Header("Setup")]
     [SerializeField] private PauseUserInterface userInterface;
 
-    private TestInput input = new TestInput();
+    private readonly TestInput input = new TestInput();
     public Flags flags = new Flags(false, false, false, false);
 
     public GameObject pauseContainer { get; private set; }
 
-    public int selectedSlot;
-    public int selectedMenu;
+    public int selectedSlot { get; private set; }
+    private int selectedMenu;
 
     //public event EventHandler OnUserInput = delegate { };
 
