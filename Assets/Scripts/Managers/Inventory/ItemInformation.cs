@@ -123,10 +123,9 @@ public class ItemInformation : MonoBehaviour
         {
             UpdateSelectedButton(InventoryManager.instance.selectedButton, 0);
 
-            for (int i = 0; (i < buttons.Length || buttons[i].GetComponent<CanvasGroup>().alpha < 1); i++)
+            for (int i = 0; (i < buttons.Length && buttons[i].GetComponent<CanvasGroup>().alpha == 1); i++)
             {
                 StartCoroutine(buttons[i].gameObject.FadeOpacity(0f, duration));
-
                 yield return new WaitForSecondsRealtime(delay);
             }
 
