@@ -35,7 +35,7 @@ public class PartyManager : MonoBehaviour
 
     public GameObject pauseContainer { get; private set; }
 
-    public int selectedMove;
+    private int selectedMove;
 
     //public event EventHandler OnUserInput = delegate { };
 

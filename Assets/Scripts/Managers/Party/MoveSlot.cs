@@ -66,6 +66,8 @@ public class MoveSlot : MonoBehaviour
 
         physicalIcon = statistics.Find("Category/Category/Physical").gameObject;
         specialIcon = statistics.Find("Category/Category/Special").gameObject;
+        accuracyText = statistics.Find("Accuracy/Accuracy").GetComponent<TextMeshProUGUI>();
+        powertext = statistics.Find("Power/Power").GetComponent<TextMeshProUGUI>();
     }
 
     #endregion

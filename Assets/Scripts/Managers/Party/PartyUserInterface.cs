@@ -21,15 +21,17 @@ public class PartyUserInterface : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    private void UpdateInformation(Party party, int selectedMember)
+    public void UpdateInformation(Party party, int selectedMember)
     {
         Pokemon member = party.playerParty[selectedMember];
 
         informationPanel.UpdateInformation(member);
+
         for (int i = 0; i < movePanels.Length; i++)
         {
-            DrawMove(i, member.learnedMoves[i]);
+            movePanels[i].GetComponent<MoveSlot>().UpdateInformation(member.learnedMoves[i]);
         }
+
         DrawSprite(member);
     }
 
@@ -39,6 +41,7 @@ public class PartyUserInterface : MonoBehaviour
         PauseManager.instance.pauseContainer.transform.Find("Target Sprite/Pokémon/Sprite").GetComponent<Image>().SetNativeSize();
     }
 
+    /*
     public void Fade(float opacity)
     {
         Transform[] children = partyContainer.transform.GetChildren();
@@ -165,6 +168,7 @@ public class PartyUserInterface : MonoBehaviour
             indicator.SetActive(true);
         }
     }
+    */
 
     #endregion
 
@@ -185,6 +189,8 @@ public class PartyUserInterface : MonoBehaviour
         radarChartMesh = transform.Find("Stats/Chart/Radar Mesh").GetComponent<CanvasRenderer>();
 
         informationPanel = transform.Find("Information").GetComponent<MemberInformation>();
+
+        UpdateInformation(PartyManager.instance.party, 0);
     }
 
     #endregion
