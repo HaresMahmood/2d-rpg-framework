@@ -65,7 +65,7 @@ public class CharMovement : MovingObject
     {
         base.Update();
 
-        if (!canMove || isMoving || onCoolDown || onExit) return; // We wait until NPC is done moving.
+        if (!canMove || isMoving || onCoolDown || onExit || PauseManager.instance.flags.isActive) return; // We wait until NPC is done moving or while the game is paused.
 
         if (direction == Vector3.zero)
         {
