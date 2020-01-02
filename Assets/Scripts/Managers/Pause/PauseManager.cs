@@ -136,6 +136,13 @@ public class PauseManager : MonoBehaviour
         userInterface.UpdateMenus(selectedMenu, increment, animationDuration, animate);
     }
 
+    private void AnimateBackground(float distance, int increment)
+    {
+        float direction = increment * distance;
+        Vector2 targetPosition = new Vector2(CameraController.instance.GetPosition().x + direction, CameraController.instance.GetPosition().y);
+        StartCoroutine(CameraController.instance.LerpCamera(targetPosition, 0.2f));
+    }
+
     private void GetInput()
     {
         if (!flags.isInPartyMenu)
@@ -145,6 +152,7 @@ public class PauseManager : MonoBehaviour
             if (hasInput)
             {
                 UpdateMenus(selectedMenu, -(int)Input.GetAxisRaw("Face Trigger"), 0.15f);
+                AnimateBackground(0.2f, -(int)Input.GetAxisRaw("Face Trigger"));
             }
         }
         else

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
@@ -28,7 +29,7 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     private void LateUpdate()
     {
-        if (transform.position != target.position)
+        if (!PauseManager.instance.flags.isActive && (transform.position != target.position))
         {
             Vector3 targetPos = new Vector3(target.position.x, target.position.y, transform.position.z);
             transform.position = Vector3.Lerp(transform.position, targetPos, moveSpeed * Time.deltaTime);
@@ -58,5 +59,29 @@ public class CameraController : MonoBehaviour
     public void ZoomCamera(float targetSize, float time)
     {
         cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, targetSize, time * Time.deltaTime);
+    }
+
+    public IEnumerator LerpCamera(Vector2 targetPosition, float duration)
+    {
+        Vector3 startPosition = cam.transform.position;
+
+        float t = 0; // Tracks how many seconds we've been fading.
+        while (t < duration) // While time is less than the duration of the fade, ...
+        {
+            if (Time.timeScale == 0)
+                t += Time.unscaledDeltaTime;
+            else
+                t += Time.deltaTime;
+            float blend = Mathf.Clamp01(t / duration); // Turns the time into an interpolation factor between 0 and 1. 
+
+            cam.transform.position = Vector3.Lerp(startPosition, new Vector3(targetPosition.x, targetPosition.y, startPosition.z), blend); // Blends to the corresponding opacity between start & target.
+
+            yield return null; // Wait one frame, then repeat.
+        }
+    }
+
+    public Vector2 GetPosition()
+    {
+        return cam.transform.position;
     }
 }
