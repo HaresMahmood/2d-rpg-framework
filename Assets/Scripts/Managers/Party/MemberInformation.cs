@@ -95,10 +95,10 @@ public class MemberInformation : MonoBehaviour // TODO: Think of better name.
         //abilityDescriptionText.SetText("Test description");
         //natureText.SetText(pokemon.nature);
 
-        heldItemText.SetText(pokemon.heldItem.Name);
-        heldItemSprite.sprite = pokemon.heldItem.sprite;
+        //heldItemText.SetText(pokemon.heldItem.Name);
+        //heldItemSprite.sprite = pokemon.heldItem.sprite;
         //effectText.SetText(pokemon.heldItem.effect);
-        itemDescriptionText.SetText(pokemon.heldItem.description);
+        //itemDescriptionText.SetText(pokemon.heldItem.description);
     }
 
     #endregion
@@ -130,8 +130,8 @@ public class MemberInformation : MonoBehaviour // TODO: Think of better name.
         abilityDescriptionText = abilityText = ability.Find("Description/Value").GetComponent<TextMeshProUGUI>();
         natureText = abilityText = ability.Find("Nature/Value").GetComponent<TextMeshProUGUI>();
 
-        heldItemText = item.Find("Item Name").GetComponent<TextMeshProUGUI>();
-        heldItemSprite = item.Find("Item Sprite").GetComponent<Image>();
+        heldItemText = item.Find("Held Item/Text/Value").GetComponent<TextMeshProUGUI>();
+        heldItemSprite = item.Find("Held Item/Icon/Value").GetComponent<Image>();
         effectText = item.Find("Effect/Value").GetComponent<TextMeshProUGUI>();
         itemDescriptionText = item.Find("Description/Value").GetComponent<TextMeshProUGUI>();
     }

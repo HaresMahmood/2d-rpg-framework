@@ -12,7 +12,7 @@ public class PartyUserInterface : MonoBehaviour
     #region Variables
 
     private GameObject indicator, movesPanel;
-    private Transform[] movePanels, movePositioners;
+    private Transform[] informationPanels, movePanels;
     private CanvasRenderer radarChartMesh;
 
     private MemberInformation informationPanel;
@@ -26,11 +26,18 @@ public class PartyUserInterface : MonoBehaviour
         Pokemon member = party.playerParty[selectedMember];
 
         informationPanel.UpdateInformation(member);
+        informationPanels[0].GetComponent<InformationContainer>().UpdatePanel(true);
+        informationPanels[1].GetComponent<InformationContainer>().UpdatePanel(false);
+        informationPanels[2].GetComponent<InformationContainer>().UpdatePanel(false);
+        informationPanels[3].GetComponent<InformationContainer>().UpdatePanel(false);
 
         for (int i = 0; i < movePanels.Length; i++)
         {
             movePanels[i].GetComponent<MoveSlot>().UpdateInformation(member.learnedMoves[i]);
+            movePanels[i].GetComponent<InformationContainer>().UpdatePanel(false);
         }
+
+        movePanels[0].GetComponent<InformationContainer>().UpdatePanel(true);
 
         DrawSprite(member);
     }
@@ -183,9 +190,8 @@ public class PartyUserInterface : MonoBehaviour
         movesPanel = transform.Find("Middle/Moves").gameObject;
         informationPanel = transform.Find("Middle/Information").GetComponent<MemberInformation>();
 
-        Transform[] panelContainers = movesPanel.transform.GetChildren();
-        movePanels = panelContainers.Where((x, i) => i % 2 == 0).ToArray();
-        movePositioners = panelContainers.Where((x, i) => i % 2 != 0).ToArray();
+        informationPanels = informationPanel.transform.GetChildren();
+        movePanels = movesPanel.transform.GetChildren();
 
         radarChartMesh = transform.Find("Middle/Stats/Chart/Radar Mesh").GetComponent<CanvasRenderer>();
 
