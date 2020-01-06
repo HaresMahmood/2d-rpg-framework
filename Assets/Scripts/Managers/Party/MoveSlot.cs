@@ -13,7 +13,7 @@ public class MoveSlot : MonoBehaviour
 
     Transform information;
     Transform statistics;
-    TextMeshProUGUI description;
+    TextMeshProUGUI descriptionText;
 
     TextMeshProUGUI moveNameText;
     TextMeshProUGUI ppText;
@@ -41,7 +41,7 @@ public class MoveSlot : MonoBehaviour
         accuracyText.SetText(move.move.accuracy.ToString());
         powertext.SetText(move.move.power.ToString());
 
-        description.SetText(move.move.description);
+        descriptionText.SetText(move.move.description);
 
         panel.color = move.move.UIColor;
     }
@@ -59,15 +59,15 @@ public class MoveSlot : MonoBehaviour
 
         information = transform.Find("Information");
         statistics = transform.Find("Stats");
-        description = transform.Find("Description/Description").GetComponent<TextMeshProUGUI>();
+        descriptionText = transform.Find("Description/Value").GetComponent<TextMeshProUGUI>();
 
-        moveNameText = information.Find("Name").GetComponent<TextMeshProUGUI>();
-        ppText = information.Find("PP/PP").GetComponent<TextMeshProUGUI>();
+        moveNameText = information.Find("Name/Value").GetComponent<TextMeshProUGUI>();
+        ppText = information.Find("Statistics/PP/Value").GetComponent<TextMeshProUGUI>();
 
-        physicalIcon = statistics.Find("Category/Category/Physical").gameObject;
-        specialIcon = statistics.Find("Category/Category/Special").gameObject;
-        accuracyText = statistics.Find("Accuracy/Accuracy").GetComponent<TextMeshProUGUI>();
-        powertext = statistics.Find("Power/Power").GetComponent<TextMeshProUGUI>();
+        physicalIcon = statistics.Find("Category/Value/Physical").gameObject;
+        specialIcon = statistics.Find("Category/Value/Special").gameObject;
+        accuracyText = statistics.Find("Accuracy/Value").GetComponent<TextMeshProUGUI>();
+        powertext = statistics.Find("Power/Value").GetComponent<TextMeshProUGUI>();
     }
 
     #endregion

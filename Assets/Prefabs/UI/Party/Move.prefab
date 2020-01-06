@@ -766,7 +766,7 @@ GameObject:
   - component: {fileID: 7571188522684697411}
   - component: {fileID: 3256364995021103128}
   m_Layer: 5
-  m_Name: Accuracy
+  m_Name: Value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1893,7 +1893,7 @@ GameObject:
   - component: {fileID: 8478430964411274199}
   - component: {fileID: 3974481471232978917}
   m_Layer: 5
-  m_Name: Power
+  m_Name: Value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2285,7 +2285,6 @@ GameObject:
   - component: {fileID: 2488694132555451500}
   - component: {fileID: 5955843302209477786}
   - component: {fileID: 7264352527339342001}
-  - component: {fileID: 818159290157354356}
   - component: {fileID: 2191217732374690327}
   m_Layer: 5
   m_Name: Move
@@ -2410,19 +2409,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &818159290157354356
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7398889604422325857}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc505d936a197074f82be814320665a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  positioner: {fileID: 0}
 --- !u!114 &2191217732374690327
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2447,7 +2433,7 @@ GameObject:
   - component: {fileID: 4811530164662138658}
   - component: {fileID: 1707263630695804954}
   m_Layer: 5
-  m_Name: Description
+  m_Name: Value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -180,15 +180,14 @@ public class PartyUserInterface : MonoBehaviour
     private void Start()
     {
         indicator = transform.Find("Indicator").gameObject;
-        movesPanel = transform.Find("Moves").gameObject;
+        movesPanel = transform.Find("Middle/Moves").gameObject;
+        informationPanel = transform.Find("Middle/Information").GetComponent<MemberInformation>();
 
         Transform[] panelContainers = movesPanel.transform.GetChildren();
         movePanels = panelContainers.Where((x, i) => i % 2 == 0).ToArray();
         movePositioners = panelContainers.Where((x, i) => i % 2 != 0).ToArray();
 
-        radarChartMesh = transform.Find("Stats/Chart/Radar Mesh").GetComponent<CanvasRenderer>();
-
-        informationPanel = transform.Find("Information").GetComponent<MemberInformation>();
+        radarChartMesh = transform.Find("Middle/Stats/Chart/Radar Mesh").GetComponent<CanvasRenderer>();
 
         UpdateInformation(PartyManager.instance.party, 0);
     }
