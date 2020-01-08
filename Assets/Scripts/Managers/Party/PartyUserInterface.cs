@@ -12,7 +12,7 @@ public class PartyUserInterface : MonoBehaviour
     #region Variables
 
     private GameObject indicator, movesPanel;
-    private Transform[] informationPanels, movePanels;
+    private Transform[] informationPanels, movesPanels, selectedPanel;
     private CanvasRenderer radarChartMesh;
 
     private MemberInformation informationPanel;
@@ -21,7 +21,7 @@ public class PartyUserInterface : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    public void UpdateInformation(Party party, int selectedMember)
+    public void InitializeMenu(Party party, int selectedMember)
     {
         Pokemon member = party.playerParty[selectedMember];
 
@@ -31,15 +31,49 @@ public class PartyUserInterface : MonoBehaviour
         informationPanels[2].GetComponent<InformationContainer>().UpdatePanel(false);
         informationPanels[3].GetComponent<InformationContainer>().UpdatePanel(false);
 
-        for (int i = 0; i < movePanels.Length; i++)
+        for (int i = 0; i < movesPanels.Length; i++)
         {
-            movePanels[i].GetComponent<MoveSlot>().UpdateInformation(member.learnedMoves[i]);
-            movePanels[i].GetComponent<InformationContainer>().UpdatePanel(false);
+            movesPanels[i].GetComponent<MoveSlot>().UpdateInformation(member.learnedMoves[i]);
+            movesPanels[i].GetComponent<InformationContainer>().UpdatePanel(false);
         }
 
-        movePanels[0].GetComponent<InformationContainer>().UpdatePanel(true);
+        movesPanels[0].GetComponent<InformationContainer>().UpdatePanel(true);
 
+       LayoutRebuilder.ForceRebuildLayoutImmediate(informationPanel.transform.parent.GetComponent<RectTransform>());
+
+        UpdateSelectedPanel(0);
+        StartCoroutine(UpdateIndicator(0));
         DrawSprite(member);
+    }
+
+    public IEnumerator UpdateIndicator(int selectedSlot, float duration = 0.1f)
+    {
+        indicator.GetComponent<Animator>().enabled = false;
+        StartCoroutine(indicator.FadeOpacity(0f, duration));
+        yield return new WaitForSecondsRealtime(duration);
+
+        indicator.transform.position = this.selectedPanel[selectedSlot].position;
+        indicator.GetComponent<RectTransform>().sizeDelta = this.selectedPanel[selectedSlot].GetComponent<RectTransform>().sizeDelta;
+
+        yield return null;
+        indicator.GetComponent<Animator>().enabled = true;
+    }
+
+    public void UpdateSelectedPanel(int selectedPanel, float duration = 0.15f)
+    {
+        StartCoroutine(this.selectedPanel[0].parent.gameObject.FadeOpacity(0.7f, duration));
+        this.selectedPanel = selectedPanel == 0 ? informationPanels : movesPanels;
+        StartCoroutine(this.selectedPanel[0].parent.gameObject.FadeOpacity(1f, duration));
+    }
+
+    public void UpdateSelectedSlot(int selectedSlot, int increment)
+    {
+        int previousSlot = ExtensionMethods.IncrementInt(selectedSlot, 0, 4, increment);
+
+        selectedPanel[selectedSlot].GetComponent<InformationContainer>().UpdatePanel(true);
+        selectedPanel[previousSlot].GetComponent<InformationContainer>().UpdatePanel(false);
+
+        LayoutRebuilder.ForceRebuildLayoutImmediate(selectedPanel[0].parent.GetComponent<RectTransform>());
     }
 
     private void DrawSprite(Pokemon pokemon)
@@ -191,11 +225,12 @@ public class PartyUserInterface : MonoBehaviour
         informationPanel = transform.Find("Middle/Information").GetComponent<MemberInformation>();
 
         informationPanels = informationPanel.transform.GetChildren();
-        movePanels = movesPanel.transform.GetChildren();
+        movesPanels = movesPanel.transform.GetChildren();
+        selectedPanel = movesPanels;
 
         radarChartMesh = transform.Find("Middle/Stats/Chart/Radar Mesh").GetComponent<CanvasRenderer>();
 
-        UpdateInformation(PartyManager.instance.party, 0);
+        InitializeMenu(PartyManager.instance.party, 0);
     }
 
     #endregion

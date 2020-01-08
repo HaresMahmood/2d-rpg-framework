@@ -11,13 +11,6 @@ using UnityEngine.UI;
 /// </summary>
 public class PartyManager : MonoBehaviour
 {
-    
-    #region Variables
-
-    private int lastInput;
-
-    #endregion
-
     #region Variables
 
     public static PartyManager instance;
@@ -35,7 +28,9 @@ public class PartyManager : MonoBehaviour
 
     public GameObject pauseContainer { get; private set; }
 
+    private int selectedInformation;
     private int selectedMove;
+    private int selectedPanel;
 
     //public event EventHandler OnUserInput = delegate { };
 
@@ -57,22 +52,46 @@ public class PartyManager : MonoBehaviour
 
     #region Miscellaneous Methods
 
+    private void UpdateSelectedSlot(int selectedSlot, int increment)
+    {
+        userInterface.UpdateSelectedSlot(selectedSlot, increment);
+        StartCoroutine(userInterface.UpdateIndicator(selectedSlot));
+    }
+
     private void GetInput()
     {
-        int totalMoves = party.playerParty[PauseManager.instance.selectedSlot].learnedMoves.Count;
-        bool hasInput;
+        if (Input.GetAxisRaw("Horizontal") == 0)
+        {
+            bool hasInput;
+            int selectedSlot = selectedPanel == 0 ? selectedInformation : selectedMove;
 
-        (selectedMove, hasInput) = input.GetInput("Vertical", TestInput.Axis.Vertical, totalMoves, selectedMove);
-        if (hasInput)
-        {
-            // Update moveslot (animate)
+            (selectedSlot, hasInput) = input.GetInput("Vertical", TestInput.Axis.Vertical, 4, selectedSlot);
+            if (hasInput)
+            {
+                if (selectedPanel == 0)
+                {
+                    selectedInformation = selectedSlot;
+                }
+                else
+                {
+                    selectedMove = selectedSlot;
+                }
+
+                UpdateSelectedSlot(selectedSlot, (int)Input.GetAxisRaw("Vertical"));
+            }
         }
-        /*
-        if ((int)Input.GetAxisRaw("Vertical") != lastInput)
+        else
         {
-            lastInput = (int)Input.GetAxisRaw("Vertical");
+            bool hasInput;
+
+            (selectedPanel, hasInput) = input.GetInput("Horizontal", TestInput.Axis.Horizontal, 2, selectedPanel);
+            if (hasInput)
+            {
+                userInterface.UpdateSelectedPanel(selectedPanel);
+                int selectedSlot = selectedPanel == 0 ? selectedInformation : selectedMove;
+                StartCoroutine(userInterface.UpdateIndicator(selectedSlot));
+            }
         }
-        */
     }
     
     #endregion
@@ -93,10 +112,11 @@ public class PartyManager : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        if (PauseManager.instance.flags.isActive && flags.isActive)
+        if (PauseManager.instance.flags.isActive) // && flags.isActive
         {
             GetInput();
         }
+
 
         /*
         if (PauseManager.instance.selectedSlot < party.playerParty.Count)
@@ -127,5 +147,5 @@ public class PartyManager : MonoBehaviour
         */
     }
 
-    #endregion
-}
+        #endregion
+    }

@@ -35,7 +35,7 @@ public class PauseUserInterface : MonoBehaviour
                 }
             case (1):
                 {
-                    
+                    FindObjectOfType<PauseManager>().flags.isActive = state;
                     break;
                 }
             case (2):
