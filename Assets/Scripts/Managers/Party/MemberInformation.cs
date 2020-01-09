@@ -83,7 +83,7 @@ public class MemberInformation : MonoBehaviour // TODO: Think of better name.
     {
         nameText.SetText(pokemon.name);
         categoryText.SetText(pokemon.category.ToUpper()); categoryText.GetComponent<AutoTextWidth>().UpdateWidth(pokemon.category.ToUpper());
-        dexText.SetText(pokemon.id.ToString()); dexText.GetComponent<AutoTextWidth>().UpdateWidth(pokemon.id.ToString());
+        dexText.SetText(pokemon.id.ToString()); dexText.GetComponent<AutoTextWidth>().UpdateWidth(pokemon.id.ToString("000"));
         statusText.SetText(pokemon.status.ToString());
 
         levelText.SetText(pokemon.level.ToString());

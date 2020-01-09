@@ -1,6 +1,6 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 ///
@@ -26,9 +26,14 @@ public class InformationContainer : MonoBehaviour
         informationPanels[2].gameObject.SetActive(isSelected);
     }
 
-    private void AnimatePanel(bool isSelected)
+    private IEnumerator AnimatePanel(bool isSelected)
     {
+        GetComponent<Animator>().SetBool("isSelected", isSelected);
 
+        float duration = GetComponent<Animator>().GetAnimationTime();
+        yield return new WaitForSecondsRealtime(duration);
+        LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponent<RectTransform>());
+        LayoutRebuilder.ForceRebuildLayoutImmediate(transform.parent.GetComponent<RectTransform>());
     }
 
     #endregion

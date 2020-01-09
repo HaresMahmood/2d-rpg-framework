@@ -20,7 +20,7 @@ public class PartyManager : MonoBehaviour
     [SerializeField] private PartyUserInterface userInterface;
     public List<PanelButton> buttons = new List<PanelButton>();
 
-    [UnityEngine.Header("Settings")]
+    [Header("Settings")]
     [SerializeField] private Material chartMaterial;
 
     private readonly TestInput input = new TestInput();
@@ -52,12 +52,6 @@ public class PartyManager : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    private void UpdateSelectedSlot(int selectedSlot, int increment)
-    {
-        userInterface.UpdateSelectedSlot(selectedSlot, increment);
-        StartCoroutine(userInterface.UpdateIndicator(selectedSlot));
-    }
-
     private void GetInput()
     {
         if (Input.GetAxisRaw("Horizontal") == 0)
@@ -77,7 +71,7 @@ public class PartyManager : MonoBehaviour
                     selectedMove = selectedSlot;
                 }
 
-                UpdateSelectedSlot(selectedSlot, (int)Input.GetAxisRaw("Vertical"));
+                StartCoroutine(userInterface.UpdateSelectedSlot(selectedSlot, (int)Input.GetAxisRaw("Vertical")));
             }
         }
         else
@@ -89,7 +83,7 @@ public class PartyManager : MonoBehaviour
             {
                 userInterface.UpdateSelectedPanel(selectedPanel);
                 int selectedSlot = selectedPanel == 0 ? selectedInformation : selectedMove;
-                StartCoroutine(userInterface.UpdateIndicator(selectedSlot));
+                StartCoroutine(userInterface.UpdateSelectedSlot(selectedSlot, -1));
             }
         }
     }
