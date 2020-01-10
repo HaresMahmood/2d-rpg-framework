@@ -1,4 +1,6 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +14,7 @@ public class InformationContainer : MonoBehaviour
     [Header("Values")]
     [SerializeField] [ReadOnly] private bool isSelected;
 
+    private RectTransform margin;
     private Transform[] informationPanels;
 
     #endregion
@@ -24,16 +27,36 @@ public class InformationContainer : MonoBehaviour
 
         informationPanels[1].gameObject.SetActive(isSelected);
         informationPanels[2].gameObject.SetActive(isSelected);
+
+        AnimatePanel(isSelected);
     }
 
-    private IEnumerator AnimatePanel(bool isSelected)
+    public void AnimatePanel(bool isSelected)
     {
-        GetComponent<Animator>().SetBool("isSelected", isSelected);
+        float width = isSelected ? 100f : 0f;
+        StartCoroutine(ExpandMargin(width));
+        LayoutRebuilder.ForceRebuildLayoutImmediate(transform.GetComponent<RectTransform>());
+    }
 
-        float duration = GetComponent<Animator>().GetAnimationTime();
-        yield return new WaitForSecondsRealtime(duration);
-        LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponent<RectTransform>());
-        LayoutRebuilder.ForceRebuildLayoutImmediate(transform.parent.GetComponent<RectTransform>());
+    private IEnumerator ExpandMargin(float targetWidth, float duration = 0.15f)
+    {
+        Vector2 startWidth = margin.sizeDelta; // Creates a value of the initial opacity.
+
+        float t = 0; // Tracks how many seconds we've been fading.
+        while (t < duration) // While time is less than the duration of the fade, ...
+        {
+            if (Time.timeScale == 0)
+                t += Time.unscaledDeltaTime;
+            else
+                t += Time.deltaTime;
+            float blend = Mathf.Clamp01(t / duration); // Turns the time into an interpolation factor between 0 and 1. 
+
+            margin.sizeDelta = Vector2.Lerp(startWidth, new Vector2(targetWidth, margin.sizeDelta.y), blend); // Blends to the corresponding opacity between start & target.
+
+            LayoutRebuilder.ForceRebuildLayoutImmediate(transform.GetComponent<RectTransform>());
+
+            yield return null; // Wait one frame, then repeat.
+        }
     }
 
     #endregion
@@ -45,7 +68,9 @@ public class InformationContainer : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        informationPanels = transform.GetChildren();
+        margin = transform.Find("Margin").GetComponent<RectTransform>();
+        List<Transform> children = transform.GetChildren().ToList();
+        informationPanels = children.Find(x => x != margin.transform).GetChildren();
     }
 
     #endregion

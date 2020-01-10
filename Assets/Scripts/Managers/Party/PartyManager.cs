@@ -81,8 +81,9 @@ public class PartyManager : MonoBehaviour
             (selectedPanel, hasInput) = input.GetInput("Horizontal", TestInput.Axis.Horizontal, 2, selectedPanel);
             if (hasInput)
             {
-                userInterface.UpdateSelectedPanel(selectedPanel);
                 int selectedSlot = selectedPanel == 0 ? selectedInformation : selectedMove;
+                userInterface.UpdateSelectedPanel(selectedPanel, selectedSlot);
+                selectedSlot = selectedPanel == 0 ? selectedInformation : selectedMove;
                 StartCoroutine(userInterface.UpdateSelectedSlot(selectedSlot, -1));
             }
         }

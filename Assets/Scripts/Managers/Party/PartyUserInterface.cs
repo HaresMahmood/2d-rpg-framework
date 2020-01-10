@@ -33,7 +33,7 @@ public class PartyUserInterface : MonoBehaviour
 
         for (int i = 0; i < movesPanels.Length; i++)
         {
-            movesPanels[i].GetComponent<MoveSlot>().UpdateInformation(member.learnedMoves[i]);
+            movesPanels[i].GetComponentInChildren<MoveSlot>().UpdateInformation(member.learnedMoves[i]);
             movesPanels[i].GetComponent<InformationContainer>().UpdatePanel(false);
         }
 
@@ -41,18 +41,23 @@ public class PartyUserInterface : MonoBehaviour
 
        LayoutRebuilder.ForceRebuildLayoutImmediate(informationPanel.transform.parent.GetComponent<RectTransform>());
 
-        UpdateSelectedPanel(0);
+        UpdateSelectedPanel(0, 0);
         StartCoroutine(UpdateSelectedSlot(0, -1, 0.2f));
         DrawSprite(member);
     }
 
     public void UpdateIndicator(int selectedSlot)
     {
-        indicator.transform.position = selectedPanel[selectedSlot].position;
-        indicator.GetComponent<RectTransform>().sizeDelta = selectedPanel[selectedSlot].GetComponent<RectTransform>().sizeDelta;
+        Transform margin = selectedPanel[selectedSlot].Find("Margin").GetComponent<RectTransform>();
+        List<Transform> children = selectedPanel[selectedSlot].GetChildren().ToList();
+        Transform panel = children.Find(x => x != margin.transform);
+
+        //indicator.transform.position = new Vector2(panel.position.x + 50f, panel.position.y);
+        indicator.transform.position = panel.position;
+        indicator.GetComponent<RectTransform>().sizeDelta = panel.GetComponent<RectTransform>().sizeDelta;
     }
 
-    private IEnumerator FadeIndicator(bool fadeIn, float duration = 0.1f)
+    private IEnumerator FadeIndicator(bool fadeIn, float duration = 0.075f)
     {
         if (fadeIn)
         {
@@ -68,9 +73,11 @@ public class PartyUserInterface : MonoBehaviour
         }
     }
 
-    public void UpdateSelectedPanel(int selectedPanel, float duration = 0.2f)
+    public void UpdateSelectedPanel(int selectedPanel, int selectedSlot, float duration = 0.3f)
     {
         StartCoroutine(this.selectedPanel[0].parent.gameObject.FadeOpacity(0.7f, duration));
+        this.selectedPanel[selectedSlot].GetComponent<InformationContainer>().AnimatePanel(false);
+
         this.selectedPanel = selectedPanel == 0 ? informationPanels : movesPanels;
         StartCoroutine(this.selectedPanel[0].parent.gameObject.FadeOpacity(1f, duration));
     }
@@ -81,15 +88,13 @@ public class PartyUserInterface : MonoBehaviour
 
         selectedPanel[selectedSlot].GetComponent<InformationContainer>().UpdatePanel(true);
         selectedPanel[previousSlot].GetComponent<InformationContainer>().UpdatePanel(false);
-
-        LayoutRebuilder.ForceRebuildLayoutImmediate(selectedPanel[0].parent.GetComponent<RectTransform>());
     }
 
-    public IEnumerator UpdateSelectedSlot(int selectedSlot, int increment, float duration = 0.2f)
+    public IEnumerator UpdateSelectedSlot(int selectedSlot, int increment, float duration = 0.15f)
     {
         StartCoroutine(FadeIndicator(false));
         yield return new WaitForSecondsRealtime(duration / 2);
-        UpdateSelectedSlot(selectedSlot, increment); yield return null;
+        UpdateSelectedSlot(selectedSlot, increment); yield return new WaitForSecondsRealtime(duration);
         UpdateIndicator(selectedSlot);
         StartCoroutine(FadeIndicator(true));
     }

@@ -110,10 +110,10 @@ public class MemberInformation : MonoBehaviour // TODO: Think of better name.
     /// </summary>
     private void Awake()
     {
-        generalInformation = transform.Find("General Information");
-        progression = transform.Find("Progression");
-        ability = transform.Find("Ability");
-        item = transform.Find("Item");
+        generalInformation = transform.Find("Information (1)/General Information");
+        progression = transform.Find("Information (2)/Progression");
+        ability = transform.Find("Information (3)/Ability");
+        item = transform.Find("Information (4)/Item");
 
         nameText = generalInformation.Find("Name/Value").GetComponent<TextMeshProUGUI>();
         categoryText = generalInformation.Find("Name/Dex Information/Category/Value").GetComponent<TextMeshProUGUI>();
