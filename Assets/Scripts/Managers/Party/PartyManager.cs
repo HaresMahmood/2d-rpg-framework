@@ -52,6 +52,16 @@ public class PartyManager : MonoBehaviour
 
     #region Miscellaneous Methods
 
+    private void UpdateSelectedPanel()
+    {
+        int selectedSlot = selectedPanel == 0 ? selectedMove : selectedInformation;
+        userInterface.AnimateSlot(selectedSlot, false);
+        userInterface.UpdateSelectedPanel(selectedPanel, selectedSlot);
+
+        selectedSlot = selectedPanel == 0 ? selectedInformation : selectedMove;
+        StartCoroutine(userInterface.UpdateSelectedSlot(selectedSlot, -1));
+    }
+
     private void GetInput()
     {
         if (Input.GetAxisRaw("Horizontal") == 0)
@@ -81,10 +91,7 @@ public class PartyManager : MonoBehaviour
             (selectedPanel, hasInput) = input.GetInput("Horizontal", TestInput.Axis.Horizontal, 2, selectedPanel);
             if (hasInput)
             {
-                int selectedSlot = selectedPanel == 0 ? selectedInformation : selectedMove;
-                userInterface.UpdateSelectedPanel(selectedPanel, selectedSlot);
-                selectedSlot = selectedPanel == 0 ? selectedInformation : selectedMove;
-                StartCoroutine(userInterface.UpdateSelectedSlot(selectedSlot, -1));
+                UpdateSelectedPanel();
             }
         }
     }

@@ -38,8 +38,9 @@ public class PartyUserInterface : MonoBehaviour
         }
 
         movesPanels[0].GetComponent<InformationContainer>().UpdatePanel(true);
+        movesPanels[0].GetComponent<InformationContainer>().AnimatePanel(false);
 
-       LayoutRebuilder.ForceRebuildLayoutImmediate(informationPanel.transform.parent.GetComponent<RectTransform>());
+        LayoutRebuilder.ForceRebuildLayoutImmediate(informationPanel.transform.parent.GetComponent<RectTransform>());
 
         UpdateSelectedPanel(0, 0);
         StartCoroutine(UpdateSelectedSlot(0, -1, 0.2f));
@@ -76,7 +77,6 @@ public class PartyUserInterface : MonoBehaviour
     public void UpdateSelectedPanel(int selectedPanel, int selectedSlot, float duration = 0.3f)
     {
         StartCoroutine(this.selectedPanel[0].parent.gameObject.FadeOpacity(0.7f, duration));
-        this.selectedPanel[selectedSlot].GetComponent<InformationContainer>().AnimatePanel(false);
 
         this.selectedPanel = selectedPanel == 0 ? informationPanels : movesPanels;
         StartCoroutine(this.selectedPanel[0].parent.gameObject.FadeOpacity(1f, duration));
@@ -88,6 +88,11 @@ public class PartyUserInterface : MonoBehaviour
 
         selectedPanel[selectedSlot].GetComponent<InformationContainer>().UpdatePanel(true);
         selectedPanel[previousSlot].GetComponent<InformationContainer>().UpdatePanel(false);
+    }
+
+    public void AnimateSlot(int selectedSlot, bool isSelected)
+    {
+        selectedPanel[selectedSlot].GetComponent<InformationContainer>().AnimatePanel(isSelected);
     }
 
     public IEnumerator UpdateSelectedSlot(int selectedSlot, int increment, float duration = 0.15f)
