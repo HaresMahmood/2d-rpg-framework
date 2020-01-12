@@ -95,10 +95,10 @@ public class MemberInformation : MonoBehaviour // TODO: Think of better name.
         //abilityDescriptionText.SetText("Test description");
         //natureText.SetText(pokemon.nature);
 
-        //heldItemText.SetText(pokemon.heldItem.Name);
-        //heldItemSprite.sprite = pokemon.heldItem.sprite;
-        //effectText.SetText(pokemon.heldItem.effect);
-        //itemDescriptionText.SetText(pokemon.heldItem.description);
+        heldItemText.SetText(pokemon.heldItem.Name);
+        heldItemSprite.sprite = pokemon.heldItem.sprite;
+        effectText.SetText(pokemon.heldItem.effect);
+        itemDescriptionText.SetText(pokemon.heldItem.description);
     }
 
     #endregion

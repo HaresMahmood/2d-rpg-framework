@@ -11,7 +11,7 @@ public class PartyUserInterface : MonoBehaviour
 {
     #region Variables
 
-    private GameObject indicator, movesPanel;
+    private GameObject indicator, arrows, movesPanel;
     private Transform[] informationPanels, movesPanels, selectedPanel;
     private CanvasRenderer radarChartMesh;
 
@@ -31,11 +31,7 @@ public class PartyUserInterface : MonoBehaviour
         informationPanels[2].GetComponent<InformationContainer>().UpdatePanel(false);
         informationPanels[3].GetComponent<InformationContainer>().UpdatePanel(false);
 
-        for (int i = 0; i < movesPanels.Length; i++)
-        {
-            movesPanels[i].GetComponentInChildren<MoveSlot>().UpdateInformation(member.learnedMoves[i]);
-            movesPanels[i].GetComponent<InformationContainer>().UpdatePanel(false);
-        }
+        UpdateMoveInformation(member);
 
         movesPanels[0].GetComponent<InformationContainer>().UpdatePanel(true);
         movesPanels[0].GetComponent<InformationContainer>().AnimatePanel(false);
@@ -47,15 +43,32 @@ public class PartyUserInterface : MonoBehaviour
         DrawSprite(member);
     }
 
+    public void UpdateMoveInformation(Pokemon member)
+    {
+        for (int i = 0; i < movesPanels.Length; i++)
+        {
+            movesPanels[i].GetComponentInChildren<MoveSlot>().UpdateInformation(member.learnedMoves[i]);
+            movesPanels[i].GetComponent<InformationContainer>().UpdatePanel(false);
+        }
+    }
+
     public void UpdateIndicator(int selectedSlot)
     {
         Transform margin = selectedPanel[selectedSlot].Find("Margin").GetComponent<RectTransform>();
         List<Transform> children = selectedPanel[selectedSlot].GetChildren().ToList();
         Transform panel = children.Find(x => x != margin.transform);
 
-        //indicator.transform.position = new Vector2(panel.position.x + 50f, panel.position.y);
         indicator.transform.position = panel.position;
         indicator.GetComponent<RectTransform>().sizeDelta = panel.GetComponent<RectTransform>().sizeDelta;
+    }
+
+    public void UpdateArrows(int selectedSlot)
+    {
+        Transform margin = selectedPanel[selectedSlot].Find("Margin").GetComponent<RectTransform>();
+        List<Transform> children = selectedPanel[selectedSlot].GetChildren().ToList();
+        Transform panel = children.Find(x => x != margin.transform);
+
+        arrows.transform.position = new Vector2(arrows.transform.position.x, panel.position.y);
     }
 
     private IEnumerator FadeIndicator(bool fadeIn, float duration = 0.075f)
@@ -102,6 +115,32 @@ public class PartyUserInterface : MonoBehaviour
         UpdateSelectedSlot(selectedSlot, increment); yield return new WaitForSecondsRealtime(duration);
         UpdateIndicator(selectedSlot);
         StartCoroutine(FadeIndicator(true));
+    }
+
+    public void UpdateMovePosition(Party party, int selectedMember, int selectedSlot, int increment)
+    {
+        int previousSlot = ExtensionMethods.IncrementInt(selectedSlot, 0, 4, increment);
+        Pokemon member = party.playerParty[selectedMember];
+        List<Pokemon.LearnedMove> moves = member.learnedMoves;
+
+        Pokemon.LearnedMove move = moves[previousSlot];
+        moves.Remove(move);
+        moves.Insert(selectedSlot, move);
+
+        UpdateMoveInformation(member);
+
+        UpdateSelectedSlot(selectedSlot, increment);
+    }
+
+    public void SwitchMode(bool isArrangingMoves, int selectedSlot, float duration = 0.15f)
+    {
+        float opacity = isArrangingMoves ? 1 : 0;
+
+        StartCoroutine(FadeIndicator(!isArrangingMoves));
+        StartCoroutine(arrows.FadeOpacity(opacity, duration));
+
+        UpdateArrows(selectedSlot);
+        UpdateIndicator(selectedSlot);
     }
 
     private void DrawSprite(Pokemon pokemon)
@@ -249,6 +288,7 @@ public class PartyUserInterface : MonoBehaviour
     private void Start()
     {
         indicator = transform.Find("Indicator").gameObject;
+        arrows = transform.Find("Arrows").gameObject;
         movesPanel = transform.Find("Middle/Moves").gameObject;
         informationPanel = transform.Find("Middle/Information").GetComponent<MemberInformation>();
 

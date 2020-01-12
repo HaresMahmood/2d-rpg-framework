@@ -24,7 +24,7 @@ public class PartyManager : MonoBehaviour
     [SerializeField] private Material chartMaterial;
 
     private readonly TestInput input = new TestInput();
-    public Flags flags = new Flags(false);
+    public Flags flags = new Flags(false, false);
 
     public GameObject pauseContainer { get; private set; }
 
@@ -41,10 +41,13 @@ public class PartyManager : MonoBehaviour
     public struct Flags
     {
         public bool isActive { get; set; }
+        public bool isArrangingMoves { get; set; }
 
-        public Flags(bool isActive)
+        public Flags(bool isActive, bool isArrangingMoves)
         {
             this.isActive = isActive;
+            this.isArrangingMoves = isArrangingMoves;
+
         }
     }
 
@@ -62,36 +65,65 @@ public class PartyManager : MonoBehaviour
         StartCoroutine(userInterface.UpdateSelectedSlot(selectedSlot, -1));
     }
 
+    private IEnumerator UpdateMovePosition(int selectedMember, int selectedMove, int increment)
+    {
+        userInterface.UpdateMovePosition(party, selectedMember, selectedMove, increment);
+        yield return null;
+        userInterface.UpdateArrows(selectedMove);
+    }
+
     private void GetInput()
     {
-        if (Input.GetAxisRaw("Horizontal") == 0)
+        if (!flags.isArrangingMoves)
         {
-            bool hasInput;
-            int selectedSlot = selectedPanel == 0 ? selectedInformation : selectedMove;
-
-            (selectedSlot, hasInput) = input.GetInput("Vertical", TestInput.Axis.Vertical, 4, selectedSlot);
-            if (hasInput)
+            if (Input.GetAxisRaw("Horizontal") == 0)
             {
-                if (selectedPanel == 0)
-                {
-                    selectedInformation = selectedSlot;
-                }
-                else
-                {
-                    selectedMove = selectedSlot;
-                }
+                bool hasInput;
+                int selectedSlot = selectedPanel == 0 ? selectedInformation : selectedMove;
 
-                StartCoroutine(userInterface.UpdateSelectedSlot(selectedSlot, (int)Input.GetAxisRaw("Vertical")));
+                (selectedSlot, hasInput) = input.GetInput("Vertical", TestInput.Axis.Vertical, 4, selectedSlot);
+                if (hasInput)
+                {
+                    if (selectedPanel == 0)
+                    {
+                        selectedInformation = selectedSlot;
+                    }
+                    else
+                    {
+                        selectedMove = selectedSlot;
+                    }
+
+                    StartCoroutine(userInterface.UpdateSelectedSlot(selectedSlot, (int)Input.GetAxisRaw("Vertical")));
+                }
+            }
+            else
+            {
+                bool hasInput;
+
+                (selectedPanel, hasInput) = input.GetInput("Horizontal", TestInput.Axis.Horizontal, 2, selectedPanel);
+                if (hasInput)
+                {
+                    UpdateSelectedPanel();
+                }
             }
         }
         else
         {
             bool hasInput;
 
-            (selectedPanel, hasInput) = input.GetInput("Horizontal", TestInput.Axis.Horizontal, 2, selectedPanel);
+            (selectedMove, hasInput) = input.GetInput("Vertical", TestInput.Axis.Vertical, 4, selectedMove);
             if (hasInput)
             {
-                UpdateSelectedPanel();
+                StartCoroutine(UpdateMovePosition(0, selectedMove, (int)Input.GetAxisRaw("Vertical")));
+            }
+        }
+
+        if (Input.GetButtonDown("Interact"))
+        {
+            if (selectedPanel == 1)
+            {
+                flags.isArrangingMoves = !flags.isArrangingMoves;
+                userInterface.SwitchMode(flags.isArrangingMoves, selectedMove);
             }
         }
     }
