@@ -19,6 +19,7 @@ public class Pokemon : ScriptableObject
     public Sprite menuSprite;
     public Type primaryType;
     public Type secondaryType;
+    public List<LearnedMove> activeMoves = new List<LearnedMove>();
     public List<LearnedMove> learnedMoves = new List<LearnedMove>();
     public Status status;
     public Item heldItem;

@@ -24,12 +24,13 @@ public class PartyManager : MonoBehaviour
     [SerializeField] private Material chartMaterial;
 
     private readonly TestInput input = new TestInput();
-    public Flags flags = new Flags(false, false);
+    public Flags flags = new Flags(false, false, false);
 
     public GameObject pauseContainer { get; private set; }
 
     private int selectedInformation;
     private int selectedMove;
+    private int selectedLearnedMove;
     private int selectedPanel;
 
     //public event EventHandler OnUserInput = delegate { };
@@ -41,12 +42,14 @@ public class PartyManager : MonoBehaviour
     public struct Flags
     {
         public bool isActive { get; set; }
-        public bool isArrangingMoves { get; set; }
+        public bool isViewingAllMoves { get; set; }
+        public bool isRearrangingMoves { get; set; }
 
-        public Flags(bool isActive, bool isArrangingMoves)
+        public Flags(bool isActive, bool isArrangingMoves, bool isRearrangingMoves)
         {
             this.isActive = isActive;
-            this.isArrangingMoves = isArrangingMoves;
+            this.isViewingAllMoves = isArrangingMoves;
+            this.isRearrangingMoves = isRearrangingMoves;
 
         }
     }
@@ -58,10 +61,23 @@ public class PartyManager : MonoBehaviour
     private void UpdateSelectedPanel()
     {
         int selectedSlot = selectedPanel == 0 ? selectedMove : selectedInformation;
+        if (selectedPanel == 2)
+        {
+            selectedSlot = selectedLearnedMove;
+        }
+
         userInterface.AnimateSlot(selectedSlot, false);
         userInterface.UpdateSelectedPanel(selectedPanel, selectedSlot);
 
-        selectedSlot = selectedPanel == 0 ? selectedInformation : selectedMove;
+        if (selectedPanel != 2)
+        {
+            selectedSlot = selectedPanel == 0 ? selectedInformation : selectedMove;
+        }
+        else
+        {
+            selectedSlot = selectedLearnedMove;
+        }
+
         StartCoroutine(userInterface.UpdateSelectedSlot(selectedSlot, -1));
     }
 
@@ -72,9 +88,18 @@ public class PartyManager : MonoBehaviour
         userInterface.UpdateArrows(selectedMove);
     }
 
+    private IEnumerator SwaptMove()
+    {
+        userInterface.SwapMove(party.playerParty[0], selectedMove, selectedLearnedMove);
+        selectedPanel = 1; selectedLearnedMove = 0;
+        UpdateSelectedPanel();
+        yield return new WaitForSecondsRealtime(0.15f);
+        userInterface.RearrangeMove(flags.isRearrangingMoves, selectedMove);
+    }
+
     private void GetInput()
     {
-        if (!flags.isArrangingMoves)
+        if (!flags.isViewingAllMoves)
         {
             if (Input.GetAxisRaw("Horizontal") == 0)
             {
@@ -109,21 +134,59 @@ public class PartyManager : MonoBehaviour
         }
         else
         {
-            bool hasInput;
+            if (Input.GetButtonDown("Interact"))
+            {
+                if (selectedPanel != 2)
+                {
+                    flags.isRearrangingMoves = !flags.isRearrangingMoves;
+                    userInterface.RearrangeMove(flags.isRearrangingMoves, selectedMove);
+                }
+                else
+                {
+                    StartCoroutine(SwaptMove());
+                }
+            }
 
-            (selectedMove, hasInput) = input.GetInput("Vertical", TestInput.Axis.Vertical, 4, selectedMove);
+            if (Input.GetButtonDown("Remove") && flags.isRearrangingMoves)
+            {
+                flags.isRearrangingMoves = false;
+                selectedPanel = 2;
+                UpdateSelectedPanel();
+            }
+
+            bool hasInput;
+            int selectedSlot = selectedPanel == 2 ? selectedLearnedMove : selectedMove;
+
+            (selectedSlot, hasInput) = input.GetInput("Vertical", TestInput.Axis.Vertical, userInterface.selectedPanel.Length, selectedSlot);
             if (hasInput)
             {
-                StartCoroutine(UpdateMovePosition(0, selectedMove, (int)Input.GetAxisRaw("Vertical")));
+
+                if (selectedPanel == 2)
+                {
+                    selectedLearnedMove = selectedSlot;
+                }
+                else
+                {
+                    selectedMove = selectedSlot;
+                }
+
+                if (flags.isRearrangingMoves)
+                {
+                    StartCoroutine(UpdateMovePosition(0, selectedSlot, (int)Input.GetAxisRaw("Vertical")));
+                }
+                else
+                {
+                    StartCoroutine(userInterface.UpdateSelectedSlot(selectedSlot, (int)Input.GetAxisRaw("Vertical")));
+                }
             }
         }
 
-        if (Input.GetButtonDown("Interact"))
+        if (Input.GetButtonDown("Toggle"))
         {
             if (selectedPanel == 1)
             {
-                flags.isArrangingMoves = !flags.isArrangingMoves;
-                userInterface.SwitchMode(flags.isArrangingMoves, selectedMove);
+                flags.isViewingAllMoves = !flags.isViewingAllMoves;
+                StartCoroutine(userInterface.SwitchMode(flags.isViewingAllMoves, selectedMove));
             }
         }
     }

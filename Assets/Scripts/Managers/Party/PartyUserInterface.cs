@@ -11,8 +11,9 @@ public class PartyUserInterface : MonoBehaviour
 {
     #region Variables
 
-    private GameObject indicator, arrows, movesPanel;
-    private Transform[] informationPanels, movesPanels, selectedPanel;
+    private GameObject indicator, arrows, movesPanel, learnedMovesPanel;
+    private Transform[] informationPanels, movesPanels, learnedMovesPanels;
+    public Transform[] selectedPanel { get; private set; }
     private CanvasRenderer radarChartMesh;
 
     private MemberInformation informationPanel;
@@ -31,7 +32,9 @@ public class PartyUserInterface : MonoBehaviour
         informationPanels[2].GetComponent<InformationContainer>().UpdatePanel(false);
         informationPanels[3].GetComponent<InformationContainer>().UpdatePanel(false);
 
-        UpdateMoveInformation(member);
+        UpdateMoveInformation(member, movesPanels);
+        UpdateMoveInformation(member, learnedMovesPanels);
+        learnedMovesPanel.SetActive(false);
 
         movesPanels[0].GetComponent<InformationContainer>().UpdatePanel(true);
         movesPanels[0].GetComponent<InformationContainer>().AnimatePanel(false);
@@ -43,12 +46,25 @@ public class PartyUserInterface : MonoBehaviour
         DrawSprite(member);
     }
 
-    public void UpdateMoveInformation(Pokemon member)
+    public void UpdateMoveInformation(Pokemon member, Transform[] panels, bool animate = true)
     {
-        for (int i = 0; i < movesPanels.Length; i++)
+        int counter = 0;
+        List<Pokemon.LearnedMove> moves = panels[0].parent.name == "Active Moves" ? member.activeMoves : member.learnedMoves;
+
+        for (int i = 0; i < moves.Count; i++)
         {
-            movesPanels[i].GetComponentInChildren<MoveSlot>().UpdateInformation(member.learnedMoves[i]);
-            movesPanels[i].GetComponent<InformationContainer>().UpdatePanel(false);
+            panels[i].GetComponentInChildren<MoveSlot>().UpdateInformation(moves[i]);
+            if (animate) panels[i].GetComponent<InformationContainer>().UpdatePanel(false);
+            if (panels[0].parent.name == "Learned Moves") counter++;
+        }
+
+        if (panels[0].parent.name == "Learned Moves")
+        {
+            for (int i = counter; i < panels.Length; i++)
+            {
+                panels[i].gameObject.SetActive(false);
+                panels.RemoveAt(i);
+            }
         }
     }
 
@@ -91,13 +107,21 @@ public class PartyUserInterface : MonoBehaviour
     {
         StartCoroutine(this.selectedPanel[0].parent.gameObject.FadeOpacity(0.7f, duration));
 
-        this.selectedPanel = selectedPanel == 0 ? informationPanels : movesPanels;
+        if (selectedPanel != 2)
+        {
+            this.selectedPanel = selectedPanel == 0 ? informationPanels : movesPanels;
+        }
+        else
+        {
+            this.selectedPanel = learnedMovesPanels;
+        }
+
         StartCoroutine(this.selectedPanel[0].parent.gameObject.FadeOpacity(1f, duration));
     }
 
     private void UpdateSelectedSlot(int selectedSlot, int increment)
     {
-        int previousSlot = ExtensionMethods.IncrementInt(selectedSlot, 0, 4, increment);
+        int previousSlot = ExtensionMethods.IncrementInt(selectedSlot, 0, selectedPanel.Length, increment);
 
         selectedPanel[selectedSlot].GetComponent<InformationContainer>().UpdatePanel(true);
         selectedPanel[previousSlot].GetComponent<InformationContainer>().UpdatePanel(false);
@@ -121,26 +145,56 @@ public class PartyUserInterface : MonoBehaviour
     {
         int previousSlot = ExtensionMethods.IncrementInt(selectedSlot, 0, 4, increment);
         Pokemon member = party.playerParty[selectedMember];
-        List<Pokemon.LearnedMove> moves = member.learnedMoves;
+        List<Pokemon.LearnedMove> moves = member.activeMoves;
 
         Pokemon.LearnedMove move = moves[previousSlot];
         moves.Remove(move);
         moves.Insert(selectedSlot, move);
 
-        UpdateMoveInformation(member);
+        UpdateMoveInformation(member, movesPanels);
 
         UpdateSelectedSlot(selectedSlot, increment);
     }
 
-    public void SwitchMode(bool isArrangingMoves, int selectedSlot, float duration = 0.15f)
+    public IEnumerator SwitchMode(bool isArrangingMoves, int selectedSlot, float duration = 0.15f)
     {
-        float opacity = isArrangingMoves ? 1 : 0;
+        float opacity = isArrangingMoves ? 0 : 1;
 
-        StartCoroutine(FadeIndicator(!isArrangingMoves));
+        transform.Find("Middle/Stats").gameObject.SetActive(!isArrangingMoves);
+        informationPanel.gameObject.SetActive(!isArrangingMoves);
+        learnedMovesPanel.SetActive(isArrangingMoves);
+
+        FindObjectOfType<PauseUserInterface>().FadeCharacterSprite(opacity, duration);
+
+        yield return null;
+        StartCoroutine(FadeIndicator(true));
+        StartCoroutine(arrows.FadeOpacity(0, duration));
+
+        UpdateArrows(selectedSlot);
+        UpdateIndicator(selectedSlot);
+    }
+
+    public void RearrangeMove(bool isRearrangingMoves, int selectedSlot, float duration = 0.15f)
+    {
+        float opacity = isRearrangingMoves ? 1 : 0;
+
+        StartCoroutine(FadeIndicator(!isRearrangingMoves));
         StartCoroutine(arrows.FadeOpacity(opacity, duration));
 
         UpdateArrows(selectedSlot);
         UpdateIndicator(selectedSlot);
+    }
+
+    public void SwapMove(Pokemon member, int selectedMove, int selectedLearnedMove)
+    {
+        Pokemon.LearnedMove move = member.activeMoves[selectedMove];
+        Pokemon.LearnedMove learnedMove = member.learnedMoves[selectedLearnedMove];
+
+        member.activeMoves[selectedMove] = learnedMove;
+        member.learnedMoves[selectedLearnedMove] = move;
+
+        UpdateMoveInformation(member, movesPanels, false);
+        UpdateMoveInformation(member, learnedMovesPanels);
     }
 
     private void DrawSprite(Pokemon pokemon)
@@ -289,11 +343,13 @@ public class PartyUserInterface : MonoBehaviour
     {
         indicator = transform.Find("Indicator").gameObject;
         arrows = transform.Find("Arrows").gameObject;
-        movesPanel = transform.Find("Middle/Moves").gameObject;
+        movesPanel = transform.Find("Middle/Active Moves").gameObject;
         informationPanel = transform.Find("Middle/Information").GetComponent<MemberInformation>();
+        learnedMovesPanel = transform.Find("Middle/Learned Moves").gameObject;
 
         informationPanels = informationPanel.transform.GetChildren();
         movesPanels = movesPanel.transform.GetChildren();
+        learnedMovesPanels = learnedMovesPanel.transform.GetChildren();
         selectedPanel = movesPanels;
 
         radarChartMesh = transform.Find("Middle/Stats/Chart/Radar Mesh").GetComponent<CanvasRenderer>();

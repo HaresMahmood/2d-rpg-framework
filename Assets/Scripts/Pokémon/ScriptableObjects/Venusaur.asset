@@ -27,15 +27,22 @@ MonoBehaviour:
   menuSprite: {fileID: 21300000, guid: 5ad551b55b0cef74c8ea6dc578ae176a, type: 3}
   primaryType: 4
   secondaryType: 8
-  learnedMoves:
+  activeMoves:
   - move: {fileID: 11400000, guid: af0b2f5aad824944badb46a0ae98c997, type: 2}
+    remainingPp: 5
+  - move: {fileID: 11400000, guid: 24eb516c2fb0e544ab02494d02643649, type: 2}
     remainingPp: 2
   - move: {fileID: 11400000, guid: 4f18ca3183ab309408ab01fde9db8f13, type: 2}
     remainingPp: 3
   - move: {fileID: 11400000, guid: baf06e7b75e5cf9408e5598f71dde22e, type: 2}
-    remainingPp: 4
-  - move: {fileID: 11400000, guid: 24eb516c2fb0e544ab02494d02643649, type: 2}
+    remainingPp: 1
+  learnedMoves:
+  - move: {fileID: 11400000, guid: e02e8ad176deaab409a2edffa7cd44f8, type: 2}
     remainingPp: 5
+  - move: {fileID: 11400000, guid: 49497cc5ccc1d8840ba8e367d213a111, type: 2}
+    remainingPp: 2
+  - move: {fileID: 11400000, guid: 3a3623eecf17a0b47aa81a016efd591f, type: 2}
+    remainingPp: 3
   status: 0
   heldItem: {fileID: 11400000, guid: 4c607f7fdbfad6146b8c4be39fe9d8ae, type: 2}
   stats:
