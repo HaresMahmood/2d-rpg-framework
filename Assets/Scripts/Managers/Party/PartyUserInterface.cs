@@ -158,13 +158,12 @@ public class PartyUserInterface : MonoBehaviour
 
     public IEnumerator SwitchMode(bool isArrangingMoves, int selectedSlot, float duration = 0.15f)
     {
+        StartCoroutine(AnimateLearnedMoves(isArrangingMoves));
+
         float opacity = isArrangingMoves ? 0 : 1;
-
-        transform.Find("Middle/Stats").gameObject.SetActive(!isArrangingMoves);
-        informationPanel.gameObject.SetActive(!isArrangingMoves);
-        learnedMovesPanel.SetActive(isArrangingMoves);
-
         FindObjectOfType<PauseUserInterface>().FadeCharacterSprite(opacity, duration);
+        StartCoroutine(informationPanel.gameObject.FadeOpacity(opacity, duration));
+        StartCoroutine(transform.Find("Middle/Stats").gameObject.FadeOpacity(opacity, duration));
 
         yield return null;
         StartCoroutine(FadeIndicator(true));
@@ -195,6 +194,26 @@ public class PartyUserInterface : MonoBehaviour
 
         UpdateMoveInformation(member, movesPanels, false);
         UpdateMoveInformation(member, learnedMovesPanels);
+    }
+
+    public IEnumerator AnimateLearnedMoves(bool isActive, float duration = 0.2f)
+    {
+        if (isActive)
+        {
+            learnedMovesPanel.SetActive(isActive);
+        }
+
+        float opacity = isActive ? 0.7f : 0;
+        Vector3 position = isActive ? informationPanel.transform.position : new Vector3(learnedMovesPanel.transform.position.x - 500, learnedMovesPanel.transform.position.y);
+        StartCoroutine(learnedMovesPanel.transform.LerpPosition(position, duration));
+
+        StartCoroutine(learnedMovesPanel.FadeOpacity(opacity, duration));
+
+        if (!isActive)
+        {
+            yield return new WaitForSecondsRealtime(duration);
+            learnedMovesPanel.SetActive(isActive);
+        }
     }
 
     private void DrawSprite(Pokemon pokemon)

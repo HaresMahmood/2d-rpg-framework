@@ -238,11 +238,11 @@ public static class ExtensionMethods
     /// </summary>
     /// <param name="transform"></param>
     /// <param name="duration"></param>
-    /// <param name="targetScale"></param>
+    /// <param name="targetPosition"></param>
     /// <returns></returns>
-    public static IEnumerator LerpScale(this Transform transform, Vector3 targetScale, float duration)
+    public static IEnumerator LerpPosition(this Transform transform, Vector2 targetPosition, float duration)
     {
-        Vector3 initialScale = transform.localScale;
+        Vector3 initialPosition = transform.position;
 
         float t = 0; // Tracks how many seconds we've been fading.
         while (t < duration) // While time is less than the duration of the fade, ...
@@ -253,7 +253,7 @@ public static class ExtensionMethods
                 t += Time.deltaTime;
             float blend = Mathf.Clamp01(t / duration); // Turns the time into an interpolation factor between 0 and 1. 
 
-            transform.localScale = Vector3.Lerp(initialScale, targetScale, blend);
+            transform.position = Vector2.Lerp(initialPosition, targetPosition, blend);
 
             yield return null; // Wait one frame, then repeat.
         }
