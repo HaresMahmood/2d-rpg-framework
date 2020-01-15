@@ -58,7 +58,7 @@ public class PartyManager : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    private void UpdateSelectedPanel()
+    private void UpdateSelectedPanel(bool arrows = false)
     {
         int selectedSlot = selectedPanel == 0 ? selectedMove : selectedInformation;
         if (selectedPanel == 2)
@@ -68,6 +68,7 @@ public class PartyManager : MonoBehaviour
 
         userInterface.AnimateSlot(selectedSlot, false);
         userInterface.UpdateSelectedPanel(selectedPanel);
+        if (arrows) userInterface.AnimateArrows(selectedPanel == 2 ? false : true);
 
         if (selectedPanel != 2)
         {
@@ -101,7 +102,7 @@ public class PartyManager : MonoBehaviour
     {
         flags.isRearrangingMoves = false;
         selectedPanel = 2;
-        UpdateSelectedPanel(); yield return null;
+        UpdateSelectedPanel(true); yield return null;
         StartCoroutine(userInterface.UpdateSelectedSlot(0, -1, true));
     }
 

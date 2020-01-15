@@ -86,7 +86,9 @@ public class PartyUserInterface : MonoBehaviour
         List<Transform> children = selectedPanel[selectedSlot].GetChildren().ToList();
         Transform panel = children.Find(x => x != margin.transform);
 
-        indicator.transform.position = panel.position;
+        Vector3 position = selectedPanel[0].parent.name == "Active Moves" ? new Vector3(panel.position.x + (indicator.GetComponent<RectTransform>().sizeDelta.x / 2), panel.position.y) : panel.position;
+
+        indicator.transform.position = position;
         indicator.GetComponent<RectTransform>().sizeDelta = panel.GetComponent<RectTransform>().sizeDelta;
     }
 
@@ -96,7 +98,18 @@ public class PartyUserInterface : MonoBehaviour
         List<Transform> children = selectedPanel[selectedSlot].GetChildren().ToList();
         Transform panel = children.Find(x => x != margin.transform);
 
-        arrows.transform.position = new Vector2(arrows.transform.position.x, panel.position.y);
+        arrows.transform.position = new Vector2(panel.position.x - (arrows.GetComponent<RectTransform>().sizeDelta.x / 2), panel.position.y);
+    }
+
+    public void AnimateArrows(bool isActive, float duration = 0.15f)
+    {
+        Debug.Log(true);
+
+        float position = isActive ? -100f : 100f;
+        float opacity = isActive ? 1f : 0.7f;
+
+        StartCoroutine(arrows.transform.LerpPosition(new Vector2(arrows.transform.position.x + position, arrows.transform.position.y), duration));
+        StartCoroutine(arrows.FadeOpacity(opacity, duration));
     }
 
     private IEnumerator FadeIndicator(bool fadeIn, float duration = 0.075f)
