@@ -67,7 +67,7 @@ public class PartyManager : MonoBehaviour
         }
 
         userInterface.AnimateSlot(selectedSlot, false);
-        userInterface.UpdateSelectedPanel(selectedPanel, selectedSlot);
+        userInterface.UpdateSelectedPanel(selectedPanel);
 
         if (selectedPanel != 2)
         {
@@ -88,13 +88,21 @@ public class PartyManager : MonoBehaviour
         userInterface.UpdateArrows(selectedMove);
     }
 
-    private IEnumerator SwaptMove()
+    private IEnumerator SwapMove()
     {
         userInterface.SwapMove(party.playerParty[0], selectedMove, selectedLearnedMove);
         selectedPanel = 1; selectedLearnedMove = 0;
         UpdateSelectedPanel();
         yield return new WaitForSecondsRealtime(0.15f);
         userInterface.RearrangeMove(flags.isRearrangingMoves, selectedMove);
+    }
+
+    private IEnumerator EnableLearnedMovePanel()
+    {
+        flags.isRearrangingMoves = false;
+        selectedPanel = 2;
+        UpdateSelectedPanel(); yield return null;
+        StartCoroutine(userInterface.UpdateSelectedSlot(0, -1, true));
     }
 
     private void GetInput()
@@ -143,15 +151,13 @@ public class PartyManager : MonoBehaviour
                 }
                 else
                 {
-                    StartCoroutine(SwaptMove());
+                    StartCoroutine(SwapMove());
                 }
             }
 
             if (Input.GetButtonDown("Remove") && flags.isRearrangingMoves)
             {
-                flags.isRearrangingMoves = false;
-                selectedPanel = 2;
-                UpdateSelectedPanel();
+                StartCoroutine(EnableLearnedMovePanel());
             }
 
             bool hasInput;
@@ -176,7 +182,7 @@ public class PartyManager : MonoBehaviour
                 }
                 else
                 {
-                    StartCoroutine(userInterface.UpdateSelectedSlot(selectedSlot, (int)Input.GetAxisRaw("Vertical")));
+                    StartCoroutine(userInterface.UpdateSelectedSlot(selectedSlot, (int)Input.GetAxisRaw("Vertical"), true));
                 }
             }
         }

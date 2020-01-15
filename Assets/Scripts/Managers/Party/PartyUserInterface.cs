@@ -1,6 +1,6 @@
-﻿using System.Linq;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +14,7 @@ public class PartyUserInterface : MonoBehaviour
     private GameObject indicator, arrows, movesPanel, learnedMovesPanel;
     private Transform[] informationPanels, movesPanels, learnedMovesPanels;
     public Transform[] selectedPanel { get; private set; }
+    private Scrollbar scrollBar;
     private CanvasRenderer radarChartMesh;
 
     private MemberInformation informationPanel;
@@ -34,6 +35,7 @@ public class PartyUserInterface : MonoBehaviour
 
         UpdateMoveInformation(member, movesPanels);
         UpdateMoveInformation(member, learnedMovesPanels);
+        UpdateScrollbar();
         learnedMovesPanel.SetActive(false);
 
         movesPanels[0].GetComponent<InformationContainer>().UpdatePanel(true);
@@ -42,8 +44,17 @@ public class PartyUserInterface : MonoBehaviour
         LayoutRebuilder.ForceRebuildLayoutImmediate(informationPanel.transform.parent.GetComponent<RectTransform>());
 
         UpdateSelectedPanel(0, 0);
-        StartCoroutine(UpdateSelectedSlot(0, -1, 0.2f));
+        StartCoroutine(UpdateSelectedSlot(0, -1, false, 0.2f));
         DrawSprite(member);
+    }
+
+    private Transform[] RemoveInactivePanels(Transform[] panels)
+    {
+        List<Transform> panelList = panels.ToList();
+
+        panelList.RemoveAll(panel => !panel.gameObject.activeSelf);
+
+        return panelList.ToArray();
     }
 
     public void UpdateMoveInformation(Pokemon member, Transform[] panels, bool animate = true)
@@ -55,16 +66,17 @@ public class PartyUserInterface : MonoBehaviour
         {
             panels[i].GetComponentInChildren<MoveSlot>().UpdateInformation(moves[i]);
             if (animate) panels[i].GetComponent<InformationContainer>().UpdatePanel(false);
-            if (panels[0].parent.name == "Learned Moves") counter++;
+            if (panels[0].parent.parent.name == "Learned Moves") counter++;
         }
 
-        if (panels[0].parent.name == "Learned Moves")
+        if (panels[0].parent.parent.name == "Learned Moves")
         {
             for (int i = counter; i < panels.Length; i++)
             {
                 panels[i].gameObject.SetActive(false);
-                panels.RemoveAt(i);
             }
+
+            learnedMovesPanels = RemoveInactivePanels(panels);
         }
     }
 
@@ -103,9 +115,18 @@ public class PartyUserInterface : MonoBehaviour
         }
     }
 
-    public void UpdateSelectedPanel(int selectedPanel, int selectedSlot, float duration = 0.3f)
+    public void UpdateSelectedPanel(int selectedPanel, float duration = 0.25f)
     {
         StartCoroutine(this.selectedPanel[0].parent.gameObject.FadeOpacity(0.7f, duration));
+
+        if (selectedPanel == 2)
+        {
+            StartCoroutine(this.selectedPanel[0].parent.gameObject.FadeOpacity(0.7f, duration));
+        }
+        else
+        {
+            StartCoroutine(learnedMovesPanel.FadeOpacity(0.7f, duration));
+        }
 
         if (selectedPanel != 2)
         {
@@ -116,7 +137,14 @@ public class PartyUserInterface : MonoBehaviour
             this.selectedPanel = learnedMovesPanels;
         }
 
-        StartCoroutine(this.selectedPanel[0].parent.gameObject.FadeOpacity(1f, duration));
+        if (selectedPanel != 2)
+        {
+            StartCoroutine(this.selectedPanel[0].parent.gameObject.FadeOpacity(1f, duration));
+        }
+        else
+        {
+            StartCoroutine(learnedMovesPanel.FadeOpacity(1f, duration));
+        }
     }
 
     private void UpdateSelectedSlot(int selectedSlot, int increment)
@@ -132,13 +160,38 @@ public class PartyUserInterface : MonoBehaviour
         selectedPanel[selectedSlot].GetComponent<InformationContainer>().AnimatePanel(isSelected);
     }
 
-    public IEnumerator UpdateSelectedSlot(int selectedSlot, int increment, float duration = 0.15f)
+    public IEnumerator UpdateSelectedSlot(int selectedSlot, int increment, bool scroll = false, float duration = 0.15f)
     {
         StartCoroutine(FadeIndicator(false));
         yield return new WaitForSecondsRealtime(duration / 2);
-        UpdateSelectedSlot(selectedSlot, increment); yield return new WaitForSecondsRealtime(duration);
+
+        UpdateSelectedSlot(selectedSlot, increment); yield return null;
+        if (scroll && scrollBar.gameObject.activeInHierarchy && selectedPanel == learnedMovesPanels)
+        {
+            UpdateScrollbar(selectedSlot);
+        }
+        else
+        {
+            UpdateScrollbar();
+        }
+        yield return new WaitForSecondsRealtime(duration);
+
         UpdateIndicator(selectedSlot);
         StartCoroutine(FadeIndicator(true));
+    }
+
+    public void UpdateScrollbar(int selectedSlot = -1)
+    {
+        if (selectedSlot > -1)
+        {
+            float totalMoves = (float)learnedMovesPanels.Length;
+            float targetValue = 1.0f - (float)selectedSlot / (totalMoves - 1);
+            StartCoroutine(scrollBar.LerpScrollbar(targetValue, 0.08f));
+        }
+        else
+        {
+            scrollBar.value = 1;
+        }
     }
 
     public void UpdateMovePosition(Party party, int selectedMember, int selectedSlot, int increment)
@@ -365,10 +418,11 @@ public class PartyUserInterface : MonoBehaviour
         movesPanel = transform.Find("Middle/Active Moves").gameObject;
         informationPanel = transform.Find("Middle/Information").GetComponent<MemberInformation>();
         learnedMovesPanel = transform.Find("Middle/Learned Moves").gameObject;
+        scrollBar = learnedMovesPanel.transform.Find("Scrollbar").GetComponent<Scrollbar>();
 
         informationPanels = informationPanel.transform.GetChildren();
         movesPanels = movesPanel.transform.GetChildren();
-        learnedMovesPanels = learnedMovesPanel.transform.GetChildren();
+        learnedMovesPanels = learnedMovesPanel.transform.Find("Moves").GetChildren();
         selectedPanel = movesPanels;
 
         radarChartMesh = transform.Find("Middle/Stats/Chart/Radar Mesh").GetComponent<CanvasRenderer>();
