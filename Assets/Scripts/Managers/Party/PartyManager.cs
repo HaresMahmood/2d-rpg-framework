@@ -63,7 +63,7 @@ public class PartyManager : MonoBehaviour
         int selectedSlot = selectedPanel == 0 ? selectedMove : selectedInformation;
         if (selectedPanel == 2)
         {
-            selectedSlot = selectedLearnedMove;
+            selectedSlot = selectedPanel == 2 ? selectedMove : selectedLearnedMove;
         }
 
         userInterface.AnimateSlot(selectedSlot, false);
