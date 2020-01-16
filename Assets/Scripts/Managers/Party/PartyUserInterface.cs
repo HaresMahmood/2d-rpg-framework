@@ -12,12 +12,12 @@ public class PartyUserInterface : MonoBehaviour
     #region Variables
 
     private GameObject indicator, arrows, movesPanel, learnedMovesPanel;
-    private Transform[] informationPanels, movesPanels, learnedMovesPanels;
+
+    private PartyInformationPanel[] informationPanels;
+
     public Transform[] selectedPanel { get; private set; }
     private Scrollbar scrollBar;
     private CanvasRenderer radarChartMesh;
-
-    private MemberInformation informationPanel;
 
     #endregion
 
@@ -27,25 +27,18 @@ public class PartyUserInterface : MonoBehaviour
     {
         Pokemon member = party.playerParty[selectedMember];
 
-        informationPanel.UpdateInformation(member);
-        informationPanels[0].GetComponent<InformationContainer>().UpdatePanel(true);
-        informationPanels[1].GetComponent<InformationContainer>().UpdatePanel(false);
-        informationPanels[2].GetComponent<InformationContainer>().UpdatePanel(false);
-        informationPanels[3].GetComponent<InformationContainer>().UpdatePanel(false);
+        //informationPanel.UpdateInformation(member);
 
-        UpdateMoveInformation(member, movesPanels);
-        UpdateMoveInformation(member, learnedMovesPanels);
+        //UpdateMoveInformation(member, movesPanels);
+        //UpdateMoveInformation(member, learnedMovesPanels);
         UpdateScrollbar();
-        learnedMovesPanel.SetActive(false);
+        //learnedMovesPanel.SetActive(false);
 
-        movesPanels[0].GetComponent<InformationContainer>().UpdatePanel(true);
-        movesPanels[0].GetComponent<InformationContainer>().AnimatePanel(false);
+        //LayoutRebuilder.ForceRebuildLayoutImmediate(informationPanel.transform.parent.GetComponent<RectTransform>());
 
-        LayoutRebuilder.ForceRebuildLayoutImmediate(informationPanel.transform.parent.GetComponent<RectTransform>());
-
-        UpdateSelectedPanel(0, 0);
-        StartCoroutine(UpdateSelectedSlot(0, -1, false, 0.2f));
-        DrawSprite(member);
+        //UpdateSelectedPanel(0, 0);
+        //StartCoroutine(UpdateSelectedSlot(0, -1, false, 0.2f));
+        UpdateSprite(member);
     }
 
     private Transform[] RemoveInactivePanels(Transform[] panels)
@@ -65,7 +58,7 @@ public class PartyUserInterface : MonoBehaviour
         for (int i = 0; i < moves.Count; i++)
         {
             panels[i].GetComponentInChildren<MoveSlot>().UpdateInformation(moves[i]);
-            if (animate) panels[i].GetComponent<InformationContainer>().UpdatePanel(false);
+            if (animate) panels[i].GetComponent<PartyInformationSlots>().SetActive(false);
             if (panels[0].parent.parent.name == "Learned Moves") counter++;
         }
 
@@ -76,17 +69,24 @@ public class PartyUserInterface : MonoBehaviour
                 panels[i].gameObject.SetActive(false);
             }
 
-            learnedMovesPanels = RemoveInactivePanels(panels);
+            //learnedMovesPanels = RemoveInactivePanels(panels);
         }
     }
 
-    public void UpdateIndicator(int selectedSlot)
+    public void UpdateSelectedPanel(int selectedPanel, int increment)
     {
-        Transform margin = selectedPanel[selectedSlot].Find("Margin").GetComponent<RectTransform>();
-        List<Transform> children = selectedPanel[selectedSlot].GetChildren().ToList();
-        Transform panel = children.Find(x => x != margin.transform);
+        int previousPanel = ExtensionMethods.IncrementInt(selectedPanel, 0, 2, increment);
 
-        Vector3 position = selectedPanel[0].parent.name == "Active Moves" ? new Vector3(panel.position.x + (indicator.GetComponent<RectTransform>().sizeDelta.x / 2), panel.position.y) : panel.position;
+        informationPanels[selectedPanel].SetActive(true);
+        informationPanels[previousPanel].SetActive(false);
+    }
+
+    public void UpdateIndicator(PartyInformationSlots[] informationSlots, int selectedSlot)
+    {
+        Transform margin = informationSlots[selectedSlot].transform.Find("Margin").GetComponent<RectTransform>();
+        List<Transform> children = informationSlots[selectedSlot].transform.GetChildren().ToList();
+        Transform panel = children.Find(x => x != margin.transform);
+        Vector3 position = informationSlots[0].transform.parent.name == "Active Moves" ? new Vector3(panel.position.x + (indicator.GetComponent<RectTransform>().sizeDelta.x / 2), panel.position.y) : panel.position;
 
         indicator.transform.position = position;
         indicator.GetComponent<RectTransform>().sizeDelta = panel.GetComponent<RectTransform>().sizeDelta;
@@ -103,8 +103,6 @@ public class PartyUserInterface : MonoBehaviour
 
     public void AnimateArrows(bool isActive, float duration = 0.15f)
     {
-        Debug.Log(true);
-
         float position = isActive ? -100f : 100f;
         float opacity = isActive ? 1f : 0.7f;
 
@@ -112,7 +110,7 @@ public class PartyUserInterface : MonoBehaviour
         StartCoroutine(arrows.FadeOpacity(opacity, duration));
     }
 
-    private IEnumerator FadeIndicator(bool fadeIn, float duration = 0.075f)
+    public IEnumerator FadeIndicator(bool fadeIn, float duration = 0.075f)
     {
         if (fadeIn)
         {
@@ -128,57 +126,13 @@ public class PartyUserInterface : MonoBehaviour
         }
     }
 
-    public void UpdateSelectedPanel(int selectedPanel, float duration = 0.25f)
-    {
-        StartCoroutine(this.selectedPanel[0].parent.gameObject.FadeOpacity(0.7f, duration));
-
-        if (selectedPanel == 2)
-        {
-            StartCoroutine(this.selectedPanel[0].parent.gameObject.FadeOpacity(0.7f, duration));
-        }
-        else
-        {
-            StartCoroutine(learnedMovesPanel.FadeOpacity(0.7f, duration));
-        }
-
-        if (selectedPanel != 2)
-        {
-            this.selectedPanel = selectedPanel == 0 ? informationPanels : movesPanels;
-        }
-        else
-        {
-            this.selectedPanel = learnedMovesPanels;
-        }
-
-        if (selectedPanel != 2)
-        {
-            StartCoroutine(this.selectedPanel[0].parent.gameObject.FadeOpacity(1f, duration));
-        }
-        else
-        {
-            StartCoroutine(learnedMovesPanel.FadeOpacity(1f, duration));
-        }
-    }
-
-    private void UpdateSelectedSlot(int selectedSlot, int increment)
-    {
-        int previousSlot = ExtensionMethods.IncrementInt(selectedSlot, 0, selectedPanel.Length, increment);
-
-        selectedPanel[selectedSlot].GetComponent<InformationContainer>().UpdatePanel(true);
-        selectedPanel[previousSlot].GetComponent<InformationContainer>().UpdatePanel(false);
-    }
-
-    public void AnimateSlot(int selectedSlot, bool isSelected)
-    {
-        selectedPanel[selectedSlot].GetComponent<InformationContainer>().AnimatePanel(isSelected);
-    }
-
-    public IEnumerator UpdateSelectedSlot(int selectedSlot, int increment, bool scroll = false, float duration = 0.15f)
+    public IEnumerator UpdateSelectedSlot(int selectedSlot, int increment, float duration = 0.15f)
     {
         StartCoroutine(FadeIndicator(false));
         yield return new WaitForSecondsRealtime(duration / 2);
 
         UpdateSelectedSlot(selectedSlot, increment); yield return null;
+        /*
         if (scroll && scrollBar.gameObject.activeInHierarchy && selectedPanel == learnedMovesPanels)
         {
             UpdateScrollbar(selectedSlot);
@@ -187,9 +141,10 @@ public class PartyUserInterface : MonoBehaviour
         {
             UpdateScrollbar();
         }
+        */
         yield return new WaitForSecondsRealtime(duration);
 
-        UpdateIndicator(selectedSlot);
+        //UpdateIndicator(selectedSlot);
         StartCoroutine(FadeIndicator(true));
     }
 
@@ -197,9 +152,9 @@ public class PartyUserInterface : MonoBehaviour
     {
         if (selectedSlot > -1)
         {
-            float totalMoves = (float)learnedMovesPanels.Length;
-            float targetValue = 1.0f - (float)selectedSlot / (totalMoves - 1);
-            StartCoroutine(scrollBar.LerpScrollbar(targetValue, 0.08f));
+            //float totalMoves = (float)learnedMovesPanels.Length;
+            //float targetValue = 1.0f - (float)selectedSlot / (totalMoves - 1);
+            //StartCoroutine(scrollBar.LerpScrollbar(targetValue, 0.08f));
         }
         else
         {
@@ -217,11 +172,12 @@ public class PartyUserInterface : MonoBehaviour
         moves.Remove(move);
         moves.Insert(selectedSlot, move);
 
-        UpdateMoveInformation(member, movesPanels);
+        //UpdateMoveInformation(member, movesPanels);
 
         UpdateSelectedSlot(selectedSlot, increment);
     }
 
+    /*
     public IEnumerator SwitchMode(bool isArrangingMoves, int selectedSlot, float duration = 0.15f)
     {
         StartCoroutine(AnimateLearnedMoves(isArrangingMoves));
@@ -249,6 +205,7 @@ public class PartyUserInterface : MonoBehaviour
         UpdateArrows(selectedSlot);
         UpdateIndicator(selectedSlot);
     }
+    */
 
     public void SwapMove(Pokemon member, int selectedMove, int selectedLearnedMove)
     {
@@ -258,8 +215,8 @@ public class PartyUserInterface : MonoBehaviour
         member.activeMoves[selectedMove] = learnedMove;
         member.learnedMoves[selectedLearnedMove] = move;
 
-        UpdateMoveInformation(member, movesPanels, false);
-        UpdateMoveInformation(member, learnedMovesPanels);
+        //UpdateMoveInformation(member, movesPanels, false);
+        //UpdateMoveInformation(member, learnedMovesPanels);
     }
 
     public IEnumerator AnimateLearnedMoves(bool isActive, float duration = 0.2f)
@@ -270,8 +227,8 @@ public class PartyUserInterface : MonoBehaviour
         }
 
         float opacity = isActive ? 0.7f : 0;
-        Vector3 position = isActive ? informationPanel.transform.position : new Vector3(learnedMovesPanel.transform.position.x - 500, learnedMovesPanel.transform.position.y);
-        StartCoroutine(learnedMovesPanel.transform.LerpPosition(position, duration));
+        //Vector3 position = isActive ? informationPanel.transform.position : new Vector3(learnedMovesPanel.transform.position.x - 500, learnedMovesPanel.transform.position.y);
+        //StartCoroutine(learnedMovesPanel.transform.LerpPosition(position, duration));
 
         StartCoroutine(learnedMovesPanel.FadeOpacity(opacity, duration));
 
@@ -282,7 +239,7 @@ public class PartyUserInterface : MonoBehaviour
         }
     }
 
-    private void DrawSprite(Pokemon pokemon)
+    private void UpdateSprite(Pokemon pokemon)
     {
         PauseManager.instance.pauseContainer.transform.Find("Target Sprite/Pokémon/Sprite").GetComponent<Image>().sprite = pokemon.frontSprite;
         PauseManager.instance.pauseContainer.transform.Find("Target Sprite/Pokémon/Sprite").GetComponent<Image>().SetNativeSize();
@@ -428,15 +385,9 @@ public class PartyUserInterface : MonoBehaviour
     {
         indicator = transform.Find("Indicator").gameObject;
         arrows = transform.Find("Arrows").gameObject;
-        movesPanel = transform.Find("Middle/Active Moves").gameObject;
-        informationPanel = transform.Find("Middle/Information").GetComponent<MemberInformation>();
-        learnedMovesPanel = transform.Find("Middle/Learned Moves").gameObject;
         scrollBar = learnedMovesPanel.transform.Find("Scrollbar").GetComponent<Scrollbar>();
 
-        informationPanels = informationPanel.transform.GetChildren();
-        movesPanels = movesPanel.transform.GetChildren();
-        learnedMovesPanels = learnedMovesPanel.transform.Find("Moves").GetChildren();
-        selectedPanel = movesPanels;
+        informationPanels = GetComponentsInChildren<PartyInformationPanel>();
 
         radarChartMesh = transform.Find("Middle/Stats/Chart/Radar Mesh").GetComponent<CanvasRenderer>();
 

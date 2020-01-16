@@ -56,8 +56,18 @@ public class PartyManager : MonoBehaviour
 
     #endregion
 
+    #region Accessor Methods
+
+    public PartyUserInterface GetUserInterface()
+    {
+        return userInterface;
+    }
+
+    #endregion
+
     #region Miscellaneous Methods
 
+    /*
     private void UpdateSelectedPanel(bool arrows = false)
     {
         int selectedSlot = selectedPanel == 0 ? selectedMove : selectedInformation;
@@ -105,9 +115,11 @@ public class PartyManager : MonoBehaviour
         UpdateSelectedPanel(true); yield return null;
         StartCoroutine(userInterface.UpdateSelectedSlot(0, -1, true));
     }
+    */
 
     private void GetInput()
     {
+        /*
         if (!flags.isViewingAllMoves)
         {
             if (Input.GetAxisRaw("Horizontal") == 0)
@@ -196,6 +208,17 @@ public class PartyManager : MonoBehaviour
                 StartCoroutine(userInterface.SwitchMode(flags.isViewingAllMoves, selectedMove));
             }
         }
+        */
+
+        bool hasInput;;
+
+        (selectedPanel, hasInput) = input.GetInput("Horizontal", TestInput.Axis.Horizontal, 4, selectedPanel);
+        if (hasInput)
+        {
+            userInterface.UpdateSelectedPanel(selectedPanel, (int)Input.GetAxisRaw("Horizontal"));
+        }
+
+        
     }
     
     #endregion
@@ -251,5 +274,5 @@ public class PartyManager : MonoBehaviour
         */
     }
 
-        #endregion
-    }
+    #endregion
+}

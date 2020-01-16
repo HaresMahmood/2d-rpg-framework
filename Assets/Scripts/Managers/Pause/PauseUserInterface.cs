@@ -1,6 +1,6 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 /// <summary>
@@ -13,6 +13,8 @@ public class PauseUserInterface : MonoBehaviour
     public GameObject pauseContainer { get; private set; }
     private GameObject menuNavigation, characterSprite, sidePanel, indicator;
     private Animator indicatorAnimator, pauseAnimator, spriteAnimator;
+
+    private RectTransform topPanel;
 
     private Transform[] menus;
     private Transform[] partySlots;
@@ -66,6 +68,10 @@ public class PauseUserInterface : MonoBehaviour
     public void TogglePauseMenu(bool state)
     {
         pauseContainer.SetActive(state);
+        if (state)
+        {
+            LayoutRebuilder.ForceRebuildLayoutImmediate(topPanel.GetComponent<RectTransform>());
+        }
     }
 
     // TODO: Move to PartyManager?
@@ -204,6 +210,8 @@ public class PauseUserInterface : MonoBehaviour
         characterSprite = transform.Find("Character Sprite").gameObject;
         sidePanel = transform.Find("Side Panel").gameObject;
         indicator = sidePanel.transform.Find("Indicators").gameObject;
+
+        topPanel = transform.Find("Top Panel").GetComponent<RectTransform>();
 
         indicatorAnimator = indicator.GetComponent<Animator>();
         pauseAnimator = pauseContainer.GetComponent<Animator>();

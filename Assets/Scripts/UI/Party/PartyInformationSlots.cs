@@ -7,31 +7,31 @@ using UnityEngine.UI;
 /// <summary>
 ///
 /// </summary>
-public class InformationContainer : MonoBehaviour
+public class PartyInformationSlots : MonoBehaviour
 {
     #region Variables
 
     [Header("Values")]
-    [SerializeField] [ReadOnly] private bool isSelected;
+    [SerializeField] [ReadOnly] private bool isActive;
 
     private RectTransform margin;
-    private Transform[] informationPanels;
+    private Transform[] informationContainers;
 
     #endregion
 
     #region Miscellaneous Methods
 
-    public void UpdatePanel(bool isSelected)
+    public void SetActive(bool isActive)
     {
-        this.isSelected = isSelected;
+        this.isActive = isActive;
 
-        informationPanels[1].gameObject.SetActive(isSelected);
-        informationPanels[2].gameObject.SetActive(isSelected);
+        informationContainers[1].gameObject.SetActive(isActive);
+        informationContainers[2].gameObject.SetActive(isActive);
 
-        AnimatePanel(isSelected);
+        AnimateSlot(isActive);
     }
 
-    public void AnimatePanel(bool isSelected)
+    public void AnimateSlot(bool isSelected)
     {
         float width = isSelected ? 100f : 0f;
         StartCoroutine(ExpandMargin(width));
@@ -70,7 +70,7 @@ public class InformationContainer : MonoBehaviour
     {
         margin = transform.Find("Margin").GetComponent<RectTransform>();
         List<Transform> children = transform.GetChildren().ToList();
-        informationPanels = children.Find(x => x != margin.transform).GetChildren();
+        informationContainers = children.Find(x => x != margin.transform).GetChildren();
     }
 
     #endregion
