@@ -31,13 +31,14 @@ public class PartyUserInterface : MonoBehaviour
 
         //UpdateMoveInformation(member, movesPanels);
         //UpdateMoveInformation(member, learnedMovesPanels);
-        UpdateScrollbar();
+        //UpdateScrollbar();
         //learnedMovesPanel.SetActive(false);
 
         //LayoutRebuilder.ForceRebuildLayoutImmediate(informationPanel.transform.parent.GetComponent<RectTransform>());
 
         //UpdateSelectedPanel(0, 0);
         //StartCoroutine(UpdateSelectedSlot(0, -1, false, 0.2f));
+        UpdateSelectedPanel(0, -1);
         UpdateSprite(member);
     }
 
@@ -385,7 +386,7 @@ public class PartyUserInterface : MonoBehaviour
     {
         indicator = transform.Find("Indicator").gameObject;
         arrows = transform.Find("Arrows").gameObject;
-        scrollBar = learnedMovesPanel.transform.Find("Scrollbar").GetComponent<Scrollbar>();
+        //scrollBar = learnedMovesPanel.transform.Find("Scrollbar").GetComponent<Scrollbar>();
 
         informationPanels = GetComponentsInChildren<PartyInformationPanel>();
 

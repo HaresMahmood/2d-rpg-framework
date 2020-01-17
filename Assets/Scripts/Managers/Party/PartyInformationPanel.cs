@@ -26,9 +26,29 @@ public class PartyInformationPanel : MonoBehaviour
     public void SetActive(bool isActive)
     {
         this.isActive = isActive;
+        StartCoroutine(SetActive(isActive, selectedSlot));
+    }
 
-        AnimatePanel(isActive);
-        informationSlots[selectedSlot].AnimateSlot(isActive);
+    private IEnumerator SetActive(bool isActive, int selectedSlot)
+    {
+        float duration = 0.15f;
+
+        //StopAllCoroutines();
+        if (isActive)
+        {
+            StartCoroutine(PartyManager.instance.GetUserInterface().FadeIndicator(false));
+            yield return new WaitForSecondsRealtime(duration / 2);
+            AnimatePanel(isActive);
+            informationSlots[selectedSlot].AnimateSlot(isActive);
+            yield return new WaitForSecondsRealtime(duration);
+            PartyManager.instance.GetUserInterface().UpdateIndicator(informationSlots, selectedSlot);
+            StartCoroutine(PartyManager.instance.GetUserInterface().FadeIndicator(true));
+        }
+        else
+        {
+            AnimatePanel(isActive);
+            informationSlots[selectedSlot].AnimateSlot(isActive);
+        }
     }
 
     private void InitializePanel()
@@ -41,7 +61,7 @@ public class PartyInformationPanel : MonoBehaviour
         informationSlots[0].SetActive(true);
     }
 
-    private void AnimatePanel(bool isActive, float opacity = 0.7f, float duration = 0.25f)
+    private void AnimatePanel(bool isActive, float opacity = 0.5f, float duration = 0.25f)
     {
         float targetOpacity = isActive ? 1 : opacity;
 
@@ -59,7 +79,7 @@ public class PartyInformationPanel : MonoBehaviour
         float duration = 0.15f;
         int previousSlot = ExtensionMethods.IncrementInt(selectedSlot, 0, informationSlots.Length, increment);
 
-        StopAllCoroutines();
+        //StopAllCoroutines();
         StartCoroutine(PartyManager.instance.GetUserInterface().FadeIndicator(false));
         yield return new WaitForSecondsRealtime(duration / 2);
         UpdateSlot(selectedSlot, previousSlot);

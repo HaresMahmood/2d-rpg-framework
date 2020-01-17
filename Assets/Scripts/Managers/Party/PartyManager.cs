@@ -210,9 +210,9 @@ public class PartyManager : MonoBehaviour
         }
         */
 
-        bool hasInput;;
+        bool hasInput;
 
-        (selectedPanel, hasInput) = input.GetInput("Horizontal", TestInput.Axis.Horizontal, 4, selectedPanel);
+        (selectedPanel, hasInput) = input.GetInput("Horizontal", TestInput.Axis.Horizontal, 2, selectedPanel);
         if (hasInput)
         {
             userInterface.UpdateSelectedPanel(selectedPanel, (int)Input.GetAxisRaw("Horizontal"));
@@ -243,7 +243,6 @@ public class PartyManager : MonoBehaviour
         {
             GetInput();
         }
-
 
         /*
         if (PauseManager.instance.selectedSlot < party.playerParty.Count)
