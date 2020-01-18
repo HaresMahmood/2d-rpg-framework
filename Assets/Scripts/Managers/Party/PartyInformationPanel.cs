@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -10,13 +9,13 @@ public class PartyInformationPanel : MonoBehaviour
     #region Variables
 
     [Header("Values")]
-    [SerializeField] [ReadOnly] private bool isActive;
+    [SerializeField] [ReadOnly] protected bool isActive;
 
-    private readonly TestInput input = new TestInput();
+    protected readonly TestInput input = new TestInput();
 
-    private PartyInformationSlots[] informationSlots;
+    protected PartyInformationSlots[] informationSlots;
 
-    private int selectedSlot;
+    protected int selectedSlot;
 
 
     #endregion
@@ -29,7 +28,7 @@ public class PartyInformationPanel : MonoBehaviour
         StartCoroutine(SetActive(isActive, selectedSlot));
     }
 
-    private IEnumerator SetActive(bool isActive, int selectedSlot)
+    protected IEnumerator SetActive(bool isActive, int selectedSlot)
     {
         float duration = 0.15f;
 
@@ -51,7 +50,7 @@ public class PartyInformationPanel : MonoBehaviour
         }
     }
 
-    private void InitializePanel()
+    public virtual void InitializePanel()
     {
         foreach (PartyInformationSlots slot in informationSlots)
         {
@@ -61,20 +60,20 @@ public class PartyInformationPanel : MonoBehaviour
         informationSlots[0].SetActive(true);
     }
 
-    private void AnimatePanel(bool isActive, float opacity = 0.5f, float duration = 0.25f)
+    protected void AnimatePanel(bool isActive, float opacity = 0.5f, float duration = 0.25f)
     {
         float targetOpacity = isActive ? 1 : opacity;
 
         StartCoroutine(gameObject.FadeOpacity(targetOpacity, duration));
     }
 
-    private void UpdateSlot(int selectedSlot, int previousSlot)
+    protected void UpdateSlot(int selectedSlot, int previousSlot)
     {
         informationSlots[selectedSlot].SetActive(true);
         informationSlots[previousSlot].SetActive(false);
     }
 
-    private IEnumerator AnimateSlot(int selectedSlot, int increment)
+    protected IEnumerator AnimateSlot(int selectedSlot, int increment)
     {
         float duration = 0.15f;
         int previousSlot = ExtensionMethods.IncrementInt(selectedSlot, 0, informationSlots.Length, increment);
@@ -88,7 +87,7 @@ public class PartyInformationPanel : MonoBehaviour
         StartCoroutine(PartyManager.instance.GetUserInterface().FadeIndicator(true));
     }
 
-    private void GetInput()
+    protected virtual void GetInput()
     {
         bool hasInput;
 
@@ -104,19 +103,19 @@ public class PartyInformationPanel : MonoBehaviour
     #region Unity Methods
 
     /// <summary>
-    /// Awake is called when the script instance is being loaded.
+    /// Start is called before the first frame update.
     /// </summary>
-    private void Awake()
+    protected virtual void Start()
     {
         informationSlots = transform.GetComponentsInChildren<PartyInformationSlots>();
-        
+
         InitializePanel();
     }
 
     /// <summary>
     /// Update is called once per frame.
     /// </summary>
-    private void Update()
+    protected void Update()
     {
         if (PauseManager.instance.flags.isActive && isActive) // && PartyManager.instance.flags.isActive
         {

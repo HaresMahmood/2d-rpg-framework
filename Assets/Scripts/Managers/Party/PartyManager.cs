@@ -31,6 +31,7 @@ public class PartyManager : MonoBehaviour
     private int selectedInformation;
     private int selectedMove;
     private int selectedLearnedMove;
+    public int selectedMember { get; private set; }
     private int selectedPanel;
 
     //public event EventHandler OnUserInput = delegate { };

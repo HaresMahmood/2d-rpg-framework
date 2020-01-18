@@ -42,38 +42,6 @@ public class PartyUserInterface : MonoBehaviour
         UpdateSprite(member);
     }
 
-    private Transform[] RemoveInactivePanels(Transform[] panels)
-    {
-        List<Transform> panelList = panels.ToList();
-
-        panelList.RemoveAll(panel => !panel.gameObject.activeSelf);
-
-        return panelList.ToArray();
-    }
-
-    public void UpdateMoveInformation(Pokemon member, Transform[] panels, bool animate = true)
-    {
-        int counter = 0;
-        List<Pokemon.LearnedMove> moves = panels[0].parent.name == "Active Moves" ? member.activeMoves : member.learnedMoves;
-
-        for (int i = 0; i < moves.Count; i++)
-        {
-            panels[i].GetComponentInChildren<MoveSlot>().UpdateInformation(moves[i]);
-            if (animate) panels[i].GetComponent<PartyInformationSlots>().SetActive(false);
-            if (panels[0].parent.parent.name == "Learned Moves") counter++;
-        }
-
-        if (panels[0].parent.parent.name == "Learned Moves")
-        {
-            for (int i = counter; i < panels.Length; i++)
-            {
-                panels[i].gameObject.SetActive(false);
-            }
-
-            //learnedMovesPanels = RemoveInactivePanels(panels);
-        }
-    }
-
     public void UpdateSelectedPanel(int selectedPanel, int increment)
     {
         int previousPanel = ExtensionMethods.IncrementInt(selectedPanel, 0, 2, increment);
