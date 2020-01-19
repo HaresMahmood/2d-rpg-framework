@@ -10,6 +10,7 @@ public class PartyLearnedMovePanel : PartyMovePanel
 {
     #region Variables
 
+    Animator animator;
     Scrollbar scrollbar;
 
     #endregion
@@ -20,7 +21,7 @@ public class PartyLearnedMovePanel : PartyMovePanel
     {
         StartCoroutine(base.SetActive(isActive, selectedSlot));
         informationSlots[selectedSlot].SetActive(isActive);
-        selectedSlot = this.selectedSlot = 0;
+        this.selectedSlot = 0;
         yield return null; yield return null;
         UpdateScrollbar();
     }
@@ -33,14 +34,12 @@ public class PartyLearnedMovePanel : PartyMovePanel
         GetComponent<CanvasGroup>().alpha = 0f;
     }
 
-    public void AnimatePanel(bool isActive, float duration = 0.25f)
+    public void AnimatePanel(bool isActive, float duration = 0.2f)
     {
         float opacity = isActive ? 0.7f : 0f;
 
         UpdateScrollbar();
-
-        Vector3 position = isActive ? new Vector3(transform.position.x + 400, transform.position.y) : new Vector3(transform.position.x - 400, transform.position.y);
-        StartCoroutine(transform.LerpPosition(position, duration));
+        animator.SetBool("isActive", isActive);
         StartCoroutine(gameObject.FadeOpacity(opacity, duration));
     }
 
@@ -74,6 +73,7 @@ public class PartyLearnedMovePanel : PartyMovePanel
 
     private void SwapMove(int selectedMember, int selectedMove, int selectedLearnedMove)
     {
+        Pokemon member = 
         Pokemon.LearnedMove move = base.GetMoves(selectedMember)[selectedMove];
         Pokemon.LearnedMove learnedMove = GetMoves(selectedMember)[selectedLearnedMove];
 
@@ -106,6 +106,7 @@ public class PartyLearnedMovePanel : PartyMovePanel
     {
         base.Start();
 
+        animator = GetComponent<Animator>();
         scrollbar = GetComponentInChildren<Scrollbar>();
     }
 

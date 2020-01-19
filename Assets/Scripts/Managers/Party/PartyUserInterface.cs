@@ -55,7 +55,7 @@ public class PartyUserInterface : MonoBehaviour
         informationPanels[selectedPanel].SetActive(isActive);
     }
 
-    public void FadePanel(int selectedPanel, bool isActive, float duration = 0.25f)
+    public void FadePanel(int selectedPanel, bool isActive, float duration = 0.2f)
     {
         float opacity = isActive ? 0.7f : 0f;
 
