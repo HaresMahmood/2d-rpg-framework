@@ -33,12 +33,14 @@ public class PartyLearnedMovePanel : PartyMovePanel
         informationSlots = RemoveInactiveObjects(informationSlots);
         GetComponent<CanvasGroup>().alpha = 0f;
     }
-    private IEnumerator DectivatePanel()
+
+    // TODO: Debug.
+    private IEnumerator DeactivatePanel()
     {
-        SwapMove(PartyManager.instance.selectedMember, FindObjectOfType<PartyMovePanel>().selectedSlot, selectedSlot);
+        SwapMove(PartyManager.instance.selectedMember, transform.FindSibling("Active Moves").GetComponent<PartyMovePanel>().selectedSlot, selectedSlot);
         UpdateMoveInformation();
-        FindObjectOfType<PartyMovePanel>().UpdateMoveInformation();
-        FindObjectOfType<PartyMovePanel>().SetActive(true);
+        transform.FindSibling("Active Moves").GetComponent<PartyMovePanel>().UpdateMoveInformation();
+        transform.FindSibling("Active Moves").GetComponent<PartyMovePanel>().SetActive(true);
         yield return null;
         SetActive(false);
     }
@@ -96,7 +98,7 @@ public class PartyLearnedMovePanel : PartyMovePanel
 
         if (Input.GetButtonDown("Interact"))
         {
-            StartCoroutine(DectivatePanel());
+            StartCoroutine(DeactivatePanel());
         }
     }
 
