@@ -33,6 +33,15 @@ public class PartyLearnedMovePanel : PartyMovePanel
         informationSlots = RemoveInactiveObjects(informationSlots);
         GetComponent<CanvasGroup>().alpha = 0f;
     }
+    private IEnumerator DectivatePanel()
+    {
+        SwapMove(PartyManager.instance.selectedMember, FindObjectOfType<PartyMovePanel>().selectedSlot, selectedSlot);
+        UpdateMoveInformation();
+        FindObjectOfType<PartyMovePanel>().UpdateMoveInformation();
+        FindObjectOfType<PartyMovePanel>().SetActive(true);
+        yield return null;
+        SetActive(false);
+    }
 
     public void AnimatePanel(bool isActive, float duration = 0.2f)
     {
@@ -73,12 +82,12 @@ public class PartyLearnedMovePanel : PartyMovePanel
 
     private void SwapMove(int selectedMember, int selectedMove, int selectedLearnedMove)
     {
-        Pokemon member = 
+        Pokemon member = PartyManager.instance.party.playerParty[selectedMember];
         Pokemon.LearnedMove move = base.GetMoves(selectedMember)[selectedMove];
         Pokemon.LearnedMove learnedMove = GetMoves(selectedMember)[selectedLearnedMove];
 
-        base.GetMoves(selectedMember)[selectedMove] = learnedMove;
-        GetMoves(selectedMember)[selectedLearnedMove] = move;
+        member.activeMoves[selectedMove] = learnedMove;
+        member.learnedMoves[selectedLearnedMove] = move;
     }
 
     protected override void GetInput()
@@ -87,11 +96,7 @@ public class PartyLearnedMovePanel : PartyMovePanel
 
         if (Input.GetButtonDown("Interact"))
         {
-            SwapMove(PartyManager.instance.selectedMember, base.selectedSlot, selectedSlot);
-            UpdateMoveInformation();
-            FindObjectOfType<PartyMovePanel>().UpdateMoveInformation();
-            SetActive(false);
-            FindObjectOfType<PartyMovePanel>().SetActive(true);
+            StartCoroutine(DectivatePanel());
         }
     }
 

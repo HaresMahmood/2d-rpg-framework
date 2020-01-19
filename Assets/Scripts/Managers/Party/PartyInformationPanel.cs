@@ -15,7 +15,7 @@ public class PartyInformationPanel : MonoBehaviour
 
     protected PartyInformationSlots[] informationSlots;
 
-    protected int selectedSlot;
+    public int selectedSlot { get; set; }
 
 
     #endregion

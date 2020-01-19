@@ -91,6 +91,12 @@ public class PartyMovePanel : PartyInformationPanel
         if (!flags.isRearrangingMoves)
         {
             base.GetInput();
+
+            if (Input.GetButtonDown("Remove") && PartyManager.instance.flags.isViewingAllMoves)
+            {
+                FindObjectOfType<PartyLearnedMovePanel>().SetActive(true);
+                SetActive(false);
+            }
         }
         else
         {
@@ -103,17 +109,11 @@ public class PartyMovePanel : PartyInformationPanel
             }
         }
 
-        if (Input.GetButtonDown("Interact"))
+        if (Input.GetButtonDown("Interact") && !FindObjectOfType<PartyLearnedMovePanel>().isActive)
         {
             flags.isRearrangingMoves = !flags.isRearrangingMoves;
             StartCoroutine(PartyManager.instance.GetUserInterface().FadeIndicator(!flags.isRearrangingMoves));
             PartyManager.instance.GetUserInterface().UpdateIndicator(informationSlots, selectedSlot);
-        }
-
-        if (Input.GetButtonDown("Remove") && PartyManager.instance.flags.isViewingAllMoves)
-        {
-            SetActive(false);
-            FindObjectOfType<PartyLearnedMovePanel>().SetActive(true);
         }
     }
 
