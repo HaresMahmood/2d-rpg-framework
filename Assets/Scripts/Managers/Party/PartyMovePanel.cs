@@ -9,13 +9,34 @@ public class PartyMovePanel : PartyInformationPanel
 {
     #region Variables
 
+    public Flags flags = new Flags(false);
 
+    #endregion
+
+    #region Structs
+
+    public struct Flags
+    {
+        public bool isRearrangingMoves { get; set; }
+
+        public Flags(bool isRearrangingMoves)
+        {
+            this.isRearrangingMoves = isRearrangingMoves;
+        }
+    }
 
     #endregion
 
     #region Miscellaneous Methods
 
     public override void InitializePanel()
+    {
+        UpdateMoveInformation();
+
+        informationSlots[0].SetActive(true);
+    }
+
+    public void UpdateMoveInformation()
     {
         int counter = 0;
         List<Pokemon.LearnedMove> moves = GetMoves(PartyManager.instance.selectedMember);
@@ -35,8 +56,6 @@ public class PartyMovePanel : PartyInformationPanel
         }
 
         informationSlots = RemoveInactiveObjects(informationSlots);
-
-        informationSlots[0].SetActive(true);
     }
 
     protected virtual List<Pokemon.LearnedMove> GetMoves(int selectedMember)
@@ -46,13 +65,56 @@ public class PartyMovePanel : PartyInformationPanel
         return member.activeMoves;
     }
 
-    private PartyInformationSlots[] RemoveInactiveObjects(PartyInformationSlots[] source)
+    protected PartyInformationSlots[] RemoveInactiveObjects(PartyInformationSlots[] source)
     {
         List<PartyInformationSlots> list = source.ToList();
 
         list.RemoveAll(panel => !panel.gameObject.activeSelf);
 
         return list.ToArray();
+    }
+
+    private void UpdateMovePosition(int selectedMember, int selectedSlot, int increment)
+    {
+        int previousSlot = ExtensionMethods.IncrementInt(selectedSlot, 0, informationSlots.Length, increment);
+
+        Pokemon.LearnedMove move = GetMoves(selectedMember)[previousSlot];
+        GetMoves(selectedMember).Remove(move);
+        GetMoves(selectedMember).Insert(selectedSlot, move);
+
+        UpdateMoveInformation();
+        UpdateSlot(selectedSlot, previousSlot);
+    }
+
+    protected override void GetInput()
+    {
+        if (!flags.isRearrangingMoves)
+        {
+            base.GetInput();
+        }
+        else
+        {
+            bool hasInput;
+
+            (selectedSlot, hasInput) = input.GetInput("Vertical", TestInput.Axis.Vertical, informationSlots.Length, selectedSlot);
+            if (hasInput)
+            {
+                UpdateMovePosition(PartyManager.instance.selectedMember, selectedSlot, (int)Input.GetAxisRaw("Vertical"));
+            }
+        }
+
+        if (Input.GetButtonDown("Interact"))
+        {
+            flags.isRearrangingMoves = !flags.isRearrangingMoves;
+            StartCoroutine(PartyManager.instance.GetUserInterface().FadeIndicator(!flags.isRearrangingMoves));
+            PartyManager.instance.GetUserInterface().UpdateIndicator(informationSlots, selectedSlot);
+        }
+
+        if (Input.GetButtonDown("Remove") && PartyManager.instance.flags.isViewingAllMoves)
+        {
+            SetActive(false);
+            FindObjectOfType<PartyLearnedMovePanel>().SetActive(true);
+        }
     }
 
     #endregion

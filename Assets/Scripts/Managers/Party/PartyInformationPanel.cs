@@ -28,10 +28,11 @@ public class PartyInformationPanel : MonoBehaviour
         StartCoroutine(SetActive(isActive, selectedSlot));
     }
 
-    protected IEnumerator SetActive(bool isActive, int selectedSlot)
+    protected virtual IEnumerator SetActive(bool isActive, int selectedSlot)
     {
         float duration = 0.15f;
 
+        informationSlots[selectedSlot].SetActive(true);
         //StopAllCoroutines();
         if (isActive)
         {
@@ -73,7 +74,7 @@ public class PartyInformationPanel : MonoBehaviour
         informationSlots[previousSlot].SetActive(false);
     }
 
-    protected IEnumerator AnimateSlot(int selectedSlot, int increment)
+    protected virtual IEnumerator AnimateSlot(int selectedSlot, int increment)
     {
         float duration = 0.15f;
         int previousSlot = ExtensionMethods.IncrementInt(selectedSlot, 0, informationSlots.Length, increment);
@@ -85,6 +86,17 @@ public class PartyInformationPanel : MonoBehaviour
         yield return new WaitForSecondsRealtime(duration);
         PartyManager.instance.GetUserInterface().UpdateIndicator(informationSlots, selectedSlot);
         StartCoroutine(PartyManager.instance.GetUserInterface().FadeIndicator(true));
+    }
+
+    protected void RegularInput()
+    {
+        bool hasInput;
+
+        (selectedSlot, hasInput) = input.GetInput("Vertical", TestInput.Axis.Vertical, informationSlots.Length, selectedSlot);
+        if (hasInput)
+        {
+            StartCoroutine(AnimateSlot(selectedSlot, (int)Input.GetAxisRaw("Vertical")));
+        }
     }
 
     protected virtual void GetInput()

@@ -24,7 +24,7 @@ public class PartyManager : MonoBehaviour
     [SerializeField] private Material chartMaterial;
 
     private readonly TestInput input = new TestInput();
-    public Flags flags = new Flags(false, false, false);
+    public Flags flags = new Flags(false, false);
 
     public GameObject pauseContainer { get; private set; }
 
@@ -44,14 +44,11 @@ public class PartyManager : MonoBehaviour
     {
         public bool isActive { get; set; }
         public bool isViewingAllMoves { get; set; }
-        public bool isRearrangingMoves { get; set; }
 
-        public Flags(bool isActive, bool isArrangingMoves, bool isRearrangingMoves)
+        public Flags(bool isActive, bool isArrangingMoves)
         {
             this.isActive = isActive;
             this.isViewingAllMoves = isArrangingMoves;
-            this.isRearrangingMoves = isRearrangingMoves;
-
         }
     }
 
@@ -118,108 +115,121 @@ public class PartyManager : MonoBehaviour
     }
     */
 
-    private void GetInput()
+    /*
+if (!flags.isViewingAllMoves)
+{
+if (Input.GetAxisRaw("Horizontal") == 0)
+{
+    bool hasInput;
+    int selectedSlot = selectedPanel == 0 ? selectedInformation : selectedMove;
+
+    (selectedSlot, hasInput) = input.GetInput("Vertical", TestInput.Axis.Vertical, 4, selectedSlot);
+    if (hasInput)
     {
-        /*
-        if (!flags.isViewingAllMoves)
+        if (selectedPanel == 0)
         {
-            if (Input.GetAxisRaw("Horizontal") == 0)
-            {
-                bool hasInput;
-                int selectedSlot = selectedPanel == 0 ? selectedInformation : selectedMove;
-
-                (selectedSlot, hasInput) = input.GetInput("Vertical", TestInput.Axis.Vertical, 4, selectedSlot);
-                if (hasInput)
-                {
-                    if (selectedPanel == 0)
-                    {
-                        selectedInformation = selectedSlot;
-                    }
-                    else
-                    {
-                        selectedMove = selectedSlot;
-                    }
-
-                    StartCoroutine(userInterface.UpdateSelectedSlot(selectedSlot, (int)Input.GetAxisRaw("Vertical")));
-                }
-            }
-            else
-            {
-                bool hasInput;
-
-                (selectedPanel, hasInput) = input.GetInput("Horizontal", TestInput.Axis.Horizontal, 2, selectedPanel);
-                if (hasInput)
-                {
-                    UpdateSelectedPanel();
-                }
-            }
+            selectedInformation = selectedSlot;
         }
         else
         {
-            if (Input.GetButtonDown("Interact"))
-            {
-                if (selectedPanel != 2)
-                {
-                    flags.isRearrangingMoves = !flags.isRearrangingMoves;
-                    userInterface.RearrangeMove(flags.isRearrangingMoves, selectedMove);
-                }
-                else
-                {
-                    StartCoroutine(SwapMove());
-                }
-            }
-
-            if (Input.GetButtonDown("Remove") && flags.isRearrangingMoves)
-            {
-                StartCoroutine(EnableLearnedMovePanel());
-            }
-
-            bool hasInput;
-            int selectedSlot = selectedPanel == 2 ? selectedLearnedMove : selectedMove;
-
-            (selectedSlot, hasInput) = input.GetInput("Vertical", TestInput.Axis.Vertical, userInterface.selectedPanel.Length, selectedSlot);
-            if (hasInput)
-            {
-
-                if (selectedPanel == 2)
-                {
-                    selectedLearnedMove = selectedSlot;
-                }
-                else
-                {
-                    selectedMove = selectedSlot;
-                }
-
-                if (flags.isRearrangingMoves)
-                {
-                    StartCoroutine(UpdateMovePosition(0, selectedSlot, (int)Input.GetAxisRaw("Vertical")));
-                }
-                else
-                {
-                    StartCoroutine(userInterface.UpdateSelectedSlot(selectedSlot, (int)Input.GetAxisRaw("Vertical"), true));
-                }
-            }
+            selectedMove = selectedSlot;
         }
 
-        if (Input.GetButtonDown("Toggle"))
-        {
-            if (selectedPanel == 1)
-            {
-                flags.isViewingAllMoves = !flags.isViewingAllMoves;
-                StartCoroutine(userInterface.SwitchMode(flags.isViewingAllMoves, selectedMove));
-            }
-        }
-        */
+        StartCoroutine(userInterface.UpdateSelectedSlot(selectedSlot, (int)Input.GetAxisRaw("Vertical")));
+    }
+}
+else
+{
+    bool hasInput;
 
+    (selectedPanel, hasInput) = input.GetInput("Horizontal", TestInput.Axis.Horizontal, 2, selectedPanel);
+    if (hasInput)
+    {
+        UpdateSelectedPanel();
+    }
+}
+}
+else
+{
+if (Input.GetButtonDown("Interact"))
+{
+    if (selectedPanel != 2)
+    {
+        flags.isRearrangingMoves = !flags.isRearrangingMoves;
+        userInterface.RearrangeMove(flags.isRearrangingMoves, selectedMove);
+    }
+    else
+    {
+        StartCoroutine(SwapMove());
+    }
+}
+
+if (Input.GetButtonDown("Remove") && flags.isRearrangingMoves)
+{
+    StartCoroutine(EnableLearnedMovePanel());
+}
+
+bool hasInput;
+int selectedSlot = selectedPanel == 2 ? selectedLearnedMove : selectedMove;
+
+(selectedSlot, hasInput) = input.GetInput("Vertical", TestInput.Axis.Vertical, userInterface.selectedPanel.Length, selectedSlot);
+if (hasInput)
+{
+
+    if (selectedPanel == 2)
+    {
+        selectedLearnedMove = selectedSlot;
+    }
+    else
+    {
+        selectedMove = selectedSlot;
+    }
+
+    if (flags.isRearrangingMoves)
+    {
+        StartCoroutine(UpdateMovePosition(0, selectedSlot, (int)Input.GetAxisRaw("Vertical")));
+    }
+    else
+    {
+        StartCoroutine(userInterface.UpdateSelectedSlot(selectedSlot, (int)Input.GetAxisRaw("Vertical"), true));
+    }
+}
+}
+
+if (Input.GetButtonDown("Toggle"))
+{
+if (selectedPanel == 1)
+{
+    flags.isViewingAllMoves = !flags.isViewingAllMoves;
+    StartCoroutine(userInterface.SwitchMode(flags.isViewingAllMoves, selectedMove));
+}
+}
+*/
+
+    private void GetInput()
+    {
         bool hasInput;
 
         (selectedPanel, hasInput) = input.GetInput("Horizontal", TestInput.Axis.Horizontal, 2, selectedPanel);
         if (hasInput)
         {
+            //selectedPanel = flags.isViewingAllMoves ? (selectedPanel == 0 ? 2 : 1) : selectedPanel;
             userInterface.UpdateSelectedPanel(selectedPanel, (int)Input.GetAxisRaw("Horizontal"));
         }
 
-        
+        if (Input.GetButtonDown("Toggle"))
+        {
+            flags.isViewingAllMoves = !flags.isViewingAllMoves;
+
+            if (selectedPanel == 0)
+            {
+                selectedPanel = 1;
+                userInterface.UpdateSelectedPanel(selectedPanel, -1);
+            }
+
+            userInterface.FadePanel(2, flags.isViewingAllMoves);
+            userInterface.FadePanel(0, !flags.isViewingAllMoves);
+        }
     }
     
     #endregion

@@ -50,6 +50,25 @@ public class PartyUserInterface : MonoBehaviour
         informationPanels[previousPanel].SetActive(false);
     }
 
+    public void SetPanelStatus(int selectedPanel, bool isActive)
+    {
+        informationPanels[selectedPanel].SetActive(isActive);
+    }
+
+    public void FadePanel(int selectedPanel, bool isActive, float duration = 0.25f)
+    {
+        float opacity = isActive ? 0.7f : 0f;
+
+        if (selectedPanel != 2)
+        {
+            StartCoroutine(informationPanels[selectedPanel].gameObject.FadeOpacity(opacity, duration));
+        }
+        else
+        {
+            informationPanels[selectedPanel].GetComponent<PartyLearnedMovePanel>().AnimatePanel(isActive);
+        }
+    }
+
     public void UpdateIndicator(PartyInformationSlots[] informationSlots, int selectedSlot)
     {
         Transform margin = informationSlots[selectedSlot].transform.Find("Margin").GetComponent<RectTransform>();
@@ -95,57 +114,6 @@ public class PartyUserInterface : MonoBehaviour
         }
     }
 
-    public IEnumerator UpdateSelectedSlot(int selectedSlot, int increment, float duration = 0.15f)
-    {
-        StartCoroutine(FadeIndicator(false));
-        yield return new WaitForSecondsRealtime(duration / 2);
-
-        UpdateSelectedSlot(selectedSlot, increment); yield return null;
-        /*
-        if (scroll && scrollBar.gameObject.activeInHierarchy && selectedPanel == learnedMovesPanels)
-        {
-            UpdateScrollbar(selectedSlot);
-        }
-        else
-        {
-            UpdateScrollbar();
-        }
-        */
-        yield return new WaitForSecondsRealtime(duration);
-
-        //UpdateIndicator(selectedSlot);
-        StartCoroutine(FadeIndicator(true));
-    }
-
-    public void UpdateScrollbar(int selectedSlot = -1)
-    {
-        if (selectedSlot > -1)
-        {
-            //float totalMoves = (float)learnedMovesPanels.Length;
-            //float targetValue = 1.0f - (float)selectedSlot / (totalMoves - 1);
-            //StartCoroutine(scrollBar.LerpScrollbar(targetValue, 0.08f));
-        }
-        else
-        {
-            scrollBar.value = 1;
-        }
-    }
-
-    public void UpdateMovePosition(Party party, int selectedMember, int selectedSlot, int increment)
-    {
-        int previousSlot = ExtensionMethods.IncrementInt(selectedSlot, 0, 4, increment);
-        Pokemon member = party.playerParty[selectedMember];
-        List<Pokemon.LearnedMove> moves = member.activeMoves;
-
-        Pokemon.LearnedMove move = moves[previousSlot];
-        moves.Remove(move);
-        moves.Insert(selectedSlot, move);
-
-        //UpdateMoveInformation(member, movesPanels);
-
-        UpdateSelectedSlot(selectedSlot, increment);
-    }
-
     /*
     public IEnumerator SwitchMode(bool isArrangingMoves, int selectedSlot, float duration = 0.15f)
     {
@@ -175,38 +143,6 @@ public class PartyUserInterface : MonoBehaviour
         UpdateIndicator(selectedSlot);
     }
     */
-
-    public void SwapMove(Pokemon member, int selectedMove, int selectedLearnedMove)
-    {
-        Pokemon.LearnedMove move = member.activeMoves[selectedMove];
-        Pokemon.LearnedMove learnedMove = member.learnedMoves[selectedLearnedMove];
-
-        member.activeMoves[selectedMove] = learnedMove;
-        member.learnedMoves[selectedLearnedMove] = move;
-
-        //UpdateMoveInformation(member, movesPanels, false);
-        //UpdateMoveInformation(member, learnedMovesPanels);
-    }
-
-    public IEnumerator AnimateLearnedMoves(bool isActive, float duration = 0.2f)
-    {
-        if (isActive)
-        {
-            learnedMovesPanel.SetActive(isActive);
-        }
-
-        float opacity = isActive ? 0.7f : 0;
-        //Vector3 position = isActive ? informationPanel.transform.position : new Vector3(learnedMovesPanel.transform.position.x - 500, learnedMovesPanel.transform.position.y);
-        //StartCoroutine(learnedMovesPanel.transform.LerpPosition(position, duration));
-
-        StartCoroutine(learnedMovesPanel.FadeOpacity(opacity, duration));
-
-        if (!isActive)
-        {
-            yield return new WaitForSecondsRealtime(duration);
-            learnedMovesPanel.SetActive(isActive);
-        }
-    }
 
     private void UpdateSprite(Pokemon pokemon)
     {
