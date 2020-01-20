@@ -529,6 +529,24 @@ public static class ExtensionMethods
         }
     }
 
+    /*
+    public static T FindBaseObjectOfType<T>() where T : UnityEngine.Object
+    {
+        T destination = default;
+
+        foreach (T child in Object.FindObjectsOfType<T>())
+        {
+            Debug.Log(child);
+            if (!child.GetType().IsSubclassOf(typeof(T)))
+            {
+                destination = child;
+            }
+        }
+
+        return destination;
+    }
+    */
+
     public static T[] RemoveAt<T>(this T[] source, int index)
     {
         T[] dest = new T[source.Length - 1];

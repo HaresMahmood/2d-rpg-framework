@@ -34,13 +34,14 @@ public class PartyLearnedMovePanel : PartyMovePanel
         GetComponent<CanvasGroup>().alpha = 0f;
     }
 
-    // TODO: Debug.
     private IEnumerator DeactivatePanel()
     {
-        SwapMove(PartyManager.instance.selectedMember, transform.FindSibling("Active Moves").GetComponent<PartyMovePanel>().selectedSlot, selectedSlot);
+        PartyMovePanel movePanel = FindBaseObjectOfType<PartyMovePanel>();
+
+        SwapMove(PartyManager.instance.selectedMember, movePanel.selectedSlot, selectedSlot);
         UpdateMoveInformation();
-        transform.FindSibling("Active Moves").GetComponent<PartyMovePanel>().UpdateMoveInformation();
-        transform.FindSibling("Active Moves").GetComponent<PartyMovePanel>().SetActive(true);
+        movePanel.UpdateMoveInformation();
+        movePanel.SetActive(true);
         yield return null;
         SetActive(false);
     }
@@ -92,6 +93,23 @@ public class PartyLearnedMovePanel : PartyMovePanel
         member.learnedMoves[selectedLearnedMove] = move;
     }
 
+    // TODO: Debug.
+    private T FindBaseObjectOfType<T>() where T : Object
+    {
+        T destination = default;
+
+        foreach (T child in FindObjectsOfType<T>())
+        {
+            Debug.Log(child);
+            if (!child.GetType().IsSubclassOf(typeof(T)))
+            {
+                destination = child;
+            }
+        }
+
+        return destination;
+    }
+
     protected override void GetInput()
     {
         RegularInput();
@@ -115,6 +133,7 @@ public class PartyLearnedMovePanel : PartyMovePanel
 
         animator = GetComponent<Animator>();
         scrollbar = GetComponentInChildren<Scrollbar>();
+        //Debug.Log(GetComponent<PartyLearnedMovePanel>().GetType().IsSubclassOf(typeof(PartyMovePanel)));
     }
 
     #endregion
