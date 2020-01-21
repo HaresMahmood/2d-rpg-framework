@@ -100,7 +100,6 @@ public class PartyLearnedMovePanel : PartyMovePanel
 
         foreach (T child in FindObjectsOfType<T>())
         {
-            Debug.Log(child);
             if (!child.GetType().IsSubclassOf(typeof(T)))
             {
                 destination = child;
