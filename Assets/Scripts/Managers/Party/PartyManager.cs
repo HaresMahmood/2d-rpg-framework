@@ -224,6 +224,7 @@ if (selectedPanel == 1)
             if (selectedPanel == 0 || selectedPanel == 2)
             {
                 userInterface.UpdateSelectedPanel(1, selectedPanel);
+                userInterface.SetPanelStatus(selectedPanel, false);
                 userInterface.FadePanel(selectedPanel, false);
                 selectedPanel = 1;
             }
