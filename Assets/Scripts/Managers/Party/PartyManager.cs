@@ -28,9 +28,6 @@ public class PartyManager : MonoBehaviour
 
     public GameObject pauseContainer { get; private set; }
 
-    private int selectedInformation;
-    private int selectedMove;
-    private int selectedLearnedMove;
     public int selectedMember { get; private set; }
     private int selectedPanel;
 
@@ -209,22 +206,26 @@ if (selectedPanel == 1)
     private void GetInput()
     {
         bool hasInput;
+        //int previousPanel = selectedPanel;
 
         (selectedPanel, hasInput) = input.GetInput("Horizontal", TestInput.Axis.Horizontal, 2, selectedPanel);
         if (hasInput)
         {
-            //selectedPanel = flags.isViewingAllMoves ? (selectedPanel == 0 ? 2 : 1) : selectedPanel;
-            userInterface.UpdateSelectedPanel(selectedPanel, (int)Input.GetAxisRaw("Horizontal"));
+            selectedPanel = flags.isViewingAllMoves ? (selectedPanel == 0 ? 2 : selectedPanel) : (selectedPanel == 2 ? 0 : selectedPanel);
+            int previousPanel = flags.isViewingAllMoves ? (ExtensionMethods.IncrementInt(selectedPanel, 1, 3, (int)Input.GetAxisRaw("Horizontal"))) : (ExtensionMethods.IncrementInt(selectedPanel, 0, 2, (int)Input.GetAxisRaw("Horizontal")));
+            userInterface.UpdateSelectedPanel(selectedPanel, previousPanel);
+            selectedPanel = flags.isViewingAllMoves ? (selectedPanel == 2 ? 0 : selectedPanel) : selectedPanel;
         }
 
         if (Input.GetButtonDown("Toggle"))
         {
             flags.isViewingAllMoves = !flags.isViewingAllMoves;
 
-            if (selectedPanel == 0)
+            if (selectedPanel == 0 || selectedPanel == 2)
             {
+                userInterface.UpdateSelectedPanel(1, selectedPanel);
+                userInterface.FadePanel(selectedPanel, false);
                 selectedPanel = 1;
-                userInterface.UpdateSelectedPanel(selectedPanel, -1);
             }
 
             userInterface.FadePanel(2, flags.isViewingAllMoves);

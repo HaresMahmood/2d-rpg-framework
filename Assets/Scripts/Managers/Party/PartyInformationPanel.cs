@@ -38,7 +38,7 @@ public class PartyInformationPanel : MonoBehaviour
         {
             StartCoroutine(PartyManager.instance.GetUserInterface().FadeIndicator(false));
             yield return new WaitForSecondsRealtime(duration / 2);
-            AnimatePanel(isActive);
+            FadePanel(isActive);
             informationSlots[selectedSlot].AnimateSlot(isActive);
             yield return new WaitForSecondsRealtime(duration);
             PartyManager.instance.GetUserInterface().UpdateIndicator(informationSlots, selectedSlot);
@@ -46,7 +46,7 @@ public class PartyInformationPanel : MonoBehaviour
         }
         else
         {
-            AnimatePanel(isActive);
+            FadePanel(isActive);
             informationSlots[selectedSlot].AnimateSlot(isActive);
         }
     }
@@ -61,7 +61,7 @@ public class PartyInformationPanel : MonoBehaviour
         informationSlots[0].SetActive(true);
     }
 
-    protected void AnimatePanel(bool isActive, float opacity = 0.5f, float duration = 0.25f)
+    public void FadePanel(bool isActive, float opacity = 0.5f, float duration = 0.25f)
     {
         float targetOpacity = isActive ? 1 : opacity;
 

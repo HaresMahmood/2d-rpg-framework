@@ -10,25 +10,23 @@ public class PartyLearnedMovePanel : PartyMovePanel
 {
     #region Variables
 
+    PartyMovePanel movePanel;
     Animator animator;
     Scrollbar scrollbar;
 
     #endregion
 
     #region Miscellaneous Methods
-
     protected override IEnumerator SetActive(bool isActive, int selectedSlot)
     {
         StartCoroutine(base.SetActive(isActive, selectedSlot));
-        informationSlots[selectedSlot].SetActive(isActive);
-        this.selectedSlot = 0;
-        yield return null; yield return null;
-        UpdateScrollbar();
+        yield return null;
+        UpdateScrollbar(this.selectedSlot);
     }
 
     public override void InitializePanel()
     {
-        UpdateMoveInformation();
+        base.InitializePanel();
 
         informationSlots = RemoveInactiveObjects(informationSlots);
         GetComponent<CanvasGroup>().alpha = 0f;
@@ -36,23 +34,23 @@ public class PartyLearnedMovePanel : PartyMovePanel
 
     private IEnumerator DeactivatePanel()
     {
-        PartyMovePanel movePanel = FindBaseObjectOfType<PartyMovePanel>();
-
-        SwapMove(PartyManager.instance.selectedMember, movePanel.selectedSlot, selectedSlot);
-        UpdateMoveInformation();
-        movePanel.UpdateMoveInformation();
         movePanel.SetActive(true);
         yield return null;
         SetActive(false);
     }
 
-    public void AnimatePanel(bool isActive, float duration = 0.2f)
+    private void UpdateMoveLists()
     {
-        float opacity = isActive ? 0.7f : 0f;
+        SwapMove(PartyManager.instance.selectedMember, movePanel.selectedSlot, selectedSlot);
+        UpdateMoveInformation();
+        movePanel.UpdateMoveInformation();
+    }
 
-        UpdateScrollbar();
+    public void AnimatePanel(bool isActive)
+    {
+        UpdateScrollbar(selectedSlot);
+        informationSlots[selectedSlot].AnimateSlot(!isActive);
         animator.SetBool("isActive", isActive);
-        StartCoroutine(gameObject.FadeOpacity(opacity, duration));
     }
 
     protected override IEnumerator AnimateSlot(int selectedSlot, int increment)
@@ -86,6 +84,7 @@ public class PartyLearnedMovePanel : PartyMovePanel
     private void SwapMove(int selectedMember, int selectedMove, int selectedLearnedMove)
     {
         Pokemon member = PartyManager.instance.party.playerParty[selectedMember];
+
         Pokemon.LearnedMove move = base.GetMoves(selectedMember)[selectedMove];
         Pokemon.LearnedMove learnedMove = GetMoves(selectedMember)[selectedLearnedMove];
 
@@ -115,6 +114,12 @@ public class PartyLearnedMovePanel : PartyMovePanel
 
         if (Input.GetButtonDown("Interact"))
         {
+            UpdateMoveLists();
+            StartCoroutine(DeactivatePanel());
+        }
+
+        if (Input.GetButtonDown("Cancel"))
+        {
             StartCoroutine(DeactivatePanel());
         }
     }
@@ -130,9 +135,9 @@ public class PartyLearnedMovePanel : PartyMovePanel
     {
         base.Start();
 
+        movePanel = FindBaseObjectOfType<PartyMovePanel>();
         animator = GetComponent<Animator>();
         scrollbar = GetComponentInChildren<Scrollbar>();
-        //Debug.Log(GetComponent<PartyLearnedMovePanel>().GetType().IsSubclassOf(typeof(PartyMovePanel)));
     }
 
     #endregion

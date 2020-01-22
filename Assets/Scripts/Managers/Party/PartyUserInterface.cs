@@ -42,10 +42,8 @@ public class PartyUserInterface : MonoBehaviour
         UpdateSprite(member);
     }
 
-    public void UpdateSelectedPanel(int selectedPanel, int increment)
+    public void UpdateSelectedPanel(int selectedPanel, int previousPanel)
     {
-        int previousPanel = ExtensionMethods.IncrementInt(selectedPanel, 0, 2, increment);
-
         informationPanels[selectedPanel].SetActive(true);
         informationPanels[previousPanel].SetActive(false);
     }
@@ -55,18 +53,12 @@ public class PartyUserInterface : MonoBehaviour
         informationPanels[selectedPanel].SetActive(isActive);
     }
 
-    public void FadePanel(int selectedPanel, bool isActive, float duration = 0.2f)
+    public void FadePanel(int selectedPanel, bool isActive, float duration = 0.25f)
     {
-        float opacity = isActive ? 0.7f : 0f;
+        float opacity = isActive ? 1f : 0f;
 
-        if (selectedPanel != 2)
-        {
-            StartCoroutine(informationPanels[selectedPanel].gameObject.FadeOpacity(opacity, duration));
-        }
-        else
-        {
-            informationPanels[selectedPanel].GetComponent<PartyLearnedMovePanel>().AnimatePanel(isActive);
-        }
+        StartCoroutine(informationPanels[selectedPanel].gameObject.FadeOpacity(opacity, duration));
+        if (selectedPanel == 2) informationPanels[selectedPanel].GetComponent<PartyLearnedMovePanel>().AnimatePanel(isActive);
     }
 
     public void UpdateIndicator(PartyInformationSlots[] informationSlots, int selectedSlot)
