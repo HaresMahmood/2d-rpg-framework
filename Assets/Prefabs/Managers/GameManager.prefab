@@ -76,14 +76,55 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   party: {fileID: 0}
+  userInterface: {fileID: 0}
+  buttons: []
   chartMaterial: {fileID: 0}
-  partyContainer: {fileID: 0}
-  indicator: {fileID: 0}
-  selectedMove: 0
-  totalMoves: 0
-  lastInput: 0
-  isActive: 0
-  isDrawing: 0
+--- !u!1 &1433313799231144793
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8645750827348014655}
+  - component: {fileID: 3635178087494467177}
+  m_Layer: 0
+  m_Name: Missions
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8645750827348014655
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1433313799231144793}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 481548375044098156}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3635178087494467177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1433313799231144793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b38fae8bd91410c47a5b9895d40b39b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  missions: {fileID: 11400000, guid: 9b180933d1a6ea4409f5cf14cda65f47, type: 2}
+  userInterface: {fileID: 0}
+  buttons: []
 --- !u!1 &1588163222089477265
 GameObject:
   m_ObjectHideFlags: 0
@@ -115,6 +156,7 @@ Transform:
   - {fileID: 5411629645143428498}
   - {fileID: 1281012373029174089}
   - {fileID: 6900684584619626328}
+  - {fileID: 8645750827348014655}
   m_Father: {fileID: 6002379217965659316}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -130,19 +172,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 692411fbe3fc9614bac4639c5d7b2881, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pauseContainer: {fileID: 0}
-  sidePanel: {fileID: 0}
-  topPanel: {fileID: 0}
-  indicator: {fileID: 0}
-  isPaused: 0
-  inPartyMenu: 0
-  isInteracting: 0
-  selectedSlot: 0
-  totalSlots: 0
-  menuIndex: 0
-  maxMenuIndex: 0
-  selectedMenu: 0
-  currentMenuIndex: 0
+  userInterface: {fileID: 0}
 --- !u!1 &2542676125325423497
 GameObject:
   m_ObjectHideFlags: 0
@@ -230,6 +260,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aeec81b4d8b91b499e78f5d3f1fb3bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  userInterface: {fileID: 0}
   buttons: []
 --- !u!1 &3787010750625582226
 GameObject:
@@ -449,11 +480,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3317e8a6689efbb4c9c36908082c8883, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  userInterface: {fileID: 0}
   realSecondsPerDay: 1420
   format: 1
+  isPaused: 0
   hours: 0
   minutes: 0
-  isPaused: 0
 --- !u!114 &8390750325625256402
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -485,13 +517,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab43665c842e54748adc88e18c2f9a1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  userInterface: {fileID: 0}
   particleSystems: {fileID: 0}
-  weather:
-    weather: 0
-    icon: {fileID: 0}
-  nextWeather:
-    weather: 0
-    icon: {fileID: 0}
+  previousWeather: 0
+  weather: 0
+  nextWeather: 0
 --- !u!1 &7329825562967326397
 GameObject:
   m_ObjectHideFlags: 0
@@ -581,6 +611,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventory: {fileID: 11400000, guid: 5a47d2040f5278546be326f7821df575, type: 2}
+  userInterface: {fileID: 0}
   buttons:
   - text: Back
     sprite: {fileID: 21300000, guid: d4e0beb796148d84886877025f53b4fb, type: 3}
@@ -590,19 +621,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 633b6632c07e05b4e93f3cc2b2391cb0, type: 3}
   - text: Sort items
     sprite: {fileID: 21300000, guid: 2530a1c673d62f345a2be841b5afc5bb, type: 3}
-  menuButtonPrefab: {fileID: 2042213031241034387, guid: f7c192d6a4a58cc4084a1be14bafc297,
-    type: 3}
-  inventoryContainer: {fileID: 0}
-  grid: []
-  categoryContainer: []
-  indicatorAnim: {fileID: 0}
-  arrowAnim: {fileID: 0}
-  currentItem: {fileID: 0}
-  selectedSlot: 0
-  isActive: 0
-  inContextMenu: 0
-  isGivingItem: 0
-  isDiscardingItem: 0
+  sortingMethod: 0
 --- !u!114 &1351163362760467619
 MonoBehaviour:
   m_ObjectHideFlags: 0
