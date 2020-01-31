@@ -182,6 +182,8 @@ public class PauseUserInterface : MonoBehaviour
         string activeMenu = $"isIn{PauseManager.instance.menuNames[selectedMenu]}"; ;
         string inactiveMenu = $"isIn{PauseManager.instance.menuNames[previousMenu]}";
 
+        Debug.Log(PauseManager.instance.menuNames[selectedMenu]);
+
         characterSprite.GetComponent<CharacterSpriteController>().SetAnimation(activeMenu, inactiveMenu);
     }
 
