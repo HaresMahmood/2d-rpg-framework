@@ -21,8 +21,6 @@ public class PauseManager : MonoBehaviour
     private readonly TestInput input = new TestInput();
     public Flags flags = new Flags(false, false, false, false);
 
-    public GameObject pauseContainer { get; private set; }
-
     public int selectedSlot { get; private set; }
     private int selectedMenu;
 
@@ -84,8 +82,13 @@ public class PauseManager : MonoBehaviour
 
     private void OnActive()
     {
+        float zoom = flags.isActive ? 5.8f : CameraController.instance.startSize;
+
         Time.timeScale = flags.isActive ? 0 : 1;
+
         CameraController.instance.GetComponent<PostprocessingBlur>().enabled = flags.isActive;
+        CameraController.instance.ZoomCamera(zoom, CameraController.instance.moveSpeed);
+
         userInterface.TogglePauseMenu(flags.isActive);
 
         if (flags.isActive)
@@ -179,7 +182,8 @@ public class PauseManager : MonoBehaviour
 
         if (Input.GetButtonDown("Start"))
         {
-            flags.isActive = !flags.isActive;
+            //flags.isActive = !flags.isActive;
+            flags.isActive = !userInterface.gameObject.activeSelf;
             OnActive();
         }
     }
