@@ -21,7 +21,6 @@ public class MissionUserInterface : MonoBehaviour
 
     private Animator indicatorAnimator;
 
-
     #endregion
 
     #region Miscellaneous Methods
@@ -63,6 +62,7 @@ public class MissionUserInterface : MonoBehaviour
         missionPanels = leftPanel.transform.Find("List/Mission List").GetComponentsInChildren<MissionPanel>();
 
         rightPanel.GetComponentInChildren<MissionMainPanel>().UpdateInformation(MissionManager.instance.missions.mission[0]);
+        rightPanel.GetComponentInChildren<MissionOtherPanel>().UpdateInformation(MissionManager.instance.missions.mission[0]);
         for (int i = 0; i < MissionManager.instance.missions.mission.Count; i++)
         {
             missionPanels[i].UpdateInformation(MissionManager.instance.missions.mission[i]);
