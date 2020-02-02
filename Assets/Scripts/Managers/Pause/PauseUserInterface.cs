@@ -33,11 +33,12 @@ public class PauseUserInterface : MonoBehaviour
             default: { break; }
             case (0):
                 {
+                    FindObjectOfType<MissionManager>().flags.isActive = state;
                     break;
                 }
             case (1):
                 {
-                    FindObjectOfType<PauseManager>().flags.isActive = state;
+                    FindObjectOfType<PartyManager>().flags.isActive = state;
                     break;
                 }
             case (2):

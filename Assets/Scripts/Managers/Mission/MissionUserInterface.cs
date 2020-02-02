@@ -13,13 +13,15 @@ public class MissionUserInterface : MonoBehaviour
 {
     #region Variables
 
-    private MissionPanel[] missionPanels;
+    private MissionPanel[] missionsPanel;
 
     private GameObject leftPanel;
     private GameObject rightPanel;
     private GameObject indicator;
 
     private Animator indicatorAnimator;
+
+    private Scrollbar scrollbar;
 
     #endregion
 
@@ -28,20 +30,39 @@ public class MissionUserInterface : MonoBehaviour
     /// <summary>
     /// Animates and updates the position of the indicator. Dynamically changes position and size of indicator depending on what situation it is used for. If no value is selected, the indicator completely fades out.
     /// </summary>
-    /// <param name="selectedValue"> Index of the value currently selected. Defaults to -1 (null/no value). </param>
+    /// <param name="selectedValue"> Index of the value currently selected. </param>
     /// <param name="duration"> Duration of the animation/fade. </param>
-    /// <param name="isInSubMenu"> Whether or not the indicator is used in the sub menu. Defaults to false. </param>
     /// <returns> Co-routine. </returns>
-    public IEnumerator UpdateIndicator(int selectedValue, float duration = 0.1f)
+    private IEnumerator UpdateIndicator(int selectedValue, float duration = 0.1f)
     {
         indicatorAnimator.enabled = false;
         StartCoroutine(indicator.FadeOpacity(0f, duration));
         yield return new WaitForSecondsRealtime(duration);
 
-        indicator.transform.position = missionPanels[selectedValue].transform.position; 
+        indicator.transform.position = missionsPanel[selectedValue].transform.position; 
         
         yield return null;
         indicatorAnimator.enabled = true;
+    }
+
+    private void UpdateScrollbar(int selectedSlot = -1)
+    {
+        if (selectedSlot > -1)
+        {
+            float totalMoves = (float)missionsPanel.Length;
+            float targetValue = 1.0f - (float)selectedSlot / (totalMoves - 1);
+            StartCoroutine(scrollbar.LerpScrollbar(targetValue, 0.08f));
+        }
+        else
+        {
+            scrollbar.value = 1;
+        }
+    }
+
+    public void UpdateSelectedSlot(int selectedSlot)
+    {
+        UpdateScrollbar(selectedSlot);
+        StartCoroutine(UpdateIndicator(selectedSlot));
     }
 
     #endregion
@@ -59,13 +80,13 @@ public class MissionUserInterface : MonoBehaviour
 
         indicatorAnimator = indicator.GetComponent<Animator>();
 
-        missionPanels = leftPanel.transform.Find("List/Mission List").GetComponentsInChildren<MissionPanel>();
+        missionsPanel = leftPanel.transform.Find("List/Mission List").GetComponentsInChildren<MissionPanel>();
 
         rightPanel.GetComponentInChildren<MissionMainPanel>().UpdateInformation(MissionManager.instance.missions.mission[0]);
         rightPanel.GetComponentInChildren<MissionOtherPanel>().UpdateInformation(MissionManager.instance.missions.mission[0]);
         for (int i = 0; i < MissionManager.instance.missions.mission.Count; i++)
         {
-            missionPanels[i].UpdateInformation(MissionManager.instance.missions.mission[i]);
+            missionsPanel[i].UpdateInformation(MissionManager.instance.missions.mission[i]);
         }
 
         StartCoroutine(UpdateIndicator(0));

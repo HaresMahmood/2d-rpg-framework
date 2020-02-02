@@ -22,7 +22,9 @@ public class MissionPanel : MonoBehaviour
     {
         nameText.SetText(mission.Name);
         objectiveText.SetText(mission.objective);
+
         remainingText.SetText(mission.remaining);
+        remainingText.GetComponent<AutoTextWidth>().UpdateWidth(mission.remaining);
     }
 
     #endregion
