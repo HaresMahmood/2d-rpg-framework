@@ -34,21 +34,25 @@ public class PauseUserInterface : MonoBehaviour
             case (0):
                 {
                     FindObjectOfType<MissionManager>().flags.isActive = state;
+                    StartCoroutine(sidePanel.FadeOpacity(0f, 0.2f)); // TODO: Debug
                     break;
                 }
             case (1):
                 {
                     FindObjectOfType<PartyManager>().flags.isActive = state;
+                    StartCoroutine(sidePanel.FadeOpacity(1f, 0.2f)); // TODO: Debug
                     break;
                 }
             case (2):
                 {
                     FindObjectOfType<InventoryManager>().flags.isActive = state;
+                    StartCoroutine(sidePanel.FadeOpacity(1f, 0.2f)); // TODO: Debug
                     break;
                 }
             case (3):
                 {
                     FindObjectOfType<SystemManager>().flags.isActive = state;
+                    StartCoroutine(sidePanel.FadeOpacity(0f, 0.2f)); // TODO: Debug
                     break;
                 }
         }
