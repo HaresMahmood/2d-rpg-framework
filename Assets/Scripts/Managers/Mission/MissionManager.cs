@@ -46,7 +46,7 @@ public class MissionManager : MonoBehaviour
     private void GetInput()
     {
         bool hasInput;
-        (selectedMission, hasInput) = input.GetInput("Vertical", TestInput.Axis.Vertical, missions.mission.Count, selectedMission);
+        (selectedMission, hasInput) = input.GetInput("Horizontal", "Vertical", missions.mission.Count, selectedMission, false, 7, 1);
         if (hasInput)
         {
             userInterface.UpdateSelectedSlot(selectedMission);

@@ -59,10 +59,17 @@ public class MissionUserInterface : MonoBehaviour
         }
     }
 
+    private void UpdatePanels(int selectedSlot)
+    {
+        rightPanel.GetComponentInChildren<MissionMainPanel>().UpdateInformation(MissionManager.instance.missions.mission[selectedSlot]);
+        rightPanel.GetComponentInChildren<MissionOtherPanel>().UpdateInformation(MissionManager.instance.missions.mission[selectedSlot]);
+    }
+
     public void UpdateSelectedSlot(int selectedSlot)
     {
         UpdateScrollbar(selectedSlot);
         StartCoroutine(UpdateIndicator(selectedSlot));
+        UpdatePanels(selectedSlot);
     }
 
     #endregion
@@ -80,15 +87,17 @@ public class MissionUserInterface : MonoBehaviour
 
         indicatorAnimator = indicator.GetComponent<Animator>();
 
+        scrollbar = leftPanel.transform.Find("List/Scrollbar").GetComponent<Scrollbar>();
+
         missionsPanel = leftPanel.transform.Find("List/Mission List").GetComponentsInChildren<MissionPanel>();
 
-        rightPanel.GetComponentInChildren<MissionMainPanel>().UpdateInformation(MissionManager.instance.missions.mission[0]);
-        rightPanel.GetComponentInChildren<MissionOtherPanel>().UpdateInformation(MissionManager.instance.missions.mission[0]);
+        UpdatePanels(0);
         for (int i = 0; i < MissionManager.instance.missions.mission.Count; i++)
         {
             missionsPanel[i].UpdateInformation(MissionManager.instance.missions.mission[i]);
         }
 
+        UpdateScrollbar();
         StartCoroutine(UpdateIndicator(0));
     }
 
