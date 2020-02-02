@@ -33,26 +33,34 @@ public class PauseUserInterface : MonoBehaviour
             default: { break; }
             case (0):
                 {
+                    float opacity = state ? 0f : 1f;
+
                     FindObjectOfType<MissionManager>().flags.isActive = state;
-                    StartCoroutine(sidePanel.FadeOpacity(0f, 0.2f)); // TODO: Debug
+                    StartCoroutine(sidePanel.FadeOpacity(opacity, 0.2f)); // TODO: Debug
                     break;
                 }
             case (1):
                 {
+                    float opacity = state ? 1f : 0f;
+
                     FindObjectOfType<PartyManager>().flags.isActive = state;
-                    StartCoroutine(sidePanel.FadeOpacity(1f, 0.2f)); // TODO: Debug
+                    StartCoroutine(sidePanel.FadeOpacity(opacity, 0.2f)); // TODO: Debug
                     break;
                 }
             case (2):
                 {
+                    float opacity = state ? 1f : 0f;
+
                     FindObjectOfType<InventoryManager>().flags.isActive = state;
-                    StartCoroutine(sidePanel.FadeOpacity(1f, 0.2f)); // TODO: Debug
+                    StartCoroutine(sidePanel.FadeOpacity(opacity, 0.2f)); // TODO: Debug
                     break;
                 }
             case (3):
                 {
+                    float opacity = state ? 0f : 1f;
+
                     FindObjectOfType<SystemManager>().flags.isActive = state;
-                    StartCoroutine(sidePanel.FadeOpacity(0f, 0.2f)); // TODO: Debug
+                    StartCoroutine(sidePanel.FadeOpacity(opacity, 0.2f)); // TODO: Debug
                     break;
                 }
         }
