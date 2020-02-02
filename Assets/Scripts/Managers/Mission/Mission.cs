@@ -38,8 +38,9 @@ public class Mission : ScriptableObject
 
     public enum Category
     {
-        MainMission,
-        SideMission
+        Main,
+        Side,
+        Placeholder
     }
 
     #endregion

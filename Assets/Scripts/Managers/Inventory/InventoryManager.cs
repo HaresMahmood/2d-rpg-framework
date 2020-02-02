@@ -12,8 +12,6 @@ public class InventoryManager : MonoBehaviour
 
     public static InventoryManager instance;
 
-    public List<string> categoryNames { get; private set; } = new List<string>();
-
     [Header("Setup")]
     public Inventory inventory;
     [SerializeField] private InventoryUserInterface userInterface;
@@ -26,6 +24,8 @@ public class InventoryManager : MonoBehaviour
     public Flags flags = new Flags(false, false, false);
 
     public Item selectedItem { get; set; }
+
+    public List<string> categoryNames { get; private set; } = new List<string>();
 
     public int selectedSlot { get; private set; } = 0; // TODO: Should be private field
     private int selectedCategory = 0;

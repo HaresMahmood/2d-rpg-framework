@@ -20,6 +20,8 @@ public class MissionManager : MonoBehaviour
     private readonly TestInput input = new TestInput();
     public Flags flags = new Flags(false, false);
 
+    public List<string> categoryNames { get; private set; } = new List<string>();
+
     private int selectedMission = 0;
     private int selectedCategory;
 
@@ -45,11 +47,24 @@ public class MissionManager : MonoBehaviour
 
     private void GetInput()
     {
-        bool hasInput;
-        (selectedMission, hasInput) = input.GetInput("Horizontal", "Vertical", missions.mission.Count, selectedMission, false, 7, 1);
-        if (hasInput)
+        if (Input.GetAxisRaw("Trigger") == 0) // TODO: Very ugly!
         {
-            userInterface.UpdateSelectedSlot(selectedMission);
+            bool hasInput;
+            (selectedMission, hasInput) = input.GetInput("Horizontal", "Vertical", missions.mission.Count, selectedMission, false, 7, 1);
+            if (hasInput)
+            {
+                userInterface.UpdateSelectedSlot(selectedMission);
+            }
+        }
+        else
+        {
+            bool hasInput;
+            (selectedCategory, hasInput) = input.GetInput("Trigger", TestInput.Axis.Horizontal, categoryNames.Count, selectedCategory);
+            if (hasInput)
+            {
+                selectedMission = 0;
+                userInterface.UpdateSelectedCategory(selectedCategory, (int)Input.GetAxisRaw("Trigger"));
+            }
         }
     }
 
@@ -64,6 +79,17 @@ public class MissionManager : MonoBehaviour
     {
         if (instance == null)
             instance = this;
+    }
+
+    /// <summary>
+    /// Start is called before the first frame update.
+    /// </summary>
+    private void Start()
+    {
+        for (int i = 0; i < Enum.GetNames(typeof(Mission.Category)).Length; i++)
+        {
+            categoryNames.Add(((Mission.Category)i).ToString());
+        }
     }
 
     /// <summary>
