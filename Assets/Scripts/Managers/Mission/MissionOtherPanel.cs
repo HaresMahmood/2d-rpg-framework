@@ -25,6 +25,12 @@ public class MissionOtherPanel : MonoBehaviour
 
     #region Miscellaneous Methods
 
+    public void FadePanel(float opacity, float duration = 0.1f)
+    {
+        StartCoroutine(informationPanel.gameObject.FadeOpacity(opacity, duration));
+        StartCoroutine(statusValue.transform.parent.gameObject.FadeOpacity(opacity, duration));
+    }
+
     public void UpdateInformation(Mission mission)
     {
         string status = mission.isCompleted ? "Completed" : "Not completed";

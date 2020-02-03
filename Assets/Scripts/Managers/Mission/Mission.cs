@@ -40,7 +40,7 @@ public class Mission : ScriptableObject
     {
         Main,
         Side,
-        Placeholder
+        Other
     }
 
     #endregion

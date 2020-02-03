@@ -36,7 +36,7 @@ public class ItemSlot : MonoBehaviour
         }
     }
 
-    public void PopulateSlot(Item item, float duration = -1, bool animate = true) // TODO: Make cleaner (no bool)
+    public void UpdateInformation(Item item, float duration = -1, bool animate = true) // TODO: Make cleaner (no bool)
     {
         slot.gameObject.SetActive(true);
 

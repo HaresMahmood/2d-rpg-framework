@@ -6,7 +6,7 @@ using TMPro;
 /// <summary>
 ///
 /// </summary>
-public class MissionPanel : MonoBehaviour
+public class MissionSlot : MonoBehaviour
 {
     #region Variables
 
@@ -18,13 +18,29 @@ public class MissionPanel : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    public void UpdateInformation(Mission mission)
+    public void AnimateSlot(float opacity, float duration = -1f)
+    {
+        if (duration > -1)
+        {
+            StartCoroutine(gameObject.FadeOpacity(opacity, duration));
+        }
+        else
+        {
+            GetComponent<CanvasGroup>().alpha = opacity;
+        }
+
+        if (opacity == 0f) gameObject.SetActive(false);
+    }
+
+    public void UpdateInformation(Mission mission, float duration = -1f)
     {
         nameText.SetText(mission.Name);
         objectiveText.SetText(mission.objective);
 
         remainingText.SetText(mission.remaining);
         remainingText.GetComponent<AutoTextWidth>().UpdateWidth(mission.remaining);
+
+        AnimateSlot(1f, duration);
     }
 
     #endregion

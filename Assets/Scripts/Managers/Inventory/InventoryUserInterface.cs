@@ -203,7 +203,7 @@ public class InventoryUserInterface : MonoBehaviour
 
             for (int i = 0; i < max; i++)
             {
-                itemGrid[i].GetComponent<ItemSlot>().PopulateSlot(categoryItems[i], duration);
+                itemGrid[i].GetComponent<ItemSlot>().UpdateInformation(categoryItems[i], duration);
 
                 yield return new WaitForSecondsRealtime(delay);
             }
@@ -212,7 +212,7 @@ public class InventoryUserInterface : MonoBehaviour
             {
                 for (int i = max; i < categoryItems.Count; i++)
                 {
-                    itemGrid[i].GetComponent<ItemSlot>().PopulateSlot(categoryItems[i]);
+                    itemGrid[i].GetComponent<ItemSlot>().UpdateInformation(categoryItems[i]);
                 }
             }
         }
@@ -227,7 +227,7 @@ public class InventoryUserInterface : MonoBehaviour
 
     public void UpdateItem(int selectedSlot)
     {
-        itemGrid[selectedSlot].GetComponent<ItemSlot>().PopulateSlot(categoryItems[selectedSlot], -1, false);
+        itemGrid[selectedSlot].GetComponent<ItemSlot>().UpdateInformation(categoryItems[selectedSlot], -1, false);
     }
 
     /// <summary>

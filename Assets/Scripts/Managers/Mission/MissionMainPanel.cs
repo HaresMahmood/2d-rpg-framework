@@ -20,6 +20,11 @@ public class MissionMainPanel : MonoBehaviour
 
     #region Miscellaneous Methods
 
+    public void FadePanel(float opacity, float duration = 0.1f)
+    {
+        StartCoroutine(panel.gameObject.FadeOpacity(opacity, duration));
+    }
+
     public void UpdateInformation(Mission mission)
     {
         nameText.SetText(mission.Name);
@@ -41,14 +46,6 @@ public class MissionMainPanel : MonoBehaviour
         nameText = panel.Find("Name").GetComponentInChildren<TextMeshProUGUI>();
         objectiveText = panel.Find("Objective/Value").GetComponent<TextMeshProUGUI>();
         descriptionText = panel.Find("Description/Value").GetComponent<TextMeshProUGUI>();
-    }
-
-    /// <summary>
-    /// Update is called once per frame.
-    /// </summary>
-    private void Update()
-    {
-        
     }
 
     #endregion

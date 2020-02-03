@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿using System.Linq;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-
 /// <summary>
 ///
 /// </summary>
@@ -10,7 +11,9 @@ public class MissionUserInterface : MonoBehaviour
 {
     #region Variables
 
-    private MissionPanel[] missionsPanel;
+    public List<Mission> categoryMissions { get; private set; } = new List<Mission>();
+
+    private MissionSlot[] missionSlots;
     private Transform[] categoryIcons;
 
     private Transform categoryText;
@@ -32,24 +35,28 @@ public class MissionUserInterface : MonoBehaviour
     /// <param name="selectedValue"> Index of the value currently selected. </param>
     /// <param name="duration"> Duration of the animation/fade. </param>
     /// <returns> Co-routine. </returns>
-    private IEnumerator UpdateIndicator(int selectedValue, float duration = 0.1f)
+    private IEnumerator UpdateIndicator(int selectedValue = -1, float duration = 0.1f)
     {
         indicatorAnimator.enabled = false;
         StartCoroutine(indicator.FadeOpacity(0f, duration));
-        yield return new WaitForSecondsRealtime(duration);
 
-        indicator.transform.position = missionsPanel[selectedValue].transform.position; 
-        
-        yield return null;
-        indicatorAnimator.enabled = true;
+        if (selectedValue > -1)
+        {
+            yield return new WaitForSecondsRealtime(duration);
+
+            indicator.transform.position = missionSlots[selectedValue].transform.position;
+
+            yield return null;
+            indicatorAnimator.enabled = true;
+        }
     }
 
     private void UpdateScrollbar(int selectedSlot = -1)
     {
         if (selectedSlot > -1)
         {
-            float totalMoves = (float)missionsPanel.Length;
-            float targetValue = 1.0f - (float)selectedSlot / (totalMoves - 1);
+            float totalSlots = categoryMissions.Count;
+            float targetValue = 1.0f - selectedSlot / (totalSlots - 1);
             StartCoroutine(scrollbar.LerpScrollbar(targetValue, 0.08f));
         }
         else
@@ -64,11 +71,11 @@ public class MissionUserInterface : MonoBehaviour
         rightPanel.GetComponentInChildren<MissionOtherPanel>().UpdateInformation(MissionManager.instance.missions.mission[selectedSlot]);
     }
 
-    public void UpdateSelectedSlot(int selectedSlot)
+    public void UpdateSelectedSlot(int selectedSlot, int selectedCategory = -1)
     {
         UpdateScrollbar(selectedSlot);
         StartCoroutine(UpdateIndicator(selectedSlot));
-        UpdatePanels(selectedSlot);
+        if (selectedCategory > -1) StartCoroutine(AnimateInformationPanels(selectedCategory));
     }
 
     /// <summary>
@@ -88,7 +95,79 @@ public class MissionUserInterface : MonoBehaviour
         StartCoroutine(categoryText.gameObject.FadeOpacity(1f, animationTime));
     }
 
-    public void UpdateSelectedCategory(int selectedCategory, int increment)
+    /// <summary>
+    /// Updates the items being displayed in the selected category.
+    /// </summary>
+    /// <param name="missions"> Inventory of items. </param>
+    /// <param name="selectedCategory"> Index of the category currently selected. </param>
+    /// <param name="duration"> The duration of the animations. </param>
+    /// <param name="delay"> The delay at which certain animations should occur. </param>
+    /// <returns> Co-routine. </returns>
+    private IEnumerator UpdateCategoryMissions(Missions missions, int selectedCategory, float duration = 0.15f, float delay = 0.03f)
+    {
+        categoryMissions = missions.mission.Where(mission => mission.category.ToString().Equals(MissionManager.instance.categoryNames[selectedCategory])).ToList();
+
+        if (categoryMissions.Count > 0)
+        {
+            int max = categoryMissions.Count > 7 ? 7 : categoryMissions.Count;
+
+            //StartCoroutine(transform.Find("Middle/Grid/Item Grid").gameObject.FadeOpacity(1f, duration));
+            //StartCoroutine(emptyGrid.FadeOpacity(0f, duration));
+
+            indicator.SetActive(false); //StartCoroutine(UpdateIndicator());
+            StartCoroutine(AnimateInformationPanels(selectedCategory));
+
+            //yield return new WaitForSecondsRealtime(duration);
+
+            for (int i = 0; i < categoryMissions.Count; i++)
+            {
+                missionSlots[i].gameObject.SetActive(true);
+                yield return null; UpdateScrollbar();
+            }
+
+            for (int i = 0; i < max; i++)
+            {
+                missionSlots[i].UpdateInformation(categoryMissions[i], duration);
+                yield return null; UpdateScrollbar();
+
+                yield return new WaitForSecondsRealtime(delay);
+            }
+
+            if (max < categoryMissions.Count)
+            {
+                for (int i = max; i < categoryMissions.Count; i++)
+                {
+                    missionSlots[i].UpdateInformation(categoryMissions[i]);
+                    yield return null; UpdateScrollbar();
+                }
+            }
+
+            indicator.SetActive(true);
+            StartCoroutine(UpdateIndicator(0));
+        }
+        else
+        {
+            indicator.SetActive(false); //StartCoroutine(UpdateIndicator());
+            StartCoroutine(AnimateInformationPanels());
+            //StartCoroutine(emptyGrid.FadeOpacity(1f, duration));
+            //StartCoroutine(transform.Find("Middle/Grid/Item Grid").gameObject.FadeOpacity(0f, duration));
+        }
+
+        yield return null;  StartCoroutine(UpdateIndicator(0));
+    }
+
+    /// <summary>
+    /// Resets the opacity of all items in the selected category.
+    /// </summary>
+    private void ResetCategoryMissions()
+    {
+        foreach (MissionSlot slot in missionSlots)
+        {
+            slot.AnimateSlot(0f);
+        }
+    }
+
+    public void UpdateSelectedCategory(Missions missions, int selectedCategory, int increment)
     {
         int previousCategory = ExtensionMethods.IncrementInt(selectedCategory, 0, MissionManager.instance.categoryNames.Count, -increment);
 
@@ -98,8 +177,10 @@ public class MissionUserInterface : MonoBehaviour
 
         StartCoroutine(UpdateCategoryName(selectedCategory));
 
+        ResetCategoryMissions();
+        StartCoroutine(UpdateCategoryMissions(missions, selectedCategory));
+
         UpdateSelectedSlot(0);
-        UpdateIndicator(0);
         UpdateScrollbar();
     }
 
@@ -113,6 +194,24 @@ public class MissionUserInterface : MonoBehaviour
     {
         StartCoroutine(categoryIcons[selectedCategory].GetComponentInChildren<Image>().gameObject.FadeColor(GameManager.GetAccentColor(), animationTime));
         StartCoroutine(categoryIcons[previousCategory].GetComponentInChildren<Image>().gameObject.FadeColor(Color.white, animationTime));
+    }
+
+    private IEnumerator AnimateInformationPanels(int selectedSlot = -1, float duration = 0.1f, float delay = 0.07f)
+    {
+        rightPanel.GetComponentInChildren<MissionMainPanel>().FadePanel(0f);
+        yield return new WaitForSecondsRealtime(delay);
+        rightPanel.GetComponentInChildren<MissionOtherPanel>().FadePanel(0f);
+
+        if (selectedSlot > -1)
+        {
+            yield return new WaitForSecondsRealtime(duration);
+
+            UpdatePanels(selectedSlot);
+
+            rightPanel.GetComponentInChildren<MissionMainPanel>().FadePanel(1f);
+            yield return new WaitForSecondsRealtime(delay);
+            rightPanel.GetComponentInChildren<MissionOtherPanel>().FadePanel(1f);
+        }
     }
 
     #endregion
@@ -134,18 +233,13 @@ public class MissionUserInterface : MonoBehaviour
 
         categoryText = leftPanel.transform.Find("Categories/Information");
 
-        missionsPanel = leftPanel.transform.Find("List/Mission List").GetComponentsInChildren<MissionPanel>();
+        missionSlots = leftPanel.transform.Find("List/Mission List").GetComponentsInChildren<MissionSlot>();
         categoryIcons = leftPanel.transform.Find("Categories/Category Icons").GetChildren();
-
-        UpdatePanels(0);
-        for (int i = 0; i < MissionManager.instance.missions.mission.Count; i++)
-        {
-            missionsPanel[i].UpdateInformation(MissionManager.instance.missions.mission[i]);
-        }
 
         UpdateScrollbar();
         StartCoroutine(UpdateIndicator(0));
-        UpdateSelectedCategory(0, -1);
+        UpdatePanels(0);
+        UpdateSelectedCategory(MissionManager.instance.missions, 0, -1);
     }
 
     #endregion
