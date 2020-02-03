@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -16,6 +13,8 @@ public class MissionUserInterface : MonoBehaviour
     private MissionPanel[] missionsPanel;
     private Transform[] categoryIcons;
 
+    private Transform categoryText;
+
     private GameObject leftPanel;
     private GameObject rightPanel;
     private GameObject indicator;
@@ -23,7 +22,6 @@ public class MissionUserInterface : MonoBehaviour
     private Animator indicatorAnimator;
 
     private Scrollbar scrollbar;
-
     #endregion
 
     #region Miscellaneous Methods
@@ -73,6 +71,23 @@ public class MissionUserInterface : MonoBehaviour
         UpdatePanels(selectedSlot);
     }
 
+    /// <summary>
+    /// Updates the text and position of the selected category's name.
+    /// </summary>
+    /// <param name="selectedCategory">  </param>
+    /// <param name="animationTime">  </param>
+    /// <returns> Co-routine. </returns>
+    private IEnumerator UpdateCategoryName(int selectedCategory, float animationTime = 0.1f)
+    {
+        StartCoroutine(categoryText.gameObject.FadeOpacity(0f, animationTime));
+
+        yield return new WaitForSecondsRealtime(animationTime);
+
+        categoryText.GetComponentInChildren<TextMeshProUGUI>().SetText($"{MissionManager.instance.categoryNames[selectedCategory]} Missions"); yield return null;
+        categoryText.position = new Vector2(categoryIcons[selectedCategory].position.x, categoryText.position.y);
+        StartCoroutine(categoryText.gameObject.FadeOpacity(1f, animationTime));
+    }
+
     public void UpdateSelectedCategory(int selectedCategory, int increment)
     {
         int previousCategory = ExtensionMethods.IncrementInt(selectedCategory, 0, MissionManager.instance.categoryNames.Count, -increment);
@@ -80,6 +95,8 @@ public class MissionUserInterface : MonoBehaviour
         AnimateCategoryPosition(selectedCategory, previousCategory);
         AnimateCategoryColor(selectedCategory, previousCategory);
         //StartCoroutine(AnimateCategoryIcon(selectedCategory, previousCategory, -increment));
+
+        StartCoroutine(UpdateCategoryName(selectedCategory));
 
         UpdateSelectedSlot(0);
         UpdateIndicator(0);
@@ -92,10 +109,10 @@ public class MissionUserInterface : MonoBehaviour
         categoryIcons[previousCategory].GetComponent<Animator>().SetBool("isSelected", false);
     }
 
-    private void AnimateCategoryColor(int selectedCategory, int previousCategory)
+    private void AnimateCategoryColor(int selectedCategory, int previousCategory, float animationTime = 0.1f)
     {
-        StartCoroutine(categoryIcons[selectedCategory].GetComponentInChildren<Image>().gameObject.FadeColor(GameManager.GetAccentColor(), 0.1f));
-        StartCoroutine(categoryIcons[previousCategory].GetComponentInChildren<Image>().gameObject.FadeColor(Color.white, 0.1f));
+        StartCoroutine(categoryIcons[selectedCategory].GetComponentInChildren<Image>().gameObject.FadeColor(GameManager.GetAccentColor(), animationTime));
+        StartCoroutine(categoryIcons[previousCategory].GetComponentInChildren<Image>().gameObject.FadeColor(Color.white, animationTime));
     }
 
     #endregion
@@ -114,6 +131,8 @@ public class MissionUserInterface : MonoBehaviour
         indicatorAnimator = indicator.GetComponent<Animator>();
 
         scrollbar = leftPanel.transform.Find("List/Scrollbar").GetComponent<Scrollbar>();
+
+        categoryText = leftPanel.transform.Find("Categories/Information");
 
         missionsPanel = leftPanel.transform.Find("List/Mission List").GetComponentsInChildren<MissionPanel>();
         categoryIcons = leftPanel.transform.Find("Categories/Category Icons").GetChildren();
