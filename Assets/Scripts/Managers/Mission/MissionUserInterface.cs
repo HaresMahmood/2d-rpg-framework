@@ -231,7 +231,7 @@ public class MissionUserInterface : MonoBehaviour
 
         indicatorAnimator = indicator.GetComponent<Animator>();
 
-        scrollbar = leftPanel.transform.Find("List/Scrollbar").GetComponent<Scrollbar>();
+        scrollbar = leftPanel.transform.Find("List/Scrollbar/Scrollbar").GetComponent<Scrollbar>();
 
         categoryText = leftPanel.transform.Find("Categories/Information");
 
