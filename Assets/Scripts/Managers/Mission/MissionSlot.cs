@@ -18,6 +18,12 @@ public class MissionSlot : MonoBehaviour
 
     #region Miscellaneous Methods
 
+    private void FadeSlot(float opacity, float duration = 0.1f)
+    {
+        StartCoroutine(nameText.gameObject.FadeOpacity(opacity, duration));
+        StartCoroutine(objectiveText.transform.parent.gameObject.FadeOpacity(opacity, duration));
+    }
+
     public void AnimateSlot(float opacity, float duration = -1f)
     {
         if (duration > -1)
@@ -41,6 +47,15 @@ public class MissionSlot : MonoBehaviour
         remainingText.GetComponent<AutoTextWidth>().UpdateWidth(mission.remaining);
 
         AnimateSlot(1f, duration);
+
+        if (mission.isCompleted && nameText.color.a != 0.5f)
+        {
+            FadeSlot(0.5f);
+        }
+        else if (!mission.isCompleted && nameText.color.a != 1f)
+        {
+            FadeSlot(1f);
+        }
     }
 
     #endregion

@@ -67,15 +67,15 @@ public class MissionUserInterface : MonoBehaviour
 
     private void UpdatePanels(int selectedSlot)
     {
-        rightPanel.GetComponentInChildren<MissionMainPanel>().UpdateInformation(MissionManager.instance.missions.mission[selectedSlot]);
-        rightPanel.GetComponentInChildren<MissionOtherPanel>().UpdateInformation(MissionManager.instance.missions.mission[selectedSlot]);
+        rightPanel.GetComponentInChildren<MissionMainPanel>().UpdateInformation(categoryMissions[selectedSlot]);
+        rightPanel.GetComponentInChildren<MissionOtherPanel>().UpdateInformation(categoryMissions[selectedSlot]);
     }
 
-    public void UpdateSelectedSlot(int selectedSlot, int selectedCategory = -1)
+    public void UpdateSelectedSlot(int selectedSlot)
     {
         UpdateScrollbar(selectedSlot);
         StartCoroutine(UpdateIndicator(selectedSlot));
-        if (selectedCategory > -1) StartCoroutine(AnimateInformationPanels(selectedCategory));
+        StartCoroutine(AnimateInformationPanels(selectedSlot));
     }
 
     /// <summary>
@@ -106,6 +106,8 @@ public class MissionUserInterface : MonoBehaviour
     private IEnumerator UpdateCategoryMissions(Missions missions, int selectedCategory, float duration = 0.15f, float delay = 0.03f)
     {
         categoryMissions = missions.mission.Where(mission => mission.category.ToString().Equals(MissionManager.instance.categoryNames[selectedCategory])).ToList();
+        //categoryMissions.Sort((mission1, mission2) => string.Compare(mission1.Name, mission2.Name));
+        categoryMissions = categoryMissions.OrderBy(mission => mission.isCompleted).ToList();
 
         if (categoryMissions.Count > 0)
         {
@@ -236,9 +238,6 @@ public class MissionUserInterface : MonoBehaviour
         missionSlots = leftPanel.transform.Find("List/Mission List").GetComponentsInChildren<MissionSlot>();
         categoryIcons = leftPanel.transform.Find("Categories/Category Icons").GetChildren();
 
-        UpdateScrollbar();
-        StartCoroutine(UpdateIndicator(0));
-        UpdatePanels(0);
         UpdateSelectedCategory(MissionManager.instance.missions, 0, -1);
     }
 
