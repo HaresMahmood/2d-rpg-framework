@@ -50,7 +50,7 @@ public class MissionManager : MonoBehaviour
         if (Input.GetAxisRaw("Trigger") == 0) // TODO: Very ugly!
         {
             bool hasInput;
-            (selectedMission, hasInput) = input.GetInput("Horizontal", "Vertical", missions.mission.Count, selectedMission, false, 7, 1);
+            (selectedMission, hasInput) = input.GetInput("Horizontal", "Vertical", userInterface.categoryMissions.Count, selectedMission, false, 7, 1);
             if (hasInput)
             {
                 userInterface.UpdateSelectedSlot(selectedMission);
