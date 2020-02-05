@@ -117,7 +117,6 @@ public class MissionUserInterface : MonoBehaviour
             //StartCoroutine(emptyGrid.FadeOpacity(0f, duration));
 
             indicator.SetActive(false); //StartCoroutine(UpdateIndicator());
-            StartCoroutine(AnimateInformationPanels(selectedCategory));
 
             //yield return new WaitForSecondsRealtime(duration);
 
@@ -145,7 +144,7 @@ public class MissionUserInterface : MonoBehaviour
             }
 
             indicator.SetActive(true);
-            StartCoroutine(UpdateIndicator(0));
+            UpdateSelectedSlot(0);
         }
         else
         {
