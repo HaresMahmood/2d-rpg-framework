@@ -53,15 +53,24 @@ public class MissionUserInterface : MonoBehaviour
 
     private void UpdateScrollbar(int selectedSlot = -1)
     {
-        if (selectedSlot > -1)
+        if (scrollbar.gameObject.activeSelf)
         {
-            float totalSlots = categoryMissions.Count;
-            float targetValue = 1.0f - selectedSlot / (totalSlots - 1);
-            StartCoroutine(scrollbar.LerpScrollbar(targetValue, 0.08f));
+            scrollbar.transform.parent.gameObject.SetActive(true);
+
+            if (selectedSlot > -1)
+            {
+                float totalSlots = categoryMissions.Count;
+                float targetValue = 1.0f - selectedSlot / (totalSlots - 1);
+                StartCoroutine(scrollbar.LerpScrollbar(targetValue, 0.08f));
+            }
+            else
+            {
+                scrollbar.value = 1;
+            }
         }
         else
         {
-            scrollbar.value = 1;
+            scrollbar.transform.parent.gameObject.SetActive(false);
         }
     }
 
@@ -126,13 +135,13 @@ public class MissionUserInterface : MonoBehaviour
             for (int i = 0; i < categoryMissions.Count; i++)
             {
                 missionSlots[i].gameObject.SetActive(true);
-                yield return null; UpdateScrollbar();
+                UpdateScrollbar();
             }
 
             for (int i = 0; i < max; i++)
             {
                 missionSlots[i].UpdateInformation(categoryMissions[i], duration);
-                yield return null; UpdateScrollbar();
+                UpdateScrollbar();
 
                 yield return new WaitForSecondsRealtime(delay);
             }
@@ -142,7 +151,7 @@ public class MissionUserInterface : MonoBehaviour
                 for (int i = max; i < categoryMissions.Count; i++)
                 {
                     missionSlots[i].UpdateInformation(categoryMissions[i]);
-                    yield return null; UpdateScrollbar();
+                    UpdateScrollbar();
                 }
             }
 
@@ -208,13 +217,15 @@ public class MissionUserInterface : MonoBehaviour
 
         if (selectedSlot > -1)
         {
+            float opacity = categoryMissions[selectedSlot].isCompleted ? 0.5f : 1f;
+
             yield return new WaitForSecondsRealtime(duration);
 
             UpdatePanels(selectedSlot);
 
-            rightPanel.GetComponentInChildren<MissionMainPanel>().FadePanel(1f);
+            rightPanel.GetComponentInChildren<MissionMainPanel>().FadePanel(opacity);
             yield return new WaitForSecondsRealtime(delay);
-            rightPanel.GetComponentInChildren<MissionOtherPanel>().FadePanel(1f);
+            rightPanel.GetComponentInChildren<MissionOtherPanel>().FadePanel(opacity);
         }
     }
 
@@ -233,7 +244,7 @@ public class MissionUserInterface : MonoBehaviour
 
         indicatorAnimator = indicator.GetComponent<Animator>();
 
-        scrollbar = leftPanel.transform.Find("List/Scrollbar/Scrollbar").GetComponent<Scrollbar>();
+        scrollbar = leftPanel.transform.Find("List/Scrollbar Container/Scrollbar").GetComponent<Scrollbar>();
 
         categoryText = leftPanel.transform.Find("Categories/Information");
 
