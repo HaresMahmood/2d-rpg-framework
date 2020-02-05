@@ -67,8 +67,11 @@ public class MissionUserInterface : MonoBehaviour
 
     private void UpdatePanels(int selectedSlot)
     {
-        rightPanel.GetComponentInChildren<MissionMainPanel>().UpdateInformation(categoryMissions[selectedSlot]);
-        rightPanel.GetComponentInChildren<MissionOtherPanel>().UpdateInformation(categoryMissions[selectedSlot]);
+        if (categoryMissions.Count >= 0)
+        {
+            rightPanel.GetComponentInChildren<MissionMainPanel>().UpdateInformation(categoryMissions[selectedSlot]);
+            rightPanel.GetComponentInChildren<MissionOtherPanel>().UpdateInformation(categoryMissions[selectedSlot]);
+        }
     }
 
     public void UpdateSelectedSlot(int selectedSlot)
