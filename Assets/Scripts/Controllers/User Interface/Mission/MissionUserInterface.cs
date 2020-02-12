@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+
 /// <summary>
 ///
 /// </summary>
@@ -255,5 +256,4 @@ public class MissionUserInterface : MonoBehaviour
     }
 
     #endregion
-    
 }
