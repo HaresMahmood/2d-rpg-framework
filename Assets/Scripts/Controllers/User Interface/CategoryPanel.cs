@@ -12,7 +12,7 @@ public class CategoryPanel : MonoBehaviour
 
     private Transform[] categoryIcons;
 
-    private Transform categoryTextContainer;
+    private Transform categoryNameContainer;
 
     private Animator leftArrowAnimator;
     private Animator rightArrowAnimator;
@@ -29,13 +29,13 @@ public class CategoryPanel : MonoBehaviour
     /// <returns> Co-routine. </returns>
     public IEnumerator UpdateCategoryName(int selectedValue, string value, float animationDuration = 0.1f)
     {
-        StartCoroutine(categoryTextContainer.gameObject.FadeOpacity(0f, animationDuration));
+        StartCoroutine(categoryNameContainer.gameObject.FadeOpacity(0f, animationDuration));
 
         yield return new WaitForSecondsRealtime(animationDuration);
 
-        categoryTextContainer.GetComponentInChildren<TextMeshProUGUI>().SetText(value); yield return null;
-        categoryTextContainer.position = new Vector2(categoryIcons[selectedValue].position.x, categoryTextContainer.position.y);
-        StartCoroutine(categoryTextContainer.gameObject.FadeOpacity(1f, animationDuration));
+        categoryNameContainer.GetComponentInChildren<TextMeshProUGUI>().SetText(value.Replace('_', ' ')); yield return null;
+        categoryNameContainer.position = new Vector2(categoryIcons[selectedValue].position.x, categoryNameContainer.position.y);
+        StartCoroutine(categoryNameContainer.gameObject.FadeOpacity(1f, animationDuration));
     }
 
     public void AnimateCategory(int selectedCategory, int increment)
@@ -109,7 +109,7 @@ public class CategoryPanel : MonoBehaviour
     private void Awake()
     {
         categoryIcons = transform.Find("Category Icons").GetChildren();
-        categoryTextContainer = transform.Find("Information");
+        categoryNameContainer = transform.Find("Category Name");
         leftArrowAnimator = transform.Find("Left Navigation/Left Arrow").GetComponent<Animator>();
         rightArrowAnimator = transform.Find("Right Navigation/Right Arrow").GetComponent<Animator>();
     }
