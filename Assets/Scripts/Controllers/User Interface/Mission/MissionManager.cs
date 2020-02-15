@@ -88,7 +88,7 @@ public class MissionManager : MonoBehaviour
     {
         for (int i = 0; i < Enum.GetNames(typeof(Mission.Category)).Length; i++)
         {
-            categoryNames.Add(((Mission.Category)i).ToString());
+            //categoryNames.Add(((Mission.Category)i).ToString());
         }
     }
 

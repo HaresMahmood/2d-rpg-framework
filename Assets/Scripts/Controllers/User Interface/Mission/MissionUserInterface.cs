@@ -118,9 +118,9 @@ public class MissionUserInterface : MonoBehaviour
     /// <returns> Co-routine. </returns>
     private IEnumerator UpdateCategoryMissions(Missions missions, int selectedCategory, float duration = 0.15f, float delay = 0.03f)
     {
-        categoryMissions = missions.mission.Where(mission => mission.category.ToString().Equals(MissionManager.instance.categoryNames[selectedCategory])).ToList();
+        //categoryMissions = missions.mission.Where(mission => mission.category.ToString().Equals(MissionManager.instance.categoryNames[selectedCategory])).ToList();
         //categoryMissions.Sort((mission1, mission2) => string.Compare(mission1.Name, mission2.Name));
-        categoryMissions = categoryMissions.OrderBy(mission => mission.isCompleted).ToList();
+        categoryMissions = categoryMissions.OrderBy(mission => mission.IsCompleted).ToList();
 
         if (categoryMissions.Count > 0)
         {
@@ -218,7 +218,7 @@ public class MissionUserInterface : MonoBehaviour
 
         if (selectedSlot > -1)
         {
-            float opacity = categoryMissions[selectedSlot].isCompleted ? 0.5f : 1f;
+            float opacity = categoryMissions[selectedSlot].IsCompleted ? 0.5f : 1f;
 
             yield return new WaitForSecondsRealtime(duration);
 

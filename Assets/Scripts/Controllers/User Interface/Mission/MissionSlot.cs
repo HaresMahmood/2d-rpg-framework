@@ -41,18 +41,18 @@ public class MissionSlot : MonoBehaviour
     public void UpdateInformation(Mission mission, float duration = -1f)
     {
         nameText.SetText(mission.Name);
-        objectiveText.SetText(mission.objective);
+        objectiveText.SetText(mission.Objective);
 
-        remainingText.SetText(mission.remaining);
-        remainingText.GetComponent<AutoTextWidth>().UpdateWidth(mission.remaining);
+        remainingText.SetText(mission.Remaining);
+        remainingText.GetComponent<AutoTextWidth>().UpdateWidth(mission.Remaining);
 
         AnimateSlot(1f, duration);
 
-        if (mission.isCompleted && nameText.color.a != 0.5f)
+        if (mission.IsCompleted && nameText.color.a != 0.5f)
         {
             FadeSlot(0.5f);
         }
-        else if (!mission.isCompleted && nameText.color.a != 1f)
+        else if (!mission.IsCompleted && nameText.color.a != 1f)
         {
             FadeSlot(1f);
         }

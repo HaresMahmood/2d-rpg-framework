@@ -28,8 +28,8 @@ public class MissionMainPanel : MonoBehaviour
     public void UpdateInformation(Mission mission)
     {
         nameText.SetText(mission.Name);
-        objectiveText.SetText(mission.objective);
-        descriptionText.SetText(mission.description);
+        objectiveText.SetText(mission.Objective);
+        descriptionText.SetText(mission.Description);
     }
 
     #endregion

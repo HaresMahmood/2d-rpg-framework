@@ -33,15 +33,15 @@ public class MissionOtherPanel : MonoBehaviour
 
     public void UpdateInformation(Mission mission)
     {
-        string status = mission.isCompleted ? "Completed" : "Not completed";
-        Color statusColor = mission.isCompleted ? "#3CA658".ToColor() : "#5C5C5C".ToColor();
+        string status = mission.IsCompleted ? "Completed" : "Not completed";
+        Color statusColor = mission.IsCompleted ? "#3CA658".ToColor() : "#5C5C5C".ToColor();
 
-        remainingText.SetText(mission.remaining);
-        assigneeText.SetText(mission.assignee.name);
-        locationText.SetText(mission.location);
+        remainingText.SetText(mission.Remaining);
+        assigneeText.SetText(mission.Assignee.name);
+        locationText.SetText(mission.Location);
 
-        rewardText.SetText(mission.rewardAmount);
-        rewardSprite.sprite = mission.rewardItem.sprite;
+        rewardText.SetText(mission.Reward.Amount.ToString());
+        rewardSprite.sprite = mission.Reward.Item.sprite;
 
         statusValue.SetText(status);
         if (statusValue.color != statusColor)
