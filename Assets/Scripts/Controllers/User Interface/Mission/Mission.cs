@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Mission", menuName = "Mission")]
+[CreateAssetMenu(fileName = "New Mission", menuName = "Categorizable/Mission")]
 public class Mission : Categorizable
 {
     #region Fields
@@ -88,7 +88,7 @@ public class Mission : Categorizable
 
         #region Miscellaneous Methods
 
-        public override string GetOrderedValue(int index)
+        public override string GetCategoryFromIndex(int index)
         {
             return ((Category)index).ToString();
         }

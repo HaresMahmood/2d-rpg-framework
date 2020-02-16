@@ -1,49 +1,102 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Item", menuName = "Inventory/Item")]
-public class Item : ScriptableObject
+[CreateAssetMenu(fileName = "New Item", menuName = "Categorizable/Item")]
+public class Item : Categorizable
 {
     #region Fields
 
-    [SerializeField] private int id;
+    [SerializeField] private ItemCategory categorization;
+    [SerializeField] private Sprite sprite;
+    [SerializeField] private ItemEffect effect;
+    [SerializeField] private int quantity;
+    [SerializeField] private bool isFavorite;
+    [SerializeField] private bool isNew;
 
     #endregion
 
     #region Properties
 
-    public string Name;
-    public int ID
+    public Sprite Sprite
     {
-        get { return id; }
-        private set { id = value; }
+        get { return sprite; }
+        private set { sprite = value; }
+    }
+
+    public ItemEffect Effect
+    {
+        get { return effect; }
+        private set { effect = value; }
+    }
+
+    public int Quantity
+    {
+        get { return quantity; }
+        private set { quantity = value; }
+    }
+
+    public bool IsFavorite
+    {
+        get { return isFavorite; }
+        private set { isFavorite = value; }
+    }
+
+    public bool IsNew
+    {
+        get { return isNew; }
+        private set { isNew = value; }
     }
 
     #endregion
 
-    #region Variables
+    #region Subclasses
 
-    public string description;
-    public Sprite sprite;
-    public string effect;
-    public Category category;
-    public int amount;
-    public bool isFavorite;
-    public bool isNew;
-
-    #endregion
-
-    #region Enums
-
-    public enum Category
+    [System.Serializable]
+    public sealed class ItemCategory : Category
     {
-        Key,
-        Health,
-        Poké_Balls,
-        Battle,
-        TM,
-        Berry,
-        Other
+        #region Variables
+
+        [SerializeField] private Category value;
+
+        #endregion
+
+        #region Properties
+
+        public override string Value
+        {
+            get { return value.ToString(); }
+        }
+
+        #endregion
+
+        #region Enums
+
+        public enum Category
+        {
+            Key,
+            Health,
+            Poké_Balls,
+            Battle,
+            TM,
+            Berry,
+            Other
+        }
+
+        #endregion
+
+        #region Miscellaneous Methods
+
+        public override string GetCategoryFromIndex(int index)
+        {
+            return ((Category)index).ToString();
+        }
+
+        #endregion
+    }
+
+    public class ItemEffect
+    {
+
     }
 
     #endregion
@@ -81,8 +134,9 @@ public class Item : ScriptableObject
     {
         List<ItemBehavior> behavior = new List<ItemBehavior>();
 
-        switch (category)
+        switch (categorization)
         {
+            /*
             default: { break; }
             case (Category.Health):
                 {
@@ -94,6 +148,7 @@ public class Item : ScriptableObject
                     behavior = HealthBehavior();
                     break;
                 }
+            */
         }
 
         behavior.AddRange(GenericBehavior(this));

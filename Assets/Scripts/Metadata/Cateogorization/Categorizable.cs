@@ -53,7 +53,7 @@ public abstract class Categorizable : ScriptableObject
             return Value;
         }
 
-        public virtual string GetOrderedValue(int index)
+        public virtual string GetCategoryFromIndex(int index)
         { 
             return null;  
         }
