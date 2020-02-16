@@ -30,7 +30,7 @@ public abstract class CategoryUserInterface : UserInterface
 
     public void UpdateSelectedCategory(List<Categorizable> categorizables, int selectedCategory, int increment)
     {
-        string value = "duck"; //((Categorizable.Category)selectedCategory).ToString();
+        string value = categorizables[0].Categorization.GetOrderedValue(selectedCategory);
 
         categoryPanel.AnimateCategory(selectedCategory, increment);
         StartCoroutine(categoryPanel.UpdateCategoryName(selectedCategory, value));

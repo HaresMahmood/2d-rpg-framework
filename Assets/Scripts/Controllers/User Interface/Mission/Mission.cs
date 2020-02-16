@@ -85,6 +85,15 @@ public class Mission : Categorizable
         }
 
         #endregion
+
+        #region Miscellaneous Methods
+
+        public override string GetOrderedValue(int index)
+        {
+            return ((Category)index).ToString();
+        }
+
+        #endregion
     }
 
     [System.Serializable]

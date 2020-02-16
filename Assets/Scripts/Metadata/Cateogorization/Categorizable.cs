@@ -53,6 +53,11 @@ public abstract class Categorizable : ScriptableObject
             return Value;
         }
 
+        public virtual string GetOrderedValue(int index)
+        { 
+            return null;  
+        }
+
         #endregion
 
 
