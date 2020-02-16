@@ -95,7 +95,7 @@ public abstract class CategoryUserInterface : UserInterface
 
     protected void ActiveSlots(int index, float animationDuration)
     {
-        //categorizableSlots[index].UpdateInformation(activeCategorizables[index], animationDuration);
+        categorizableSlots[index].UpdateInformation(activeCategorizables[index], animationDuration);
     }
 
     private void ResetCategoryObjects()
@@ -109,7 +109,7 @@ public abstract class CategoryUserInterface : UserInterface
 
         foreach (CategorizableSlot slot in categorizableSlots)
         {
-            //slot.AnimateSlot(0f);
+            slot.AnimateSlot(0f);
         }
 
         activeCategorizables.Clear();

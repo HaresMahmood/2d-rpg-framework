@@ -1,54 +1,32 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
 /// <summary>
 ///
 /// </summary>
-public class ItemSlot : MonoBehaviour
+public class ItemSlot : CategorizableSlot
 {
     #region Variables
-
-    private Transform slot;
 
     private GameObject favoriteTag;
     private GameObject newTag;
 
     private Image itemSprite;
-    private TextMeshProUGUI amountText;
+    private TextMeshProUGUI quantityText;
 
     #endregion
 
     #region Miscellaneous Methods
 
-    public void AnimateSlot(float opacity, float duration = -1)
+    protected override void SetInformation(Categorizable categorizable)
     {
-        if (duration > -1)
-        {
-            StartCoroutine(slot.gameObject.FadeOpacity(opacity, duration));
-        }
-        else
-        {
-            slot.GetComponent<CanvasGroup>().alpha = opacity;
-            slot.gameObject.SetActive(false);
-        }
-    }
+        Item item = (Item)categorizable;
 
-    public void UpdateInformation(Item item, float duration = -1, bool animate = true) // TODO: Make cleaner (no bool)
-    {
-        slot.gameObject.SetActive(true);
-
-        itemSprite.sprite = item.sprite;
-        amountText.SetText(item.amount.ToString());
-        favoriteTag.SetActive(item.isFavorite);
-        newTag.SetActive(item.isNew);
-
-        if (animate)
-        {
-            AnimateSlot(1f, duration);
-        }
+        itemSprite.sprite = item.Sprite;
+        quantityText.SetText(item.Quantity.ToString());
+        favoriteTag.SetActive(item.IsFavorite);
+        newTag.SetActive(item.IsNew);
     }
 
     #endregion
@@ -57,8 +35,10 @@ public class ItemSlot : MonoBehaviour
 
     /// <summary>
     /// Awake is called when the script instance is being loaded.
+    /// 
+    /// Derives from CategorizableSlot base class.
     /// </summary>
-    private void Awake()
+    protected override void Awake()
     {
         slot = transform.Find("Information");
 
@@ -66,9 +46,9 @@ public class ItemSlot : MonoBehaviour
         newTag = slot.Find("Tags/New").gameObject;
 
         itemSprite = slot.Find("Sprite").GetComponent<Image>();
-        amountText = slot.Find("Amount").GetComponentInChildren<TextMeshProUGUI>();
+        quantityText = slot.Find("Quantity").GetComponentInChildren<TextMeshProUGUI>();
 
-        slot.gameObject.SetActive(false);
+        base.Awake();
     }
 
     #endregion
