@@ -42,10 +42,10 @@ public class OverworldItemManager : MonoBehaviour
     public void AddItem(OverworldItem overworldItem)
     {
         Item item = overworldItem.item;
-        if (!InventoryManager.instance.inventory.items.Contains(item))
-            InventoryManager.instance.inventory.items.Add(item);
+        if (!InventoryController.instance.inventory.items.Contains(item))
+            InventoryController.instance.inventory.items.Add(item);
 
-        InventoryManager.instance.inventory.items.Find(i => i.ID == item.ID).amount++;
+        InventoryController.instance.inventory.items.Find(i => i.ID == item.ID).amount++;
 
         DisplayItem(item);
         //overworldItem.isPickedUp = true;

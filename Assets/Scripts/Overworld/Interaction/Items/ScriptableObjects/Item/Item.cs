@@ -49,7 +49,7 @@ public class Item : Categorizable
 
     #endregion
 
-    #region Subclasses
+    #region Nested Classes
 
     [System.Serializable]
     public sealed class ItemCategory : Category

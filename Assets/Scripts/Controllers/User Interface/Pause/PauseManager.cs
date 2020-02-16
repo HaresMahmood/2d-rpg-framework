@@ -111,7 +111,7 @@ public class PauseManager : MonoBehaviour
             TimeManager.instance.SetPause(false);
         }
 
-        InventoryManager.instance.flags.isActive = flags.isActive;
+        InventoryController.instance.flags.isActive = flags.isActive;
     }
 
     public void InitializeSidePanel()
@@ -127,11 +127,11 @@ public class PauseManager : MonoBehaviour
         flags.isInPartyMenu = false;
         userInterface.UpdateSidePanel(selectedSlot, 0, 0.15f);
         selectedSlot = 0;
-        if (InventoryManager.instance.flags.isItemSelected)
+        if (InventoryController.instance.flags.isItemSelected)
         {
-            InventoryManager.instance.CloseSelectionMenu();
+            InventoryController.instance.CloseSelectionMenu();
         }
-        StartCoroutine(InventoryManager.instance.DeactivateSidePanel(0.2f));
+        StartCoroutine(InventoryController.instance.DeactivateSidePanel(0.2f));
     }
 
     private void UpdateMenus(int selectedMenu, int increment, float animationDuration, bool animate = true)
@@ -174,8 +174,8 @@ public class PauseManager : MonoBehaviour
 
             if (Input.GetButtonDown("Interact"))
             {
-                ApplyItemBehavior(InventoryManager.instance.selectedItem);
-                InventoryManager.instance.UpdateItem();
+                ApplyItemBehavior(InventoryController.instance.selectedItem);
+                InventoryController.instance.UpdateItem();
                 DeactivateSidePanel();
             }
         }

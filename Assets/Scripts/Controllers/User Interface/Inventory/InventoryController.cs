@@ -6,22 +6,37 @@ using UnityEngine;
 /// <summary>
 ///
 /// </summary>
-public class InventoryManager : MonoBehaviour
+public class InventoryController : UserInterfaceController
 {
-    #region Variables
+    #region Fields
 
-    public static InventoryManager instance;
+    [SerializeField] private InventoryUserInterface userInterface;
+
+    private InventoryFlags flags = new InventoryFlags(false, false);
+
+    #endregion
+
+    #region Properties
+
+    protected override UserInterface UserInterface
+    {
+        get { return userInterface; }
+    }
+
+    protected override UserInterfaceFlags Flags
+    {
+        get { return flags; }
+    }
+
+    #endregion
+
+    #region Variables
 
     [Header("Setup")]
     public Inventory inventory;
-    [SerializeField] private InventoryUserInterface userInterface;
-    public List<PanelButton> buttons = new List<PanelButton>();
 
     [Header("Values")]
     [SerializeField] private SortingMethod sortingMethod = SortingMethod.None;
-
-    private readonly TestInput input = new TestInput();
-    public Flags flags = new Flags(false, false, false);
 
     public Item selectedItem { get; set; }
 
@@ -30,24 +45,6 @@ public class InventoryManager : MonoBehaviour
     public int selectedSlot { get; private set; } = 0; // TODO: Should be private field
     private int selectedCategory = 0;
     public int selectedButton { get; private set; } = 0;
-
-    #endregion
-
-    #region Structs
-
-    public struct Flags
-    {
-        public bool isActive { get; set; }
-        public bool isItemSelected { get; set; }
-        public bool isDirty { get; set; }
-
-        public Flags(bool isActive, bool isItemSelected, bool isDirty)
-        {
-            this.isActive = isActive;
-            this.isItemSelected = isItemSelected;
-            this.isDirty = isDirty;
-        }
-    }
 
     #endregion
 
@@ -66,11 +63,25 @@ public class InventoryManager : MonoBehaviour
 
     #endregion
 
+    #region Nested Classes
+
+    protected sealed class InventoryFlags : UserInterfaceFlags
+    {
+        public bool isInSubmenu { get; set; }
+
+        internal InventoryFlags(bool isActive, bool isInSubmenu) : base(isActive)
+        {
+            this.isInSubmenu = isInSubmenu;
+        }
+    }
+
+    #endregion
+
     #region Miscellaneous Methods
 
     public void ActiveSidePanel()
     {
-        flags.isActive = false;
+        Flags.isActive = false;
         PauseManager.instance.InitializeSidePanel();
     }
 
@@ -98,7 +109,7 @@ public class InventoryManager : MonoBehaviour
     {
         userInterface.CloseSubMenu(selectedButton);
 
-        flags.isItemSelected = selectedButton > -1 ? true : false;
+        flags.isInSubmenu = selectedButton > -1 ? true : false;
         this.selectedButton = selectedButton > -1 ? this.selectedButton : 0;
     }
 
@@ -126,7 +137,7 @@ public class InventoryManager : MonoBehaviour
 
     private void GetInput()
     {
-        if (!flags.isItemSelected)
+        if (!flags.isInSubmenu)
         {
             if (Input.GetAxisRaw("Trigger") == 0) // TODO: Very ugly!
             {
@@ -141,7 +152,6 @@ public class InventoryManager : MonoBehaviour
             {
                 bool hasInput;
                 (selectedCategory, hasInput) = input.GetInput("Trigger", TestInput.Axis.Horizontal, categoryNames.Count, selectedCategory);
-                flags.isDirty = true;
                 if (hasInput)
                 {
                     UpdateSelectedCategory((int)Input.GetAxisRaw("Trigger"));
@@ -151,7 +161,7 @@ public class InventoryManager : MonoBehaviour
             if (Input.GetButtonDown("Interact"))
             {
                 StartCoroutine(userInterface.AnimateItemSelection(selectedSlot));
-                flags.isItemSelected = true;
+                flags.isInSubmenu = true;
             }
 
             if (Input.GetButtonDown("Toggle"))
@@ -189,33 +199,13 @@ public class InventoryManager : MonoBehaviour
     #region Unity Methods
 
     /// <summary>
-    /// Awake is called when the script instance is being loaded.
-    /// </summary>
-    private void Awake()
-    {
-        if (instance == null)
-            instance = this;
-    }
-
-    /// <summary>
     /// Start is called before the first frame update.
     /// </summary>
     private void Start()
     {
         for (int i = 0; i < Enum.GetNames(typeof(Item.Category)).Length; i++)
         {
-            categoryNames.Add(((Item.Category)i).ToString());
-        }
-    }
-
-    /// <summary>
-    /// Update is called once per frame.
-    /// </summary>
-    private void Update()
-    {
-        if (PauseManager.instance.flags.isActive && flags.isActive)
-        {
-            GetInput();
+            //categoryNames.Add(((Item.Category)i).ToString());
         }
     }
 

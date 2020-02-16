@@ -35,7 +35,7 @@ public abstract class Categorizable : ScriptableObject
 
     #endregion
 
-    #region Subclasses
+    #region Nested Classes
 
     [System.Serializable]
     public abstract class Category

@@ -9,7 +9,7 @@ using TMPro;
 /// <summary>
 ///
 /// </summary>
-public class InventoryUserInterface : MonoBehaviour
+public class InventoryUserInterface : CategoryUserInterface
 {
     #region Variables
 
@@ -20,6 +20,8 @@ public class InventoryUserInterface : MonoBehaviour
 
     public List<Item> categoryItems { get; private set; } = new List<Item>();
     public List<ItemBehavior> itemButtons { get; set; } = new List<ItemBehavior>();
+
+    protected override int maxObjects => throw new NotImplementedException();
 
     #endregion
 
@@ -47,7 +49,7 @@ public class InventoryUserInterface : MonoBehaviour
         Color favoriteColor = item.isFavorite ? "#EAC03E".ToColor() : "#FFFFFF".ToColor();
         StartCoroutine(GetComponentInChildren<ItemInformation>().buttons[itemButtons.IndexOf(itemButtons.Find(b => b.buttonName == "Favorite"))].Find("Big Icon/Icon").gameObject.FadeColor(favoriteColor, 0.1f));
         StartCoroutine(GetComponentInChildren<ItemInformation>().buttons[itemButtons.IndexOf(itemButtons.Find(b => b.buttonName == "Favorite"))].Find("Small Icon/Icon").gameObject.FadeColor(favoriteColor, 0.1f));
-        UpdateItem(InventoryManager.instance.selectedSlot);
+        UpdateItem(InventoryController.instance.selectedSlot);
     }
 
     public void Discard(Item item)
@@ -65,41 +67,41 @@ public class InventoryUserInterface : MonoBehaviour
         yield return new WaitForSecondsRealtime(0.1f);
         informationAnimator.SetBool("isUsingItem", true);
         StartCoroutine(UpdateIndicator());
-        InventoryManager.instance.ActiveSidePanel();
+        InventoryController.instance.ActiveSidePanel();
         StartCoroutine(FindObjectOfType<PauseUserInterface>().pauseContainer.transform.Find("Side Panel").gameObject.FadeOpacity(1f, 0.15f));
     }
 
-    private void ApplySortingMethod(Inventory inventory, InventoryManager.SortingMethod sortingMethod)
+    private void ApplySortingMethod(Inventory inventory, InventoryController.SortingMethod sortingMethod)
     {
         switch (sortingMethod)
         {
             default: { break; }
-            case (InventoryManager.SortingMethod.AToZ):
+            case (InventoryController.SortingMethod.AToZ):
                 {
                     inventory.items.Sort((item1, item2) => string.Compare(item1.Name, item2.Name));
                     break;
                 }
-            case (InventoryManager.SortingMethod.ZToA):
+            case (InventoryController.SortingMethod.ZToA):
                 {
                     inventory.items.Sort((item1, item2) => string.Compare(item2.Name, item1.Name));
                     break;
                 }
-            case (InventoryManager.SortingMethod.AmountAscending):
+            case (InventoryController.SortingMethod.AmountAscending):
                 {
                     inventory.items.Sort((item1, item2) => item1.amount.CompareTo(item2.amount));
                     break;
                 }
-            case (InventoryManager.SortingMethod.AmountDescending):
+            case (InventoryController.SortingMethod.AmountDescending):
                 {
                     inventory.items.Sort((item1, item2) => item2.amount.CompareTo(item1.amount));
                     break;
                 }
-            case (InventoryManager.SortingMethod.FavoriteFirst):
+            case (InventoryController.SortingMethod.FavoriteFirst):
                 {
                     inventory.items.Sort((item1, item2) => item1.isFavorite.CompareTo(item2.isFavorite)); // Not working.
                     break;
                 }
-            case (InventoryManager.SortingMethod.NewFirst):
+            case (InventoryController.SortingMethod.NewFirst):
                 {
                     inventory.items.Sort((item1, item2) => item1.isNew.CompareTo(item2.isNew)); // Not working.
                     break;
@@ -115,7 +117,7 @@ public class InventoryUserInterface : MonoBehaviour
     /// <param name="fadeSidePanel"> Specifies whether the side panel, or the information panel should be fades. Defaults to false. </param>
     public void FadeUserInterface(float opacity, float duration = 0.2f, bool fadeSidePanel = false)
     {
-        int indicatorActive = opacity == 1f ? InventoryManager.instance.selectedSlot : -1;
+        int indicatorActive = opacity == 1f ? InventoryController.instance.selectedSlot : -1;
         StartCoroutine(UpdateIndicator(indicatorActive));
 
         StartCoroutine(transform.Find("Middle").gameObject.FadeOpacity(opacity, duration));
@@ -189,7 +191,7 @@ public class InventoryUserInterface : MonoBehaviour
                 }
         #endif
 
-        categoryItems = inventory.items.Where(item => item.category.ToString().Equals(InventoryManager.instance.categoryNames[selectedCategory])).ToList();
+        categoryItems = inventory.items.Where(item => item.category.ToString().Equals(InventoryController.instance.categoryNames[selectedCategory])).ToList();
 
         if (categoryItems.Count > 0)
         {
@@ -260,7 +262,7 @@ public class InventoryUserInterface : MonoBehaviour
 
         yield return new WaitForSecondsRealtime(animationTime);
 
-        categoryText.SetText(InventoryManager.instance.categoryNames[selectedCategory].Replace('_', ' ')); yield return null;
+        categoryText.SetText(InventoryController.instance.categoryNames[selectedCategory].Replace('_', ' ')); yield return null;
         categoryText.transform.parent.position = new Vector2(categoryIcons[selectedCategory].position.x, categoryText.transform.parent.position.y);
         StartCoroutine(categoryText.transform.parent.gameObject.FadeOpacity(1f, animationTime));
     }
@@ -277,7 +279,7 @@ public class InventoryUserInterface : MonoBehaviour
 
     public void UpdateSelectedItem(int selectedItem)
     {
-        if (categoryItems.Count != 0) InventoryManager.instance.selectedItem = categoryItems[selectedItem];
+        if (categoryItems.Count != 0) InventoryController.instance.selectedItem = categoryItems[selectedItem];
         StartCoroutine(UpdateIndicator(selectedItem));
         StartCoroutine(informationPanel.GetComponent<ItemInformation>().SetInformation(categoryItems.Count == 0 ? null : categoryItems[selectedItem]));
     }
@@ -287,7 +289,7 @@ public class InventoryUserInterface : MonoBehaviour
         informationPanel.GetComponent<ItemInformation>().UpdateSelectedButton(selectedButton, increment);
     }
 
-    public void UpdateSortingMethod(Inventory inventory, InventoryManager.SortingMethod sortingMethod, int selectedCategory)
+    public void UpdateSortingMethod(Inventory inventory, InventoryController.SortingMethod sortingMethod, int selectedCategory)
     {
         AnimateSortingMethodText(sortingMethod);
         ApplySortingMethod(inventory, sortingMethod);
@@ -403,11 +405,11 @@ public class InventoryUserInterface : MonoBehaviour
                 informationAnimator.SetBool("Selected", false);
             }
 
-            StartCoroutine(UpdateIndicator(InventoryManager.instance.selectedSlot));
+            StartCoroutine(UpdateIndicator(InventoryController.instance.selectedSlot));
         }
     }
 
-    private void AnimateSortingMethodText(InventoryManager.SortingMethod sortingMethod)
+    private void AnimateSortingMethodText(InventoryController.SortingMethod sortingMethod)
     {
         string value = string.Concat(sortingMethod.ToString().Select(x => Char.IsUpper(x) ? " " + x : x.ToString())).TrimStart(' '); // .FirstToUpper()
         StartCoroutine(FindObjectOfType<BottomPanelUserInterface>().AnimateValue(value, 1f));
@@ -434,11 +436,11 @@ public class InventoryUserInterface : MonoBehaviour
         itemGrid = transform.Find("Middle/Grid/Item Grid").GetChildren();
         categoryIcons = transform.Find("Middle/Categories/Category Icons").GetChildren();
 
-        UpdateSelectedCategory(InventoryManager.instance.inventory, 0, 1);
+        UpdateSelectedCategory(InventoryController.instance.inventory, 0, 1);
 
         LayoutRebuilder.ForceRebuildLayoutImmediate(informationPanel.transform.Find("Information (Vertical)").GetComponent<RectTransform>());
 
-        StartCoroutine(FindObjectOfType<BottomPanelUserInterface>().ChangePanelButtons(InventoryManager.instance.buttons));
+        StartCoroutine(FindObjectOfType<BottomPanelUserInterface>().ChangePanelButtons(InventoryController.instance.buttons));
     }
 
     /// <summary>

@@ -55,7 +55,7 @@ public class Mission : Categorizable
 
     #endregion
 
-    #region Subclasses
+    #region Nested Classes
 
     [System.Serializable]
     public sealed class MissionCategory : Category

@@ -7,26 +7,49 @@ using UnityEngine;
 /// </summary>
 public class UserInterfaceController : MonoBehaviour
 {
+    #region Fields
+
+    [Header("Setup")]
+    [SerializeField] private UserInterface userInterface;
+
+    private UserInterfaceFlags flags;
+
+    #endregion
+
+    #region Properties
+
+    protected virtual UserInterface UserInterface
+    {
+        get { return userInterface; }
+    }
+
+    protected virtual UserInterfaceFlags Flags
+    {
+        get { return flags; }
+    }
+
+    #endregion
+
     #region Variables
 
     public static UserInterfaceController instance;
 
     [Header("Setup")]
-    [SerializeField] private UserInterface userInterface;
     public List<PanelButton> buttons = new List<PanelButton>();
 
-    private readonly TestInput input = new TestInput();
-    public Flags flags = new Flags(false);
+    protected readonly TestInput input = new TestInput();
+
+    protected int selectedValue;
 
     #endregion
 
-    #region Structs
+    #region Nested Classes
 
-    public struct Flags
+    protected abstract class UserInterfaceFlags
     {
         public bool isActive { get; set; }
 
-        public Flags(bool isActive)
+        protected UserInterfaceFlags(bool isActive)
         {
             this.isActive = isActive;
         }
@@ -36,7 +59,7 @@ public class UserInterfaceController : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    protected void GetInput()
+    protected virtual void GetInput()
     {
         
     }
@@ -48,24 +71,16 @@ public class UserInterfaceController : MonoBehaviour
     /// <summary>
     /// Awake is called when the script instance is being loaded.
     /// </summary>
-    protected void Awake()
+    protected virtual void Awake()
     {
         if (instance == null)
             instance = this;
     }
 
     /// <summary>
-    /// Start is called before the first frame update.
-    /// </summary>
-    protected void Start()
-    {
-        
-    }
-
-    /// <summary>
     /// Update is called once per frame.
     /// </summary>
-    protected void Update()
+    protected virtual void Update()
     {
         if (flags.isActive)
         {
