@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 ///
 /// </summary>
-public class UserInterfaceController : MonoBehaviour
+public abstract class UserInterfaceController : MonoBehaviour
 {
     #region Fields
 
@@ -59,9 +59,26 @@ public class UserInterfaceController : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    protected virtual void GetInput()
+    protected virtual void UpdateSelectedValue(int selectedButton)
+    { }
+
+    protected virtual bool RegularInput(int selectedSlot, int max, string axisName)
     {
-        
+        TestInput.Axis axis = axisName == "Horizontal" ? TestInput.Axis.Horizontal : TestInput.Axis.Vertical;
+
+        bool hasInput;
+        (selectedValue, hasInput) = input.GetInput(axisName, axis, max, selectedSlot);
+
+        return hasInput;
+    }
+
+    protected virtual void GetInput(string axisName)
+    {
+        bool hasInput = RegularInput(selectedValue, 10, axisName); // TODO: Change max value.
+        if (hasInput)
+        {
+            UpdateSelectedValue(selectedValue);
+        }
     }
 
     #endregion
@@ -84,7 +101,7 @@ public class UserInterfaceController : MonoBehaviour
     {
         if (flags.isActive)
         {
-            GetInput();
+            GetInput("Vertical");
         }
     }
 

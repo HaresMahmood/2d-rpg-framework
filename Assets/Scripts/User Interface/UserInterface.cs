@@ -6,8 +6,14 @@ using UnityEngine.UI;
 /// <summary>
 ///
 /// </summary>
-public class UserInterface : MonoBehaviour
+public abstract class UserInterface : MonoBehaviour
 {
+    #region Constants
+
+    public abstract int maxObjects { get; }
+
+    #endregion
+
     #region Variables
 
     protected GameObject selector;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Item", menuName = "Categorizable/Item")]
@@ -38,13 +39,13 @@ public class Item : Categorizable
     public bool IsFavorite
     {
         get { return isFavorite; }
-        private set { isFavorite = value; }
+        set { isFavorite = value; }
     }
 
     public bool IsNew
     {
         get { return isNew; }
-        private set { isNew = value; }
+        set { isNew = value; }
     }
 
     #endregion
@@ -89,6 +90,11 @@ public class Item : Categorizable
         public override string GetCategoryFromIndex(int index)
         {
             return ((Category)index).ToString();
+        }
+
+        public override int GetTotalCategories()
+        {
+            return Enum.GetNames(typeof(Category)).Length;
         }
 
         #endregion

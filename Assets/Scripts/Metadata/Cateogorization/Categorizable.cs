@@ -58,6 +58,11 @@ public abstract class Categorizable : ScriptableObject
             return null;  
         }
 
+        public virtual int GetTotalCategories()
+        {
+            return 0;
+        }
+
         #endregion
 
 

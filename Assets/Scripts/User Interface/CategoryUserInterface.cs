@@ -10,7 +10,7 @@ public abstract class CategoryUserInterface : UserInterface
 {
     #region Constants
 
-    protected abstract int maxObjects { get; }
+    public override int maxObjects => categorizableSlots.Count;
 
     #endregion
 
@@ -18,11 +18,11 @@ public abstract class CategoryUserInterface : UserInterface
 
     public List<Categorizable> activeCategorizables { get; private set; } = new List<Categorizable>();
 
-    private List<CategorizableSlot> categorizableSlots;
+    protected List<CategorizableSlot> categorizableSlots;
 
-    private CategoryPanel categoryPanel;
+    protected CategoryPanel categoryPanel;
 
-    private GameObject emptyGrid;
+    protected GameObject emptyGrid;
 
     #endregion
 

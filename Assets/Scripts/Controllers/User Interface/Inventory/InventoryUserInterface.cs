@@ -9,19 +9,15 @@ using TMPro;
 /// <summary>
 ///
 /// </summary>
-public class InventoryUserInterface : CategoryUserInterface
+public sealed class InventoryUserInterface : CategoryUserInterface
 {
     #region Variables
 
     private Transform[] itemGrid, categoryIcons;
     private Animator informationAnimator, indicatorAnimator, arrowAnimator;
-    private GameObject emptyGrid, informationPanel, indicator;
-    private TextMeshProUGUI categoryText;
+    private GameObject informationPanel, indicator;
 
-    public List<Item> categoryItems { get; private set; } = new List<Item>();
     public List<ItemBehavior> itemButtons { get; set; } = new List<ItemBehavior>();
-
-    protected override int maxObjects => throw new NotImplementedException();
 
     #endregion
 
@@ -45,11 +41,11 @@ public class InventoryUserInterface : CategoryUserInterface
 
     public void Favorite(Item item)
     {
-        item.isFavorite = !item.isFavorite;
-        Color favoriteColor = item.isFavorite ? "#EAC03E".ToColor() : "#FFFFFF".ToColor();
+        item.IsFavorite = !item.IsFavorite;
+        Color favoriteColor = item.IsFavorite ? "#EAC03E".ToColor() : "#FFFFFF".ToColor();
         StartCoroutine(GetComponentInChildren<ItemInformation>().buttons[itemButtons.IndexOf(itemButtons.Find(b => b.buttonName == "Favorite"))].Find("Big Icon/Icon").gameObject.FadeColor(favoriteColor, 0.1f));
         StartCoroutine(GetComponentInChildren<ItemInformation>().buttons[itemButtons.IndexOf(itemButtons.Find(b => b.buttonName == "Favorite"))].Find("Small Icon/Icon").gameObject.FadeColor(favoriteColor, 0.1f));
-        UpdateItem(InventoryController.instance.selectedSlot);
+        //UpdateItem(InventoryController.instance.selectedSlot);
     }
 
     public void Discard(Item item)
@@ -67,7 +63,7 @@ public class InventoryUserInterface : CategoryUserInterface
         yield return new WaitForSecondsRealtime(0.1f);
         informationAnimator.SetBool("isUsingItem", true);
         StartCoroutine(UpdateIndicator());
-        InventoryController.instance.ActiveSidePanel();
+        //InventoryController.instance.ActiveSidePanel();
         StartCoroutine(FindObjectOfType<PauseUserInterface>().pauseContainer.transform.Find("Side Panel").gameObject.FadeOpacity(1f, 0.15f));
     }
 
@@ -88,22 +84,22 @@ public class InventoryUserInterface : CategoryUserInterface
                 }
             case (InventoryController.SortingMethod.AmountAscending):
                 {
-                    inventory.items.Sort((item1, item2) => item1.amount.CompareTo(item2.amount));
+                    inventory.items.Sort((item1, item2) => item1.Quantity.CompareTo(item2.Quantity));
                     break;
                 }
             case (InventoryController.SortingMethod.AmountDescending):
                 {
-                    inventory.items.Sort((item1, item2) => item2.amount.CompareTo(item1.amount));
+                    inventory.items.Sort((item1, item2) => item2.Quantity.CompareTo(item1.Quantity));
                     break;
                 }
             case (InventoryController.SortingMethod.FavoriteFirst):
                 {
-                    inventory.items.Sort((item1, item2) => item1.isFavorite.CompareTo(item2.isFavorite)); // Not working.
+                    inventory.items.Sort((item1, item2) => item1.IsFavorite.CompareTo(item2.IsFavorite)); // Not working.
                     break;
                 }
             case (InventoryController.SortingMethod.NewFirst):
                 {
-                    inventory.items.Sort((item1, item2) => item1.isNew.CompareTo(item2.isNew)); // Not working.
+                    inventory.items.Sort((item1, item2) => item1.IsNew.CompareTo(item2.IsNew)); // Not working.
                     break;
                 }
         }
@@ -117,7 +113,7 @@ public class InventoryUserInterface : CategoryUserInterface
     /// <param name="fadeSidePanel"> Specifies whether the side panel, or the information panel should be fades. Defaults to false. </param>
     public void FadeUserInterface(float opacity, float duration = 0.2f, bool fadeSidePanel = false)
     {
-        int indicatorActive = opacity == 1f ? InventoryController.instance.selectedSlot : -1;
+        int indicatorActive = 1; //opacity == 1f ? InventoryController.instance.selectedSlot : -1;
         StartCoroutine(UpdateIndicator(indicatorActive));
 
         StartCoroutine(transform.Find("Middle").gameObject.FadeOpacity(opacity, duration));
@@ -191,7 +187,7 @@ public class InventoryUserInterface : CategoryUserInterface
                 }
         #endif
 
-        categoryItems = inventory.items.Where(item => item.category.ToString().Equals(InventoryController.instance.categoryNames[selectedCategory])).ToList();
+        //categoryItems = inventory.items.Where(item => item.Categorization.ToString().Equals(InventoryController.instance.categoryNames[selectedCategory])).ToList();
 
         if (categoryItems.Count > 0)
         {
@@ -229,7 +225,7 @@ public class InventoryUserInterface : CategoryUserInterface
 
     public void UpdateItem(int selectedSlot)
     {
-        itemGrid[selectedSlot].GetComponent<ItemSlot>().UpdateInformation(categoryItems[selectedSlot], -1, false);
+        //itemGrid[selectedSlot].GetComponent<ItemSlot>().UpdateInformation(categoryItems[selectedSlot], -1, false);
     }
 
     /// <summary>
@@ -262,7 +258,7 @@ public class InventoryUserInterface : CategoryUserInterface
 
         yield return new WaitForSecondsRealtime(animationTime);
 
-        categoryText.SetText(InventoryController.instance.categoryNames[selectedCategory].Replace('_', ' ')); yield return null;
+        //categoryText.SetText(InventoryController.instance.categoryNames[selectedCategory].Replace('_', ' ')); yield return null;
         categoryText.transform.parent.position = new Vector2(categoryIcons[selectedCategory].position.x, categoryText.transform.parent.position.y);
         StartCoroutine(categoryText.transform.parent.gameObject.FadeOpacity(1f, animationTime));
     }
@@ -279,7 +275,7 @@ public class InventoryUserInterface : CategoryUserInterface
 
     public void UpdateSelectedItem(int selectedItem)
     {
-        if (categoryItems.Count != 0) InventoryController.instance.selectedItem = categoryItems[selectedItem];
+        //if (categoryItems.Count != 0) InventoryController.instance.selectedItem = categoryItems[selectedItem];
         StartCoroutine(UpdateIndicator(selectedItem));
         StartCoroutine(informationPanel.GetComponent<ItemInformation>().SetInformation(categoryItems.Count == 0 ? null : categoryItems[selectedItem]));
     }
@@ -405,7 +401,7 @@ public class InventoryUserInterface : CategoryUserInterface
                 informationAnimator.SetBool("Selected", false);
             }
 
-            StartCoroutine(UpdateIndicator(InventoryController.instance.selectedSlot));
+            //StartCoroutine(UpdateIndicator(InventoryController.instance.selectedSlot));
         }
     }
 
@@ -436,7 +432,7 @@ public class InventoryUserInterface : CategoryUserInterface
         itemGrid = transform.Find("Middle/Grid/Item Grid").GetChildren();
         categoryIcons = transform.Find("Middle/Categories/Category Icons").GetChildren();
 
-        UpdateSelectedCategory(InventoryController.instance.inventory, 0, 1);
+        //UpdateSelectedCategory(InventoryController.instance.inventory, 0, 1);
 
         LayoutRebuilder.ForceRebuildLayoutImmediate(informationPanel.transform.Find("Information (Vertical)").GetComponent<RectTransform>());
 

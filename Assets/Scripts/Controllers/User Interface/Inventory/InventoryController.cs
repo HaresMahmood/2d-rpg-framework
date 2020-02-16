@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 ///
 /// </summary>
-public class InventoryController : UserInterfaceController
+public class InventoryController : CategoryUserInterfaceController
 {
     #region Fields
 
@@ -38,13 +38,7 @@ public class InventoryController : UserInterfaceController
     [Header("Values")]
     [SerializeField] private SortingMethod sortingMethod = SortingMethod.None;
 
-    public Item selectedItem { get; set; }
-
-    public List<string> categoryNames { get; private set; } = new List<string>();
-
-    public int selectedSlot { get; private set; } = 0; // TODO: Should be private field
-    private int selectedCategory = 0;
-    public int selectedButton { get; private set; } = 0;
+    private List<string> categoryNames = new List<string>();
 
     #endregion
 
@@ -87,7 +81,7 @@ public class InventoryController : UserInterfaceController
 
     public IEnumerator ActiveSidePanel(float delay)
     {
-        if (selectedSlot % 7 == 0 || selectedSlot == 0) // Debug
+        if (selectedValue % 7 == 0 || selectedValue == 0) // Debug
         {
             yield return new WaitForSecondsRealtime(delay);
             if (Input.GetAxisRaw("Horizontal") == -1)
@@ -110,12 +104,12 @@ public class InventoryController : UserInterfaceController
         userInterface.CloseSubMenu(selectedButton);
 
         flags.isInSubmenu = selectedButton > -1 ? true : false;
-        this.selectedButton = selectedButton > -1 ? this.selectedButton : 0;
+        selectedValue = selectedButton > -1 ? selectedValue : 0;
     }
 
     private void UpdateSelectedCategory(int increment)
     {
-        selectedSlot = 0;
+        selectedValue = 0;
         userInterface.UpdateSelectedCategory(inventory, selectedCategory, increment);
     }
 
@@ -132,44 +126,32 @@ public class InventoryController : UserInterfaceController
 
     public void UpdateItem()
     {
-        userInterface.UpdateItem(selectedSlot);
+        userInterface.UpdateItem(selectedValue);
     }
 
-    private void GetInput()
+    protected override void GetInput()
+    {
+        base.GetInput();
+
+        if (Input.GetButtonDown("Interact"))
+        {
+            StartCoroutine(userInterface.AnimateItemSelection(selectedValue));
+            flags.isInSubmenu = true;
+        }
+
+        if (Input.GetButtonDown("Toggle"))
+        {
+            sortingMethod = (SortingMethod)ExtensionMethods.IncrementInt((int)sortingMethod, 0, Enum.GetValues(typeof(SortingMethod)).Length, 1);
+            if (sortingMethod == SortingMethod.None) sortingMethod = SortingMethod.AToZ;
+            userInterface.UpdateSortingMethod(inventory, sortingMethod, selectedCategory);
+        }
+    }
+
+    /*
+    protected void GetInput(int something)
     {
         if (!flags.isInSubmenu)
         {
-            if (Input.GetAxisRaw("Trigger") == 0) // TODO: Very ugly!
-            {
-                bool hasInput;
-                (selectedSlot, hasInput) = input.GetInput("Horizontal", "Vertical", userInterface.categoryItems.Count, selectedSlot, true, 1, 7);
-                if (hasInput)
-                {
-                    UpdateSelectedItem(selectedSlot);
-                }
-            }
-            else
-            {
-                bool hasInput;
-                (selectedCategory, hasInput) = input.GetInput("Trigger", TestInput.Axis.Horizontal, categoryNames.Count, selectedCategory);
-                if (hasInput)
-                {
-                    UpdateSelectedCategory((int)Input.GetAxisRaw("Trigger"));
-                }
-            }
-
-            if (Input.GetButtonDown("Interact"))
-            {
-                StartCoroutine(userInterface.AnimateItemSelection(selectedSlot));
-                flags.isInSubmenu = true;
-            }
-
-            if (Input.GetButtonDown("Toggle"))
-            {
-                sortingMethod = (SortingMethod)ExtensionMethods.IncrementInt((int)sortingMethod, 0, Enum.GetValues(typeof(SortingMethod)).Length, 1);
-                if (sortingMethod == SortingMethod.None) sortingMethod = SortingMethod.AToZ;
-                userInterface.UpdateSortingMethod(inventory, sortingMethod, selectedCategory);
-            }
 
             StartCoroutine(ActiveSidePanel(0.2f));
         }
@@ -193,6 +175,7 @@ public class InventoryController : UserInterfaceController
             }
         }
     }
+    */
 
     #endregion
 
@@ -203,9 +186,21 @@ public class InventoryController : UserInterfaceController
     /// </summary>
     private void Start()
     {
-        for (int i = 0; i < Enum.GetNames(typeof(Item.Category)).Length; i++)
+        // Adds name of every category of class "Item" to List.
+        for (int i = 0; i < inventory.items[0].Categorization.GetTotalCategories(); i++)
         {
-            //categoryNames.Add(((Item.Category)i).ToString());
+            categoryNames.Add(inventory.items[0].Categorization.GetCategoryFromIndex(i));
+        }
+    }
+
+    /// <summary>
+    /// Update is called once per frame.
+    /// </summary>
+    protected override void Update()
+    {
+        if (flags.isActive)
+        {
+            GetInput();
         }
     }
 
