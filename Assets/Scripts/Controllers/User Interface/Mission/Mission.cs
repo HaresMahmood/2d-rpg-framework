@@ -5,7 +5,7 @@ public class Mission : Categorizable
 {
     #region Fields
 
-    [SerializeField] private MissionCategory categorization;
+    [SerializeField] private MissionCategory categorization = new MissionCategory();
     [SerializeField] private string objective;
     [SerializeField] private string remaining;
     [SerializeField] private Character assignee;
@@ -16,6 +16,11 @@ public class Mission : Categorizable
     #endregion
 
     #region Properties
+
+    public override Category Categorization
+    {
+        get { return categorization; }
+    }
 
     public string Objective
     {
@@ -68,7 +73,7 @@ public class Mission : Categorizable
 
         #region Properties
 
-        public override string Value
+        protected override string Value
         {
             get { return value.ToString(); }
         }

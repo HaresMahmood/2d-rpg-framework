@@ -37,8 +37,6 @@ public class InventoryController : CategoryUserInterfaceController
     [Header("Values")]
     [SerializeField] private SortingMethod sortingMethod = SortingMethod.None;
 
-    private List<string> categoryNames = new List<string>();
-
     #endregion
 
     #region Enums
@@ -181,16 +179,11 @@ public class InventoryController : CategoryUserInterfaceController
 
     #region Unity Methods
 
-    /// <summary>
-    /// Start is called before the first frame update.
-    /// </summary>
-    private void Start()
+    protected override void Awake()
     {
-        // Adds name of every category of class "Item" to List.
-        for (int i = 0; i < inventory.items[0].Categorization.GetTotalCategories(); i++)
-        {
-            categoryNames.Add(inventory.items[0].Categorization.GetCategoryFromIndex(i));
-        }
+        categorizableObjects.AddRange(inventory.items);
+
+        base.Awake();
     }
 
     /// <summary>

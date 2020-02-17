@@ -31,7 +31,7 @@ public abstract class Categorizable : ScriptableObject
         private set { description = value; }
     }
 
-    public Category Categorization { get; }
+    public abstract Category Categorization { get; }
 
     #endregion
 
@@ -42,7 +42,7 @@ public abstract class Categorizable : ScriptableObject
     {
         #region Properies
 
-        public virtual string Value { get; }
+        protected virtual string Value { get; }
 
         #endregion
 
@@ -54,7 +54,7 @@ public abstract class Categorizable : ScriptableObject
         }
 
         public virtual string GetCategoryFromIndex(int index)
-        { 
+        {
             return null;  
         }
 
@@ -64,8 +64,6 @@ public abstract class Categorizable : ScriptableObject
         }
 
         #endregion
-
-
     }
 
     #endregion

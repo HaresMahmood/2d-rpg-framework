@@ -7,9 +7,9 @@ public class Item : Categorizable
 {
     #region Fields
 
-    [SerializeField] private ItemCategory categorization;
+    [SerializeField] private ItemCategory categorization = new ItemCategory();
     [SerializeField] private Sprite sprite;
-    [SerializeField] private ItemEffect effect;
+    [SerializeField] private ItemEffect effect = new ItemEffect();
     [SerializeField] private int quantity;
     [SerializeField] private bool isFavorite;
     [SerializeField] private bool isNew;
@@ -17,6 +17,11 @@ public class Item : Categorizable
     #endregion
 
     #region Properties
+
+    public override Category Categorization 
+    {
+        get { return categorization; } 
+    }
 
     public Sprite Sprite
     {
@@ -27,13 +32,12 @@ public class Item : Categorizable
     public ItemEffect Effect
     {
         get { return effect; }
-        private set { effect = value; }
     }
 
     public int Quantity
     {
         get { return quantity; }
-        private set { quantity = value; }
+        set { quantity = value; }
     }
 
     public bool IsFavorite
@@ -52,7 +56,7 @@ public class Item : Categorizable
 
     #region Nested Classes
 
-    [System.Serializable]
+    [Serializable]
     public sealed class ItemCategory : Category
     {
         #region Variables
@@ -63,7 +67,7 @@ public class Item : Categorizable
 
         #region Properties
 
-        public override string Value
+        protected override string Value
         {
             get { return value.ToString(); }
         }

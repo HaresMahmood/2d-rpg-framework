@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 ///
@@ -6,6 +7,10 @@
 public class CategoryUserInterfaceController : UserInterfaceController
 {
     #region Variables
+
+    protected List<Categorizable> categorizableObjects = new List<Categorizable>();
+
+    protected List<string> categoryNames = new List<string>();
 
     protected int selectedCategory;
 
@@ -62,4 +67,15 @@ public class CategoryUserInterfaceController : UserInterfaceController
     }
 
     #endregion
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        // Adds name of every category of class "Categorizable" to List.
+        for (int i = 0; i < categorizableObjects[0].Categorization.GetTotalCategories(); i++)
+        {
+            categoryNames.Add(categorizableObjects[0].Categorization.GetCategoryFromIndex(i));
+        }
+    }
 }
