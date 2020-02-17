@@ -42,14 +42,14 @@ public class OverworldItemManager : MonoBehaviour
     public void AddItem(OverworldItem overworldItem)
     {
         Item item = overworldItem.item;
-        if (!InventoryController.instance.inventory.items.Contains(item))
-            InventoryController.instance.inventory.items.Add(item);
+        //if (!//InventoryController.instance.inventory.items.Contains(item))
+            //InventoryController.instance.inventory.items.Add(item);
 
-        InventoryController.instance.inventory.items.Find(i => i.ID == item.ID).amount++;
+        //InventoryController.instance.inventory.items.Find(i => i.ID == item.ID).amount++;
 
         DisplayItem(item);
         //overworldItem.isPickedUp = true;
-        item.isNew = true;
+        //item.isNew = true;
     }
 
     public void DisplayItem(Item item)
@@ -61,8 +61,8 @@ public class OverworldItemManager : MonoBehaviour
         containerObj.transform.SetParent(itemGrid.transform, false);
 
         containerObj.transform.Find("Overworld Item Container/Item/Name").GetComponent<TextMeshProUGUI>().text = item.Name;
-        containerObj.transform.Find("Overworld Item Container/Item/Category").GetComponent<TextMeshProUGUI>().text = item.category.ToString().ToUpper();
-        containerObj.transform.Find("Overworld Item Container/Item/Sprite").GetComponent<Image>().sprite = item.sprite;
+        //containerObj.transform.Find("Overworld Item Container/Item/Category").GetComponent<TextMeshProUGUI>().text = item.category.ToString().ToUpper();
+        //containerObj.transform.Find("Overworld Item Container/Item/Sprite").GetComponent<Image>().sprite = item.sprite;
 
         itemContainers.Add(containerObj);
 

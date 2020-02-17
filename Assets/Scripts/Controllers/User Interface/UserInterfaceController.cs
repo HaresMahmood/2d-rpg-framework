@@ -9,8 +9,7 @@ public abstract class UserInterfaceController : MonoBehaviour
 {
     #region Fields
 
-    [Header("Setup")]
-    [SerializeField] private UserInterface userInterface;
+    private UserInterface userInterface;
 
     private UserInterfaceFlags flags;
 
@@ -23,7 +22,7 @@ public abstract class UserInterfaceController : MonoBehaviour
         get { return userInterface; }
     }
 
-    protected virtual UserInterfaceFlags Flags
+    public virtual UserInterfaceFlags Flags
     {
         get { return flags; }
     }
@@ -45,7 +44,7 @@ public abstract class UserInterfaceController : MonoBehaviour
 
     #region Nested Classes
 
-    protected abstract class UserInterfaceFlags
+    public abstract class UserInterfaceFlags
     {
         public bool isActive { get; set; }
 

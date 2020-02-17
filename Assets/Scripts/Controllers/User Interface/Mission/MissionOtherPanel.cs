@@ -41,7 +41,7 @@ public class MissionOtherPanel : MonoBehaviour
         locationText.SetText(mission.Location);
 
         rewardText.SetText(mission.Reward.Amount.ToString());
-        rewardSprite.sprite = mission.Reward.Item.sprite;
+        //rewardSprite.sprite = mission.Reward.Item.sprite;
 
         statusValue.SetText(status);
         if (statusValue.color != statusColor)

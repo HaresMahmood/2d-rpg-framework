@@ -51,7 +51,7 @@ public class PauseUserInterface : MonoBehaviour
                 {
                     float opacity = state ? 1f : 0f;
 
-                    FindObjectOfType<InventoryController>().flags.isActive = state;
+                    FindObjectOfType<InventoryController>().Flags.isActive = state;
                     StartCoroutine(sidePanel.FadeOpacity(opacity, 0.2f)); // TODO: Debug
                     break;
                 }

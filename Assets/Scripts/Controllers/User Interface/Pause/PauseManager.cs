@@ -52,14 +52,14 @@ public class PauseManager : MonoBehaviour
 
     private void Use(Item item)
     {
-        item.amount--;
+        //item.amount--;
         PartyManager.instance.party.playerParty[selectedSlot].stats.health = (int)PartyManager.instance.party.playerParty[selectedSlot].totalHealth;
         userInterface.PopulateSideBar(PartyManager.instance.party);
     }
 
     private void Give(Item item)
     {
-        item.amount--;
+        //item.amount--;
         PartyManager.instance.party.playerParty[selectedSlot].heldItem = item;
         userInterface.PopulateSideBar(PartyManager.instance.party);
     }
@@ -111,7 +111,7 @@ public class PauseManager : MonoBehaviour
             TimeManager.instance.SetPause(false);
         }
 
-        InventoryController.instance.flags.isActive = flags.isActive;
+        InventoryController.instance.Flags.isActive = flags.isActive;
     }
 
     public void InitializeSidePanel()
@@ -127,11 +127,11 @@ public class PauseManager : MonoBehaviour
         flags.isInPartyMenu = false;
         userInterface.UpdateSidePanel(selectedSlot, 0, 0.15f);
         selectedSlot = 0;
-        if (InventoryController.instance.flags.isItemSelected)
-        {
-            InventoryController.instance.CloseSelectionMenu();
-        }
-        StartCoroutine(InventoryController.instance.DeactivateSidePanel(0.2f));
+        //if (InventoryController.instance.Flags.isItemSelected)
+        //{
+        //    InventoryController.instance.CloseSelectionMenu();
+        //}
+        //StartCoroutine(InventoryController.instance.DeactivateSidePanel(0.2f));
     }
 
     private void UpdateMenus(int selectedMenu, int increment, float animationDuration, bool animate = true)
@@ -174,8 +174,8 @@ public class PauseManager : MonoBehaviour
 
             if (Input.GetButtonDown("Interact"))
             {
-                ApplyItemBehavior(InventoryController.instance.selectedItem);
-                InventoryController.instance.UpdateItem();
+                //ApplyItemBehavior(InventoryController.instance.selectedItem);
+                //InventoryController.instance.UpdateItem();
                 DeactivateSidePanel();
             }
         }

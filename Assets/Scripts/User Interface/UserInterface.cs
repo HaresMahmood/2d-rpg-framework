@@ -10,7 +10,7 @@ public abstract class UserInterface : MonoBehaviour
 {
     #region Constants
 
-    public abstract int maxObjects { get; }
+    public abstract int MaxObjects { get; }
 
     #endregion
 
@@ -26,7 +26,7 @@ public abstract class UserInterface : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    protected virtual void UpdateSelectedObject(int selectedValue)
+    public virtual void UpdateSelectedObject(int selectedValue)
     {   }
 
     /// <summary>
@@ -63,6 +63,18 @@ public abstract class UserInterface : MonoBehaviour
         {
             scrollbar.value = 1;
         }
+    }
+
+    #endregion
+
+    #region Unity Methods
+
+    /// <summary>
+    /// Start is called before the first frame update.
+    /// </summary>
+    protected virtual void Start()
+    {
+        selectorAnimator = selector.GetComponent<Animator>();
     }
 
     #endregion

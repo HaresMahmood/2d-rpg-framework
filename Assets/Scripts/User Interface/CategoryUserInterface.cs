@@ -10,7 +10,7 @@ public abstract class CategoryUserInterface : UserInterface
 {
     #region Constants
 
-    public override int maxObjects => categorizableSlots.Count;
+    public override int MaxObjects => categorizableSlots.Count;
 
     #endregion
 
@@ -39,6 +39,11 @@ public abstract class CategoryUserInterface : UserInterface
         UpdateSelectedObject(0);
     }
 
+    public override void UpdateSelectedObject(int selectedValue)
+    {
+        UpdateSelector(categorizableSlots.Select(slot => slot.transform).ToArray(), selectedValue);
+    }
+
     protected void UpdateCategoryObjectsList(List<Categorizable> categorizables, string value, float animationDuration = 0.15f, float animationDelay = 0.03f)
     {
         #if DEBUG
@@ -52,7 +57,7 @@ public abstract class CategoryUserInterface : UserInterface
 
         if (activeCategorizables.Count > 0)
         {
-            int max = activeCategorizables.Count > maxObjects ? maxObjects : activeCategorizables.Count;
+            int max = activeCategorizables.Count > MaxObjects ? MaxObjects : activeCategorizables.Count;
 
             ToggleEmptyPanel(1f);
 
@@ -97,6 +102,22 @@ public abstract class CategoryUserInterface : UserInterface
     {
         categorizableSlots[index].UpdateInformation(activeCategorizables[index], animationDuration);
     }
+
+    /*
+    protected IEnumerator AnimateArrows(int increment)
+    {
+        arrowAnimator.SetBool("isActive", true);
+        arrowAnimator.SetFloat("Blend", increment);
+
+        yield return null; float waitTime = arrowAnimator.GetAnimationTime();
+        yield return new WaitForSecondsRealtime(waitTime);
+
+        //yield return new WaitForSecondsRealtime(0.1f);
+
+        arrowAnimator.SetFloat("Blend", 0);
+        arrowAnimator.SetBool("isActive", false);
+    }
+    */
 
     private void ResetCategoryObjects()
     {

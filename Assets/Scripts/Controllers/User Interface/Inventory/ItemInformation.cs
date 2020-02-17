@@ -59,7 +59,7 @@ public class ItemInformation : MonoBehaviour
             yield return new WaitForSecondsRealtime(duration);
 
             nameText.SetText(item.Name);
-            descriptionText.SetText(item.description);
+            //descriptionText.SetText(item.description);
 
             StartCoroutine(verticalInformation.FadeOpacity(1f, duration));
         }
@@ -115,13 +115,13 @@ public class ItemInformation : MonoBehaviour
                 }
             }
 
-            Color favoriteColor = item.isFavorite ? "#EAC03E".ToColor() : Color.white;
-            StartCoroutine(buttons[itemButtons.IndexOf(itemButtons.Find(b => b.buttonName == "Favorite"))].Find("Big Icon/Icon").gameObject.FadeColor(favoriteColor, 0.1f));
-            StartCoroutine(buttons[itemButtons.IndexOf(itemButtons.Find(b => b.buttonName == "Favorite"))].Find("Small Icon/Icon").gameObject.FadeColor(favoriteColor, 0.1f));
+            //Color favoriteColor = item.isFavorite ? "#EAC03E".ToColor() : Color.white;
+            //StartCoroutine(buttons[itemButtons.IndexOf(itemButtons.Find(b => b.buttonName == "Favorite"))].Find("Big Icon/Icon").gameObject.FadeColor(favoriteColor, 0.1f));
+            //StartCoroutine(buttons[itemButtons.IndexOf(itemButtons.Find(b => b.buttonName == "Favorite"))].Find("Small Icon/Icon").gameObject.FadeColor(favoriteColor, 0.1f));
         }
         else
         {
-            UpdateSelectedButton(InventoryController.instance.selectedButton, 0);
+            //UpdateSelectedButton(InventoryController.instance.selectedButton, 0);
 
             for (int i = 0; (i < buttons.Length && buttons[i].GetComponent<CanvasGroup>().alpha == 1); i++)
             {

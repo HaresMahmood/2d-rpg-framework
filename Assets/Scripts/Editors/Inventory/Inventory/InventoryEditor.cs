@@ -7,6 +7,7 @@ using System;
 [CustomEditor(typeof(Inventory)), CanEditMultipleObjects]
 public class InventoryEditor : Editor
 {
+    /*
     #region Variables
 
     private Inventory inventory;
@@ -42,7 +43,7 @@ public class InventoryEditor : Editor
 
         EditorGUILayout.BeginVertical("Box");
         int counter = 0; foreach (Item item in inventory.items.ToArray())
-            if (item.category.ToString().Equals(category)) counter++;
+            //if (item.category.ToString().Equals(category)) counter++;
         GUILayout.Label("Displaying " + counter + "/" + inventory.items.Count + " items.");
         EditorGUILayout.EndVertical();
 
@@ -110,6 +111,7 @@ public class InventoryEditor : Editor
                 GUILayout.Space(2);
 
                 EditorGUILayout.EndVertical();
+                
             }
         }
 
@@ -149,4 +151,5 @@ public class InventoryEditor : Editor
 
         EditorUtility.SetDirty(target);
     }
+    */
 }

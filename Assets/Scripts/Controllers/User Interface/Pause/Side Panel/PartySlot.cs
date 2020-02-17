@@ -49,7 +49,7 @@ public class PartySlot : MonoBehaviour
 
     public void PopulateSlot(Pokemon pokemon)
     {
-        PopulateSlot(pokemon.menuSprite, pokemon.heldItem.sprite, pokemon.totalHealth, pokemon.stats.health, pokemon.name, pokemon.level);
+        //PopulateSlot(pokemon.menuSprite, pokemon.heldItem.sprite, pokemon.totalHealth, pokemon.stats.health, pokemon.name, pokemon.level);
     }
 
     private void PopulateSlot(Sprite menuSprite, Sprite itemSprite, float totalHealth, float health, string name, int level)

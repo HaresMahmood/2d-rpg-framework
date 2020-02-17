@@ -23,7 +23,7 @@ public class InventoryController : CategoryUserInterfaceController
         get { return userInterface; }
     }
 
-    protected override UserInterfaceFlags Flags
+    public override UserInterfaceFlags Flags
     {
         get { return flags; }
     }
@@ -32,7 +32,6 @@ public class InventoryController : CategoryUserInterfaceController
 
     #region Variables
 
-    [Header("Setup")]
     public Inventory inventory;
 
     [Header("Values")]
@@ -73,6 +72,7 @@ public class InventoryController : CategoryUserInterfaceController
 
     #region Miscellaneous Methods
 
+    /*
     public void ActiveSidePanel()
     {
         Flags.isActive = false;
