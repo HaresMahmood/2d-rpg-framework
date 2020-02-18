@@ -9,6 +9,7 @@ using TMPro;
 /// </summary>
 public class SettingsManager : MonoBehaviour
 {
+    /*
     #region Variables
 
     public static SettingsManager instance;
@@ -42,7 +43,6 @@ public class SettingsManager : MonoBehaviour
             get { return isSettingSelected; }
             set { if (isSettingSelected) isSettingSelected = value; }
         }
-        */
 
         public Flags(bool isActive, bool isSettingSelected)
         {
@@ -234,4 +234,5 @@ public class SettingsManager : MonoBehaviour
     }
 
     #endregion
+    */
 }

@@ -8,6 +8,7 @@ using UnityEngine;
 /// </summary>
 public class MissionManager : MonoBehaviour
 {
+    /*
     #region Variables
 
     public static MissionManager instance;
@@ -104,4 +105,5 @@ public class MissionManager : MonoBehaviour
     }
 
     #endregion
+    */
 }

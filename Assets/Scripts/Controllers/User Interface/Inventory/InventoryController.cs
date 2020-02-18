@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 ///
@@ -179,6 +176,9 @@ public class InventoryController : CategoryUserInterfaceController
 
     #region Unity Methods
 
+    /// <summary>
+    /// Awake is called when the script instance is being loaded.
+    /// </summary>
     protected override void Awake()
     {
         categorizableObjects.AddRange(inventory.items);

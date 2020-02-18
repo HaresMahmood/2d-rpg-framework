@@ -17,7 +17,7 @@ public class GlobalLightController : MonoBehaviour
 
     public void FadeLight(Color color, float duration, float intensity = -1)
     {
-        StopAllCoroutines();
+        //StopAllCoroutines();
         StartCoroutine(gameObject.FadeColor(color, duration));
         if (intensity > -1 && intensity != GetComponent<Light>().intensity)
         {

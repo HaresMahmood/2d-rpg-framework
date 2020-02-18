@@ -35,7 +35,7 @@ public class PauseUserInterface : MonoBehaviour
                 {
                     float opacity = state ? 0f : 1f;
 
-                    FindObjectOfType<MissionManager>().flags.isActive = state;
+                    //FindObjectOfType<MissionManager>().flags.isActive = state;
                     StartCoroutine(sidePanel.FadeOpacity(opacity, 0.2f)); // TODO: Debug
                     break;
                 }
@@ -43,7 +43,7 @@ public class PauseUserInterface : MonoBehaviour
                 {
                     float opacity = state ? 1f : 0f;
 
-                    FindObjectOfType<PartyManager>().flags.isActive = state;
+                    //FindObjectOfType<PartyManager>().flags.isActive = state;
                     StartCoroutine(sidePanel.FadeOpacity(opacity, 0.2f)); // TODO: Debug
                     break;
                 }
@@ -52,6 +52,7 @@ public class PauseUserInterface : MonoBehaviour
                     float opacity = state ? 1f : 0f;
 
                     FindObjectOfType<InventoryController>().Flags.isActive = state;
+                    FindObjectOfType<InventoryController>().OnPause(state);
                     StartCoroutine(sidePanel.FadeOpacity(opacity, 0.2f)); // TODO: Debug
                     break;
                 }
@@ -59,7 +60,7 @@ public class PauseUserInterface : MonoBehaviour
                 {
                     float opacity = state ? 0f : 1f;
 
-                    FindObjectOfType<SystemManager>().flags.isActive = state;
+                    //FindObjectOfType<SystemManager>().flags.isActive = state;
                     StartCoroutine(sidePanel.FadeOpacity(opacity, 0.2f)); // TODO: Debug
                     break;
                 }
@@ -131,6 +132,7 @@ public class PauseUserInterface : MonoBehaviour
 
             indicator.transform.position = partySlots[selectedSlot].position;
 
+            /*
             if (selectedSlot >= PartyManager.instance.party.playerParty.Count)
             {
                 indicator.transform.Find("Party Indicator").gameObject.SetActive(false);
@@ -146,6 +148,7 @@ public class PauseUserInterface : MonoBehaviour
                 indicator.transform.position = new Vector2(indicator.transform.position.x, partySlots[selectedSlot].position.y);
                 indicator.transform.Find("Party Indicator").gameObject.SetActive(true);
             }
+            */
 
             yield return null;
             indicatorAnimator.enabled = true;
@@ -200,6 +203,7 @@ public class PauseUserInterface : MonoBehaviour
 
     private void AnimatePartySlot(int selectedSlot, int increment)
     {
+        /*
         if (selectedSlot < PartyManager.instance.party.playerParty.Count)
         {
             int previousSlot = ExtensionMethods.IncrementInt(selectedSlot, 0, PartyManager.instance.party.playerParty.Count, increment);
@@ -207,6 +211,7 @@ public class PauseUserInterface : MonoBehaviour
             partySlots[selectedSlot].GetComponent<Animator>().SetBool("isSelected", true);
             partySlots[previousSlot].GetComponent<Animator>().SetBool("isSelected", false);
         }
+        */
     }
 
     #endregion

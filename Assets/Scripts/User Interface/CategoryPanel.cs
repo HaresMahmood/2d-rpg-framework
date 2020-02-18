@@ -33,7 +33,8 @@ public class CategoryPanel : MonoBehaviour
 
         yield return new WaitForSecondsRealtime(animationDuration);
 
-        categoryNameContainer.GetComponentInChildren<TextMeshProUGUI>().SetText(value.Replace('_', ' ')); yield return null;
+        categoryNameContainer.GetComponentInChildren<TextMeshProUGUI>().SetText(value.Replace('_', ' '));
+        yield return null;
         categoryNameContainer.position = new Vector2(categoryIcons[selectedValue].position.x, categoryNameContainer.position.y);
         StartCoroutine(categoryNameContainer.gameObject.FadeOpacity(1f, animationDuration));
     }
@@ -45,6 +46,7 @@ public class CategoryPanel : MonoBehaviour
         AnimateIconPosition(selectedCategory, previousCategory);
         AnimateIconColor(selectedCategory, previousCategory);
         StartCoroutine(AnimateIcon(selectedCategory, previousCategory));
+        //StartCoroutine(AnimateIcon(selectedCategory, previousCategory));
     }
 
     private void AnimateIconPosition(int selectedCategory, int previousCategory)
@@ -52,6 +54,7 @@ public class CategoryPanel : MonoBehaviour
         categoryIcons[selectedCategory].GetComponent<Animator>().SetBool("isSelected", true);
         categoryIcons[previousCategory].GetComponent<Animator>().SetBool("isSelected", false);
     }
+
 
     private void AnimateIconColor(int selectedCategory, int previousCategory)
     {
@@ -85,7 +88,7 @@ public class CategoryPanel : MonoBehaviour
         Animator selectedAnimator = categoryIcons[selectedCategory].Find("Icon").GetComponent<Animator>();
         Animator previousAnimator = categoryIcons[previousCategory].Find("Icon").GetComponent<Animator>();
 
-        if (selectedAnimator != null) // Debug.
+        if (selectedAnimator != null)
         {
             if (previousAnimator != null && previousAnimator.GetBool("isSelected"))
             {

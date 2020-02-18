@@ -11,106 +11,107 @@ using UnityEngine.UI;
 /// </summary>
 public class PartyManager : MonoBehaviour
 {
-    #region Variables
-
-    public static PartyManager instance;
-
-    [Header("Setup")]
-    public Party party;
-    [SerializeField] private PartyUserInterface userInterface;
-    public List<PanelButton> buttons = new List<PanelButton>();
-
-    [Header("Settings")]
-    [SerializeField] private Material chartMaterial;
-
-    private readonly TestInput input = new TestInput();
-    public Flags flags = new Flags(false, false);
-
-    public GameObject pauseContainer { get; private set; }
-
-    public int selectedMember { get; private set; }
-    private int selectedPanel;
-
-    //public event EventHandler OnUserInput = delegate { };
-
-    #endregion
-
-    #region Structs
-
-    public struct Flags
-    {
-        public bool isActive { get; set; }
-        public bool isViewingAllMoves { get; set; }
-
-        public Flags(bool isActive, bool isArrangingMoves)
-        {
-            this.isActive = isActive;
-            this.isViewingAllMoves = isArrangingMoves;
-        }
-    }
-
-    #endregion
-
-    #region Accessor Methods
-
-    public PartyUserInterface GetUserInterface()
-    {
-        return userInterface;
-    }
-
-    #endregion
-
-    #region Miscellaneous Methods
-
     /*
-    private void UpdateSelectedPanel(bool arrows = false)
-    {
-        int selectedSlot = selectedPanel == 0 ? selectedMove : selectedInformation;
-        if (selectedPanel == 2)
-        {
-            selectedSlot = selectedPanel == 2 ? selectedMove : selectedLearnedMove;
-        }
+  #region Variables
 
-        userInterface.AnimateSlot(selectedSlot, false);
-        userInterface.UpdateSelectedPanel(selectedPanel);
-        if (arrows) userInterface.AnimateArrows(selectedPanel == 2 ? false : true);
+  public static PartyManager instance;
 
-        if (selectedPanel != 2)
-        {
-            selectedSlot = selectedPanel == 0 ? selectedInformation : selectedMove;
-        }
-        else
-        {
-            selectedSlot = selectedLearnedMove;
-        }
+  [Header("Setup")]
+  public Party party;
+  [SerializeField] private PartyUserInterface userInterface;
+  public List<PanelButton> buttons = new List<PanelButton>();
 
-        StartCoroutine(userInterface.UpdateSelectedSlot(selectedSlot, -1));
-    }
+  [Header("Settings")]
+  [SerializeField] private Material chartMaterial;
 
-    private IEnumerator UpdateMovePosition(int selectedMember, int selectedMove, int increment)
-    {
-        userInterface.UpdateMovePosition(party, selectedMember, selectedMove, increment);
-        yield return null;
-        userInterface.UpdateArrows(selectedMove);
-    }
+  private readonly TestInput input = new TestInput();
+  public Flags flags = new Flags(false, false);
 
-    private IEnumerator SwapMove()
-    {
-        userInterface.SwapMove(party.playerParty[0], selectedMove, selectedLearnedMove);
-        selectedPanel = 1; selectedLearnedMove = 0;
-        UpdateSelectedPanel();
-        yield return new WaitForSecondsRealtime(0.15f);
-        userInterface.RearrangeMove(flags.isRearrangingMoves, selectedMove);
-    }
+  public GameObject pauseContainer { get; private set; }
 
-    private IEnumerator EnableLearnedMovePanel()
-    {
-        flags.isRearrangingMoves = false;
-        selectedPanel = 2;
-        UpdateSelectedPanel(true); yield return null;
-        StartCoroutine(userInterface.UpdateSelectedSlot(0, -1, true));
-    }
-    */
+  public int selectedMember { get; private set; }
+  private int selectedPanel;
+
+  //public event EventHandler OnUserInput = delegate { };
+
+  #endregion
+
+  #region Structs
+
+  public struct Flags
+  {
+      public bool isActive { get; set; }
+      public bool isViewingAllMoves { get; set; }
+
+      public Flags(bool isActive, bool isArrangingMoves)
+      {
+          this.isActive = isActive;
+          this.isViewingAllMoves = isArrangingMoves;
+      }
+  }
+
+  #endregion
+
+  #region Accessor Methods
+
+  public PartyUserInterface GetUserInterface()
+  {
+      return userInterface;
+  }
+
+  #endregion
+
+  #region Miscellaneous Methods
+
+
+  private void UpdateSelectedPanel(bool arrows = false)
+  {
+      int selectedSlot = selectedPanel == 0 ? selectedMove : selectedInformation;
+      if (selectedPanel == 2)
+      {
+          selectedSlot = selectedPanel == 2 ? selectedMove : selectedLearnedMove;
+      }
+
+      userInterface.AnimateSlot(selectedSlot, false);
+      userInterface.UpdateSelectedPanel(selectedPanel);
+      if (arrows) userInterface.AnimateArrows(selectedPanel == 2 ? false : true);
+
+      if (selectedPanel != 2)
+      {
+          selectedSlot = selectedPanel == 0 ? selectedInformation : selectedMove;
+      }
+      else
+      {
+          selectedSlot = selectedLearnedMove;
+      }
+
+      StartCoroutine(userInterface.UpdateSelectedSlot(selectedSlot, -1));
+  }
+
+  private IEnumerator UpdateMovePosition(int selectedMember, int selectedMove, int increment)
+  {
+      userInterface.UpdateMovePosition(party, selectedMember, selectedMove, increment);
+      yield return null;
+      userInterface.UpdateArrows(selectedMove);
+  }
+
+  private IEnumerator SwapMove()
+  {
+      userInterface.SwapMove(party.playerParty[0], selectedMove, selectedLearnedMove);
+      selectedPanel = 1; selectedLearnedMove = 0;
+      UpdateSelectedPanel();
+      yield return new WaitForSecondsRealtime(0.15f);
+      userInterface.RearrangeMove(flags.isRearrangingMoves, selectedMove);
+  }
+
+  private IEnumerator EnableLearnedMovePanel()
+  {
+      flags.isRearrangingMoves = false;
+      selectedPanel = 2;
+      UpdateSelectedPanel(true); yield return null;
+      StartCoroutine(userInterface.UpdateSelectedSlot(0, -1, true));
+  }
+  */
 
     /*
 if (!flags.isViewingAllMoves)
@@ -201,7 +202,7 @@ if (selectedPanel == 1)
     StartCoroutine(userInterface.SwitchMode(flags.isViewingAllMoves, selectedMove));
 }
 }
-*/
+
 
     private void GetInput()
     {
@@ -283,8 +284,8 @@ if (selectedPanel == 1)
         {
             radarChartMesh.gameObject.SetActive(false);
         }
-        */
     }
 
     #endregion
+    */
 }

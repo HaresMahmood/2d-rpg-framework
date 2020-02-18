@@ -7,6 +7,7 @@ using UnityEngine;
 /// </summary>
 public class PartyMovePanel : PartyInformationPanel
 {
+    /*
     #region Variables
 
     public Flags flags = new Flags(false);
@@ -118,4 +119,5 @@ public class PartyMovePanel : PartyInformationPanel
     }
 
     #endregion
+    */
 }

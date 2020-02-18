@@ -31,12 +31,11 @@ public abstract class CategoryUserInterface : UserInterface
     public void UpdateSelectedCategory(List<Categorizable> categorizables, int selectedCategory, int increment)
     {
         string value = categorizables[0].Categorization.GetCategoryFromIndex(selectedCategory);
-
         categoryPanel.AnimateCategory(selectedCategory, increment);
         StartCoroutine(categoryPanel.UpdateCategoryName(selectedCategory, value));
-        ResetCategoryObjects();
-        UpdateCategoryObjectsList(categorizables, value);
-        UpdateSelectedObject(0);
+        //ResetCategoryObjects();
+        //UpdateCategoryObjectsList(categorizables, value);
+        //UpdateSelectedObject(0);
     }
 
     public override void UpdateSelectedObject(int selectedValue)
@@ -134,6 +133,20 @@ public abstract class CategoryUserInterface : UserInterface
         }
 
         activeCategorizables.Clear();
+    }
+
+    #endregion
+
+    #region Unity Methods
+
+    /// <summary>
+    /// Awake is called when the script instance is being loaded.
+    /// </summary>
+    protected override void Awake()
+    {
+        categoryPanel = GetComponentInChildren<CategoryPanel>();
+
+        base.Awake();
     }
 
     #endregion

@@ -55,7 +55,7 @@ public class BottomPanelUserInterface : MonoBehaviour
 
     public IEnumerator AnimateValue(string text, float waitTime)
     {
-        StopAllCoroutines();
+        //StopAllCoroutines();
         valueAnimator.GetComponent<TextMeshProUGUI>().SetText(text);
         valueAnimator.SetBool("isToggling", true);
         valueAnimator.gameObject.SetActive(true);

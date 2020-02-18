@@ -15,13 +15,13 @@ public class FormHandler : MonoBehaviour
 
         if (FormManager.instance.selectedButton == buttonIndex)
         {
-            StopAllCoroutines();
+            //StopAllCoroutines();
             StartCoroutine(FadeButton(this.gameObject, 0.3f, 0.3f));
             //Debug.Log("FADING");
         }
         else
         {
-            StopAllCoroutines();
+            //StopAllCoroutines();
             StartCoroutine(FadeButton(this.gameObject, 1f, 0.3f));
             //Debug.Log("FADING");
         }

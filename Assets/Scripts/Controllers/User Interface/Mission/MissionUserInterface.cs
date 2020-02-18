@@ -10,6 +10,7 @@ using TMPro;
 /// </summary>
 public class MissionUserInterface : MonoBehaviour
 {
+    /*
     #region Variables
 
     public List<Mission> categoryMissions { get; private set; } = new List<Mission>();
@@ -103,7 +104,7 @@ public class MissionUserInterface : MonoBehaviour
 
         yield return new WaitForSecondsRealtime(animationTime);
 
-        categoryText.GetComponentInChildren<TextMeshProUGUI>().SetText($"{MissionManager.instance.categoryNames[selectedCategory]} Missions"); yield return null;
+        //categoryText.GetComponentInChildren<TextMeshProUGUI>().SetText($"{MissionManager.instance.categoryNames[selectedCategory]} Missions"); yield return null;
         categoryText.position = new Vector2(categoryIcons[selectedCategory].position.x, categoryText.position.y);
         StartCoroutine(categoryText.gameObject.FadeOpacity(1f, animationTime));
     }
@@ -256,4 +257,5 @@ public class MissionUserInterface : MonoBehaviour
     }
 
     #endregion
+    */
 }

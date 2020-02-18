@@ -11,6 +11,7 @@ using TMPro;
 /// </summary>
 public class SystemUserInterface : MonoBehaviour
 {
+    /*
     #region Variables
 
     public event EventHandler OnSettingSelected = delegate { };
@@ -93,6 +94,6 @@ public class SystemUserInterface : MonoBehaviour
     {
 
     }
+        #endregion
+    */
 }
-
-    #endregion

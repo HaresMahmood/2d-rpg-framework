@@ -163,7 +163,7 @@ public class DialogManager : MonoBehaviour
             hasBranchingDialog = false;
 
         string sentence = dialog.sentence;
-        StopAllCoroutines();
+        //StopAllCoroutines();
 
         if (input.Equals("Interact"))
             typingCoroutine = StartCoroutine(TypeSentence(sentence));

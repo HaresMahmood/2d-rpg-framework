@@ -7,6 +7,7 @@ using UnityEngine;
 /// </summary>
 public class SaveManager : MonoBehaviour
 {
+    /*
     #region Variables
 
     public static SaveManager instance;
@@ -110,4 +111,5 @@ public class SaveManager : MonoBehaviour
     }
 
     #endregion
+    */
 }

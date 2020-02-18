@@ -11,6 +11,7 @@ using UnityEngine.UI;
 /// </summary>
 public class SaveUserInterface : MonoBehaviour
 {
+    /*
     #region Variables
 
     private GameObject indicator;
@@ -67,7 +68,6 @@ public class SaveUserInterface : MonoBehaviour
         saveOption.GetComponentInChildren<TextMeshProUGUI>().SetText("Saved!");
         StartCoroutine(saveOption.gameObject.FadeOpacity(1f, 0.1f));
         yield return new WaitForSecondsRealtime(0.1f);
-        */
 
         StartCoroutine(saveOption.gameObject.FadeOpacity(0f, 0.1f));
         saveOption.GetComponentInChildren<TextMeshProUGUI>().SetText("Save");
@@ -118,4 +118,5 @@ public class SaveUserInterface : MonoBehaviour
     }
 
     #endregion
+    */
 }

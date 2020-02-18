@@ -7,6 +7,7 @@ using TMPro;
 /// </summary>
 public class MemberInformation : MonoBehaviour // TODO: Think of better name.
 {
+    /*
     #region Variables
 
     Transform generalInformation;
@@ -115,9 +116,9 @@ public class MemberInformation : MonoBehaviour // TODO: Think of better name.
         ability = transform.Find("Information (3)/Ability");
         item = transform.Find("Information (4)/Item");
 
-        nameText = generalInformation.Find("Name/Value").GetComponent<TextMeshProUGUI>();
-        categoryText = generalInformation.Find("Name/Dex Information/Category/Value").GetComponent<TextMeshProUGUI>();
-        dexText = generalInformation.Find("Name/Dex Information/Dex Number/Value").GetComponent<TextMeshProUGUI>();
+        //nameText = generalInformation.Find("Name/Value").GetComponent<TextMeshProUGUI>();
+        //categoryText = generalInformation.Find("Name/Dex Information/Category/Value").GetComponent<TextMeshProUGUI>();
+        //dexText = generalInformation.Find("Name/Dex Information/Dex Number/Value").GetComponent<TextMeshProUGUI>();
         statusText = generalInformation.Find("Status Ailment/Value").GetComponent<TextMeshProUGUI>();
 
         levelText = progression.Find("Level/Value").GetComponent<TextMeshProUGUI>();
@@ -137,4 +138,5 @@ public class MemberInformation : MonoBehaviour // TODO: Think of better name.
     }
 
     #endregion
+    */
 }

@@ -70,9 +70,9 @@ public abstract class UserInterface : MonoBehaviour
     #region Unity Methods
 
     /// <summary>
-    /// Start is called before the first frame update.
+    /// Awake is called when the script instance is being loaded.
     /// </summary>
-    protected virtual void Start()
+    protected virtual void Awake()
     {
         selectorAnimator = selector.GetComponent<Animator>();
     }

@@ -11,6 +11,7 @@ using UnityEngine.UI;
 /// </summary>
 public class SettingsUserInterface : MonoBehaviour
 {
+    /*
     #region Variables
 
     public event EventHandler OnSettingSelected = delegate { };
@@ -223,7 +224,7 @@ public class SettingsUserInterface : MonoBehaviour
     {
         StartCoroutine(UpdateIndicator(SettingsManager.instance.selectedSetting, 0.1f));
     }
-    */
 
     #endregion
+    */
 }

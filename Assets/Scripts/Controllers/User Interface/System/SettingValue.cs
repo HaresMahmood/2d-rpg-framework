@@ -10,6 +10,7 @@ using UnityEngine.UI;
 /// </summary>
 public class SettingValue : MonoBehaviour
 {
+    /*
     #region Variables
 
     [SerializeField] private Type type;
@@ -220,4 +221,5 @@ public class SettingValue : MonoBehaviour
     }
 
     #endregion
+    */
 }

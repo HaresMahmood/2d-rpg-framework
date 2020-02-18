@@ -11,6 +11,7 @@ using UnityEngine.UI;
 /// </summary>
 public class SystemManager : MonoBehaviour
 {
+    /*
     #region Constants
 
     public readonly string[] navigationNames = new string[] { "Save", "Settings", "Tutorials", "Controls", "Quit" };
@@ -168,4 +169,5 @@ public class SystemManager : MonoBehaviour
     }
 
     #endregion
+    */
 }

@@ -38,7 +38,7 @@ public abstract class UserInterfaceController : MonoBehaviour
 
     protected readonly TestInput input = new TestInput();
 
-    protected int selectedValue;
+    protected int selectedValue = 0;
 
     #endregion
 
@@ -58,6 +58,9 @@ public abstract class UserInterfaceController : MonoBehaviour
 
     #region Miscellaneous Methods
 
+    public virtual void OnPause(bool isPaused)
+    {   }
+
     protected virtual void UpdateSelectedValue(int selectedButton)
     { }
 
@@ -73,7 +76,7 @@ public abstract class UserInterfaceController : MonoBehaviour
 
     protected virtual void GetInput(string axisName)
     {
-        bool hasInput = RegularInput(selectedValue, 10, axisName); // TODO: Change max value.
+        bool hasInput = RegularInput(selectedValue, UserInterface.MaxObjects, axisName); // TODO: Change max value.
         if (hasInput)
         {
             UpdateSelectedValue(selectedValue);

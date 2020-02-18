@@ -14,6 +14,7 @@ public sealed class InventoryUserInterface : CategoryUserInterface
     #region Variables
 
     private Animator informationAnimator, arrowAnimator;
+
     private GameObject informationPanel;
 
     public List<ItemBehavior> itemButtons { get; set; } = new List<ItemBehavior>();
@@ -61,7 +62,7 @@ public sealed class InventoryUserInterface : CategoryUserInterface
         base.UpdateSelectedObject(selectedValue);
         //StartCoroutine(informationPanel.GetComponent<ItemInformation>().SetInformation(categoryItems.Count == 0 ? null : categoryItems[selectedItem]));
     }
-    
+
     /*
     private IEnumerator ActivateSidePanel()
     {
@@ -113,7 +114,7 @@ public sealed class InventoryUserInterface : CategoryUserInterface
         }
     }
     */
-    
+
     /*
     public void FadeUserInterface(float opacity, float duration = 0.2f, bool fadeSidePanel = false)
     {
@@ -330,9 +331,9 @@ public sealed class InventoryUserInterface : CategoryUserInterface
     #region Unity Methods
 
     /// <summary>
-    /// Start is called before the first frame update.
+    /// Awake is called when the script instance is being loaded.
     /// </summary>
-    private void Start()
+    protected override void Awake()
     {
         informationPanel = transform.Find("Item Information").gameObject;
         selector = transform.Find("Indicator").gameObject;
@@ -350,7 +351,9 @@ public sealed class InventoryUserInterface : CategoryUserInterface
 
         StartCoroutine(FindObjectOfType<BottomPanelUserInterface>().ChangePanelButtons(InventoryController.instance.buttons));
 
-        base.Start();
+        base.Awake();
+
+
     }
 
     #endregion

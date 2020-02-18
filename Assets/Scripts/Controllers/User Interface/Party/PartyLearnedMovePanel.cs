@@ -8,6 +8,7 @@ using UnityEngine.UI;
 /// </summary>
 public class PartyLearnedMovePanel : PartyMovePanel
 {
+    /*
     #region Variables
 
     PartyMovePanel movePanel;
@@ -141,4 +142,5 @@ public class PartyLearnedMovePanel : PartyMovePanel
     }
 
     #endregion
+    */
 }

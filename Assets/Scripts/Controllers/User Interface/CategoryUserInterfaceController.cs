@@ -6,25 +6,50 @@ using UnityEngine;
 /// </summary>
 public class CategoryUserInterfaceController : UserInterfaceController
 {
+    #region Fields
+
+    private CategoryUserInterface userInterface;
+
+    #endregion
+
+    #region Properties
+
+    protected override UserInterface UserInterface
+    {
+        get { return userInterface; }
+    }
+
+    #endregion
+
     #region Variables
 
     protected List<Categorizable> categorizableObjects = new List<Categorizable>();
 
     protected List<string> categoryNames = new List<string>();
 
-    protected int selectedCategory;
+    protected int selectedCategory = 0;
 
     #endregion
 
     #region Miscellaneous Methods
 
-    protected void UpdateSelectedCategory(int selectedCategory, int increment)
-    {   }
+    public override void OnPause(bool isPaused)
+    {
+        int increment = isPaused ? -1 : 0;
 
-    protected bool TriggerInput(int selectedCategory, int max)
+        UpdateSelectedCategory(selectedCategory, increment);
+    }
+
+    protected void UpdateSelectedCategory(int selectedCategory, int increment)
+    {
+        selectedValue = 0;
+        ((CategoryUserInterface)UserInterface).UpdateSelectedCategory(categorizableObjects, selectedCategory, increment);
+    }
+
+    protected bool TriggerInput(int max)
     {
         bool hasInput;
-        (this.selectedCategory, hasInput) = input.GetInput("Trigger", TestInput.Axis.Horizontal, max, selectedCategory);
+        (selectedCategory, hasInput) = input.GetInput("Trigger", TestInput.Axis.Horizontal, max, selectedCategory);
 
         return hasInput;
     }
@@ -34,7 +59,7 @@ public class CategoryUserInterfaceController : UserInterfaceController
         if (Input.GetAxisRaw("Trigger") == 0)
         {
             bool hasInput;
-            (selectedValue, hasInput) = input.GetInput("Horizontal", "Vertical", 10, selectedValue, true, 1, 7); // TODO: Change max value.
+            (selectedValue, hasInput) = input.GetInput("Horizontal", "Vertical", UserInterface.MaxObjects, selectedValue, true, 1, 7); // TODO: Change max value.
             if (hasInput)
             {
                 UpdateSelectedValue(selectedValue);
@@ -42,7 +67,7 @@ public class CategoryUserInterfaceController : UserInterfaceController
         }
         else
         {
-            bool hasInput = TriggerInput(selectedValue, 10); // TODO: Change max value.
+            bool hasInput = TriggerInput(categoryNames.Count);
             if (hasInput)
             {
                 UpdateSelectedCategory(selectedCategory, (int)Input.GetAxisRaw("Trigger"));
@@ -58,7 +83,7 @@ public class CategoryUserInterfaceController : UserInterfaceController
         }
         else
         {
-            bool hasInput = TriggerInput(selectedValue, 10); // TODO: Change max value.
+            bool hasInput = TriggerInput(categoryNames.Count); // TODO: Change max value.
             if (hasInput)
             {
                 UpdateSelectedCategory(selectedCategory, (int)Input.GetAxisRaw("Trigger"));
@@ -68,6 +93,9 @@ public class CategoryUserInterfaceController : UserInterfaceController
 
     #endregion
 
+    /// <summary>
+    /// Awake is called when the script instance is being loaded.
+    /// </summary>
     protected override void Awake()
     {
         base.Awake();

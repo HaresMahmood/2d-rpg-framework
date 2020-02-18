@@ -9,6 +9,7 @@ using UnityEngine.UI;
 /// </summary>
 public class PartyUserInterface : MonoBehaviour
 {
+    /*
     #region Variables
 
     private GameObject indicator, arrows, movesPanel, learnedMovesPanel;
@@ -269,7 +270,6 @@ public class PartyUserInterface : MonoBehaviour
             indicator.SetActive(true);
         }
     }
-    */
 
     #endregion
 
@@ -292,4 +292,5 @@ public class PartyUserInterface : MonoBehaviour
     }
 
     #endregion
+    */
 }

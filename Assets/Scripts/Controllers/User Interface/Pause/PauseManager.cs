@@ -53,15 +53,15 @@ public class PauseManager : MonoBehaviour
     private void Use(Item item)
     {
         //item.amount--;
-        PartyManager.instance.party.playerParty[selectedSlot].stats.health = (int)PartyManager.instance.party.playerParty[selectedSlot].totalHealth;
-        userInterface.PopulateSideBar(PartyManager.instance.party);
+        //PartyManager.instance.party.playerParty[selectedSlot].stats.health = (int)PartyManager.instance.party.playerParty[selectedSlot].totalHealth;
+        //userInterface.PopulateSideBar(PartyManager.instance.party);
     }
 
     private void Give(Item item)
     {
         //item.amount--;
-        PartyManager.instance.party.playerParty[selectedSlot].heldItem = item;
-        userInterface.PopulateSideBar(PartyManager.instance.party);
+        //PartyManager.instance.party.playerParty[selectedSlot].heldItem = item;
+        //userInterface.PopulateSideBar(PartyManager.instance.party);
     }
 
     private void ApplyItemBehavior(Item item)
@@ -94,7 +94,7 @@ public class PauseManager : MonoBehaviour
         if (flags.isActive)
         {
             UpdateMenus(2, -1, 0.1f, false);
-            userInterface.PopulateSideBar(PartyManager.instance.party);
+            //userInterface.PopulateSideBar(PartyManager.instance.party);
 
             TimeManager.instance.UpdateTimeUserInterface();
             WeatherManager.instance.UpdateWeahterUserInterface();
@@ -160,8 +160,8 @@ public class PauseManager : MonoBehaviour
         }
         else
         {
-            bool hasInput;
-            (selectedSlot, hasInput) = input.GetInput("Vertical", TestInput.Axis.Vertical, (PartyManager.instance.party.playerParty.Count + 1), selectedSlot);
+            bool hasInput = false;
+            //(selectedSlot, hasInput) = input.GetInput("Vertical", TestInput.Axis.Vertical, (PartyManager.instance.party.playerParty.Count + 1), selectedSlot);
             if (hasInput)
             {
                 userInterface.UpdateSidePanel(selectedSlot, (int)Input.GetAxisRaw("Vertical"), 0.1f);

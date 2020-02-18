@@ -6,6 +6,7 @@ using UnityEngine;
 /// </summary>
 public class PartyInformationPanel : MonoBehaviour
 {
+    /*
     #region Variables
 
     [Header("Values")]
@@ -136,4 +137,5 @@ public class PartyInformationPanel : MonoBehaviour
     }
 
     #endregion
+    */
 }
