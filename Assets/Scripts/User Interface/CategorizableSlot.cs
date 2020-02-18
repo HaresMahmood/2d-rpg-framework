@@ -17,14 +17,19 @@ public abstract class CategorizableSlot : MonoBehaviour
     {
         if (duration > -1)
         {
-            StartCoroutine(gameObject.FadeOpacity(opacity, duration));
+            StartCoroutine(slot.gameObject.FadeOpacity(opacity, duration));
         }
         else
         {
-            GetComponent<CanvasGroup>().alpha = opacity;
+            slot.GetComponent<CanvasGroup>().alpha = opacity;
         }
 
-        if (opacity == 0f) gameObject.SetActive(false);
+        /*
+        if (opacity == 0f)
+        {
+            slot.gameObject.SetActive(false);
+        }
+        */
     }
 
     public void UpdateInformation(Categorizable categorizable, float duration = -1)

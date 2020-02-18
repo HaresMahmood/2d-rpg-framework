@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Collections;
+﻿using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,7 +11,7 @@ public sealed class InventoryUserInterface : CategoryUserInterface
 {
     #region Variables
 
-    private Animator informationAnimator, arrowAnimator;
+    private Animator informationAnimator;
 
     private GameObject informationPanel;
 

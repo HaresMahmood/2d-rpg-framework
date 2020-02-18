@@ -33,9 +33,9 @@ public abstract class CategoryUserInterface : UserInterface
         string value = categorizables[0].Categorization.GetCategoryFromIndex(selectedCategory);
         categoryPanel.AnimateCategory(selectedCategory, increment);
         StartCoroutine(categoryPanel.UpdateCategoryName(selectedCategory, value));
-        //ResetCategoryObjects();
-        //UpdateCategoryObjectsList(categorizables, value);
-        //UpdateSelectedObject(0);
+        ResetCategoryObjects();
+        UpdateCategoryObjectsList(categorizables, value);
+        UpdateSelectedObject(0);
     }
 
     public override void UpdateSelectedObject(int selectedValue)
@@ -58,7 +58,7 @@ public abstract class CategoryUserInterface : UserInterface
         {
             int max = activeCategorizables.Count > MaxObjects ? MaxObjects : activeCategorizables.Count;
 
-            ToggleEmptyPanel(1f);
+            ToggleEmptyPanel(false);
 
             StartCoroutine(ActiveSlots(0, max, animationDuration, animationDelay));
 
@@ -69,18 +69,20 @@ public abstract class CategoryUserInterface : UserInterface
         }
         else
         {
-            ToggleEmptyPanel(0f);
+            ToggleEmptyPanel(true);
         }
     }
 
-    protected virtual void ToggleEmptyPanel(float opacity, float animationDuration = 0.15f)
+    protected virtual void ToggleEmptyPanel(bool isActive, float animationDuration = 0.15f)
     {
-        bool isActive = opacity > 0f ? true : false;
+        float opacity = isActive ? 1f : 0f;
 
-        if (selector.activeSelf != isActive)
+        if (selector.activeSelf == isActive)
         {
-            selector.SetActive(isActive);
+            selector.SetActive(!isActive);
             StartCoroutine(emptyGrid.FadeOpacity(opacity, animationDuration));
+            opacity = isActive ? 0f : 1f;
+            StartCoroutine(categorizableSlots[0].transform.parent.gameObject.FadeOpacity(opacity, animationDuration));
         }
     }
 
@@ -88,11 +90,14 @@ public abstract class CategoryUserInterface : UserInterface
     {
         for (int i = min; i < max; i++)
         {
-            ActiveSlots(i, animationDuration);
-
-            if (animationDelay >= 0)
+            if (i < activeCategorizables.Count)
             {
-                yield return new WaitForSecondsRealtime(animationDelay);
+                ActiveSlots(i, animationDuration);
+
+                if (animationDelay >= 0)
+                {
+                    yield return new WaitForSecondsRealtime(animationDelay);
+                }
             }
         }
     }
