@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,7 +8,7 @@ using TMPro;
 /// <summary>
 ///
 /// </summary>
-public class ItemInformation : MonoBehaviour
+public class ItemInformationPanel : MonoBehaviour
 {
     #region Variables
 

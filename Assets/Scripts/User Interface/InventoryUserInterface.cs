@@ -41,8 +41,8 @@ public sealed class InventoryUserInterface : CategoryUserInterface
     {
         item.IsFavorite = !item.IsFavorite;
         Color favoriteColor = item.IsFavorite ? "#EAC03E".ToColor() : "#FFFFFF".ToColor();
-        StartCoroutine(GetComponentInChildren<ItemInformation>().buttons[itemButtons.IndexOf(itemButtons.Find(b => b.buttonName == "Favorite"))].Find("Big Icon/Icon").gameObject.FadeColor(favoriteColor, 0.1f));
-        StartCoroutine(GetComponentInChildren<ItemInformation>().buttons[itemButtons.IndexOf(itemButtons.Find(b => b.buttonName == "Favorite"))].Find("Small Icon/Icon").gameObject.FadeColor(favoriteColor, 0.1f));
+        StartCoroutine(GetComponentInChildren<ItemInformationPanel>().buttons[itemButtons.IndexOf(itemButtons.Find(b => b.buttonName == "Favorite"))].Find("Big Icon/Icon").gameObject.FadeColor(favoriteColor, 0.1f));
+        StartCoroutine(GetComponentInChildren<ItemInformationPanel>().buttons[itemButtons.IndexOf(itemButtons.Find(b => b.buttonName == "Favorite"))].Find("Small Icon/Icon").gameObject.FadeColor(favoriteColor, 0.1f));
         //UpdateItem(InventoryController.instance.selectedSlot);
     }
 
@@ -338,22 +338,15 @@ public sealed class InventoryUserInterface : CategoryUserInterface
 
         emptyGrid = transform.Find("Middle/Grid/Empty Grid").gameObject;
         informationAnimator = informationPanel.GetComponent<Animator>();
-        //arrowAnimator = transform.Find("Categories/Navigation").GetComponent<Animator>();
 
-        //category = transform.Find("Middle/Categories/Information/Name").GetComponent<TextMeshProUGUI>();
         categorizableSlots = transform.Find("Middle/Grid/Item Grid").GetComponentsInChildren<CategorizableSlot>().ToList();
 
-        //UpdateSelectedCategory(InventoryController.instance.inventory, 0, 1);
-
-        LayoutRebuilder.ForceRebuildLayoutImmediate(informationPanel.transform.Find("Information (Vertical)").GetComponent<RectTransform>());
+        //LayoutRebuilder.ForceRebuildLayoutImmediate(informationPanel.transform.Find("Information (Vertical)").GetComponent<RectTransform>());
 
         StartCoroutine(FindObjectOfType<BottomPanelUserInterface>().ChangePanelButtons(InventoryController.instance.buttons));
 
         base.Awake();
-
-
     }
 
-    #endregion
-    
+    #endregion    
 }

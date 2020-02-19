@@ -15,16 +15,6 @@ public static class ExtensionMethods
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="t"></param>
-    /// <returns></returns>
-    public static float SmoothStep(float t)
-    {
-        return t * t * t * (t * (6f * t - 15f) + 10f);
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
     /// <param name="light"></param>
     /// <param name="targetIntensity"></param>
     /// <param name="duration"></param>
