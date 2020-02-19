@@ -11,6 +11,7 @@ public class InventoryMenuIcons : MonoBehaviour
     public static InventoryMenuIcons instance;
 
     [SerializeField] private List<Sprite> icons = new List<Sprite>();
+
     public List<Sprite> Icons 
     { 
         get 

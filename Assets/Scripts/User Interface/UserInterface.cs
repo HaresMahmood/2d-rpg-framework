@@ -6,7 +6,7 @@ using UnityEngine.UI;
 /// <summary>
 ///
 /// </summary>
-public abstract class UserInterface : CategorizableInformationUserInterface
+public abstract class UserInterface : MonoBehaviour
 {
     #region Constants
 

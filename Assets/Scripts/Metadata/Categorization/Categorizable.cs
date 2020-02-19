@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Mission", menuName = "Categorizable")]
 public abstract class Categorizable : ScriptableObject
 {
     #region Fields

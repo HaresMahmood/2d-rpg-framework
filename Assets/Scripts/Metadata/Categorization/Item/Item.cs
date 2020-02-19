@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Item", menuName = "Categorizable/Item")]
+[CreateAssetMenu(fileName = "New Item", menuName = "Categorizable/Item/Generic")]
 public class Item : Categorizable
 {
     #region Fields
 
     [SerializeField] private ItemCategory categorization = new ItemCategory();
     [SerializeField] private Sprite sprite;
-    [SerializeField] private ItemEffect effect = new ItemEffect();
+    [SerializeField] private ItemEffect effect;
     [SerializeField] private int quantity;
     [SerializeField] private bool isFavorite;
     [SerializeField] private bool isNew;
@@ -29,7 +29,7 @@ public class Item : Categorizable
         private set { sprite = value; }
     }
 
-    public ItemEffect Effect
+    public virtual ItemEffect Effect
     {
         get { return effect; }
     }
@@ -78,13 +78,7 @@ public class Item : Categorizable
 
         public enum Category
         {
-            Key,
-            Health,
-            Poké_Balls,
-            Battle,
-            TM,
-            Berry,
-            Other
+            Key
         }
 
         #endregion
@@ -104,10 +98,8 @@ public class Item : Categorizable
         #endregion
     }
 
-    public class ItemEffect
-    {
-
-    }
+    public abstract class ItemEffect
+    {   }
 
     #endregion
 
@@ -120,8 +112,8 @@ public class Item : Categorizable
             new ItemBehavior("Use", InventoryMenuIcons.instance.Icons[3]),
             new ItemBehavior("Give", InventoryMenuIcons.instance.Icons[4])
         };
-        behavior[0].behaviorEvent.AddListener(delegate { FindObjectOfType<InventoryUserInterface>().Use(); });
-        behavior[1].behaviorEvent.AddListener(delegate { FindObjectOfType<InventoryUserInterface>().Give(); });
+        //behavior[0].behaviorEvent.AddListener(delegate { FindObjectOfType<InventoryUserInterface>().Use(); });
+        //behavior[1].behaviorEvent.AddListener(delegate { FindObjectOfType<InventoryUserInterface>().Give(); });
 
         return behavior;
     }
@@ -134,8 +126,8 @@ public class Item : Categorizable
             new ItemBehavior("Discard", InventoryMenuIcons.instance.Icons[1]),
             new ItemBehavior("Cancel", InventoryMenuIcons.instance.Icons[2])
         };
-        behavior[0].behaviorEvent.AddListener(delegate { FindObjectOfType<InventoryUserInterface>().Favorite(item); });
-        behavior[1].behaviorEvent.AddListener(delegate { FindObjectOfType<InventoryUserInterface>().Discard(item); });
+        //behavior[0].behaviorEvent.AddListener(delegate { FindObjectOfType<InventoryUserInterface>().Favorite(item); });
+        //behavior[1].behaviorEvent.AddListener(delegate { FindObjectOfType<InventoryUserInterface>().Discard(item); });
 
         return behavior;
     }
