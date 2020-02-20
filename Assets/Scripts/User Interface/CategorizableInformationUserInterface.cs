@@ -1,11 +1,10 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
 ///
 /// </summary>
-public class CategorizableInformationUserInterface : MonoBehaviour
+public abstract class CategorizableInformationUserInterface : MonoBehaviour
 {
     #region Variables
 
@@ -15,10 +14,24 @@ public class CategorizableInformationUserInterface : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    public IEnumerator SetInformation(Categorizable categorizable, float animationDuration = 0.15f)
+    public virtual void SetInformation(Categorizable categorizable)
+    {   }
+
+    public virtual IEnumerator AnimatatePanel(Categorizable categorizable, Transform panel, float animationDuration = 0.15f)
     {
-        yield break;
+        FadePanel(panel, 0f, animationDuration / 2);
+
+        yield return new WaitForSecondsRealtime(animationDuration / 2);
+
+        SetInformation(categorizable);
+        FadePanel(panel, 1f, animationDuration / 2);
     }
+
+    protected virtual void FadePanel(Transform panel, float opacity, float animationDuration)
+    {
+        panel.gameObject.FadeOpacity(opacity, animationDuration);
+    }
+
 
     #endregion
 
@@ -28,14 +41,6 @@ public class CategorizableInformationUserInterface : MonoBehaviour
     /// Start is called before the first frame update.
     /// </summary>
     private void Start()
-    {
-        
-    }
-
-    /// <summary>
-    /// Update is called once per frame.
-    /// </summary>
-    private void Update()
     {
         
     }

@@ -9,7 +9,7 @@ public class Item : Categorizable
 
     [SerializeField] private ItemCategory categorization = new ItemCategory();
     [SerializeField] private Sprite sprite;
-    [SerializeField] private ItemEffect effect;
+    [SerializeField] private ItemEffect effect = new ItemEffect();
     [SerializeField] private int quantity;
     [SerializeField] private bool isFavorite;
     [SerializeField] private bool isNew;
@@ -98,8 +98,17 @@ public class Item : Categorizable
         #endregion
     }
 
-    public abstract class ItemEffect
-    {   }
+    public class ItemEffect
+    {
+        #region Miscellaneous Methods
+
+        public override string ToString()
+        {
+            return "None";
+        }
+
+        #endregion
+    }
 
     #endregion
 

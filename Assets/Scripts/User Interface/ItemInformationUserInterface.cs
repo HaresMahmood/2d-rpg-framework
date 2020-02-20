@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -10,9 +8,13 @@ using TMPro;
 /// </summary>
 public class ItemInformationUserInterface : CategorizableInformationUserInterface
 {
-    #region Variables
+    #region Properties
 
-    private GameObject informationPanel;
+    public int MaxObjects { get; private set; }
+
+    #endregion
+
+    #region Variables
 
     private GameObject verticalInformation;
     private GameObject horizontalInformation;
@@ -21,27 +23,118 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
 
     private TextMeshProUGUI nameText;
     private TextMeshProUGUI descriptionText;
+    private TextMeshProUGUI effectText;
     private TextMeshProUGUI valueText;
     private Image spriteImage;
 
     private RectTransform buttonPanel;
-    public Transform[] buttons { get; private set; }
+    public Transform[] buttons;
 
     #endregion
 
     #region Miscellaneous Methods
 
-    private void SetObjectDefinitions(Transform panel)
+    public override void SetInformation(Categorizable categorizable)
+    {
+        nameText.SetText(categorizable.Name);
+        effectText.SetText(((Item)categorizable).Effect.ToString()); // TODO: Set correct text color and set visibility of up-arrow.
+        descriptionText.SetText(categorizable.Description);
+    }
+
+    private void SeFieldDefinitionsFromPanel(Transform panel)
     {
         nameText = panel.Find("Name/Value").GetComponent<TextMeshProUGUI>();
         descriptionText = panel.Find("Description/Value").GetComponent<TextMeshProUGUI>();
-
-        if (panel.name.Contains("horizontal"))
-        {
-            valueText = panel.Find("Amount/Value").GetComponent<TextMeshProUGUI>();
-            spriteImage = panel.Find("Name/Icon").GetComponent<Image>();
-        }
+        effectText = panel.Find("Effect/Value").GetComponent<TextMeshProUGUI>();
     }
+
+    #endregion
+
+    #region Unity Methods
+
+    /// <summary>
+    /// Awake is called when the script instance is being loaded.
+    /// </summary>
+    private void Awake()
+    {
+        informationAnimator = informationPanel.GetComponent<Animator>();
+
+        verticalInformation = informationPanel.transform.Find("Information (Vertical)").gameObject;
+        horizontalInformation = informationPanel.transform.Find("Information (Horizontal)").gameObject;
+
+        informationPanel = verticalInformation.transform;
+
+        valueText = horizontalInformation.transform.Find("Amount/Value").GetComponent<TextMeshProUGUI>();
+        spriteImage = horizontalInformation.transform.Find("Name/Icon").GetComponent<Image>();
+
+        buttonPanel = horizontalInformation.transform.Find("Buttons").GetComponent<RectTransform>();
+        buttons = buttonPanel.GetChildren();
+
+        //SetObjectDefinitions(verticalInformation.transform);
+    }
+
+    #endregion
+
+    /*
+    
+    #region Variables
+
+    private Animator informationAnimator;
+
+    private GameObject informationPanel;
+
+    public List<ItemBehavior> itemButtons { get; set; } = new List<ItemBehavior>();
+
+    #endregion
+
+    private void Awake()
+    {
+        informationPanel = transform.Find("Item Information").gameObject;
+        selector = transform.Find("Indicator").gameObject;
+
+        emptyGrid = transform.Find("Middle/Grid/Empty Grid").gameObject;
+        informationAnimator = informationPanel.GetComponent<Animator>();
+
+        categorizableSlots = transform.Find("Middle/Grid/Item Grid").GetComponentsInChildren<CategorizableSlot>().ToList();
+
+        //LayoutRebuilder.ForceRebuildLayoutImmediate(informationPanel.transform.Find("Information (Vertical)").GetComponent<RectTransform>());
+
+        StartCoroutine(FindObjectOfType<BottomPanelUserInterface>().ChangePanelButtons(InventoryController.instance.buttons));
+    }  
+     
+    #region Behavior Definitions
+
+    public void Use()
+    {
+        informationPanel.transform.Find("Information (Horizontal)/Text").GetComponentInChildren<TextMeshProUGUI>().SetText("Select a Pokémon to use item on.");
+        //StartCoroutine(ActivateSidePanel());
+        PauseManager.instance.flags.isUsingItem = true;
+        PauseManager.instance.flags.isGivingItem = false;
+    }
+
+    public void Give()
+    {
+        informationPanel.transform.Find("Information (Horizontal)/Text").GetComponentInChildren<TextMeshProUGUI>().SetText("Select a Pokémon to give item to.");
+        //StartCoroutine(ActivateSidePanel());
+        PauseManager.instance.flags.isGivingItem = true;
+        PauseManager.instance.flags.isUsingItem = false;
+    }
+
+    public void Favorite(Item item)
+    {
+        item.IsFavorite = !item.IsFavorite;
+        Color favoriteColor = item.IsFavorite ? "#EAC03E".ToColor() : "#FFFFFF".ToColor();
+        StartCoroutine(GetComponentInChildren<ItemInformationPanel>().buttons[itemButtons.IndexOf(itemButtons.Find(b => b.buttonName == "Favorite"))].Find("Big Icon/Icon").gameObject.FadeColor(favoriteColor, 0.1f));
+        StartCoroutine(GetComponentInChildren<ItemInformationPanel>().buttons[itemButtons.IndexOf(itemButtons.Find(b => b.buttonName == "Favorite"))].Find("Small Icon/Icon").gameObject.FadeColor(favoriteColor, 0.1f));
+        //UpdateItem(InventoryController.instance.selectedSlot);
+    }
+
+    public void Discard(Item item)
+    {
+        Debug.Log($"Discarding item: {item}");
+    }
+
+    #endregion
 
     /// <summary>
     /// Sets the desciption of the selected item.
@@ -131,91 +224,6 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
             //FindObjectOfType<InventoryUserInterface>().itemButtons.Clear();
         }
     }
-
-    #endregion
-
-    #region Unity Methods
-
-    /// <summary>
-    /// Awake is called when the script instance is being loaded.
-    /// </summary>
-    private void Awake()
-    {
-        informationPanel = transform.gameObject;
-
-        informationAnimator = informationPanel.GetComponent<Animator>();
-
-        verticalInformation = informationPanel.transform.Find("Information (Vertical)").gameObject;
-        horizontalInformation = informationPanel.transform.Find("Information (Horizontal)").gameObject;
-
-        buttonPanel = horizontalInformation.transform.Find("Buttons").GetComponent<RectTransform>();
-        buttons = buttonPanel.GetChildren();
-
-        SetObjectDefinitions(verticalInformation.transform);
-    }
-
-    #endregion
-
-    /*
-    
-    #region Variables
-
-    private Animator informationAnimator;
-
-    private GameObject informationPanel;
-
-    public List<ItemBehavior> itemButtons { get; set; } = new List<ItemBehavior>();
-
-    #endregion
-
-    private void Awake()
-    {
-        informationPanel = transform.Find("Item Information").gameObject;
-        selector = transform.Find("Indicator").gameObject;
-
-        emptyGrid = transform.Find("Middle/Grid/Empty Grid").gameObject;
-        informationAnimator = informationPanel.GetComponent<Animator>();
-
-        categorizableSlots = transform.Find("Middle/Grid/Item Grid").GetComponentsInChildren<CategorizableSlot>().ToList();
-
-        //LayoutRebuilder.ForceRebuildLayoutImmediate(informationPanel.transform.Find("Information (Vertical)").GetComponent<RectTransform>());
-
-        StartCoroutine(FindObjectOfType<BottomPanelUserInterface>().ChangePanelButtons(InventoryController.instance.buttons));
-    }  
-     
-    #region Behavior Definitions
-
-    public void Use()
-    {
-        informationPanel.transform.Find("Information (Horizontal)/Text").GetComponentInChildren<TextMeshProUGUI>().SetText("Select a Pokémon to use item on.");
-        //StartCoroutine(ActivateSidePanel());
-        PauseManager.instance.flags.isUsingItem = true;
-        PauseManager.instance.flags.isGivingItem = false;
-    }
-
-    public void Give()
-    {
-        informationPanel.transform.Find("Information (Horizontal)/Text").GetComponentInChildren<TextMeshProUGUI>().SetText("Select a Pokémon to give item to.");
-        //StartCoroutine(ActivateSidePanel());
-        PauseManager.instance.flags.isGivingItem = true;
-        PauseManager.instance.flags.isUsingItem = false;
-    }
-
-    public void Favorite(Item item)
-    {
-        item.IsFavorite = !item.IsFavorite;
-        Color favoriteColor = item.IsFavorite ? "#EAC03E".ToColor() : "#FFFFFF".ToColor();
-        StartCoroutine(GetComponentInChildren<ItemInformationPanel>().buttons[itemButtons.IndexOf(itemButtons.Find(b => b.buttonName == "Favorite"))].Find("Big Icon/Icon").gameObject.FadeColor(favoriteColor, 0.1f));
-        StartCoroutine(GetComponentInChildren<ItemInformationPanel>().buttons[itemButtons.IndexOf(itemButtons.Find(b => b.buttonName == "Favorite"))].Find("Small Icon/Icon").gameObject.FadeColor(favoriteColor, 0.1f));
-        //UpdateItem(InventoryController.instance.selectedSlot);
-    }
-
-    public void Discard(Item item)
-    {
-        Debug.Log($"Discarding item: {item}");
-    }
-
-    #endregion
 
         /*
     private IEnumerator ActivateSidePanel()
