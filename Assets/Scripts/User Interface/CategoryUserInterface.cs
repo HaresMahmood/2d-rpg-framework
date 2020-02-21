@@ -24,6 +24,8 @@ public abstract class CategoryUserInterface : UserInterface
 
     protected GameObject emptyGrid;
 
+    protected CategorizableInformationUserInterface informationPanel;
+
     private Coroutine categoryObjectsListRoutine;
 
     #endregion
@@ -42,8 +44,11 @@ public abstract class CategoryUserInterface : UserInterface
 
     public override void UpdateSelectedObject(int selectedValue)
     {
+        Categorizable selectedCategorizable = activeCategorizables.Count > 0 ? activeCategorizables[selectedValue] : null;
+
         UpdateSelector(categorizableSlots.Select(slot => slot.transform).ToArray(), selectedValue);
-    }
+        informationPanel.AnimatePanel(selectedCategorizable);
+}
 
     protected void UpdateCategoryObjectsList(List<Categorizable> categorizables, string value, float animationDuration = 0.15f, float animationDelay = 0.03f)
     {

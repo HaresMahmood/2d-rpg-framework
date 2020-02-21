@@ -10,14 +10,16 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
 {
     #region Properties
 
-    public Transform VerticalPanel { get; private set; }
-    public Transform HorizontalPanel { get; private set; }
-
     public int MaxObjects { get; private set; }
 
     #endregion
 
     #region Variables
+
+    public Transform[] buttons;
+
+    public Transform verticalPanel;
+    private Transform horizontalPanel;
 
     private Animator informationAnimator;
 
@@ -28,7 +30,6 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
     private Image spriteImage;
 
     private RectTransform buttonPanel;
-    public Transform[] buttons;
 
     #endregion
 
@@ -41,13 +42,18 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
         descriptionText.SetText(categorizable.Description);
     }
 
-    public override IEnumerator AnimatatePanel(Categorizable categorizable, Transform panel, float animationDuration = 0.15F)
+    public override void AnimatePanel(Categorizable categorizable, float animationDuration = 0.15f)
+    {
+        StartCoroutine(AnimatePanel(categorizable, verticalPanel, animationDuration));
+    }
+
+    protected override IEnumerator AnimatePanel(Categorizable categorizable, Transform panel, float animationDuration = 0.15F)
     {
         SetObjectDefinitionsFromPanel(panel);
 
         yield return null;
 
-        StartCoroutine(base.AnimatatePanel(categorizable, panel, animationDuration));
+        StartCoroutine(base.AnimatePanel(categorizable, panel, animationDuration));
     }
 
     private void SetObjectDefinitionsFromPanel(Transform panel)
@@ -71,15 +77,15 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
     {
         informationAnimator = transform.GetComponent<Animator>();
 
-        VerticalPanel = transform.Find("Information (Vertical)");
-        HorizontalPanel = transform.Find("Information (Horizontal)");
+        verticalPanel = transform.Find("Information (Vertical)");
+        horizontalPanel = transform.Find("Information (Horizontal)");
 
-        informationPanel = VerticalPanel.transform;
+        informationPanel = verticalPanel.transform;
 
-        valueText = HorizontalPanel.transform.Find("Amount/Value").GetComponent<TextMeshProUGUI>();
-        spriteImage = HorizontalPanel.transform.Find("Name/Icon").GetComponent<Image>();
+        valueText = horizontalPanel.transform.Find("Amount/Value").GetComponent<TextMeshProUGUI>();
+        spriteImage = horizontalPanel.transform.Find("Name/Icon").GetComponent<Image>();
 
-        buttonPanel = HorizontalPanel.transform.Find("Buttons").GetComponent<RectTransform>();
+        buttonPanel = horizontalPanel.transform.Find("Buttons").GetComponent<RectTransform>();
         buttons = buttonPanel.GetChildren();
 
         //SetObjectDefinitions(verticalInformation.transform);

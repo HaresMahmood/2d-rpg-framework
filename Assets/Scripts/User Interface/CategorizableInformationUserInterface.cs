@@ -17,14 +17,20 @@ public abstract class CategorizableInformationUserInterface : MonoBehaviour
     public virtual void SetInformation(Categorizable categorizable)
     {   }
 
-    public virtual IEnumerator AnimatatePanel(Categorizable categorizable, Transform panel, float animationDuration = 0.15f)
+    public virtual void AnimatePanel(Categorizable categorizable, float animationDuration = 0.15f)
+    {   }
+
+    protected virtual IEnumerator AnimatePanel(Categorizable categorizable, Transform panel, float animationDuration = 0.15f)
     {
         FadePanel(panel, 0f, animationDuration / 2);
 
-        yield return new WaitForSecondsRealtime(animationDuration / 2);
+        if (categorizable != null)
+        {
+            yield return new WaitForSecondsRealtime(animationDuration / 2);
 
-        SetInformation(categorizable);
-        FadePanel(panel, 1f, animationDuration / 2);
+            SetInformation(categorizable);
+            FadePanel(panel, 1f, animationDuration / 2);
+        }
     }
 
     public virtual void FadePanel(Transform panel, float opacity, float animationDuration)

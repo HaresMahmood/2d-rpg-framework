@@ -11,17 +11,11 @@ public sealed class InventoryUserInterface : CategoryUserInterface
 {
     #region Variables
 
-    private ItemInformationUserInterface informationPanel;
-
     #endregion
 
     #region Miscellaneous Methods
 
-    public override void UpdateSelectedObject(int selectedValue)
-    {
-        base.UpdateSelectedObject(selectedValue);
-        StartCoroutine(informationPanel.AnimatatePanel(activeCategorizables[selectedValue], informationPanel.VerticalPanel));
-    }
+
 
     #endregion
 
