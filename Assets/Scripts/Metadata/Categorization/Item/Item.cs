@@ -81,18 +81,30 @@ public class Item : Categorizable
             Key
         }
 
+        public enum CategoryConstant
+        {
+            Key,
+            Health,
+            Poké_Balls,
+            Battle,
+            TM,
+            Berry,
+            Other
+
+        }
+
         #endregion
 
         #region Miscellaneous Methods
 
         public override string GetCategoryFromIndex(int index)
         {
-            return ((Category)index).ToString();
+            return ((CategoryConstant)index).ToString();
         }
 
         public override int GetTotalCategories()
         {
-            return Enum.GetNames(typeof(Category)).Length;
+            return Enum.GetNames(typeof(CategoryConstant)).Length;
         }
 
         #endregion

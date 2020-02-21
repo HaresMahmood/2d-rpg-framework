@@ -37,6 +37,7 @@ public class CategoryUserInterfaceController : UserInterfaceController
     {
         int increment = isPaused ? -1 : 0;
 
+        Flags.isActive = true;
         UpdateSelectedCategory(selectedCategory, increment);
     }
 
@@ -83,7 +84,7 @@ public class CategoryUserInterfaceController : UserInterfaceController
         }
         else
         {
-            bool hasInput = TriggerInput(categoryNames.Count); // TODO: Change max value.
+            bool hasInput = TriggerInput(categoryNames.Count);
             if (hasInput)
             {
                 UpdateSelectedCategory(selectedCategory, (int)Input.GetAxisRaw("Trigger"));

@@ -24,6 +24,8 @@ public abstract class CategoryUserInterface : UserInterface
 
     protected GameObject emptyGrid;
 
+    private Coroutine categoryObjectsListRoutine;
+
     #endregion
 
     #region Miscellaneous Methods

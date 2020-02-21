@@ -9,12 +9,18 @@ using TMPro;
 /// </summary>
 public sealed class InventoryUserInterface : CategoryUserInterface
 {
+    #region Variables
+
+    private ItemInformationUserInterface informationPanel;
+
+    #endregion
+
     #region Miscellaneous Methods
 
     public override void UpdateSelectedObject(int selectedValue)
     {
         base.UpdateSelectedObject(selectedValue);
-        //StartCoroutine(informationPanel.GetComponent<ItemInformation>().SetInformation(categoryItems.Count == 0 ? null : categoryItems[selectedItem]));
+        StartCoroutine(informationPanel.AnimatatePanel(activeCategorizables[selectedValue], informationPanel.VerticalPanel));
     }
 
     #endregion
@@ -33,6 +39,8 @@ public sealed class InventoryUserInterface : CategoryUserInterface
         categorizableSlots = transform.Find("Middle/Grid/Item Grid").GetComponentsInChildren<CategorizableSlot>().ToList();
 
         //StartCoroutine(FindObjectOfType<BottomPanelUserInterface>().ChangePanelButtons(InventoryController.instance.buttons));
+
+        informationPanel = transform.Find("Item Information").GetComponent<ItemInformationUserInterface>();
 
         base.Awake();
     }

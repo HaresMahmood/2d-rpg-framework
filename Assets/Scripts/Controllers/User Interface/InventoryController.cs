@@ -191,7 +191,7 @@ public class InventoryController : CategoryUserInterfaceController
     /// </summary>
     protected override void Update()
     {
-        if (flags.isActive)
+        if (Flags.isActive)
         {
             GetInput();
         }

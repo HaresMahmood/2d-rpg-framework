@@ -10,14 +10,14 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
 {
     #region Properties
 
+    public Transform VerticalPanel { get; private set; }
+    public Transform HorizontalPanel { get; private set; }
+
     public int MaxObjects { get; private set; }
 
     #endregion
 
     #region Variables
-
-    private GameObject verticalInformation;
-    private GameObject horizontalInformation;
 
     private Animator informationAnimator;
 
@@ -37,15 +37,27 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
     public override void SetInformation(Categorizable categorizable)
     {
         nameText.SetText(categorizable.Name);
-        effectText.SetText(((Item)categorizable).Effect.ToString()); // TODO: Set correct text color and set visibility of up-arrow.
+        //effectText.SetText(((Item)categorizable).Effect.ToString()); // TODO: Set correct text color and set visibility of up-arrow.
         descriptionText.SetText(categorizable.Description);
     }
 
-    private void SeFieldDefinitionsFromPanel(Transform panel)
+    public override IEnumerator AnimatatePanel(Categorizable categorizable, Transform panel, float animationDuration = 0.15F)
     {
-        nameText = panel.Find("Name/Value").GetComponent<TextMeshProUGUI>();
-        descriptionText = panel.Find("Description/Value").GetComponent<TextMeshProUGUI>();
-        effectText = panel.Find("Effect/Value").GetComponent<TextMeshProUGUI>();
+        SetObjectDefinitionsFromPanel(panel);
+
+        yield return null;
+
+        StartCoroutine(base.AnimatatePanel(categorizable, panel, animationDuration));
+    }
+
+    private void SetObjectDefinitionsFromPanel(Transform panel)
+    {
+        if (nameText != panel.Find("Name/Value").GetComponent<TextMeshProUGUI>())
+        {
+            nameText = panel.Find("Name/Value").GetComponent<TextMeshProUGUI>();
+            descriptionText = panel.Find("Description/Value").GetComponent<TextMeshProUGUI>();
+            //effectText = panel.Find("Effect/Value").GetComponent<TextMeshProUGUI>();
+        }
     }
 
     #endregion
@@ -57,17 +69,17 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
     /// </summary>
     private void Awake()
     {
-        informationAnimator = informationPanel.GetComponent<Animator>();
+        informationAnimator = transform.GetComponent<Animator>();
 
-        verticalInformation = informationPanel.transform.Find("Information (Vertical)").gameObject;
-        horizontalInformation = informationPanel.transform.Find("Information (Horizontal)").gameObject;
+        VerticalPanel = transform.Find("Information (Vertical)");
+        HorizontalPanel = transform.Find("Information (Horizontal)");
 
-        informationPanel = verticalInformation.transform;
+        informationPanel = VerticalPanel.transform;
 
-        valueText = horizontalInformation.transform.Find("Amount/Value").GetComponent<TextMeshProUGUI>();
-        spriteImage = horizontalInformation.transform.Find("Name/Icon").GetComponent<Image>();
+        valueText = HorizontalPanel.transform.Find("Amount/Value").GetComponent<TextMeshProUGUI>();
+        spriteImage = HorizontalPanel.transform.Find("Name/Icon").GetComponent<Image>();
 
-        buttonPanel = horizontalInformation.transform.Find("Buttons").GetComponent<RectTransform>();
+        buttonPanel = HorizontalPanel.transform.Find("Buttons").GetComponent<RectTransform>();
         buttons = buttonPanel.GetChildren();
 
         //SetObjectDefinitions(verticalInformation.transform);

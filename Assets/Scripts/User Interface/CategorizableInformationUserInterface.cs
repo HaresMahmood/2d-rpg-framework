@@ -27,9 +27,9 @@ public abstract class CategorizableInformationUserInterface : MonoBehaviour
         FadePanel(panel, 1f, animationDuration / 2);
     }
 
-    protected virtual void FadePanel(Transform panel, float opacity, float animationDuration)
+    public virtual void FadePanel(Transform panel, float opacity, float animationDuration)
     {
-        panel.gameObject.FadeOpacity(opacity, animationDuration);
+        StartCoroutine(panel.gameObject.FadeOpacity(opacity, animationDuration));
     }
 
 
