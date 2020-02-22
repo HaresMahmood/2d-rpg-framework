@@ -15,7 +15,14 @@ public sealed class InventoryUserInterface : CategoryUserInterface
 
     #region Miscellaneous Methods
 
-
+    public void ActiveSubMenu(int selectedValue)
+    {
+        if (activeCategorizables.Count > 0)
+        {
+            selector.SetActive(false);
+            ((ItemInformationUserInterface)informationPanel).ToggleSubMenu(activeCategorizables[selectedValue], true);
+        }
+    }
 
     #endregion
 

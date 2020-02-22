@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System.Linq;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -16,9 +18,9 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
 
     #region Variables
 
-    public Transform[] buttons;
+    private List<MenuButton> buttons = new List<MenuButton>();
 
-    public Transform verticalPanel;
+    private Transform verticalPanel;
     private Transform horizontalPanel;
 
     private Animator informationAnimator;
@@ -42,6 +44,19 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
         descriptionText.SetText(categorizable.Description);
     }
 
+    public void ToggleSubMenu(Categorizable categorizable, bool isActive)
+    {
+        if (isActive)
+        {
+            SetObjectDefinitionsFromPanel(horizontalPanel);
+            SetInformation(categorizable);
+            valueText.SetText(((Item)categorizable).Quantity.ToString());
+            spriteImage.sprite = ((Item)categorizable).Sprite;
+        }
+
+        StartCoroutine(AnimateSubMenu(isActive));
+    }
+
     public override void AnimatePanel(Categorizable categorizable, float animationDuration = 0.15f)
     {
         StartCoroutine(AnimatePanel(categorizable, verticalPanel, animationDuration));
@@ -54,6 +69,34 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
         yield return null;
 
         StartCoroutine(base.AnimatePanel(categorizable, panel, animationDuration));
+    }
+
+    private IEnumerator AnimateSubMenu(bool isActive, float delay = 0.03f)
+    {
+        float opacity = isActive ? 1f : 0f;
+
+        if (!isActive)
+        {
+            StartCoroutine(FadeButtons(opacity));
+            yield return new WaitForSecondsRealtime(delay * buttons.Count);
+        }
+
+        informationAnimator.SetBool("isActive", isActive);
+        yield return null; yield return new WaitForSecondsRealtime(informationAnimator.GetAnimationTime());
+
+        if (isActive)
+        {
+            StartCoroutine(FadeButtons(opacity));
+        }
+    }
+
+    private IEnumerator FadeButtons(float opacity, float delay = 0.03f)
+    {
+        foreach (MenuButton button in buttons)
+        {
+            button.FadeButton(opacity);
+            yield return new WaitForSecondsRealtime(delay);
+        }
     }
 
     private void SetObjectDefinitionsFromPanel(Transform panel)
@@ -86,9 +129,7 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
         spriteImage = horizontalPanel.transform.Find("Name/Icon").GetComponent<Image>();
 
         buttonPanel = horizontalPanel.transform.Find("Buttons").GetComponent<RectTransform>();
-        buttons = buttonPanel.GetChildren();
-
-        //SetObjectDefinitions(verticalInformation.transform);
+        buttons = buttonPanel.GetComponentsInChildren<MenuButton>().ToList();
     }
 
     #endregion

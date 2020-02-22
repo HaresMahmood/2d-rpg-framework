@@ -5,30 +5,31 @@ using UnityEngine;
 /// <summary>
 ///
 /// </summary>
-public class ItemInformationController : MonoBehaviour
+public class ItemInformationController : UserInterfaceController
 {
     #region Variables
 
 
 
     #endregion
-    
-    #region Unity Methods
 
-    /// <summary>
-    /// Start is called before the first frame update.
-    /// </summary>
-    private void Start()
-    {
-        
-    }
+    #region Miscellaneous Methods
+
+
+
+    #endregion
+
+    #region Unity Methods
 
     /// <summary>
     /// Update is called once per frame.
     /// </summary>
-    private void Update()
+    protected override void Update()
     {
-        
+        if (Flags.isActive)
+        {
+            GetInput("Horizontal");
+        }
     }
 
     #endregion

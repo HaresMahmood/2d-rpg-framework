@@ -101,7 +101,7 @@ public abstract class UserInterfaceController : MonoBehaviour
     /// </summary>
     protected virtual void Update()
     {
-        if (flags.isActive)
+        if (Flags.isActive)
         {
             GetInput("Vertical");
         }

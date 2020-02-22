@@ -16,7 +16,7 @@ public abstract class CategoryUserInterface : UserInterface
 
     #region Variables
 
-    public List<Categorizable> activeCategorizables { get; private set; } = new List<Categorizable>();
+    protected List<Categorizable> activeCategorizables = new List<Categorizable>();
 
     protected List<CategorizableSlot> categorizableSlots;
 
