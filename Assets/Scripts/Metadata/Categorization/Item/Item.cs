@@ -114,6 +114,11 @@ public class Item : Categorizable
     {
         #region Miscellaneous Methods
 
+        public virtual string GetQuantity()
+        {
+            return "";
+        }
+
         public override string ToString()
         {
             return "None";

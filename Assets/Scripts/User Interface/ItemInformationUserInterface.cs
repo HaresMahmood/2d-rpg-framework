@@ -27,9 +27,12 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
 
     private TextMeshProUGUI nameText;
     private TextMeshProUGUI descriptionText;
-    private TextMeshProUGUI effectText;
     private TextMeshProUGUI valueText;
     private Image spriteImage;
+
+    private TextMeshProUGUI effectTypeText;
+    private TextMeshProUGUI effectQuantityText;
+    private GameObject effectArrow;
 
     private RectTransform buttonPanel;
 
@@ -39,9 +42,26 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
 
     public override void SetInformation(Categorizable categorizable)
     {
+        Color textColor = ((Item)categorizable).Effect.GetQuantity().Equals("") ? "#B0B0B0".ToColor() : GameManager.GetAccentColor();
+        bool arrowState = ((Item)categorizable).Effect.GetQuantity().Equals("") ? false : true;
+
         nameText.SetText(categorizable.Name);
-        //effectText.SetText(((Item)categorizable).Effect.ToString()); // TODO: Set correct text color and set visibility of up-arrow.
         descriptionText.SetText(categorizable.Description);
+
+        effectTypeText.SetText(((Item)categorizable).Effect.ToString());
+        effectQuantityText.SetText(((Item)categorizable).Effect.GetQuantity());
+
+        effectTypeText.GetComponent<AutoTextWidth>().UpdateWidth(effectTypeText.text);
+
+        if (!effectTypeText.color.Equals(textColor))
+        {
+            effectTypeText.color = textColor;
+        }
+
+        if (!effectArrow.activeSelf.Equals(arrowState))
+        {
+            effectArrow.SetActive(arrowState);
+        }
     }
 
     public void ToggleSubMenu(Categorizable categorizable, bool isActive)
@@ -105,7 +125,10 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
         {
             nameText = panel.Find("Name/Value").GetComponent<TextMeshProUGUI>();
             descriptionText = panel.Find("Description/Value").GetComponent<TextMeshProUGUI>();
-            //effectText = panel.Find("Effect/Value").GetComponent<TextMeshProUGUI>();
+
+            effectTypeText = panel.Find("Effect/Type").GetComponent<TextMeshProUGUI>();
+            effectQuantityText = panel.Find("Effect/Quantity").GetComponent<TextMeshProUGUI>();
+            effectArrow = panel.Find("Effect/Arrow").gameObject;
         }
     }
 

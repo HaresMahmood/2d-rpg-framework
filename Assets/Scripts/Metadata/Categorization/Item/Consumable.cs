@@ -78,7 +78,7 @@ public class Consumable : Item
         #region Variables
 
         [SerializeField] private Type type;
-        [ConditionalField("type", false, Type.HP)] [SerializeField] private int amount; // TODO: Using property for debug.
+        [ConditionalField("type", false, Type.HP)] [SerializeField] private int quantity; // TODO: Using property for debug.
         [ConditionalField("type", false, Type.Status)] [SerializeField] private Pokemon.Status status; // TODO: Using property for debug.
 
         #endregion
@@ -102,9 +102,16 @@ public class Consumable : Item
 
         #region Miscellaneous Methods
 
+        public override string GetQuantity()
+        {
+            return quantity.ToString();
+        }
+
         public override string ToString()
         {
-            string effect = type == 0 ? $"{amount.ToString()} {type.ToString()}" : status.ToString().Replace("None", "All"); // TODO: Using replace for debug.
+            //string effect = type == 0 ? $"{amount.ToString()} {type.ToString()}" : status.ToString().Replace("None", "All"); // TODO: Using replace for debug.
+
+            string effect = type == 0 ? type.ToString() : status.ToString().Replace("None", "All"); // TODO: Using replace for debug.
 
             return effect;
         }
