@@ -19,7 +19,7 @@ public sealed class InventoryUserInterface : CategoryUserInterface
     {
         if (activeCategorizables.Count > 0)
         {
-            selector.SetActive(false);
+            StartCoroutine(UpdateSelector());
             ((ItemInformationUserInterface)informationPanel).ToggleSubMenu(activeCategorizables[selectedValue], true);
         }
     }

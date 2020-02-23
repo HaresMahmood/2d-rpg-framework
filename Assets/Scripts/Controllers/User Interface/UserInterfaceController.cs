@@ -61,8 +61,10 @@ public abstract class UserInterfaceController : MonoBehaviour
     public virtual void OnPause(bool isPaused)
     {   }
 
-    protected virtual void UpdateSelectedValue(int selectedButton)
-    { }
+    protected virtual void UpdateSelectedObject(int selectedValue)
+    {
+        UserInterface.UpdateSelectedObject(selectedValue);
+    }
 
     protected virtual bool RegularInput(int selectedSlot, int max, string axisName)
     {
@@ -79,7 +81,7 @@ public abstract class UserInterfaceController : MonoBehaviour
         bool hasInput = RegularInput(selectedValue, UserInterface.MaxObjects, axisName); // TODO: Change max value.
         if (hasInput)
         {
-            UpdateSelectedValue(selectedValue);
+            UpdateSelectedObject(selectedValue);
         }
     }
 

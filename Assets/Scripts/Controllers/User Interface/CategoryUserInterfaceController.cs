@@ -63,7 +63,7 @@ public class CategoryUserInterfaceController : UserInterfaceController
             (selectedValue, hasInput) = input.GetInput("Horizontal", "Vertical", UserInterface.MaxObjects, selectedValue, true, 1, 7); // TODO: Change max value.
             if (hasInput)
             {
-                UpdateSelectedValue(selectedValue);
+                UpdateSelectedObject(selectedValue);
             }
         }
         else

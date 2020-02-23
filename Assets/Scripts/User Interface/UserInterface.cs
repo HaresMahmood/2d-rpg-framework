@@ -37,16 +37,16 @@ public abstract class UserInterface : MonoBehaviour
     /// <param name="selectedValue"> Index of the value currently selected. </param>
     /// <param name="animationDuration"> Duration of the animation/fade. </param>
     /// <returns> Co-routine. </returns>
-    protected IEnumerator UpdateSelector(Transform[] objectSlots, int selectedValue = -1, float animationDuration = 0.1f)
+    protected IEnumerator UpdateSelector(Transform selectedObject = null, float animationDuration = 0.1f)
     {
         selectorAnimator.enabled = false;
         StartCoroutine(selector.FadeOpacity(0f, animationDuration));
 
-        if (selectedValue > -1)
+        if (selectedObject != null)
         {
             yield return new WaitForSecondsRealtime(animationDuration);
 
-            selector.transform.position = objectSlots[selectedValue].transform.position;
+            selector.transform.position = selectedObject.position;
             selectorAnimator.enabled = true;
         }
     }

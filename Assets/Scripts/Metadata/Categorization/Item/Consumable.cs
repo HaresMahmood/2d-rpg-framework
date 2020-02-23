@@ -79,7 +79,7 @@ public class Consumable : Item
 
         [SerializeField] private Type type;
         [ConditionalField("type", false, Type.HP)] [SerializeField] private int quantity; // TODO: Using property for debug.
-        [ConditionalField("type", false, Type.Status)] [SerializeField] private Pokemon.Status status; // TODO: Using property for debug.
+        [ConditionalField("type", false, Type.STS)] [SerializeField] private Pokemon.Status status; // TODO: Using property for debug.
 
         #endregion
 
@@ -88,7 +88,7 @@ public class Consumable : Item
         private enum Type
         {
             HP,
-            Status
+            STS
         }
 
         /*

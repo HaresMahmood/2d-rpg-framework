@@ -46,9 +46,9 @@ public abstract class CategoryUserInterface : UserInterface
     {
         Categorizable selectedCategorizable = activeCategorizables.Count > 0 ? activeCategorizables[selectedValue] : null;
 
-        UpdateSelector(categorizableSlots.Select(slot => slot.transform).ToArray(), selectedValue);
+        StartCoroutine(UpdateSelector(categorizableSlots[selectedValue].transform));
         informationPanel.AnimatePanel(selectedCategorizable);
-}
+    }
 
     protected void UpdateCategoryObjectsList(List<Categorizable> categorizables, string value, float animationDuration = 0.15f, float animationDelay = 0.03f)
     {

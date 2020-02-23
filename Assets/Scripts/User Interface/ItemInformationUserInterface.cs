@@ -51,7 +51,7 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
         effectTypeText.SetText(((Item)categorizable).Effect.ToString());
         effectQuantityText.SetText(((Item)categorizable).Effect.GetQuantity());
 
-        effectTypeText.GetComponent<AutoTextWidth>().UpdateWidth(effectTypeText.text);
+        effectTypeText.GetComponent<AutoTextWidth>().UpdateWidth(((Item)categorizable).Effect.ToString());
 
         if (!effectTypeText.color.Equals(textColor))
         {
