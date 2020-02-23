@@ -7,6 +7,21 @@ using UnityEngine;
 /// </summary>
 public class ItemInformationController : UserInterfaceController
 {
+    #region Fields
+
+    [SerializeField] private ItemInformationUserInterface userInterface;
+
+    #endregion
+
+    #region Properties
+
+    protected override UserInterface UserInterface
+    {
+        get { return userInterface; }
+    }
+
+    #endregion
+
     #region Variables
 
 
@@ -15,7 +30,19 @@ public class ItemInformationController : UserInterfaceController
 
     #region Miscellaneous Methods
 
+    protected override void UpdateSelectedObject(int selectedValue, int increment = -1)
+    {
+        UserInterface.UpdateSelectedObject(selectedValue, increment);
+    }
 
+    protected override void GetInput(string axisName)
+    {
+        bool hasInput = RegularInput(selectedValue, UserInterface.MaxObjects, axisName);
+        if (hasInput)
+        {
+            UpdateSelectedObject(selectedValue, (int)Input.GetAxisRaw(axisName));
+        }
+    }
 
     #endregion
 

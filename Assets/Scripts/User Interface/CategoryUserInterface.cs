@@ -42,7 +42,7 @@ public abstract class CategoryUserInterface : UserInterface
         UpdateSelectedObject(0);
     }
 
-    public override void UpdateSelectedObject(int selectedValue)
+    public override void UpdateSelectedObject(int selectedValue, int increment = -1)
     {
         Categorizable selectedCategorizable = activeCategorizables.Count > 0 ? activeCategorizables[selectedValue] : null;
 

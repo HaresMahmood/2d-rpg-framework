@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 ///
 /// </summary>
-public abstract class CategorizableInformationUserInterface : MonoBehaviour
+public abstract class CategorizableInformationUserInterface : UserInterface
 {
     #region Variables
 
@@ -20,7 +20,7 @@ public abstract class CategorizableInformationUserInterface : MonoBehaviour
     public virtual void AnimatePanel(Categorizable categorizable, float animationDuration = 0.15f)
     {   }
 
-    protected virtual IEnumerator AnimatePanel(Categorizable categorizable, Transform panel, float animationDuration = 0.15f)
+    protected virtual IEnumerator AnimatePanel( Transform panel, Categorizable categorizable = null, float animationDuration = 0.15f)
     {
         FadePanel(panel, 0f, animationDuration / 2);
 
@@ -37,7 +37,6 @@ public abstract class CategorizableInformationUserInterface : MonoBehaviour
     {
         StartCoroutine(panel.gameObject.FadeOpacity(opacity, animationDuration));
     }
-
 
     #endregion
 

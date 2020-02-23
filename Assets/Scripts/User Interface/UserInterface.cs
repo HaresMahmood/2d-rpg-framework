@@ -26,7 +26,7 @@ public abstract class UserInterface : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    public virtual void UpdateSelectedObject(int selectedValue)
+    public virtual void UpdateSelectedObject(int selectedValue, int increment = -1)
     {   }
 
     /// <summary>

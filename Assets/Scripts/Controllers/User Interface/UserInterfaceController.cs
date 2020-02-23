@@ -11,7 +11,7 @@ public abstract class UserInterfaceController : MonoBehaviour
 
     private UserInterface userInterface;
 
-    private UserInterfaceFlags flags;
+    private UserInterfaceFlags flags = new UserInterfaceFlags(false);
 
     #endregion
 
@@ -44,11 +44,11 @@ public abstract class UserInterfaceController : MonoBehaviour
 
     #region Nested Classes
 
-    public abstract class UserInterfaceFlags
+    public class UserInterfaceFlags
     {
         public bool isActive { get; set; }
 
-        protected UserInterfaceFlags(bool isActive)
+        public UserInterfaceFlags(bool isActive)
         {
             this.isActive = isActive;
         }
@@ -61,7 +61,7 @@ public abstract class UserInterfaceController : MonoBehaviour
     public virtual void OnPause(bool isPaused)
     {   }
 
-    protected virtual void UpdateSelectedObject(int selectedValue)
+    protected virtual void UpdateSelectedObject(int selectedValue, int increment = -1)
     {
         UserInterface.UpdateSelectedObject(selectedValue);
     }
@@ -78,7 +78,7 @@ public abstract class UserInterfaceController : MonoBehaviour
 
     protected virtual void GetInput(string axisName)
     {
-        bool hasInput = RegularInput(selectedValue, UserInterface.MaxObjects, axisName); // TODO: Change max value.
+        bool hasInput = RegularInput(selectedValue, UserInterface.MaxObjects, axisName);
         if (hasInput)
         {
             UpdateSelectedObject(selectedValue);

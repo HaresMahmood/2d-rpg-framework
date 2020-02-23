@@ -10,9 +10,9 @@ using TMPro;
 /// </summary>
 public class ItemInformationUserInterface : CategorizableInformationUserInterface
 {
-    #region Properties
+    #region Constants
 
-    public int MaxObjects { get; private set; }
+    public override int MaxObjects => buttons.Count;
 
     #endregion
 
@@ -74,21 +74,31 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
             spriteImage.sprite = ((Item)categorizable).Sprite;
         }
 
+        FindObjectOfType<ItemInformationController>().Flags.isActive = isActive;
         StartCoroutine(AnimateSubMenu(isActive));
     }
 
     public override void AnimatePanel(Categorizable categorizable, float animationDuration = 0.15f)
     {
-        StartCoroutine(AnimatePanel(categorizable, verticalPanel, animationDuration));
+        StartCoroutine(AnimatePanel(verticalPanel, categorizable, animationDuration));
     }
 
-    protected override IEnumerator AnimatePanel(Categorizable categorizable, Transform panel, float animationDuration = 0.15F)
+    public override void UpdateSelectedObject(int selectedValue, int increment = -1)
+    {
+        int previousValue = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, -increment);
+
+        StartCoroutine(UpdateSelector(buttons[selectedValue].transform));
+        buttons[selectedValue].AnimateButton(true);
+        buttons[previousValue].AnimateButton(false);
+    }
+
+    protected override IEnumerator AnimatePanel(Transform panel, Categorizable categorizable = null, float animationDuration = 0.15F)
     {
         SetObjectDefinitionsFromPanel(panel);
 
         yield return null;
 
-        StartCoroutine(base.AnimatePanel(categorizable, panel, animationDuration));
+        StartCoroutine(base.AnimatePanel(panel, categorizable, animationDuration));
     }
 
     private IEnumerator AnimateSubMenu(bool isActive, float delay = 0.03f)
@@ -107,6 +117,7 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
         if (isActive)
         {
             StartCoroutine(FadeButtons(opacity));
+            UpdateSelectedObject(0);
         }
     }
 
@@ -139,7 +150,7 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
     /// <summary>
     /// Awake is called when the script instance is being loaded.
     /// </summary>
-    private void Awake()
+    protected override void Awake()
     {
         informationAnimator = transform.GetComponent<Animator>();
 
@@ -153,6 +164,12 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
 
         buttonPanel = horizontalPanel.transform.Find("Buttons").GetComponent<RectTransform>();
         buttons = buttonPanel.GetComponentsInChildren<MenuButton>().ToList();
+
+        selector = buttonPanel.Find("Indicator").gameObject;
+
+        base.Awake();
+
+        StartCoroutine(UpdateSelector());
     }
 
     #endregion
