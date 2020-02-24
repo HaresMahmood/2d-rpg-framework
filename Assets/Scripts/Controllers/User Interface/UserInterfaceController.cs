@@ -66,14 +66,20 @@ public abstract class UserInterfaceController : MonoBehaviour
         UserInterface.UpdateSelectedObject(selectedValue);
     }
 
-    protected virtual bool RegularInput(int selectedSlot, int max, string axisName)
+    protected virtual bool RegularInput(int selectedValue, int max, string axisName)
     {
         TestInput.Axis axis = axisName == "Horizontal" ? TestInput.Axis.Horizontal : TestInput.Axis.Vertical;
 
         bool hasInput;
-        (selectedValue, hasInput) = input.GetInput(axisName, axis, max, selectedSlot);
+        (selectedValue, hasInput) = input.GetInput(axisName, axis, max, selectedValue);
 
         return hasInput;
+    }
+
+    protected virtual void InteractInput(int selectedValue)
+    {
+        Flags.isActive = false;
+        StartCoroutine(UserInterface.AnimateSelector());
     }
 
     protected virtual void GetInput(string axisName)

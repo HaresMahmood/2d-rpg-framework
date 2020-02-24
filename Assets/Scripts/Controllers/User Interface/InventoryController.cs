@@ -172,14 +172,20 @@ public class InventoryController : CategoryUserInterfaceController
     }
     */
 
+    protected override void InteractInput(int selectedValue)
+    {
+        base.InteractInput(selectedValue);
+
+        userInterface.ActiveSubMenu(selectedValue);
+    }
+
     protected override void GetInput()
     {
         base.GetInput();
-        
+
         if (Input.GetButtonDown("Interact"))
         {
-            Flags.isActive = false;
-            userInterface.ActiveSubMenu(selectedValue);
+            InteractInput(selectedValue);
         }
     }
 

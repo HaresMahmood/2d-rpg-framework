@@ -26,6 +26,28 @@ public abstract class UserInterface : MonoBehaviour
 
     #region Miscellaneous Methods
 
+    public IEnumerator AnimateSelector()
+    {
+        float animationDuration;
+
+        selectorAnimator.SetBool("isPressed", true);
+
+        yield return null;
+        animationDuration = selectorAnimator.GetAnimationTime();
+
+        if (Time.timeScale == 0)
+        {
+            yield return new WaitForSecondsRealtime(animationDuration);
+        }
+        else
+        {
+            yield return new WaitForSeconds(animationDuration);
+        }
+
+        selectorAnimator.SetBool("isPressed", false);
+        selector.gameObject.SetActive(false);
+    }
+
     public virtual void UpdateSelectedObject(int selectedValue, int increment = -1)
     {   }
 
@@ -39,6 +61,11 @@ public abstract class UserInterface : MonoBehaviour
     /// <returns> Co-routine. </returns>
     protected IEnumerator UpdateSelector(Transform selectedObject = null, float animationDuration = 0.1f)
     {
+        if (!selector.activeSelf)
+        {
+            selector.SetActive(true);
+        }
+
         selectorAnimator.enabled = false;
         StartCoroutine(selector.FadeOpacity(0f, animationDuration));
 
