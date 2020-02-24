@@ -71,7 +71,7 @@ public abstract class UserInterfaceController : MonoBehaviour
         TestInput.Axis axis = axisName == "Horizontal" ? TestInput.Axis.Horizontal : TestInput.Axis.Vertical;
 
         bool hasInput;
-        (selectedValue, hasInput) = input.GetInput(axisName, axis, max, selectedValue);
+        (this.selectedValue, hasInput) = input.GetInput(axisName, axis, max, selectedValue);
 
         return hasInput;
     }

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 ///
@@ -10,7 +8,6 @@ public class CharacterSpriteController : MonoBehaviour
     #region Variables
 
     private Animator animator;
-
 
     #endregion
 
@@ -22,16 +19,21 @@ public class CharacterSpriteController : MonoBehaviour
         animator.SetBool(inactiveMenu, false);
     }
 
+    public void FadeSprite(float opacity, float animationDuration)
+    {
+        StartCoroutine(gameObject.FadeOpacity(opacity, animationDuration));
+    }
+
     #endregion
 
     #region Unity Methods
 
     /// <summary>
-    /// Start is called before the first frame update.
+    /// Awake is called when the script instance is being loaded.
     /// </summary>
-    private void Start()
+    private void Awake()
     {
-        animator = transform.GetComponent<Animator>();
+        animator = GetComponent<Animator>();
     }
 
     #endregion

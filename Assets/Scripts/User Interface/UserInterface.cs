@@ -78,11 +78,11 @@ public abstract class UserInterface : MonoBehaviour
         }
     }
 
-    protected void UpdateScrollbar(int objectsAmount, int selectedValue = -1, float animationDuration = 0.08f)
+    protected void UpdateScrollbar(int maxObjects, int selectedValue = -1, float animationDuration = 0.08f)
     {
         if (selectedValue > -1)
         {
-            float totalSlots = objectsAmount;
+            float totalSlots = maxObjects;
             float targetValue = 1.0f - selectedValue / (totalSlots - 1);
             StartCoroutine(scrollbar.LerpScrollbar(targetValue, animationDuration));
         }
@@ -90,6 +90,16 @@ public abstract class UserInterface : MonoBehaviour
         {
             scrollbar.value = 1;
         }
+    }
+
+    protected void FadeUserInterface(GameObject panel, float opacity, float animationDuration = 0.15f)
+    {
+        StartCoroutine(panel.FadeOpacity(opacity, animationDuration));
+    }
+
+    protected void FadeCharacterSprite(float opacity, float animationDuration = 0.15f)
+    {
+        FindObjectOfType<CharacterSpriteController>().FadeSprite(opacity, animationDuration); // TODO: Bad performance, think of different way.
     }
 
     #endregion

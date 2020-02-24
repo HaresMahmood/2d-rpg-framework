@@ -11,14 +11,18 @@ public sealed class InventoryUserInterface : CategoryUserInterface
 {
     #region Variables
 
+    private GameObject middlePanel;
+
     #endregion
 
     #region Miscellaneous Methods
 
-    public void ActiveSubMenu(int selectedValue)
+    public void ActiveSubMenu(int selectedValue, float opacity = 0.5f)
     {
         if (activeCategorizables.Count > 0)
         {
+            FadeUserInterface(middlePanel, opacity);
+            FadeCharacterSprite(opacity);
             ((ItemInformationUserInterface)informationPanel).ToggleSubMenu(activeCategorizables[selectedValue], true);
         }
     }
@@ -33,6 +37,8 @@ public sealed class InventoryUserInterface : CategoryUserInterface
     protected override void Awake()
     {
         selector = transform.Find("Indicator").gameObject;
+
+        middlePanel = transform.Find("Middle").gameObject;
 
         emptyGrid = transform.Find("Middle/Grid/Empty Grid").gameObject;
 
