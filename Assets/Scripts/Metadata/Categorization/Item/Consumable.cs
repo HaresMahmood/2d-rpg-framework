@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -117,6 +118,25 @@ public class Consumable : Item
         }
 
         #endregion
+    }
+
+    #endregion
+
+    #region Miscellaneous Methods
+
+    protected override List<ItemBehavior> DefineBehavior(Item item)
+    {
+        List<ItemBehavior> behavior = new List<ItemBehavior>
+        {
+            new ItemBehavior("Use", InventoryMenuIcons.instance.Icons[3]),
+            new ItemBehavior("Give", InventoryMenuIcons.instance.Icons[4])
+        };
+        //behavior[0].behaviorEvent.AddListener(delegate { FindObjectOfType<InventoryUserInterface>().Use(); });
+        //behavior[1].behaviorEvent.AddListener(delegate { FindObjectOfType<InventoryUserInterface>().Give(); });
+
+        behavior.AddRange(base.DefineBehavior(item));
+
+        return behavior;
     }
 
     #endregion

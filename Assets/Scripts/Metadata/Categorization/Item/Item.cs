@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 [CreateAssetMenu(fileName = "New Item", menuName = "Categorizable/Item/Generic")]
 public class Item : Categorizable
@@ -50,6 +51,14 @@ public class Item : Categorizable
     {
         get { return isNew; }
         set { isNew = value; }
+    }
+
+    public List<ItemBehavior> Behavior
+    {
+        get 
+        { 
+            return DefineBehavior(this);
+        }
     }
 
     #endregion
@@ -127,24 +136,24 @@ public class Item : Categorizable
         #endregion
     }
 
+    public class ItemBehavior
+    {
+        public string buttonName;
+        public Sprite iconSprite;
+        public UnityEvent behaviorEvent = new UnityEvent();
+
+        public ItemBehavior(string buttonName, Sprite iconSprite)
+        {
+            this.buttonName = buttonName;
+            this.iconSprite = iconSprite;
+        }
+    }
+
     #endregion
 
     #region Miscellaneous Methods
 
-    private List<ItemBehavior> HealthBehavior()
-    {
-        List<ItemBehavior> behavior = new List<ItemBehavior>
-        {
-            new ItemBehavior("Use", InventoryMenuIcons.instance.Icons[3]),
-            new ItemBehavior("Give", InventoryMenuIcons.instance.Icons[4])
-        };
-        //behavior[0].behaviorEvent.AddListener(delegate { FindObjectOfType<InventoryUserInterface>().Use(); });
-        //behavior[1].behaviorEvent.AddListener(delegate { FindObjectOfType<InventoryUserInterface>().Give(); });
-
-        return behavior;
-    }
-
-    private List<ItemBehavior> GenericBehavior(Item item)
+    protected virtual List<ItemBehavior> DefineBehavior(Item item)
     {
         List<ItemBehavior> behavior = new List<ItemBehavior>
         {
@@ -154,32 +163,6 @@ public class Item : Categorizable
         };
         //behavior[0].behaviorEvent.AddListener(delegate { FindObjectOfType<InventoryUserInterface>().Favorite(item); });
         //behavior[1].behaviorEvent.AddListener(delegate { FindObjectOfType<InventoryUserInterface>().Discard(item); });
-
-        return behavior;
-    }
-
-    public List<ItemBehavior> GenerateButtons()
-    {
-        List<ItemBehavior> behavior = new List<ItemBehavior>();
-
-        switch (categorization)
-        {
-            /*
-            default: { break; }
-            case (Category.Health):
-                {
-                    behavior = HealthBehavior();
-                    break;
-                }
-            case (Category.Berry):
-                {
-                    behavior = HealthBehavior();
-                    break;
-                }
-            */
-        }
-
-        behavior.AddRange(GenericBehavior(this));
 
         return behavior;
     }

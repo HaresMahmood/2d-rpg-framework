@@ -24,8 +24,6 @@ public class ItemInformationController : UserInterfaceController
 
     #region Variables
 
-
-
     #endregion
 
     #region Miscellaneous Methods

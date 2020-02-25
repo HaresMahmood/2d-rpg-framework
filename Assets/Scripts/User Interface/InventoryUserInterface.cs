@@ -23,7 +23,7 @@ public sealed class InventoryUserInterface : CategoryUserInterface
         {
             FadeUserInterface(middlePanel, opacity);
             FadeCharacterSprite(opacity);
-            ((ItemInformationUserInterface)informationPanel).ToggleSubMenu(activeCategorizables[selectedValue], true);
+            ((ItemInformationUserInterface)informationPanel).ToggleSubMenu((Item)activeCategorizables[selectedValue], true);
         }
     }
 

@@ -12,11 +12,13 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
 {
     #region Constants
 
-    public override int MaxObjects => buttons.Count;
+    public override int MaxObjects => selectedItem.Behavior.Count;
 
     #endregion
 
     #region Variables
+
+    private Item selectedItem;
 
     private List<MenuButton> buttons = new List<MenuButton>();
 
@@ -40,7 +42,7 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
 
     #region Miscellaneous Methods
 
-    public override void SetInformation(Categorizable categorizable)
+    public override void SetValues(Categorizable categorizable)
     {
         Color textColor = ((Item)categorizable).Effect.GetQuantity().Equals("") ? "#B0B0B0".ToColor() : GameManager.GetAccentColor();
         bool arrowState = ((Item)categorizable).Effect.GetQuantity().Equals("") ? false : true;
@@ -64,18 +66,19 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
         }
     }
 
-    public void ToggleSubMenu(Categorizable categorizable, bool isActive)
+    public void ToggleSubMenu(Item item, bool isActive)
     {
         if (isActive)
         {
             SetObjectDefinitionsFromPanel(horizontalPanel);
-            SetInformation(categorizable);
-            valueText.SetText(((Item)categorizable).Quantity.ToString());
-            spriteImage.sprite = ((Item)categorizable).Sprite;
+            SetValues(item);
+            valueText.SetText((item).Quantity.ToString());
+            spriteImage.sprite = (item).Sprite;
         }
 
+        selectedItem = item;
         FindObjectOfType<ItemInformationController>().Flags.isActive = isActive;
-        StartCoroutine(AnimateSubMenu(isActive));
+        StartCoroutine(AnimateSubMenu(item, isActive));
     }
 
     public override void AnimatePanel(Categorizable categorizable, float animationDuration = 0.15f)
@@ -101,13 +104,13 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
         StartCoroutine(base.AnimatePanel(panel, categorizable, animationDuration));
     }
 
-    private IEnumerator AnimateSubMenu(bool isActive, float delay = 0.03f)
+    private IEnumerator AnimateSubMenu(Item item, bool isActive, float delay = 0.03f)
     {
         float opacity = isActive ? 1f : 0f;
 
         if (!isActive)
         {
-            StartCoroutine(FadeButtons(opacity));
+            StartCoroutine(ActivateButtons(item, opacity));
             yield return new WaitForSecondsRealtime(delay * buttons.Count);
         }
 
@@ -116,18 +119,32 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
 
         if (isActive)
         {
-            StartCoroutine(FadeButtons(opacity));
+            StartCoroutine(ActivateButtons(item, opacity));
             UpdateSelectedObject(0);
         }
     }
 
-    private IEnumerator FadeButtons(float opacity, float delay = 0.03f)
+    private IEnumerator ActivateButtons(Item item, float opacity, float animationDuration = 0.1f, float delay = 0.03f)
     {
-        foreach (MenuButton button in buttons)
+        for (int i = 0; i < MaxObjects; i++)
         {
-            button.FadeButton(opacity);
+            buttons[i].SetValues(item.Behavior[i].buttonName, item.Behavior[i].iconSprite);
+
+            if (opacity == 1)
+            {
+                buttons[i].gameObject.SetActive(true);
+            }
+
+            buttons[i].FadeButton(opacity, animationDuration);
             yield return new WaitForSecondsRealtime(delay);
+
+            if (opacity == 0)
+            {
+                buttons[i].gameObject.SetActive(false);
+            }
         }
+
+        LayoutRebuilder.ForceRebuildLayoutImmediate(buttonPanel);
     }
 
     private void SetObjectDefinitionsFromPanel(Transform panel)

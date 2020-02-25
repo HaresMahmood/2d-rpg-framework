@@ -20,7 +20,7 @@ public class MenuButton : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    public void SetButtonInformation(string value, Sprite icon)
+    public void SetValues(string value, Sprite icon)
     {
         valueText.SetText(value);
 
@@ -28,9 +28,16 @@ public class MenuButton : MonoBehaviour
         bigIcon.sprite = icon;
     }
 
-    public void FadeButton(float opacity, float animationDuration = 0.1f)
+    public void FadeButton(float opacity, float animationDuration = -1)
     {
-        StartCoroutine(gameObject.FadeOpacity(opacity, animationDuration));
+        if (animationDuration > -1)
+        {
+            StartCoroutine(gameObject.FadeOpacity(opacity, animationDuration));
+        }
+        else
+        {
+            GetComponent<CanvasGroup>().alpha = opacity;
+        }
     }
 
     public void AnimateButton(bool isSelected)

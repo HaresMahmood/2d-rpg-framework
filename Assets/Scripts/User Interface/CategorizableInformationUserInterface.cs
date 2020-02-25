@@ -14,7 +14,7 @@ public abstract class CategorizableInformationUserInterface : UserInterface
 
     #region Miscellaneous Methods
 
-    public virtual void SetInformation(Categorizable categorizable)
+    public virtual void SetValues(Categorizable categorizable)
     {   }
 
     public virtual void AnimatePanel(Categorizable categorizable, float animationDuration = 0.15f)
@@ -28,7 +28,7 @@ public abstract class CategorizableInformationUserInterface : UserInterface
         {
             yield return new WaitForSecondsRealtime(animationDuration / 2);
 
-            SetInformation(categorizable);
+            SetValues(categorizable);
             FadePanel(panel, 1f, animationDuration / 2);
         }
     }
