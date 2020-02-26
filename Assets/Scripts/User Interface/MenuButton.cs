@@ -52,7 +52,7 @@ public class MenuButton : MonoBehaviour
     /// <summary>
     /// Awake is called when the script instance is being loaded.
     /// </summary>
-    private void Awake()
+    protected virtual void Awake()
     {
         animator = GetComponent<Animator>();
 

@@ -110,7 +110,7 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
 
         if (!isActive)
         {
-            StartCoroutine(ActivateButtons(item, opacity));
+            StartCoroutine(ActivateButtons(item, opacity, MaxObjects));
             yield return new WaitForSecondsRealtime(delay * buttons.Count);
         }
 
@@ -119,26 +119,43 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
 
         if (isActive)
         {
-            StartCoroutine(ActivateButtons(item, opacity));
+            StartCoroutine(ActivateButtons(item, opacity, MaxObjects));
             UpdateSelectedObject(0);
         }
     }
 
-    private IEnumerator ActivateButtons(Item item, float opacity, float animationDuration = 0.1f, float delay = 0.03f)
+    private IEnumerator ActivateButtons(Item item, float opacity, int maxObjects, float animationDuration = 0.1f, float delay = 0.03f)
     {
-        for (int i = 0; i < MaxObjects; i++)
+        if (opacity == 1)
         {
-            buttons[i].SetValues(item.Behavior[i].buttonName, item.Behavior[i].iconSprite);
-
-            if (opacity == 1)
+            for (int i = 0; i < buttons.Count; i++)
             {
                 buttons[i].gameObject.SetActive(true);
             }
 
+            if (maxObjects != buttons.Count)
+            {
+                for (int i = maxObjects; i < buttons.Count; i++)
+                {
+                    buttons[i].gameObject.SetActive(false);
+                }
+            }
+        }
+
+        for (int i = 0; i < maxObjects; i++)
+        {
+            if (item != null)
+            {
+                buttons[i].SetValues(item.Behavior[i].buttonName, item.Behavior[i].iconSprite);
+            }
+
             buttons[i].FadeButton(opacity, animationDuration);
             yield return new WaitForSecondsRealtime(delay);
+        }
 
-            if (opacity == 0)
+        if (opacity == 0)
+        {
+            for (int i = 0; i < maxObjects; i++)
             {
                 buttons[i].gameObject.SetActive(false);
             }
