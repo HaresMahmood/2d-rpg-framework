@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -33,12 +34,18 @@ public class CategoryUserInterfaceController : UserInterfaceController
 
     #region Miscellaneous Methods
 
-    public override void OnPause(bool isPaused)
+    public override IEnumerator SetActive(bool isActive, bool condition = true)
     {
-        int increment = isPaused ? -1 : 0;
+        int increment = isActive ? -1 : 0;
 
-        Flags.isActive = true;
-        UpdateSelectedCategory(selectedCategory, increment);
+        yield return null;
+
+        Flags.isActive = isActive;
+
+        if (isActive && condition)
+        {
+            UpdateSelectedCategory(selectedCategory, increment);
+        }
     }
 
     protected void UpdateSelectedCategory(int selectedCategory, int increment)
@@ -97,10 +104,8 @@ public class CategoryUserInterfaceController : UserInterfaceController
     /// <summary>
     /// Awake is called when the script instance is being loaded.
     /// </summary>
-    protected override void Awake()
+    protected virtual void Awake()
     {
-        base.Awake();
-
         // Adds name of every category of class "Categorizable" to List.
         for (int i = 0; i < categorizableObjects[0].Categorization.GetTotalCategories(); i++)
         {

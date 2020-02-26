@@ -7,6 +7,8 @@ public class InventoryController : CategoryUserInterfaceController
 {
     #region Fields
 
+    private static InventoryController instance;
+
     [SerializeField] private InventoryUserInterface userInterface;
 
     private InventoryFlags flags = new InventoryFlags(false, false);
@@ -15,12 +17,28 @@ public class InventoryController : CategoryUserInterfaceController
 
     #region Properties
 
+    /// <summary>
+    /// Singleton pattern.
+    /// </summary>
+    public static InventoryController Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<InventoryController>();
+            }
+
+            return instance;
+        }
+    }
+
     protected override UserInterface UserInterface
     {
         get { return userInterface; }
     }
 
-    public override UserInterfaceFlags Flags
+    protected override UserInterfaceFlags Flags
     {
         get { return flags; }
     }
@@ -176,7 +194,7 @@ public class InventoryController : CategoryUserInterfaceController
     {
         base.InteractInput(selectedValue);
 
-        userInterface.ActiveSubMenu(selectedValue);
+        ((InventoryUserInterface)UserInterface).ActiveSubMenu(selectedValue);
     }
 
     protected override void GetInput()

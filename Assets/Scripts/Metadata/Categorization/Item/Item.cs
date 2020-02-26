@@ -153,7 +153,7 @@ public class Item : Categorizable
 
     #region Miscellaneous Methods
 
-    protected virtual List<ItemBehavior> DefineBehavior(Item item)
+    protected virtual List<ItemBehavior> DefineBehavior(Item item) // TODO: Think of beteter way to handle icons
     {
         List<ItemBehavior> behavior = new List<ItemBehavior>
         {
@@ -161,7 +161,7 @@ public class Item : Categorizable
             new ItemBehavior("Discard", InventoryMenuIcons.instance.Icons[1]),
             new ItemBehavior("Cancel", InventoryMenuIcons.instance.Icons[2])
         };
-        //behavior[0].behaviorEvent.AddListener(delegate { FindObjectOfType<InventoryUserInterface>().Favorite(item); });
+        behavior[0].behaviorEvent.AddListener(delegate { ItemInformationUserInterface.Favorite(item); });
         //behavior[1].behaviorEvent.AddListener(delegate { FindObjectOfType<InventoryUserInterface>().Discard(item); });
 
         return behavior;

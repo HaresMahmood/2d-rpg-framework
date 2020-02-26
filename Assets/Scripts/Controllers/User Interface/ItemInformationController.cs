@@ -9,11 +9,29 @@ public class ItemInformationController : UserInterfaceController
 {
     #region Fields
 
+    private static ItemInformationController instance;
+
     [SerializeField] private ItemInformationUserInterface userInterface;
 
     #endregion
 
     #region Properties
+
+    /// <summary>
+    /// Singleton pattern.
+    /// </summary>
+    public static ItemInformationController Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<ItemInformationController>();
+            }
+
+            return instance;
+        }
+    }
 
     protected override UserInterface UserInterface
     {
@@ -28,9 +46,23 @@ public class ItemInformationController : UserInterfaceController
 
     #region Miscellaneous Methods
 
+    public override IEnumerator SetActive(bool isActive, bool condition = true)
+    {
+        yield return null;
+
+        Flags.isActive = isActive;
+    }
+
     protected override void UpdateSelectedObject(int selectedValue, int increment = -1)
     {
         UserInterface.UpdateSelectedObject(selectedValue, increment);
+    }
+
+    protected override void InteractInput(int selectedValue)
+    {
+        //StartCoroutine(UserInterface.AnimateSelector());
+
+        ((ItemInformationUserInterface)UserInterface).InvokeItemBehavior(selectedValue);
     }
 
     protected override void GetInput(string axisName)
@@ -39,6 +71,11 @@ public class ItemInformationController : UserInterfaceController
         if (hasInput)
         {
             UpdateSelectedObject(selectedValue, (int)Input.GetAxisRaw(axisName));
+        }
+
+        if (Input.GetButtonDown("Interact"))
+        {
+            InteractInput(selectedValue);
         }
     }
 

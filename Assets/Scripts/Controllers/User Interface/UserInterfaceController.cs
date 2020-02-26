@@ -22,7 +22,7 @@ public abstract class UserInterfaceController : MonoBehaviour
         get { return userInterface; }
     }
 
-    public virtual UserInterfaceFlags Flags
+    protected virtual UserInterfaceFlags Flags
     {
         get { return flags; }
     }
@@ -30,8 +30,6 @@ public abstract class UserInterfaceController : MonoBehaviour
     #endregion
 
     #region Variables
-
-    public static UserInterfaceController instance;
 
     [Header("Setup")]
     public List<PanelButton> buttons = new List<PanelButton>();
@@ -44,11 +42,11 @@ public abstract class UserInterfaceController : MonoBehaviour
 
     #region Nested Classes
 
-    public class UserInterfaceFlags
+    protected class UserInterfaceFlags
     {
-        public bool isActive { get; set; }
+        internal bool isActive { get; set; }
 
-        public UserInterfaceFlags(bool isActive)
+        internal UserInterfaceFlags(bool isActive)
         {
             this.isActive = isActive;
         }
@@ -58,8 +56,10 @@ public abstract class UserInterfaceController : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    public virtual void OnPause(bool isPaused)
-    {   }
+    public virtual IEnumerator SetActive(bool isActive, bool condition = true)
+    {
+        yield break;
+    }
 
     protected virtual void UpdateSelectedObject(int selectedValue, int increment = -1)
     {
@@ -94,15 +94,6 @@ public abstract class UserInterfaceController : MonoBehaviour
     #endregion
 
     #region Unity Methods
-
-    /// <summary>
-    /// Awake is called when the script instance is being loaded.
-    /// </summary>
-    protected virtual void Awake()
-    {
-        if (instance == null)
-            instance = this;
-    }
 
     /// <summary>
     /// Update is called once per frame.

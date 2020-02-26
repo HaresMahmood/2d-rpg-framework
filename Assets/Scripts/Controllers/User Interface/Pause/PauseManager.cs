@@ -111,7 +111,7 @@ public class PauseManager : MonoBehaviour
             TimeManager.instance.SetPause(false);
         }
 
-        InventoryController.instance.Flags.isActive = flags.isActive;
+        //InventoryController.instance.Flags.isActive = flags.isActive;
     }
 
     public void InitializeSidePanel()
