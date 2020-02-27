@@ -15,7 +15,7 @@ public class CategoryUserInterfaceController : UserInterfaceController
 
     #region Properties
 
-    protected override UserInterface UserInterface
+    public override UserInterface UserInterface
     {
         get { return userInterface; }
     }

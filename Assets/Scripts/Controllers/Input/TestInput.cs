@@ -61,6 +61,7 @@ public class TestInput
                 {
                     selectedButton = ExtensionMethods.IncrementInt(selectedButton, 0, totalButtons, -((int)Input.GetAxisRaw(button) * step), isBounded);
                 }
+
                 SetInput(true);
             }
         }

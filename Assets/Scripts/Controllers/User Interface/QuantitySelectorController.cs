@@ -1,34 +1,72 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
 ///
 /// </summary>
-public class QuantitySelectorController : MonoBehaviour
+public class QuantitySelectorController : UserInterfaceController
 {
-    #region Variables
+    #region Fields
 
+    private static QuantitySelectorController instance;
 
+    [SerializeField] private QuantitySelectorUserInterface userInterface;
 
     #endregion
-    
-    #region Unity Methods
+
+    #region Properties
 
     /// <summary>
-    /// Start is called before the first frame update.
+    /// Singleton pattern.
     /// </summary>
-    private void Start()
+    public static QuantitySelectorController Instance
     {
-        
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<QuantitySelectorController>();
+            }
+
+            return instance;
+        }
     }
 
-    /// <summary>
-    /// Update is called once per frame.
-    /// </summary>
-    private void Update()
+    public override UserInterface UserInterface
     {
-        
+        get { return userInterface; }
+        set { userInterface = (QuantitySelectorUserInterface)value; }
+    }
+
+    #endregion
+
+    #region Miscellaneous Methods
+
+    public override IEnumerator SetActive(bool isActive, bool condition = true)
+    {
+        selectedValue = 1;
+
+        yield return null;
+
+        Flags.isActive = isActive;
+    }
+
+    protected override void InteractInput(int selectedValue)
+    {
+        userInterface.ToggleSelector(false, null, -1);
+        ((ItemInformationUserInterface)ItemInformationController.Instance.UserInterface).ToggleSubMenu(null, false);
+
+        StartCoroutine(SetActive(false));
+    }
+
+    protected override void GetInput(string axisName)
+    {
+        base.GetInput(axisName);
+
+        if (Input.GetButtonDown("Interact"))
+        {
+            InteractInput(selectedValue);
+        }
     }
 
     #endregion

@@ -33,7 +33,7 @@ public class ItemInformationController : UserInterfaceController
         }
     }
 
-    protected override UserInterface UserInterface
+    public override UserInterface UserInterface
     {
         get { return userInterface; }
     }
@@ -48,6 +48,8 @@ public class ItemInformationController : UserInterfaceController
 
     public override IEnumerator SetActive(bool isActive, bool condition = true)
     {
+        selectedValue = 0;
+
         yield return null;
 
         Flags.isActive = isActive;
@@ -67,7 +69,7 @@ public class ItemInformationController : UserInterfaceController
 
     protected override void GetInput(string axisName)
     {
-        bool hasInput = RegularInput(selectedValue, UserInterface.MaxObjects, axisName);
+        bool hasInput = RegularInput(UserInterface.MaxObjects, axisName);
         if (hasInput)
         {
             UpdateSelectedObject(selectedValue, (int)Input.GetAxisRaw(axisName));

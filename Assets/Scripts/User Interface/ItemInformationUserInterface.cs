@@ -18,35 +18,11 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
 
     #endregion
 
-    #region Fields
-
-    private static ItemInformationUserInterface instance;
-
-    #endregion
-
-    #region Properties
-
-    /// <summary>
-    /// Singleton pattern.
-    /// </summary>
-    public static ItemInformationUserInterface Instance
-    {
-        get
-        {
-            if (instance == null)
-            {
-                instance = FindObjectOfType<ItemInformationUserInterface>();
-            }
-
-            return instance;
-        }
-    }
-
-    #endregion
-
     #region Variables
 
     private List<MenuButton> buttons = new List<MenuButton>();
+
+    private QuantitySelectorUserInterface quantitySelector;
 
     private Transform verticalPanel;
     private Transform horizontalPanel;
@@ -65,18 +41,9 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
 
     #endregion
 
-    #region Static Methods
-
-    public static void Favorite(Item item)
-    {
-        Instance.ToggleFavorite(item);
-    }
-
-    #endregion
-
     #region Behavior Definitions
 
-    private void ToggleFavorite(Item item, float animationDuration = 0.1f)
+    public void Favorite(Item item, float animationDuration = 0.1f)
     {
         Color color = item.IsFavorite ? "#EAC03E".ToColor() : Color.white;
         int index = item.Behavior.FindIndex(b => b.buttonName == "Favorite");
@@ -87,23 +54,59 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
         StartCoroutine(buttons[index].transform.Find("Small Icon/Icon").gameObject.FadeColor(color, animationDuration));
     }
 
+    public void Discard(Item item, float opacity = 0.7f)
+    {
+        int index = item.Behavior.FindIndex(b => b.buttonName == "Discard");
+        float xCoordinate = buttons[index].transform.position.x + (buttons[index].GetComponent<RectTransform>().sizeDelta.x / 2);
+
+        StartCoroutine(AnimateSelector());
+        StartCoroutine(ActivateButtons(selectedItem, opacity, MaxObjects));
+
+        QuantitySelectorController.Instance.UserInterface = quantitySelector;
+
+        StartCoroutine(ItemInformationController.Instance.SetActive(false));
+        StartCoroutine(QuantitySelectorController.Instance.SetActive(true));
+
+        quantitySelector.ToggleSelector(true, item, xCoordinate);
+    }
+
+    public void Cancel()
+    {
+        StartCoroutine(AnimateSubMenu(null, false));
+
+        StartCoroutine(InventoryController.Instance.SetActive(true));
+        ((InventoryUserInterface)InventoryController.Instance.UserInterface).FadeInventoryUserInterface(1f);
+        StartCoroutine(ItemInformationController.Instance.SetActive(false));
+    }
+
     #endregion
 
     #region Miscellaneous Methods
 
     public void ToggleSubMenu(Item item, bool isActive)
     {
-        if (isActive)
+        if (item != null)
         {
-            SetObjectDefinitionsFromPanel(horizontalPanel);
-            SetValues(item);
-            valueText.SetText((item).Quantity.ToString());
-            spriteImage.sprite = (item).Sprite;
+            selectedItem = item;
+
+            if (isActive)
+            {
+                SetObjectDefinitionsFromPanel(horizontalPanel);
+                SetValues(item);
+                valueText.SetText((item).Quantity.ToString());
+                spriteImage.sprite = (item).Sprite;
+            }
         }
 
-        selectedItem = item;
-        StartCoroutine(ItemInformationController.Instance.SetActive(true));
         StartCoroutine(AnimateSubMenu(item, isActive));
+
+        if (!isActive)
+        {
+            StartCoroutine(InventoryController.Instance.SetActive(true));
+            ((InventoryUserInterface)InventoryController.Instance.UserInterface).FadeInventoryUserInterface(1f);
+        }
+
+        StartCoroutine(ItemInformationController.Instance.SetActive(isActive));
     }
 
     public void InvokeItemBehavior(int selectedValue)
@@ -201,11 +204,10 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
             if (item != null)
             {
                 buttons[i].SetValues(item.Behavior[i].buttonName, item.Behavior[i].iconSprite);
-                if (i == item.Behavior.FindIndex(b => b.buttonName == "Favorite"))
-                { 
-                    Color color = item.IsFavorite ? tulipTreeColor : Color.white;
 
-                    buttons[i].transform.Find("Big Icon/Icon").GetComponent<Image>().color = color;
+                if (opacity == 1)
+                {
+                    ApplyButtonStyles(item, i);
                 }
             }
 
@@ -223,6 +225,22 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
         }
 
         LayoutRebuilder.ForceRebuildLayoutImmediate(buttonPanel);
+    }
+
+    private void ApplyButtonStyles(Item item, int index)
+    {
+        if (index == item.Behavior.FindIndex(b => b.buttonName == "Favorite"))
+        {
+            Color color = item.IsFavorite ? tulipTreeColor : Color.white;
+
+            buttons[index].transform.Find("Big Icon/Icon").GetComponent<Image>().color = color;
+        }
+        else if (index == item.Behavior.FindIndex(b => b.buttonName == "Discard"))
+        {
+            float xCoordinate = buttons[index].transform.position.x - 30f;
+
+            quantitySelector.ToggleSelector(false, null, xCoordinate);
+        }
     }
 
     private void SetObjectDefinitionsFromPanel(Transform panel)
@@ -259,6 +277,8 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
 
         buttonPanel = horizontalPanel.transform.Find("Buttons").GetComponent<RectTransform>();
         buttons = buttonPanel.GetComponentsInChildren<MenuButton>().ToList();
+
+        quantitySelector = horizontalPanel.Find("Quantity Selector").GetComponent<QuantitySelectorUserInterface>();
 
         selector = buttonPanel.Find("Indicator").gameObject;
 

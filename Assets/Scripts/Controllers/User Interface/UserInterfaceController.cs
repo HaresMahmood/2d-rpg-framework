@@ -17,9 +17,10 @@ public abstract class UserInterfaceController : MonoBehaviour
 
     #region Properties
 
-    protected virtual UserInterface UserInterface
+    public virtual UserInterface UserInterface
     {
         get { return userInterface; }
+        set { }
     }
 
     protected virtual UserInterfaceFlags Flags
@@ -66,12 +67,12 @@ public abstract class UserInterfaceController : MonoBehaviour
         UserInterface.UpdateSelectedObject(selectedValue);
     }
 
-    protected virtual bool RegularInput(int selectedValue, int max, string axisName)
+    protected virtual bool RegularInput(int max, string axisName)
     {
-        TestInput.Axis axis = axisName == "Horizontal" ? TestInput.Axis.Horizontal : TestInput.Axis.Vertical;
+        TestInput.Axis axis = axisName.Equals("Horizontal") ? TestInput.Axis.Horizontal : TestInput.Axis.Vertical;
 
         bool hasInput;
-        (this.selectedValue, hasInput) = input.GetInput(axisName, axis, max, selectedValue);
+        (selectedValue, hasInput) = input.GetInput(axisName, axis, max, selectedValue);
 
         return hasInput;
     }
@@ -84,7 +85,7 @@ public abstract class UserInterfaceController : MonoBehaviour
 
     protected virtual void GetInput(string axisName)
     {
-        bool hasInput = RegularInput(selectedValue, UserInterface.MaxObjects, axisName);
+        bool hasInput = RegularInput(UserInterface.MaxObjects, axisName);
         if (hasInput)
         {
             UpdateSelectedObject(selectedValue);

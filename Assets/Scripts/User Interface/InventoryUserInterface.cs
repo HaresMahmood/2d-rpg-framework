@@ -21,11 +21,16 @@ public sealed class InventoryUserInterface : CategoryUserInterface
     {
         if (activeCategorizables.Count > 0)
         {
-            FadeUserInterface(middlePanel, opacity);
-            FadeCharacterSprite(opacity);
+            FadeInventoryUserInterface(opacity);
             ((ItemInformationUserInterface)informationPanel).ToggleSubMenu((Item)activeCategorizables[selectedValue], true);
             StartCoroutine(InventoryController.Instance.SetActive(false, false));
         }
+    }
+
+    public void FadeInventoryUserInterface(float opacity)
+    {
+        FadeUserInterface(middlePanel, opacity);
+        FadeCharacterSprite(opacity);
     }
 
     #endregion

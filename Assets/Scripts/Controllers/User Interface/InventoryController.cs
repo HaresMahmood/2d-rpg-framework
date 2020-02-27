@@ -33,7 +33,7 @@ public class InventoryController : CategoryUserInterfaceController
         }
     }
 
-    protected override UserInterface UserInterface
+    public override UserInterface UserInterface
     {
         get { return userInterface; }
     }

@@ -161,8 +161,9 @@ public class Item : Categorizable
             new ItemBehavior("Discard", InventoryMenuIcons.instance.Icons[1]),
             new ItemBehavior("Cancel", InventoryMenuIcons.instance.Icons[2])
         };
-        behavior[0].behaviorEvent.AddListener(delegate { ItemInformationUserInterface.Favorite(item); });
-        //behavior[1].behaviorEvent.AddListener(delegate { FindObjectOfType<InventoryUserInterface>().Discard(item); });
+        behavior[0].behaviorEvent.AddListener(delegate { ((ItemInformationUserInterface)ItemInformationController.Instance.UserInterface).Favorite(item); });
+        behavior[1].behaviorEvent.AddListener(delegate { ((ItemInformationUserInterface)ItemInformationController.Instance.UserInterface).Discard(item); });
+        behavior[2].behaviorEvent.AddListener(delegate { ((ItemInformationUserInterface)ItemInformationController.Instance.UserInterface).Cancel(); });
 
         return behavior;
     }
