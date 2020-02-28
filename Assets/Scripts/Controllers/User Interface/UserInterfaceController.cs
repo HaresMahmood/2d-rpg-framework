@@ -83,6 +83,9 @@ public abstract class UserInterfaceController : MonoBehaviour
         StartCoroutine(UserInterface.AnimateSelector());
     }
 
+    protected virtual void CancelInput(int selectedValue)
+    {   }
+
     protected virtual void GetInput(string axisName)
     {
         bool hasInput = RegularInput(UserInterface.MaxObjects, axisName);

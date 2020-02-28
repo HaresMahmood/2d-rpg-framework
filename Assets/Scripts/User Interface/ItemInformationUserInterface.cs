@@ -39,6 +39,8 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
 
     private Item selectedItem;
 
+    private int selectedValue;
+
     #endregion
 
     #region Behavior Definitions
@@ -72,8 +74,7 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
 
     public void Cancel()
     {
-        StartCoroutine(AnimateSubMenu(null, false));
-
+        StartCoroutine(ResetSubMenu(selectedValue));
         StartCoroutine(InventoryController.Instance.SetActive(true));
         ((InventoryUserInterface)InventoryController.Instance.UserInterface).FadeInventoryUserInterface(1f);
         StartCoroutine(ItemInformationController.Instance.SetActive(false));
@@ -150,6 +151,8 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
         StartCoroutine(UpdateSelector(buttons[selectedValue].transform));
         buttons[selectedValue].AnimateButton(true);
         buttons[previousValue].AnimateButton(false);
+
+        this.selectedValue = selectedValue;
     }
 
     protected override IEnumerator AnimatePanel(Transform panel, Categorizable categorizable = null, float animationDuration = 0.15F)
@@ -241,6 +244,16 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
 
             quantitySelector.ToggleSelector(false, null, xCoordinate);
         }
+    }
+
+    private IEnumerator ResetSubMenu(int selectedValue, float animationDuration = 0.15f)
+    {
+        StartCoroutine(UpdateSelector());
+        buttons[selectedValue].AnimateButton(false);
+
+        yield return new WaitForSecondsRealtime(animationDuration);
+
+        StartCoroutine(AnimateSubMenu(null, false));
     }
 
     private void SetObjectDefinitionsFromPanel(Transform panel)

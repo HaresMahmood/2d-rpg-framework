@@ -67,6 +67,11 @@ public class ItemInformationController : UserInterfaceController
         ((ItemInformationUserInterface)UserInterface).InvokeItemBehavior(selectedValue);
     }
 
+    protected override void CancelInput(int selectedValue)
+    {
+        userInterface.Cancel();
+    }
+
     protected override void GetInput(string axisName)
     {
         bool hasInput = RegularInput(UserInterface.MaxObjects, axisName);
@@ -78,6 +83,11 @@ public class ItemInformationController : UserInterfaceController
         if (Input.GetButtonDown("Interact"))
         {
             InteractInput(selectedValue);
+        }
+
+        if (Input.GetButtonDown("Cancel"))
+        {
+            CancelInput(selectedValue);
         }
     }
 
