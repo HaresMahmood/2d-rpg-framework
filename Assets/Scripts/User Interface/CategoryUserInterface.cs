@@ -26,20 +26,31 @@ public abstract class CategoryUserInterface : UserInterface
 
     protected CategorizableInformationUserInterface informationPanel;
 
-    private Coroutine categoryObjectsListRoutine;
+    private int selectedCategory = -1;
 
     #endregion
 
     #region Miscellaneous Methods
 
-    public void UpdateSelectedCategory(List<Categorizable> categorizables, int selectedCategory, int increment)
+    public void UpdateSelectedCategory(List<Categorizable> categorizables, int selectedCategory, int selectedValue, int increment)
     {
-        string value = categorizables[0].Categorization.GetCategoryFromIndex(selectedCategory);
-        categoryPanel.AnimateCategory(selectedCategory, increment);
-        StartCoroutine(categoryPanel.UpdateCategoryName(selectedCategory, value));
-        ResetCategoryObjects();
-        UpdateCategoryObjectsList(categorizables, value);
-        UpdateSelectedObject(0);
+        if (this.selectedCategory != selectedCategory)
+        {
+            string value = categorizables[0].Categorization.GetCategoryFromIndex(selectedCategory);
+
+            this.selectedCategory = selectedCategory;
+
+            categoryPanel.AnimateCategory(selectedCategory, increment);
+            StartCoroutine(categoryPanel.UpdateCategoryName(selectedCategory, value));
+            ResetCategoryObjects();
+            UpdateCategoryObjectsList(categorizables, value);
+        }
+        else
+        {
+            ActiveSlot(selectedValue, -1);
+        }
+
+        UpdateSelectedObject(selectedValue);
     }
 
     public override void UpdateSelectedObject(int selectedValue, int increment = -1)
@@ -99,7 +110,7 @@ public abstract class CategoryUserInterface : UserInterface
         {
             if (i < activeCategorizables.Count)
             {
-                ActiveSlots(i, animationDuration);
+                ActiveSlot(i, animationDuration);
 
                 if (animationDelay >= 0)
                 {
@@ -109,7 +120,7 @@ public abstract class CategoryUserInterface : UserInterface
         }
     }
 
-    protected void ActiveSlots(int index, float animationDuration)
+    protected void ActiveSlot(int index, float animationDuration)
     {
         categorizableSlots[index].UpdateInformation(activeCategorizables[index], animationDuration);
     }

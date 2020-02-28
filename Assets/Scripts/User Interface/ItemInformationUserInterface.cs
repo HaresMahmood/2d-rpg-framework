@@ -47,10 +47,10 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
 
     public void Favorite(Item item, float animationDuration = 0.1f)
     {
+        item.IsFavorite = !item.IsFavorite;
+
         Color color = item.IsFavorite ? "#EAC03E".ToColor() : Color.white;
         int index = item.Behavior.FindIndex(b => b.buttonName == "Favorite");
-
-        item.IsFavorite = !item.IsFavorite;
 
         StartCoroutine(buttons[index].transform.Find("Big Icon/Icon").gameObject.FadeColor(color, animationDuration));
         StartCoroutine(buttons[index].transform.Find("Small Icon/Icon").gameObject.FadeColor(color, animationDuration));
@@ -237,6 +237,7 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
             Color color = item.IsFavorite ? tulipTreeColor : Color.white;
 
             buttons[index].transform.Find("Big Icon/Icon").GetComponent<Image>().color = color;
+            buttons[index].transform.Find("Small Icon/Icon").GetComponent<Image>().color = color;
         }
         else if (index == item.Behavior.FindIndex(b => b.buttonName == "Discard"))
         {

@@ -44,14 +44,13 @@ public class CategoryUserInterfaceController : UserInterfaceController
 
         if (isActive && condition)
         {
-            UpdateSelectedCategory(selectedCategory, increment);
+            UpdateSelectedCategory(selectedCategory, selectedValue, increment);
         }
     }
 
-    protected void UpdateSelectedCategory(int selectedCategory, int increment)
+    protected void UpdateSelectedCategory(int selectedCategory, int selectedValue, int increment)
     {
-        selectedValue = 0;
-        ((CategoryUserInterface)UserInterface).UpdateSelectedCategory(categorizableObjects, selectedCategory, increment);
+        ((CategoryUserInterface)UserInterface).UpdateSelectedCategory(categorizableObjects, selectedCategory, selectedValue, increment);
     }
 
     protected bool TriggerInput(int max)
@@ -78,7 +77,8 @@ public class CategoryUserInterfaceController : UserInterfaceController
             bool hasInput = TriggerInput(categoryNames.Count);
             if (hasInput)
             {
-                UpdateSelectedCategory(selectedCategory, (int)Input.GetAxisRaw("Trigger"));
+                selectedValue= 0;
+                UpdateSelectedCategory(selectedCategory, selectedValue, (int)Input.GetAxisRaw("Trigger"));
             }
         }
     }
@@ -94,7 +94,7 @@ public class CategoryUserInterfaceController : UserInterfaceController
             bool hasInput = TriggerInput(categoryNames.Count);
             if (hasInput)
             {
-                UpdateSelectedCategory(selectedCategory, (int)Input.GetAxisRaw("Trigger"));
+                UpdateSelectedCategory(selectedCategory, selectedValue, (int)Input.GetAxisRaw("Trigger"));
             }
         }
     }
