@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEditor;
 using TMPro;
 
 /// <summary>
@@ -46,9 +47,10 @@ public class QuantitySelectorUserInterface : UserInterface
             quantityText.SetText("1");
         }
 
-        if (!isActive && SelectedItem != null)
+        if (!isActive && xCoordinate == -1)
         {
-            SelectedItem.Quantity -= (Value > 1 ? (Value - 1) : Value);
+            SelectedItem.Quantity -= Value;
+            EditorUtility.SetDirty(SelectedItem);
         }
     }
 

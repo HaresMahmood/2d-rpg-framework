@@ -38,7 +38,7 @@ public class Item : Categorizable
     public int Quantity
     {
         get { return quantity; }
-        set { quantity = value; }
+        set { Debug.Log(value);  quantity = value; }
     }
 
     public bool IsFavorite
