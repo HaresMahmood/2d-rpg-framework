@@ -54,7 +54,7 @@ public class QuantitySelectorController : UserInterfaceController
     protected override void InteractInput(int selectedValue)
     {
         userInterface.ToggleSelector(false, null, -1);
-        ((ItemInformationUserInterface)ItemInformationController.Instance.UserInterface).ToggleSubMenu(null, false);
+        ((ItemInformationUserInterface)ItemInformationController.Instance.UserInterface).Cancel();
 
         StartCoroutine(SetActive(false));
     }
