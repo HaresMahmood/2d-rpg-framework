@@ -8,6 +8,8 @@ using TMPro;
 /// <summary>
 ///
 /// </summary>
+
+// TODO: Clean up!
 public class ItemInformationUserInterface : CategorizableInformationUserInterface
 {
     #region Constants

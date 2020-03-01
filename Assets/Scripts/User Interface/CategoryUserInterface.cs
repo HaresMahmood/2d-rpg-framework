@@ -76,7 +76,7 @@ public abstract class CategoryUserInterface : UserInterface
         {
             int max = activeCategorizables.Count > MaxObjects ? MaxObjects : activeCategorizables.Count;
 
-            ToggleEmptyPanel(false);
+            ToggleEmptyPanel(true);
 
             StartCoroutine(ActiveSlots(0, max, animationDuration, animationDelay));
 
@@ -87,21 +87,20 @@ public abstract class CategoryUserInterface : UserInterface
         }
         else
         {
-            ToggleEmptyPanel(true);
+            ToggleEmptyPanel(false);
         }
     }
 
     protected virtual void ToggleEmptyPanel(bool isActive, float animationDuration = 0.15f)
     {
-        float opacity = isActive ? 1f : 0f;
+        float opacity = isActive ? 0f : 1f;
+        Transform selectedObject = isActive ? categorizableSlots[0].transform : null;
 
-        if (selector.activeSelf == isActive)
-        {
-            selector.SetActive(!isActive);
-            StartCoroutine(emptyGrid.FadeOpacity(opacity, animationDuration));
-            opacity = isActive ? 0f : 1f;
-            StartCoroutine(categorizableSlots[0].transform.parent.gameObject.FadeOpacity(opacity, animationDuration));
-        }
+        selector.SetActive(isActive);
+        StartCoroutine(emptyGrid.FadeOpacity(opacity, animationDuration));
+
+        opacity = isActive ? 1f : 0f;
+        StartCoroutine(categorizableSlots[0].transform.parent.gameObject.FadeOpacity(opacity, animationDuration));
     }
 
     protected IEnumerator ActiveSlots(int min, int max, float animationDuration = -1, float animationDelay = -1)
