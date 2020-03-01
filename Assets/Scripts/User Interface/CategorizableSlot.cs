@@ -24,12 +24,10 @@ public abstract class CategorizableSlot : MonoBehaviour
             slot.GetComponent<CanvasGroup>().alpha = opacity;
         }
 
-        /*
         if (opacity == 0f)
         {
             slot.gameObject.SetActive(false);
         }
-        */
     }
 
     public void UpdateInformation(Categorizable categorizable, float duration = -1)
