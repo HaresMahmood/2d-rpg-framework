@@ -16,11 +16,14 @@ public class AutoTextWidth : MonoBehaviour
 
     public void UpdateWidth(string text)
     {
-        textComponent = GetComponent<TextMeshProUGUI>();
+        if (gameObject.activeSelf)
+        {
+            textComponent = GetComponent<TextMeshProUGUI>();
 
-        Vector2 textSize = new Vector2(textComponent.GetPreferredValues(text).x, textComponent.rectTransform.sizeDelta.y);
+            Vector2 textSize = new Vector2(textComponent.GetPreferredValues(text).x, textComponent.rectTransform.sizeDelta.y);
 
-        textComponent.rectTransform.sizeDelta = textSize;
+            textComponent.rectTransform.sizeDelta = textSize;
+        }
     }
 
     #endregion

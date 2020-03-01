@@ -123,6 +123,7 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
         bool arrowState = ((Item)categorizable).Effect.GetQuantity().Equals("") ? false : true;
 
         nameText.SetText(categorizable.Name);
+        nameText.GetComponent<AutoTextWidth>().UpdateWidth(categorizable.Name);
         descriptionText.SetText(categorizable.Description);
 
         effectTypeText.SetText(((Item)categorizable).Effect.ToString());
