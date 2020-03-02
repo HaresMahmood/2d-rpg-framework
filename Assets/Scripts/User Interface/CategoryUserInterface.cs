@@ -26,6 +26,7 @@ public abstract class CategoryUserInterface : UserInterface
 
     protected CategorizableInformationUserInterface informationPanel;
 
+    private int selectedValue;
     private int selectedCategory = -1;
 
     #endregion
@@ -58,7 +59,15 @@ public abstract class CategoryUserInterface : UserInterface
         Categorizable selectedCategorizable = activeCategorizables.Count > 0 ? activeCategorizables[selectedValue] : null;
 
         StartCoroutine(UpdateSelector(categorizableSlots[selectedValue].transform));
+
+        if ((this.selectedValue - selectedValue == 7) || (selectedValue -this.selectedValue == 7))
+        {
+            UpdateScrollbar(MaxObjects, selectedValue);
+        }
+
         informationPanel.AnimatePanel(selectedCategorizable);
+
+        this.selectedValue = selectedValue;
     }
 
     protected void UpdateCategoryObjectsList(List<Categorizable> categorizables, string value, float animationDuration = 0.15f, float animationDelay = 0.03f)

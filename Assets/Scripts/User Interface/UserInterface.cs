@@ -1,5 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -83,7 +83,10 @@ public abstract class UserInterface : MonoBehaviour
         if (selectedValue > -1)
         {
             float totalSlots = maxObjects;
-            float targetValue = 1.0f - selectedValue / (totalSlots - 1);
+            float targetValue = (float)Math.Round(1.0f - (selectedValue / (totalSlots - 1)), 1);
+
+            targetValue = (selectedValue == 0) ? 1 : targetValue;
+
             StartCoroutine(scrollbar.LerpScrollbar(targetValue, animationDuration));
         }
         else
