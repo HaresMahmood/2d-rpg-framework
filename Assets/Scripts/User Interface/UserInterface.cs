@@ -78,20 +78,35 @@ public abstract class UserInterface : MonoBehaviour
         }
     }
 
-    protected void UpdateScrollbar(int maxObjects, int selectedValue = -1, float animationDuration = 0.08f)
+    protected void UpdateScrollbar(int maxObjects = -1, int selectedValue = -1, float animationDuration = 0.08f)
     {
-        if (selectedValue > -1)
+        if (maxObjects > -1)
         {
-            float totalSlots = maxObjects;
-            float targetValue = (float)Math.Round(1.0f - (selectedValue / (totalSlots - 1)), 1);
+            if (scrollbar.GetComponent<CanvasGroup>().alpha != 1f)
+            {
+                StartCoroutine(scrollbar.gameObject.FadeOpacity(1f, animationDuration));
+            }
 
-            targetValue = (selectedValue == 0) ? 1 : targetValue;
+            if (selectedValue > -1)
+            {
+                float totalSlots = maxObjects;
+                float targetValue = (float)Math.Round(1.0f - (selectedValue / (totalSlots - 1)), 1);
 
-            StartCoroutine(scrollbar.LerpScrollbar(targetValue, animationDuration));
+                targetValue = (selectedValue == 0) ? 1 : targetValue;
+
+                StartCoroutine(scrollbar.LerpScrollbar(targetValue, animationDuration));
+            }
+            else
+            {
+                scrollbar.value = 1;
+            }
         }
         else
         {
-            scrollbar.value = 1;
+            if (scrollbar.GetComponent<CanvasGroup>().alpha != 0f)
+            {
+                StartCoroutine(scrollbar.gameObject.FadeOpacity(0f, animationDuration));
+            }
         }
     }
 

@@ -70,7 +70,7 @@ public abstract class CategoryUserInterface : UserInterface
         this.selectedValue = selectedValue;
     }
 
-    protected void UpdateCategoryObjectsList(List<Categorizable> categorizables, string value, float animationDuration = 0.15f, float animationDelay = 0.03f)
+    protected void UpdateCategoryObjectsList(List<Categorizable> categorizables, string value, float animationDuration = 0.15f, float animationDelay = 0.02f, int maxObjects = 28)
     {
         #if DEBUG
         if (GameManager.Debug())
@@ -83,19 +83,29 @@ public abstract class CategoryUserInterface : UserInterface
 
         if (activeCategorizables.Count > 0)
         {
-            int max = activeCategorizables.Count > MaxObjects ? MaxObjects : activeCategorizables.Count;
+            int max = activeCategorizables.Count > maxObjects ? maxObjects : activeCategorizables.Count;
+
+            if (activeCategorizables.Count < maxObjects)
+            {
+                UpdateScrollbar();
+            }
+            else
+            {
+                UpdateScrollbar(MaxObjects);
+            }
 
             ToggleEmptyPanel(true);
 
             StartCoroutine(ActiveSlots(0, max, animationDuration, animationDelay));
 
-            if (max < categorizables.Count)
+            if (activeCategorizables.Count > maxObjects)
             {
                 StartCoroutine(ActiveSlots(max, activeCategorizables.Count));
             }
         }
         else
         {
+            UpdateScrollbar();
             ToggleEmptyPanel(false);
         }
     }
