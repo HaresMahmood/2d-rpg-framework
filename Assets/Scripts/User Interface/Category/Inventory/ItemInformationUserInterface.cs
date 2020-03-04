@@ -302,7 +302,7 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
 
         quantitySelector = horizontalPanel.Find("Quantity Selector").GetComponent<QuantitySelectorUserInterface>();
 
-        selector = buttonPanel.Find("Indicator").gameObject;
+        selector = buttonPanel.Find("Selector").gameObject;
 
         base.Awake();
 

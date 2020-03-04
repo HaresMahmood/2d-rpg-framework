@@ -43,7 +43,7 @@ public class MissionsUserInterface : CategoryUserInterface
         Transform leftPanel = transform.Find("Left");
         Transform rightPanel = transform.Find("Right");
 
-        selector = leftPanel.Find("List/Indicator").gameObject;
+        selector = leftPanel.Find("List/Selector").gameObject;
 
         scrollbar = leftPanel.Find("List/Scrollbar").GetComponent<Scrollbar>();
 

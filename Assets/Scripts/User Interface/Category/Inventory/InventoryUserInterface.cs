@@ -42,19 +42,20 @@ public sealed class InventoryUserInterface : CategoryUserInterface
     /// </summary>
     protected override void Awake()
     {
-        selector = transform.Find("Indicator").gameObject;
+        Transform middle = transform.Find("Middle");
+        middlePanel = middle.gameObject;
 
-        scrollbar = transform.Find("Middle/Grid/Scrollbar").GetComponent<Scrollbar>();
+        selector = middle.Find("Grid/Selector").gameObject;
 
-        middlePanel = transform.Find("Middle").gameObject;
+        scrollbar = middle.Find("Grid/Scrollbar").GetComponent<Scrollbar>();
 
-        emptyGrid = transform.Find("Middle/Grid/Empty Grid").gameObject;
+        emptyGrid = middle.Find("Grid/Display Panels/Empty Panel").gameObject;
 
-        categorizableSlots = transform.Find("Middle/Grid/Item Grid").GetComponentsInChildren<CategorizableSlot>().ToList();
-
-        //StartCoroutine(FindObjectOfType<BottomPanelUserInterface>().ChangePanelButtons(InventoryController.instance.buttons));
+        categorizableSlots = middle.Find("Grid/Display Panels/Item Grid").GetComponentsInChildren<CategorizableSlot>().ToList();
 
         informationPanel = transform.Find("Item Information").GetComponent<ItemInformationUserInterface>();
+
+        //StartCoroutine(FindObjectOfType<BottomPanelUserInterface>().ChangePanelButtons(InventoryController.instance.buttons));
 
         base.Awake();
     }
