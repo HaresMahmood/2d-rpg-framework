@@ -82,6 +82,11 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
         StartCoroutine(ItemInformationController.Instance.SetActive(false));
     }
 
+    public void Use(Item item)
+    {
+        
+    }
+
     #endregion
 
     #region Miscellaneous Methods

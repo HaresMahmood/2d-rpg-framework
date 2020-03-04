@@ -131,7 +131,7 @@ public class Consumable : Item
             new ItemBehavior("Use", InventoryMenuIcons.instance.Icons[3]),
             new ItemBehavior("Give", InventoryMenuIcons.instance.Icons[4])
         };
-        //behavior[0].behaviorEvent.AddListener(delegate { ((ItemInformationUserInterface)ItemInformationController.Instance.UserInterface).Favorite(item); });
+        behavior[0].behaviorEvent.AddListener(delegate { ((ItemInformationUserInterface)ItemInformationController.Instance.UserInterface).Use(item); });
         //behavior[1].behaviorEvent.AddListener(delegate { FindObjectOfType<InventoryUserInterface>().Give(); });
 
         behavior.AddRange(base.DefineBehavior(item));
