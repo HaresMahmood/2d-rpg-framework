@@ -8,9 +8,8 @@ using TMPro;
 /// <summary>
 ///
 /// </summary>
-public class MissionUserInterface : MonoBehaviour
+public class MissionsUserInterface : CategoryUserInterface
 {
-    /*
     #region Variables
 
     public List<Mission> categoryMissions { get; private set; } = new List<Mission>();
@@ -31,6 +30,35 @@ public class MissionUserInterface : MonoBehaviour
 
     #region Miscellaneous Methods
 
+
+    #endregion
+
+    #region Unity Methods
+
+    /// <summary>
+    /// Awake is called when the script instance is being loaded.
+    /// </summary>
+    protected override void Awake()
+    {
+        selector = transform.Find("Indicator").gameObject;
+
+        scrollbar = transform.Find("Middle/Grid/Scrollbar").GetComponent<Scrollbar>();
+
+        emptyGrid = transform.Find("Middle/Grid/Empty Grid").gameObject;
+
+        categorizableSlots = transform.Find("Middle/Grid/Item Grid").GetComponentsInChildren<CategorizableSlot>().ToList();
+
+        //StartCoroutine(FindObjectOfType<BottomPanelUserInterface>().ChangePanelButtons(InventoryController.instance.buttons));
+
+        informationPanel = transform.Find("Item Information").GetComponent<MissionsInformationUserInterface>();
+
+        base.Awake();
+    }
+
+    #endregion
+
+
+    /*
     /// <summary>
     /// Animates and updates the position of the indicator. Dynamically changes position and size of indicator depending on what situation it is used for. If no value is selected, the indicator completely fades out.
     /// </summary>
@@ -230,32 +258,5 @@ public class MissionUserInterface : MonoBehaviour
             rightPanel.GetComponentInChildren<MissionOtherPanel>().FadePanel(opacity);
         }
     }
-
-    #endregion
-
-    #region Unity Methods
-
-    /// <summary>
-    /// Start is called before the first frame update.
-    /// </summary>
-    private void Start()
-    {
-        leftPanel = transform.Find("Left").gameObject;
-        rightPanel = transform.Find("Right").gameObject;
-        indicator = leftPanel.transform.Find("List/Indicator").gameObject;
-
-        indicatorAnimator = indicator.GetComponent<Animator>();
-
-        scrollbar = leftPanel.transform.Find("List/Scrollbar Container/Scrollbar").GetComponent<Scrollbar>();
-
-        categoryText = leftPanel.transform.Find("Categories/Information");
-
-        missionSlots = leftPanel.transform.Find("List/Mission List").GetComponentsInChildren<MissionSlot>();
-        categoryIcons = leftPanel.transform.Find("Categories/Category Icons").GetChildren();
-
-        UpdateSelectedCategory(MissionManager.instance.missions, 0, -1);
-    }
-
-    #endregion
     */
 }
