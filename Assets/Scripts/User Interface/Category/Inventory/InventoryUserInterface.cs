@@ -11,9 +11,27 @@ public sealed class InventoryUserInterface : CategoryUserInterface
 {
     #region Variables
 
+    private GameObject middlePanel;
+
     #endregion
 
     #region Miscellaneous Methods
+
+    public void ActiveSubMenu(int selectedValue, float opacity = 0.5f)
+    {
+        if (activeCategorizables.Count > 0)
+        {
+            FadeInventoryUserInterface(opacity);
+            ((ItemInformationUserInterface)informationPanel).ToggleSubMenu((Item)activeCategorizables[selectedValue], true);
+            StartCoroutine(InventoryController.Instance.SetActive(false, false));
+        }
+    }
+
+    public void FadeInventoryUserInterface(float opacity)
+    {
+        FadeUserInterface(middlePanel, opacity);
+        FadeCharacterSprite(opacity);
+    }
 
     #endregion
 
@@ -24,15 +42,15 @@ public sealed class InventoryUserInterface : CategoryUserInterface
     /// </summary>
     protected override void Awake()
     {
-        Transform leftPanel = transform.Find("Left");
+        selector = transform.Find("Indicator").gameObject;
 
-        selector = leftPanel.Find("List/Indicator").gameObject;
+        scrollbar = transform.Find("Middle/Grid/Scrollbar").GetComponent<Scrollbar>();
 
-        scrollbar = leftPanel.Find("List/Scrollbar").GetComponent<Scrollbar>();
+        middlePanel = transform.Find("Middle").gameObject;
 
         emptyGrid = transform.Find("Middle/Grid/Empty Grid").gameObject;
 
-        categorizableSlots = leftPanel.Find("List/Mission List").GetComponentsInChildren<CategorizableSlot>().ToList();
+        categorizableSlots = transform.Find("Middle/Grid/Item Grid").GetComponentsInChildren<CategorizableSlot>().ToList();
 
         //StartCoroutine(FindObjectOfType<BottomPanelUserInterface>().ChangePanelButtons(InventoryController.instance.buttons));
 

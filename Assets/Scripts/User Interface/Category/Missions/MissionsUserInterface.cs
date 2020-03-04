@@ -40,17 +40,20 @@ public class MissionsUserInterface : CategoryUserInterface
     /// </summary>
     protected override void Awake()
     {
-        selector = transform.Find("Indicator").gameObject;
+        Transform leftPanel = transform.Find("Left");
+        Transform rightPanel = transform.Find("Right");
 
-        scrollbar = transform.Find("Middle/Grid/Scrollbar").GetComponent<Scrollbar>();
+        selector = leftPanel.Find("List/Indicator").gameObject;
 
-        emptyGrid = transform.Find("Middle/Grid/Empty Grid").gameObject;
+        scrollbar = leftPanel.Find("List/Scrollbar").GetComponent<Scrollbar>();
 
-        categorizableSlots = transform.Find("Middle/Grid/Item Grid").GetComponentsInChildren<CategorizableSlot>().ToList();
+        categorizableSlots = leftPanel.Find("List/Mission List").GetComponentsInChildren<CategorizableSlot>().ToList();
+
+        emptyGrid = rightPanel.Find("Empty Panel").gameObject;
+
+        informationPanel = rightPanel.Find("Information Panel").GetComponent<ItemInformationUserInterface>();
 
         //StartCoroutine(FindObjectOfType<BottomPanelUserInterface>().ChangePanelButtons(InventoryController.instance.buttons));
-
-        informationPanel = transform.Find("Item Information").GetComponent<MissionsInformationUserInterface>();
 
         base.Awake();
     }
