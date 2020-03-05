@@ -7,6 +7,12 @@ using UnityEngine;
 /// </summary>
 public class MissionsController : CategoryUserInterfaceController
 {
+    #region Constants
+
+    protected override int MaxViewableObjects => 6;
+
+    #endregion
+
     #region Fields
 
     [SerializeField] private MissionsUserInterface userInterface;

@@ -5,8 +5,14 @@ using UnityEngine;
 /// <summary>
 ///
 /// </summary>
-public class CategoryUserInterfaceController : UserInterfaceController
+public abstract class CategoryUserInterfaceController : UserInterfaceController
 {
+    #region Constants
+
+    protected abstract int MaxViewableObjects { get; }
+
+    #endregion
+
     #region Fields
 
     private CategoryUserInterface userInterface;
@@ -50,7 +56,7 @@ public class CategoryUserInterfaceController : UserInterfaceController
 
     protected void UpdateSelectedCategory(int selectedCategory, int selectedValue, int increment)
     {
-        ((CategoryUserInterface)UserInterface).UpdateSelectedCategory(categorizableObjects, selectedCategory, selectedValue, increment);
+        ((CategoryUserInterface)UserInterface).UpdateSelectedCategory(categorizableObjects, selectedCategory, selectedValue, increment, MaxViewableObjects);
     }
 
     protected bool TriggerInput(int max)

@@ -1,12 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using TMPro;
+﻿using TMPro;
 
 /// <summary>
 ///
 /// </summary>
-public class MissionSlot : MonoBehaviour
+public class MissionSlot : CategorizableSlot
 {
     #region Variables
 
@@ -18,35 +15,20 @@ public class MissionSlot : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    private void FadeSlot(float opacity, float duration = 0.1f)
+    public void DeactivateSlot()
     {
-        StartCoroutine(nameText.gameObject.FadeOpacity(opacity, duration));
-        StartCoroutine(objectiveText.transform.parent.gameObject.FadeOpacity(opacity, duration));
+        base.Awake();
     }
 
-    public void AnimateSlot(float opacity, float duration = -1f)
+    protected override void SetInformation(Categorizable categorizable)
     {
-        if (duration > -1)
-        {
-            StartCoroutine(gameObject.FadeOpacity(opacity, duration));
-        }
-        else
-        {
-            GetComponent<CanvasGroup>().alpha = opacity;
-        }
+        Mission mission = (Mission)categorizable;
 
-        if (opacity == 0f) gameObject.SetActive(false);
-    }
-
-    public void UpdateInformation(Mission mission, float duration = -1f)
-    {
         nameText.SetText(mission.Name);
         objectiveText.SetText(mission.Objective);
 
         remainingText.SetText(mission.Remaining);
         remainingText.GetComponent<AutoTextWidth>().UpdateWidth(mission.Remaining);
-
-        AnimateSlot(1f, duration);
 
         if (mission.IsCompleted && nameText.color.a != 0.5f)
         {
@@ -58,6 +40,12 @@ public class MissionSlot : MonoBehaviour
         }
     }
 
+    private void FadeSlot(float opacity, float duration = 0.1f)
+    {
+        StartCoroutine(nameText.gameObject.FadeOpacity(opacity, duration));
+        StartCoroutine(objectiveText.transform.parent.gameObject.FadeOpacity(opacity, duration));
+    }
+
     #endregion
 
     #region Unity Methods
@@ -65,8 +53,10 @@ public class MissionSlot : MonoBehaviour
     /// <summary>
     /// Awake is called when the script instance is being loaded.
     /// </summary>
-    private void Awake()
+    protected override void Awake()
     {
+        slot = transform;
+
         nameText = transform.Find("Name").GetComponent<TextMeshProUGUI>();
         objectiveText = transform.Find("Information/Objective").GetComponent<TextMeshProUGUI>();
         remainingText = transform.Find("Information/Remaining").GetComponent<TextMeshProUGUI>();

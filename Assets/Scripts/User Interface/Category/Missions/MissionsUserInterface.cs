@@ -14,18 +14,6 @@ public class MissionsUserInterface : CategoryUserInterface
 
     public List<Mission> categoryMissions { get; private set; } = new List<Mission>();
 
-    private MissionSlot[] missionSlots;
-    private Transform[] categoryIcons;
-
-    private Transform categoryText;
-
-    private GameObject leftPanel;
-    private GameObject rightPanel;
-    private GameObject indicator;
-
-    private Animator indicatorAnimator;
-
-    private Scrollbar scrollbar;
     #endregion
 
     #region Miscellaneous Methods
@@ -47,15 +35,22 @@ public class MissionsUserInterface : CategoryUserInterface
 
         scrollbar = leftPanel.Find("List/Scrollbar").GetComponent<Scrollbar>();
 
+        categorizablePanel = rightPanel.Find("Information Panel").gameObject;
+
+        emptyPanel = rightPanel.Find("Empty Panel").gameObject;
+
         categorizableSlots = leftPanel.Find("List/Mission List").GetComponentsInChildren<CategorizableSlot>().ToList();
 
-        emptyGrid = rightPanel.Find("Empty Panel").gameObject;
-
-        informationPanel = rightPanel.Find("Information Panel").GetComponent<ItemInformationUserInterface>();
+        //informationPanel = rightPanel.Find("Information Panel").GetComponent<MissionsInformationUserInterface>();
 
         //StartCoroutine(FindObjectOfType<BottomPanelUserInterface>().ChangePanelButtons(InventoryController.instance.buttons));
 
         base.Awake();
+
+        foreach (MissionSlot slot in categorizableSlots)
+        {
+            slot.DeactivateSlot();
+        }
     }
 
     #endregion

@@ -5,6 +5,12 @@
 /// </summary>
 public class InventoryController : CategoryUserInterfaceController
 {
+    #region Constants
+
+    protected override int MaxViewableObjects => 28;
+
+    #endregion
+
     #region Fields
 
     private static InventoryController instance;

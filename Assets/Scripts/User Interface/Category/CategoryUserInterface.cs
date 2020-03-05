@@ -10,7 +10,7 @@ public abstract class CategoryUserInterface : UserInterface
 {
     #region Constants
 
-    public override int MaxObjects => categorizableSlots.Count;
+    public override int MaxObjects => activeCategorizables.Count;
 
     #endregion
 
@@ -22,7 +22,9 @@ public abstract class CategoryUserInterface : UserInterface
 
     protected CategoryPanel categoryPanel;
 
-    protected GameObject emptyGrid;
+    protected GameObject categorizablePanel;
+
+    protected GameObject emptyPanel;
 
     protected CategorizableInformationUserInterface informationPanel;
 
@@ -33,7 +35,7 @@ public abstract class CategoryUserInterface : UserInterface
 
     #region Miscellaneous Methods
 
-    public void UpdateSelectedCategory(List<Categorizable> categorizables, int selectedCategory, int selectedValue, int increment)
+    public void UpdateSelectedCategory(List<Categorizable> categorizables, int selectedCategory, int selectedValue, int increment, int maxViewableObjects)
     {
         if (this.selectedCategory != selectedCategory)
         {
@@ -44,7 +46,7 @@ public abstract class CategoryUserInterface : UserInterface
             categoryPanel.AnimateCategory(selectedCategory, increment);
             StartCoroutine(categoryPanel.UpdateCategoryName(selectedCategory, value));
             ResetCategoryObjects();
-            UpdateCategoryObjectsList(categorizables, value);
+            UpdateCategoryObjectsList(categorizables, value, maxViewableObjects);
         }
         else
         {
@@ -65,12 +67,12 @@ public abstract class CategoryUserInterface : UserInterface
             UpdateScrollbar(MaxObjects, selectedValue);
         }
 
-        informationPanel.AnimatePanel(selectedCategorizable);
+        //informationPanel.AnimatePanel(selectedCategorizable);
 
         this.selectedValue = selectedValue;
     }
 
-    protected void UpdateCategoryObjectsList(List<Categorizable> categorizables, string value, float animationDuration = 0.15f, float animationDelay = 0.02f, int maxObjects = 28)
+    protected void UpdateCategoryObjectsList(List<Categorizable> categorizables, string value, int maxViewableObjects, float animationDuration = 0.15f, float animationDelay = 0.02f)
     {
         #if DEBUG
         if (GameManager.Debug())
@@ -83,9 +85,9 @@ public abstract class CategoryUserInterface : UserInterface
 
         if (activeCategorizables.Count > 0)
         {
-            int max = activeCategorizables.Count > maxObjects ? maxObjects : activeCategorizables.Count;
+            int max = activeCategorizables.Count > maxViewableObjects ? maxViewableObjects : activeCategorizables.Count;
 
-            if (activeCategorizables.Count < maxObjects)
+            if (activeCategorizables.Count < maxViewableObjects)
             {
                 UpdateScrollbar();
             }
@@ -98,7 +100,7 @@ public abstract class CategoryUserInterface : UserInterface
 
             StartCoroutine(ActiveSlots(0, max, animationDuration, animationDelay));
 
-            if (activeCategorizables.Count > maxObjects)
+            if (activeCategorizables.Count > maxViewableObjects)
             {
                 StartCoroutine(ActiveSlots(max, activeCategorizables.Count));
             }
@@ -116,10 +118,10 @@ public abstract class CategoryUserInterface : UserInterface
         Transform selectedObject = isActive ? categorizableSlots[0].transform : null;
 
         selector.SetActive(isActive);
-        StartCoroutine(emptyGrid.FadeOpacity(opacity, animationDuration));
+        StartCoroutine(emptyPanel.FadeOpacity(opacity, animationDuration));
 
         opacity = isActive ? 1f : 0f;
-        StartCoroutine(categorizableSlots[0].transform.parent.gameObject.FadeOpacity(opacity, animationDuration));
+        StartCoroutine(categorizablePanel.FadeOpacity(opacity, animationDuration));
     }
 
     protected IEnumerator ActiveSlots(int min, int max, float animationDuration = -1, float animationDelay = -1)

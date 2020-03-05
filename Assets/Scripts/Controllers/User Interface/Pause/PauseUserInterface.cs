@@ -35,7 +35,7 @@ public class PauseUserInterface : MonoBehaviour
                 {
                     float opacity = state ? 0f : 1f;
 
-                    //FindObjectOfType<MissionManager>().flags.isActive = state;
+                    StartCoroutine(FindObjectOfType<MissionsController>().SetActive(state));
                     StartCoroutine(sidePanel.FadeOpacity(opacity, 0.2f)); // TODO: Debug
                     break;
                 }

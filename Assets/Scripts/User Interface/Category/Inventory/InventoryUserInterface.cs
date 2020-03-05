@@ -49,9 +49,11 @@ public sealed class InventoryUserInterface : CategoryUserInterface
 
         scrollbar = middle.Find("Grid/Scrollbar").GetComponent<Scrollbar>();
 
-        emptyGrid = middle.Find("Grid/Display Panels/Empty Panel").gameObject;
+        categorizablePanel = middle.Find("Grid/Display Panels/Item Grid").gameObject;
 
-        categorizableSlots = middle.Find("Grid/Display Panels/Item Grid").GetComponentsInChildren<CategorizableSlot>().ToList();
+        emptyPanel = middle.Find("Grid/Display Panels/Empty Panel").gameObject;
+
+        categorizableSlots = categorizablePanel.GetComponentsInChildren<CategorizableSlot>().ToList();
 
         informationPanel = transform.Find("Item Information").GetComponent<ItemInformationUserInterface>();
 
