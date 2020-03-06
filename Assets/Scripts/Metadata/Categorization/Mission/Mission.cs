@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Mission", menuName = "Categorizable/Mission")]
 public class Mission : Categorizable
@@ -96,6 +97,11 @@ public class Mission : Categorizable
         public override string GetCategoryFromIndex(int index)
         {
             return ((Category)index).ToString();
+        }
+
+        public override int GetTotalCategories()
+        {
+            return Enum.GetNames(typeof(Category)).Length;
         }
 
         #endregion

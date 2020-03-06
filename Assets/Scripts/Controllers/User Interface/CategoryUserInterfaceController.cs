@@ -100,6 +100,7 @@ public abstract class CategoryUserInterfaceController : UserInterfaceController
             bool hasInput = TriggerInput(categoryNames.Count);
             if (hasInput)
             {
+                selectedValue = 0;
                 UpdateSelectedCategory(selectedCategory, selectedValue, (int)Input.GetAxisRaw("Trigger"));
             }
         }
