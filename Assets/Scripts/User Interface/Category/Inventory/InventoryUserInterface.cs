@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 /// <summary>
 ///
@@ -31,6 +32,48 @@ public sealed class InventoryUserInterface : CategoryUserInterface
     {
         FadeUserInterface(middlePanel, opacity);
         FadeCharacterSprite(opacity);
+    }
+
+    public override void UpdateSelectedObject(int selectedValue, int increment = -1)
+    {
+        if ((this.selectedValue - selectedValue == 7) || (selectedValue - this.selectedValue == 7))
+        {
+            UpdateScrollbar(MaxObjects, selectedValue);
+        }
+
+        base.UpdateSelectedObject(selectedValue, increment);
+    }
+
+    protected override void UpdateScrollbar(int maxObjects = -1, int selectedValue = -1, float animationDuration = 0.08f)
+    {
+        if (maxObjects > -1)
+        {
+            if (scrollbar.GetComponent<CanvasGroup>().alpha != 1f)
+            {
+                StartCoroutine(scrollbar.gameObject.FadeOpacity(1f, animationDuration));
+            }
+
+            if (selectedValue > -1)
+            {
+                float totalSlots = maxObjects;
+                float targetValue = (float)Math.Round(1.0f - (selectedValue / (totalSlots - 1)), 1);
+
+                targetValue = (selectedValue < 7) ? 1 : targetValue;
+
+                StartCoroutine(scrollbar.LerpScrollbar(targetValue, animationDuration));
+            }
+            else
+            {
+                scrollbar.value = 1;
+            }
+        }
+        else
+        {
+            if (scrollbar.GetComponent<CanvasGroup>().alpha != 0f)
+            {
+                StartCoroutine(scrollbar.gameObject.FadeOpacity(0f, animationDuration));
+            }
+        }
     }
 
     #endregion

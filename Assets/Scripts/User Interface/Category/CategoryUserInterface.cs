@@ -28,7 +28,8 @@ public abstract class CategoryUserInterface : UserInterface
 
     protected CategorizableInformationUserInterface informationPanel;
 
-    private int selectedValue;
+    protected int selectedValue;
+
     private int selectedCategory = -1;
 
     #endregion
@@ -61,11 +62,6 @@ public abstract class CategoryUserInterface : UserInterface
         Categorizable selectedCategorizable = activeCategorizables.Count > 0 ? activeCategorizables[selectedValue] : null;
 
         StartCoroutine(UpdateSelector(categorizableSlots[selectedValue].transform));
-
-        if ((this.selectedValue - selectedValue == 7) || (selectedValue -this.selectedValue == 7))
-        {
-            UpdateScrollbar(MaxObjects, selectedValue);
-        }
 
         //informationPanel.AnimatePanel(selectedCategorizable);
 
@@ -140,7 +136,7 @@ public abstract class CategoryUserInterface : UserInterface
         }
     }
 
-    protected void ActiveSlot(int index, float animationDuration)
+    protected virtual void ActiveSlot(int index, float animationDuration)
     {
         categorizableSlots[index].UpdateInformation(activeCategorizables[index], animationDuration);
     }

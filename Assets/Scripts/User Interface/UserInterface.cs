@@ -78,7 +78,7 @@ public abstract class UserInterface : MonoBehaviour
         }
     }
 
-    protected void UpdateScrollbar(int maxObjects = -1, int selectedValue = -1, float animationDuration = 0.08f)
+    protected virtual void UpdateScrollbar(int maxObjects = -1, int selectedValue = -1, float animationDuration = 0.08f)
     {
         if (maxObjects > -1)
         {

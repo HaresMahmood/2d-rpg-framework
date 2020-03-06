@@ -12,12 +12,25 @@ public class MissionsUserInterface : CategoryUserInterface
 {
     #region Variables
 
-    public List<Mission> categoryMissions { get; private set; } = new List<Mission>();
+
 
     #endregion
 
     #region Miscellaneous Methods
 
+    public override void UpdateSelectedObject(int selectedValue, int increment = -1)
+    {
+        UpdateScrollbar(MaxObjects, selectedValue);
+
+        base.UpdateSelectedObject(selectedValue, increment);
+    }
+
+    protected override void ActiveSlot(int index, float animationDuration)
+    {
+        base.ActiveSlot(index, animationDuration);
+
+        UpdateScrollbar(MaxObjects);
+    }
 
     #endregion
 
