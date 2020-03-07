@@ -7,12 +7,6 @@ using UnityEngine.UI;
 /// </summary>
 public class MissionsUserInterface : CategoryUserInterface
 {
-    #region Variables
-
-
-
-    #endregion
-
     #region Miscellaneous Methods
 
     public override void UpdateSelectedObject(int selectedValue, int increment = -1)
@@ -25,6 +19,15 @@ public class MissionsUserInterface : CategoryUserInterface
     protected override void UpdateCategoryObjectsList(System.Collections.Generic.List<Categorizable> categorizables, string value, int maxViewableObjects, float animationDuration = 0.15f, float animationDelay = 0.02f) 
     {
         categorizables = categorizables.OrderBy(mission => ((Mission)mission).IsCompleted).ToList();
+
+        if (activeCategorizables.Count > 0)
+        {
+            for (int i = 0; i < activeCategorizables.Count; i++)
+            {
+                categorizableSlots[i].gameObject.SetActive(true);
+            }  
+        }
+
         base.UpdateCategoryObjectsList(categorizables, value, maxViewableObjects, animationDuration, animationDelay);
     }
 

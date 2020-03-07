@@ -46,6 +46,7 @@ public class MissionSlot : CategorizableSlot
         StartCoroutine(objectiveText.transform.parent.gameObject.FadeOpacity(opacity, duration));
     }
 
+
     #endregion
 
     #region Unity Methods
