@@ -68,7 +68,7 @@ public abstract class CategoryUserInterface : UserInterface
         this.selectedValue = selectedValue;
     }
 
-    protected void UpdateCategoryObjectsList(List<Categorizable> categorizables, string value, int maxViewableObjects, float animationDuration = 0.15f, float animationDelay = 0.02f)
+    protected virtual void UpdateCategoryObjectsList(List<Categorizable> categorizables, string value, int maxViewableObjects, float animationDuration = 0.15f, float animationDelay = 0.02f)
     {
         #if DEBUG
         if (GameManager.Debug())
@@ -107,6 +107,39 @@ public abstract class CategoryUserInterface : UserInterface
             ToggleEmptyPanel(false);
         }
     }
+    /*
+            indicator.SetActive(false);
+
+            for (int i = 0; i < categoryMissions.Count; i++)
+            {
+                missionSlots[i].gameObject.SetActive(true);
+                UpdateScrollbar();
+            }
+
+            for (int i = 0; i < max; i++)
+            {
+                missionSlots[i].UpdateInformation(categoryMissions[i], duration);
+                UpdateScrollbar();
+
+                yield return new WaitForSecondsRealtime(delay);
+            }
+
+            if (max < categoryMissions.Count)
+            {
+                for (int i = max; i < categoryMissions.Count; i++)
+                {
+                    missionSlots[i].UpdateInformation(categoryMissions[i]);
+                    UpdateScrollbar();
+                }
+            }
+
+            indicator.SetActive(true);
+            UpdateSelectedSlot(0);
+        }
+
+        yield return null;  StartCoroutine(UpdateIndicator(0));
+    }
+    */
 
     protected virtual void ToggleEmptyPanel(bool isActive, float animationDuration = 0.15f)
     {

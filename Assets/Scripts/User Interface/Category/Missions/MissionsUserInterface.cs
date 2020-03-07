@@ -1,9 +1,6 @@
 ﻿using System.Linq;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 /// <summary>
 ///
@@ -23,6 +20,12 @@ public class MissionsUserInterface : CategoryUserInterface
         UpdateScrollbar(MaxObjects, selectedValue);
 
         base.UpdateSelectedObject(selectedValue, increment);
+    }
+
+    protected override void UpdateCategoryObjectsList(System.Collections.Generic.List<Categorizable> categorizables, string value, int maxViewableObjects, float animationDuration = 0.15f, float animationDelay = 0.02f) 
+    {
+        categorizables = categorizables.OrderBy(mission => ((Mission)mission).IsCompleted).ToList();
+        base.UpdateCategoryObjectsList(categorizables, value, maxViewableObjects, animationDuration, animationDelay);
     }
 
     protected override void ActiveSlot(int index, float animationDuration)
@@ -67,7 +70,6 @@ public class MissionsUserInterface : CategoryUserInterface
     }
 
     #endregion
-
 
     /*
     /// <summary>
