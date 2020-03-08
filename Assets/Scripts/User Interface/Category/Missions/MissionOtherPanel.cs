@@ -6,11 +6,15 @@ using TMPro;
 /// <summary>
 ///
 /// </summary>
-public class MissionOtherPanel : MonoBehaviour
+public class MissionOtherPanel : CategorizableInformationUserInterface
 {
-    #region Variables
+    #region Constants
 
-    private Transform informationPanel;
+    public override int MaxObjects => throw new System.NotImplementedException();
+
+    #endregion
+
+    #region Variables
 
     private TextMeshProUGUI remainingText;
     private TextMeshProUGUI assigneeText;
@@ -25,16 +29,11 @@ public class MissionOtherPanel : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    public void FadePanel(float opacity, float duration = 0.1f)
+    public override void SetValues(Categorizable categorizable)
     {
-        StartCoroutine(informationPanel.gameObject.FadeOpacity(opacity, duration));
-        StartCoroutine(statusValue.transform.parent.gameObject.FadeOpacity(opacity, duration));
-    }
-
-    public void UpdateInformation(Mission mission)
-    {
-        string status = mission.IsCompleted ? "Completed" : "Not completed";
+        Mission mission = (Mission)categorizable;        
         Color statusColor = mission.IsCompleted ? "#3CA658".ToColor() : "#5C5C5C".ToColor();
+        string status = mission.IsCompleted ? "Completed" : "Not completed";
 
         remainingText.SetText(mission.Remaining);
         assigneeText.SetText(mission.Assignee.name);
@@ -50,6 +49,13 @@ public class MissionOtherPanel : MonoBehaviour
         }
     }
 
+    public override void FadePanel(Transform panel, float opacity, float animationDuration)
+    {
+        base.FadePanel(panel, opacity, animationDuration);
+
+        StartCoroutine(statusValue.transform.parent.gameObject.FadeOpacity(opacity, animationDuration));
+    }
+
     #endregion
 
     #region Unity Methods
@@ -57,16 +63,16 @@ public class MissionOtherPanel : MonoBehaviour
     /// <summary>
     /// Awake is called when the script instance is being loaded.
     /// </summary>
-    private void Awake()
+    protected override void Awake()
     {
-        informationPanel = transform.Find("Information");
+        InformationPanel = transform.Find("Information");
 
-        remainingText = informationPanel.Find("Remaining/Value").GetComponent<TextMeshProUGUI>();
-        assigneeText = informationPanel.Find("Assignee/Value").GetComponent<TextMeshProUGUI>();
-        locationText = informationPanel.Find("Location/Value").GetComponent<TextMeshProUGUI>();
+        remainingText = InformationPanel.Find("Remaining/Value").GetComponent<TextMeshProUGUI>();
+        assigneeText = InformationPanel.Find("Assignee/Value").GetComponent<TextMeshProUGUI>();
+        locationText = InformationPanel.Find("Location/Value").GetComponent<TextMeshProUGUI>();
 
-        rewardText = informationPanel.Find("Reward/Value/Value").GetComponent<TextMeshProUGUI>();
-        rewardSprite = informationPanel.Find("Reward/Value/Item").GetComponent<Image>();
+        rewardText = InformationPanel.Find("Reward/Value/Value").GetComponent<TextMeshProUGUI>();
+        rewardSprite = InformationPanel.Find("Reward/Value/Item").GetComponent<Image>();
 
         statusValue = transform.Find("Status/Value").GetComponent<TextMeshProUGUI>();
     }

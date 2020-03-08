@@ -60,9 +60,7 @@ public class MissionsUserInterface : CategoryUserInterface
 
         categorizableSlots = leftPanel.Find("List/Mission List").GetComponentsInChildren<CategorizableSlot>().ToList();
 
-        //informationPanel = rightPanel.Find("Information Panel").GetComponent<MissionsInformationUserInterface>();
-
-        //StartCoroutine(FindObjectOfType<BottomPanelUserInterface>().ChangePanelButtons(InventoryController.instance.buttons));
+        informationPanel = rightPanel.Find("Information Panel").GetComponent<MissionsInformationUserInterface>();
 
         base.Awake();
 

@@ -147,11 +147,6 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
         }
     }
 
-    public override void AnimatePanel(Categorizable categorizable, float animationDuration = 0.15f)
-    {
-        StartCoroutine(AnimatePanel(verticalPanel, categorizable, animationDuration));
-    }
-
     public override void UpdateSelectedObject(int selectedValue, int increment = -1)
     {
         int previousValue = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, -increment);
@@ -161,6 +156,11 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
         buttons[previousValue].AnimateButton(false);
 
         this.selectedValue = selectedValue;
+    }
+
+    public override void AnimatePanel(Categorizable categorizable, float animationDuration = 0.15f)
+    {
+        StartCoroutine(AnimatePanel(verticalPanel, categorizable, animationDuration));
     }
 
     protected override IEnumerator AnimatePanel(Transform panel, Categorizable categorizable = null, float animationDuration = 0.15F)
@@ -292,7 +292,7 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
         verticalPanel = transform.Find("Information (Vertical)");
         horizontalPanel = transform.Find("Information (Horizontal)");
 
-        informationPanel = verticalPanel.transform;
+        InformationPanel = verticalPanel.transform;
 
         valueText = horizontalPanel.transform.Find("Amount/Value").GetComponent<TextMeshProUGUI>();
         spriteImage = horizontalPanel.transform.Find("Name/Icon").GetComponent<Image>();

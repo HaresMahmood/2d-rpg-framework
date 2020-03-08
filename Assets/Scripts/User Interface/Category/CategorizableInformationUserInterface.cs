@@ -6,9 +6,9 @@ using UnityEngine;
 /// </summary>
 public abstract class CategorizableInformationUserInterface : UserInterface
 {
-    #region Variables
+    #region Properties
 
-    protected Transform informationPanel;
+    public Transform InformationPanel {get; protected set;}
 
     #endregion
 
@@ -20,7 +20,7 @@ public abstract class CategorizableInformationUserInterface : UserInterface
     public virtual void AnimatePanel(Categorizable categorizable, float animationDuration = 0.15f)
     {   }
 
-    protected virtual IEnumerator AnimatePanel( Transform panel, Categorizable categorizable = null, float animationDuration = 0.15f)
+    protected virtual IEnumerator AnimatePanel(Transform panel, Categorizable categorizable = null, float animationDuration = 0.15f)
     {
         FadePanel(panel, 0f, animationDuration / 2);
 
@@ -36,18 +36,6 @@ public abstract class CategorizableInformationUserInterface : UserInterface
     public virtual void FadePanel(Transform panel, float opacity, float animationDuration)
     {
         StartCoroutine(panel.gameObject.FadeOpacity(opacity, animationDuration));
-    }
-
-    #endregion
-
-    #region Unity Methods
-
-    /// <summary>
-    /// Start is called before the first frame update.
-    /// </summary>
-    private void Start()
-    {
-        
     }
 
     #endregion

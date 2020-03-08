@@ -63,7 +63,7 @@ public abstract class CategoryUserInterface : UserInterface
 
         StartCoroutine(UpdateSelector(categorizableSlots[selectedValue].transform));
 
-        //informationPanel.AnimatePanel(selectedCategorizable);
+        informationPanel.AnimatePanel(selectedCategorizable);
 
         this.selectedValue = selectedValue;
     }

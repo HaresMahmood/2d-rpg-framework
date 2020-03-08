@@ -6,11 +6,15 @@ using TMPro;
 /// <summary>
 ///
 /// </summary>
-public class MissionMainPanel : MonoBehaviour
+public class MissionMainPanel : CategorizableInformationUserInterface
 {
-    #region Variables
+    #region Constants
 
-    private Transform panel;
+    public override int MaxObjects => throw new System.NotImplementedException();
+
+    #endregion
+
+    #region Variables
 
     private TextMeshProUGUI nameText;
     private TextMeshProUGUI objectiveText;
@@ -20,13 +24,10 @@ public class MissionMainPanel : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    public void FadePanel(float opacity, float duration = 0.1f)
+    public override void SetValues(Categorizable categorizable)
     {
-        StartCoroutine(panel.gameObject.FadeOpacity(opacity, duration));
-    }
+        Mission mission = (Mission)categorizable;
 
-    public void UpdateInformation(Mission mission)
-    {
         nameText.SetText(mission.Name);
         objectiveText.SetText(mission.Objective);
         descriptionText.SetText(mission.Description);
@@ -39,13 +40,13 @@ public class MissionMainPanel : MonoBehaviour
     /// <summary>
     /// Awake is called when the script instance is being loaded.
     /// </summary>
-    private void Awake()
+    protected override void Awake()
     {
-        panel = transform.Find("Information");
+        InformationPanel = transform.Find("Information");
 
-        nameText = panel.Find("Name").GetComponentInChildren<TextMeshProUGUI>();
-        objectiveText = panel.Find("Objective/Value").GetComponent<TextMeshProUGUI>();
-        descriptionText = panel.Find("Description/Value").GetComponent<TextMeshProUGUI>();
+        nameText = InformationPanel.Find("Name").GetComponentInChildren<TextMeshProUGUI>();
+        objectiveText = InformationPanel.Find("Objective/Value").GetComponent<TextMeshProUGUI>();
+        descriptionText = InformationPanel.Find("Description/Value").GetComponent<TextMeshProUGUI>();
     }
 
     #endregion
