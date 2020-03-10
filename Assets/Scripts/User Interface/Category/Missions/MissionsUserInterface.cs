@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,19 +17,54 @@ public class MissionsUserInterface : CategoryUserInterface
         base.UpdateSelectedObject(selectedValue, increment);
     }
 
+    /*
     protected override void UpdateCategoryObjectsList(System.Collections.Generic.List<Categorizable> categorizables, string value, int maxViewableObjects, float animationDuration = 0.15f, float animationDelay = 0.02f) 
     {
         categorizables = categorizables.OrderBy(mission => ((Mission)mission).IsCompleted).ToList();
 
+        base.UpdateCategoryObjectsList(categorizables, value, maxViewableObjects, animationDuration, animationDelay);
+    }
+    */
+
+    protected override void UpdateCategoryObjectsList(List<Categorizable> categorizables, string value, int maxViewableObjects, float animationDuration = 0.15f, float animationDelay = 0.02f)
+    {
+        #if DEBUG
+        if (GameManager.Debug())
+        {
+            Debug.Log($"[{gameObject.name.ToUpper()}:] Updating category objects.");
+        }
+        #endif
+
+        categorizables = categorizables.OrderBy(mission => ((Mission)mission).IsCompleted).ToList();
+        activeCategorizables = categorizables.Where(categorizable => categorizable.Categorization.ToString().Equals(value)).ToList();
+
         if (activeCategorizables.Count > 0)
         {
-            for (int i = 0; i < activeCategorizables.Count; i++)
-            {
-                categorizableSlots[i].gameObject.SetActive(true);
-            }  
-        }
+            int max = activeCategorizables.Count > maxViewableObjects ? maxViewableObjects : activeCategorizables.Count;
 
-        base.UpdateCategoryObjectsList(categorizables, value, maxViewableObjects, animationDuration, animationDelay);
+            if (activeCategorizables.Count < maxViewableObjects)
+            {
+                UpdateScrollbar();
+            }
+            else
+            {
+                UpdateScrollbar(MaxObjects);
+            }
+
+            ToggleEmptyPanel(true);
+
+            StartCoroutine(ActiveSlots(0, max, animationDuration, animationDelay));
+
+            if (activeCategorizables.Count > maxViewableObjects)
+            {
+                StartCoroutine(ActiveSlots(max, activeCategorizables.Count));
+            }
+        }
+        else
+        {
+            UpdateScrollbar();
+            ToggleEmptyPanel(false);
+        }
     }
 
     protected override void ActiveSlot(int index, float animationDuration)

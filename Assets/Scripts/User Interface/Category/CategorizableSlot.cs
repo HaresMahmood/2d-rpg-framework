@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 /// <summary>
 ///
@@ -17,16 +18,11 @@ public abstract class CategorizableSlot : MonoBehaviour
     {
         if (duration > -1)
         {
-            StartCoroutine(slot.gameObject.FadeOpacity(opacity, duration));
+            StartCoroutine(FadeOpacity(opacity, duration));
         }
         else
         {
             slot.GetComponent<CanvasGroup>().alpha = opacity;
-        }
-
-        if (opacity == 0f)
-        {
-            slot.gameObject.SetActive(false);
         }
     }
 
@@ -44,6 +40,18 @@ public abstract class CategorizableSlot : MonoBehaviour
 
     protected virtual void SetInformation(Categorizable categorizable)
     {   }
+
+    private IEnumerator FadeOpacity(float opacity, float duration)
+    {
+        StartCoroutine(slot.gameObject.FadeOpacity(opacity, duration));
+
+        yield return new WaitForSecondsRealtime(duration);
+
+        if (opacity == 0f)
+        {
+            slot.gameObject.SetActive(false);
+        }
+    }
 
     #endregion
 
