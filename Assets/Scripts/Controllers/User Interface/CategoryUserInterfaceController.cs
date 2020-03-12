@@ -9,7 +9,7 @@ public abstract class CategoryUserInterfaceController : UserInterfaceController
 {
     #region Constants
 
-    protected abstract int MaxViewableObjects { get; }
+    public abstract int MaxViewableObjects { get; }
 
     #endregion
 

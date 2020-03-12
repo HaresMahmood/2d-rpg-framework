@@ -28,11 +28,6 @@ public abstract class CategorizableSlot : MonoBehaviour
 
     public void UpdateInformation(Categorizable categorizable, float duration = -1)
     {
-        if (!slot.gameObject.activeSelf)
-        {
-            slot.gameObject.SetActive(true);
-        }
-
         SetInformation(categorizable);
 
         AnimateSlot(1f, duration);
@@ -43,6 +38,11 @@ public abstract class CategorizableSlot : MonoBehaviour
 
     private IEnumerator FadeOpacity(float opacity, float duration)
     {
+        if (opacity == 1f)
+        {
+            slot.gameObject.SetActive(true);
+        }
+
         StartCoroutine(slot.gameObject.FadeOpacity(opacity, duration));
 
         yield return new WaitForSecondsRealtime(duration);

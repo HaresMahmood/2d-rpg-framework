@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 ///
@@ -9,17 +7,35 @@ public class MissionsController : CategoryUserInterfaceController
 {
     #region Constants
 
-    protected override int MaxViewableObjects => 6;
+    public override int MaxViewableObjects => 7;
 
     #endregion
 
     #region Fields
+
+    private static MissionsController instance;
 
     [SerializeField] private MissionsUserInterface userInterface;
 
     #endregion
 
     #region Properties
+
+    /// <summary>
+    /// Singleton pattern.
+    /// </summary>
+    public static MissionsController Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<MissionsController>();
+            }
+
+            return instance;
+        }
+    }
 
     public override UserInterface UserInterface
     {

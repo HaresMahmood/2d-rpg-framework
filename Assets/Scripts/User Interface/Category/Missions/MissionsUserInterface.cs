@@ -28,43 +28,9 @@ public class MissionsUserInterface : CategoryUserInterface
 
     protected override void UpdateCategoryObjectsList(List<Categorizable> categorizables, string value, int maxViewableObjects, float animationDuration = 0.15f, float animationDelay = 0.02f)
     {
-        #if DEBUG
-        if (GameManager.Debug())
-        {
-            Debug.Log($"[{gameObject.name.ToUpper()}:] Updating category objects.");
-        }
-        #endif
-
         categorizables = categorizables.OrderBy(mission => ((Mission)mission).IsCompleted).ToList();
-        activeCategorizables = categorizables.Where(categorizable => categorizable.Categorization.ToString().Equals(value)).ToList();
 
-        if (activeCategorizables.Count > 0)
-        {
-            int max = activeCategorizables.Count > maxViewableObjects ? maxViewableObjects : activeCategorizables.Count;
-
-            if (activeCategorizables.Count < maxViewableObjects)
-            {
-                UpdateScrollbar();
-            }
-            else
-            {
-                UpdateScrollbar(MaxObjects);
-            }
-
-            ToggleEmptyPanel(true);
-
-            StartCoroutine(ActiveSlots(0, max, animationDuration, animationDelay));
-
-            if (activeCategorizables.Count > maxViewableObjects)
-            {
-                StartCoroutine(ActiveSlots(max, activeCategorizables.Count));
-            }
-        }
-        else
-        {
-            UpdateScrollbar();
-            ToggleEmptyPanel(false);
-        }
+        base.UpdateCategoryObjectsList(categorizables, value, maxViewableObjects, animationDuration, animationDelay);
     }
 
     protected override void ActiveSlot(int index, float animationDuration)
@@ -99,11 +65,6 @@ public class MissionsUserInterface : CategoryUserInterface
         informationPanel = rightPanel.Find("Information Panel").GetComponent<MissionsInformationUserInterface>();
 
         base.Awake();
-
-        foreach (MissionSlot slot in categorizableSlots)
-        {
-            slot.DeactivateSlot();
-        }
     }
 
     #endregion

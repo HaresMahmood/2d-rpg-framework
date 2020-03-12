@@ -7,7 +7,7 @@ public class InventoryController : CategoryUserInterfaceController
 {
     #region Constants
 
-    protected override int MaxViewableObjects => 28;
+    public override int MaxViewableObjects => 28;
 
     #endregion
 
