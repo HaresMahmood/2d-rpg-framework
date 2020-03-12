@@ -17,15 +17,6 @@ public class MissionsUserInterface : CategoryUserInterface
         base.UpdateSelectedObject(selectedValue, increment);
     }
 
-    /*
-    protected override void UpdateCategoryObjectsList(System.Collections.Generic.List<Categorizable> categorizables, string value, int maxViewableObjects, float animationDuration = 0.15f, float animationDelay = 0.02f) 
-    {
-        categorizables = categorizables.OrderBy(mission => ((Mission)mission).IsCompleted).ToList();
-
-        base.UpdateCategoryObjectsList(categorizables, value, maxViewableObjects, animationDuration, animationDelay);
-    }
-    */
-
     protected override void UpdateCategoryObjectsList(List<Categorizable> categorizables, string value, int maxViewableObjects, float animationDuration = 0.15f, float animationDelay = 0.02f)
     {
         categorizables = categorizables.OrderBy(mission => ((Mission)mission).IsCompleted).ToList();
@@ -65,6 +56,11 @@ public class MissionsUserInterface : CategoryUserInterface
         informationPanel = rightPanel.Find("Information Panel").GetComponent<MissionsInformationUserInterface>();
 
         base.Awake();
+
+        foreach (MissionSlot slot in categorizableSlots)
+        {
+            slot.DeactivateSlot();
+        }
     }
 
     #endregion

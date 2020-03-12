@@ -22,7 +22,11 @@ public abstract class CategorizableSlot : MonoBehaviour
         }
         else
         {
+            bool isActive = opacity == 1f ? true : false;
+
             slot.GetComponent<CanvasGroup>().alpha = opacity;
+            slot.gameObject.SetActive(isActive);
+            
         }
     }
 

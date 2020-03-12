@@ -48,7 +48,7 @@ public class ItemSlot : CategorizableSlot
         itemSprite = slot.Find("Sprite").GetComponent<Image>();
         quantityText = slot.Find("Quantity").GetComponentInChildren<TextMeshProUGUI>();
 
-        base.Awake();
+        //base.Awake();
     }
 
     #endregion
