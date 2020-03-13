@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using UnityEngine;
+using TMPro;
 
 /// <summary>
 ///
@@ -40,10 +41,10 @@ public class MissionSlot : CategorizableSlot
         }
     }
 
-    private void FadeSlot(float opacity, float duration = 0.1f)
+    private void FadeSlot(float opacity)
     {
-        StartCoroutine(nameText.gameObject.FadeOpacity(opacity, duration));
-        StartCoroutine(objectiveText.transform.parent.gameObject.FadeOpacity(opacity, duration));
+        nameText.alpha = opacity;
+        objectiveText.transform.parent.GetComponent<CanvasGroup>().alpha = opacity;
     }
 
 

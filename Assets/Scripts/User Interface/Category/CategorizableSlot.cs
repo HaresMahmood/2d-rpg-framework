@@ -18,6 +18,11 @@ public abstract class CategorizableSlot : MonoBehaviour
     {
         if (duration > -1)
         {
+            if (opacity == 1f)
+            {
+                slot.gameObject.SetActive(true);
+            }
+
             StartCoroutine(FadeOpacity(opacity, duration));
         }
         else
@@ -42,11 +47,6 @@ public abstract class CategorizableSlot : MonoBehaviour
 
     private IEnumerator FadeOpacity(float opacity, float duration)
     {
-        if (opacity == 1f)
-        {
-            slot.gameObject.SetActive(true);
-        }
-
         StartCoroutine(slot.gameObject.FadeOpacity(opacity, duration));
 
         yield return new WaitForSecondsRealtime(duration);
