@@ -7,9 +7,39 @@ using UnityEngine.UI;
 /// <summary>
 ///
 /// </summary>
-public class PartyUserInterface : MonoBehaviour
+public class PartyUserInterface : UserInterface
 {
-    /*
+    #region Constants
+
+    public override int MaxObjects => 28;
+
+    #endregion
+
+    #region Variables
+
+
+
+    #endregion
+
+    #region Unity Methods
+
+    /// <summary>
+    /// Awake is called when the script instance is being loaded.
+    /// </summary>
+    protected override void Awake()
+    {
+        
+
+        //StartCoroutine(FindObjectOfType<BottomPanelUserInterface>().ChangePanelButtons(InventoryController.instance.buttons));
+
+        base.Awake();
+    }
+
+    #endregion
+}
+
+
+   /*
     #region Variables
 
     private GameObject indicator, arrows, movesPanel, learnedMovesPanel;
@@ -135,7 +165,6 @@ public class PartyUserInterface : MonoBehaviour
         UpdateArrows(selectedSlot);
         UpdateIndicator(selectedSlot);
     }
-    */
 
     private void UpdateSprite(Pokemon pokemon)
     {
@@ -143,7 +172,6 @@ public class PartyUserInterface : MonoBehaviour
         //PauseManager.instance.pauseContainer.transform.Find("Target Sprite/Pokémon/Sprite").GetComponent<Image>().SetNativeSize();
     }
 
-    /*
     public void Fade(float opacity)
     {
         Transform[] children = partyContainer.transform.GetChildren();
@@ -293,4 +321,3 @@ public class PartyUserInterface : MonoBehaviour
 
     #endregion
     */
-}
