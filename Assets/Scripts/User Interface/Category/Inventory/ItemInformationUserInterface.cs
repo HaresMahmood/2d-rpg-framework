@@ -10,7 +10,7 @@ using TMPro;
 /// </summary>
 
 // TODO: Clean up!
-public class ItemInformationUserInterface : CategorizableInformationUserInterface
+public class ItemInformationUserInterface : InformationUserInterface
 {
     #region Constants
 
@@ -122,19 +122,21 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
         selectedItem.Behavior[selectedValue].behaviorEvent.Invoke();;
     }
 
-    public override void SetValues(Categorizable categorizable)
+    public override void SetValues(ScriptableObject selectedObject)
     {
-        Color textColor = ((Item)categorizable).Effect.GetQuantity().Equals("") ? "#B0B0B0".ToColor() : GameManager.GetAccentColor();
-        bool arrowState = ((Item)categorizable).Effect.GetQuantity().Equals("") ? false : true;
+        Item item = (Item)selectedObject;
 
-        nameText.SetText(categorizable.Name);
-        nameText.GetComponent<AutoTextWidth>().UpdateWidth(categorizable.Name);
-        descriptionText.SetText(categorizable.Description);
+        Color textColor = item.Effect.GetQuantity().Equals("") ? "#B0B0B0".ToColor() : GameManager.GetAccentColor();
+        bool arrowState = item.Effect.GetQuantity().Equals("") ? false : true;
 
-        effectTypeText.SetText(((Item)categorizable).Effect.ToString());
-        effectQuantityText.SetText(((Item)categorizable).Effect.GetQuantity());
+        nameText.SetText(item.Name);
+        nameText.GetComponent<AutoTextWidth>().UpdateWidth(item.Name);
+        descriptionText.SetText(item.Description);
 
-        effectTypeText.GetComponent<AutoTextWidth>().UpdateWidth(((Item)categorizable).Effect.ToString());
+        effectTypeText.SetText(item.Effect.ToString());
+        effectQuantityText.SetText(item.Effect.GetQuantity());
+
+        effectTypeText.GetComponent<AutoTextWidth>().UpdateWidth(item.Effect.ToString());
 
         if (!effectTypeText.color.Equals(textColor))
         {
@@ -158,18 +160,18 @@ public class ItemInformationUserInterface : CategorizableInformationUserInterfac
         this.selectedValue = selectedValue;
     }
 
-    public override void AnimatePanel(Categorizable categorizable, float animationDuration = 0.15f)
+    public override void AnimatePanel(ScriptableObject selectedObject, float animationDuration = 0.15f)
     {
-        StartCoroutine(AnimatePanel(verticalPanel, categorizable, animationDuration));
+        StartCoroutine(AnimatePanel(verticalPanel, selectedObject, animationDuration));
     }
 
-    protected override IEnumerator AnimatePanel(Transform panel, Categorizable categorizable = null, float animationDuration = 0.15F)
+    protected override IEnumerator AnimatePanel(Transform panel, ScriptableObject selectedObject = null, float animationDuration = 0.15F)
     {
         SetObjectDefinitionsFromPanel(panel);
 
         yield return null;
 
-        StartCoroutine(base.AnimatePanel(panel, categorizable, animationDuration));
+        StartCoroutine(base.AnimatePanel(panel, selectedObject, animationDuration));
     }
 
     private IEnumerator AnimateSubMenu(Item item, bool isActive, float delay = 0.03f)

@@ -26,7 +26,7 @@ public abstract class CategoryUserInterface : UserInterface
 
     protected GameObject emptyPanel;
 
-    protected CategorizableInformationUserInterface informationPanel;
+    protected InformationUserInterface informationPanel;
 
     protected int selectedValue;
 

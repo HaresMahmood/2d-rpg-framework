@@ -4,9 +4,12 @@ using UnityEngine;
 /// <summary>
 ///
 /// </summary>
-public class PartyInformationPanel : MonoBehaviour
+public class PartyInformationUserInterface : MonoBehaviour
 {
-    /*
+    
+}
+
+/*
     #region Variables
 
     [Header("Values")]
@@ -138,4 +141,3 @@ public class PartyInformationPanel : MonoBehaviour
 
     #endregion
     */
-}

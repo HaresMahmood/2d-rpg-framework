@@ -5,7 +5,7 @@ using TMPro;
 /// <summary>
 ///
 /// </summary>
-public class PartySlot : MonoBehaviour
+public class SidebarSlot : MonoBehaviour
 {
     #region Variables
 

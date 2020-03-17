@@ -17,7 +17,7 @@ public class PartyUserInterface : UserInterface
 
     #region Variables
 
-    private PartyInformationPanel[] informationPanels;
+    private PartyInformationUserInterface[] informationPanels;
 
     #endregion
 
@@ -32,7 +32,7 @@ public class PartyUserInterface : UserInterface
         //scrollBar = learnedMovesPanel.transform.Find("Scrollbar").GetComponent<Scrollbar>();
         //arrows = transform.Find("Arrows").gameObject;
         
-        informationPanels = GetComponentsInChildren<PartyInformationPanel>();
+        informationPanels = GetComponentsInChildren<PartyInformationUserInterface>();
 
         //radarChartMesh = transform.Find("Middle/Stats/Chart/Radar Mesh").GetComponent<CanvasRenderer>();
 

@@ -6,7 +6,7 @@ using TMPro;
 /// <summary>
 ///
 /// </summary>
-public class MissionMainPanel : CategorizableInformationUserInterface
+public class MissionMainPanel : InformationUserInterface
 {
     #region Constants
 
@@ -24,9 +24,9 @@ public class MissionMainPanel : CategorizableInformationUserInterface
 
     #region Miscellaneous Methods
 
-    public override void SetValues(Categorizable categorizable)
+    public override void SetValues(ScriptableObject selectedObject)
     {
-        Mission mission = (Mission)categorizable;
+        Mission mission = (Mission)selectedObject;
 
         nameText.SetText(mission.Name);
         objectiveText.SetText(mission.Objective);

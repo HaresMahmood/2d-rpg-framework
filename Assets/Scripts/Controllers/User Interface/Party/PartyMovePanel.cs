@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 ///
 /// </summary>
-public class PartyMovePanel : PartyInformationPanel
+public class PartyMovePanel : PartyInformationUserInterface
 {
     /*
     #region Variables

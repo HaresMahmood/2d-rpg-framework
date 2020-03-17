@@ -91,7 +91,7 @@ public class PauseUserInterface : MonoBehaviour
     {
         foreach (Pokemon pokemon in party.playerParty)
         {
-            partySlots[party.playerParty.IndexOf(pokemon)].GetComponent<PartySlot>().PopulateSlot(pokemon);
+            partySlots[party.playerParty.IndexOf(pokemon)].GetComponent<SidebarSlot>().PopulateSlot(pokemon);
         }
     }
 

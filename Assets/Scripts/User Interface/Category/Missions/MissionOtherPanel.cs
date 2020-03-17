@@ -6,7 +6,7 @@ using TMPro;
 /// <summary>
 ///
 /// </summary>
-public class MissionOtherPanel : CategorizableInformationUserInterface
+public class MissionOtherPanel : InformationUserInterface
 {
     #region Constants
 
@@ -29,9 +29,9 @@ public class MissionOtherPanel : CategorizableInformationUserInterface
 
     #region Miscellaneous Methods
 
-    public override void SetValues(Categorizable categorizable)
+    public override void SetValues(ScriptableObject selectedObject)
     {
-        Mission mission = (Mission)categorizable;        
+        Mission mission = (Mission)selectedObject;        
         Color statusColor = mission.IsCompleted ? "#3CA658".ToColor() : "#5C5C5C".ToColor();
         string status = mission.IsCompleted ? "Completed" : "Not completed";
 

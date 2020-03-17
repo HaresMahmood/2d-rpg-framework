@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 ///
 /// </summary>
-public class MissionsInformationUserInterface : CategorizableInformationUserInterface
+public class MissionsInformationUserInterface : InformationUserInterface
 {
     #region Constants
 
@@ -22,18 +22,18 @@ public class MissionsInformationUserInterface : CategorizableInformationUserInte
 
     #region Miscellaneous Methods
 
-    public override void SetValues(Categorizable categorizable)
+    public override void SetValues(ScriptableObject selectedObject)
     {
-        mainPanel.SetValues(categorizable);
-        otherPanel.SetValues(categorizable);
+        mainPanel.SetValues(selectedObject);
+        otherPanel.SetValues(selectedObject);
     }
 
-    public override void AnimatePanel(Categorizable categorizable, float animationDuration = 0.15f)
+    public override void AnimatePanel(ScriptableObject selectedObject, float animationDuration = 0.15f)
     {
-        StartCoroutine(AnimatePanel(null, categorizable, animationDuration));
+        StartCoroutine(AnimatePanel(null, selectedObject, animationDuration));
     }
 
-    protected override IEnumerator AnimatePanel(Transform panel, Categorizable categorizable = null, float animationDuration = 0.15F)
+    protected override IEnumerator AnimatePanel(Transform panel, ScriptableObject selectedObject = null, float animationDuration = 0.15F)
     {  
         float delay = 0.03f;
 
@@ -43,11 +43,11 @@ public class MissionsInformationUserInterface : CategorizableInformationUserInte
 
         otherPanel.FadePanel(otherPanel.InformationPanel, 0f, animationDuration / 2);
 
-        if (categorizable != null)
+        if (selectedObject != null)
         {
             yield return new WaitForSecondsRealtime(animationDuration / 2);
 
-            SetValues(categorizable);
+            SetValues(selectedObject);
             mainPanel.FadePanel(mainPanel.InformationPanel, 1f, animationDuration / 2);
 
             yield return new WaitForSecondsRealtime(delay);

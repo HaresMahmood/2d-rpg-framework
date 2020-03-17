@@ -7,7 +7,7 @@ using UnityEngine.UI;
 /// <summary>
 ///
 /// </summary>
-public class PartyInformationSlots : MonoBehaviour
+public class PartyInformationSlots : Slot
 {
     #region Variables
 
@@ -66,7 +66,7 @@ public class PartyInformationSlots : MonoBehaviour
     /// <summary>
     /// Awake is called when the script instance is being loaded.
     /// </summary>
-    private void Awake()
+    protected override void Awake()
     {
         margin = transform.Find("Margin").GetComponent<RectTransform>();
         List<Transform> children = transform.GetChildren().ToList();

@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 ///
 /// </summary>
-public abstract class CategorizableInformationUserInterface : UserInterface
+public abstract class InformationUserInterface : UserInterface
 {
     #region Properties
 
@@ -14,21 +14,21 @@ public abstract class CategorizableInformationUserInterface : UserInterface
 
     #region Miscellaneous Methods
 
-    public virtual void SetValues(Categorizable categorizable)
+    public virtual void SetValues(ScriptableObject selectedObject)
     {   }
 
-    public virtual void AnimatePanel(Categorizable categorizable, float animationDuration = 0.15f)
+    public virtual void AnimatePanel(ScriptableObject selectedObject, float animationDuration = 0.15f)
     {   }
 
-    protected virtual IEnumerator AnimatePanel(Transform panel, Categorizable categorizable = null, float animationDuration = 0.15f)
+    protected virtual IEnumerator AnimatePanel(Transform panel, ScriptableObject selectedObject = null, float animationDuration = 0.15f)
     {
         FadePanel(panel, 0f, animationDuration / 2);
 
-        if (categorizable != null)
+        if (selectedObject != null)
         {
             yield return new WaitForSecondsRealtime(animationDuration / 2);
 
-            SetValues(categorizable);
+            SetValues(selectedObject);
             FadePanel(panel, 1f, animationDuration / 2);
         }
     }
