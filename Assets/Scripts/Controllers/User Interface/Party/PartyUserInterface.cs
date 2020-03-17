@@ -17,7 +17,7 @@ public class PartyUserInterface : UserInterface
 
     #region Variables
 
-
+    private PartyInformationPanel[] informationPanels;
 
     #endregion
 
@@ -29,14 +29,12 @@ public class PartyUserInterface : UserInterface
     protected override void Awake()
     {
         selector = transform.Find("Selector").gameObject;
+        //scrollBar = learnedMovesPanel.transform.Find("Scrollbar").GetComponent<Scrollbar>();
         //arrows = transform.Find("Arrows").gameObject;
-        scrollBar = learnedMovesPanel.transform.Find("Scrollbar").GetComponent<Scrollbar>();
-
+        
         informationPanels = GetComponentsInChildren<PartyInformationPanel>();
 
-        radarChartMesh = transform.Find("Middle/Stats/Chart/Radar Mesh").GetComponent<CanvasRenderer>();
-
-        InitializeMenu(PartyManager.instance.party, 0);
+        //radarChartMesh = transform.Find("Middle/Stats/Chart/Radar Mesh").GetComponent<CanvasRenderer>();
 
         //StartCoroutine(FindObjectOfType<BottomPanelUserInterface>().ChangePanelButtons(InventoryController.instance.buttons));
 
