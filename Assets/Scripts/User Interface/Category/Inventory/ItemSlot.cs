@@ -19,9 +19,9 @@ public class ItemSlot : CategorizableSlot
 
     #region Miscellaneous Methods
 
-    protected override void SetInformation(Categorizable categorizable)
+    protected override void SetInformation(ScriptableObject slotObject)
     {
-        Item item = (Item)categorizable;
+        Item item = (Item)slotObject;
 
         itemSprite.sprite = item.Sprite;
         quantityText.SetText(item.Quantity.ToString());

@@ -21,9 +21,9 @@ public class MissionSlot : CategorizableSlot
         base.Awake();
     }
 
-    protected override void SetInformation(Categorizable categorizable)
+    protected override void SetInformation(ScriptableObject slotObject)
     {
-        Mission mission = (Mission)categorizable;
+        Mission mission = (Mission)slotObject;
 
         nameText.SetText(mission.Name);
         objectiveText.SetText(mission.Objective);
