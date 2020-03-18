@@ -30,9 +30,9 @@ public abstract class CategoryUserInterfaceController : UserInterfaceController
 
     #region Variables
 
-    protected List<Categorizable> categorizableObjects = new List<Categorizable>();
+    protected List<Categorizable> categorizableObjects;
 
-    protected List<string> categoryNames = new List<string>();
+    protected List<string> categoryNames;
 
     protected int selectedCategory = 0;
 

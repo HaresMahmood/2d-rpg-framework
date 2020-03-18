@@ -1,58 +1,30 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using System.Linq;
+using System.Collections.Generic;
 
 /// <summary>
 ///
 /// </summary>
-public class PartyInformationUserInterface : MonoBehaviour
+public class PartyInformationUserInterface : UserInterface
 {
-    
-}
+    #region Constants
 
-/*
+    public override int MaxObjects => informationSlots.Count;
+
+    #endregion
+
     #region Variables
 
-    [Header("Values")]
-    [SerializeField] [ReadOnly] protected bool isActive;
-
-    protected readonly TestInput input = new TestInput();
-
-    protected PartyInformationSlots[] informationSlots;
-
-    public int selectedSlot { get; set; }
-
+    private List<PartyInformationSlot> informationSlots;
 
     #endregion
 
     #region Miscellaneous Methods
 
-    public void SetActive(bool isActive)
+    /*
+    public void SetActive(bool isActive, int selectedSlot)
     {
-        this.isActive = isActive;
+        //this.isActive = isActive;
         StartCoroutine(SetActive(isActive, selectedSlot));
-    }
-
-    protected virtual IEnumerator SetActive(bool isActive, int selectedSlot)
-    {
-        float duration = 0.15f;
-
-        informationSlots[selectedSlot].SetActive(true);
-        //StopAllCoroutines();
-        if (isActive)
-        {
-            StartCoroutine(PartyManager.instance.GetUserInterface().FadeIndicator(false));
-            yield return new WaitForSecondsRealtime(duration / 2);
-            FadePanel(isActive);
-            informationSlots[selectedSlot].AnimateSlot(isActive);
-            yield return new WaitForSecondsRealtime(duration);
-            PartyManager.instance.GetUserInterface().UpdateIndicator(informationSlots, selectedSlot);
-            StartCoroutine(PartyManager.instance.GetUserInterface().FadeIndicator(true));
-        }
-        else
-        {
-            FadePanel(isActive);
-            informationSlots[selectedSlot].AnimateSlot(isActive);
-        }
     }
 
     public virtual void InitializePanel()
@@ -72,16 +44,37 @@ public class PartyInformationUserInterface : MonoBehaviour
         StartCoroutine(gameObject.FadeOpacity(targetOpacity, duration));
     }
 
-    protected void UpdateSlot(int selectedSlot, int previousSlot)
+    protected virtual IEnumerator SetActive(bool isActive, int selectedSlot)
     {
+        float duration = 0.15f;
+
         informationSlots[selectedSlot].SetActive(true);
-        informationSlots[previousSlot].SetActive(false);
+        
+        if (isActive)
+        {
+            StartCoroutine(PartyManager.instance.GetUserInterface().FadeIndicator(false));
+            yield return new WaitForSecondsRealtime(duration / 2);
+            FadePanel(isActive);
+            informationSlots[selectedSlot].AnimateSlot(isActive);
+            yield return new WaitForSecondsRealtime(duration);
+            PartyManager.instance.GetUserInterface().UpdateIndicator(informationSlots, selectedSlot);
+            StartCoroutine(PartyManager.instance.GetUserInterface().FadeIndicator(true));
+        }
+        else
+        {
+            FadePanel(isActive);
+            informationSlots[selectedSlot].AnimateSlot(isActive);
+        }
+
+        yield return null;
     }
 
     protected virtual IEnumerator AnimateSlot(int selectedSlot, int increment)
     {
         float duration = 0.15f;
-        int previousSlot = ExtensionMethods.IncrementInt(selectedSlot, 0, informationSlots.Length, increment);
+        int previousSlot = ExtensionMethods.IncrementInt(selectedSlot, 0, MaxObjects, increment);
+
+        yield return null;
 
         //StopAllCoroutines();
         StartCoroutine(PartyManager.instance.GetUserInterface().FadeIndicator(false));
@@ -89,8 +82,48 @@ public class PartyInformationUserInterface : MonoBehaviour
         UpdateSlot(selectedSlot, previousSlot);
         yield return new WaitForSecondsRealtime(duration);
         PartyManager.instance.GetUserInterface().UpdateIndicator(informationSlots, selectedSlot);
-        StartCoroutine(PartyManager.instance.GetUserInterface().FadeIndicator(true));
+        StartCoroutine(PartyManager.instance.GetUserInterface().FadeIndicator(true)); 
     }
+
+    protected void UpdateSlot(int selectedSlot, int previousSlot)
+    {
+        informationSlots[selectedSlot].SetActive(true);
+        informationSlots[previousSlot].SetActive(false);
+    }
+    */
+
+    #endregion
+
+    #region Unity Methods
+
+    protected override void Awake()
+    {
+        informationSlots = GetComponentsInChildren<PartyInformationSlot>().ToList();
+
+        selector = transform.parent.Find("Selector").gameObject;
+
+        base.Awake();
+    }
+
+    #endregion
+}
+
+/*
+    #region Variables
+
+    [Header("Values")]
+    [SerializeField] [ReadOnly] protected bool isActive;
+
+    protected readonly TestInput input = new TestInput();
+
+    protected PartyInformationSlots[] informationSlots;
+
+    public int selectedSlot { get; set; }
+
+
+    #endregion
+
+    #region Miscellaneous Methods
 
     protected void RegularInput()
     {
