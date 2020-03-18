@@ -9,7 +9,7 @@ using UnityEngine.UI;
 /// <summary>
 ///
 /// </summary>
-public class PartyManager : MonoBehaviour
+public class PartyController : MonoBehaviour
 {
     /*
   #region Variables
