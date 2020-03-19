@@ -1,8 +1,5 @@
-﻿using System.Collections;
+﻿using System.Linq;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
-using UnityEngine.UI;
 
 /// <summary>
 ///
@@ -11,13 +8,37 @@ public class PartyUserInterface : UserInterface
 {
     #region Constants
 
-    public override int MaxObjects => 28;
+    public override int MaxObjects => 2;
 
     #endregion
 
     #region Variables
 
-    private PartyInformationUserInterface[] informationPanels;
+    private List<PartyInformationController> informationPanels;
+
+    #endregion
+
+    #region Miscellaneous Methods
+
+    public override void UpdateSelectedObject(int selectedValue, int increment = -1)
+    {   
+        int previousValue = ExtensionMethods.IncrementInt(selectedValue, 0, informationPanels.Count, increment);
+
+        StartCoroutine(informationPanels[selectedValue].SetActive(true));
+        StartCoroutine(informationPanels[previousValue].SetActive(false));
+    }
+
+    public void UpdateSelectedPartyMember(Pokemon member)
+    {
+        foreach (PartyInformationController panel in informationPanels)
+        {
+            panel.SetInformation(member);
+        }
+        
+        UpdateSelectedObject(0);
+        
+        //UpdateSprite(member);
+    }
 
     #endregion
 
@@ -32,7 +53,7 @@ public class PartyUserInterface : UserInterface
         //scrollBar = learnedMovesPanel.transform.Find("Scrollbar").GetComponent<Scrollbar>();
         //arrows = transform.Find("Arrows").gameObject;
         
-        informationPanels = GetComponentsInChildren<PartyInformationUserInterface>();
+        informationPanels = GetComponentsInChildren<PartyInformationController>().ToList();
 
         //radarChartMesh = transform.Find("Middle/Stats/Chart/Radar Mesh").GetComponent<CanvasRenderer>();
 
@@ -43,7 +64,6 @@ public class PartyUserInterface : UserInterface
 
     #endregion
 }
-
 
    /*
     #region Variables

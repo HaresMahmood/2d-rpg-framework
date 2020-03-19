@@ -92,6 +92,11 @@ public class PartyInformationUserInterface : UserInterface
     }
     */
 
+    public virtual void SetInformation(Pokemon member)
+    {
+
+    }
+
     #endregion
 
     #region Unity Methods
