@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 ///
@@ -97,10 +98,18 @@ public class PartyInformationUserInterface : UserInterface
 
     }
 
+    public void ActivateSlot(int selectedSlot, bool isActive)
+    {
+        informationSlots[selectedSlot].SetActive(isActive);
+    }
+
     #endregion
 
     #region Unity Methods
 
+    /// <summary>
+    /// Awake is called when the script instance is being loaded.
+    /// </summary>
     protected override void Awake()
     {
         informationSlots = GetComponentsInChildren<PartyInformationSlot>().ToList();
@@ -108,6 +117,17 @@ public class PartyInformationUserInterface : UserInterface
         selector = transform.parent.Find("Selector").gameObject;
 
         base.Awake();
+    }
+
+    /// <summary>
+    /// Start is called before the first frame update.
+    /// </summary>
+    protected virtual void Start()
+    {
+        for (int i = 1; i < informationSlots.Count; i++)
+        {
+            informationSlots[i].SetActive(false);
+        }
     }
 
     #endregion

@@ -25,6 +25,8 @@ public class PartyInformationController : UserInterfaceController
         yield return null;
 
         Flags.isActive = isActive;
+
+        userInterface.ActivateSlot(selectedValue, isActive);
     }
 
     public void SetInformation(Pokemon member)
@@ -55,17 +57,15 @@ public class PartyInformationController : UserInterfaceController
 
     #region Unity Methods
 
-    /*
     /// <summary>
     /// Awake is called when the script instance is being loaded.
     /// </summary>
-    protected override void Awake()
+    protected void Awake()
     {
-        categorizableObjects.AddRange(inventory.items);
-
-        base.Awake();
+        userInterface = GetComponent<PartyInformationUserInterface>();
     }
 
+    /*
     /// <summary>
     /// Update is called once per frame.
     /// </summary>

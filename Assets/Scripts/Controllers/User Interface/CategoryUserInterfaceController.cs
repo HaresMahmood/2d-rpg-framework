@@ -30,7 +30,7 @@ public abstract class CategoryUserInterfaceController : UserInterfaceController
 
     #region Variables
 
-    protected List<Categorizable> categorizableObjects;
+    protected List<Categorizable> categorizableObjects  = new List<Categorizable>();
 
     protected List<string> categoryNames;
 
@@ -113,6 +113,8 @@ public abstract class CategoryUserInterfaceController : UserInterfaceController
     /// </summary>
     protected virtual void Awake()
     {
+        categoryNames = new List<string>();
+
         // Adds name of every category of class "Categorizable" to List.
         for (int i = 0; i < categorizableObjects[0].Categorization.GetTotalCategories(); i++)
         {

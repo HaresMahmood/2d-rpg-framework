@@ -43,7 +43,7 @@ public class PauseUserInterface : MonoBehaviour
                 {
                     float opacity = state ? 1f : 0f;
 
-                    //FindObjectOfType<PartyManager>().flags.isActive = state;
+                    StartCoroutine(PartyController.Instance.SetActive(state));
                     StartCoroutine(sidePanel.FadeOpacity(opacity, 0.2f)); // TODO: Debug
                     break;
                 }

@@ -12,7 +12,13 @@ public class PartyInformationSlot : Slot
     #region Variables
 
     [Header("Values")]
-    [SerializeField] [ReadOnly] private bool isActive;
+    [SerializeField] private bool isActive;
+
+    private bool IsActive
+    {
+        get { return IsActive; }
+        set { IsActive = value; SetActive(value); }
+    }
 
     private RectTransform margin;
     private Transform[] informationContainers;
@@ -69,8 +75,7 @@ public class PartyInformationSlot : Slot
     protected override void Awake()
     {
         margin = transform.Find("Margin").GetComponent<RectTransform>();
-        List<Transform> children = transform.GetChildren().ToList();
-        informationContainers = children.Find(x => x != margin.transform).GetChildren();
+        informationContainers = transform.Find("Information Panel").GetChildren();
     }
 
     #endregion
