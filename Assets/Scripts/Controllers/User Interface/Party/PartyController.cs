@@ -49,7 +49,7 @@ public class PartyController : UserInterfaceController
 
     public override IEnumerator SetActive(bool isActive, bool condition = true)
     {
-        int increment = isActive ? -1 : 0;
+        int previousValue = -(int)(Input.GetAxisRaw("Horizontal") == 0 ? -1 : Input.GetAxisRaw("Horizontal"));
 
         yield return null;
 
@@ -57,7 +57,7 @@ public class PartyController : UserInterfaceController
 
         if (isActive && condition)
         {
-            UpdateSelectedObject(selectedValue);
+            UpdateSelectedObject(selectedValue, previousValue);
         }
     }
 
@@ -92,6 +92,7 @@ public class PartyController : UserInterfaceController
 
         base.Awake();
     }
+    */
 
     /// <summary>
     /// Update is called once per frame.
@@ -100,10 +101,10 @@ public class PartyController : UserInterfaceController
     {
         if (Flags.isActive)
         {
-            GetInput();
+            GetInput("Horizontal");
         }
     }
-    */
+    
 
     #endregion
 }

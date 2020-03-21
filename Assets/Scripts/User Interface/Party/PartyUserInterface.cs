@@ -20,12 +20,12 @@ public class PartyUserInterface : UserInterface
 
     #region Miscellaneous Methods
 
-    public override void UpdateSelectedObject(int selectedValue, int increment = -1)
-    {   
-        int previousValue = ExtensionMethods.IncrementInt(selectedValue, 0, informationPanels.Count, increment);
+    public override void UpdateSelectedObject(int selectedValue, int previousValue)
+    {
+        int value = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, previousValue); // Debug.
 
         StartCoroutine(informationPanels[selectedValue].SetActive(true));
-        StartCoroutine(informationPanels[previousValue].SetActive(false));
+        StartCoroutine(informationPanels[value].SetActive(false));
     }
 
     public void UpdateSelectedPartyMember(Pokemon member)
@@ -35,7 +35,7 @@ public class PartyUserInterface : UserInterface
             panel.SetInformation(member);
         }
         
-        UpdateSelectedObject(0);
+        UpdateSelectedObject(0, 1);
         
         //UpdateSprite(member);
     }

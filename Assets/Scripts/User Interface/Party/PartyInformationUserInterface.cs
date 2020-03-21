@@ -100,7 +100,7 @@ public class PartyInformationUserInterface : UserInterface
 
     public void ActivateSlot(int selectedSlot, bool isActive)
     {
-        informationSlots[selectedSlot].SetActive(isActive);
+        informationSlots[selectedSlot].AnimateSlot(isActive);
     }
 
     #endregion
