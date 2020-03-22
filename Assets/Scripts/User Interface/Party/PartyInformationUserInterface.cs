@@ -105,7 +105,7 @@ public class PartyInformationUserInterface : UserInterface
         informationSlots[selectedValue].SetActive(true);
         informationSlots[previousValue].SetActive(false);
         
-        UpdateSelector(informationSlots[selectedValue].transform);
+        StartCoroutine(UpdateSelector(informationSlots[selectedValue].transform));
     }
 
     public void ActivateSlot(int selectedSlot, bool isActive)
