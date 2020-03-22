@@ -64,7 +64,7 @@ public abstract class UserInterfaceController : MonoBehaviour
 
     protected virtual void UpdateSelectedObject(int selectedValue, int increment = -1)
     {
-        UserInterface.UpdateSelectedObject(selectedValue);
+        UserInterface.UpdateSelectedObject(selectedValue, increment);
     }
 
     protected virtual bool RegularInput(int max, string axisName)

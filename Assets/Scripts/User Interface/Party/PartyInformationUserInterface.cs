@@ -98,6 +98,16 @@ public class PartyInformationUserInterface : UserInterface
 
     }
 
+    public override void UpdateSelectedObject(int selectedValue, int increment)
+    {
+        int previousValue = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, increment);
+        
+        informationSlots[selectedValue].SetActive(true);
+        informationSlots[previousValue].SetActive(false);
+        
+        UpdateSelector(informationSlots[selectedValue].transform);
+    }
+
     public void ActivateSlot(int selectedSlot, bool isActive)
     {
         informationSlots[selectedSlot].AnimateSlot(isActive);

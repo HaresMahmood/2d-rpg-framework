@@ -34,6 +34,15 @@ public class PartyInformationController : UserInterfaceController
         userInterface.SetInformation(member);
     }
 
+    protected override void GetInput(string axisName)
+    {
+        bool hasInput = RegularInput(UserInterface.MaxObjects, axisName);
+        if (hasInput)
+        {
+            UpdateSelectedObject(selectedValue, (int)Input.GetAxisRaw(axisName));
+        }
+    }
+
     /*
     protected override void InteractInput(int selectedValue)
     {
