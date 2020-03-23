@@ -94,9 +94,7 @@ public class PartyInformationUserInterface : UserInterface
     */
 
     public virtual void SetInformation(Pokemon member)
-    {
-
-    }
+    {   }
 
     public override void UpdateSelectedObject(int selectedValue, int increment)
     {
