@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 ///
 /// </summary>
-public class PartyMovePanel : PartyInformationUserInterface
+public class PartyMovesPanel : PartyInformationUserInterface
 {
     #region Variables
 
@@ -22,7 +22,7 @@ public class PartyMovePanel : PartyInformationUserInterface
         foreach (Pokemon.LearnedMove move in GetMoves(member))
         {
             informationSlots[counter].SetActive(false);
-            //informationSlots[counter].GetComponentInChildren<MoveSlot>().SetInformation(move);
+            //informationSlots[counter].GetComponentInChildren<PartyMoveSlot>().UpdateInformation(move);
             counter++;
         }
 

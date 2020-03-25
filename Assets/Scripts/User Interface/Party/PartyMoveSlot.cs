@@ -5,7 +5,7 @@ using TMPro;
 /// <summary>
 ///
 /// </summary>
-public class MoveSlot : MonoBehaviour
+public class PartyMoveSlot : Slot
 {
     #region Variables
 
@@ -27,13 +27,16 @@ public class MoveSlot : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    public void UpdateInformation(Pokemon.LearnedMove move)
+    protected override void SetInformation(ScriptableObject slotObject)
     {
-        moveNameText.SetText(move.move.name);
         /*
-        info.Find("Typing/Typing").GetComponent<TextMeshProUGUI>().SetText(learnedMove.move.type.ToString());
-        info.Find("Typing/Typing").GetComponent<TextMeshProUGUI>().color = learnedMove.move.UIColor;
-        */
+        Pokemon.LearnedMove move = (Pokemon.LearnedMove)slotObject;
+
+        moveNameText.SetText(move.move.name);
+        
+        //info.Find("Typing/Typing").GetComponent<TextMeshProUGUI>().SetText(learnedMove.move.type.ToString());
+        //info.Find("Typing/Typing").GetComponent<TextMeshProUGUI>().color = learnedMove.move.UIColor;
+   
         ppText.SetText(move.remainingPp.ToString() + "/" + move.move.pp);
 
         physicalIcon.SetActive(move.move.category == Move.Category.Physical);
@@ -44,6 +47,7 @@ public class MoveSlot : MonoBehaviour
         descriptionText.SetText(move.move.description);
 
         panel.color = move.move.UIColor;
+        */ 
     }
 
     #endregion
@@ -53,7 +57,7 @@ public class MoveSlot : MonoBehaviour
     /// <summary>
     /// Awake is called when the script instance is being loaded.
     /// </summary>
-    private void Awake()
+    protected override void Awake()
     {
         panel = transform.GetComponent<Image>();
 
