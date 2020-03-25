@@ -7,7 +7,7 @@ using UnityEngine.UI;
 /// <summary>
 ///
 /// </summary>
-public class PartyInformationSlot : Slot
+public abstract class PartyInformationSlot : Slot
 {
     #region Variables
 

@@ -18,23 +18,36 @@ public class PartyMovePanel : PartyInformationUserInterface
     public override void SetInformation(Pokemon member)
     {
         int counter = 0;
-        List<Pokemon.LearnedMove> moves = GetMoves(PartyManager.instance.selectedMember);
 
-        informationSlots = transform.GetComponentsInChildren<PartyInformationSlots>();
-
-        foreach (Pokemon.LearnedMove move in moves)
+        foreach (Pokemon.LearnedMove move in GetMoves(member))
         {
             informationSlots[counter].SetActive(false);
-            informationSlots[counter].GetComponentInChildren<MoveSlot>().UpdateInformation(move);
+            //informationSlots[counter].GetComponentInChildren<MoveSlot>().SetInformation(move);
             counter++;
         }
 
-        for (int i = counter; i < informationSlots.Length; i++)
+        for (int i = counter; i < informationSlots.Count; i++)
         {
             informationSlots[i].gameObject.SetActive(false);
         }
 
         informationSlots = RemoveInactiveObjects(informationSlots);
+
+        informationSlots = GetComponentsInChildren<PartyInformationSlot>().ToList();
+    }
+
+    protected List<Pokemon.LearnedMove> GetMoves(Pokemon member)
+    {
+        return null;
+    }
+
+    private List<PartyInformationSlot> RemoveInactiveObjects(List<PartyInformationSlot> source)
+    {
+        List<PartyInformationSlot> list = source;
+
+        list.RemoveAll(panel => !panel.gameObject.activeSelf);
+
+        return list;
     }
 
     #endregion

@@ -15,7 +15,7 @@ public class PartyInformationUserInterface : UserInterface
 
     #region Variables
 
-    private List<PartyInformationSlot> informationSlots;
+    protected List<PartyInformationSlot> informationSlots;
 
     #endregion
 
