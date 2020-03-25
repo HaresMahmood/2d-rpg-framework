@@ -7,7 +7,48 @@ using UnityEngine;
 /// </summary>
 public class PartyMovePanel : PartyInformationUserInterface
 {
-    /*
+    #region Variables
+
+
+
+    #endregion
+
+    #region Misccellaneous Methods
+
+    public override void SetInformation(Pokemon member)
+    {
+        int counter = 0;
+        List<Pokemon.LearnedMove> moves = GetMoves(PartyManager.instance.selectedMember);
+
+        informationSlots = transform.GetComponentsInChildren<PartyInformationSlots>();
+
+        foreach (Pokemon.LearnedMove move in moves)
+        {
+            informationSlots[counter].SetActive(false);
+            informationSlots[counter].GetComponentInChildren<MoveSlot>().UpdateInformation(move);
+            counter++;
+        }
+
+        for (int i = counter; i < informationSlots.Length; i++)
+        {
+            informationSlots[i].gameObject.SetActive(false);
+        }
+
+        informationSlots = RemoveInactiveObjects(informationSlots);
+    }
+
+    #endregion
+
+    #region Unity Methods
+
+
+
+    #endregion
+}
+
+
+
+/*
     #region Variables
 
     public Flags flags = new Flags(false);
@@ -120,4 +161,3 @@ public class PartyMovePanel : PartyInformationUserInterface
 
     #endregion
     */
-}
