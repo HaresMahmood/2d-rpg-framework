@@ -19,7 +19,7 @@ public class PartyMovesPanel : PartyInformationUserInterface
     {
         int counter = 0;
 
-        foreach (Pokemon.LearnedMove move in GetMoves(member))
+        foreach (Move move in GetMoves(member))
         {
             informationSlots[counter].SetActive(false);
             //informationSlots[counter].GetComponentInChildren<PartyMoveSlot>().UpdateInformation(move);

@@ -35,7 +35,7 @@ public class Pokemon : ScriptableObject
     public int ID
     {
         get { return id; }
-        private set { id = value; }
+        set { id = value; }
     }
 
     public int Level
@@ -44,13 +44,11 @@ public class Pokemon : ScriptableObject
         private set { level = value; }
     }
 
-    /*
-    public int Category
+    public string Category
     {
-        get { return level; }
-        private set { level = value; }
+        get { return category; }
+        private set { category = value; }
     }
-    */
 
     public string DexEntry
     {
@@ -166,6 +164,21 @@ public class Pokemon : ScriptableObject
         [SerializeField] private Sprite frontSprite;
         [SerializeField] private Sprite backSprite;
         [SerializeField] private Sprite menuSprite;
+
+        public Sprite FrontSprite
+        {
+            get { return frontSprite; }
+        }
+
+        public Sprite BackSprite
+        {
+            get { return backSprite; }
+        }
+
+        public Sprite MenuSprite
+        {
+            get { return menuSprite; }
+        }
     }
 
     [System.Serializable]
