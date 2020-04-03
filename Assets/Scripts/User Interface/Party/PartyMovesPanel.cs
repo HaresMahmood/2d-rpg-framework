@@ -36,7 +36,7 @@ public class PartyMovesPanel : PartyInformationUserInterface
         informationSlots = GetComponentsInChildren<PartyInformationSlot>().ToList();
     }
 
-    protected List<Pokemon.LearnedMove> GetMoves(Pokemon member)
+    protected List<Move> GetMoves(Pokemon member)
     {
         return null;
     }
@@ -58,8 +58,6 @@ public class PartyMovesPanel : PartyInformationUserInterface
 
     #endregion
 }
-
-
 
 /*
     #region Variables

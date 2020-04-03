@@ -4,92 +4,125 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Pokémon", menuName = "Characters/Pokémon")]
 public class Pokemon : ScriptableObject
 {
-    public new string name;
-    public int id;
-    public int level;
-    [Range(0f, 200f)] public float exp;
-    public float totalExp = 200;
-    public float totalHealth;
-    public string category;
-    public string dexEntry;
-    public string ability;
-    public string nature; // TODO: Should be enum.
-    public Sprite frontSprite;
-    public Sprite backSprite;
-    public Sprite menuSprite;
-    public Type primaryType;
-    public Type secondaryType;
-    public List<LearnedMove> activeMoves = new List<LearnedMove>();
-    public List<LearnedMove> learnedMoves = new List<LearnedMove>();
-    public Status status;
-    public Item heldItem;
-    public Stats stats;
+    #region Fields
 
-    [System.Serializable]
-    public class Stats
+    [SerializeField] private int id;
+    [SerializeField] private new string name;
+    [SerializeField] private int level;
+    [SerializeField] private string category;
+    [SerializeField] private string dexEntry;
+    [SerializeField] private string nature;
+    [SerializeField] private string ability;
+    [SerializeField] private PokemonSprites sprites;
+    [SerializeField] private Type primaryType;
+    [SerializeField] private Type secondaryType;
+    [SerializeField] private List<Move> activeMoves = new List<Move>();
+    [SerializeField] private List<Move> learnedMoves = new List<Move>();
+    [SerializeField] private StatusAilment status;
+    [SerializeField] private Item heldItem;
+    [SerializeField] private PokemonStats stats;
+
+    #endregion
+
+    #region Properties
+
+    public string Name
     {
-        public int health;
-        public int attack;
-        public int defence;
-        public int spAttack;
-        public int spDefence;
-        public int speed;
-
-        private enum StatType
-        {
-            HP,
-            Attack,
-            Defence,
-            SpAttack,
-            SpDefence,
-            Speed
-        }
-
-        /*
-        public Stats(int hp, int attack, int defence, int spAttack, int spDefence, int speed)
-        {
-            this.hp = new Stat(hp);
-            this.attack = new Stat(attack);
-            this.defence = new Stat(defence);
-            this.spAttack = new Stat(spAttack);
-            this.spDefence = new Stat(spDefence);
-            this.speed = new Stat(speed);
-        }
-        
-
-        private Stat GetStat(StatType statType)
-        {
-            switch (statType)
-            {
-                default:
-                case StatType.HP:           return hp;
-                case StatType.Attack:       return attack;
-                case StatType.Defence:      return defence;
-                case StatType.SpAttack:     return spAttack;
-                case StatType.SpDefence:    return spDefence;
-                case StatType.Speed:        return speed;
-
-            }
-        }
-        */
-
-        public class Stat
-        {
-            public int stat;
-
-            public Stat(int amount)
-            {
-                stat = amount;
-            }
-        }
+        get { return name; }
+        private set { name = value; }
     }
 
-    [System.Serializable]
-    public class LearnedMove
+    public int ID
     {
-        public Move move;
-        public int remainingPp;
+        get { return id; }
+        private set { id = value; }
     }
+
+    public int Level
+    {
+        get { return level; }
+        private set { level = value; }
+    }
+
+    /*
+    public int Category
+    {
+        get { return level; }
+        private set { level = value; }
+    }
+    */
+
+    public string DexEntry
+    {
+        get { return dexEntry; }
+        private set { dexEntry = value; }
+    }
+
+    /*
+    public int Nature
+    {
+        get { return level; }
+        private set { level = value; }
+    }
+
+    public int Ability
+    {
+        get { return level; }
+        private set { level = value; }
+    }
+    */
+
+    public PokemonSprites Sprites
+    {
+        get { return sprites; }
+        private set { sprites = value; }
+    }
+
+    public Type PrimaryType
+    {
+        get { return primaryType; }
+        private set { primaryType = value; }
+    }
+
+    public Type SecondaryType
+    {
+        get { return secondaryType; }
+        private set { secondaryType = value; }
+    }
+
+    public List<Move> ActiveMoves
+    {
+        get { return activeMoves; }
+        private set { activeMoves = value; }
+    }
+
+    public List<Move> LearnedMoves
+    {
+        get { return learnedMoves; }
+        private set { learnedMoves = value; }
+    }
+
+    public StatusAilment Status
+    {
+        get { return status; }
+        private set { status = value; }
+    }
+
+    public Item HeldItem
+    {
+        get { return heldItem; }
+        private set { heldItem = value; }
+    }
+
+    public PokemonStats Stats
+    {
+        get { return stats; }
+        private set { stats = value; }
+    }
+
+    #endregion
+
+    #region Enums
 
     public enum Type
     {
@@ -113,7 +146,7 @@ public class Pokemon : ScriptableObject
         Fairy
     }
 
-    public enum Status
+    public enum StatusAilment
     {
         None,
         Paralyzed,
@@ -122,4 +155,49 @@ public class Pokemon : ScriptableObject
         Poisoned,
         Asleep
     }
+
+    #endregion
+
+    #region Nested Classes
+
+    [System.Serializable]
+    public class PokemonSprites
+    {
+        [SerializeField] private Sprite frontSprite;
+        [SerializeField] private Sprite backSprite;
+        [SerializeField] private Sprite menuSprite;
+    }
+
+    [System.Serializable]
+    public class PokemonStats
+    {
+        public int health;
+        public int attack;
+        public int defence;
+        public int spAttack;
+        public int spDefence;
+        public int speed;
+
+        private enum StatType
+        {
+            HP,
+            Attack,
+            Defence,
+            SpAttack,
+            SpDefence,
+            Speed
+        }
+
+        public class Stat
+        {
+            public int stat;
+
+            public Stat(int amount)
+            {
+                stat = amount;
+            }
+        }
+    }
+
+    #endregion
 }
