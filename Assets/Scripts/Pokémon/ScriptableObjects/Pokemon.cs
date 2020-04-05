@@ -11,14 +11,14 @@ public class Pokemon : ScriptableObject
     [SerializeField] private int level;
     [SerializeField] private string category;
     [SerializeField] private string dexEntry;
-    [SerializeField] private string nature;
+    [SerializeField] private PokemonNature nature = new PokemonNature();
     [SerializeField] private string ability;
     [SerializeField] private PokemonSprites sprites;
     [SerializeField] private Type primaryType;
     [SerializeField] private Type secondaryType;
     [SerializeField] private List<Move> activeMoves = new List<Move>();
     [SerializeField] private List<Move> learnedMoves = new List<Move>();
-    [SerializeField] private StatusAilment status;
+    [SerializeField] private StatusAilment status = new StatusAilment();
     [SerializeField] private Item heldItem;
     [SerializeField] private PokemonStats stats;
 
@@ -56,13 +56,12 @@ public class Pokemon : ScriptableObject
         private set { dexEntry = value; }
     }
 
-    /*
-    public int Nature
+    public PokemonNature Nature
     {
-        get { return level; }
-        private set { level = value; }
+        get { return nature; }
     }
 
+    /*
     public int Ability
     {
         get { return level; }
@@ -144,26 +143,212 @@ public class Pokemon : ScriptableObject
         Fairy
     }
 
-    public enum StatusAilment
-    {
-        None,
-        Paralyzed,
-        Burned,
-        Frozen,
-        Poisoned,
-        Asleep
-    }
-
     #endregion
 
     #region Nested Classes
 
     [System.Serializable]
+    public class PokemonNature
+    {
+        #region Fields
+
+        [SerializeField] private Nature value;
+
+        #endregion
+
+        #region Properties
+
+        public string Value
+        {
+            get { return value.ToString(); }
+        }
+
+        public (PokemonStats.StatType, PokemonStats.StatType) ChangedStats
+        {
+            get
+            {
+                PokemonStats.StatType increasedStat;
+                PokemonStats.StatType decreasedStat;
+
+                if (value == Nature.Lonely || value == Nature.Brave || value == Nature.Adamant || value == Nature.Naughty)
+                {
+                    increasedStat = PokemonStats.StatType.Attack;
+                }
+                else if (value == Nature.Bold || value == Nature.Relaxed || value == Nature.Impish || value == Nature.Lax)
+                {
+                    increasedStat = PokemonStats.StatType.Defence;
+                }
+                else if (value == Nature.Timid || value == Nature.Hasty || value == Nature.Jolly || value == Nature.Naive)
+                {
+                    increasedStat = PokemonStats.StatType.Speed;
+                }
+                else if (value == Nature.Modest || value == Nature.Mild || value == Nature.Quiet || value == Nature.Rash)
+                {
+                    increasedStat = PokemonStats.StatType.SpAttack;
+                }
+                else if (value == Nature.Calm || value == Nature.Gentle || value == Nature.Sassy || value == Nature.Careful)
+                {
+                    increasedStat = PokemonStats.StatType.SpDefence;
+                }
+                else
+                {
+                    increasedStat = PokemonStats.StatType.None;
+                }
+
+                if (value == Nature.Lonely || value == Nature.Docile || value == Nature.Mild || value == Nature.Gentle)
+                {
+                    decreasedStat = PokemonStats.StatType.Defence;
+                }
+                else if (value == Nature.Brave || value == Nature.Relaxed || value == Nature.Quiet || value == Nature.Sassy)
+                {
+                    decreasedStat = PokemonStats.StatType.Speed;
+                }
+                else if (value == Nature.Adamant || value == Nature.Impish || value == Nature.Jolly || value == Nature.Careful)
+                {
+                    decreasedStat = PokemonStats.StatType.SpAttack;
+                }
+                else if (value == Nature.Naughty || value == Nature.Lax || value == Nature.Naive || value == Nature.Rash)
+                {
+                    decreasedStat = PokemonStats.StatType.SpDefence;
+                }
+                else if (value == Nature.Bold || value == Nature.Timid || value == Nature.Modest || value == Nature.Calm)
+                {
+                    decreasedStat = PokemonStats.StatType.Attack;
+                }
+                else
+                {
+                    decreasedStat = PokemonStats.StatType.None;
+                }
+
+                return (increasedStat, decreasedStat);
+            }
+        }
+
+        #endregion
+
+        #region Enums
+
+        public enum Nature
+        {
+            Hardy,
+            Lonely,
+            Brave,
+            Adamant,
+            Naughty,
+            Bold,
+            Docile,
+            Relaxed,
+            Impish,
+            Lax,
+            Timid,
+            Hasty,
+            Serious,
+            Jolly,
+            Naive,
+            Modest,
+            Mild,
+            Quiet,
+            Bashful,
+            Rash,
+            Calm,
+            Gentle,
+            Sassy,
+            Careful,
+            Quirky
+        }
+
+        #endregion
+    }
+
+    [System.Serializable]
+    public class StatusAilment
+    {
+        #region Fields
+
+        [SerializeField] private Ailment value;
+
+        #endregion
+
+        #region Properties
+
+        public string Value
+        {
+            get { return value.ToString(); }
+        }
+
+        public Color Color
+        {
+            get
+            {
+                Color color;
+
+                switch (value)
+                {
+                    case Ailment.Paralyzed:
+                        {
+                            color = "FCFF83".ToColor();
+                            break;
+                        }
+                    case Ailment.Burned:
+                        {
+                            color = "FF9D83".ToColor();
+                            break;
+                        }
+                    case Ailment.Frozen:
+                        {
+                            color = "A0FCFF".ToColor();
+                            break;
+                        }
+                    case Ailment.Poisoned:
+                        {
+                            color = "F281FF".ToColor();
+                            break;
+                        }
+                    case Ailment.Asleep:
+                        {
+                            color = "B0B0B0".ToColor();
+                            break;
+                        }
+                    default:
+                        {
+                            color = Color.white;
+                            break;
+                        }
+                }
+
+                return color;
+            }
+        }
+
+        #endregion
+
+        #region Enums
+
+        public enum Ailment
+        {
+            None,
+            Paralyzed,
+            Burned,
+            Frozen,
+            Poisoned,
+            Asleep
+        }
+
+        #endregion
+    }
+
+    [System.Serializable]
     public class PokemonSprites
     {
+        #region Fields
+
         [SerializeField] private Sprite frontSprite;
         [SerializeField] private Sprite backSprite;
         [SerializeField] private Sprite menuSprite;
+
+        #endregion
+
+        #region Properties
 
         public Sprite FrontSprite
         {
@@ -179,6 +364,8 @@ public class Pokemon : ScriptableObject
         {
             get { return menuSprite; }
         }
+
+        #endregion
     }
 
     [System.Serializable]
@@ -191,8 +378,9 @@ public class Pokemon : ScriptableObject
         public int spDefence;
         public int speed;
 
-        private enum StatType
+        public enum StatType
         {
+            None,
             HP,
             Attack,
             Defence,
