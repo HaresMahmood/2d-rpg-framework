@@ -15,9 +15,11 @@ MonoBehaviour:
   id: 1
   name: Venusaur
   level: 10
+  hp: 0
   category: Seed
   dexEntry: 
-  nature: 
+  nature:
+    value: 0
   ability: 
   sprites:
     frontSprite: {fileID: 21300000, guid: 2cf32e7c024c5a347bf07b90d45ba341, type: 3}
@@ -27,7 +29,8 @@ MonoBehaviour:
   secondaryType: 8
   activeMoves: []
   learnedMoves: []
-  status: 0
+  status:
+    value: 0
   heldItem: {fileID: 0}
   stats:
     health: 0

@@ -30,7 +30,7 @@ public class Pokemon : ScriptableObject
     public string Name
     {
         get { return name; }
-        private set { name = value; }
+        set { name = value; }
     }
 
     public int ID
@@ -54,7 +54,7 @@ public class Pokemon : ScriptableObject
     public string Category
     {
         get { return category; }
-        private set { category = value; }
+        set { category = value; }
     }
 
     public string DexEntry
@@ -85,13 +85,13 @@ public class Pokemon : ScriptableObject
     public Typing PrimaryType
     {
         get { return primaryType; }
-        private set { primaryType = value; }
+        set { primaryType = value; }
     }
 
     public Typing SecondaryType
     {
         get { return secondaryType; }
-        private set { secondaryType = value; }
+        set { secondaryType = value; }
     }
 
     public List<Move> ActiveMoves
