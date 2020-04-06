@@ -9,13 +9,14 @@ public class Pokemon : ScriptableObject
     [SerializeField] private int id;
     [SerializeField] private new string name;
     [SerializeField] private int level;
+    [SerializeField] private int hp;
     [SerializeField] private string category;
     [SerializeField] private string dexEntry;
     [SerializeField] private PokemonNature nature = new PokemonNature();
     [SerializeField] private string ability;
     [SerializeField] private PokemonSprites sprites;
-    [SerializeField] private Type primaryType;
-    [SerializeField] private Type secondaryType;
+    [SerializeField] private Typing primaryType;
+    [SerializeField] private Typing secondaryType;
     [SerializeField] private List<Move> activeMoves = new List<Move>();
     [SerializeField] private List<Move> learnedMoves = new List<Move>();
     [SerializeField] private StatusAilment status = new StatusAilment();
@@ -42,6 +43,12 @@ public class Pokemon : ScriptableObject
     {
         get { return level; }
         private set { level = value; }
+    }
+
+    public int HP
+    {
+        get { return hp; }
+        private set { hp = value; }
     }
 
     public string Category
@@ -75,13 +82,13 @@ public class Pokemon : ScriptableObject
         private set { sprites = value; }
     }
 
-    public Type PrimaryType
+    public Typing PrimaryType
     {
         get { return primaryType; }
         private set { primaryType = value; }
     }
 
-    public Type SecondaryType
+    public Typing SecondaryType
     {
         get { return secondaryType; }
         private set { secondaryType = value; }
@@ -121,7 +128,7 @@ public class Pokemon : ScriptableObject
 
     #region Enums
 
-    public enum Type
+    public enum Typing
     {
         None,
         Normal,
@@ -141,6 +148,17 @@ public class Pokemon : ScriptableObject
         Dark,
         Dragon,
         Fairy
+    }
+
+    public enum Stat
+    {
+        None,
+        HP,
+        Attack,
+        Defence,
+        SpAttack,
+        SpDefence,
+        Speed
     }
 
     #endregion
@@ -163,61 +181,61 @@ public class Pokemon : ScriptableObject
             get { return value.ToString(); }
         }
 
-        public (PokemonStats.StatType, PokemonStats.StatType) ChangedStats
+        public (Stat, Stat) ChangedStats
         {
             get
             {
-                PokemonStats.StatType increasedStat;
-                PokemonStats.StatType decreasedStat;
+                Stat increasedStat;
+                Stat decreasedStat;
 
                 if (value == Nature.Lonely || value == Nature.Brave || value == Nature.Adamant || value == Nature.Naughty)
                 {
-                    increasedStat = PokemonStats.StatType.Attack;
+                    increasedStat = Stat.Attack;
                 }
                 else if (value == Nature.Bold || value == Nature.Relaxed || value == Nature.Impish || value == Nature.Lax)
                 {
-                    increasedStat = PokemonStats.StatType.Defence;
+                    increasedStat = Stat.Defence;
                 }
                 else if (value == Nature.Timid || value == Nature.Hasty || value == Nature.Jolly || value == Nature.Naive)
                 {
-                    increasedStat = PokemonStats.StatType.Speed;
+                    increasedStat = Stat.Speed;
                 }
                 else if (value == Nature.Modest || value == Nature.Mild || value == Nature.Quiet || value == Nature.Rash)
                 {
-                    increasedStat = PokemonStats.StatType.SpAttack;
+                    increasedStat = Stat.SpAttack;
                 }
                 else if (value == Nature.Calm || value == Nature.Gentle || value == Nature.Sassy || value == Nature.Careful)
                 {
-                    increasedStat = PokemonStats.StatType.SpDefence;
+                    increasedStat = Stat.SpDefence;
                 }
                 else
                 {
-                    increasedStat = PokemonStats.StatType.None;
+                    increasedStat = Stat.None;
                 }
 
                 if (value == Nature.Lonely || value == Nature.Docile || value == Nature.Mild || value == Nature.Gentle)
                 {
-                    decreasedStat = PokemonStats.StatType.Defence;
+                    decreasedStat = Stat.Defence;
                 }
                 else if (value == Nature.Brave || value == Nature.Relaxed || value == Nature.Quiet || value == Nature.Sassy)
                 {
-                    decreasedStat = PokemonStats.StatType.Speed;
+                    decreasedStat = Stat.Speed;
                 }
                 else if (value == Nature.Adamant || value == Nature.Impish || value == Nature.Jolly || value == Nature.Careful)
                 {
-                    decreasedStat = PokemonStats.StatType.SpAttack;
+                    decreasedStat = Stat.SpAttack;
                 }
                 else if (value == Nature.Naughty || value == Nature.Lax || value == Nature.Naive || value == Nature.Rash)
                 {
-                    decreasedStat = PokemonStats.StatType.SpDefence;
+                    decreasedStat = Stat.SpDefence;
                 }
                 else if (value == Nature.Bold || value == Nature.Timid || value == Nature.Modest || value == Nature.Calm)
                 {
-                    decreasedStat = PokemonStats.StatType.Attack;
+                    decreasedStat = Stat.Attack;
                 }
                 else
                 {
-                    decreasedStat = PokemonStats.StatType.None;
+                    decreasedStat = Stat.None;
                 }
 
                 return (increasedStat, decreasedStat);
@@ -377,27 +395,6 @@ public class Pokemon : ScriptableObject
         public int spAttack;
         public int spDefence;
         public int speed;
-
-        public enum StatType
-        {
-            None,
-            HP,
-            Attack,
-            Defence,
-            SpAttack,
-            SpDefence,
-            Speed
-        }
-
-        public class Stat
-        {
-            public int stat;
-
-            public Stat(int amount)
-            {
-                stat = amount;
-            }
-        }
     }
 
     #endregion

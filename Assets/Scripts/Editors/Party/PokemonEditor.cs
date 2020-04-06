@@ -20,7 +20,7 @@ public class PokemonEditor : Editor
 
     public override void OnInspectorGUI()
     {
-        GUILayout.BeginHorizontal(GUILayout.Height(50));
+        GUILayout.BeginHorizontal("Box", GUILayout.Height(35));
             GUILayout.FlexibleSpace();
 
                     if (pokemon.Sprites.MenuSprite != null)
@@ -48,7 +48,7 @@ public class PokemonEditor : Editor
                         GUILayout.EndVertical();
                     GUILayout.EndHorizontal();
 
-                    if (!pokemon.SecondaryType.Equals(Pokemon.Type.None))
+                    if (!pokemon.SecondaryType.Equals(Pokemon.Typing.None))
                     {
                         GUILayout.BeginHorizontal("Box", GUILayout.Height(29));
                             GUILayout.BeginVertical();
