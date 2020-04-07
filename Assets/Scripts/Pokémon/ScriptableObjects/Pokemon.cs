@@ -9,6 +9,8 @@ public class Pokemon : ScriptableObject
     [SerializeField] private int id;
     [SerializeField] private new string name;
     [SerializeField] private int level;
+    [SerializeField] private float experience;
+    [SerializeField] private int metAt;
     [SerializeField] private int hp;
     [SerializeField] private string category;
     [SerializeField] private string dexEntry;
@@ -42,7 +44,19 @@ public class Pokemon : ScriptableObject
     public int Level
     {
         get { return level; }
-        private set { level = value; }
+        set { level = value; }
+    }
+
+    public float Experience
+    {
+        get { return experience; }
+        set { experience = value; }
+    }
+
+    public int MetAt
+    {
+        get { return metAt; }
+        set { metAt = value; }
     }
 
     public int HP
@@ -60,7 +74,7 @@ public class Pokemon : ScriptableObject
     public string DexEntry
     {
         get { return dexEntry; }
-        private set { dexEntry = value; }
+        set { dexEntry = value; }
     }
 
     public PokemonNature Nature
@@ -176,9 +190,10 @@ public class Pokemon : ScriptableObject
 
         #region Properties
 
-        public string Value
+        public Nature Value
         {
-            get { return value.ToString(); }
+            get { return value; }
+            set { this.value = value; }
         }
 
         public (Stat, Stat) ChangedStats
