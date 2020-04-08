@@ -294,6 +294,12 @@ public class Pokemon : ScriptableObject
     }
 
     [System.Serializable]
+    public class PokemonAbility
+    {
+        
+    }
+
+    [System.Serializable]
     public class StatusAilment
     {
         #region Fields

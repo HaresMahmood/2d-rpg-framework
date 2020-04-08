@@ -92,15 +92,15 @@ public class PokemonEditor : Editor
 
         EditorGUILayout.LabelField(new GUIContent("Typing", "Category of this Pokémon.\n\n" +
         "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-        target.PrimaryType = (Pokemon.Typing)EditorGUILayout.EnumPopup(target.PrimaryType, GUILayout.Width(146));
-        target.SecondaryType = (Pokemon.Typing)EditorGUILayout.EnumPopup(target.SecondaryType, GUILayout.Width(146));
+        target.PrimaryType = (Pokemon.Typing)EditorGUILayout.EnumPopup(target.PrimaryType);
+        target.SecondaryType = (Pokemon.Typing)EditorGUILayout.EnumPopup(target.SecondaryType);
 
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
 
         EditorGUILayout.LabelField(new GUIContent("Dex Entry", "Category of this Pokémon.\n\n" +
         "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-        target.DexEntry = EditorGUILayout.TextArea(target.DexEntry, GUILayout.MaxHeight(35), GUILayout.Width(295));
+        target.DexEntry = EditorGUILayout.TextArea(target.DexEntry, GUILayout.MaxHeight(35));
         EditorStyles.textField.wordWrap = true;
 
         GUILayout.EndHorizontal();
@@ -117,21 +117,21 @@ public class PokemonEditor : Editor
 
         EditorGUILayout.LabelField(new GUIContent("Level", "Category of this Pokémon.\n\n" +
         "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-        target.Level = EditorGUILayout.IntSlider(target.Level, 0, 100, GUILayout.Width(295));
+        target.Level = EditorGUILayout.IntSlider(target.Level, 0, 100);
 
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
 
         EditorGUILayout.LabelField(new GUIContent("Experience", "Category of this Pokémon.\n\n" +
         "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-        target.Experience = EditorGUILayout.Slider(target.Experience, 0f, 100f, GUILayout.Width(295)); // TODO: https://bulbapedia.bulbagarden.net/wiki/Experience
+        target.Experience = EditorGUILayout.Slider(target.Experience, 0f, 100f); // TODO: https://bulbapedia.bulbagarden.net/wiki/Experience
 
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
 
         EditorGUILayout.LabelField(new GUIContent("Met At Level", "Category of this Pokémon.\n\n" +
         "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-        target.MetAt = EditorGUILayout.IntSlider(target.MetAt, 0, target.Level, GUILayout.Width(295));
+        target.MetAt = EditorGUILayout.IntSlider(target.MetAt, 0, target.Level);
 
         GUILayout.EndHorizontal();
         GUILayout.EndVertical();
@@ -148,6 +148,7 @@ public class PokemonEditor : Editor
         target.Level = EditorGUILayout.IntSlider(target.Level, 0, 100, GUILayout.Width(295));
 
         GUILayout.EndHorizontal();
+
         GUILayout.BeginHorizontal();
 
         EditorGUILayout.LabelField(new GUIContent("Experience", "Category of this Pokémon.\n\n" +
@@ -189,7 +190,7 @@ public class PokemonEditor : Editor
             GUILayout.BeginHorizontal();
 
             EditorGUILayout.LabelField(new GUIContent("Description"), GUILayout.Width(95));
-            EditorGUILayout.TextArea(target.HeldItem.Description, GUILayout.MaxHeight(35), GUILayout.Width(295));
+            EditorGUILayout.TextArea(target.HeldItem.Description, GUILayout.MaxHeight(35));
 
             GUILayout.EndHorizontal();
         }
@@ -199,6 +200,8 @@ public class PokemonEditor : Editor
         GUILayout.Space(2);
         ExtensionMethods.DrawUILine("#525252".ToColor());
         GUILayout.Space(2);
+
+        EditorUtility.SetDirty(target);
 
         base.OnInspectorGUI();
     }
