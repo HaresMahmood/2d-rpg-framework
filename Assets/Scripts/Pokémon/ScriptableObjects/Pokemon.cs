@@ -129,7 +129,7 @@ public class Pokemon : ScriptableObject
     public Item HeldItem
     {
         get { return heldItem; }
-        private set { heldItem = value; }
+        set { heldItem = value; }
     }
 
     public PokemonStats Stats

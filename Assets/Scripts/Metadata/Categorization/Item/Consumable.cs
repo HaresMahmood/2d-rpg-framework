@@ -6,7 +6,7 @@ using UnityEngine;
 ///
 /// </summary>
 [CreateAssetMenu(fileName = "New Consumable", menuName = "Categorizable/Item/Consumable")]
-public class Consumable : Item
+public class Consumable : Holdable
 {
     #region Fields
 
