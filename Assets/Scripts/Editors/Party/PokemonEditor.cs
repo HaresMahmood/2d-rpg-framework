@@ -117,7 +117,7 @@ public class PokemonEditor : Editor
 
         EditorGUILayout.LabelField(new GUIContent("Level", "Category of this Pokémon.\n\n" +
         "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-        target.Level = EditorGUILayout.IntSlider(target.Level, 0, 100);
+        target.Level = EditorGUILayout.IntSlider(target.Level, 1, 100);
 
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();

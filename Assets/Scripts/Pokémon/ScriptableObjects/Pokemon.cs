@@ -8,7 +8,7 @@ public class Pokemon : ScriptableObject
 
     [SerializeField] private int id;
     [SerializeField] private new string name;
-    [SerializeField] private int level;
+    [SerializeField] internal int level;
     [SerializeField] private float experience;
     [SerializeField] private int metAt;
     [SerializeField] private int hp;
@@ -178,6 +178,1120 @@ public class Pokemon : ScriptableObject
     #endregion
 
     #region Nested Classes
+
+    [System.Serializable]
+    public class PokemonExperience
+    {
+        #region Fields
+
+        [SerializeField] private Category category;
+        [SerializeField] private int maxExperience;
+        private int level;
+
+        #endregion
+
+        #region Properties
+
+        public Category Stats
+        {
+            get { return category; }
+            private set { category = value; }
+        }
+
+        public int MaxExperience
+        {
+            get
+            {
+                int maxExperience = 0;
+
+                switch (level)
+                {
+                    case (1):
+                        {
+                            switch (category)
+                            {
+                                default: { break; }
+                                case Category.Erratic:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumFast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumSlow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Slow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fluctuating:
+                                    {
+                                        break;
+                                    }
+                            }
+
+                            break;
+                        }
+                    case (2):
+                        {
+                            switch (category)
+                            {
+                                default: { break; }
+                                case Category.Erratic:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumFast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumSlow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Slow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fluctuating:
+                                    {
+                                        break;
+                                    }
+                            }
+
+                            break;
+                        }
+                    case (3):
+                        {
+                            switch (category)
+                            {
+                                default: { break; }
+                                case Category.Erratic:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumFast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumSlow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Slow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fluctuating:
+                                    {
+                                        break;
+                                    }
+                            }
+
+                            break;
+                        }
+                    case (4):
+                        {
+                            switch (category)
+                            {
+                                default: { break; }
+                                case Category.Erratic:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumFast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumSlow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Slow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fluctuating:
+                                    {
+                                        break;
+                                    }
+                            }
+
+                            break;
+                        }
+                    case (5):
+                        {
+                            switch (category)
+                            {
+                                default: { break; }
+                                case Category.Erratic:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumFast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumSlow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Slow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fluctuating:
+                                    {
+                                        break;
+                                    }
+                            }
+
+                            break;
+                        }
+                    case (6):
+                        {
+                            switch (category)
+                            {
+                                default: { break; }
+                                case Category.Erratic:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumFast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumSlow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Slow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fluctuating:
+                                    {
+                                        break;
+                                    }
+                            }
+
+                            break;
+                        }
+                    case (7):
+                        {
+                            switch (category)
+                            {
+                                default: { break; }
+                                case Category.Erratic:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumFast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumSlow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Slow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fluctuating:
+                                    {
+                                        break;
+                                    }
+                            }
+
+                            break;
+                        }
+                    case (8):
+                        {
+                            switch (category)
+                            {
+                                default: { break; }
+                                case Category.Erratic:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumFast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumSlow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Slow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fluctuating:
+                                    {
+                                        break;
+                                    }
+                            }
+
+                            break;
+                        }
+                    case (9):
+                        {
+                            switch (category)
+                            {
+                                default: { break; }
+                                case Category.Erratic:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumFast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumSlow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Slow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fluctuating:
+                                    {
+                                        break;
+                                    }
+                            }
+
+                            break;
+                        }
+                    case (10):
+                        {
+                            switch (category)
+                            {
+                                default: { break; }
+                                case Category.Erratic:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumFast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumSlow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Slow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fluctuating:
+                                    {
+                                        break;
+                                    }
+                            }
+
+                            break;
+                        }
+                    case (11):
+                        {
+                            switch (category)
+                            {
+                                default: { break; }
+                                case Category.Erratic:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumFast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumSlow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Slow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fluctuating:
+                                    {
+                                        break;
+                                    }
+                            }
+
+                            break;
+                        }
+                    case (12):
+                        {
+                            switch (category)
+                            {
+                                default: { break; }
+                                case Category.Erratic:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumFast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumSlow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Slow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fluctuating:
+                                    {
+                                        break;
+                                    }
+                            }
+
+                            break;
+                        }
+                    case (13):
+                        {
+                            switch (category)
+                            {
+                                default: { break; }
+                                case Category.Erratic:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumFast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumSlow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Slow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fluctuating:
+                                    {
+                                        break;
+                                    }
+                            }
+
+                            break;
+                        }
+                    case (14):
+                        {
+                            switch (category)
+                            {
+                                default: { break; }
+                                case Category.Erratic:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumFast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumSlow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Slow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fluctuating:
+                                    {
+                                        break;
+                                    }
+                            }
+
+                            break;
+                        }
+                    case (15):
+                        {
+                            switch (category)
+                            {
+                                default: { break; }
+                                case Category.Erratic:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumFast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumSlow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Slow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fluctuating:
+                                    {
+                                        break;
+                                    }
+                            }
+
+                            break;
+                        }
+                    case (16):
+                        {
+                            switch (category)
+                            {
+                                default: { break; }
+                                case Category.Erratic:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumFast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumSlow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Slow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fluctuating:
+                                    {
+                                        break;
+                                    }
+                            }
+
+                            break;
+                        }
+                    case (17):
+                        {
+                            switch (category)
+                            {
+                                default: { break; }
+                                case Category.Erratic:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumFast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumSlow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Slow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fluctuating:
+                                    {
+                                        break;
+                                    }
+                            }
+
+                            break;
+                        }
+                    case (18):
+                        {
+                            switch (category)
+                            {
+                                default: { break; }
+                                case Category.Erratic:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumFast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumSlow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Slow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fluctuating:
+                                    {
+                                        break;
+                                    }
+                            }
+
+                            break;
+                        }
+                    case (19):
+                        {
+                            switch (category)
+                            {
+                                default: { break; }
+                                case Category.Erratic:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumFast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumSlow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Slow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fluctuating:
+                                    {
+                                        break;
+                                    }
+                            }
+
+                            break;
+                        }
+                    case (20):
+                        {
+                            switch (category)
+                            {
+                                default: { break; }
+                                case Category.Erratic:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumFast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumSlow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Slow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fluctuating:
+                                    {
+                                        break;
+                                    }
+                            }
+
+                            break;
+                        }
+                    case (21):
+                        {
+                            switch (category)
+                            {
+                                default: { break; }
+                                case Category.Erratic:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumFast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumSlow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Slow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fluctuating:
+                                    {
+                                        break;
+                                    }
+                            }
+
+                            break;
+                        }
+                    case (22):
+                        {
+                            switch (category)
+                            {
+                                default: { break; }
+                                case Category.Erratic:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumFast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumSlow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Slow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fluctuating:
+                                    {
+                                        break;
+                                    }
+                            }
+
+                            break;
+                        }
+                    case (23):
+                        {
+                            switch (category)
+                            {
+                                default: { break; }
+                                case Category.Erratic:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumFast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumSlow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Slow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fluctuating:
+                                    {
+                                        break;
+                                    }
+                            }
+
+                            break;
+                        }
+                    case (24):
+                        {
+                            switch (category)
+                            {
+                                default: { break; }
+                                case Category.Erratic:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumFast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumSlow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Slow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fluctuating:
+                                    {
+                                        break;
+                                    }
+                            }
+
+                            break;
+                        }
+                    case (25):
+                        {
+                            switch (category)
+                            {
+                                default: { break; }
+                                case Category.Erratic:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumFast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumSlow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Slow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fluctuating:
+                                    {
+                                        break;
+                                    }
+                            }
+
+                            break;
+                        }
+                    case (26):
+                        {
+                            switch (category)
+                            {
+                                default: { break; }
+                                case Category.Erratic:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumFast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumSlow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Slow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fluctuating:
+                                    {
+                                        break;
+                                    }
+                            }
+
+                            break;
+                        }
+                    case (27):
+                        {
+                            switch (category)
+                            {
+                                default: { break; }
+                                case Category.Erratic:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumFast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumSlow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Slow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fluctuating:
+                                    {
+                                        break;
+                                    }
+                            }
+
+                            break;
+                        }
+                    case (28):
+                        {
+                            switch (category)
+                            {
+                                default: { break; }
+                                case Category.Erratic:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumFast:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.MediumSlow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Slow:
+                                    {
+
+                                        break;
+                                    }
+                                case Category.Fluctuating:
+                                    {
+                                        break;
+                                    }
+                            }
+
+                            break;
+                        }
+                }
+
+                return maxExperience;
+            }
+        }
+
+        #endregion
+
+        #region Enums
+
+        public enum Category
+        {
+            Erratic,
+            Fast,
+            MediumFast,
+            MediumSlow,
+            Slow,
+            Fluctuating
+        }
+
+        #endregion
+    }
 
     [System.Serializable]
     public class PokemonNature

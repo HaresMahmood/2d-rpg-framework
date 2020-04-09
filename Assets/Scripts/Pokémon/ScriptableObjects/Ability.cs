@@ -9,7 +9,6 @@ public class Ability : ScriptableObject
     [SerializeField] private new string name;
     [SerializeField] private string description;
     [SerializeField] private bool requiresTarget;
-    [SerializeField] private bool cancastOnSelf;
     //private GameObject particleEffect;
     //private (Unity)Event trigger;
 
