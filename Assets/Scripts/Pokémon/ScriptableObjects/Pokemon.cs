@@ -9,7 +9,7 @@ public class Pokemon : ScriptableObject
     [SerializeField] private int id;
     [SerializeField] private new string name;
     [SerializeField] internal int level;
-    [SerializeField] private float experience;
+    [SerializeField] private PokemonExperience experience;
     [SerializeField] private int metAt;
     [SerializeField] private int hp;
     [SerializeField] private string category;
@@ -47,10 +47,17 @@ public class Pokemon : ScriptableObject
         set { level = value; }
     }
 
-    public float Experience
+    public PokemonExperience Experience
     {
-        get { return experience; }
-        set { experience = value; }
+        get 
+        { 
+            if (experience == null)
+            {
+                experience = new PokemonExperience(level);
+            }
+
+            return experience;
+        }
     }
 
     public int MetAt
@@ -184,19 +191,15 @@ public class Pokemon : ScriptableObject
     {
         #region Fields
 
-        [SerializeField] private Category category;
-        [SerializeField] private int maxExperience;
-        private int level;
+        private readonly int level;
 
         #endregion
 
         #region Properties
 
-        public Category Stats
-        {
-            get { return category; }
-            private set { category = value; }
-        }
+        public int Value { get; set; }
+
+        public ExperienceGroup Group { get; }
 
         public int MaxExperience
         {
@@ -204,1068 +207,63 @@ public class Pokemon : ScriptableObject
             {
                 int maxExperience = 0;
 
-                switch (level)
+                switch (Group)
                 {
-                    case (1):
+                    default: { break; }
+                    case ExperienceGroup.Erratic:
                         {
-                            switch (category)
+                            if (level <= 50)
                             {
-                                default: { break; }
-                                case Category.Erratic:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumFast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumSlow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Slow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fluctuating:
-                                    {
-                                        break;
-                                    }
+                                maxExperience = (level ^ 3 * (100 - level)) / 50;
+                            }
+                            else if (level > 50 && level <= 68)
+                            {
+                                maxExperience = (level ^ 3 * (150 - level)) / 100;
+                            }
+                            else if (level > 68 && level <= 98)
+                            {
+                                maxExperience = (level ^ 3 * ((1911 - 10 * level) / 3)) / 500;
+                            }
+                            else if (level > 98 && level <= 100)
+                            {
+                                maxExperience = (level ^ 3 * (160 - level)) / 100;
                             }
 
                             break;
                         }
-                    case (2):
+                    case ExperienceGroup.Fast:
                         {
-                            switch (category)
-                            {
-                                default: { break; }
-                                case Category.Erratic:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumFast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumSlow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Slow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fluctuating:
-                                    {
-                                        break;
-                                    }
-                            }
-
+                            maxExperience = (4 * level ^ 3) / 5;
                             break;
                         }
-                    case (3):
+                    case ExperienceGroup.MediumFast:
                         {
-                            switch (category)
-                            {
-                                default: { break; }
-                                case Category.Erratic:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumFast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumSlow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Slow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fluctuating:
-                                    {
-                                        break;
-                                    }
-                            }
-
+                            maxExperience = level ^ 3;
                             break;
                         }
-                    case (4):
+                    case ExperienceGroup.MediumSlow:
                         {
-                            switch (category)
-                            {
-                                default: { break; }
-                                case Category.Erratic:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumFast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumSlow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Slow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fluctuating:
-                                    {
-                                        break;
-                                    }
-                            }
-
+                            maxExperience = ((6 / 5) * level ^ 3) - (15 * level ^ 2) + (100 * level) - 140;
                             break;
                         }
-                    case (5):
+                    case ExperienceGroup.Slow:
                         {
-                            switch (category)
-                            {
-                                default: { break; }
-                                case Category.Erratic:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumFast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumSlow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Slow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fluctuating:
-                                    {
-                                        break;
-                                    }
-                            }
-
+                            maxExperience = (5 * level ^ 3) / 4;
                             break;
                         }
-                    case (6):
+                    case ExperienceGroup.Fluctuating:
                         {
-                            switch (category)
+                            if (level <= 15)
                             {
-                                default: { break; }
-                                case Category.Erratic:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumFast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumSlow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Slow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fluctuating:
-                                    {
-                                        break;
-                                    }
+                                maxExperience = level ^ 3 * ((((level + 1) / 3) + 24) / 50);
                             }
-
-                            break;
-                        }
-                    case (7):
-                        {
-                            switch (category)
+                            else if (level > 15 && level <= 36)
                             {
-                                default: { break; }
-                                case Category.Erratic:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumFast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumSlow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Slow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fluctuating:
-                                    {
-                                        break;
-                                    }
+                                maxExperience = level ^ 3 * ((level + 14) / 50);
                             }
-
-                            break;
-                        }
-                    case (8):
-                        {
-                            switch (category)
+                            else if (level > 36 && level <= 100)
                             {
-                                default: { break; }
-                                case Category.Erratic:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumFast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumSlow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Slow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fluctuating:
-                                    {
-                                        break;
-                                    }
-                            }
-
-                            break;
-                        }
-                    case (9):
-                        {
-                            switch (category)
-                            {
-                                default: { break; }
-                                case Category.Erratic:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumFast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumSlow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Slow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fluctuating:
-                                    {
-                                        break;
-                                    }
-                            }
-
-                            break;
-                        }
-                    case (10):
-                        {
-                            switch (category)
-                            {
-                                default: { break; }
-                                case Category.Erratic:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumFast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumSlow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Slow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fluctuating:
-                                    {
-                                        break;
-                                    }
-                            }
-
-                            break;
-                        }
-                    case (11):
-                        {
-                            switch (category)
-                            {
-                                default: { break; }
-                                case Category.Erratic:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumFast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumSlow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Slow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fluctuating:
-                                    {
-                                        break;
-                                    }
-                            }
-
-                            break;
-                        }
-                    case (12):
-                        {
-                            switch (category)
-                            {
-                                default: { break; }
-                                case Category.Erratic:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumFast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumSlow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Slow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fluctuating:
-                                    {
-                                        break;
-                                    }
-                            }
-
-                            break;
-                        }
-                    case (13):
-                        {
-                            switch (category)
-                            {
-                                default: { break; }
-                                case Category.Erratic:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumFast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumSlow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Slow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fluctuating:
-                                    {
-                                        break;
-                                    }
-                            }
-
-                            break;
-                        }
-                    case (14):
-                        {
-                            switch (category)
-                            {
-                                default: { break; }
-                                case Category.Erratic:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumFast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumSlow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Slow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fluctuating:
-                                    {
-                                        break;
-                                    }
-                            }
-
-                            break;
-                        }
-                    case (15):
-                        {
-                            switch (category)
-                            {
-                                default: { break; }
-                                case Category.Erratic:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumFast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumSlow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Slow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fluctuating:
-                                    {
-                                        break;
-                                    }
-                            }
-
-                            break;
-                        }
-                    case (16):
-                        {
-                            switch (category)
-                            {
-                                default: { break; }
-                                case Category.Erratic:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumFast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumSlow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Slow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fluctuating:
-                                    {
-                                        break;
-                                    }
-                            }
-
-                            break;
-                        }
-                    case (17):
-                        {
-                            switch (category)
-                            {
-                                default: { break; }
-                                case Category.Erratic:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumFast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumSlow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Slow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fluctuating:
-                                    {
-                                        break;
-                                    }
-                            }
-
-                            break;
-                        }
-                    case (18):
-                        {
-                            switch (category)
-                            {
-                                default: { break; }
-                                case Category.Erratic:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumFast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumSlow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Slow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fluctuating:
-                                    {
-                                        break;
-                                    }
-                            }
-
-                            break;
-                        }
-                    case (19):
-                        {
-                            switch (category)
-                            {
-                                default: { break; }
-                                case Category.Erratic:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumFast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumSlow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Slow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fluctuating:
-                                    {
-                                        break;
-                                    }
-                            }
-
-                            break;
-                        }
-                    case (20):
-                        {
-                            switch (category)
-                            {
-                                default: { break; }
-                                case Category.Erratic:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumFast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumSlow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Slow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fluctuating:
-                                    {
-                                        break;
-                                    }
-                            }
-
-                            break;
-                        }
-                    case (21):
-                        {
-                            switch (category)
-                            {
-                                default: { break; }
-                                case Category.Erratic:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumFast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumSlow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Slow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fluctuating:
-                                    {
-                                        break;
-                                    }
-                            }
-
-                            break;
-                        }
-                    case (22):
-                        {
-                            switch (category)
-                            {
-                                default: { break; }
-                                case Category.Erratic:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumFast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumSlow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Slow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fluctuating:
-                                    {
-                                        break;
-                                    }
-                            }
-
-                            break;
-                        }
-                    case (23):
-                        {
-                            switch (category)
-                            {
-                                default: { break; }
-                                case Category.Erratic:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumFast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumSlow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Slow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fluctuating:
-                                    {
-                                        break;
-                                    }
-                            }
-
-                            break;
-                        }
-                    case (24):
-                        {
-                            switch (category)
-                            {
-                                default: { break; }
-                                case Category.Erratic:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumFast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumSlow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Slow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fluctuating:
-                                    {
-                                        break;
-                                    }
-                            }
-
-                            break;
-                        }
-                    case (25):
-                        {
-                            switch (category)
-                            {
-                                default: { break; }
-                                case Category.Erratic:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumFast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumSlow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Slow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fluctuating:
-                                    {
-                                        break;
-                                    }
-                            }
-
-                            break;
-                        }
-                    case (26):
-                        {
-                            switch (category)
-                            {
-                                default: { break; }
-                                case Category.Erratic:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumFast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumSlow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Slow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fluctuating:
-                                    {
-                                        break;
-                                    }
-                            }
-
-                            break;
-                        }
-                    case (27):
-                        {
-                            switch (category)
-                            {
-                                default: { break; }
-                                case Category.Erratic:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumFast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumSlow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Slow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fluctuating:
-                                    {
-                                        break;
-                                    }
-                            }
-
-                            break;
-                        }
-                    case (28):
-                        {
-                            switch (category)
-                            {
-                                default: { break; }
-                                case Category.Erratic:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumFast:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.MediumSlow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Slow:
-                                    {
-
-                                        break;
-                                    }
-                                case Category.Fluctuating:
-                                    {
-                                        break;
-                                    }
+                                maxExperience = level ^ 3 * (((level / 2) + 32) / 50);
                             }
 
                             break;
@@ -1278,9 +276,18 @@ public class Pokemon : ScriptableObject
 
         #endregion
 
+        #region Constructor
+
+        public PokemonExperience(int level)
+        {
+            this.level = level;
+        }
+
+        #endregion
+
         #region Enums
 
-        public enum Category
+        public enum ExperienceGroup
         {
             Erratic,
             Fast,
