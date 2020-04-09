@@ -8,8 +8,7 @@ public class Pokemon : ScriptableObject
 
     [SerializeField] private int id;
     [SerializeField] private new string name;
-    [SerializeField] internal int level;
-    [SerializeField] private PokemonExperience experience;
+    [SerializeField] private PokemonExperience experience = new PokemonExperience();
     [SerializeField] private int metAt;
     [SerializeField] private int hp;
     [SerializeField] private string category;
@@ -41,23 +40,9 @@ public class Pokemon : ScriptableObject
         set { id = value; }
     }
 
-    public int Level
+    public PokemonExperience Experience 
     {
-        get { return level; }
-        set { level = value; }
-    }
-
-    public PokemonExperience Experience
-    {
-        get 
-        { 
-            if (experience == null)
-            {
-                experience = new PokemonExperience(level);
-            }
-
-            return experience;
-        }
+        get { return experience; } 
     }
 
     public int MetAt
@@ -189,98 +174,49 @@ public class Pokemon : ScriptableObject
     [System.Serializable]
     public class PokemonExperience
     {
-        #region Fields
-
-        private readonly int level;
-
-        #endregion
-
         #region Properties
 
-        public int Value { get; set; }
+        [SerializeField] private int value;
+        [SerializeField] private int level;
+        [SerializeField] ExperienceGroup group;
 
-        public ExperienceGroup Group { get; }
+        public int Value
+        {
+            get { return value; }
+            set { this.value = value; }
+        }
 
-        public int MaxExperience
+        public int Level
+        {
+            get { return level; }
+            set { level = value; }
+        }
+
+        public ExperienceGroup Group
+        {
+            get { return group; }
+            set { group = value; }
+        }
+
+        public int Total
         {
             get
             {
-                int maxExperience = 0;
-
-                switch (Group)
-                {
-                    default: { break; }
-                    case ExperienceGroup.Erratic:
-                        {
-                            if (level <= 50)
-                            {
-                                maxExperience = (level ^ 3 * (100 - level)) / 50;
-                            }
-                            else if (level > 50 && level <= 68)
-                            {
-                                maxExperience = (level ^ 3 * (150 - level)) / 100;
-                            }
-                            else if (level > 68 && level <= 98)
-                            {
-                                maxExperience = (level ^ 3 * ((1911 - 10 * level) / 3)) / 500;
-                            }
-                            else if (level > 98 && level <= 100)
-                            {
-                                maxExperience = (level ^ 3 * (160 - level)) / 100;
-                            }
-
-                            break;
-                        }
-                    case ExperienceGroup.Fast:
-                        {
-                            maxExperience = (4 * level ^ 3) / 5;
-                            break;
-                        }
-                    case ExperienceGroup.MediumFast:
-                        {
-                            maxExperience = level ^ 3;
-                            break;
-                        }
-                    case ExperienceGroup.MediumSlow:
-                        {
-                            maxExperience = ((6 / 5) * level ^ 3) - (15 * level ^ 2) + (100 * level) - 140;
-                            break;
-                        }
-                    case ExperienceGroup.Slow:
-                        {
-                            maxExperience = (5 * level ^ 3) / 4;
-                            break;
-                        }
-                    case ExperienceGroup.Fluctuating:
-                        {
-                            if (level <= 15)
-                            {
-                                maxExperience = level ^ 3 * ((((level + 1) / 3) + 24) / 50);
-                            }
-                            else if (level > 15 && level <= 36)
-                            {
-                                maxExperience = level ^ 3 * ((level + 14) / 50);
-                            }
-                            else if (level > 36 && level <= 100)
-                            {
-                                maxExperience = level ^ 3 * (((level / 2) + 32) / 50);
-                            }
-
-                            break;
-                        }
-                }
-
-                return maxExperience;
+                return Mathf.Max(0, GetTotalExperience(Level));
             }
         }
 
-        #endregion
-
-        #region Constructor
-
-        public PokemonExperience(int level)
+        public int Remaining
         {
-            this.level = level;
+            get
+            {
+                if (Level > 0 && Level < 100)
+                {
+                    return (GetTotalExperience(Level + 1) - Total);
+                }
+
+                return 0;
+            }
         }
 
         #endregion
@@ -295,6 +231,80 @@ public class Pokemon : ScriptableObject
             MediumSlow,
             Slow,
             Fluctuating
+        }
+
+        #endregion
+
+        #region Miscellaneous Methods
+
+        private int GetTotalExperience(int level)
+        {
+            int maxExperience = 0;
+
+            switch (Group)
+            {
+                default: { break; }
+                case ExperienceGroup.Erratic:
+                    {
+                        if (level <= 50)
+                        {
+                            maxExperience = (int)Mathf.Pow(level, 3) * (100 - level) / 50;
+                        }
+                        else if (level > 50 && level <= 68)
+                        {
+                            maxExperience = (int)Mathf.Pow(level, 3) * (150 - level) / 100;
+                        }
+                        else if (level > 68 && level <= 98)
+                        {
+                            maxExperience = (int)Mathf.Pow(level, 3) * ((1911 - 10 * level) / 3) / 500;
+                        }
+                        else if (level > 98 && level <= 100)
+                        {
+                            maxExperience = (int)Mathf.Pow(level, 3) * (160 - level) / 100;
+                        }
+
+                        break;
+                    }
+                case ExperienceGroup.Fast:
+                    {
+                        maxExperience = 4 * (int)Mathf.Pow(level, 3) / 5;
+                        break;
+                    }
+                case ExperienceGroup.MediumFast:
+                    {
+                        maxExperience = level ^ 3;
+                        break;
+                    }
+                case ExperienceGroup.MediumSlow:
+                    {
+                        maxExperience = ((int)(1.2f * (int)Mathf.Pow(level, 3))) - (15 * (int)Mathf.Pow(level, 2)) + (100 * level) - 140;
+                        break;
+                    }
+                case ExperienceGroup.Slow:
+                    {
+                        maxExperience = (5 * (int)Mathf.Pow(level, 3)) / 4;
+                        break;
+                    }
+                case ExperienceGroup.Fluctuating:
+                    {
+                        if (level <= 15)
+                        {
+                            maxExperience = (int)Mathf.Pow(level, 3) * (((int)Mathf.Floor((level + 1) / 3) + 24) / 50);
+                        }
+                        else if (level > 15 && level <= 36)
+                        {
+                            maxExperience = (int)Mathf.Pow(level, 3) * ((level + 14) / 50);
+                        }
+                        else if (level > 36 && level <= 100)
+                        {
+                            maxExperience = (int)Mathf.Pow(level, 3) * (((int)Mathf.Floor(level / 2) + 32) / 50);
+                        }
+
+                        break;
+                    }
+            }
+
+            return maxExperience;
         }
 
         #endregion

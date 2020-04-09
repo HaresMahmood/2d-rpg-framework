@@ -14,15 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 1
   name: Venusaur
-  level: 10
-  experience: 0
-  metAt: 0
+  experience:
+    value: 0
+    level: 10
+    group: 3
+  metAt: 1
   hp: 0
   category: Seed
   dexEntry: A bewitching aroma wafts from its flower. The fragrance becalms those
     engaged in a battle.
   nature:
-    value: 0
+    value: 18
   ability: 
   sprites:
     frontSprite: {fileID: 21300000, guid: 2cf32e7c024c5a347bf07b90d45ba341, type: 3}
@@ -34,7 +36,7 @@ MonoBehaviour:
   learnedMoves: []
   status:
     value: 0
-  heldItem: {fileID: 11400000, guid: 6ead661240d040f4e9639dd97e9d516c, type: 2}
+  heldItem: {fileID: 11400000, guid: 05049e0d41204834780d8b503effb9ef, type: 2}
   stats:
     health: 0
     attack: 0

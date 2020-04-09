@@ -80,7 +80,7 @@ public class Consumable : Holdable
 
         [SerializeField] private Type type;
         [ConditionalField("type", false, Type.HP)] [SerializeField] private int quantity; // TODO: Using property for debug.
-        [ConditionalField("type", false, Type.STS)] [SerializeField] private Pokemon.StatusAilment status; // TODO: Using property for debug.
+        [ConditionalField("type", false, Type.STS)] [SerializeField] private Pokemon.StatusAilment.Ailment status; // TODO: Using property for debug.
 
         #endregion
 
@@ -91,13 +91,6 @@ public class Consumable : Holdable
             HP,
             STS
         }
-
-        /*
-        private enum Status
-        {
-            
-        }
-        */
 
         #endregion
 
@@ -110,9 +103,7 @@ public class Consumable : Holdable
 
         public override string ToString()
         {
-            //string effect = type == 0 ? $"{amount.ToString()} {type.ToString()}" : status.ToString().Replace("None", "All"); // TODO: Using replace for debug.
-
-            string effect = type == 0 ? type.ToString() : status.ToString().Replace("None", "All"); // TODO: Using replace for debug.
+            string effect = type.ToString() + ( type == 0 ? $" + {quantity}" : $" ↑ {status.ToString().Replace("None", "All")}"); // TODO: Using replace for debug.
 
             return effect;
         }

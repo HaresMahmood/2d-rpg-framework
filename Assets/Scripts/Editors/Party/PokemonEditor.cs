@@ -67,6 +67,7 @@ public class PokemonEditor : Editor
         GUILayout.Space(5);
 
         GUILayout.BeginVertical();
+        GUILayout.BeginVertical("Box");
         GUILayout.BeginHorizontal();
 
         EditorGUILayout.LabelField(new GUIContent("#", "Dex number of this Pokémon.\n\n" +
@@ -74,6 +75,8 @@ public class PokemonEditor : Editor
         target.ID = int.Parse(EditorGUILayout.TextField(target.ID.ToString("000")));
         
         GUILayout.EndHorizontal();
+        GUILayout.EndVertical();
+        GUILayout.BeginVertical("Box");
         GUILayout.BeginHorizontal();
 
         EditorGUILayout.LabelField(new GUIContent("Name", "Name of this Pokémon.\n\n" +
@@ -88,6 +91,8 @@ public class PokemonEditor : Editor
         target.Category = EditorGUILayout.TextField(target.Category);
 
         GUILayout.EndHorizontal();
+        GUILayout.EndVertical();
+        GUILayout.BeginVertical("Box");
         GUILayout.BeginHorizontal();
 
         EditorGUILayout.LabelField(new GUIContent("Typing", "Category of this Pokémon.\n\n" +
@@ -96,6 +101,8 @@ public class PokemonEditor : Editor
         target.SecondaryType = (Pokemon.Typing)EditorGUILayout.EnumPopup(target.SecondaryType);
 
         GUILayout.EndHorizontal();
+        GUILayout.EndVertical();
+        GUILayout.BeginVertical("Box");
         GUILayout.BeginHorizontal();
 
         EditorGUILayout.LabelField(new GUIContent("Dex Entry", "Category of this Pokémon.\n\n" +
@@ -105,6 +112,7 @@ public class PokemonEditor : Editor
 
         GUILayout.EndHorizontal();
         GUILayout.EndVertical();
+        GUILayout.EndVertical();
 
         GUILayout.Space(2);
         ExtensionMethods.DrawUILine("#525252".ToColor());
@@ -113,27 +121,86 @@ public class PokemonEditor : Editor
         EditorGUILayout.LabelField("Progression", EditorStyles.boldLabel);
 
         GUILayout.BeginVertical();
+        GUILayout.BeginVertical("Box");
         GUILayout.BeginHorizontal();
 
         EditorGUILayout.LabelField(new GUIContent("Level", "Category of this Pokémon.\n\n" +
         "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-        target.Level = EditorGUILayout.IntSlider(target.Level, 1, 100);
+        target.Experience.Level = EditorGUILayout.IntSlider(target.Experience.Level, 1, 100);
+
+        GUILayout.BeginHorizontal();
+
+        if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
+        {
+            Mathf.Clamp(++target.Experience.Level, 1, 100);
+        }
+
+        if (GUILayout.Button("-", GUILayout.Width(18), GUILayout.Height(18)))
+        {
+            Mathf.Clamp(--target.Experience.Level, 1, 100);
+        }
 
         GUILayout.EndHorizontal();
+        GUILayout.EndHorizontal();
+        GUILayout.EndVertical();
+        GUILayout.BeginVertical("Box");
         GUILayout.BeginHorizontal();
 
         EditorGUILayout.LabelField(new GUIContent("Experience", "Category of this Pokémon.\n\n" +
         "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-        target.Experience = EditorGUILayout.Slider(target.Experience, 0f, 100f); // TODO: https://bulbapedia.bulbagarden.net/wiki/Experience
+        target.Experience.Value = EditorGUILayout.IntSlider(target.Experience.Value, 0, target.Experience.Remaining);
+
+        if (target.Experience.Value == target.Experience.Remaining)
+        {
+            if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
+            {
+                Mathf.Clamp(++target.Experience.Level, 1, 100);
+            }
+        }
+
+        GUILayout.EndHorizontal();
+
+        GUILayout.BeginHorizontal();
+        GUILayout.BeginHorizontal();
+
+        GUILayout.Space(1);
+        EditorGUILayout.LabelField(new GUIContent("Group", "Category of this Pokémon.\n\n" +
+        "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(40));
+        target.Experience.Group = (Pokemon.PokemonExperience.ExperienceGroup)EditorGUILayout.EnumPopup(target.Experience.Group);
 
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
 
-        EditorGUILayout.LabelField(new GUIContent("Met At Level", "Category of this Pokémon.\n\n" +
-        "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-        target.MetAt = EditorGUILayout.IntSlider(target.MetAt, 0, target.Level);
+        EditorGUILayout.LabelField(new GUIContent("Total", "Category of this Pokémon.\n\n" +
+        "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(40));
+        EditorGUILayout.IntField(target.Experience.Total);
 
         GUILayout.EndHorizontal();
+        GUILayout.BeginHorizontal();
+
+        EditorGUILayout.LabelField(new GUIContent("Remaining", "Category of this Pokémon.\n\n" +
+        "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(65));
+        EditorGUILayout.TextField((target.Experience.Level < 100 && target.Experience.Level > 0) ? target.Experience.Remaining.ToString() : "-");
+
+        GUILayout.EndHorizontal();
+        GUILayout.EndHorizontal();
+        GUILayout.EndVertical();
+        GUILayout.BeginVertical("Box");
+        GUILayout.BeginHorizontal();
+
+        EditorGUILayout.LabelField(new GUIContent("Met At Level", "Category of this Pokémon.\n\n" +
+        "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+        target.MetAt = EditorGUILayout.IntSlider(target.MetAt, 1, target.Experience.Level);
+
+        GUILayout.EndHorizontal();
+        GUILayout.BeginHorizontal();
+
+        EditorGUILayout.LabelField(new GUIContent("Location", "Category of this Pokémon.\n\n" +
+        "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+        EditorGUILayout.TextField("");
+
+        GUILayout.EndHorizontal();
+        GUILayout.EndVertical();
         GUILayout.EndVertical();
 
         GUILayout.Space(2);
@@ -141,21 +208,28 @@ public class PokemonEditor : Editor
         GUILayout.Space(2);
 
         GUILayout.BeginVertical();
+
+        EditorGUILayout.LabelField("Held Item", EditorStyles.boldLabel);
+        GUILayout.Space(5);
+
+        GUILayout.BeginVertical("Box");
         GUILayout.BeginHorizontal();
 
         EditorGUILayout.LabelField(new GUIContent("Ability", "Category of this Pokémon.\n\n" +
         "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-        target.Level = EditorGUILayout.IntSlider(target.Level, 0, 100, GUILayout.Width(295));
+        //target.Level = EditorGUILayout.IntSlider(target.Level, 0, 100);
 
         GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal();
 
-        EditorGUILayout.LabelField(new GUIContent("Experience", "Category of this Pokémon.\n\n" +
+        EditorGUILayout.LabelField(new GUIContent("Description", "Category of this Pokémon.\n\n" +
         "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-        target.Experience = EditorGUILayout.Slider(target.Experience, 0f, 100f, GUILayout.Width(295)); // TODO: https://bulbapedia.bulbagarden.net/wiki/Experience
+        EditorGUILayout.TextArea(target.DexEntry, GUILayout.MaxHeight(35));
 
         GUILayout.EndHorizontal();
+        GUILayout.EndVertical();
+        GUILayout.BeginVertical("Box");
         GUILayout.BeginHorizontal();
 
         EditorGUILayout.LabelField(new GUIContent("Nature", "Category of this Pokémon.\n\n" +
@@ -164,15 +238,22 @@ public class PokemonEditor : Editor
 
         GUILayout.EndHorizontal();
         GUILayout.EndVertical();
+        GUILayout.EndVertical();
 
         GUILayout.Space(2);
         ExtensionMethods.DrawUILine("#525252".ToColor());
         GUILayout.Space(2);
 
         GUILayout.BeginVertical();
+
+        EditorGUILayout.LabelField("Held Item", EditorStyles.boldLabel);
+        GUILayout.Space(5);
+
+        GUILayout.BeginVertical("Box");
+        GUILayout.BeginHorizontal();
         GUILayout.BeginHorizontal();
 
-        EditorGUILayout.LabelField(new GUIContent("Held Item", "Item this Pokémon is holding.\n\n" +
+        EditorGUILayout.LabelField(new GUIContent("Item", "Item this Pokémon is holding.\n\n" +
         "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
         target.HeldItem = (Holdable)EditorGUILayout.ObjectField(target.HeldItem, typeof(Holdable), false);
 
@@ -184,9 +265,15 @@ public class PokemonEditor : Editor
 
             EditorGUILayout.LabelField(new GUIContent("Effect", "Category of this Pokémon.\n\n" +
             "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-            EditorGUILayout.LabelField(new GUIContent(target.HeldItem.Effect.ToString()), GUILayout.Width(200));
+            EditorGUILayout.TextField(target.HeldItem.Effect.ToString());
 
             GUILayout.EndHorizontal();
+        }
+
+        GUILayout.EndHorizontal();
+
+        if (target.HeldItem != null)
+        {
             GUILayout.BeginHorizontal();
 
             EditorGUILayout.LabelField(new GUIContent("Description"), GUILayout.Width(95));
@@ -195,6 +282,7 @@ public class PokemonEditor : Editor
             GUILayout.EndHorizontal();
         }
 
+        GUILayout.EndVertical();
         GUILayout.EndVertical();
 
         GUILayout.Space(2);
