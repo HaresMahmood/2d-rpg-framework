@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Pokémon", menuName = "Characters/Pokémon")]
@@ -8,21 +10,61 @@ public class Pokemon : ScriptableObject
     #region Fields
 
     //[SerializeField] private string ability;
-    private Dictionary<Stat, int> baseStats = new Dictionary<Stat, int>();
+    [SerializeField] private new string name;
+    [SerializeField] private int id;
+    [SerializeField] private PokemonProgression progression = new PokemonProgression();
+    [SerializeField] private string category;
+    [SerializeField] private string dexEntry;
+    [SerializeField] private PokemonSprites sprites = new PokemonSprites();
+    [SerializeField] private Typing primaryType;
+    [SerializeField] private Typing secondaryType;
+    [SerializeField] private StatDictionary baseStats;
+    
 
     #endregion
 
     #region Properties
 
-    public string Name { get; set; }
+    public string Name
+    {
+        get { return name; }
+        set { name = value; }
+    }
 
-    public int ID { get; set; }
+    public int ID
+    {
+        get { return id; }
+        set { id = value; }
+    }
 
-    public PokemonProgression Progression { get; } = new PokemonProgression();
+    public PokemonProgression Progression
+    {
+        get { return progression; }
+    }
 
-    public string Category { get; set; }
+    public string Category
+    {
+        get { return category; }
+        set { category = value; }
+    }
+    public Typing PrimaryType
+    {
+        get { return primaryType; }
+        set { primaryType = value; }
+    }
 
-    public string DexEntry { get; set; }
+    public Typing SecondaryType
+    {
+        get { return secondaryType; }
+        set { secondaryType = value; }
+    }
+
+
+    public string DexEntry
+    {
+        get { return dexEntry; }
+        set { dexEntry = value; }
+    }
 
     /*
     public int Ability
@@ -32,20 +74,19 @@ public class Pokemon : ScriptableObject
     }
     */
 
-    public PokemonSprites Sprites { get; private set; }
-
-    public Typing PrimaryType { get; set; }
-
-    public Typing SecondaryType { get; set; }
+    public PokemonSprites Sprites
+    {
+        get { return sprites; }
+    }
 
     public Dictionary<Stat, int> BaseStats
     {
-        get 
-        { 
-            Stat[] values = System.Enum.GetValues(typeof(Stat)).Cast<Stat>().ToArray();
-
-            if (baseStats.Count != values.Length)
+        get
+        {
+            if (baseStats.Count == 0)
             {
+                IEnumerable values = Enum.GetValues(typeof(Stat)).Cast<Stat>();
+
                 foreach (Stat stat in values)
                 {
                     baseStats.Add(stat, 0);
@@ -54,8 +95,6 @@ public class Pokemon : ScriptableObject
 
             return baseStats;
         }
-
-        private set { baseStats = value; }
     }
 
     #endregion
@@ -98,12 +137,22 @@ public class Pokemon : ScriptableObject
 
     #region Nested Classes
 
-    [System.Serializable]
+    [Serializable]
     public class PokemonProgression
     {
+        #region Fields
+
+        private LevelingGroup group;
+
+        #endregion
+
         #region Properties
 
-        public LevelingGroup Group { get; set; }
+        public LevelingGroup Group
+        {
+            get { return group; }
+            set { group = value; }
+        }
 
         #endregion
 
@@ -196,25 +245,46 @@ public class Pokemon : ScriptableObject
         #endregion
     }
 
-    [System.Serializable]
+    [Serializable]
     public class PokemonAbility
     {
         
     }
 
-    [System.Serializable]
+    [Serializable]
     public class PokemonSprites
     {
+        #region Fields
+
+        private Sprite frontSprite;
+        private Sprite backSprite;
+        private Sprite menuSprite;
+
+        #endregion
+
         #region Properties
 
-        public Sprite FrontSprite { get; set; }
+        public Sprite FrontSprite
+        {
+            get { return frontSprite; }
+        }
 
-        public Sprite BackSprite { get; set; }
+        public Sprite BackSprite
+        {
+            get { return backSprite; }
+        }
 
-        public Sprite MenuSprite { get; set; }
+        public Sprite MenuSprite
+        {
+            get { return menuSprite; }
+        }
 
         #endregion
     }
+
+    [Serializable] 
+    public class StatDictionary : SerializableDictionary<Stat, int> 
+    { }
 
     #endregion
 }

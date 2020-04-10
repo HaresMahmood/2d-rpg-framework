@@ -12,36 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2b96a900ced20843b2e7d98359ed3f7, type: 3}
   m_Name: Pikachu
   m_EditorClassIdentifier: 
-  name: Pikachu
-  id: 2
-  level: 20
-  exp: 15
-  totalExp: 100
-  totalHealth: 10
-  category: Mouse
+  name: 
+  id: 0
+  category: 
   dexEntry: 
-  ability: 
-  nature: 
-  frontSprite: {fileID: 21300000, guid: 4bf21c8014d8b484fbcb67b83a1e8788, type: 3}
-  backSprite: {fileID: 0}
-  menuSprite: {fileID: 21300000, guid: 296d4f41b7fa0364fbe8e0653a9c7027, type: 3}
-  primaryType: 5
+  primaryType: 0
   secondaryType: 0
-  learnedMoves:
-  - move: {fileID: 11400000, guid: baf06e7b75e5cf9408e5598f71dde22e, type: 2}
-    remainingPp: 5
-  - move: {fileID: 11400000, guid: af0b2f5aad824944badb46a0ae98c997, type: 2}
-    remainingPp: 4
-  - move: {fileID: 11400000, guid: 24eb516c2fb0e544ab02494d02643649, type: 2}
-    remainingPp: 2
-  - move: {fileID: 11400000, guid: 4f18ca3183ab309408ab01fde9db8f13, type: 2}
-    remainingPp: 7
-  status: 1
-  heldItem: {fileID: 11400000, guid: 77efa9f8500d50540a191e53bbb00470, type: 2}
-  stats:
-    health: 7
-    attack: 6
-    defence: 5
-    spAttack: 4
-    spDefence: 3
-    speed: 2
+  baseStats:
+    keys: 000000000100000002000000030000000400000005000000
+    values: 000000000000000000000000000000000000000000000000
