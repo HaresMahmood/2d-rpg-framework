@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Party Member", menuName = "Characters/Pokémon")]
@@ -36,21 +37,6 @@ public class PartyMember : ScriptableObject
     public Item HeldItem { get; set; }
 
     public MemberStats Stats { get; }
-
-    #endregion
-
-    #region Enums
-
-    public enum Stat
-    {
-        None,
-        HP,
-        Attack,
-        Defence,
-        SpAttack,
-        SpDefence,
-        Speed
-    }
 
     #endregion
 
@@ -107,20 +93,11 @@ public class PartyMember : ScriptableObject
     [System.Serializable]
     public class MemberNature
     {
-        #region Fields
-
-        [SerializeField] private Nature value;
-
-        #endregion
-
         #region Properties
 
-        public Nature Value
-        {
-            get { return value; }
-            set { this.value = value; }
-        }
+        public Nature Value { get; set; }
 
+        /*
         public (Stat, Stat) ChangedStats
         {
             get
@@ -181,6 +158,7 @@ public class PartyMember : ScriptableObject
                 return (increasedStat, decreasedStat);
             }
         }
+        */
 
         #endregion
 
@@ -229,7 +207,7 @@ public class PartyMember : ScriptableObject
     {
         #region Fields
 
-        [SerializeField] private Ailment value;
+        private readonly Ailment value;
 
         #endregion
 
@@ -304,7 +282,78 @@ public class PartyMember : ScriptableObject
     [System.Serializable]
     public class MemberStats
     {
-       
+        #region Variables
+
+        Pokemon.Stat[] values = System.Enum.GetValues(typeof(Pokemon.Stat)).Cast<Pokemon.Stat>().ToArray();
+
+        #endregion
+
+        #region Fields
+
+        //[SerializeField] private string ability;
+        private Dictionary<Pokemon.Stat, int> stats = new Dictionary<Pokemon.Stat, int>();
+        private Dictionary<Pokemon.Stat, int> ivs = new Dictionary<Pokemon.Stat, int>();
+        private Dictionary<Pokemon.Stat, int> evs = new Dictionary<Pokemon.Stat, int>();
+
+        #endregion
+
+        #region Properties
+
+        public Dictionary<Pokemon.Stat, int> Stats
+        {
+            get
+            { 
+                if (stats.Count != values.Length)
+                {
+                    foreach (Pokemon.Stat stat in values)
+                    {
+                        stats.Add(stat, 0);
+                    }
+                }
+
+                return stats;
+            }
+
+            private set { stats = value; }
+        }
+
+        public Dictionary<Pokemon.Stat, int> IVs
+        {
+            get
+            {
+                if (ivs.Count != values.Length)
+                {
+                    foreach (Pokemon.Stat stat in values)
+                    {
+                        ivs.Add(stat, 0);
+                    }
+                }
+
+                return stats;
+            }
+
+            private set { ivs = value; }
+        }
+
+        public Dictionary<Pokemon.Stat, int> Evs
+        {
+            get
+            {
+                if (evs.Count != values.Length)
+                {
+                    foreach (Pokemon.Stat stat in values)
+                    {
+                        evs.Add(stat, Random.Range(0, 32));
+                    }
+                }
+
+                return stats;
+            }
+
+            private set { evs = value; }
+        }
+
+        #endregion
     }
 
     #endregion

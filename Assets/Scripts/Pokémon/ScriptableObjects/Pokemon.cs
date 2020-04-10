@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Pokémon", menuName = "Characters/Pokémon")]
@@ -7,6 +8,7 @@ public class Pokemon : ScriptableObject
     #region Fields
 
     //[SerializeField] private string ability;
+    private Dictionary<Stat, int> baseStats = new Dictionary<Stat, int>();
 
     #endregion
 
@@ -36,7 +38,25 @@ public class Pokemon : ScriptableObject
 
     public Typing SecondaryType { get; set; }
 
-    public PokemonStats BaseStats { get; private set; }
+    public Dictionary<Stat, int> BaseStats
+    {
+        get 
+        { 
+            Stat[] values = System.Enum.GetValues(typeof(Stat)).Cast<Stat>().ToArray();
+
+            if (baseStats.Count != values.Length)
+            {
+                foreach (Stat stat in values)
+                {
+                    baseStats.Add(stat, 0);
+                }
+            }
+
+            return baseStats;
+        }
+
+        private set { baseStats = value; }
+    }
 
     #endregion
 
@@ -62,6 +82,16 @@ public class Pokemon : ScriptableObject
         Dark,
         Dragon,
         Fairy
+    }
+
+    public enum Stat
+    {
+        HP,
+        Attack,
+        Defence,
+        SpAttack,
+        SpDefence,
+        Speed
     }
 
     #endregion
@@ -170,21 +200,6 @@ public class Pokemon : ScriptableObject
     public class PokemonAbility
     {
         
-    }
-
-    [System.Serializable]
-    public class PokemonStats
-    {
-        #region Properties
-
-        public int Health { get; set; }
-        public int Attack { get; set; }
-        public int Defence { get; set; }
-        public int SpAttack { get; set; }
-        public int SpDefence { get; set; }
-        public int Speed { get; set; }
-
-        #endregion
     }
 
     [System.Serializable]

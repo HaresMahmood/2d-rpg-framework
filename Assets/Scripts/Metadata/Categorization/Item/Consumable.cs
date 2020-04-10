@@ -80,7 +80,7 @@ public class Consumable : Holdable
 
         [SerializeField] private Type type;
         [ConditionalField("type", false, Type.HP)] [SerializeField] private int quantity; // TODO: Using property for debug.
-        [ConditionalField("type", false, Type.STS)] [SerializeField] private Pokemon.StatusAilment.Ailment status; // TODO: Using property for debug.
+        [ConditionalField("type", false, Type.STS)] [SerializeField] private PartyMember.StatusAilment.Ailment status; // TODO: Using property for debug.
 
         #endregion
 
