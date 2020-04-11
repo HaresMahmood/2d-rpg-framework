@@ -12,15 +12,15 @@ public class Pokemon : ScriptableObject
     //[SerializeField] private string ability;
     [SerializeField] private new string name;
     [SerializeField] private int id;
+    [SerializeField] private PokemonMeasurements measurements = new PokemonMeasurements();
     [SerializeField] private PokemonProgression progression = new PokemonProgression();
     [SerializeField] private string category;
     [SerializeField] private string dexEntry;
     [SerializeField] private PokemonSprites sprites = new PokemonSprites();
     [SerializeField] private Typing primaryType;
     [SerializeField] private Typing secondaryType;
-    [SerializeField] private StatDictionary baseStats;
+    [SerializeField] private PokemonStats stats = new PokemonStats();
     
-
     #endregion
 
     #region Properties
@@ -40,6 +40,11 @@ public class Pokemon : ScriptableObject
     public PokemonProgression Progression
     {
         get { return progression; }
+    }
+
+    public PokemonMeasurements Measurements
+    {
+        get { return measurements; }
     }
 
     public string Category
@@ -79,22 +84,9 @@ public class Pokemon : ScriptableObject
         get { return sprites; }
     }
 
-    public Dictionary<Stat, int> BaseStats
+    public PokemonStats Stats
     {
-        get
-        {
-            if (baseStats.Count == 0)
-            {
-                IEnumerable values = Enum.GetValues(typeof(Stat)).Cast<Stat>();
-
-                foreach (Stat stat in values)
-                {
-                    baseStats.Add(stat, 0);
-                }
-            }
-
-            return baseStats;
-        }
+        get { return stats; }
     }
 
     #endregion
@@ -138,11 +130,38 @@ public class Pokemon : ScriptableObject
     #region Nested Classes
 
     [Serializable]
+    public class PokemonMeasurements
+    {
+        #region Fields
+
+        [SerializeField] private double height;
+        [SerializeField] private double weight;
+
+        #endregion
+
+        #region Properties
+
+        public double Height
+        {
+            get { return height; }
+            set { height = value; }
+        }
+
+        public double Weight
+        {
+            get { return weight; }
+            set { weight = value; }
+        }
+
+        #endregion
+    }
+
+    [Serializable]
     public class PokemonProgression
     {
         #region Fields
 
-        private LevelingGroup group;
+        [SerializeField]  private LevelingGroup group;
 
         #endregion
 
@@ -249,6 +268,45 @@ public class Pokemon : ScriptableObject
     public class PokemonAbility
     {
         
+    }
+
+    [Serializable]
+    public class PokemonStats
+    {
+        #region Fields
+
+        [SerializeField] private StatDictionary baseStats;
+        [SerializeField] private int baseHappiness;
+
+        #endregion
+
+        #region Property
+
+        public Dictionary<Stat, int> BaseStats
+        {
+            get
+            {
+                if (baseStats.Count == 0)
+                {
+                    IEnumerable values = Enum.GetValues(typeof(Stat)).Cast<Stat>();
+
+                    foreach (Stat stat in values)
+                    {
+                        baseStats.Add(stat, 0);
+                    }
+                }
+
+                return baseStats;
+            }
+        }
+
+        public int BaseHappiness
+        {
+            get { return baseHappiness; }
+            set { baseHappiness = value; }
+        }
+
+        #endregion
     }
 
     [Serializable]
