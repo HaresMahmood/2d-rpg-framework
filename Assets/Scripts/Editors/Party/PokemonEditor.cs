@@ -14,6 +14,9 @@ public class PokemonEditor : Editor
     private static bool showMeasurements = true;
     private static bool showStats = true;
 
+    private int feet, inches;
+    private double pounds;
+
     #endregion
 
     private void OnEnable()
@@ -155,9 +158,15 @@ public class PokemonEditor : Editor
 
             GUILayout.BeginHorizontal();
             GUILayout.BeginHorizontal();
+            EditorGUI.BeginChangeCheck();
 
-            target.Measurements.Height = EditorGUILayout.DoubleField(target.Measurements.Height);
+            target.Measurements.Height = EditorGUILayout.DoubleField(Math.Round(target.Measurements.Height, 1));
             EditorGUILayout.LabelField("m", GUILayout.Width(55));
+
+            if (EditorGUI.EndChangeCheck())
+            {
+                (feet, inches) = ToFeet(target.Measurements.Height);
+            }
 
             GUILayout.EndHorizontal();
 
@@ -165,9 +174,7 @@ public class PokemonEditor : Editor
             "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(55));
 
             GUILayout.BeginHorizontal();
-
-            (int feet, int inches) = ToFeet(target.Measurements.Height);
-
+            EditorGUI.BeginChangeCheck();
             GUILayout.BeginHorizontal();
 
             feet = EditorGUILayout.IntField(feet);
@@ -179,9 +186,17 @@ public class PokemonEditor : Editor
             inches = EditorGUILayout.IntField(inches);
             EditorGUILayout.LabelField("\"", GUILayout.Width(10));
 
-            //target.Measurements.Height = 
-
             GUILayout.EndHorizontal();
+
+            if (EditorGUI.EndChangeCheck())
+            {
+                target.Measurements.Height = toMeters(feet, inches);
+            }
+            else
+            {
+                (feet, inches) = (feet, inches) == ToFeet(Math.Round(target.Measurements.Height, 1)) ? (feet, inches) : ToFeet(target.Measurements.Height);
+            }
+
             GUILayout.EndHorizontal();
             GUILayout.EndHorizontal();
             GUILayout.EndHorizontal();
@@ -189,14 +204,20 @@ public class PokemonEditor : Editor
             GUILayout.BeginVertical("Box");
             GUILayout.BeginHorizontal();
 
-            EditorGUILayout.LabelField(new GUIContent("Height", "Dex number of this Pokémon.\n\n" +
+            EditorGUILayout.LabelField(new GUIContent("Weight", "Dex number of this Pokémon.\n\n" +
             "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
 
             GUILayout.BeginHorizontal();
             GUILayout.BeginHorizontal();
+            EditorGUI.BeginChangeCheck();
 
-            target.Measurements.Height = EditorGUILayout.DoubleField(target.Measurements.Height);
-            EditorGUILayout.LabelField("m", GUILayout.Width(55));
+            target.Measurements.Weight = EditorGUILayout.DoubleField(Math.Round(target.Measurements.Weight, 1));
+            EditorGUILayout.LabelField("kg", GUILayout.Width(55));
+
+            if (EditorGUI.EndChangeCheck())
+            {
+                pounds = ToPounds(target.Measurements.Weight);
+            }
 
             GUILayout.EndHorizontal();
 
@@ -204,18 +225,23 @@ public class PokemonEditor : Editor
             "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(55));
 
             GUILayout.BeginHorizontal();
+            EditorGUI.BeginChangeCheck();
             GUILayout.BeginHorizontal();
 
-            target.Measurements.Height = EditorGUILayout.DoubleField(target.Measurements.Height);
-            EditorGUILayout.LabelField("'", GUILayout.Width(10));
+            pounds = EditorGUILayout.DoubleField(pounds);
+            EditorGUILayout.LabelField("lbs", GUILayout.Width(20));
 
             GUILayout.EndHorizontal();
-            GUILayout.BeginHorizontal();
 
-            target.Measurements.Height = EditorGUILayout.DoubleField(target.Measurements.Height);
-            EditorGUILayout.LabelField("\"", GUILayout.Width(10));
+            if (EditorGUI.EndChangeCheck())
+            {
+                target.Measurements.Weight = ToKilograms(pounds);
+            }
+            else
+            {
+                pounds = pounds == ToPounds(target.Measurements.Weight) ? pounds : ToPounds(target.Measurements.Weight);
+            }
 
-            GUILayout.EndHorizontal();
             GUILayout.EndHorizontal();
             GUILayout.EndHorizontal();
             GUILayout.EndHorizontal();
@@ -319,18 +345,34 @@ public class PokemonEditor : Editor
 
     private (int, int) ToFeet(double value)
     {
-        int feet = (int)(value / 0.3048);
-        int inches = (int)((feet - Math.Truncate(value / 0.3048f)) / 0.08333);
+        double conversion = value * 39.37f;
+        int feet = (int)(conversion / 12);
+        int inches = (int)(conversion % 12);
 
         return (feet, inches);
     }
 
-    /*
     private double toMeters(int feet, int inches)
     {
+        inches = inches + (feet * 12);
+        double meters = inches / 39.37f;
 
+        return meters;
     }
-    */
+
+    private double ToPounds(double value)
+    {
+        double pounds = Math.Round(value * 2.205f, 1);
+
+        return pounds;
+    }
+
+    private double ToKilograms(double value)
+    {
+        double kilograms = value / 2.205f;
+
+        return kilograms;
+    }
 
     #endregion
 
