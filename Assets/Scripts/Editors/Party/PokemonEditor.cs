@@ -12,7 +12,9 @@ public class PokemonEditor : Editor
 
     private static bool showDexInfo = true;
     private static bool showMeasurements = true;
+    private static bool showProgression = true;
     private static bool showStats = true;
+    private static bool showSprites = true;
 
     private int feet, inches;
     private double pounds;
@@ -254,6 +256,31 @@ public class PokemonEditor : Editor
         ExtensionMethods.DrawUILine("#525252".ToColor());
         GUILayout.Space(2);
 
+        showProgression = EditorGUILayout.Foldout(showProgression, "Progression", foldoutStyle);
+        GUILayout.Space(5);
+
+        if (showProgression)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Space(15);
+            GUILayout.BeginVertical();
+            GUILayout.BeginVertical("Box");
+            GUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("Leveling Group", "Dex number of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+            target.Progression.Group = (Pokemon.PokemonProgression.LevelingGroup)EditorGUILayout.EnumPopup(target.Progression.Group);
+
+            GUILayout.EndHorizontal();
+            GUILayout.EndVertical();
+            GUILayout.EndVertical();
+            GUILayout.EndHorizontal();
+        }
+
+        GUILayout.Space(2);
+        ExtensionMethods.DrawUILine("#525252".ToColor());
+        GUILayout.Space(2);
+
         showStats = EditorGUILayout.Foldout(showStats, "Base Stats", foldoutStyle);
         GUILayout.Space(5);
 
@@ -325,7 +352,7 @@ public class PokemonEditor : Editor
             GUILayout.BeginVertical("Box");
             GUILayout.BeginHorizontal();
 
-            EditorGUILayout.LabelField(new GUIContent("Base Happiness", "Dex number of this Pokémon.\n\n" +
+            EditorGUILayout.LabelField(new GUIContent("Happiness", "Dex number of this Pokémon.\n\n" +
             "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
             target.Stats.BaseHappiness = EditorGUILayout.IntSlider(target.Stats.BaseHappiness, 0, 255);
 
@@ -335,6 +362,78 @@ public class PokemonEditor : Editor
             GUILayout.EndVertical();
             GUILayout.EndHorizontal();
         }
+
+        GUILayout.Space(2);
+        ExtensionMethods.DrawUILine("#525252".ToColor());
+        GUILayout.Space(2);
+
+        showSprites = EditorGUILayout.Foldout(showSprites, "Sprites", foldoutStyle);
+        GUILayout.Space(5);
+
+        if (showSprites)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Space(15);
+            GUILayout.BeginVertical();
+            GUILayout.BeginVertical("Box");
+            GUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("Menu", "Dex number of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+            target.Sprites.MenuSprite = (Sprite)EditorGUILayout.ObjectField(target.Sprites.MenuSprite, typeof(Sprite), false);
+
+            GUILayout.EndHorizontal();
+            GUILayout.EndVertical();
+            GUILayout.BeginHorizontal();
+            GUILayout.BeginVertical("Box");
+
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+
+            if (target.Sprites.FrontSprite != null)
+            {
+                Texture2D itemSprite = target.Sprites.FrontSprite.texture;
+                GUILayout.Label(itemSprite, GUILayout.Width((Screen.width / 2) - 50), GUILayout.Height((Screen.width / 2) - 50));
+            }
+
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("Front", "Dex number of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(45));
+            target.Sprites.FrontSprite = (Sprite)EditorGUILayout.ObjectField(target.Sprites.FrontSprite, typeof(Sprite), false);
+
+            GUILayout.EndHorizontal();
+            GUILayout.EndVertical();
+            GUILayout.BeginVertical("Box");
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+
+            if (target.Sprites.BackSprite != null)
+            {
+                Texture2D itemSprite = target.Sprites.BackSprite.texture;
+                GUILayout.Label(itemSprite, GUILayout.Width((Screen.width / 2) - 50), GUILayout.Height((Screen.width / 2) - 50));
+            }
+
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("Back", "Dex number of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(45));
+            target.Sprites.BackSprite = (Sprite)EditorGUILayout.ObjectField(target.Sprites.BackSprite, typeof(Sprite), false);
+
+            GUILayout.EndHorizontal();
+            GUILayout.EndVertical();
+            GUILayout.EndVertical();
+            GUILayout.EndHorizontal();
+            GUILayout.EndHorizontal();
+        }
+
+        GUILayout.Space(2);
+        ExtensionMethods.DrawUILine("#525252".ToColor());
+        GUILayout.Space(2);
 
         EditorUtility.SetDirty(target);
 

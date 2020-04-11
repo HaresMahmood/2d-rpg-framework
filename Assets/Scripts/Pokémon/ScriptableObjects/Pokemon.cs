@@ -314,27 +314,30 @@ public class Pokemon : ScriptableObject
     {
         #region Fields
 
-        private Sprite frontSprite;
-        private Sprite backSprite;
-        private Sprite menuSprite;
+        [SerializeField] private Sprite menuSprite;
+        [SerializeField] private Sprite frontSprite;
+        [SerializeField] private Sprite backSprite;
 
         #endregion
 
         #region Properties
 
+        public Sprite MenuSprite
+        {
+            get { return menuSprite; }
+            set { menuSprite = value; }
+        }
+
         public Sprite FrontSprite
         {
             get { return frontSprite; }
+            set { frontSprite = value; }
         }
 
         public Sprite BackSprite
         {
             get { return backSprite; }
-        }
-
-        public Sprite MenuSprite
-        {
-            get { return menuSprite; }
+            set { backSprite = value; }
         }
 
         #endregion
