@@ -14,6 +14,7 @@ public class PokemonEditor : Editor
     private static bool showMeasurements = true;
     private static bool showProgression = true;
     private static bool showStats = true;
+    private static bool showYield = true;
     private static bool showSprites = true;
 
     private int feet, inches;
@@ -293,11 +294,20 @@ public class PokemonEditor : Editor
             GUILayout.BeginHorizontal();
             GUILayout.BeginHorizontal();
 
-            EditorGUILayout.LabelField(new GUIContent("Attack", "Dex number of this Pokémon.\n\n" +
+            EditorGUILayout.LabelField(new GUIContent("Hit Points", "Dex number of this Pokémon.\n\n" +
             "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+            target.Stats.BaseStats[Pokemon.Stat.HP] = Mathf.Max(0, EditorGUILayout.IntField(target.Stats.BaseStats[Pokemon.Stat.HP]));
+
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("Attack", "Dex number of this Pokémon.\n\n" +
+           "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
             target.Stats.BaseStats[Pokemon.Stat.Attack] = Mathf.Max(0, EditorGUILayout.IntField(target.Stats.BaseStats[Pokemon.Stat.Attack]));
 
             GUILayout.EndHorizontal();
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
             GUILayout.BeginHorizontal();
 
             EditorGUILayout.LabelField(new GUIContent("Defence", "Dex number of this Pokémon.\n\n" +
@@ -305,8 +315,6 @@ public class PokemonEditor : Editor
             target.Stats.BaseStats[Pokemon.Stat.Defence] = Mathf.Max(0, EditorGUILayout.IntField(target.Stats.BaseStats[Pokemon.Stat.Defence]));
 
             GUILayout.EndHorizontal();
-            GUILayout.EndHorizontal();
-            GUILayout.BeginHorizontal();
             GUILayout.BeginHorizontal();
 
             EditorGUILayout.LabelField(new GUIContent("Sp. Attack", "Dex number of this Pokémon.\n\n" +
@@ -314,6 +322,8 @@ public class PokemonEditor : Editor
             target.Stats.BaseStats[Pokemon.Stat.SpAttack] = Mathf.Max(0, EditorGUILayout.IntField(target.Stats.BaseStats[Pokemon.Stat.SpAttack]));
 
             GUILayout.EndHorizontal();
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
             GUILayout.BeginHorizontal();
 
             EditorGUILayout.LabelField(new GUIContent("Sp. Defence", "Dex number of this Pokémon.\n\n" +
@@ -321,20 +331,11 @@ public class PokemonEditor : Editor
             target.Stats.BaseStats[Pokemon.Stat.SpDefence] = Mathf.Max(0, EditorGUILayout.IntField(target.Stats.BaseStats[Pokemon.Stat.SpDefence]));
 
             GUILayout.EndHorizontal();
-            GUILayout.EndHorizontal();
-            GUILayout.BeginHorizontal();
             GUILayout.BeginHorizontal();
 
             EditorGUILayout.LabelField(new GUIContent("Speed", "Dex number of this Pokémon.\n\n" +
             "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
             target.Stats.BaseStats[Pokemon.Stat.Speed] = Mathf.Max(0, EditorGUILayout.IntField(target.Stats.BaseStats[Pokemon.Stat.Speed]));
-
-            GUILayout.EndHorizontal();
-            GUILayout.BeginHorizontal();
-
-            EditorGUILayout.LabelField(new GUIContent("Hit Points", "Dex number of this Pokémon.\n\n" +
-            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-            target.Stats.BaseStats[Pokemon.Stat.HP] = Mathf.Max(0, EditorGUILayout.IntField(target.Stats.BaseStats[Pokemon.Stat.HP]));
 
             GUILayout.EndHorizontal();
             GUILayout.EndHorizontal();
@@ -359,6 +360,160 @@ public class PokemonEditor : Editor
             GUILayout.EndHorizontal();
             GUILayout.EndVertical();
 
+            GUILayout.EndVertical();
+            GUILayout.EndHorizontal();
+        }
+
+        GUILayout.Space(2);
+        ExtensionMethods.DrawUILine("#525252".ToColor());
+        GUILayout.Space(2);
+
+        showYield = EditorGUILayout.Foldout(showYield, "Base Yield", foldoutStyle);
+        GUILayout.Space(5);
+
+        if (showYield)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Space(15);
+            GUILayout.BeginVertical();
+            GUILayout.BeginVertical("Box");
+            GUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("Experience", "Dex number of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+            target.Yield.Experience = EditorGUILayout.IntSlider(target.Yield.Experience, 0, 750);
+
+            GUILayout.EndHorizontal();
+            GUILayout.EndVertical();
+            GUILayout.BeginVertical("Box");
+            GUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("EV", "Dex number of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+
+            GUILayout.BeginVertical();
+            GUILayout.BeginHorizontal();
+            GUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("HP", "Dex number of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(55));
+
+            if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
+            {
+                Mathf.Clamp(++target.Yield.EV[Pokemon.Stat.HP], 0, 3);
+            }
+
+            target.Yield.EV[Pokemon.Stat.HP] = EditorGUILayout.IntField(target.Yield.EV[Pokemon.Stat.HP], GUILayout.Width(18));
+
+            if (GUILayout.Button("-", GUILayout.Width(18), GUILayout.Height(18)))
+            {
+                Mathf.Clamp(--target.Yield.EV[Pokemon.Stat.HP], 0, 3);
+            }
+
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("ATK", "Dex number of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(55));
+
+            if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
+            {
+                Mathf.Clamp(++target.Yield.EV[Pokemon.Stat.Attack], 0, 3);
+            }
+
+            target.Yield.EV[Pokemon.Stat.Attack] = EditorGUILayout.IntField(target.Yield.EV[Pokemon.Stat.Attack], GUILayout.Width(18));
+
+            if (GUILayout.Button("-", GUILayout.Width(18), GUILayout.Height(18)))
+            {
+                Mathf.Clamp(--target.Yield.EV[Pokemon.Stat.Attack], 0, 3);
+            }
+
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("DEF", "Dex number of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(55));
+
+            if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
+            {
+                Mathf.Clamp(++target.Yield.EV[Pokemon.Stat.Defence], 0, 3);
+            }
+
+            target.Yield.EV[Pokemon.Stat.Defence] = EditorGUILayout.IntField(target.Yield.EV[Pokemon.Stat.Defence], GUILayout.Width(18));
+
+            if (GUILayout.Button("-", GUILayout.Width(18), GUILayout.Height(18)))
+            {
+                Mathf.Clamp(--target.Yield.EV[Pokemon.Stat.Defence], 0, 3);
+            }
+
+            GUILayout.EndHorizontal();
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+            GUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("SP. ATK", "Dex number of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(55));
+
+            if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
+            {
+                Mathf.Clamp(++target.Yield.EV[Pokemon.Stat.SpAttack], 0, 3);
+            }
+
+            target.Yield.EV[Pokemon.Stat.SpAttack] = EditorGUILayout.IntField(target.Yield.EV[Pokemon.Stat.SpAttack], GUILayout.Width(18));
+
+            if (GUILayout.Button("-", GUILayout.Width(18), GUILayout.Height(18)))
+            {
+                Mathf.Clamp(--target.Yield.EV[Pokemon.Stat.SpAttack], 0, 3);
+            }
+
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("SP. DEF", "Dex number of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(55));
+
+            if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
+            {
+                Mathf.Clamp(++target.Yield.EV[Pokemon.Stat.SpDefence], 0, 3);
+            }
+
+            target.Yield.EV[Pokemon.Stat.HP] = EditorGUILayout.IntField(target.Yield.EV[Pokemon.Stat.SpDefence], GUILayout.Width(18));
+
+            if (GUILayout.Button("-", GUILayout.Width(18), GUILayout.Height(18)))
+            {
+                Mathf.Clamp(--target.Yield.EV[Pokemon.Stat.SpDefence], 0, 3);
+            }
+
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("SPD", "Dex number of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(55));
+
+            if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
+            {
+                Mathf.Clamp(++target.Yield.EV[Pokemon.Stat.Speed], 0, 3);
+            }
+
+            target.Yield.EV[Pokemon.Stat.HP] = EditorGUILayout.IntField(target.Yield.EV[Pokemon.Stat.Speed], GUILayout.Width(18));
+
+            if (GUILayout.Button("-", GUILayout.Width(18), GUILayout.Height(18)))
+            {
+                Mathf.Clamp(--target.Yield.EV[Pokemon.Stat.Speed], 0, 3);
+            }
+
+            GUILayout.EndHorizontal();
+            GUILayout.EndHorizontal();
+            GUILayout.EndHorizontal();
+            GUILayout.EndVertical();
+            GUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("Total", "Dex number of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+            EditorGUILayout.SelectableLabel(target.Yield.EV.Sum(stat => stat.Value).ToString(), EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
+
+            GUILayout.EndHorizontal();
+            GUILayout.EndVertical();
             GUILayout.EndVertical();
             GUILayout.EndHorizontal();
         }

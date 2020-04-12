@@ -16,11 +16,12 @@ public class Pokemon : ScriptableObject
     [SerializeField] private PokemonProgression progression = new PokemonProgression();
     [SerializeField] private string category;
     [SerializeField] private string dexEntry;
-    [SerializeField] private PokemonSprites sprites = new PokemonSprites();
     [SerializeField] private Typing primaryType;
     [SerializeField] private Typing secondaryType;
     [SerializeField] private PokemonStats stats = new PokemonStats();
-    
+    [SerializeField] private PokemonYield yield = new PokemonYield();
+    [SerializeField] private PokemonSprites sprites = new PokemonSprites();
+
     #endregion
 
     #region Properties
@@ -79,16 +80,20 @@ public class Pokemon : ScriptableObject
     }
     */
 
-    public PokemonSprites Sprites
-    {
-        get { return sprites; }
-    }
-
     public PokemonStats Stats
     {
         get { return stats; }
     }
 
+    public PokemonYield Yield
+    {
+        get { return yield; }
+    }
+
+    public PokemonSprites Sprites
+    {
+        get { return sprites; }
+    }
     #endregion
 
     #region Enums
@@ -304,6 +309,45 @@ public class Pokemon : ScriptableObject
         {
             get { return baseHappiness; }
             set { baseHappiness = value; }
+        }
+
+        #endregion
+    }
+
+    [Serializable]
+    public class PokemonYield
+    {
+        #region Fields
+
+        [SerializeField] private int experience;
+        [SerializeField] private StatDictionary ev;
+
+        #endregion
+
+        #region Properties
+
+        public int Experience
+        {
+            get { return experience; }
+            set { experience = value; }
+        }
+
+        public Dictionary<Stat, int> EV
+        {
+            get
+            {
+                if (ev.Count == 0)
+                {
+                    IEnumerable values = Enum.GetValues(typeof(Stat)).Cast<Stat>();
+
+                    foreach (Stat stat in values)
+                    {
+                        ev.Add(stat, 0);
+                    }
+                }
+
+                return ev;
+            }
         }
 
         #endregion

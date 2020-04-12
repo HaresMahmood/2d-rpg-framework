@@ -182,68 +182,41 @@ public class PartyMember : ScriptableObject
 
         public Nature Value { get; set; }
 
-        /*
-        public (Stat, Stat) ChangedStats
+        public StatDictionary ModifiedStat
         {
             get
             {
-                Stat increasedStat;
-                Stat decreasedStat;
+                StatDictionary stats = new StatDictionary();
+                Pokemon.Stat[] values = Enum.GetValues(typeof(Pokemon.Stat)).Cast<Pokemon.Stat>().ToArray();
 
-                if (value == Nature.Lonely || value == Nature.Brave || value == Nature.Adamant || value == Nature.Naughty)
+                foreach (Pokemon.Stat stat in values)
                 {
-                    increasedStat = Stat.Attack;
-                }
-                else if (value == Nature.Bold || value == Nature.Relaxed || value == Nature.Impish || value == Nature.Lax)
-                {
-                    increasedStat = Stat.Defence;
-                }
-                else if (value == Nature.Timid || value == Nature.Hasty || value == Nature.Jolly || value == Nature.Naive)
-                {
-                    increasedStat = Stat.Speed;
-                }
-                else if (value == Nature.Modest || value == Nature.Mild || value == Nature.Quiet || value == Nature.Rash)
-                {
-                    increasedStat = Stat.SpAttack;
-                }
-                else if (value == Nature.Calm || value == Nature.Gentle || value == Nature.Sassy || value == Nature.Careful)
-                {
-                    increasedStat = Stat.SpDefence;
-                }
-                else
-                {
-                    increasedStat = Stat.None;
-                }
+                    int value = 100;
 
-                if (value == Nature.Lonely || value == Nature.Docile || value == Nature.Mild || value == Nature.Gentle)
-                {
-                    decreasedStat = Stat.Defence;
-                }
-                else if (value == Nature.Brave || value == Nature.Relaxed || value == Nature.Quiet || value == Nature.Sassy)
-                {
-                    decreasedStat = Stat.Speed;
-                }
-                else if (value == Nature.Adamant || value == Nature.Impish || value == Nature.Jolly || value == Nature.Careful)
-                {
-                    decreasedStat = Stat.SpAttack;
-                }
-                else if (value == Nature.Naughty || value == Nature.Lax || value == Nature.Naive || value == Nature.Rash)
-                {
-                    decreasedStat = Stat.SpDefence;
-                }
-                else if (value == Nature.Bold || value == Nature.Timid || value == Nature.Modest || value == Nature.Calm)
-                {
-                    decreasedStat = Stat.Attack;
-                }
-                else
-                {
-                    decreasedStat = Stat.None;
+                    if ((((Value == Nature.Lonely || Value == Nature.Brave || Value == Nature.Adamant || Value == Nature.Naughty)) && stat == Pokemon.Stat.Attack)
+                    || (((Value == Nature.Bold || Value == Nature.Relaxed || Value == Nature.Impish || Value == Nature.Lax)) && stat == Pokemon.Stat.Defence)
+                    || (((Value == Nature.Timid || Value == Nature.Hasty || Value == Nature.Jolly || Value == Nature.Naive)) && stat == Pokemon.Stat.Speed)
+                    || (((Value == Nature.Modest || Value == Nature.Mild || Value == Nature.Quiet || Value == Nature.Rash)) && stat == Pokemon.Stat.SpAttack)
+                    || (((Value == Nature.Calm || Value == Nature.Gentle || Value == Nature.Sassy || Value == Nature.Careful)) && stat == Pokemon.Stat.SpDefence))
+                    {
+                        value = 110;
+                    }
+                    else
+                    if ((((Value == Nature.Lonely || Value == Nature.Docile || Value == Nature.Mild || Value == Nature.Gentle)) && stat == Pokemon.Stat.Defence)
+                    || (((Value == Nature.Brave || Value == Nature.Relaxed || Value == Nature.Quiet || Value == Nature.Sassy)) && stat == Pokemon.Stat.Speed)
+                    || (((Value == Nature.Adamant || Value == Nature.Impish || Value == Nature.Jolly || Value == Nature.Careful)) && stat == Pokemon.Stat.SpAttack)
+                    || (((Value == Nature.Naughty || Value == Nature.Lax || Value == Nature.Naive || Value == Nature.Rash)) && stat == Pokemon.Stat.SpDefence)
+                    || (((Value == Nature.Bold || Value == Nature.Timid || Value == Nature.Modest || Value == Nature.Calm)) && stat == Pokemon.Stat.Attack))
+                    {
+                        value = 90;
+                    }
+
+                    stats.Add(stat, value);
                 }
 
-                return (increasedStat, decreasedStat);
+                return stats;
             }
         }
-        */
 
         #endregion
 
@@ -391,7 +364,7 @@ public class PartyMember : ScriptableObject
             set { hp = value; }
         }
 
-        public Dictionary<Pokemon.Stat, int> Stats
+        public StatDictionary Stats
         {
             get
             {
@@ -407,7 +380,7 @@ public class PartyMember : ScriptableObject
             }
         }
 
-        public Dictionary<Pokemon.Stat, int> EVs
+        public StatDictionary EVs
         {
             get
             {
@@ -423,7 +396,7 @@ public class PartyMember : ScriptableObject
             }
         }
 
-        public Dictionary<Pokemon.Stat, int> IVs
+        public StatDictionary IVs
         {
             get
             {
