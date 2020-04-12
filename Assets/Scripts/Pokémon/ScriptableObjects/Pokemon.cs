@@ -12,12 +12,14 @@ public class Pokemon : ScriptableObject
     //[SerializeField] private string ability;
     [SerializeField] private new string name;
     [SerializeField] private int id;
-    [SerializeField] private PokemonMeasurements measurements = new PokemonMeasurements();
-    [SerializeField] private PokemonProgression progression = new PokemonProgression();
     [SerializeField] private string category;
     [SerializeField] private string dexEntry;
+    [SerializeField] private float genderRatio;
+    [SerializeField] private int catchRate;
     [SerializeField] private Typing primaryType;
     [SerializeField] private Typing secondaryType;
+    [SerializeField] private PokemonMeasurements measurements = new PokemonMeasurements();
+    [SerializeField] private PokemonProgression progression = new PokemonProgression();
     [SerializeField] private PokemonStats stats = new PokemonStats();
     [SerializeField] private PokemonYield yield = new PokemonYield();
     [SerializeField] private PokemonSprites sprites = new PokemonSprites();
@@ -53,6 +55,7 @@ public class Pokemon : ScriptableObject
         get { return category; }
         set { category = value; }
     }
+
     public Typing PrimaryType
     {
         get { return primaryType; }
@@ -65,11 +68,22 @@ public class Pokemon : ScriptableObject
         set { secondaryType = value; }
     }
 
-
     public string DexEntry
     {
         get { return dexEntry; }
         set { dexEntry = value; }
+    }
+
+    public float GenderRatio
+    {
+        get { return genderRatio; }
+        set { genderRatio = value; }
+    }
+
+    public int CatchRate
+    {
+        get { return catchRate; }
+        set { catchRate = value; }
     }
 
     /*
@@ -287,7 +301,7 @@ public class Pokemon : ScriptableObject
 
         #region Property
 
-        public Dictionary<Stat, int> BaseStats
+        public StatDictionary BaseStats
         {
             get
             {
@@ -332,7 +346,7 @@ public class Pokemon : ScriptableObject
             set { experience = value; }
         }
 
-        public Dictionary<Stat, int> EV
+        public StatDictionary EV
         {
             get
             {

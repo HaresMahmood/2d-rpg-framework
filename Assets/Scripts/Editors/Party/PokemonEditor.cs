@@ -11,12 +11,14 @@ public class PokemonEditor : Editor
     private new Pokemon target;
 
     private static bool showDexInfo = true;
-    private static bool showMeasurements = true;
-    private static bool showProgression = true;
-    private static bool showStats = true;
-    private static bool showYield = true;
-    private static bool showSprites = true;
+    private static bool showMeasurements = false;
+    private static bool showProgression = false;
+    private static bool showAbility = true;
+    private static bool showStats = false;
+    private static bool showYield = false;
+    private static bool showSprites = false;
 
+    private float female;
     private int feet, inches;
     private double pounds;
 
@@ -137,6 +139,69 @@ public class PokemonEditor : Editor
 
             GUILayout.EndHorizontal();
             GUILayout.EndVertical();
+            GUILayout.BeginVertical("Box");
+            GUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("Gender Ratio", "Category of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+
+            GUILayout.BeginVertical();
+            GUILayout.BeginHorizontal();
+            GUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("Male", "Category of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(55));
+
+            GUILayout.BeginHorizontal();
+            EditorGUI.BeginChangeCheck();
+
+            target.GenderRatio = EditorGUILayout.Slider(target.GenderRatio, 0f, 100f);
+            EditorGUILayout.LabelField("%", GUILayout.Width(20));
+
+            if (EditorGUI.EndChangeCheck())
+            {
+                female = 100f - target.GenderRatio;
+            }
+
+            GUILayout.EndHorizontal();
+            GUILayout.EndHorizontal();
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+            GUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("Female", "Category of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(55));
+
+            GUILayout.BeginHorizontal();
+            EditorGUI.BeginChangeCheck();
+
+            female = EditorGUILayout.Slider(female, 0f, 100f);
+            EditorGUILayout.LabelField("%", GUILayout.Width(20));
+
+            if (EditorGUI.EndChangeCheck())
+            {
+                target.GenderRatio = 100f - female;
+            }
+            else
+            {
+                female = female == 100f - target.GenderRatio ? female : 100f - target.GenderRatio;
+            }
+
+            GUILayout.EndHorizontal();
+            GUILayout.EndHorizontal();
+            GUILayout.EndHorizontal();
+            GUILayout.EndVertical();
+            GUILayout.EndHorizontal();
+            GUILayout.EndVertical();
+            GUILayout.BeginVertical("Box");
+            GUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("Catch Rate", "Category of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+            target.CatchRate = EditorGUILayout.IntSlider(target.CatchRate, 1, 255);
+
+            GUILayout.EndHorizontal();
+            GUILayout.EndVertical();
             GUILayout.EndVertical();
             GUILayout.EndHorizontal();
         }
@@ -247,6 +312,33 @@ public class PokemonEditor : Editor
 
             GUILayout.EndHorizontal();
             GUILayout.EndHorizontal();
+            GUILayout.EndHorizontal();
+            GUILayout.EndVertical();
+            GUILayout.EndVertical();
+            GUILayout.EndHorizontal();
+        }
+
+        GUILayout.Space(2);
+        ExtensionMethods.DrawUILine("#525252".ToColor());
+        GUILayout.Space(2);
+
+        showAbility = EditorGUILayout.Foldout(showAbility, "Ability", foldoutStyle);
+        GUILayout.Space(5);
+
+        if (showAbility)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Space(15);
+            GUILayout.BeginVertical();
+            GUILayout.BeginVertical("Box");
+            GUILayout.BeginHorizontal();
+
+            /*
+            EditorGUILayout.LabelField(new GUIContent("Leveling Group", "Dex number of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+            target.Progression.Group = (Pokemon.PokemonProgression.LevelingGroup)EditorGUILayout.EnumPopup(target.Progression.Group);
+            */
+
             GUILayout.EndHorizontal();
             GUILayout.EndVertical();
             GUILayout.EndVertical();
@@ -400,14 +492,14 @@ public class PokemonEditor : Editor
 
             if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
             {
-                Mathf.Clamp(++target.Yield.EV[Pokemon.Stat.HP], 0, 3);
+                target.Yield.EV[Pokemon.Stat.HP] = Mathf.Clamp(++target.Yield.EV[Pokemon.Stat.HP], 0, 3);
             }
 
             target.Yield.EV[Pokemon.Stat.HP] = EditorGUILayout.IntField(target.Yield.EV[Pokemon.Stat.HP], GUILayout.Width(18));
 
             if (GUILayout.Button("-", GUILayout.Width(18), GUILayout.Height(18)))
             {
-                Mathf.Clamp(--target.Yield.EV[Pokemon.Stat.HP], 0, 3);
+                target.Yield.EV[Pokemon.Stat.HP] = Mathf.Clamp(--target.Yield.EV[Pokemon.Stat.HP], 0, 3);
             }
 
             GUILayout.EndHorizontal();
@@ -418,14 +510,14 @@ public class PokemonEditor : Editor
 
             if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
             {
-                Mathf.Clamp(++target.Yield.EV[Pokemon.Stat.Attack], 0, 3);
+                target.Yield.EV[Pokemon.Stat.Attack] = Mathf.Clamp(++target.Yield.EV[Pokemon.Stat.Attack], 0, 3);
             }
 
             target.Yield.EV[Pokemon.Stat.Attack] = EditorGUILayout.IntField(target.Yield.EV[Pokemon.Stat.Attack], GUILayout.Width(18));
 
             if (GUILayout.Button("-", GUILayout.Width(18), GUILayout.Height(18)))
             {
-                Mathf.Clamp(--target.Yield.EV[Pokemon.Stat.Attack], 0, 3);
+                target.Yield.EV[Pokemon.Stat.Attack] = Mathf.Clamp(--target.Yield.EV[Pokemon.Stat.Attack], 0, 3);
             }
 
             GUILayout.EndHorizontal();
@@ -436,14 +528,14 @@ public class PokemonEditor : Editor
 
             if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
             {
-                Mathf.Clamp(++target.Yield.EV[Pokemon.Stat.Defence], 0, 3);
+                target.Yield.EV[Pokemon.Stat.Defence] = Mathf.Clamp(++target.Yield.EV[Pokemon.Stat.Defence], 0, 3);
             }
 
             target.Yield.EV[Pokemon.Stat.Defence] = EditorGUILayout.IntField(target.Yield.EV[Pokemon.Stat.Defence], GUILayout.Width(18));
 
             if (GUILayout.Button("-", GUILayout.Width(18), GUILayout.Height(18)))
             {
-                Mathf.Clamp(--target.Yield.EV[Pokemon.Stat.Defence], 0, 3);
+                target.Yield.EV[Pokemon.Stat.Defence] = Mathf.Clamp(--target.Yield.EV[Pokemon.Stat.Defence], 0, 3);
             }
 
             GUILayout.EndHorizontal();
@@ -456,14 +548,14 @@ public class PokemonEditor : Editor
 
             if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
             {
-                Mathf.Clamp(++target.Yield.EV[Pokemon.Stat.SpAttack], 0, 3);
+                target.Yield.EV[Pokemon.Stat.SpAttack] = Mathf.Clamp(++target.Yield.EV[Pokemon.Stat.SpAttack], 0, 3);
             }
 
             target.Yield.EV[Pokemon.Stat.SpAttack] = EditorGUILayout.IntField(target.Yield.EV[Pokemon.Stat.SpAttack], GUILayout.Width(18));
 
             if (GUILayout.Button("-", GUILayout.Width(18), GUILayout.Height(18)))
             {
-                Mathf.Clamp(--target.Yield.EV[Pokemon.Stat.SpAttack], 0, 3);
+                target.Yield.EV[Pokemon.Stat.SpAttack] = Mathf.Clamp(--target.Yield.EV[Pokemon.Stat.SpAttack], 0, 3);
             }
 
             GUILayout.EndHorizontal();
@@ -474,14 +566,14 @@ public class PokemonEditor : Editor
 
             if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
             {
-                Mathf.Clamp(++target.Yield.EV[Pokemon.Stat.SpDefence], 0, 3);
+                target.Yield.EV[Pokemon.Stat.SpDefence] = Mathf.Clamp(++target.Yield.EV[Pokemon.Stat.SpDefence], 0, 3);
             }
 
-            target.Yield.EV[Pokemon.Stat.HP] = EditorGUILayout.IntField(target.Yield.EV[Pokemon.Stat.SpDefence], GUILayout.Width(18));
+            target.Yield.EV[Pokemon.Stat.SpDefence] = EditorGUILayout.IntField(target.Yield.EV[Pokemon.Stat.SpDefence], GUILayout.Width(18));
 
             if (GUILayout.Button("-", GUILayout.Width(18), GUILayout.Height(18)))
             {
-                Mathf.Clamp(--target.Yield.EV[Pokemon.Stat.SpDefence], 0, 3);
+                target.Yield.EV[Pokemon.Stat.SpDefence] = Mathf.Clamp(--target.Yield.EV[Pokemon.Stat.SpDefence], 0, 3);
             }
 
             GUILayout.EndHorizontal();
@@ -492,14 +584,14 @@ public class PokemonEditor : Editor
 
             if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
             {
-                Mathf.Clamp(++target.Yield.EV[Pokemon.Stat.Speed], 0, 3);
+                target.Yield.EV[Pokemon.Stat.Speed] = Mathf.Clamp(++target.Yield.EV[Pokemon.Stat.Speed], 0, 3);
             }
 
-            target.Yield.EV[Pokemon.Stat.HP] = EditorGUILayout.IntField(target.Yield.EV[Pokemon.Stat.Speed], GUILayout.Width(18));
+            target.Yield.EV[Pokemon.Stat.Speed] = EditorGUILayout.IntField(target.Yield.EV[Pokemon.Stat.Speed], GUILayout.Width(18));
 
             if (GUILayout.Button("-", GUILayout.Width(18), GUILayout.Height(18)))
             {
-                Mathf.Clamp(--target.Yield.EV[Pokemon.Stat.Speed], 0, 3);
+                target.Yield.EV[Pokemon.Stat.Speed] = Mathf.Clamp(--target.Yield.EV[Pokemon.Stat.Speed], 0, 3);
             }
 
             GUILayout.EndHorizontal();
