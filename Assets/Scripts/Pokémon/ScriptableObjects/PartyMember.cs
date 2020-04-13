@@ -4,15 +4,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "New Party Member", menuName = "Characters/Pokémon")]
+[CreateAssetMenu(fileName = "New Party Member", menuName = "Characters/Party Member")]
 public class PartyMember : ScriptableObject
 {
     #region Fields
 
-    [SerializeField] private static Pokemon pokemon;
+    [SerializeField] private Pokemon species;
     [SerializeField] private string nickname;
-    [SerializeField] private Gender gender;
-    [SerializeField] private MemberProgression progression = new MemberProgression(Pokemon);
+    [SerializeField] private MemberGender gender = new MemberGender();
+    [SerializeField] private MemberProgression progression;
     [SerializeField] private MemberMetAt metAt = new MemberMetAt();
     [SerializeField] private MemberNature nature = new MemberNature();
     [SerializeField] private List<Move> activeMoves = new List<Move>();
@@ -25,10 +25,10 @@ public class PartyMember : ScriptableObject
 
     #region Properties
 
-    public static Pokemon Pokemon
+    public Pokemon Species
     {
-        get { return pokemon; }
-        set { pokemon = value; }
+        get { return species; }
+        set { species = value; }
     }
 
     public string Nickname
@@ -37,9 +37,22 @@ public class PartyMember : ScriptableObject
         set { nickname = value; }
     }
 
+    public MemberGender Gender
+    {
+        get { return gender; }
+    }
+
     public MemberProgression Progression
     {
-        get { return progression; }
+        get 
+        { 
+            if (progression == null)
+            {
+                progression = new MemberProgression(Species);
+            }
+
+            return progression; 
+        }
     }
 
     public MemberMetAt MetAt
@@ -88,17 +101,64 @@ public class PartyMember : ScriptableObject
 
     #endregion
 
-    #region Enums
-
-    public enum Gender
-    {
-        Male,
-        Female
-    } // TODO: Create nested class to calculate gender ratios.
-
-    #endregion
-
     #region Nested Classes
+
+    [Serializable]
+    public class MemberGender
+    {
+        #region Fields
+
+        [SerializeField] private Gender value;
+
+        #endregion
+
+        #region Properties
+
+        public Gender Value
+        {
+            get { return value; }
+            set { this.value = value; }
+        }
+
+        #endregion
+
+        #region Enums
+
+        public enum Gender
+        {
+            Male,
+            Female
+        }
+
+        #endregion
+
+        #region Miscellaneous Methodss
+
+        public Gender AssignGender(Pokemon species)
+        {
+            float[] probabilities = new float[2];
+            probabilities[0] = species.GenderRatio;
+            probabilities[1] = 100f - probabilities[0];
+            float probability = UnityEngine.Random.Range(0f, 1f) * 100;
+            float currentProbability = probabilities[0];
+            Gender selectedGender = Gender.Male;
+
+            for (int i = 0; i < 2; i++)
+            {
+                if (probability <= currentProbability)
+                {
+                    selectedGender = (Gender)i;
+                    break;
+                }
+
+                currentProbability += probabilities[i + 1];
+            }
+
+            return selectedGender;
+        }
+
+        #endregion
+    }
 
     [Serializable]
     public class MemberProgression
