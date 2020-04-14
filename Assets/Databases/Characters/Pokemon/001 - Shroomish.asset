@@ -10,31 +10,33 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2b96a900ced20843b2e7d98359ed3f7, type: 3}
-  m_Name: Shroomish
+  m_Name: 001 - Shroomish
   m_EditorClassIdentifier: 
-  name: 
-  id: 0
-  category: 
-  dexEntry: 
-  genderRatio: 0
-  catchRate: 1
-  primaryType: 0
+  name: Shroomish
+  id: 1
+  category: Mushroom
+  dexEntry: "If Shroomish senses danger, it shakes its body and scatters spores from
+    the top of its head. This Pok\xE9mon\u2019s spores are so toxic, they make trees
+    and weeds wilt."
+  genderRatio: 50
+  catchRate: 255
+  primaryType: 4
   secondaryType: 0
   measurements:
-    height: 0
-    weight: 0
+    height: 0.4
+    weight: 4.5
   progression:
-    group: 0
+    group: 5
   stats:
     baseStats:
-      keys: 
-      values: 
-    baseHappiness: 0
+      keys: 000000000100000002000000030000000400000005000000
+      values: 3c000000280000003c000000280000003c00000023000000
+    baseHappiness: 70
   yield:
-    experience: 0
+    experience: 59
     ev:
       keys: 000000000100000002000000030000000400000005000000
-      values: 000000000000000000000000000000000000000000000000
+      values: 010000000000000000000000000000000000000000000000
   sprites:
     menuSprite: {fileID: 0}
     frontSprite: {fileID: 0}
