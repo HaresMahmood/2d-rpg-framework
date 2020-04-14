@@ -13,11 +13,15 @@ MonoBehaviour:
   m_Name: New Party Member
   m_EditorClassIdentifier: 
   species: {fileID: 11400000, guid: 7fcb87f94da493946be896af33424397, type: 2}
-  nickname: Mr. Cuddles
+  nickname: 
   gender:
     value: 0
+  pokeBall: {fileID: 0}
+  progression:
+    value: 0
+    level: 78
   metAt:
-    level: 0
+    level: 1
     location: 
   activeMoves: []
   learnedMoves: []
@@ -25,12 +29,12 @@ MonoBehaviour:
   stats:
     hp: 0
     stats:
-      keys: 
-      values: 
+      keys: 000000000100000002000000030000000400000005000000
+      values: 3e01000066010000e5000000aa000000cf000000b6000000
     evs:
-      keys: 
-      values: 
+      keys: 000000000100000002000000030000000400000005000000
+      values: 180000000c0000001e000000100000001700000005000000
     ivs:
-      keys: 
-      values: 
-    happiness: 0
+      keys: 000000000100000002000000030000000400000005000000
+      values: 4a000000be0000005b000000300000005400000017000000
+    happiness: 70

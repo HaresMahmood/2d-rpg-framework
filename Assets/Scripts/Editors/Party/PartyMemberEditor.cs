@@ -13,8 +13,8 @@ public class PartyMemberEditor : Editor
     private static bool showDexInfo = true;
     private static bool showNoName = true;
     private static bool showProgression = false;
-    private static bool showAbility = true;
-    private static bool showStats = false;
+    private static bool showAbility = false;
+    private static bool showStats = true;
 
     #endregion
 
@@ -79,7 +79,7 @@ public class PartyMemberEditor : Editor
             GUILayout.BeginVertical();
             GUILayout.FlexibleSpace();
 
-            GUILayout.Label("Add a species via the \"Species\" option..");
+            GUILayout.Label("Add a species via Basic Information/\"Species\"");
 
             GUILayout.FlexibleSpace();
             GUILayout.EndVertical();
@@ -106,52 +106,65 @@ public class PartyMemberEditor : Editor
 
             GUILayout.EndHorizontal();
             GUILayout.EndVertical();
-            GUILayout.BeginVertical("Box");
-            GUILayout.BeginHorizontal();
 
-            EditorGUILayout.LabelField(new GUIContent("Nickname", "Name of this Pokémon.\n\n" +
-            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-
-            GUILayout.BeginVertical();
-
-            showNoName = GUILayout.Toggle(showNoName, "None");
-
-
-            if (!showNoName)
+            if (target.Species != null)
             {
+                GUILayout.BeginVertical("Box");
                 GUILayout.BeginHorizontal();
 
-                target.Nickname = EditorGUILayout.TextField(target.Nickname);
+                EditorGUILayout.LabelField(new GUIContent("Nickname", "Name of this Pokémon.\n\n" +
+                "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+
+                GUILayout.BeginVertical();
+
+                showNoName = GUILayout.Toggle(showNoName, "None");
+
+
+                if (!showNoName)
+                {
+                    GUILayout.BeginHorizontal();
+
+                    target.Nickname = EditorGUILayout.TextField(target.Nickname);
+
+                    GUILayout.EndHorizontal();
+                }
+                else
+                {
+                    target.Nickname = "";
+                }
+
+                GUILayout.EndVertical();
+                GUILayout.EndHorizontal();
+                GUILayout.EndVertical();
+                GUILayout.BeginVertical("Box");
+                GUILayout.BeginHorizontal();
+
+                EditorGUILayout.LabelField(new GUIContent("Gender", "Category of this Pokémon.\n\n" +
+                "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+
+                GUILayout.BeginHorizontal();
+
+                target.Gender.Value = (PartyMember.MemberGender.Gender)EditorGUILayout.EnumPopup(target.Gender.Value);
+                EditorStyles.textField.wordWrap = true;
+
+                if (GUILayout.Button("Random", GUILayout.Width(100), GUILayout.Height(18)))
+                {
+                    target.Gender.Value = target.Gender.AssignGender(target.Species);
+                }
 
                 GUILayout.EndHorizontal();
+                GUILayout.EndHorizontal();
+                GUILayout.EndVertical();
+                GUILayout.BeginVertical("Box");
+                GUILayout.BeginHorizontal();
+
+                EditorGUILayout.LabelField(new GUIContent("Poké Ball", "Category of this Pokémon.\n\n" +
+                "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+                target.PokeBall = (PokeBall)EditorGUILayout.ObjectField(target.PokeBall, typeof(PokeBall), false);
+
+                GUILayout.EndHorizontal();
+                GUILayout.EndVertical();
             }
-            else
-            {
-                target.Nickname = "";
-            }
-
-            GUILayout.EndVertical();
-            GUILayout.EndHorizontal();
-            GUILayout.EndVertical();
-            GUILayout.BeginVertical("Box");
-            GUILayout.BeginHorizontal();
-
-            EditorGUILayout.LabelField(new GUIContent("Gender", "Category of this Pokémon.\n\n" +
-            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-
-            GUILayout.BeginHorizontal();
-
-            target.Gender.Value = (PartyMember.MemberGender.Gender)EditorGUILayout.EnumPopup(target.Gender.Value);
-            EditorStyles.textField.wordWrap = true;
-
-            if (GUILayout.Button("Random", GUILayout.Height(18)))
-            {
-                target.Gender.Value = target.Gender.AssignGender(target.Species);
-            }
-
-            GUILayout.EndHorizontal();
-            GUILayout.EndHorizontal();
-            GUILayout.EndVertical();
             GUILayout.EndVertical();
             GUILayout.EndHorizontal();
         }
@@ -198,9 +211,79 @@ public class PartyMemberEditor : Editor
             GUILayout.BeginVertical("Box");
             GUILayout.BeginHorizontal();
 
-            EditorGUILayout.LabelField(new GUIContent("Leveling Group", "Dex number of this Pokémon.\n\n" +
+            EditorGUILayout.LabelField(new GUIContent("Level", "Category of this Pokémon.\n\n" +
             "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-            //target.Progression.Group = (Pokemon.PokemonProgression.LevelingGroup)EditorGUILayout.EnumPopup(target.Progression.Group);
+            target.Progression.Level = EditorGUILayout.IntSlider(target.Progression.Level, 1, 100);
+
+            GUILayout.BeginHorizontal();
+
+            if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
+            {
+                target.Progression.Level = Mathf.Clamp(++target.Progression.Level, 1, 100);
+            }
+
+            if (GUILayout.Button("-", GUILayout.Width(18), GUILayout.Height(18)))
+            {
+                target.Progression.Level = Mathf.Clamp(--target.Progression.Level, 1, 100);
+            }
+
+            GUILayout.EndHorizontal();
+            GUILayout.EndHorizontal();
+            GUILayout.EndVertical();
+            GUILayout.BeginVertical("Box");
+            GUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("Experience", "Category of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+            target.Progression.Value = EditorGUILayout.IntSlider(target.Progression.Value, 0, target.Progression.GetRemaining(target.Species));
+
+            if (target.Progression.Value == target.Progression.GetRemaining(target.Species) && target.Progression.Level < 100)
+            {
+                if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
+                {
+                    target.Progression.Level = Mathf.Clamp(++target.Progression.Level, 1, 100);
+                }
+            }
+
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+            GUILayout.BeginHorizontal();
+
+            GUILayout.Space(1);
+            EditorGUILayout.LabelField(new GUIContent("Group", "Category of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(40));
+            target.Species.Progression.Group = (Pokemon.PokemonProgression.LevelingGroup)EditorGUILayout.EnumPopup(target.Species.Progression.Group);
+
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("Total", "Category of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(40));
+            EditorGUILayout.SelectableLabel(target.Progression.GetTotal(target.Species).ToString(), EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
+
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("Remaining", "Category of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(65));
+            EditorGUILayout.SelectableLabel((target.Progression.Level < 100 && target.Progression.Level > 0) ? target.Progression.GetRemaining(target.Species).ToString() : "-", EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
+
+            GUILayout.EndHorizontal();
+            GUILayout.EndHorizontal();
+            GUILayout.EndVertical();
+            GUILayout.BeginVertical("Box");
+            GUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("Met At Level", "Category of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+            target.MetAt.Level = EditorGUILayout.IntSlider(target.MetAt.Level, 1, target.Progression.Level);
+
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("Location", "Category of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+            EditorGUILayout.TextField("");
 
             GUILayout.EndHorizontal();
             GUILayout.EndVertical();
@@ -216,25 +299,32 @@ public class PartyMemberEditor : Editor
         GUILayout.Space(5);
 
         if (showStats)
-        {
-            /*
+        { 
             GUILayout.BeginHorizontal();
             GUILayout.Space(15);
             GUILayout.BeginVertical();
             GUILayout.BeginVertical("Box");
             GUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("Stats", "Dex number of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+
+            GUILayout.BeginVertical();
+            GUILayout.BeginHorizontal();
             GUILayout.BeginHorizontal();
 
             EditorGUILayout.LabelField(new GUIContent("Hit Points", "Dex number of this Pokémon.\n\n" +
             "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-            target.Stats.BaseStats[Pokemon.Stat.HP] = Mathf.Max(0, EditorGUILayout.IntField(target.Stats.BaseStats[Pokemon.Stat.HP]));
+            target.Stats.Stats[Pokemon.Stat.HP] = target.Stats.CalculateStat(target.Species.Stats.BaseStats[Pokemon.Stat.HP], target.Stats.IVs[Pokemon.Stat.HP], target.Stats.EVs[Pokemon.Stat.HP], target.Progression.Level, target.Nature.ModifiedStat[Pokemon.Stat.HP], true);
+            EditorGUILayout.SelectableLabel(target.Stats.Stats[Pokemon.Stat.HP].ToString(), EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
 
             GUILayout.EndHorizontal();
             GUILayout.BeginHorizontal();
 
             EditorGUILayout.LabelField(new GUIContent("Attack", "Dex number of this Pokémon.\n\n" +
-           "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-            target.Stats.BaseStats[Pokemon.Stat.Attack] = Mathf.Max(0, EditorGUILayout.IntField(target.Stats.BaseStats[Pokemon.Stat.Attack]));
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+            target.Stats.Stats[Pokemon.Stat.Attack] = target.Stats.CalculateStat(target.Species.Stats.BaseStats[Pokemon.Stat.Attack], target.Stats.IVs[Pokemon.Stat.Attack], target.Stats.EVs[Pokemon.Stat.Attack], target.Progression.Level, target.Nature.ModifiedStat[Pokemon.Stat.Attack], false);
+            EditorGUILayout.SelectableLabel(target.Stats.Stats[Pokemon.Stat.Attack].ToString(), EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
 
             GUILayout.EndHorizontal();
             GUILayout.EndHorizontal();
@@ -243,14 +333,16 @@ public class PartyMemberEditor : Editor
 
             EditorGUILayout.LabelField(new GUIContent("Defence", "Dex number of this Pokémon.\n\n" +
             "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-            target.Stats.BaseStats[Pokemon.Stat.Defence] = Mathf.Max(0, EditorGUILayout.IntField(target.Stats.BaseStats[Pokemon.Stat.Defence]));
+            target.Stats.Stats[Pokemon.Stat.Defence] = target.Stats.CalculateStat(target.Species.Stats.BaseStats[Pokemon.Stat.Defence], target.Stats.IVs[Pokemon.Stat.Defence], target.Stats.EVs[Pokemon.Stat.Defence], target.Progression.Level, target.Nature.ModifiedStat[Pokemon.Stat.Defence], false);
+            EditorGUILayout.SelectableLabel(target.Stats.Stats[Pokemon.Stat.Defence].ToString(), EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
 
             GUILayout.EndHorizontal();
             GUILayout.BeginHorizontal();
 
             EditorGUILayout.LabelField(new GUIContent("Sp. Attack", "Dex number of this Pokémon.\n\n" +
             "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-            target.Stats.BaseStats[Pokemon.Stat.SpAttack] = Mathf.Max(0, EditorGUILayout.IntField(target.Stats.BaseStats[Pokemon.Stat.SpAttack]));
+            target.Stats.Stats[Pokemon.Stat.SpAttack] = target.Stats.CalculateStat(target.Species.Stats.BaseStats[Pokemon.Stat.SpAttack], target.Stats.IVs[Pokemon.Stat.SpAttack], target.Stats.EVs[Pokemon.Stat.SpAttack], target.Progression.Level, target.Nature.ModifiedStat[Pokemon.Stat.SpAttack], false);
+            EditorGUILayout.SelectableLabel(target.Stats.Stats[Pokemon.Stat.SpAttack].ToString(), EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
 
             GUILayout.EndHorizontal();
             GUILayout.EndHorizontal();
@@ -259,41 +351,309 @@ public class PartyMemberEditor : Editor
 
             EditorGUILayout.LabelField(new GUIContent("Sp. Defence", "Dex number of this Pokémon.\n\n" +
             "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-            target.Stats.BaseStats[Pokemon.Stat.SpDefence] = Mathf.Max(0, EditorGUILayout.IntField(target.Stats.BaseStats[Pokemon.Stat.SpDefence]));
+            target.Stats.Stats[Pokemon.Stat.SpDefence] = target.Stats.CalculateStat(target.Species.Stats.BaseStats[Pokemon.Stat.SpDefence], target.Stats.IVs[Pokemon.Stat.SpDefence], target.Stats.EVs[Pokemon.Stat.SpDefence], target.Progression.Level, target.Nature.ModifiedStat[Pokemon.Stat.SpDefence], false);
+            EditorGUILayout.SelectableLabel(target.Stats.Stats[Pokemon.Stat.SpDefence].ToString(), EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
 
             GUILayout.EndHorizontal();
             GUILayout.BeginHorizontal();
 
             EditorGUILayout.LabelField(new GUIContent("Speed", "Dex number of this Pokémon.\n\n" +
             "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-            target.Stats.BaseStats[Pokemon.Stat.Speed] = Mathf.Max(0, EditorGUILayout.IntField(target.Stats.BaseStats[Pokemon.Stat.Speed]));
+            target.Stats.Stats[Pokemon.Stat.Speed] = target.Stats.CalculateStat(target.Species.Stats.BaseStats[Pokemon.Stat.Speed], target.Stats.IVs[Pokemon.Stat.Speed], target.Stats.EVs[Pokemon.Stat.Speed], target.Progression.Level, target.Nature.ModifiedStat[Pokemon.Stat.Speed], false);
+            EditorGUILayout.SelectableLabel(target.Stats.Stats[Pokemon.Stat.Speed].ToString(), EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
 
             GUILayout.EndHorizontal();
+            GUILayout.EndHorizontal();
+            GUILayout.EndVertical();
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("Total", "Dex number of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+            EditorGUILayout.SelectableLabel(target.Stats.Stats.Sum(stat => stat.Value).ToString(), EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
+
+            GUILayout.EndHorizontal();
+            GUILayout.EndHorizontal();
+            GUILayout.BeginVertical("Box");
+            GUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("EVs", "Dex number of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+
+            GUILayout.BeginVertical();
+            GUILayout.BeginHorizontal();
+            GUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("HP", "Dex number of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(55));
+
+            if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
+            {
+                target.Stats.EVs[Pokemon.Stat.HP] = Mathf.Clamp(++target.Stats.EVs[Pokemon.Stat.HP], 0, 255);
+            }
+
+            target.Stats.EVs[Pokemon.Stat.HP] = EditorGUILayout.IntField(target.Stats.EVs[Pokemon.Stat.HP], GUILayout.Width(36));
+
+            if (GUILayout.Button("-", GUILayout.Width(18), GUILayout.Height(18)))
+            {
+                target.Stats.EVs[Pokemon.Stat.HP] = Mathf.Clamp(--target.Stats.EVs[Pokemon.Stat.HP], 0, 255);
+            }
+
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("ATK", "Dex number of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(55));
+
+            if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
+            {
+                target.Stats.EVs[Pokemon.Stat.Attack] = Mathf.Clamp(++target.Stats.EVs[Pokemon.Stat.Attack], 0, 255);
+            }
+
+            target.Stats.EVs[Pokemon.Stat.Attack] = EditorGUILayout.IntField(target.Stats.EVs[Pokemon.Stat.Attack], GUILayout.Width(36));
+
+            if (GUILayout.Button("-", GUILayout.Width(18), GUILayout.Height(18)))
+            {
+                target.Stats.EVs[Pokemon.Stat.Attack] = Mathf.Clamp(--target.Stats.EVs[Pokemon.Stat.Attack], 0, 255);
+            }
+
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("DEF", "Dex number of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(55));
+
+            if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
+            {
+                target.Stats.EVs[Pokemon.Stat.Defence] = Mathf.Clamp(++target.Stats.EVs[Pokemon.Stat.Defence], 0, 255);
+            }
+
+            target.Stats.EVs[Pokemon.Stat.Defence] = EditorGUILayout.IntField(target.Stats.EVs[Pokemon.Stat.Defence], GUILayout.Width(36));
+
+            if (GUILayout.Button("-", GUILayout.Width(18), GUILayout.Height(18)))
+            {
+                target.Stats.EVs[Pokemon.Stat.Defence] = Mathf.Clamp(--target.Stats.EVs[Pokemon.Stat.Defence], 0, 255);
+            }
+
+            GUILayout.EndHorizontal();
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+            GUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("SP. ATK", "Dex number of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(55));
+
+            if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
+            {
+                target.Stats.EVs[Pokemon.Stat.SpAttack] = Mathf.Clamp(++target.Stats.EVs[Pokemon.Stat.SpAttack], 0, 255);
+            }
+
+            target.Stats.EVs[Pokemon.Stat.SpAttack] = EditorGUILayout.IntField(target.Stats.EVs[Pokemon.Stat.SpAttack], GUILayout.Width(36));
+
+            if (GUILayout.Button("-", GUILayout.Width(18), GUILayout.Height(18)))
+            {
+                target.Stats.EVs[Pokemon.Stat.SpAttack] = Mathf.Clamp(--target.Stats.EVs[Pokemon.Stat.SpAttack], 0, 255);
+            }
+
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("SP. DEF", "Dex number of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(55));
+
+            if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
+            {
+                target.Stats.EVs[Pokemon.Stat.SpDefence] = Mathf.Clamp(++target.Stats.EVs[Pokemon.Stat.SpDefence], 0, 255);
+            }
+
+            target.Stats.EVs[Pokemon.Stat.SpDefence] = EditorGUILayout.IntField(target.Stats.EVs[Pokemon.Stat.SpDefence], GUILayout.Width(36));
+
+            if (GUILayout.Button("-", GUILayout.Width(18), GUILayout.Height(18)))
+            {
+                target.Stats.EVs[Pokemon.Stat.SpDefence] = Mathf.Clamp(--target.Stats.EVs[Pokemon.Stat.SpDefence], 0, 255);
+            }
+
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("SPD", "Dex number of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(55));
+
+            if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
+            {
+                target.Stats.EVs[Pokemon.Stat.Speed] = Mathf.Clamp(++target.Stats.EVs[Pokemon.Stat.Speed], 0, 255);
+            }
+
+            target.Stats.EVs[Pokemon.Stat.Speed] = EditorGUILayout.IntField(target.Stats.EVs[Pokemon.Stat.Speed], GUILayout.Width(36));
+
+            if (GUILayout.Button("-", GUILayout.Width(18), GUILayout.Height(18)))
+            {
+                target.Stats.EVs[Pokemon.Stat.Speed] = Mathf.Clamp(--target.Stats.EVs[Pokemon.Stat.Speed], 0, 255);
+            }
+
+            GUILayout.EndHorizontal();
+            GUILayout.EndHorizontal();
+            GUILayout.EndHorizontal();
+            GUILayout.EndVertical();
+            GUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("Total", "Dex number of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+            EditorGUILayout.SelectableLabel(target.Stats.EVs.Sum(stat => stat.Value).ToString(), EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
+
             GUILayout.EndHorizontal();
             GUILayout.EndVertical();
             GUILayout.BeginVertical("Box");
             GUILayout.BeginHorizontal();
 
+            EditorGUILayout.LabelField(new GUIContent("IVs", "Dex number of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+
+            GUILayout.BeginVertical();
+            GUILayout.BeginHorizontal();
+            GUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("HP", "Dex number of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(55));
+
+            if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
+            {
+                target.Stats.IVs[Pokemon.Stat.HP] = Mathf.Clamp(++target.Stats.IVs[Pokemon.Stat.HP], 0, 31);
+            }
+
+            target.Stats.IVs[Pokemon.Stat.HP] = EditorGUILayout.IntField(target.Stats.IVs[Pokemon.Stat.HP], GUILayout.Width(36));
+
+            if (GUILayout.Button("-", GUILayout.Width(18), GUILayout.Height(18)))
+            {
+                target.Stats.IVs[Pokemon.Stat.HP] = Mathf.Clamp(--target.Stats.IVs[Pokemon.Stat.HP], 0, 31);
+            }
+
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("ATK", "Dex number of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(55));
+
+            if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
+            {
+                target.Stats.IVs[Pokemon.Stat.Attack] = Mathf.Clamp(++target.Stats.IVs[Pokemon.Stat.Attack], 0, 31);
+            }
+
+            target.Stats.IVs[Pokemon.Stat.Attack] = EditorGUILayout.IntField(target.Stats.IVs[Pokemon.Stat.Attack], GUILayout.Width(36));
+
+            if (GUILayout.Button("-", GUILayout.Width(18), GUILayout.Height(18)))
+            {
+                target.Stats.IVs[Pokemon.Stat.Attack] = Mathf.Clamp(--target.Stats.IVs[Pokemon.Stat.Attack], 0, 31);
+            }
+
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("DEF", "Dex number of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(55));
+
+            if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
+            {
+                target.Stats.IVs[Pokemon.Stat.Defence] = Mathf.Clamp(++target.Stats.IVs[Pokemon.Stat.Defence], 0, 31);
+            }
+
+            target.Stats.IVs[Pokemon.Stat.Defence] = EditorGUILayout.IntField(target.Stats.IVs[Pokemon.Stat.Defence], GUILayout.Width(36));
+
+            if (GUILayout.Button("-", GUILayout.Width(18), GUILayout.Height(18)))
+            {
+                target.Stats.IVs[Pokemon.Stat.Defence] = Mathf.Clamp(--target.Stats.IVs[Pokemon.Stat.Defence], 0, 31);
+            }
+
+            GUILayout.EndHorizontal();
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+            GUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("SP. ATK", "Dex number of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(55));
+
+            if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
+            {
+                target.Stats.IVs[Pokemon.Stat.SpAttack] = Mathf.Clamp(++target.Stats.IVs[Pokemon.Stat.SpAttack], 0, 31);
+            }
+
+            target.Stats.IVs[Pokemon.Stat.SpAttack] = EditorGUILayout.IntField(target.Stats.IVs[Pokemon.Stat.SpAttack], GUILayout.Width(36));
+
+            if (GUILayout.Button("-", GUILayout.Width(18), GUILayout.Height(18)))
+            {
+                target.Stats.IVs[Pokemon.Stat.SpAttack] = Mathf.Clamp(--target.Stats.IVs[Pokemon.Stat.SpAttack], 0, 31);
+            }
+
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("SP. DEF", "Dex number of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(55));
+
+            if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
+            {
+                target.Stats.IVs[Pokemon.Stat.SpDefence] = Mathf.Clamp(++target.Stats.IVs[Pokemon.Stat.SpDefence], 0, 31);
+            }
+
+            target.Stats.IVs[Pokemon.Stat.SpDefence] = EditorGUILayout.IntField(target.Stats.IVs[Pokemon.Stat.SpDefence], GUILayout.Width(36));
+
+            if (GUILayout.Button("-", GUILayout.Width(18), GUILayout.Height(18)))
+            {
+                target.Stats.IVs[Pokemon.Stat.SpDefence] = Mathf.Clamp(--target.Stats.IVs[Pokemon.Stat.SpDefence], 0, 31);
+            }
+
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("SPD", "Dex number of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(55));
+
+            if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
+            {
+                target.Stats.IVs[Pokemon.Stat.Speed] = Mathf.Clamp(++target.Stats.IVs[Pokemon.Stat.Speed], 0, 31);
+            }
+
+            target.Stats.IVs[Pokemon.Stat.Speed] = EditorGUILayout.IntField(target.Stats.IVs[Pokemon.Stat.Speed], GUILayout.Width(36));
+
+            if (GUILayout.Button("-", GUILayout.Width(18), GUILayout.Height(18)))
+            {
+                target.Stats.IVs[Pokemon.Stat.Speed] = Mathf.Clamp(--target.Stats.IVs[Pokemon.Stat.Speed], 0, 31);
+            }
+
+            GUILayout.EndHorizontal();
+            GUILayout.EndHorizontal();
+            GUILayout.EndHorizontal();
+            GUILayout.EndVertical();
+            GUILayout.BeginHorizontal();
+
             EditorGUILayout.LabelField(new GUIContent("Total", "Dex number of this Pokémon.\n\n" +
             "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-            EditorGUILayout.SelectableLabel(target.Stats.BaseStats.Sum(stat => stat.Value).ToString(), EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
+            EditorGUILayout.SelectableLabel(target.Stats.IVs.Sum(stat => stat.Value).ToString(), EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
 
             GUILayout.EndHorizontal();
             GUILayout.EndVertical();
-
             GUILayout.BeginVertical("Box");
             GUILayout.BeginHorizontal();
 
             EditorGUILayout.LabelField(new GUIContent("Happiness", "Dex number of this Pokémon.\n\n" +
             "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-            target.Stats.BaseHappiness = EditorGUILayout.IntSlider(target.Stats.BaseHappiness, 0, 255);
 
+            GUILayout.BeginHorizontal();
+
+            target.Stats.Happiness = EditorGUILayout.IntSlider(target.Stats.Happiness, 0, 255);
+
+            if (GUILayout.Button("Base", GUILayout.Width(100), GUILayout.Height(18)))
+            {
+                target.Stats.Happiness = target.Species.Stats.BaseHappiness;
+            }
+
+            GUILayout.EndHorizontal();
             GUILayout.EndHorizontal();
             GUILayout.EndVertical();
 
             GUILayout.EndVertical();
             GUILayout.EndHorizontal();
-            */
+
         }
 
         GUILayout.Space(2);
@@ -308,7 +668,52 @@ public class PartyMemberEditor : Editor
     /*
 showProgression = EditorGUILayout.Foldout(showProgression, "Progression", foldoutStyle);
 
-if (showProgression)
+GUILayout.Space(2);
+ExtensionMethods.DrawUILine("#525252".ToColor());
+GUILayout.Space(2);
+
+showBasicInfo = EditorGUILayout.Foldout(showBasicInfo, "Abilities", foldoutStyle);
+
+if (showBasicInfo)
+{
+    GUILayout.BeginHorizontal();
+    GUILayout.Space(margin);
+    GUILayout.BeginVertical();
+    GUILayout.BeginVertical("Box");
+    GUILayout.BeginHorizontal();
+
+    EditorGUILayout.LabelField(new GUIContent("Ability", "Category of this Pokémon.\n\n" +
+    "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+    //target.Level = EditorGUILayout.IntSlider(target.Level, 0, 100);
+
+    GUILayout.EndHorizontal();
+
+    GUILayout.BeginHorizontal();
+
+    EditorGUILayout.LabelField(new GUIContent("Description", "Category of this Pokémon.\n\n" +
+    "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+    EditorGUILayout.TextArea(target.DexEntry, GUILayout.MaxHeight(35));
+
+    GUILayout.EndHorizontal();
+    GUILayout.EndVertical();
+    GUILayout.BeginVertical("Box");
+    GUILayout.BeginHorizontal();
+
+    EditorGUILayout.LabelField(new GUIContent("Nature", "Category of this Pokémon.\n\n" +
+    "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+    target.Nature.Value = (Pokemon.PokemonNature.Nature)EditorGUILayout.EnumPopup(target.Nature.Value);
+
+    GUILayout.EndHorizontal();
+    GUILayout.EndVertical();
+    GUILayout.EndVertical();
+    GUILayout.EndHorizontal();
+}
+
+GUILayout.Space(2);
+ExtensionMethods.DrawUILine("#525252".ToColor());
+GUILayout.Space(2);
+
+    if (showProgression)
 {
     GUILayout.BeginHorizontal();
     GUILayout.Space(margin);
@@ -396,51 +801,6 @@ if (showProgression)
     GUILayout.EndVertical();
     GUILayout.EndHorizontal();
 }
-
-GUILayout.Space(2);
-ExtensionMethods.DrawUILine("#525252".ToColor());
-GUILayout.Space(2);
-
-showBasicInfo = EditorGUILayout.Foldout(showBasicInfo, "Abilities", foldoutStyle);
-
-if (showBasicInfo)
-{
-    GUILayout.BeginHorizontal();
-    GUILayout.Space(margin);
-    GUILayout.BeginVertical();
-    GUILayout.BeginVertical("Box");
-    GUILayout.BeginHorizontal();
-
-    EditorGUILayout.LabelField(new GUIContent("Ability", "Category of this Pokémon.\n\n" +
-    "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-    //target.Level = EditorGUILayout.IntSlider(target.Level, 0, 100);
-
-    GUILayout.EndHorizontal();
-
-    GUILayout.BeginHorizontal();
-
-    EditorGUILayout.LabelField(new GUIContent("Description", "Category of this Pokémon.\n\n" +
-    "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-    EditorGUILayout.TextArea(target.DexEntry, GUILayout.MaxHeight(35));
-
-    GUILayout.EndHorizontal();
-    GUILayout.EndVertical();
-    GUILayout.BeginVertical("Box");
-    GUILayout.BeginHorizontal();
-
-    EditorGUILayout.LabelField(new GUIContent("Nature", "Category of this Pokémon.\n\n" +
-    "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-    target.Nature.Value = (Pokemon.PokemonNature.Nature)EditorGUILayout.EnumPopup(target.Nature.Value);
-
-    GUILayout.EndHorizontal();
-    GUILayout.EndVertical();
-    GUILayout.EndVertical();
-    GUILayout.EndHorizontal();
-}
-
-GUILayout.Space(2);
-ExtensionMethods.DrawUILine("#525252".ToColor());
-GUILayout.Space(2);
 
 showBasicInfo = EditorGUILayout.Foldout(showBasicInfo, "Held Item", foldoutStyle);
 

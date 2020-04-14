@@ -212,72 +212,75 @@ public class Pokemon : ScriptableObject
 
         public int GetTotalExperience(int level)
         {
-            int maxExperience = 0;
+            int totalExperience = 0;
 
-            switch (Group)
+            if (level > 1)
             {
-                default: { break; }
-                case LevelingGroup.Erratic:
-                    {
-                        if (level <= 50)
+                switch (Group)
+                {
+                    default: { break; }
+                    case LevelingGroup.Erratic:
                         {
-                            maxExperience = (int)Mathf.Pow(level, 3) * (100 - level) / 50;
-                        }
-                        else if (level > 50 && level <= 68)
-                        {
-                            maxExperience = (int)Mathf.Pow(level, 3) * (150 - level) / 100;
-                        }
-                        else if (level > 68 && level <= 98)
-                        {
-                            maxExperience = (int)Mathf.Pow(level, 3) * ((1911 - 10 * level) / 3) / 500;
-                        }
-                        else if (level > 98 && level <= 100)
-                        {
-                            maxExperience = (int)Mathf.Pow(level, 3) * (160 - level) / 100;
-                        }
+                            if (level <= 50)
+                            {
+                                totalExperience = (int)Mathf.Pow(level, 3) * (100 - level) / 50;
+                            }
+                            else if (level > 50 && level <= 68)
+                            {
+                                totalExperience = (int)Mathf.Pow(level, 3) * (150 - level) / 100;
+                            }
+                            else if (level > 68 && level <= 98)
+                            {
+                                totalExperience = (int)Mathf.Pow(level, 3) * ((1911 - 10 * level) / 3) / 500;
+                            }
+                            else if (level > 98 && level <= 100)
+                            {
+                                totalExperience = (int)Mathf.Pow(level, 3) * (160 - level) / 100;
+                            }
 
-                        break;
-                    }
-                case LevelingGroup.Fast:
-                    {
-                        maxExperience = 4 * (int)Mathf.Pow(level, 3) / 5;
-                        break;
-                    }
-                case LevelingGroup.MediumFast:
-                    {
-                        maxExperience = level ^ 3;
-                        break;
-                    }
-                case LevelingGroup.MediumSlow:
-                    {
-                        maxExperience = ((int)(1.2f * (int)Mathf.Pow(level, 3))) - (15 * (int)Mathf.Pow(level, 2)) + (100 * level) - 140;
-                        break;
-                    }
-                case LevelingGroup.Slow:
-                    {
-                        maxExperience = (5 * (int)Mathf.Pow(level, 3)) / 4;
-                        break;
-                    }
-                case LevelingGroup.Fluctuating:
-                    {
-                        if (level <= 15)
-                        {
-                            maxExperience = (int)Mathf.Pow(level, 3) * (((int)Mathf.Floor((level + 1) / 3) + 24) / 50);
+                            break;
                         }
-                        else if (level > 15 && level <= 36)
+                    case LevelingGroup.Fast:
                         {
-                            maxExperience = (int)Mathf.Pow(level, 3) * ((level + 14) / 50);
+                            totalExperience = 4 * (int)Mathf.Pow(level, 3) / 5;
+                            break;
                         }
-                        else if (level > 36 && level <= 100)
+                    case LevelingGroup.MediumFast:
                         {
-                            maxExperience = (int)Mathf.Pow(level, 3) * (((int)Mathf.Floor(level / 2) + 32) / 50);
+                            totalExperience = (int)Mathf.Pow(level, 3);
+                            break;
                         }
+                    case LevelingGroup.MediumSlow:
+                        {
+                            totalExperience = ((int)(1.2f * (int)Mathf.Pow(level, 3))) - (15 * (int)Mathf.Pow(level, 2)) + (100 * level) - 140;
+                            break;
+                        }
+                    case LevelingGroup.Slow:
+                        {
+                            totalExperience = (5 * (int)Mathf.Pow(level, 3)) / 4;
+                            break;
+                        }
+                    case LevelingGroup.Fluctuating:
+                        {
+                            if (level <= 15)
+                            {
+                                totalExperience = (int)((int)Mathf.Pow(level, 3) * ((Mathf.FloorToInt(((level + 1) / 3)) + 24) / 50.0));
+                            }
+                            else if (level > 15 && level <= 36)
+                            {
+                                totalExperience = (int)((int)Mathf.Pow(level, 3) * ((level + 14) / 50.0));
+                            }
+                            else if (level > 36 && level <= 100)
+                            {
+                                totalExperience = (int)((int)Mathf.Pow(level, 3) * (((Mathf.FloorToInt(level / 2) + 32) / 50.0)));
+                            }
 
-                        break;
-                    }
+                            break;
+                        }
+                }
             }
 
-            return maxExperience;
+            return totalExperience;
         }
 
         #endregion

@@ -4,12 +4,12 @@ using UnityEngine;
 /// <summary>
 ///
 /// </summary>
-[CreateAssetMenu(fileName = "New Holdable", menuName = "Categorizable/Item/Holdable")]
-public class Holdable : Item
+[CreateAssetMenu(fileName = "New Poké Ball", menuName = "Categorizable/Item/Poké Ball")]
+public class PokeBall : Holdable
 {
     #region Fields
 
-    [SerializeField] private HoldableCategory categorization = new HoldableCategory();
+    [SerializeField] private PokeBallCategory categorization = new PokeBallCategory();
 
     #endregion
 
@@ -24,7 +24,7 @@ public class Holdable : Item
 
     #region Nested Classes
 
-    public sealed class HoldableCategory : Category
+    public sealed class PokeBallCategory : Category
     {
         #region Variables
 
@@ -45,22 +45,7 @@ public class Holdable : Item
 
         public enum Category
         {
-            Battle,
-            Other
-        }
-
-        #endregion
-
-        #region Miscellaneous Methods
-
-        public override string GetCategoryFromIndex(int index)
-        {
-            return ((Category)index).ToString();
-        }
-
-        public override int GetTotalCategories()
-        {
-            return Enum.GetNames(typeof(Category)).Length;
+            Poké_Balls
         }
 
         #endregion

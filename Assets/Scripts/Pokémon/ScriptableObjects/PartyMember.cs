@@ -12,7 +12,8 @@ public class PartyMember : ScriptableObject
     [SerializeField] private Pokemon species;
     [SerializeField] private string nickname;
     [SerializeField] private MemberGender gender = new MemberGender();
-    [SerializeField] private MemberProgression progression;
+    [SerializeField] private PokeBall pokeBall;
+    [SerializeField] private MemberProgression progression = new MemberProgression();
     [SerializeField] private MemberMetAt metAt = new MemberMetAt();
     [SerializeField] private MemberNature nature = new MemberNature();
     [SerializeField] private List<Move> activeMoves = new List<Move>();
@@ -42,15 +43,16 @@ public class PartyMember : ScriptableObject
         get { return gender; }
     }
 
+    public PokeBall PokeBall
+    {
+        get { return pokeBall; }
+        set { pokeBall = value; }
+    }
+
     public MemberProgression Progression
     {
         get 
-        { 
-            if (progression == null)
-            {
-                progression = new MemberProgression(Species);
-            }
-
+        {
             return progression; 
         }
     }
@@ -163,46 +165,45 @@ public class PartyMember : ScriptableObject
     [Serializable]
     public class MemberProgression
     {
-        #region Variables
+        #region Fields
 
-        private Pokemon pokemon;
-
+        [SerializeField] private int value;
+        [SerializeField] private int level;
+         
         #endregion
 
         #region Properties
 
-        public int Value { get; set; }
-
-        public int Level { get; set; }
-
-        public int Total
+        public int Value 
         {
-            get
-            {
-                return Mathf.Max(0, pokemon.Progression.GetTotalExperience(Level));
-            }
+            get { return value; }
+            set { this.value = value; }
         }
 
-        public int Remaining
+        public int Level 
         {
-            get
-            {
-                if (Level > 0 && Level < 100)
-                {
-                    return (pokemon.Progression.GetTotalExperience(Level + 1) - Total);
-                }
-
-                return 0;
-            }
+            get { return level; }
+            set { level = value; }
         }
 
         #endregion
 
-        #region Constructor
+        #region Miscellaneous Methods
 
-        internal MemberProgression(Pokemon pokemon)
+        public int GetTotal(Pokemon species)
         {
-            this.pokemon = pokemon;
+            return Mathf.Max(0, species.Progression.GetTotalExperience(Level));
+
+        }
+
+        public int GetRemaining(Pokemon species)
+        {
+            if (Level > 0 && Level < 100)
+            {
+                return (species.Progression.GetTotalExperience(Level + 1) - GetTotal(species));
+            }
+
+            return 0;
         }
 
         #endregion
@@ -432,6 +433,7 @@ public class PartyMember : ScriptableObject
                 {
                     foreach (Pokemon.Stat stat in values)
                     {
+                        Debug.Log(stat);
                         stats.Add(stat, 0);
                     }
                 }
@@ -448,7 +450,7 @@ public class PartyMember : ScriptableObject
                 {
                     foreach (Pokemon.Stat stat in values)
                     {
-                        stats.Add(stat, 0);
+                        evs.Add(stat, 0);
                     }
                 }
 
@@ -460,7 +462,7 @@ public class PartyMember : ScriptableObject
         {
             get
             {
-                if (stats.Count == 0)
+                if (ivs.Count == 0)
                 {
                     foreach (Pokemon.Stat stat in values)
                     {
@@ -476,6 +478,26 @@ public class PartyMember : ScriptableObject
         {
             get { return happiness; }
             set { happiness = value; }
+        }
+
+        #endregion
+
+        #region Miscellaneous Methods
+
+        public int CalculateStat(int baseStat, int iv, int ev, int level, int nature, bool calculateHP)
+        {
+            int stat = 0;
+
+            if (calculateHP)
+            {
+                stat = Mathf.FloorToInt((2 * baseStat + iv + Mathf.Floor(ev / 4.0f)) * level / 100) + level + 10;
+            }
+            else
+            {
+               stat = Mathf.FloorToInt((Mathf.FloorToInt((2 * baseStat + iv + Mathf.Floor(ev / 4.0f)) * level / 100) + 5) * (nature / 100.0f));
+            }
+
+            return stat;
         }
 
         #endregion
