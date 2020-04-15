@@ -16,7 +16,7 @@ public class PokemonEditor : Editor
     private static bool showAbility = true;
     private static bool showStats = false;
     private static bool showYield = false;
-    private static bool showSprites = false;
+    private static bool showSprites = true;
 
     private float female;
     private int feet, inches;
@@ -619,62 +619,35 @@ public class PokemonEditor : Editor
 
         if (showSprites)
         {
+            int width = Screen.width / 2 - 30;
+
             GUILayout.BeginHorizontal();
             GUILayout.Space(15);
             GUILayout.BeginVertical();
-            GUILayout.BeginVertical("Box");
-            GUILayout.BeginHorizontal();
+            GUILayout.BeginHorizontal("Box");
 
             EditorGUILayout.LabelField(new GUIContent("Menu", "Dex number of this Pokémon.\n\n" +
             "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
             target.Sprites.MenuSprite = (Sprite)EditorGUILayout.ObjectField(target.Sprites.MenuSprite, typeof(Sprite), false);
 
             GUILayout.EndHorizontal();
-            GUILayout.EndVertical();
-            GUILayout.BeginHorizontal();
-            GUILayout.BeginVertical("Box");
-
-            GUILayout.BeginHorizontal();
-            GUILayout.FlexibleSpace();
-
-            if (target.Sprites.FrontSprite != null)
-            {
-                Texture2D itemSprite = target.Sprites.FrontSprite.texture;
-                GUILayout.Label(itemSprite, GUILayout.Width((Screen.width / 2) - 50), GUILayout.Height((Screen.width / 2) - 50));
-            }
-
-            GUILayout.FlexibleSpace();
-            GUILayout.EndHorizontal();
-            GUILayout.BeginHorizontal();
+            GUILayout.BeginHorizontal("Box");
+            GUILayout.BeginVertical();
 
             EditorGUILayout.LabelField(new GUIContent("Front", "Dex number of this Pokémon.\n\n" +
-            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(45));
-            target.Sprites.FrontSprite = (Sprite)EditorGUILayout.ObjectField(target.Sprites.FrontSprite, typeof(Sprite), false);
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+            target.Sprites.FrontSprite = (Sprite)EditorGUILayout.ObjectField(target.Sprites.FrontSprite, typeof(Sprite), false, GUILayout.Width(width), GUILayout.Height(width));
 
-            GUILayout.EndHorizontal();
             GUILayout.EndVertical();
-            GUILayout.BeginVertical("Box");
-            GUILayout.BeginHorizontal();
-            GUILayout.FlexibleSpace();
-
-            if (target.Sprites.BackSprite != null)
-            {
-                Texture2D itemSprite = target.Sprites.BackSprite.texture;
-                GUILayout.Label(itemSprite, GUILayout.Width((Screen.width / 2) - 50), GUILayout.Height((Screen.width / 2) - 50));
-            }
-
-            GUILayout.FlexibleSpace();
-            GUILayout.EndHorizontal();
-            GUILayout.BeginHorizontal();
+            GUILayout.BeginVertical();
 
             EditorGUILayout.LabelField(new GUIContent("Back", "Dex number of this Pokémon.\n\n" +
-            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(45));
-            target.Sprites.BackSprite = (Sprite)EditorGUILayout.ObjectField(target.Sprites.BackSprite, typeof(Sprite), false);
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+            target.Sprites.BackSprite = (Sprite)EditorGUILayout.ObjectField(target.Sprites.BackSprite, typeof(Sprite), false, GUILayout.Width(width), GUILayout.Height(width));
 
-            GUILayout.EndHorizontal();
-            GUILayout.EndVertical();
             GUILayout.EndVertical();
             GUILayout.EndHorizontal();
+            GUILayout.EndVertical();
             GUILayout.EndHorizontal();
         }
 
