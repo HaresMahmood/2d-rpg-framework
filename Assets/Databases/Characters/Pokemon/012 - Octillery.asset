@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2b96a900ced20843b2e7d98359ed3f7, type: 3}
+  m_Name: 012 - Octillery
+  m_EditorClassIdentifier: 
+  name: Octillery
+  id: 12
+  category: Jet
+  dexEntry: "\tThe ink it spits when escaping is special. It contains a substance
+    that dulls the sense of smell, so Pok\xE9mon with keen noses get lost."
+  genderRatio: 50
+  catchRate: 75
+  primaryType: 3
+  secondaryType: 0
+  measurements:
+    height: 0.9
+    weight: 28.5
+  progression:
+    group: 2
+  stats:
+    baseStats:
+      keys: 000000000100000002000000030000000400000005000000
+      values: 4b000000690000004b000000690000004b0000002d000000
+    baseHappiness: 70
+  yield:
+    experience: 168
+    ev:
+      keys: 000000000100000002000000030000000400000005000000
+      values: 000000000100000000000000010000000000000000000000
+  sprites:
+    menuSprite: {fileID: 0}
+    frontSprite: {fileID: 0}
+    backSprite: {fileID: 0}
