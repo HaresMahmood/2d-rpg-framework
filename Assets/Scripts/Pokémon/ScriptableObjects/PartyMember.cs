@@ -136,7 +136,7 @@ public class PartyMember : ScriptableObject
 
         #region Miscellaneous Methodss
 
-        public Gender AssignGender(Pokemon species)
+        public Gender AssignRandom(Pokemon species)
         {
             float[] probabilities = new float[2];
             probabilities[0] = species.GenderRatio;
@@ -239,9 +239,19 @@ public class PartyMember : ScriptableObject
     [Serializable]
     public class MemberNature
     {
+        #region Fields
+
+        [SerializeField] private Nature value;
+
+        #endregion
+
         #region Properties
 
-        public Nature Value { get; set; }
+        public Nature Value 
+        {
+            get { return value; }
+            set { this.value = value; }
+        }
 
         public StatDictionary ModifiedStat
         {
@@ -310,6 +320,17 @@ public class PartyMember : ScriptableObject
             Sassy,
             Careful,
             Quirky
+        }
+
+        #endregion
+
+        #region Miscellaneous Methods
+
+        public Nature AssignRandom()
+        {
+            Nature nature = (Nature)(UnityEngine.Random.Range(0, Enum.GetNames(typeof(Nature)).Length));
+
+            return nature;
         }
 
         #endregion
@@ -498,6 +519,22 @@ public class PartyMember : ScriptableObject
             }
 
             return stat;
+        }
+
+        public void ResetEVs()
+        {
+            foreach (Pokemon.Stat stat in values)
+            {
+                evs[stat] = 0;
+            }
+        }
+
+        public void AssignRandomIVs()
+        {
+            foreach (Pokemon.Stat stat in values)
+            {
+                ivs[stat] = UnityEngine.Random.Range(0, 32);
+            }
         }
 
         #endregion

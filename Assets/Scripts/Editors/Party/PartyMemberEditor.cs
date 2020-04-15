@@ -141,18 +141,14 @@ public class PartyMemberEditor : Editor
 
                 EditorGUILayout.LabelField(new GUIContent("Gender", "Category of this Pokémon.\n\n" +
                 "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-
-                GUILayout.BeginHorizontal();
-
                 target.Gender.Value = (PartyMember.MemberGender.Gender)EditorGUILayout.EnumPopup(target.Gender.Value);
                 EditorStyles.textField.wordWrap = true;
 
                 if (GUILayout.Button("Random", GUILayout.Width(100), GUILayout.Height(18)))
                 {
-                    target.Gender.Value = target.Gender.AssignGender(target.Species);
+                    target.Gender.Value = target.Gender.AssignRandom(target.Species);
                 }
 
-                GUILayout.EndHorizontal();
                 GUILayout.EndHorizontal();
                 GUILayout.EndVertical();
                 GUILayout.BeginVertical("Box");
@@ -295,7 +291,7 @@ public class PartyMemberEditor : Editor
         ExtensionMethods.DrawUILine("#525252".ToColor());
         GUILayout.Space(2);
 
-        showStats = EditorGUILayout.Foldout(showStats, "Base Stats", foldoutStyle);
+        showStats = EditorGUILayout.Foldout(showStats, "Stats", foldoutStyle);
         GUILayout.Space(5);
 
         if (showStats)
@@ -501,6 +497,11 @@ public class PartyMemberEditor : Editor
             "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
             EditorGUILayout.SelectableLabel(target.Stats.EVs.Sum(stat => stat.Value).ToString(), EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
 
+            if (GUILayout.Button("Reset", GUILayout.Width(100), GUILayout.Height(18)))
+            {
+                target.Stats.ResetEVs();
+            }
+
             GUILayout.EndHorizontal();
             GUILayout.EndVertical();
             GUILayout.BeginVertical("Box");
@@ -630,6 +631,11 @@ public class PartyMemberEditor : Editor
             "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
             EditorGUILayout.SelectableLabel(target.Stats.IVs.Sum(stat => stat.Value).ToString(), EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
 
+            if (GUILayout.Button("Random", GUILayout.Width(100), GUILayout.Height(18)))
+            {
+                target.Stats.AssignRandomIVs();
+            }
+
             GUILayout.EndHorizontal();
             GUILayout.EndVertical();
             GUILayout.BeginVertical("Box");
@@ -638,19 +644,30 @@ public class PartyMemberEditor : Editor
             EditorGUILayout.LabelField(new GUIContent("Happiness", "Dex number of this Pokémon.\n\n" +
             "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
 
-            GUILayout.BeginHorizontal();
 
             target.Stats.Happiness = EditorGUILayout.IntSlider(target.Stats.Happiness, 0, 255);
 
-            if (GUILayout.Button("Base", GUILayout.Width(100), GUILayout.Height(18)))
+            if (GUILayout.Button("Reset", GUILayout.Width(100), GUILayout.Height(18)))
             {
                 target.Stats.Happiness = target.Species.Stats.BaseHappiness;
             }
 
             GUILayout.EndHorizontal();
+            GUILayout.EndVertical();
+            GUILayout.BeginVertical("Box");
+            GUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("Nature", "Category of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+            target.Nature.Value = (PartyMember.MemberNature.Nature)EditorGUILayout.EnumPopup(target.Nature.Value);
+
+            if (GUILayout.Button("Random", GUILayout.Width(100), GUILayout.Height(18)))
+            {
+                target.Nature.Value = target.Nature.AssignRandom();
+            }
+
             GUILayout.EndHorizontal();
             GUILayout.EndVertical();
-
             GUILayout.EndVertical();
             GUILayout.EndHorizontal();
 
