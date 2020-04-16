@@ -18,21 +18,29 @@ MonoBehaviour:
     value: 0
   pokeBall: {fileID: 0}
   progression:
-    value: 0
-    level: 72
+    value: 3128
+    level: 74
   metAt:
     level: 1
     location: 
   nature:
     value: 0
-  activeMoves: []
-  learnedMoves: []
+  activeMoves:
+  - value: {fileID: 11400000, guid: e02e8ad176deaab409a2edffa7cd44f8, type: 2}
+    pp: 0
+  - value: {fileID: 11400000, guid: 3a3623eecf17a0b47aa81a016efd591f, type: 2}
+    pp: 0
+  - value: {fileID: 11400000, guid: baf06e7b75e5cf9408e5598f71dde22e, type: 2}
+    pp: 0
+  learnedMoves:
+  - value: {fileID: 11400000, guid: af0b2f5aad824944badb46a0ae98c997, type: 2}
+    pp: 0
   heldItem: {fileID: 0}
   stats:
     hp: 0
     stats:
       keys: 000000000100000002000000030000000400000005000000
-      values: f0000000d1000000970000008300000094000000a4000000
+      values: f6000000d70000009b0000008700000098000000a8000000
     evs:
       keys: 000000000100000002000000030000000400000005000000
       values: 000000000000000000000000000000000000000000000000

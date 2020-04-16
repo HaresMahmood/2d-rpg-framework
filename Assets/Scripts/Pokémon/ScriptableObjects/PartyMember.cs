@@ -16,8 +16,8 @@ public class PartyMember : ScriptableObject
     [SerializeField] private MemberProgression progression = new MemberProgression();
     [SerializeField] private MemberMetAt metAt = new MemberMetAt();
     [SerializeField] private MemberNature nature = new MemberNature();
-    [SerializeField] private List<Move> activeMoves = new List<Move>();
-    [SerializeField] private List<Move> learnedMoves = new List<Move>();
+    [SerializeField] private List<MemberMove> activeMoves = new List<MemberMove>();
+    [SerializeField] private List<MemberMove> learnedMoves = new List<MemberMove>();
     [SerializeField] private StatusAilment ailment = new StatusAilment();
     [SerializeField] private Item heldItem;
     [SerializeField] private MemberStats stats = new MemberStats();
@@ -75,12 +75,12 @@ public class PartyMember : ScriptableObject
     }
     */
 
-    public List<Move> ActiveMoves
+    public List<MemberMove> ActiveMoves
     {
         get { return activeMoves; }
     }
 
-    public List<Move> LearnedMoves
+    public List<MemberMove> LearnedMoves
     {
         get { return learnedMoves; }
     }
@@ -340,6 +340,33 @@ public class PartyMember : ScriptableObject
     public class PokemonAbility
     {
 
+    }
+
+    [Serializable]
+    public class MemberMove
+    {
+        #region Fields
+
+        [SerializeField] private Move value;
+        [SerializeField] private int pp;
+
+        #endregion
+
+        #region Properties
+
+        public Move Value
+        {
+            get { return value; }
+            set { this.value = value; }
+        }
+
+        public int PP
+        {
+            get { return pp; }
+            set { pp = value; }
+        }
+
+        #endregion
     }
 
     [Serializable]
