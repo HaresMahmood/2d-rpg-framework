@@ -13,12 +13,13 @@ public class PartyMember : ScriptableObject
     [SerializeField] private string nickname;
     [SerializeField] private MemberGender gender = new MemberGender();
     [SerializeField] private PokeBall pokeBall;
+    [SerializeField] private MemberPokerus pokerus = new MemberPokerus();
+    [SerializeField] private StatusAilment ailment = new StatusAilment();
     [SerializeField] private MemberProgression progression = new MemberProgression();
     [SerializeField] private MemberMetAt metAt = new MemberMetAt();
     [SerializeField] private MemberNature nature = new MemberNature();
     [SerializeField] private List<MemberMove> activeMoves = new List<MemberMove>();
     [SerializeField] private List<MemberMove> learnedMoves = new List<MemberMove>();
-    [SerializeField] private StatusAilment ailment = new StatusAilment();
     [SerializeField] private Item heldItem;
     [SerializeField] private MemberStats stats = new MemberStats();
 
@@ -47,6 +48,16 @@ public class PartyMember : ScriptableObject
     {
         get { return pokeBall; }
         set { pokeBall = value; }
+    }
+
+    public MemberPokerus Pokerus
+    {
+        get { return pokerus; }
+    }
+
+    public StatusAilment Ailment
+    {
+        get { return ailment; }
     }
 
     public MemberProgression Progression
@@ -83,11 +94,6 @@ public class PartyMember : ScriptableObject
     public List<MemberMove> LearnedMoves
     {
         get { return learnedMoves; }
-    }
-
-    public StatusAilment Ailment
-    {
-        get { return ailment; }
     }
 
     public Item HeldItem
@@ -134,7 +140,7 @@ public class PartyMember : ScriptableObject
 
         #endregion
 
-        #region Miscellaneous Methodss
+        #region Miscellaneous Methods
 
         public Gender AssignRandom(Pokemon species)
         {
@@ -157,6 +163,77 @@ public class PartyMember : ScriptableObject
             }
 
             return selectedGender;
+        }
+
+        #endregion
+    }
+
+    [Serializable]
+    public class MemberPokerus
+    {
+        #region Fields
+
+        [SerializeField] private InfectionStatus status;
+        [SerializeField] private int strain;
+        [SerializeField] private int days;
+
+        #endregion
+
+        #region Properties
+
+        public InfectionStatus Status
+        {
+            get { return status; }
+            set 
+            {
+                /*
+                if (!(value == InfectionStatus.Infected && status == InfectionStatus.Immune) && !(value == InfectionStatus.Immune && status == InfectionStatus.Uninfected))
+                {
+
+                }
+
+                if (value == InfectionStatus.Immune && status == InfectionStatus.Infected)
+                {
+                    
+                }
+                */
+
+                if (value == InfectionStatus.Infected && status == InfectionStatus.Uninfected)
+                {
+                    Strain = UnityEngine.Random.Range(0, 15);
+                }
+
+
+
+                status = value;
+            }
+        }
+
+        public int Strain
+        {
+            get { return strain; }
+            set 
+            {
+                strain = value;
+                Days = Strain % 4 + 1;
+            }
+        }
+
+        public int Days
+        {
+            get { return days; }
+            set { days = value; }
+        }
+
+        #endregion
+
+        #region Enums
+
+        public enum InfectionStatus
+        {
+            Uninfected,
+            Infected,
+            Immune
         }
 
         #endregion
@@ -374,15 +451,16 @@ public class PartyMember : ScriptableObject
     {
         #region Fields
 
-        private readonly Ailment value;
+        [SerializeField] private Ailment value;
 
         #endregion
 
         #region Properties
 
-        public string Value
+        public Ailment Value
         {
-            get { return value.ToString(); }
+            get { return value; }
+            set { this.value = value; }
         }
 
         public Color Color
