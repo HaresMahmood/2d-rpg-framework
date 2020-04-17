@@ -103,7 +103,9 @@ public class Consumable : Holdable
 
         public override string ToString()
         {
-            string effect = type.ToString() + ( type == 0 ? $" + {quantity}" : $" ↑ {status.ToString().Replace("None", "All")}"); // TODO: Using replace for debug.
+            //string effect = type.ToString() + ( type == 0 ? $" + {quantity}" : $" ↑ {status.ToString().Replace("None", "All")}"); // TODO: Using replace for debug.
+
+            string effect = type == 0 ? type.ToString() : status.ToString().Replace("None", "All");
 
             return effect;
         }

@@ -16,8 +16,8 @@ public class PartyMember : ScriptableObject
     [SerializeField] private MemberProgression progression = new MemberProgression();
     [SerializeField] private MemberMetAt metAt = new MemberMetAt();
     [SerializeField] private MemberNature nature = new MemberNature();
-    [SerializeField] private List<Move> activeMoves = new List<Move>();
-    [SerializeField] private List<Move> learnedMoves = new List<Move>();
+    [SerializeField] private List<MemberMove> activeMoves = new List<MemberMove>();
+    [SerializeField] private List<MemberMove> learnedMoves = new List<MemberMove>();
     [SerializeField] private StatusAilment ailment = new StatusAilment();
     [SerializeField] private Item heldItem;
     [SerializeField] private MemberStats stats = new MemberStats();
@@ -75,12 +75,12 @@ public class PartyMember : ScriptableObject
     }
     */
 
-    public List<Move> ActiveMoves
+    public List<MemberMove> ActiveMoves
     {
         get { return activeMoves; }
     }
 
-    public List<Move> LearnedMoves
+    public List<MemberMove> LearnedMoves
     {
         get { return learnedMoves; }
     }
@@ -136,7 +136,7 @@ public class PartyMember : ScriptableObject
 
         #region Miscellaneous Methodss
 
-        public Gender AssignGender(Pokemon species)
+        public Gender AssignRandom(Pokemon species)
         {
             float[] probabilities = new float[2];
             probabilities[0] = species.GenderRatio;
@@ -239,9 +239,19 @@ public class PartyMember : ScriptableObject
     [Serializable]
     public class MemberNature
     {
+        #region Fields
+
+        [SerializeField] private Nature value;
+
+        #endregion
+
         #region Properties
 
-        public Nature Value { get; set; }
+        public Nature Value 
+        {
+            get { return value; }
+            set { this.value = value; }
+        }
 
         public StatDictionary ModifiedStat
         {
@@ -313,12 +323,50 @@ public class PartyMember : ScriptableObject
         }
 
         #endregion
+
+        #region Miscellaneous Methods
+
+        public Nature AssignRandom()
+        {
+            Nature nature = (Nature)(UnityEngine.Random.Range(0, Enum.GetNames(typeof(Nature)).Length));
+
+            return nature;
+        }
+
+        #endregion
     }
 
     [Serializable]
     public class PokemonAbility
     {
 
+    }
+
+    [Serializable]
+    public class MemberMove
+    {
+        #region Fields
+
+        [SerializeField] private Move value;
+        [SerializeField] private int pp;
+
+        #endregion
+
+        #region Properties
+
+        public Move Value
+        {
+            get { return value; }
+            set { this.value = value; }
+        }
+
+        public int PP
+        {
+            get { return pp; }
+            set { pp = value; }
+        }
+
+        #endregion
     }
 
     [Serializable]
@@ -498,6 +546,22 @@ public class PartyMember : ScriptableObject
             }
 
             return stat;
+        }
+
+        public void ResetEVs()
+        {
+            foreach (Pokemon.Stat stat in values)
+            {
+                evs[stat] = 0;
+            }
+        }
+
+        public void AssignRandomIVs()
+        {
+            foreach (Pokemon.Stat stat in values)
+            {
+                ivs[stat] = UnityEngine.Random.Range(0, 32);
+            }
         }
 
         #endregion
