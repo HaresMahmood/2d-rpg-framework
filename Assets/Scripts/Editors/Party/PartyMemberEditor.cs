@@ -11,6 +11,7 @@ public class PartyMemberEditor : Editor
     private new PartyMember target;
 
     private static bool showDexInfo = true;
+    private static bool showStatusAilment = true;
     private static bool showNoName = true;
     private static bool showProgression = false;
     private static bool showAbility = false;
@@ -164,6 +165,89 @@ public class PartyMemberEditor : Editor
                 GUILayout.EndHorizontal();
             }
             GUILayout.EndVertical();
+            GUILayout.EndHorizontal();
+        }
+
+        GUILayout.Space(2);
+        ExtensionMethods.DrawUILine("#525252".ToColor());
+        GUILayout.Space(2);
+
+        showStatusAilment = EditorGUILayout.Foldout(showStatusAilment, "Status Ailment", foldoutStyle);
+        GUILayout.Space(5);
+
+        if (showStatusAilment)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Space(15);
+            GUILayout.BeginVertical();
+            GUILayout.BeginHorizontal("Box");
+
+            EditorGUILayout.LabelField(new GUIContent("Status Ailment", "Dex number of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+            target.Ailment.Value = (PartyMember.StatusAilment.Ailment)EditorGUILayout.EnumPopup(target.Ailment.Value);
+
+            GUILayout.EndHorizontal();
+            GUILayout.BeginVertical("Box");
+            EditorGUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(new GUIContent("Pokérus", "Dex number of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+            target.Pokerus.Status = (PartyMember.MemberPokerus.InfectionStatus)EditorGUILayout.EnumPopup(target.Pokerus.Status);
+
+            EditorGUILayout.EndHorizontal();
+
+            if (target.Pokerus.Status == PartyMember.MemberPokerus.InfectionStatus.Infected)
+            {
+                EditorGUILayout.BeginHorizontal();
+
+                EditorGUILayout.LabelField(new GUIContent($"Strain ({Convert.ToChar((target.Pokerus.Strain % 4 + 1) + 64)})", "Dex number of this Pokémon.\n\n" +
+                "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+                EditorGUI.BeginChangeCheck();
+
+                int strain = EditorGUILayout.IntSlider(target.Pokerus.Strain, 0, 15);
+
+                if (EditorGUI.EndChangeCheck())
+                {
+                    target.Pokerus.Strain = strain;
+                }
+
+                if (GUILayout.Button("Random", GUILayout.Width(100), GUILayout.Height(18)))
+                {
+                    target.Pokerus.Strain = UnityEngine.Random.Range(0, 15);
+                }
+
+                if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
+                {
+                    target.Pokerus.Strain = Mathf.Clamp(++target.Pokerus.Strain, 0, 15);
+                }
+
+                if (GUILayout.Button("-", GUILayout.Width(18), GUILayout.Height(18)))
+                {
+                    target.Pokerus.Strain = Mathf.Clamp(--target.Pokerus.Strain, 0, 15);
+                }
+
+                EditorGUILayout.EndHorizontal();
+                EditorGUILayout.BeginHorizontal();
+
+                EditorGUILayout.LabelField(new GUIContent("Days Left", "Dex number of this Pokémon.\n\n" +
+                "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+                target.Pokerus.Days = EditorGUILayout.IntField(target.Pokerus.Days);
+
+                if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
+                {
+                    target.Pokerus.Days = Mathf.Clamp(++target.Pokerus.Days, 0, target.Pokerus.Strain % 4 + 1);
+                }
+
+                if (GUILayout.Button("-", GUILayout.Width(18), GUILayout.Height(18)))
+                {
+                    target.Pokerus.Days = Mathf.Clamp(--target.Pokerus.Days, 0, target.Pokerus.Strain % 4 + 1);
+                }
+
+                EditorGUILayout.EndHorizontal();
+            }
+
+            GUILayout.EndVertical();
+            EditorGUILayout.EndVertical();
             GUILayout.EndHorizontal();
         }
 
@@ -927,7 +1011,6 @@ public class PartyMemberEditor : Editor
             GUILayout.EndVertical();
             GUILayout.EndHorizontal();
         }
-
 
         GUILayout.Space(2);
         ExtensionMethods.DrawUILine("#525252".ToColor());
