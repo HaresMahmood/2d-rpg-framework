@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2b96a900ced20843b2e7d98359ed3f7, type: 3}
+  m_Name: 016 - Ursaring
+  m_EditorClassIdentifier: 
+  name: Ursaring
+  id: 16
+  category: Hibernator
+  dexEntry: Although it has a large body, it is quite skilled at climbing trees.
+    It eats and sleeps in the treetops.
+  genderRatio: 50
+  catchRate: 60
+  primaryType: 1
+  secondaryType: 0
+  measurements:
+    height: 1.8
+    weight: 125.8
+  progression:
+    group: 2
+  stats:
+    baseStats:
+      keys: 000000000100000002000000030000000400000005000000
+      values: 5a000000820000004b0000004b0000004b00000037000000
+    baseHappiness: 70
+  yield:
+    experience: 175
+    ev:
+      keys: 000000000100000002000000030000000400000005000000
+      values: 000000000200000000000000000000000000000000000000
+  sprites:
+    menuSprite: {fileID: 0}
+    frontSprite: {fileID: 0}
+    backSprite: {fileID: 0}
