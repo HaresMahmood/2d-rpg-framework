@@ -10,31 +10,33 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2b96a900ced20843b2e7d98359ed3f7, type: 3}
-  m_Name: 002 - Cabellet
+  m_Name: 025 - Shedinja
   m_EditorClassIdentifier: 
-  name: Cabellet
-  id: 2
-  category: Ballerina
-  dexEntry: 
-  genderRatio: 0
-  catchRate: 1
-  primaryType: 4
-  secondaryType: 17
+  name: Shedinja
+  id: 25
+  category: Shed
+  dexEntry: "Shedinja's hard body doesn't move\u2014not even a twitch. In fact, its
+    body appears to be merely a hollow shell. It is believed that this Pok\xE9mon
+    will steal the spirit of anyone peering into its hollow body from its back."
+  genderRatio: 100
+  catchRate: 45
+  primaryType: 12
+  secondaryType: 13
   measurements:
-    height: 0
-    weight: 0
+    height: 0.8
+    weight: 1.2
   progression:
     group: 0
   stats:
     baseStats:
       keys: 000000000100000002000000030000000400000005000000
-      values: 000000000000000000000000000000000000000000000000
-    baseHappiness: 0
+      values: 010000005a0000002d0000001e0000001e00000028000000
+    baseHappiness: 70
   yield:
-    experience: 0
+    experience: 83
     ev:
       keys: 000000000100000002000000030000000400000005000000
-      values: 000000000000000000000000000000000000000000000000
+      values: 020000000000000000000000000000000000000000000000
   sprites:
     menuSprite: {fileID: 0}
     frontSprite: {fileID: 0}
