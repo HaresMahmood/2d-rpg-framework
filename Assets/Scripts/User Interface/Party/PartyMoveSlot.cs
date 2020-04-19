@@ -59,6 +59,7 @@ public class PartyMoveSlot : Slot
     /// </summary>
     protected override void Awake()
     {
+        /*
         panel = transform.GetComponent<Image>();
 
         information = transform.Find("Information");
@@ -72,6 +73,7 @@ public class PartyMoveSlot : Slot
         specialIcon = statistics.Find("Category/Value/Special").gameObject;
         accuracyText = statistics.Find("Accuracy/Value").GetComponent<TextMeshProUGUI>();
         powertext = statistics.Find("Power/Value").GetComponent<TextMeshProUGUI>();
+        */
     }
 
     #endregion
