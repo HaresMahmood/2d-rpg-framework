@@ -11,7 +11,7 @@ public class PartyMemberEditor : Editor
     private new PartyMember target;
 
     private static bool showDexInfo = true;
-    private static bool showStatusAilment = true;
+    private static bool showStatusAilment = false;
     private static bool showNoName = true;
     private static bool showProgression = false;
     private static bool showAbility = false;
@@ -143,9 +143,12 @@ public class PartyMemberEditor : Editor
                 target.Gender.Value = (PartyMember.MemberGender.Gender)EditorGUILayout.EnumPopup(target.Gender.Value);
                 EditorStyles.textField.wordWrap = true;
 
-                if (GUILayout.Button("Random", GUILayout.Width(100), GUILayout.Height(18)))
+                if (target.Gender.Value != PartyMember.MemberGender.Gender.None)
                 {
-                    target.Gender.Value = target.Gender.AssignRandom(target.Species);
+                    if (GUILayout.Button("Random", GUILayout.Width(100), GUILayout.Height(18)))
+                    {
+                        target.Gender.Value = target.Gender.AssignRandom(target.Species);
+                    }
                 }
 
                 GUILayout.EndHorizontal();

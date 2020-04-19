@@ -134,6 +134,7 @@ public class PartyMember : ScriptableObject
 
         public enum Gender
         {
+            None,
             Male,
             Female
         }
@@ -151,7 +152,7 @@ public class PartyMember : ScriptableObject
             float currentProbability = probabilities[0];
             Gender selectedGender = Gender.Male;
 
-            for (int i = 0; i < 2; i++)
+            for (int i = 1; i < 3; i++)
             {
                 if (probability <= currentProbability)
                 {
