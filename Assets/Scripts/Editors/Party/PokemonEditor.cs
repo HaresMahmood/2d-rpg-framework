@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
+using UnityEditor;
 
 [CustomEditor(typeof(Pokemon)), CanEditMultipleObjects]
 public class PokemonEditor : Editor
