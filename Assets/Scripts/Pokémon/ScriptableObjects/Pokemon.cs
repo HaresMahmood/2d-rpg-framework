@@ -112,28 +112,6 @@ public class Pokemon : ScriptableObject
 
     #region Enums
 
-    public enum Typing
-    {
-        None,
-        Normal,
-        Fire,
-        Water,
-        Grass,
-        Electric,
-        Fighting,
-        Flying,
-        Poison,
-        Ground,
-        Rock,
-        Psychic,
-        Bug,
-        Ghost,
-        Steel,
-        Dark,
-        Dragon,
-        Fairy
-    }
-
     public enum Stat
     {
         HP,

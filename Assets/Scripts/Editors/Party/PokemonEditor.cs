@@ -65,7 +65,7 @@ public class PokemonEditor : Editor
         GUILayout.EndVertical();
         GUILayout.EndHorizontal();
 
-        if (!target.SecondaryType.Equals(Pokemon.Typing.None))
+        if (!target.SecondaryType.Equals(Typing.Type.None))
         {
             GUILayout.BeginHorizontal("Box", GUILayout.Height(29));
             GUILayout.BeginVertical();
@@ -121,8 +121,8 @@ public class PokemonEditor : Editor
 
             EditorGUILayout.LabelField(new GUIContent("Typing", "Category of this Pokémon.\n\n" +
             "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-            target.PrimaryType = (Pokemon.Typing)EditorGUILayout.EnumPopup(target.PrimaryType);
-            target.SecondaryType = (Pokemon.Typing)EditorGUILayout.EnumPopup(target.SecondaryType);
+            target.PrimaryType.Value = (Typing.Type)EditorGUILayout.EnumPopup(target.PrimaryType.Value);
+            target.SecondaryType.Value = (Typing.Type)EditorGUILayout.EnumPopup(target.SecondaryType.Value);
 
             GUILayout.EndHorizontal();
             GUILayout.BeginHorizontal("Box");

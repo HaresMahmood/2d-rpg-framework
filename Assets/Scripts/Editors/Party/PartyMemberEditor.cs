@@ -65,7 +65,7 @@ public class PartyMemberEditor : Editor
             GUILayout.EndVertical();
             GUILayout.EndHorizontal();
 
-            if (!target.Species.SecondaryType.Equals(Pokemon.Typing.None))
+            if (!target.Species.SecondaryType.Equals(Typing.Type.None))
             {
                 GUILayout.BeginHorizontal("Box", GUILayout.Height(29));
                 GUILayout.BeginVertical();
