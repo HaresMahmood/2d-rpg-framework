@@ -78,6 +78,8 @@ public class TypingUserInterface : MonoBehaviour
             typeText.color = type.color;
             typeIcon.color = type.color;
 
+            typeText.GetComponent<AutoTextWidth>().UpdateWidth(type.Value.ToString());
+
             if (!typeText.gameObject.activeSelf)
             {
                 typeText.gameObject.SetActive(true);
