@@ -1,13 +1,11 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
 ///
 /// </summary>
-public abstract class PartyInformationSlot : Slot
+public class PartyInformationSlot : Slot
 {
     #region Variables
 

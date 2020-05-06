@@ -421,7 +421,7 @@ public class PartyMember : ScriptableObject
     }
 
     [Serializable]
-    public class MemberMove
+    public class MemberMove : ScriptableObject
     {
         #region Fields
 

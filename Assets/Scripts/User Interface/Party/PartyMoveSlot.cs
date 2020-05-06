@@ -29,25 +29,23 @@ public class PartyMoveSlot : Slot
 
     protected override void SetInformation(ScriptableObject slotObject)
     {
-        /*
-        Pokemon.LearnedMove move = (Pokemon.LearnedMove)slotObject;
+        PartyMember.MemberMove move = (PartyMember.MemberMove)slotObject;
 
-        moveNameText.SetText(move.move.name);
+        moveNameText.SetText(move.Value.name);
         
         //info.Find("Typing/Typing").GetComponent<TextMeshProUGUI>().SetText(learnedMove.move.type.ToString());
         //info.Find("Typing/Typing").GetComponent<TextMeshProUGUI>().color = learnedMove.move.UIColor;
    
-        ppText.SetText(move.remainingPp.ToString() + "/" + move.move.pp);
+        ppText.SetText(move.PP.ToString() + "/" + move.Value.pp);
 
-        physicalIcon.SetActive(move.move.category == Move.Category.Physical);
-        specialIcon.SetActive(move.move.category == Move.Category.Special);
-        accuracyText.SetText(move.move.accuracy.ToString());
-        powertext.SetText(move.move.power.ToString());
+        physicalIcon.SetActive(move.Value.category == Move.Category.Physical);
+        specialIcon.SetActive(move.Value.category == Move.Category.Special);
+        accuracyText.SetText(move.Value.accuracy.ToString());
+        powertext.SetText(move.Value.power.ToString());
 
-        descriptionText.SetText(move.move.description);
+        descriptionText.SetText(move.Value.description);
 
-        panel.color = move.move.UIColor;
-        */ 
+        panel.color = move.Value.UIColor;
     }
 
     #endregion
@@ -62,9 +60,11 @@ public class PartyMoveSlot : Slot
         /*
         panel = transform.GetComponent<Image>();
 
-        information = transform.Find("Information");
-        statistics = transform.Find("Stats");
-        descriptionText = transform.Find("Description/Value").GetComponent<TextMeshProUGUI>();
+        Transform slot = transform.Find("Information Panel").transform;
+
+        information = slot.Find("Information");
+        statistics = slot.Find("Stats");
+        descriptionText = slot.Find("Description/Value").GetComponent<TextMeshProUGUI>();
 
         moveNameText = information.Find("Name/Value").GetComponent<TextMeshProUGUI>();
         ppText = information.Find("Statistics/PP/Value").GetComponent<TextMeshProUGUI>();
