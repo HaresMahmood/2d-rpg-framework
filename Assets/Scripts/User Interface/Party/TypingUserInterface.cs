@@ -187,7 +187,7 @@ public class TypingUserInterface : MonoBehaviour
                 }
             case (Typing.Type.Water):
                 {
-                    color = "#a3aacc".ToColor();
+                    color = "#2c9fda".ToColor();
                     break;
                 }
         }
