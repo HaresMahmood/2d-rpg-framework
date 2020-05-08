@@ -59,7 +59,7 @@ public abstract class UserInterface : MonoBehaviour
     /// <param name="selectedValue"> Index of the value currently selected. </param>
     /// <param name="animationDuration"> Duration of the animation/fade. </param>
     /// <returns> Co-routine. </returns>
-    protected IEnumerator UpdateSelector(Transform selectedObject = null, float animationDuration = 0.1f)
+    protected virtual IEnumerator UpdateSelector(Transform selectedObject = null, float animationDuration = 0.1f)
     {
         if (!selector.activeSelf)
         {

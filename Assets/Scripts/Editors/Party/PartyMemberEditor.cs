@@ -603,7 +603,7 @@ public class PartyMemberEditor : Editor
             "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
             GUI.enabled = false;
             EditorGUILayout.SelectableLabel(target.Stats.EVs.Sum(stat => stat.Value).ToString(), EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
-            GUI.enabled = false;
+            GUI.enabled = true;
 
             if (GUILayout.Button("Reset", GUILayout.Width(100), GUILayout.Height(18)))
             {
@@ -739,7 +739,7 @@ public class PartyMemberEditor : Editor
             "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
             GUI.enabled = false;
             EditorGUILayout.SelectableLabel(target.Stats.IVs.Sum(stat => stat.Value).ToString(), EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
-            GUI.enabled = false;
+            GUI.enabled = true;
 
             if (GUILayout.Button("Random", GUILayout.Width(100), GUILayout.Height(18)))
             {

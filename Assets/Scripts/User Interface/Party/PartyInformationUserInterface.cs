@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -102,8 +103,8 @@ public class PartyInformationUserInterface : UserInterface
         
         informationSlots[selectedValue].SetActive(true);
         informationSlots[previousValue].SetActive(false);
-        
-        StartCoroutine(UpdateSelector(informationSlots[selectedValue].transform));
+
+        StartCoroutine(UpdateSelector(informationSlots[selectedValue].transform.Find("Information Panel")));
     }
 
     public void ActivateSlot(int selectedSlot, bool isActive)
