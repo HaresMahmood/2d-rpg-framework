@@ -100,16 +100,25 @@ public class PartyInformationUserInterface : UserInterface
     public override void UpdateSelectedObject(int selectedValue, int increment)
     {
         int previousValue = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, increment);
-        
-        informationSlots[selectedValue].SetActive(true);
-        informationSlots[previousValue].SetActive(false);
 
-        StartCoroutine(UpdateSelector(informationSlots[selectedValue].transform.Find("Information Panel")));
+        StartCoroutine(AnimeSelectedObject(selectedValue, previousValue));
     }
 
     public void ActivateSlot(int selectedSlot, bool isActive)
     {
         informationSlots[selectedSlot].AnimateSlot(isActive);
+    }
+
+    private IEnumerator AnimeSelectedObject(int selectedValue, int previousValue, float animationDuration = 0.15f)
+    {
+        StartCoroutine(UpdateSelector());
+
+        informationSlots[selectedValue].SetActive(true);
+        informationSlots[previousValue].SetActive(false);
+
+        yield return new WaitForSecondsRealtime(animationDuration);
+
+        StartCoroutine(UpdateSelector(informationSlots[selectedValue].transform.Find("Information Panel")));
     }
 
     #endregion
