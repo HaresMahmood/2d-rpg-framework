@@ -8,5 +8,5 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Party", menuName = "Collections/Party")]
 public class Party : ScriptableObject
 {
-    public List<Pokemon> playerParty = new List<Pokemon>();
+    public List<PartyMember> playerParty = new List<PartyMember>();
 }

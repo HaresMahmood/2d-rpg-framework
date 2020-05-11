@@ -41,7 +41,7 @@ public class PartyController : UserInterfaceController
 
     #region Variables
 
-    public Party inventory;
+    public Party party;
 
     #endregion
 
@@ -58,6 +58,7 @@ public class PartyController : UserInterfaceController
         if (isActive && condition)
         {
             UpdateSelectedObject(selectedValue, previousValue);
+            userInterface.UpdateSelectedPartyMember(party.playerParty[0]);
         }
     }
 

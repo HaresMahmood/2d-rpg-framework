@@ -89,10 +89,12 @@ public class PauseUserInterface : MonoBehaviour
     // TODO: Move to PartyManager?
     public void PopulateSideBar(Party party)
     {
+        /*
         foreach (Pokemon pokemon in party.playerParty)
         {
             partySlots[party.playerParty.IndexOf(pokemon)].GetComponent<SidebarSlot>().PopulateSlot(pokemon);
         }
+        */
     }
 
     private void SetMenuText(int selectedMenu, int increment, bool animate)

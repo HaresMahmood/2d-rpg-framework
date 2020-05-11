@@ -94,7 +94,7 @@ public class PartyInformationUserInterface : UserInterface
     }
     */
 
-    public virtual void SetInformation(Pokemon member)
+    public virtual void SetInformation(PartyMember member)
     {   }
 
     public override void UpdateSelectedObject(int selectedValue, int increment)
@@ -118,7 +118,7 @@ public class PartyInformationUserInterface : UserInterface
 
         yield return new WaitForSecondsRealtime(animationDuration);
 
-        StartCoroutine(UpdateSelector(informationSlots[selectedValue].transform.Find("Information Panel")));
+        //StartCoroutine(UpdateSelector(informationSlots[selectedValue].transform.Find("Information Panel")));
     }
 
     #endregion

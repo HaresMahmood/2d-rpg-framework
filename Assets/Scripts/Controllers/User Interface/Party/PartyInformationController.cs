@@ -29,7 +29,7 @@ public class PartyInformationController : UserInterfaceController
         userInterface.ActivateSlot(selectedValue, isActive);
     }
 
-    public void SetInformation(Pokemon member)
+    public void SetInformation(PartyMember member)
     {
         userInterface.SetInformation(member);
     }

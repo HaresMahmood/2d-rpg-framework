@@ -29,7 +29,7 @@ public class PartyUserInterface : UserInterface
         StartCoroutine(informationPanels[value].SetActive(false));
     }
 
-    public void UpdateSelectedPartyMember(Pokemon member)
+    public void UpdateSelectedPartyMember(PartyMember member)
     {
         foreach (PartyInformationController panel in informationPanels)
         {

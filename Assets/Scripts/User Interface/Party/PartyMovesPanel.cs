@@ -15,14 +15,15 @@ public class PartyMovesPanel : PartyInformationUserInterface
 
     #region Misccellaneous Methods
 
-    public override void SetInformation(Pokemon member)
+    public override void SetInformation(PartyMember member)
     {
         int counter = 0;
 
-        foreach (Move move in GetMoves(member))
+        foreach (PartyMember.MemberMove move in GetMoves(member))
         {
             informationSlots[counter].SetActive(false);
-            //informationSlots[counter].GetComponentInChildren<PartyMoveSlot>().UpdateInformation(move);
+            Debug.Log(move);
+            informationSlots[counter].GetComponentInChildren<PartyMoveSlot>().UpdateInformation(move);
             counter++;
         }
 
@@ -36,9 +37,9 @@ public class PartyMovesPanel : PartyInformationUserInterface
         informationSlots = GetComponentsInChildren<PartyInformationSlot>().ToList();
     }
 
-    protected List<Move> GetMoves(Pokemon member)
+    protected List<PartyMember.MemberMove> GetMoves(PartyMember member)
     {
-        return null;
+        return member.ActiveMoves;
     }
 
     private List<PartyInformationSlot> RemoveInactiveObjects(List<PartyInformationSlot> source)

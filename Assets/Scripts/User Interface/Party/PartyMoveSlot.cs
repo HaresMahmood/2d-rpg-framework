@@ -5,23 +5,23 @@ using TMPro;
 /// <summary>
 ///
 /// </summary>
-public class PartyMoveSlot : Slot
+public class PartyMoveSlot : PartyInformationSlot
 {
     #region Variables
 
-    Image panel;
+    private Image panel;
 
-    Transform information;
-    Transform statistics;
-    TextMeshProUGUI descriptionText;
+    private Transform information;
+    private Transform statistics;
+    private TextMeshProUGUI descriptionText;
 
-    TextMeshProUGUI moveNameText;
-    TextMeshProUGUI ppText;
+    private TextMeshProUGUI moveNameText;
+    private TextMeshProUGUI ppText;
 
-    GameObject physicalIcon;
-    GameObject specialIcon;
-    TextMeshProUGUI accuracyText;
-    TextMeshProUGUI powertext;
+    private GameObject physicalIcon;
+    private GameObject specialIcon;
+    private TextMeshProUGUI accuracyText;
+    private TextMeshProUGUI powertext;
 
     #endregion
 
@@ -57,7 +57,6 @@ public class PartyMoveSlot : Slot
     /// </summary>
     protected override void Awake()
     {
-        /*
         panel = transform.GetComponent<Image>();
 
         Transform slot = transform.Find("Information Panel").transform;
@@ -66,14 +65,15 @@ public class PartyMoveSlot : Slot
         statistics = slot.Find("Stats");
         descriptionText = slot.Find("Description/Value").GetComponent<TextMeshProUGUI>();
 
-        moveNameText = information.Find("Name/Value").GetComponent<TextMeshProUGUI>();
+        moveNameText = information.Find("Name").GetComponent<TextMeshProUGUI>();
         ppText = information.Find("Statistics/PP/Value").GetComponent<TextMeshProUGUI>();
 
         physicalIcon = statistics.Find("Category/Value/Physical").gameObject;
         specialIcon = statistics.Find("Category/Value/Special").gameObject;
         accuracyText = statistics.Find("Accuracy/Value").GetComponent<TextMeshProUGUI>();
         powertext = statistics.Find("Power/Value").GetComponent<TextMeshProUGUI>();
-        */
+
+        base.Awake();
     }
 
     #endregion
