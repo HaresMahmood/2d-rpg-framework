@@ -35,7 +35,7 @@ public class PartyMovesPanel : PartyInformationUserInterface
 
         informationSlots = GetComponentsInChildren<PartyInformationSlot>().ToList();
 
-        informationSlots[0].SetActive(true); ActivateSlot(0, true); // Debug
+        informationSlots[0].SetActive(true); // Debug
     }
 
     protected List<PartyMember.MemberMove> GetMoves(PartyMember member)
