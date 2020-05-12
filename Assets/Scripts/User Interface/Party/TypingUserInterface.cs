@@ -47,7 +47,7 @@ public class TypingUserInterface : MonoBehaviour
             if (type.Value != Typing.Type.None)
             {
                 icon = icons.First(i => i.name.Contains(type.Value.ToString().ToLower()));
-                type.color = GetColor(type.Value);
+                type.Color = GetColor(type.Value);
             }
         }
     }
@@ -75,8 +75,8 @@ public class TypingUserInterface : MonoBehaviour
             typeText.SetText(type.Value.ToString());
             typeIcon.sprite = icon;
 
-            typeText.color = type.color;
-            typeIcon.color = type.color;
+            typeText.color = type.Color;
+            typeIcon.color = type.Color;
 
             typeText.GetComponent<AutoTextWidth>().UpdateWidth(type.Value.ToString());
 

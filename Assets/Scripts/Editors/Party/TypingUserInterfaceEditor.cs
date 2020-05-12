@@ -44,7 +44,7 @@ public class TypingUserInterfaceEditor : Editor
             "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
 
             GUI.enabled = false;
-            target.Type.color = EditorGUILayout.ColorField(target.Type.color, GUILayout.Height(90));
+            target.Type.Color = EditorGUILayout.ColorField(target.Type.Color, GUILayout.Height(90));
             GUI.enabled = true;
 
             GUILayout.EndHorizontal();

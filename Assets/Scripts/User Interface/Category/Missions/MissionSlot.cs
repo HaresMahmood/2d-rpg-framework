@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using TMPro;
+using System;
 
 /// <summary>
 ///
@@ -21,9 +22,9 @@ public class MissionSlot : CategorizableSlot
         base.Awake();
     }
 
-    protected override void SetInformation(ScriptableObject slotObject)
+    protected override void SetInformation<T>(T slotObject)
     {
-        Mission mission = (Mission)slotObject;
+        Mission mission = (Mission)Convert.ChangeType(slotObject, typeof(Mission));
 
         nameText.SetText(mission.Name);
         objectiveText.SetText(mission.Objective);

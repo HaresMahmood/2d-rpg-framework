@@ -22,7 +22,6 @@ public class PartyMovesPanel : PartyInformationUserInterface
         foreach (PartyMember.MemberMove move in GetMoves(member))
         {
             informationSlots[counter].SetActive(false);
-            Debug.Log(move);
             informationSlots[counter].GetComponentInChildren<PartyMoveSlot>().UpdateInformation(move);
             counter++;
         }
@@ -35,11 +34,13 @@ public class PartyMovesPanel : PartyInformationUserInterface
         informationSlots = RemoveInactiveObjects(informationSlots);
 
         informationSlots = GetComponentsInChildren<PartyInformationSlot>().ToList();
+
+        informationSlots[0].SetActive(true); ActivateSlot(0, true); // Debug
     }
 
     protected List<PartyMember.MemberMove> GetMoves(PartyMember member)
     {
-        return member.ActiveMoves;
+        return member.ActiveMoves; // Debug
     }
 
     private List<PartyInformationSlot> RemoveInactiveObjects(List<PartyInformationSlot> source)

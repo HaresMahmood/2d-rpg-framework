@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
@@ -23,18 +24,17 @@ public class PartyMoveSlot : PartyInformationSlot
     private TextMeshProUGUI accuracyText;
     private TextMeshProUGUI powertext;
 
+    private TypingUserInterface typing;
+
     #endregion
 
     #region Miscellaneous Methods
 
-    protected override void SetInformation(ScriptableObject slotObject)
+    protected override void SetInformation<T>(T slotObject)
     {
-        PartyMember.MemberMove move = (PartyMember.MemberMove)slotObject;
+        PartyMember.MemberMove move = (PartyMember.MemberMove)Convert.ChangeType(slotObject, typeof(PartyMember.MemberMove));
 
         moveNameText.SetText(move.Value.name);
-        
-        //info.Find("Typing/Typing").GetComponent<TextMeshProUGUI>().SetText(learnedMove.move.type.ToString());
-        //info.Find("Typing/Typing").GetComponent<TextMeshProUGUI>().color = learnedMove.move.UIColor;
    
         ppText.SetText(move.PP.ToString() + "/" + move.Value.pp);
 
@@ -43,9 +43,16 @@ public class PartyMoveSlot : PartyInformationSlot
         accuracyText.SetText(move.Value.accuracy.ToString());
         powertext.SetText(move.Value.power.ToString());
 
+        typing.Value = move.Value.typing.Value;
+        typing.UpdateUserInterface(typing.Type, typing.Icon);
+
         descriptionText.SetText(move.Value.description);
 
-        panel.color = move.Value.UIColor;
+        float h, s;
+
+        Color.RGBToHSV(new Color(typing.Type.Color.r, typing.Type.Color.g, typing.Type.Color.b), out h, out s, out _);
+        Color color = Color.HSVToRGB(h, s, 0.75f);
+        panel.color = new Color(color.r, color.g, color.b, 0.4f);
     }
 
     #endregion
@@ -57,7 +64,7 @@ public class PartyMoveSlot : PartyInformationSlot
     /// </summary>
     protected override void Awake()
     {
-        panel = transform.GetComponent<Image>();
+        panel = transform.Find("Information Panel").GetComponent<Image>();
 
         Transform slot = transform.Find("Information Panel").transform;
 
@@ -72,6 +79,8 @@ public class PartyMoveSlot : PartyInformationSlot
         specialIcon = statistics.Find("Category/Value/Special").gameObject;
         accuracyText = statistics.Find("Accuracy/Value").GetComponent<TextMeshProUGUI>();
         powertext = statistics.Find("Power/Value").GetComponent<TextMeshProUGUI>();
+
+        typing = information.Find("Statistics/Typing").GetComponent<TypingUserInterface>();
 
         base.Awake();
     }

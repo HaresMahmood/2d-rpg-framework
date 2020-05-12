@@ -17,14 +17,14 @@ public abstract class Slot : MonoBehaviour
     public virtual void AnimateSlot(float opacity, float duration = -1)
     {   }
 
-    public virtual void UpdateInformation(ScriptableObject slotObject, float duration = -1)
+    public virtual void UpdateInformation<T>(T slotObject, float duration = -1)
     {
         SetInformation(slotObject);
 
         AnimateSlot(1f, duration);
     }
 
-    protected virtual void SetInformation(ScriptableObject slotObject)
+    protected virtual void SetInformation<T>(T slotObject)
     {   }
 
     private IEnumerator FadeOpacity(float opacity, float duration)

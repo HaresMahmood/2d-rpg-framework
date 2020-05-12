@@ -3,10 +3,21 @@
 [System.Serializable]
 public class Typing
 {
+    #region Fields
+
+    [SerializeField] private Type value;
+
+    #endregion
+
     #region Properties
 
-    public Type Value { get; set; }
-    public Color color { get; set; }
+    public Type Value 
+    {
+        get { return value; }
+        set { this.value = value; } 
+    }
+
+    public Color Color { get; set; }
 
     #endregion
 

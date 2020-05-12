@@ -557,6 +557,11 @@ public static class ExtensionMethods
         source.Add(newKey, value);
     }
 
+    public static T ConvertValue<T>(string value)
+    {
+        return (T)Convert.ChangeType(value, typeof(T));
+    }
+
     /*
     public static IEnumerator AnimateIndicator(this GameObject indicator, float waitTime)
     {

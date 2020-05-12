@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
@@ -19,9 +20,9 @@ public class ItemSlot : CategorizableSlot
 
     #region Miscellaneous Methods
 
-    protected override void SetInformation(ScriptableObject slotObject)
+    protected override void SetInformation<T>(T slotObject)
     {
-        Item item = (Item)slotObject;
+        Item item = (Item)Convert.ChangeType(slotObject, typeof(Item));
 
         itemSprite.sprite = item.Sprite;
         quantityText.SetText(item.Quantity.ToString());
