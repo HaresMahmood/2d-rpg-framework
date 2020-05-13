@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 ///
 /// </summary>
-public class PartyInformationPanel : MonoBehaviour
+public class PartyInformationPanel : PartyInformationUserInterface
 {
     #region Variables
 
@@ -15,27 +15,15 @@ public class PartyInformationPanel : MonoBehaviour
 
     #region Miscellaneous Methods
 
-
+    public override void SetInformation(PartyMember member)
+    {
+        informationSlots[0].UpdateInformation(member);
+    }
 
     #endregion
-    
+
     #region Unity Methods
-
-    /// <summary>
-    /// Start is called before the first frame update.
-    /// </summary>
-    private void Start()
-    {
-        
-    }
-
-    /// <summary>
-    /// Update is called once per frame.
-    /// </summary>
-    private void Update()
-    {
-        
-    }
+ 
 
     #endregion
 }

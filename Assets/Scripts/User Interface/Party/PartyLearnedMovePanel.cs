@@ -6,7 +6,7 @@ using UnityEngine.UI;
 /// <summary>
 ///
 /// </summary>
-public class PartyLearnedMovePanel : PartyMovesPanel
+public class PartyLearnedMovePanel
 {
     /*
     #region Variables

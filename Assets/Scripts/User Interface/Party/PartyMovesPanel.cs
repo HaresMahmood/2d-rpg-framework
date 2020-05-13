@@ -22,7 +22,7 @@ public class PartyMovesPanel : PartyInformationUserInterface
         foreach (PartyMember.MemberMove move in GetMoves(member))
         {
             informationSlots[counter].SetActive(false);
-            informationSlots[counter].GetComponentInChildren<PartyMoveSlot>().UpdateInformation(move);
+            informationSlots[counter].UpdateInformation(move);
             counter++;
         }
 
