@@ -9,18 +9,18 @@ using TMPro;
 /// </summary>
 public class TypingUserInterface : MonoBehaviour
 {
+    #region Variables
+
+    private TextMeshProUGUI typeText;
+    private Image typeIcon;
+
+    #endregion
+
     #region Fields
 
     [SerializeField] private List<Sprite> icons = new List<Sprite>();
     [SerializeField] [ReadOnly] private Typing type;
     [SerializeField] [ReadOnly] private Sprite icon;
-
-    #endregion
-
-    #region Variables
-
-    private TextMeshProUGUI typeText;
-    private Image typeIcon;
 
     #endregion
 
@@ -40,7 +40,7 @@ public class TypingUserInterface : MonoBehaviour
     public Typing.Type Value
     {
         get { return type.Value; }
-        set 
+        set
         {
             type.Value = value;
 

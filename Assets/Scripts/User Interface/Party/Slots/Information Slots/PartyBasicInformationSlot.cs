@@ -23,8 +23,7 @@ public class PartyBasicInformationSlot : PartyInformationSlot
     private TypingUserInterface secondaryTyping;
 
     private TextMeshProUGUI ailmentText;
-    private Image pokerusIcon;
-    private TextMeshProUGUI pokerusText;
+    private PokerusUserInterface pokerus;
 
     #endregion
 
@@ -59,9 +58,12 @@ public class PartyBasicInformationSlot : PartyInformationSlot
         secondaryTyping.Value = member.Species.SecondaryType.Value;
         secondaryTyping.UpdateUserInterface(secondaryTyping.Type, secondaryTyping.Icon);
 
+        // TODO: Move to separate class?
         ailmentText.SetText(member.Ailment.Value.ToString());
         ailmentText.GetComponent<AutoTextWidth>().UpdateWidth(member.Ailment.Value.ToString());
-        // TODO: Create PokerusUserInterface class
+        ailmentText.color = member.Ailment.Color;
+        //\\
+        pokerus.UpdateUserInterface(member.Pokerus);
     }
 
     #endregion
@@ -88,8 +90,7 @@ public class PartyBasicInformationSlot : PartyInformationSlot
         secondaryTyping = typing.Find("Secondary Typing").GetComponent<TypingUserInterface>();
 
         ailmentText = statusAilment.Find("Ailment").GetComponent<TextMeshProUGUI>();
-        pokerusText = statusAilment.Find("Pokerus/Value").GetComponent<TextMeshProUGUI>();
-        pokerusIcon = statusAilment.Find("Pokerus/Icon").GetComponent<Image>();
+        pokerus = statusAilment.Find("Pokerus").GetComponent<PokerusUserInterface>();
 
         base.Awake();
     }

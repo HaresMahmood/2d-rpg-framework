@@ -204,8 +204,6 @@ public class PartyMember : ScriptableObject
                     Strain = UnityEngine.Random.Range(0, 15);
                 }
 
-
-
                 status = value;
             }
         }
