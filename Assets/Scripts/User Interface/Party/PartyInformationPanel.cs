@@ -17,7 +17,10 @@ public class PartyInformationPanel : PartyInformationUserInterface
 
     public override void SetInformation(PartyMember member)
     {
-        informationSlots[0].UpdateInformation(member);
+        foreach (PartyInformationSlot slot in informationSlots)
+        {
+            slot.UpdateInformation(member);
+        }
     }
 
     #endregion

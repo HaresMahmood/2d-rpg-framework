@@ -6,7 +6,7 @@ using TMPro;
 /// <summary>
 ///
 /// </summary>
-public class PartyBasicInformationSlot : PartyInformationSlot
+public class PartyBasicSlot : PartyInformationSlot
 {
     #region Variables
 
