@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using System.Collections.Generic;
+﻿using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -7,11 +7,9 @@ using TMPro;
 /// <summary>
 ///
 /// </summary>
-public class PokerusUserInterface : MonoBehaviour
+public class PokerusUserInterface : ComponentUserInterface
 {
     #region Variables
-
-    [SerializeField] private List<Sprite> icons = new List<Sprite>();
 
     private GameObject separator;
     private Image icon;
@@ -21,8 +19,10 @@ public class PokerusUserInterface : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    public void UpdateUserInterface(PartyMember.MemberPokerus pokerus)
+    public override void UpdateUserInterface<T>(T information)
     {
+        PartyMember.MemberPokerus pokerus = (PartyMember.MemberPokerus)Convert.ChangeType(information, typeof(PartyMember.MemberPokerus));
+
         if (pokerus.Status == PartyMember.MemberPokerus.InfectionStatus.Uninfected)
         {
             separator.SetActive(false);
@@ -48,7 +48,7 @@ public class PokerusUserInterface : MonoBehaviour
     /// <summary>
     /// Awake is called when the script instance is being loaded.
     /// </summary>
-    private void Awake()
+    protected override void Awake()
     {
         separator = transform.Find("Separator").gameObject;
         icon = transform.Find("Icon").GetComponent<Image>();

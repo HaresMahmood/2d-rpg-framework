@@ -7,7 +7,7 @@ using TMPro;
 /// <summary>
 ///
 /// </summary>
-public class TypingUserInterface : MonoBehaviour
+public class TypingUserInterface : ComponentUserInterface
 {
     #region Variables
 
@@ -18,7 +18,6 @@ public class TypingUserInterface : MonoBehaviour
 
     #region Fields
 
-    [SerializeField] private List<Sprite> icons = new List<Sprite>();
     [SerializeField] [ReadOnly] private Typing type;
     [SerializeField] [ReadOnly] private Sprite icon;
 
@@ -202,7 +201,7 @@ public class TypingUserInterface : MonoBehaviour
     /// <summary>
     /// Awake is called when the script instance is being loaded.
     /// </summary>
-    private void Awake()
+    protected override void Awake()
     {
         UpdateUserInterface(type, icon);
     }
