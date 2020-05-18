@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -9,27 +8,14 @@ using TMPro;
 /// </summary>
 public class TypingUserInterface : ComponentUserInterface
 {
-    #region Variables
-
-    private TextMeshProUGUI typeText;
-    private Image typeIcon;
-
-    #endregion
-
     #region Fields
 
     [SerializeField] [ReadOnly] private Typing type;
-    [SerializeField] [ReadOnly] private Sprite icon;
+    [SerializeField] [ReadOnly] private Sprite sprite;
 
     #endregion
 
     #region Properties
-
-    public List<Sprite> Icons
-    {
-        get { return icons; }
-        set { icons = value; }
-    }
 
     public Typing Type
     {
@@ -45,7 +31,7 @@ public class TypingUserInterface : ComponentUserInterface
 
             if (type.Value != Typing.Type.None)
             {
-                icon = icons.First(i => i.name.Contains(type.Value.ToString().ToLower()));
+                sprite = icons.First(i => i.name.Contains(type.Value.ToString().ToLower()));
                 type.Color = GetColor(type.Value);
             }
         }
@@ -53,42 +39,42 @@ public class TypingUserInterface : ComponentUserInterface
 
     public Sprite Icon
     {
-        get { return icon; }
-        set { icon = value; }
+        get { return sprite; }
+        set { sprite = value; }
     }
 
     #endregion
 
     #region Miscellaneous Methods
 
-    public void UpdateUserInterface(Typing type, Sprite icon)
+    public void UpdateUserInterface(Typing type, Sprite sprite)
     {
-        if (typeText == null)
+        if (text == null)
         {
-            typeText = transform.Find("Text").GetComponent<TextMeshProUGUI>();
-            typeIcon = transform.Find("Icon").GetComponent<Image>();
+            text = transform.Find("Text").GetComponent<TextMeshProUGUI>();
+            icon = transform.Find("Icon").GetComponent<Image>();
         }
 
         if (type.Value != Typing.Type.None)
         {
-            typeText.SetText(type.Value.ToString());
-            typeIcon.sprite = icon;
+            text.SetText(type.Value.ToString());
+            icon.sprite = sprite;
 
-            typeText.color = type.Color;
-            typeIcon.color = type.Color;
+            text.color = type.Color;
+            icon.color = type.Color;
 
-            typeText.GetComponent<AutoTextWidth>().UpdateWidth(type.Value.ToString());
+            text.GetComponent<AutoTextWidth>().UpdateWidth(type.Value.ToString());
 
-            if (!typeText.gameObject.activeSelf)
+            if (!text.gameObject.activeSelf)
             {
-                typeText.gameObject.SetActive(true);
-                typeIcon.gameObject.SetActive(true);
+                text.gameObject.SetActive(true);
+                icon.gameObject.SetActive(true);
             }
         }
         else
         {
-            typeText.gameObject.SetActive(false);
-            typeIcon.gameObject.SetActive(false);
+            text.gameObject.SetActive(false);
+            icon.gameObject.SetActive(false);
         }
     }
 
@@ -203,7 +189,7 @@ public class TypingUserInterface : ComponentUserInterface
     /// </summary>
     protected override void Awake()
     {
-        UpdateUserInterface(type, icon);
+        UpdateUserInterface(type, sprite);
     }
 
     #endregion

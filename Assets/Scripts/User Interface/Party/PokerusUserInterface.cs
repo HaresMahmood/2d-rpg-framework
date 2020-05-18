@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -12,8 +11,6 @@ public class PokerusUserInterface : ComponentUserInterface
     #region Variables
 
     private GameObject separator;
-    private Image icon;
-    private TextMeshProUGUI pokerusText;
 
     #endregion
 
@@ -27,16 +24,16 @@ public class PokerusUserInterface : ComponentUserInterface
         {
             separator.SetActive(false);
             icon.gameObject.SetActive(false);
-            pokerusText.gameObject.SetActive(false);
+            text.gameObject.SetActive(false);
         }
         else
         {
             separator.SetActive(true);
             icon.gameObject.SetActive(true);
-            pokerusText.gameObject.SetActive(true);
+            text.gameObject.SetActive(true);
 
-            icon.sprite = icons.First(i => i.name.Contains(pokerus.Status.ToString().ToLower()));
-            pokerusText.SetText(pokerus.Status.ToString());
+            text.SetText(pokerus.Status.ToString());
+            base.UpdateUserInterface(information);
             // TODO: Add strain to UI
         }
     }
@@ -52,7 +49,7 @@ public class PokerusUserInterface : ComponentUserInterface
     {
         separator = transform.Find("Separator").gameObject;
         icon = transform.Find("Icon").GetComponent<Image>();
-        pokerusText = transform.Find("Value").GetComponent<TextMeshProUGUI>();
+        text = transform.Find("Value").GetComponent<TextMeshProUGUI>();
     }
 
     #endregion
