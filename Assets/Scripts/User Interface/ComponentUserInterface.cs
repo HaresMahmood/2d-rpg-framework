@@ -36,7 +36,7 @@ public abstract class ComponentUserInterface : MonoBehaviour
 
     public virtual void UpdateUserInterface<T>(T information)
     {
-        icon.sprite = icons.First(i => i.name.Contains(text.text));
+        icon.sprite = icons.First(i => i.name.Contains(text.text.ToLower()));
     }
 
     #endregion

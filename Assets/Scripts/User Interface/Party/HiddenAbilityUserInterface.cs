@@ -7,13 +7,6 @@ using TMPro;
 /// </summary>
 public class HiddenAbilityUserInterface : ComponentUserInterface
 {
-    #region Variables
-
-    private TextMeshProUGUI abilityText;
-    private Image abilityIcon;
-
-    #endregion
-
     #region Miscellaneous Methods
 
     public override void UpdateUserInterface<T>(T information)
