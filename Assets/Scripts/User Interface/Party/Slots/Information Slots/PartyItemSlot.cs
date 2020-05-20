@@ -22,7 +22,8 @@ public class PartyItemSlot : PartyInformationSlot
     private TextMeshProUGUI descriptionText;
 
     // TODO: Crappy names...
-    private GameObject text;
+    private GameObject effectHeader;
+    private GameObject descriptionHeader;
     private GameObject empty;
 
     #endregion
@@ -42,25 +43,23 @@ public class PartyItemSlot : PartyInformationSlot
 
             descriptionText.SetText(member.HeldItem.Description);
 
-
             itemIcon.gameObject.SetActive(true);
-
-            text.SetActive(true);
             effectText.gameObject.SetActive(true);
-
-            description.gameObject.SetActive(true);
+            descriptionText.gameObject.SetActive(true);
+            effectHeader.SetActive(true);
+            descriptionHeader.SetActive(true);
 
             empty.SetActive(false);
         }
         else
         {
             itemText.SetText("None");
+
             itemIcon.gameObject.SetActive(false);
-
-            text.SetActive(false);
             effectText.gameObject.SetActive(false);
-
-            description.gameObject.SetActive(false);
+            descriptionText.gameObject.SetActive(false);
+            effectHeader.SetActive(false);
+            descriptionHeader.SetActive(false);
 
             empty.SetActive(true);
         }
@@ -88,7 +87,8 @@ public class PartyItemSlot : PartyInformationSlot
 
         descriptionText = description.Find("Value").GetComponent<TextMeshProUGUI>();
 
-        text = effect.Find("Text").gameObject;
+        effectHeader = effect.Find("Text").gameObject;
+        descriptionHeader = description.Find("Text").gameObject;
         empty = effect.Find("Empty").gameObject;
 
         base.Awake();
