@@ -138,6 +138,13 @@ public class PartyMemberEditor : Editor
                 GUILayout.EndHorizontal();
                 GUILayout.BeginHorizontal("Box");
 
+                EditorGUILayout.LabelField(new GUIContent("HP", "Category of this Pokémon.\n\n" +
+                "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+                target.Stats.HP = EditorGUILayout.IntSlider(target.Stats.HP, 0, target.Stats.Stats[Pokemon.Stat.HP]);
+
+                GUILayout.EndHorizontal();
+                GUILayout.BeginHorizontal("Box");
+
                 EditorGUILayout.LabelField(new GUIContent("Gender", "Category of this Pokémon.\n\n" +
                 "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
                 target.Gender.Value = (PartyMember.MemberGender.Gender)EditorGUILayout.EnumPopup(target.Gender.Value);

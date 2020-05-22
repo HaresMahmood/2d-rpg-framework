@@ -16,6 +16,7 @@ public class PartyUserInterface : UserInterface
     #region Variables
 
     private List<PartyInformationController> informationPanels;
+    private StatsUserInterface statsUserInterface;
 
     #endregion
 
@@ -37,6 +38,8 @@ public class PartyUserInterface : UserInterface
         }
         
         UpdateSelectedObject(0, 1);
+
+        statsUserInterface.UpdateUserInterface(member);
         
         //UpdateSprite(member);
     }
@@ -55,6 +58,7 @@ public class PartyUserInterface : UserInterface
         //arrows = transform.Find("Arrows").gameObject;
         
         informationPanels = GetComponentsInChildren<PartyInformationController>().ToList();
+        statsUserInterface = transform.Find("Stats").GetComponent<StatsUserInterface>();
 
         //radarChartMesh = transform.Find("Middle/Stats/Chart/Radar Mesh").GetComponent<CanvasRenderer>();
 
