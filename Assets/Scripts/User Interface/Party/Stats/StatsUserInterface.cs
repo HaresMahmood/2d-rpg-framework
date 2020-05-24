@@ -33,7 +33,7 @@ public class StatsUserInterface : MonoBehaviour
     public void UpdateUserInterface(PartyMember member)
     {
         float hp = (float)member.Stats.HP / (float)member.Stats.Stats[Pokemon.Stat.HP];
-        string color = hp > 0.5f ? "#67FF8F" : (hp > 0.25f ? "#FFB766" : "#FF7766");
+        string color = hp >= 0.5f ? "#67FF8F" : (hp >= 0.25f ? "#FFB766" : "#FF7766");
 
         hpText.SetText($"<color={color}>{member.Stats.HP}</color>/{member.Stats.Stats[Pokemon.Stat.HP]}");
         attackText.SetText(member.Stats.Stats[Pokemon.Stat.Attack].ToString());
