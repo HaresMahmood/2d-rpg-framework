@@ -20958,8 +20958,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7057610779843151323}
+  - component: {fileID: 2191227406363192281}
   m_Layer: 5
-  m_Name: Chart
+  m_Name: Radar Chart
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20986,6 +20987,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 325}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2191227406363192281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3077193560748724376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1db0ae32da7ff04c9b21afdbc219ae7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  material: {fileID: 2100000, guid: b192db5db61b287458cac7579c79663d, type: 2}
 --- !u!1 &3128404439719416209
 GameObject:
   m_ObjectHideFlags: 0
@@ -24888,7 +24902,7 @@ GameObject:
   - component: {fileID: 7751025075680460105}
   - component: {fileID: 8204174838060856100}
   m_Layer: 5
-  m_Name: Radar Mesh
+  m_Name: Mesh
   m_TagString: Customizable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -24910,8 +24924,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 25, y: 25}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7751025075680460105
 CanvasRenderer:
@@ -32108,7 +32122,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -50, y: -1204.5997}
+  m_AnchoredPosition: {x: -50, y: -4154.1997}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &8694263909661119934
@@ -76237,12 +76251,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d50049cf9a3932245bacfc86e7cbcf40, type: 3}
---- !u!224 &387992383516372700 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 3493718296305854499, guid: d50049cf9a3932245bacfc86e7cbcf40,
-    type: 3}
-  m_PrefabInstance: {fileID: 3827570691836413695}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &3698155288137706921 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 453807927555599190, guid: d50049cf9a3932245bacfc86e7cbcf40,
@@ -76255,6 +76263,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a4db7a114972834c8e4117be1d82ba3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &387992383516372700 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 3493718296305854499, guid: d50049cf9a3932245bacfc86e7cbcf40,
+    type: 3}
+  m_PrefabInstance: {fileID: 3827570691836413695}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4046016863737972255
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -84866,15 +84880,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7b5865790cca50345ab5ec825488c891, type: 3}
---- !u!224 &1693356132767380899 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 5379722904720739810, guid: 7b5865790cca50345ab5ec825488c891,
-    type: 3}
-  m_PrefabInstance: {fileID: 6712790156169820225}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &9099767228433317583 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2549108857947260558, guid: 7b5865790cca50345ab5ec825488c891,
+    type: 3}
+  m_PrefabInstance: {fileID: 6712790156169820225}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &1693356132767380899 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 5379722904720739810, guid: 7b5865790cca50345ab5ec825488c891,
     type: 3}
   m_PrefabInstance: {fileID: 6712790156169820225}
   m_PrefabAsset: {fileID: 0}
@@ -85088,7 +85102,7 @@ PrefabInstance:
     - target: {fileID: 453807927555599190, guid: d50049cf9a3932245bacfc86e7cbcf40,
         type: 3}
       propertyPath: m_Value
-      value: -0.000000021993595
+      value: 0.35428923
       objectReference: {fileID: 0}
     - target: {fileID: 453807927555599190, guid: d50049cf9a3932245bacfc86e7cbcf40,
         type: 3}

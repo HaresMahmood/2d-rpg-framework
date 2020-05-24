@@ -8,7 +8,7 @@ public class StatsUserInterface : MonoBehaviour
 {
     #region Variables
 
-    private CanvasRenderer radarChartMesh;
+    private RadarChartUserInterface radarChart;
 
     private Slider hpBar;
 
@@ -44,10 +44,8 @@ public class StatsUserInterface : MonoBehaviour
 
         hpBar.fillRect.GetComponent<Image>().color = color.ToColor(); 
         StartCoroutine(LerpSlider(hpBar, hp, 0.15f));
-    }
 
-    private void DrawStatChart()
-    {
+        radarChart.UpdateUserInterface(member.Stats.Stats[Pokemon.Stat.HP], member.Stats.Stats[Pokemon.Stat.Attack], member.Stats.Stats[Pokemon.Stat.Defence], member.Stats.Stats[Pokemon.Stat.SpAttack], member.Stats.Stats[Pokemon.Stat.SpDefence], member.Stats.Stats[Pokemon.Stat.Speed]);
     }
 
     private TextMeshProUGUI GetUserInterfaceText(Transform parent)
@@ -89,6 +87,8 @@ public class StatsUserInterface : MonoBehaviour
     /// </summary>
     private void Awake()
     {
+        radarChart = transform.Find("Radar Chart").GetComponent<RadarChartUserInterface>();
+
         hpBar = transform.Find("Health Bar").GetComponent<Slider>();
 
         Transform information = transform.Find("Information");
