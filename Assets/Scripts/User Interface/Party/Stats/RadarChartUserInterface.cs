@@ -15,6 +15,7 @@ public class RadarChartUserInterface : MonoBehaviour
     #region Variables
 
     [SerializeField] private Material material;
+    [SerializeField] private Texture2D texture;
 
     private CanvasRenderer canvasRenderer;
     private RectTransform baseSprite; // TODO: Crap name...
@@ -74,12 +75,20 @@ public class RadarChartUserInterface : MonoBehaviour
         triangles[16] = 6;
         triangles[17] = 1;
 
+        uv[0] = Vector2.zero;
+        uv[1] = Vector2.one;
+        uv[2] = Vector2.one;
+        uv[3] = Vector2.one;
+        uv[4] = Vector2.one;
+        uv[5] = Vector2.one;
+        uv[6] = Vector2.one;
+
         mesh.vertices = vertices;
         mesh.uv = uv;
         mesh.triangles = triangles;
 
         canvasRenderer.SetMesh(mesh);
-        canvasRenderer.SetMaterial(material, null);
+        canvasRenderer.SetMaterial(material, texture);
     }
 
     #endregion

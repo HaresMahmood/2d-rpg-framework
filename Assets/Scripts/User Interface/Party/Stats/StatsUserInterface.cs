@@ -87,11 +87,9 @@ public class StatsUserInterface : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        radarChart = transform.Find("Radar Chart").GetComponent<RadarChartUserInterface>();
+        radarChart = transform.Find("Chart").GetComponent<RadarChartUserInterface>();
 
-        hpBar = transform.Find("Health Bar").GetComponent<Slider>();
-
-        Transform information = transform.Find("Information");
+        Transform information = radarChart.transform.Find("Base/Information");
 
         hp = information.Find("HP");
         attack = information.Find("Attack");
@@ -106,6 +104,8 @@ public class StatsUserInterface : MonoBehaviour
         spAttackText = GetUserInterfaceText(spAttack);
         spDefenceText = GetUserInterfaceText(spDefence);
         speedText = GetUserInterfaceText(speed);
+
+        hpBar = hp.Find("Health Bar").GetComponent<Slider>();
     }
 
     #endregion
