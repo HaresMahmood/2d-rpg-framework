@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Linq;
 
 public class StatsUserInterface : MonoBehaviour
 {
@@ -45,7 +46,7 @@ public class StatsUserInterface : MonoBehaviour
         hpBar.fillRect.GetComponent<Image>().color = color.ToColor(); 
         StartCoroutine(LerpSlider(hpBar, hp, 0.15f));
 
-        radarChart.UpdateUserInterface(member.Stats.Stats[Pokemon.Stat.HP], member.Stats.Stats[Pokemon.Stat.Attack], member.Stats.Stats[Pokemon.Stat.Defence], member.Stats.Stats[Pokemon.Stat.SpAttack], member.Stats.Stats[Pokemon.Stat.SpDefence], member.Stats.Stats[Pokemon.Stat.Speed]);
+        radarChart.UpdateUserInterface(member.Stats.Stats.Values.ToList());
     }
 
     private TextMeshProUGUI GetUserInterfaceText(Transform parent)

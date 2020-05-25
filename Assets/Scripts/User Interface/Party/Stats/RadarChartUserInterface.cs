@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 /// <summary>
 ///
@@ -14,8 +16,12 @@ public class RadarChartUserInterface : MonoBehaviour
 
     #region Variables
 
+    [Header("Setup")]
     [SerializeField] private Material material;
     [SerializeField] private Texture2D texture;
+
+    [Header("Settings")]
+    [SerializeField] [Range(0, 500)] private int cutOff = 300;
 
     private CanvasRenderer canvasRenderer;
     private RectTransform baseSprite; // TODO: Crap name...
@@ -24,64 +30,41 @@ public class RadarChartUserInterface : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    public void UpdateUserInterface(float hp, float attack, float defence, float spAttack, float spDefence, float speed) // TODO: Use list/dict
+    public void UpdateUserInterface(List<int> stats)
     {
         float height = baseSprite.sizeDelta.y / 2;
-        float angle = -360f / 6;
+        float angle = -360f / stats.Count;
 
         Mesh mesh = new Mesh();
 
-        Vector3[] vertices = new Vector3[7];
-        Vector2[] uv = new Vector2[7];
-        int[] triangles = new int[3 * 6];
-
-        Vector3 hpVertex = (Quaternion.Euler(0, 0, angle * 0) * Vector3.up * height * (Mathf.Clamp(hp, 0, 300) / 300f));
-        Vector3 attackVertex = (Quaternion.Euler(0, 0, angle * 1) * Vector3.up * height * (Mathf.Clamp(attack, 0, 300) / 300f));
-        Vector3 defenceVertex = (Quaternion.Euler(0, 0, angle * 2) * Vector3.up * height * (Mathf.Clamp(defence, 0, 300) / 300f));
-        Vector3 spAttackVertex = (Quaternion.Euler(0, 0, angle * 3) * Vector3.up * height * (Mathf.Clamp(spAttack, 0, 300) / 300f));
-        Vector3 spDefenceVertex = (Quaternion.Euler(0, 0, angle * 4) * Vector3.up * height * (Mathf.Clamp(spDefence, 0, 300) / 300f));
-        Vector3 speedVertex = (Quaternion.Euler(0, 0, angle * 5) * Vector3.up * height * (Mathf.Clamp(speed, 0, 300) / 300f));
-
+        Vector3[] vertices = new Vector3[stats.Count + 1];
+        Vector2[] uv = new Vector2[stats.Count + 1];
+        int[] triangles = new int[3 * stats.Count];
 
         vertices[0] = Vector3.zero;
-        vertices[1] = hpVertex;
-        vertices[2] = attackVertex;
-        vertices[3] = defenceVertex;
-        vertices[4] = spAttackVertex;
-        vertices[5] = spDefenceVertex;
-        vertices[6] = speedVertex;
 
-        triangles[0] = 0;
-        triangles[1] = 1;
-        triangles[2] = 2;
+        for (int i = 0; i < stats.Count; i++)
+        {
+            vertices[i + 1] = Quaternion.Euler(0, 0, angle * i) * Vector3.up * height * GetNormalizedStat(stats[i], cutOff);
+        }
 
-        triangles[3] = 0;
-        triangles[4] = 2;
-        triangles[5] = 3;
+        int j = 0; // TODO: Pretty crappy name
 
-        triangles[6] = 0;
-        triangles[7] = 3;
-        triangles[8] = 4;
+        for (int i = 1; i < triangles.Length; i++)
+        {
+            triangles[i] = i % 3 == 0 ? 0 : ExtensionMethods.IncrementInt(j, 1, stats.Count + 1, 1);
+            j = triangles[i] == 0 || (i + 1) % 3 == 0 ? j : triangles[i];
+        }
 
-        triangles[9] = 0;
-        triangles[10] = 4;
-        triangles[11] = 5;
-
-        triangles[12] = 0;
-        triangles[13] = 5;
-        triangles[14] = 6;
-
-        triangles[15] = 0;
-        triangles[16] = 6;
-        triangles[17] = 1;
-
-        uv[0] = Vector2.zero;
-        uv[1] = Vector2.one;
-        uv[2] = Vector2.one;
-        uv[3] = Vector2.one;
-        uv[4] = Vector2.one;
-        uv[5] = Vector2.one;
-        uv[6] = Vector2.one;
+        if (texture != null)
+        {
+            uv[0] = Vector2.zero;
+            
+            for (int i = 1; i < uv.Length; i++)
+            {
+                uv[i] = Vector2.one;
+            }
+        }
 
         mesh.vertices = vertices;
         mesh.uv = uv;
@@ -89,6 +72,11 @@ public class RadarChartUserInterface : MonoBehaviour
 
         canvasRenderer.SetMesh(mesh);
         canvasRenderer.SetMaterial(material, texture);
+    }
+
+    private float GetNormalizedStat(int value, float max)
+    {
+        return (Mathf.Clamp(value, 0, cutOff) / max);
     }
 
     #endregion
