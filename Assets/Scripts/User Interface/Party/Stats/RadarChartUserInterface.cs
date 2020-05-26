@@ -30,7 +30,7 @@ public class RadarChartUserInterface : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    public void UpdateUserInterface(List<int> stats)
+    public void SetInformation(List<int> stats)
     {
         float height = baseSprite.sizeDelta.y / 2;
         float angle = -360f / stats.Count;

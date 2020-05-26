@@ -31,7 +31,7 @@ public class StatsUserInterface : MonoBehaviour
 
     #region Miscellaneous Methodss
 
-    public void UpdateUserInterface(PartyMember member)
+    public void SetInformation(PartyMember member)
     {
         float hp = (float)member.Stats.HP / (float)member.Stats.Stats[Pokemon.Stat.HP];
         string color = hp >= 0.5f ? "#67FF8F" : (hp >= 0.25f ? "#FFB766" : "#FF7766");
@@ -46,7 +46,7 @@ public class StatsUserInterface : MonoBehaviour
         hpBar.fillRect.GetComponent<Image>().color = color.ToColor(); 
         StartCoroutine(LerpSlider(hpBar, hp, 0.15f));
 
-        radarChart.UpdateUserInterface(member.Stats.Stats.Values.ToList());
+        radarChart.SetInformation(member.Stats.Stats.Values.ToList());
     }
 
     private TextMeshProUGUI GetUserInterfaceText(Transform parent)
@@ -88,7 +88,7 @@ public class StatsUserInterface : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        radarChart = transform.Find("Chart").GetComponent<RadarChartUserInterface>();
+        radarChart = transform.Find("Radar Chart").GetComponent<RadarChartUserInterface>();
 
         Transform information = radarChart.transform.Find("Base/Information");
 
