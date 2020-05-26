@@ -1,13 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
+using System.Linq;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System.Linq;
 
-public class StatsUserInterface : MonoBehaviour
+
+public class StatsUserInterface : PartyInformationUserInterface
 {
     #region Variables
+
+    private Animator animator;
 
     private RadarChartUserInterface radarChart;
 
@@ -31,7 +34,7 @@ public class StatsUserInterface : MonoBehaviour
 
     #region Miscellaneous Methodss
 
-    public void SetInformation(PartyMember member)
+    public override void SetInformation(PartyMember member)
     {
         float hp = (float)member.Stats.HP / (float)member.Stats.Stats[Pokemon.Stat.HP];
         string color = hp >= 0.5f ? "#67FF8F" : (hp >= 0.25f ? "#FFB766" : "#FF7766");
@@ -47,6 +50,19 @@ public class StatsUserInterface : MonoBehaviour
         StartCoroutine(LerpSlider(hpBar, hp, 0.15f));
 
         radarChart.SetInformation(member.Stats.Stats.Values.ToList());
+    }
+
+    public override void ActivateSlot(int selectedSlot, bool isActive)
+    {
+        // "selectedSlot" = whehter enter is pressed
+        /*
+        if (selectedSlot == 0)
+        {
+            
+        }
+        */
+
+        animator.SetBool("isSelected", isActive);
     }
 
     private TextMeshProUGUI GetUserInterfaceText(Transform parent)
@@ -86,8 +102,10 @@ public class StatsUserInterface : MonoBehaviour
     /// <summary>
     /// Awake is called when the script instance is being loaded.
     /// </summary>
-    private void Awake()
+    protected override void Awake()
     {
+        animator = GetComponent<Animator>();
+
         radarChart = transform.Find("Radar Chart").GetComponent<RadarChartUserInterface>();
 
         Transform information = radarChart.transform.Find("Base/Information");

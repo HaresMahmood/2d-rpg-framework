@@ -10,7 +10,7 @@ public class PartyInformationUserInterface : UserInterface
 {
     #region Constants
 
-    public override int MaxObjects => informationSlots.Count;
+    public override int MaxObjects => informationSlots != null ? informationSlots.Count : 0;
 
     #endregion
 
@@ -104,7 +104,7 @@ public class PartyInformationUserInterface : UserInterface
         StartCoroutine(AnimeSelectedObject(selectedValue, previousValue));
     }
 
-    public void ActivateSlot(int selectedSlot, bool isActive)
+    public virtual void ActivateSlot(int selectedSlot, bool isActive)
     {
         informationSlots[selectedSlot].AnimateSlot(isActive);
     }
@@ -142,9 +142,12 @@ public class PartyInformationUserInterface : UserInterface
     /// </summary>
     protected virtual void Start()
     {
-        for (int i = 1; i < informationSlots.Count; i++)
+        if (informationSlots != null)
         {
-            informationSlots[i].SetActive(false);
+            for (int i = 1; i < informationSlots.Count; i++)
+            {
+                informationSlots[i].SetActive(false);
+            }
         }
     }
 

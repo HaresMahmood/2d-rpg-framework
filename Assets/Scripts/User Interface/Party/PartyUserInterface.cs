@@ -9,7 +9,7 @@ public class PartyUserInterface : UserInterface
 {
     #region Constants
 
-    public override int MaxObjects => 2;
+    public override int MaxObjects => 3;
 
     #endregion
 
@@ -22,12 +22,12 @@ public class PartyUserInterface : UserInterface
 
     #region Miscellaneous Methods
 
-    public override void UpdateSelectedObject(int selectedValue, int previousValue)
+    public override void UpdateSelectedObject(int selectedValue, int increment)
     {
-        int value = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, previousValue); // Debug.
+        int previousValue = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, -increment);
 
         StartCoroutine(informationPanels[selectedValue].SetActive(true));
-        StartCoroutine(informationPanels[value].SetActive(false));
+        StartCoroutine(informationPanels[previousValue].SetActive(false));
     }
 
     public void UpdateSelectedPartyMember(PartyMember member)

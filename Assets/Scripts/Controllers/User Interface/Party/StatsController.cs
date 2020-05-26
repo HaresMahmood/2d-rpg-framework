@@ -1,23 +1,8 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class PartyInformationController : UserInterfaceController
+public class StatsController : PartyInformationController
 {
-    #region Fields
-
-    protected PartyInformationUserInterface userInterface;
-
-    #endregion
-
-    #region Properties
-
-    public override UserInterface UserInterface
-    {
-        get { return userInterface; }
-    }
-
-    #endregion
-
     #region Miscellaneous Methods
 
     public override IEnumerator SetActive(bool isActive, bool condition = true)
@@ -26,12 +11,7 @@ public class PartyInformationController : UserInterfaceController
 
         Flags.isActive = isActive;
 
-        userInterface.ActivateSlot(selectedValue, isActive);
-    }
-
-    public void SetInformation(PartyMember member)
-    {
-        userInterface.SetInformation(member);
+        userInterface.ActivateSlot(0, isActive);
     }
 
     protected override void GetInput(string axisName)
@@ -39,7 +19,7 @@ public class PartyInformationController : UserInterfaceController
         bool hasInput = RegularInput(UserInterface.MaxObjects, axisName);
         if (hasInput)
         {
-            UpdateSelectedObject(selectedValue, (int)Input.GetAxisRaw(axisName));
+            //UpdateSelectedObject(0, (int)Input.GetAxisRaw(axisName));
         }
     }
 
@@ -69,9 +49,9 @@ public class PartyInformationController : UserInterfaceController
     /// <summary>
     /// Awake is called when the script instance is being loaded.
     /// </summary>
-    protected virtual void Awake()
+    protected override void Awake()
     {
-        userInterface = GetComponent<PartyInformationUserInterface>();
+        base.Awake();
     }
 
     /*
