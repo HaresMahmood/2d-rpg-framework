@@ -62,6 +62,12 @@ public class PartyController : UserInterfaceController
         }
     }
 
+    public void AnimatePanel(int panel, float opacity, float animationDuration = 0.15f)
+
+    {
+        userInterface.AnimatePanel(panel, opacity, animationDuration);
+    }
+
     protected override void GetInput(string axisName)
     {
         bool hasInput = RegularInput(UserInterface.MaxObjects, axisName);

@@ -44,6 +44,11 @@ public class PartyUserInterface : UserInterface
         //UpdateSprite(member);
     }
 
+    public void AnimatePanel(int panel, float opacity, float animationDuration)
+    {
+        StartCoroutine(informationPanels[panel].gameObject.FadeOpacity(opacity, animationDuration));
+    }
+
     #endregion
 
     #region Unity Methods

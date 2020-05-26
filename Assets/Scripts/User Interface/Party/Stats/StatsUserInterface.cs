@@ -54,15 +54,8 @@ public class StatsUserInterface : PartyInformationUserInterface
 
     public override void ActivateSlot(int selectedSlot, bool isActive)
     {
-        // "selectedSlot" = whehter enter is pressed
-        /*
-        if (selectedSlot == 0)
-        {
-            
-        }
-        */
-
         animator.SetBool("isSelected", isActive);
+        animator.SetBool("isActive", Convert.ToBoolean(selectedSlot)); // "selectedSlot" = whehter enter is pressed)
     }
 
     private TextMeshProUGUI GetUserInterfaceText(Transform parent)

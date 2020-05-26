@@ -1,8 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class StatsController : PartyInformationController
 {
+    private bool isActive; // TODO: Turn into flag?
+
     #region Miscellaneous Methods
 
     public override IEnumerator SetActive(bool isActive, bool condition = true)
@@ -11,59 +14,54 @@ public class StatsController : PartyInformationController
 
         Flags.isActive = isActive;
 
+        if (this.isActive)
+        {
+            this.isActive = false;
+            AnimatePanels(1f);
+        }
+
         userInterface.ActivateSlot(0, isActive);
     }
-
+    
     protected override void GetInput(string axisName)
     {
-        bool hasInput = RegularInput(UserInterface.MaxObjects, axisName);
-        if (hasInput)
+        base.GetInput(axisName);
+
+        // TODO: Ugly code
+
+        if (Input.GetButtonDown("Interact") && !isActive)
         {
-            //UpdateSelectedObject(0, (int)Input.GetAxisRaw(axisName));
+            isActive = true;
+
+            AnimatePanels(0.4f);
+            userInterface.ActivateSlot(Convert.ToInt32(isActive), true);
+        }
+        else if (Input.GetButtonDown("Cancel") && isActive)
+        {
+            isActive = false;
+
+            AnimatePanels(1f);
+            userInterface.ActivateSlot(Convert.ToInt32(isActive), true);
         }
     }
 
-    /*
-    protected override void InteractInput(int selectedValue)
+    private void AnimatePanels(float opacity)
     {
-        base.InteractInput(selectedValue);
-
-        ((InventoryUserInterface)UserInterface).ActiveSubMenu(selectedValue);
+        PartyController.Instance.AnimatePanel(0, opacity);
+        PartyController.Instance.AnimatePanel(2, opacity);
     }
-    
-    protected override void GetInput()
-    {
-        base.GetInput();
-
-        if (Input.GetButtonDown("Interact"))
-        {
-            InteractInput(selectedValue);
-        }
-    }
-    */
 
     #endregion
 
     #region Unity Methods
 
+    /*
     /// <summary>
     /// Awake is called when the script instance is being loaded.
     /// </summary>
     protected override void Awake()
     {
         base.Awake();
-    }
-
-    /*
-    /// <summary>
-    /// Update is called once per frame.
-    /// </summary>
-    protected override void Update()
-    {
-        if (Flags.isActive)
-        {
-            GetInput();
-        }
     }
     */
 
