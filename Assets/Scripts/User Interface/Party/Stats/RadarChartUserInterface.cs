@@ -74,6 +74,11 @@ public class RadarChartUserInterface : MonoBehaviour
         canvasRenderer.SetMaterial(material, texture);
     }
 
+    public void ClearMesh()
+    {
+        canvasRenderer.SetMesh(null);
+    }
+
     private float GetNormalizedStat(int value, float max)
     {
         return (Mathf.Clamp(value, 0, cutOff) / max);

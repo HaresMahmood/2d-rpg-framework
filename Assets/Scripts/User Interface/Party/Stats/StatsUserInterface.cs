@@ -4,7 +4,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-
+using System.Collections.Generic;
 
 public class StatsUserInterface : PartyInformationUserInterface
 {
@@ -13,6 +13,7 @@ public class StatsUserInterface : PartyInformationUserInterface
     private Animator animator;
 
     private RadarChartUserInterface radarChart;
+    private RadarChartUserInterface partyAverage;
 
     private Slider hpBar;
 
@@ -56,6 +57,27 @@ public class StatsUserInterface : PartyInformationUserInterface
     {
         animator.SetBool("isSelected", isActive);
         animator.SetBool("isActive", Convert.ToBoolean(selectedSlot)); // "selectedSlot" = whehter enter is pressed)
+
+        if (selectedSlot == 0)
+        {
+            partyAverage.ClearMesh();
+        }
+        else
+        {
+            SetPartyAverage();
+        }
+    }
+
+    private void SetPartyAverage()
+    {
+        List<List<int>> lists = new List<List<int>>();
+
+        foreach (PartyMember member in PartyController.Instance.party.playerParty)
+        {
+            lists.Add(member.Stats.Stats.Values.ToList());
+        }
+
+        partyAverage.SetInformation(GetAverageFromLists(lists));
     }
 
     private TextMeshProUGUI GetUserInterfaceText(Transform parent)
@@ -88,6 +110,20 @@ public class StatsUserInterface : PartyInformationUserInterface
         }
     }
 
+    private List<int> GetAverageFromLists(List<List<int>> input)
+    {
+        var listLengths = input.Select(x => x.Count());
+
+        if (listLengths.Distinct().Count() != 1)
+        {
+            throw new Exception("Line lengths must be the same");
+        }
+
+        var lengthOfEachList = listLengths.First();
+
+        return Enumerable.Range(0, lengthOfEachList).Select(x => input.Average(y => y[x])).ToList().ConvertAll(Convert.ToInt32);
+    }
+
     #endregion
 
     #region Unity Methods
@@ -100,6 +136,7 @@ public class StatsUserInterface : PartyInformationUserInterface
         animator = GetComponent<Animator>();
 
         radarChart = transform.Find("Radar Chart").GetComponent<RadarChartUserInterface>();
+        partyAverage = radarChart.transform.Find("Party Average").GetComponent<RadarChartUserInterface>();
 
         Transform information = radarChart.transform.Find("Base/Information");
 

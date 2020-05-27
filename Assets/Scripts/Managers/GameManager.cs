@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private bool debug;
 
     private Color initialColor;
+    [SerializeField] private Color oppositeColor;
 
     [System.Serializable]
     public class Settings
@@ -91,6 +92,35 @@ public class GameManager : MonoBehaviour
                 {
                     element.GetComponent<CanvasRenderer>().SetColor(accentColor);
                 }
+            }
+        }
+
+        Color.RGBToHSV(accentColor, out float h, out float s, out float v);
+        h = (h + 180) % 360;
+        //oppositeColor = Color.HSVToRGB(h, s, v);
+
+        TextMeshProUGUI[] text = Resources.FindObjectsOfTypeAll<TextMeshProUGUI>();
+        foreach (TextMeshProUGUI element in text)
+        {
+            if (element.CompareTag("Opposite"))
+            {
+                element.color = oppositeColor;
+            }
+        }
+        Image[] image = Resources.FindObjectsOfTypeAll<Image>();
+        foreach (Image element in image)
+        {
+            if (element.CompareTag("Opposite"))
+            {
+                element.color = oppositeColor;
+            }
+        }
+        CustomRenderer[] canvas = Resources.FindObjectsOfTypeAll<CustomRenderer>();
+        foreach (CustomRenderer element in canvas)
+        {
+            if (element.CompareTag("Opposite"))
+            {
+                element.GetComponent<CanvasRenderer>().SetColor(oppositeColor);
             }
         }
 

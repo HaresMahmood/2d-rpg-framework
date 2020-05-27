@@ -537,6 +537,16 @@ public static class ExtensionMethods
         return (T)Convert.ChangeType(value, typeof(T));
     }
 
+    public static List<TSource> ToList<TSource>(this IEnumerable<TSource> source)
+    {
+        if (source == null)
+        {
+            //throw Error.ArgumentNull("source");
+        }
+
+        return new List<TSource>(source);
+    }
+
     /*
     public static IEnumerator AnimateIndicator(this GameObject indicator, float waitTime)
     {
