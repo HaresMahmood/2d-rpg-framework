@@ -15,6 +15,8 @@ public class StatsUserInterface : PartyInformationUserInterface
     private RadarChartUserInterface radarChart;
     private RadarChartUserInterface partyAverage;
 
+    private BarChartUserInterface barChart;
+
     private Slider hpBar;
 
     private Transform hp;
@@ -32,6 +34,8 @@ public class StatsUserInterface : PartyInformationUserInterface
     private TextMeshProUGUI speedText;
 
     private TextMeshProUGUI natureText;
+
+    private TextMeshProUGUI nameText;
 
     #endregion
 
@@ -54,8 +58,13 @@ public class StatsUserInterface : PartyInformationUserInterface
 
         radarChart.SetInformation(member.Stats.Stats.Values.ToList());
 
+        barChart.SetInformation(member.Stats.EVs, member.Stats.IVs);
+
         natureText.SetText(member.Nature.Value.ToString());
         natureText.GetComponent<AutoTextWidth>().UpdateWidth(member.Nature.Value.ToString());
+
+        nameText.SetText(member.Nickname != "" ? member.Nickname : member.Species.Name); // TODO: Implement in getter (in PartyMember.cs)
+        nameText.GetComponent<AutoTextWidth>().UpdateWidth(nameText.text); // TODO: Drop string parameter for "UpdateWidth method
 
     }
 
@@ -144,6 +153,8 @@ public class StatsUserInterface : PartyInformationUserInterface
         radarChart = transform.Find("Radar Chart").GetComponent<RadarChartUserInterface>();
         partyAverage = radarChart.transform.Find("Party Average").GetComponent<RadarChartUserInterface>();
 
+        barChart = transform.Find("Bar Chart").GetComponent<BarChartUserInterface>();
+
         Transform information = radarChart.transform.Find("Base/Information");
 
         hp = information.Find("HP");
@@ -163,6 +174,8 @@ public class StatsUserInterface : PartyInformationUserInterface
         hpBar = hp.Find("Health Bar").GetComponent<Slider>();
 
         natureText = transform.Find("Nature").Find("Value").GetComponent<TextMeshProUGUI>();
+
+        nameText = radarChart.transform.Find("Legend/Member/Text").GetComponent<TextMeshProUGUI>();
     }
 
     #endregion
