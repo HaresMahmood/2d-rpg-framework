@@ -31,6 +31,8 @@ public class StatsUserInterface : PartyInformationUserInterface
     private TextMeshProUGUI spDefenceText;
     private TextMeshProUGUI speedText;
 
+    private TextMeshProUGUI natureText;
+
     #endregion
 
     #region Miscellaneous Methodss
@@ -51,6 +53,10 @@ public class StatsUserInterface : PartyInformationUserInterface
         StartCoroutine(LerpSlider(hpBar, hp, 0.15f));
 
         radarChart.SetInformation(member.Stats.Stats.Values.ToList());
+
+        natureText.SetText(member.Nature.Value.ToString());
+        natureText.GetComponent<AutoTextWidth>().UpdateWidth(member.Nature.Value.ToString());
+
     }
 
     public override void ActivateSlot(int selectedSlot, bool isActive)
@@ -155,6 +161,8 @@ public class StatsUserInterface : PartyInformationUserInterface
         speedText = GetUserInterfaceText(speed);
 
         hpBar = hp.Find("Health Bar").GetComponent<Slider>();
+
+        natureText = transform.Find("Nature").Find("Value").GetComponent<TextMeshProUGUI>();
     }
 
     #endregion
