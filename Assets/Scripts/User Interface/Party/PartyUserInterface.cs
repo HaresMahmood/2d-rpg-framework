@@ -16,6 +16,10 @@ public class PartyUserInterface : UserInterface
     #region Variables
 
     private List<PartyInformationController> informationPanels;
+    private PartyLearnedMovesController learnedMovesPanel;
+    private PartyInformationController informationPanel;
+    private StatsController statsPanel;
+
     private StatsUserInterface statsUserInterface;
 
     #endregion
@@ -49,6 +53,36 @@ public class PartyUserInterface : UserInterface
         StartCoroutine(informationPanels[panel].gameObject.FadeOpacity(opacity, animationDuration));
     }
 
+    public void AnimatePanel(GameObject panel, float opacity, float animationDuration)
+    {
+        StartCoroutine(panel.FadeOpacity(opacity, animationDuration));
+    }
+
+    public bool AnimatePanel(float animationDuration = 0.15f)
+    {
+        bool isActive = !learnedMovesPanel.GetComponent<Animator>().GetBool("isActive");
+        float opacity = isActive ? 0f : 1f;
+
+        learnedMovesPanel.AnimatePanel(isActive);
+        AnimatePanel(statsPanel.gameObject, opacity, animationDuration);
+        AnimatePanel(informationPanel.gameObject, opacity, animationDuration);
+
+        informationPanels[0] = isActive ? learnedMovesPanel : informationPanel;
+
+        if (isActive)
+        {
+            informationPanels.RemoveAt(1);
+
+            StartCoroutine(statsPanel.SetActive(false));
+        }
+        else
+        {
+            informationPanels.Insert(1, statsPanel);
+        }
+
+        return isActive;
+    }
+
     #endregion
 
     #region Unity Methods
@@ -59,13 +93,13 @@ public class PartyUserInterface : UserInterface
     protected override void Awake()
     {
         selector = transform.Find("Selector").gameObject;
-        //scrollBar = learnedMovesPanel.transform.Find("Scrollbar").GetComponent<Scrollbar>();
-        //arrows = transform.Find("Arrows").gameObject;
         
         informationPanels = GetComponentsInChildren<PartyInformationController>().ToList();
-        statsUserInterface = transform.Find("Stats").GetComponent<StatsUserInterface>();
+        learnedMovesPanel = transform.Find("Learned Moves").GetComponent<PartyLearnedMovesController>();
+        informationPanel = informationPanels[0];
+        statsPanel = (StatsController)informationPanels[1];
 
-        //radarChartMesh = transform.Find("Middle/Stats/Chart/Radar Mesh").GetComponent<CanvasRenderer>();
+        statsUserInterface = transform.Find("Stats").GetComponent<StatsUserInterface>();
 
         //StartCoroutine(FindObjectOfType<BottomPanelUserInterface>().ChangePanelButtons(InventoryController.instance.buttons));
 

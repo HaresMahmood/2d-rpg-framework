@@ -71,9 +71,19 @@ public class PartyController : UserInterfaceController
     protected override void GetInput(string axisName)
     {
         bool hasInput = RegularInput(UserInterface.MaxObjects, axisName);
+
         if (hasInput)
         {
             UpdateSelectedObject(selectedValue, (int)(Input.GetAxisRaw(axisName)));
+        }
+
+        if (Input.GetButtonDown("Toggle"))
+        {
+            bool isActive = userInterface.AnimatePanel();
+
+            selectedValue = isActive ? 1 : 0;
+
+            UpdateSelectedObject(selectedValue, 1);
         }
     }
 

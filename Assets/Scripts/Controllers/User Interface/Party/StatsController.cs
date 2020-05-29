@@ -10,14 +10,17 @@ public class StatsController : PartyInformationController
 
     public override IEnumerator SetActive(bool isActive, bool condition = true)
     {
-        yield return null;
-
-        Flags.isActive = isActive;
-
-        if (this.isActive)
+        if (Flags.isActive != isActive)
         {
-            this.isActive = false;
-            AnimatePanels(1f);
+            yield return null;
+
+            Flags.isActive = isActive;
+
+            if (this.isActive)
+            {
+                this.isActive = false;
+                AnimatePanels(1f);
+            }
         }
 
         userInterface.ActivateSlot(0, isActive);
@@ -50,20 +53,6 @@ public class StatsController : PartyInformationController
         PartyController.Instance.AnimatePanel(0, opacity);
         PartyController.Instance.AnimatePanel(2, opacity);
     }
-
-    #endregion
-
-    #region Unity Methods
-
-    /*
-    /// <summary>
-    /// Awake is called when the script instance is being loaded.
-    /// </summary>
-    protected override void Awake()
-    {
-        base.Awake();
-    }
-    */
 
     #endregion
 }
