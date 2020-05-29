@@ -14,6 +14,9 @@ public class BarComponent : MonoBehaviour
     private Slider ev;
     private Slider iv;
 
+    private TextMeshProUGUI evText;
+    private TextMeshProUGUI ivText;
+
     #endregion
 
     #region Miscellaneous Methods
@@ -23,13 +26,8 @@ public class BarComponent : MonoBehaviour
         this.ev.value = ev / 255f;
         this.iv.value = iv / 31f;
 
-        SetValue(this.ev, ev.ToString());
-        SetValue(this.iv, iv.ToString());
-    }
-
-    private void SetValue(Slider slider, string value)
-    {
-        slider.transform.Find("Value").GetComponent<TextMeshProUGUI>().SetText(value);
+        evText.SetText(ev.ToString());
+        ivText.SetText(iv.ToString());
     }
 
     #endregion
@@ -43,6 +41,9 @@ public class BarComponent : MonoBehaviour
     {
         ev = transform.Find("EV").GetComponent<Slider>();
         iv = transform.Find("IV").GetComponent<Slider>();
+
+        evText = ev.transform.Find("Fill Area/Fill/Value").GetComponent<TextMeshProUGUI>();
+        ivText = iv.transform.Find("Fill Area/Fill/Value").GetComponent<TextMeshProUGUI>();
     }
 
     #endregion
