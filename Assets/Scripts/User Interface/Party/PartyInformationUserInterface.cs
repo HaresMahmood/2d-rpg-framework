@@ -116,7 +116,7 @@ public class PartyInformationUserInterface : UserInterface
         informationSlots[selectedValue].SetActive(true);
         informationSlots[previousValue].SetActive(false);
 
-        yield return new WaitForSecondsRealtime(animationDuration);
+        yield return new WaitForSecondsRealtime(animationDuration); // TODO: No longer needed
 
         //StartCoroutine(UpdateSelector(informationSlots[selectedValue].transform.Find("Information Panel")));
     }

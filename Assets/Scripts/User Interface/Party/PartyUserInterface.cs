@@ -9,7 +9,7 @@ public class PartyUserInterface : UserInterface
 {
     #region Constants
 
-    public override int MaxObjects => 3;
+    public override int MaxObjects => informationPanels.Count - 1;
 
     #endregion
 

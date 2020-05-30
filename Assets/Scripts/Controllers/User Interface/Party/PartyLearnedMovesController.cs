@@ -17,6 +17,12 @@ public class PartyLearnedMovesController : PartyInformationController
 
         animator.SetBool("isActive", isActive);
         StartCoroutine(gameObject.FadeOpacity(opacity, 0.15f)); // TODO: Make dynamic with animation time.
+
+        UserInterface.UpdateSelectedObject(selectedValue, 0);
+        UserInterface.UpdateSelectedObject(0);
+        userInterface.ActivateSlot(0, false);
+
+        selectedValue = 0;
     }
 
     #endregion
