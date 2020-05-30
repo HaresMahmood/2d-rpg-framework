@@ -40,6 +40,8 @@ public class PartyUserInterface : UserInterface
         {
             panel.SetInformation(member);
         }
+
+        learnedMovesPanel.SetInformation(member);
         
         UpdateSelectedObject(0, 1);
 

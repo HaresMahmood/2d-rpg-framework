@@ -38,7 +38,7 @@ public class PartyMovesPanel : PartyInformationUserInterface
         informationSlots[0].SetActive(true); // Debug
     }
 
-    protected List<PartyMember.MemberMove> GetMoves(PartyMember member)
+    protected virtual List<PartyMember.MemberMove> GetMoves(PartyMember member)
     {
         return member.ActiveMoves; // Debug
     }
@@ -51,12 +51,6 @@ public class PartyMovesPanel : PartyInformationUserInterface
 
         return list;
     }
-
-    #endregion
-
-    #region Unity Methods
-
-
 
     #endregion
 }
