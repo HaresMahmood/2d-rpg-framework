@@ -59,19 +59,19 @@ public class PokemonEditor : Editor
         GUILayout.BeginVertical();
         GUILayout.FlexibleSpace();
 
-        GUILayout.Label(target.PrimaryType.ToString());
+        GUILayout.Label(target.PrimaryType.Value.ToString());
 
         GUILayout.FlexibleSpace();
         GUILayout.EndVertical();
         GUILayout.EndHorizontal();
 
-        if (!target.SecondaryType.Equals(Typing.Type.None))
+        if (!target.SecondaryType.Value.Equals(Typing.Type.None))
         {
             GUILayout.BeginHorizontal("Box", GUILayout.Height(29));
             GUILayout.BeginVertical();
             GUILayout.FlexibleSpace();
 
-            GUILayout.Label(target.SecondaryType.ToString());
+            GUILayout.Label(target.SecondaryType.Value.ToString());
 
             GUILayout.FlexibleSpace();
             GUILayout.EndVertical();

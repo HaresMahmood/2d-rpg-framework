@@ -59,19 +59,19 @@ public class PartyMemberEditor : Editor
             GUILayout.BeginVertical();
             GUILayout.FlexibleSpace();
 
-            GUILayout.Label(target.Species.PrimaryType.ToString());
+            GUILayout.Label(target.Species.PrimaryType.Value.ToString());
 
             GUILayout.FlexibleSpace();
             GUILayout.EndVertical();
             GUILayout.EndHorizontal();
 
-            if (!target.Species.SecondaryType.Equals(Typing.Type.None))
+            if (!target.Species.SecondaryType.Value.Equals(Typing.Type.None))
             {
                 GUILayout.BeginHorizontal("Box", GUILayout.Height(29));
                 GUILayout.BeginVertical();
                 GUILayout.FlexibleSpace();
 
-                GUILayout.Label(target.Species.SecondaryType.ToString());
+                GUILayout.Label(target.Species.SecondaryType.Value.ToString());
 
                 GUILayout.FlexibleSpace();
                 GUILayout.EndVertical();
@@ -915,7 +915,7 @@ public class PartyMemberEditor : Editor
 
             showLearnedMoves = EditorGUILayout.Foldout(showLearnedMoves, $"Learned Moves ({target.LearnedMoves.Count})");
 
-            EditorGUI.BeginDisabledGroup(!showLearnedMoves || target.LearnedMoves.Count >= 4);
+            EditorGUI.BeginDisabledGroup(!showLearnedMoves || target.LearnedMoves.Count >= 50);
 
             if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
             {
