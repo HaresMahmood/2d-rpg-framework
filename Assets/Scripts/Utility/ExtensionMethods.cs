@@ -547,6 +547,18 @@ public static class ExtensionMethods
         return new List<TSource>(source);
     }
 
+    public static void Move<T>(this List<T> list, int source, int destination)
+    {
+        var item = list[source];
+
+        list.RemoveAt(source);
+
+        if (destination > source) destination--;
+        // the actual index could have shifted due to the removal
+
+        list.Insert(destination, item);
+    }
+
     /*
     public static IEnumerator AnimateIndicator(this GameObject indicator, float waitTime)
     {

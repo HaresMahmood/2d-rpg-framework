@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class PartyLearnedMovesController : PartyInformationController
+public class PartyLearnedMovesController : PartyMovesPanelController
 {
     #region Variables
 

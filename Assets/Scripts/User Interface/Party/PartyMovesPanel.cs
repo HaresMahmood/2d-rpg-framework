@@ -7,12 +7,6 @@ using UnityEngine;
 /// </summary>
 public class PartyMovesPanel : PartyInformationUserInterface
 {
-    #region Variables
-
-
-
-    #endregion
-
     #region Misccellaneous Methods
 
     public override void SetInformation(PartyMember member)
@@ -36,6 +30,13 @@ public class PartyMovesPanel : PartyInformationUserInterface
         informationSlots = GetComponentsInChildren<PartyInformationSlot>().ToList();
 
         informationSlots[0].SetActive(true); // Debug
+    }
+
+    public void UpdatePositionInList(PartyMember member, int selectedValue, int increment)
+    {
+        int previousValue = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, increment);
+
+        GetMoves(member).Move(selectedValue, previousValue);
     }
 
     protected virtual List<PartyMember.MemberMove> GetMoves(PartyMember member)
