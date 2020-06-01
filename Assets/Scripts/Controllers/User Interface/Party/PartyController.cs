@@ -63,9 +63,13 @@ public class PartyController : UserInterfaceController
     }
 
     public void AnimatePanel(int panel, float opacity, float animationDuration = 0.15f)
-
     {
         userInterface.AnimatePanel(panel, opacity, animationDuration);
+    }
+
+    public void AnimatePanels(PartyInformationController panel, float opacity, float animationDuration = 0.15f)
+    {
+        userInterface.AnimatePanels(panel, opacity, animationDuration);
     }
 
     protected override void GetInput(string axisName)
@@ -86,6 +90,10 @@ public class PartyController : UserInterfaceController
             UpdateSelectedObject(selectedValue, 1);
         }
     }
+
+    #endregion
+
+    #region Unity Methods
 
     /*
     protected override void InteractInput(int selectedValue)

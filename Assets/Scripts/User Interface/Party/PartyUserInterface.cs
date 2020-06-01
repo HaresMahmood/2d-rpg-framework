@@ -57,6 +57,28 @@ public class PartyUserInterface : UserInterface
         StartCoroutine(informationPanels[panel].gameObject.FadeOpacity(opacity, animationDuration));
     }
 
+    public void AnimatePanels(PartyInformationController panel, float opacity, float animationDuration)
+    {
+        int index = informationPanels.IndexOf(panel);
+
+        AnimatePanels(index, opacity, animationDuration);
+    }
+
+    private void AnimatePanels(int panel, float opacity, float animationDuration)
+    {
+        for (int i = 0; i < informationPanels.Count; i++)
+        {
+            if (i == panel)
+            {
+                continue;
+            }
+            else if (informationPanels[i].GetComponent<CanvasGroup>().alpha != 0)
+            {
+                AnimatePanel(i, opacity, animationDuration);
+            }
+        }
+    }
+
     public void AnimatePanel(GameObject panel, float opacity, float animationDuration)
     {
         StartCoroutine(panel.FadeOpacity(opacity, animationDuration));
