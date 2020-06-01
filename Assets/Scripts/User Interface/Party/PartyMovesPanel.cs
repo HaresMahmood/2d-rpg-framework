@@ -11,9 +11,35 @@ public class PartyMovesPanel : PartyInformationUserInterface
 
     public override void SetInformation(PartyMember member)
     {
+        SetInformation(GetMoves(member));
+
+        informationSlots[0].SetActive(true);
+    }
+
+    public void UpdatePosition(PartyMember member, int selectedValue, int increment)
+    {
+        int previousValue = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, increment);
+
+        //GetMoves(member).Move(selectedValue, previousValue);
+
+        PartyMember.MemberMove move = GetMoves(member)[previousValue];
+        GetMoves(member).Remove(move);
+        GetMoves(member).Insert(selectedValue, move);
+
+        SetInformation(GetMoves(member));
+        UpdateSelectedObject(selectedValue, increment);
+    }
+
+    protected virtual List<PartyMember.MemberMove> GetMoves(PartyMember member)
+    {
+        return member.ActiveMoves; // Debug
+    }
+
+    private void SetInformation(List<PartyMember.MemberMove> moves)
+    {
         int counter = 0;
 
-        foreach (PartyMember.MemberMove move in GetMoves(member))
+        foreach (PartyMember.MemberMove move in moves)
         {
             informationSlots[counter].SetActive(false);
             informationSlots[counter].UpdateInformation(move);
@@ -28,20 +54,6 @@ public class PartyMovesPanel : PartyInformationUserInterface
         informationSlots = RemoveInactiveObjects(informationSlots);
 
         informationSlots = GetComponentsInChildren<PartyInformationSlot>().ToList();
-
-        informationSlots[0].SetActive(true); // Debug
-    }
-
-    public void UpdatePositionInList(PartyMember member, int selectedValue, int increment)
-    {
-        int previousValue = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, increment);
-
-        GetMoves(member).Move(selectedValue, previousValue);
-    }
-
-    protected virtual List<PartyMember.MemberMove> GetMoves(PartyMember member)
-    {
-        return member.ActiveMoves; // Debug
     }
 
     private List<PartyInformationSlot> RemoveInactiveObjects(List<PartyInformationSlot> source)

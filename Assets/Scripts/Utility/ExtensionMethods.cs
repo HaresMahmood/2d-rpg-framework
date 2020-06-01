@@ -554,7 +554,6 @@ public static class ExtensionMethods
         list.RemoveAt(source);
 
         if (destination > source) destination--;
-        // the actual index could have shifted due to the removal
 
         list.Insert(destination, item);
     }

@@ -42,7 +42,7 @@ public class PartyUserInterface : UserInterface
         }
 
         learnedMovesPanel.SetInformation(member);
-        
+
         UpdateSelectedObject(0, 1);
 
         statsUserInterface.SetInformation(member);

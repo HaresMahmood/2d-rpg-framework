@@ -111,7 +111,7 @@ public class PartyInformationUserInterface : UserInterface
 
     private IEnumerator AnimeSelectedObject(int selectedValue, int previousValue, float animationDuration = 0.15f)
     {
-        StartCoroutine(UpdateSelector());
+        //StartCoroutine(UpdateSelector());
 
         informationSlots[selectedValue].SetActive(true);
         informationSlots[previousValue].SetActive(false);

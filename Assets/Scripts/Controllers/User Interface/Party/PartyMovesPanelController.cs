@@ -41,7 +41,7 @@ public class PartyMovesPanelController : PartyInformationController
         bool hasInput = RegularInput(UserInterface.MaxObjects, "Vertical");
         if (hasInput)
         {
-            ((PartyMovesPanel)userInterface).UpdatePositionInList(PartyController.Instance.party.playerParty[0], selectedValue, (int)Input.GetAxisRaw("Vertical"));
+            ((PartyMovesPanel)userInterface).UpdatePosition(PartyController.Instance.party.playerParty[0], selectedValue, (int)Input.GetAxisRaw("Vertical"));
         }
     }
 
