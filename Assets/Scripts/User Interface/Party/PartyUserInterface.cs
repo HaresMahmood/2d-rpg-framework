@@ -32,6 +32,8 @@ public class PartyUserInterface : UserInterface
 
         StartCoroutine(informationPanels[selectedValue].SetActive(true));
         StartCoroutine(informationPanels[previousValue].SetActive(false));
+
+        StartCoroutine(UpdateSelector(informationPanels[selectedValue].transform));
     }
 
     public void UpdateSelectedPartyMember(PartyMember member)

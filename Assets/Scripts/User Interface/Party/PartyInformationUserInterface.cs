@@ -101,24 +101,13 @@ public class PartyInformationUserInterface : UserInterface
     {
         int previousValue = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, increment);
 
-        StartCoroutine(AnimeSelectedObject(selectedValue, previousValue));
+        informationSlots[selectedValue].SetActive(true);
+        informationSlots[previousValue].SetActive(false);
     }
 
     public virtual void ActivateSlot(int selectedSlot, bool isActive)
     {
         informationSlots[selectedSlot].AnimateSlot(isActive);
-    }
-
-    private IEnumerator AnimeSelectedObject(int selectedValue, int previousValue, float animationDuration = 0.15f)
-    {
-        //StartCoroutine(UpdateSelector());
-
-        informationSlots[selectedValue].SetActive(true);
-        informationSlots[previousValue].SetActive(false);
-
-        yield return new WaitForSecondsRealtime(animationDuration); // TODO: No longer needed
-
-        //StartCoroutine(UpdateSelector(informationSlots[selectedValue].transform.Find("Information Panel")));
     }
 
     #endregion
