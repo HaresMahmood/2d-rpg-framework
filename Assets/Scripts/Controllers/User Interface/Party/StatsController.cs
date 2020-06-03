@@ -30,20 +30,20 @@ public class StatsController : PartyInformationController
     {
         base.GetInput(axisName);
 
-        // TODO: Ugly code
-
-        if (Input.GetButtonDown("Interact") && !isActive)
+        if (Input.GetButtonDown("Interact"))
         {
-            isActive = true;
-
-            AnimatePanels(0.4f);
-            userInterface.ActivateSlot(Convert.ToInt32(isActive), true);
+            isActive = !isActive;
         }
         else if (Input.GetButtonDown("Cancel") && isActive)
         {
             isActive = false;
+        }
+       
+        if (Input.GetButtonDown("Interact") || Input.GetButtonDown("Cancel"))
+        {
+            float opacity = isActive ? 0.4f : 1f;
 
-            AnimatePanels(1f);
+            AnimatePanels(opacity);
             userInterface.ActivateSlot(Convert.ToInt32(isActive), true);
         }
     }

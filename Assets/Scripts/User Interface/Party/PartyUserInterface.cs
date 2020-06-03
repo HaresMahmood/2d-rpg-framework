@@ -38,7 +38,7 @@ public class PartyUserInterface : UserInterface
 
     public void UpdateSelector(bool isActive, float animationDuration)
     {
-        Color color = isActive ? Color.red : Color.white;
+        Color color = isActive ? "#ba2f2f".ToColor() : Color.white;
 
         StartCoroutine(selector.FadeColor(color, animationDuration));
     }
