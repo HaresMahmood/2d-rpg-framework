@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private bool debug;
 
     private Color initialColor;
-    [SerializeField] private Color oppositeColor;
+    public Color oppositeColor;
 
     [System.Serializable]
     public class Settings

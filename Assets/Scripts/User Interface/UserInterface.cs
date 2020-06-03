@@ -115,9 +115,14 @@ public abstract class UserInterface : MonoBehaviour
         StartCoroutine(panel.FadeOpacity(opacity, animationDuration));
     }
 
+    protected void SetCharacterSprite(Sprite sprite)
+    {
+        CharacterSpriteController.Instance.SetSprite(sprite);
+    }
+
     protected void FadeCharacterSprite(float opacity, float animationDuration = 0.15f)
     {
-        FindObjectOfType<CharacterSpriteController>().FadeSprite(opacity, animationDuration); // TODO: Bad performance, think of different way.
+        CharacterSpriteController.Instance.FadeSprite(opacity, animationDuration);
     }
 
     #endregion

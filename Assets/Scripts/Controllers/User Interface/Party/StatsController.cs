@@ -24,6 +24,8 @@ public class StatsController : PartyInformationController
         }
 
         userInterface.ActivateSlot(0, isActive);
+
+        CharacterSpriteController.Instance.FadeSprite(isActive ? 0.4f : 1f, 0.15f); // TODO: Debug.
     }
     
     protected override void GetInput(string axisName)
@@ -48,10 +50,12 @@ public class StatsController : PartyInformationController
         }
     }
 
-    private void AnimatePanels(float opacity)
+    private void AnimatePanels(float opacity, float animationDuration = 0.15f)
     {
-        PartyController.Instance.AnimatePanel(0, opacity);
-        PartyController.Instance.AnimatePanel(2, opacity);
+        PartyController.Instance.AnimatePanel(0, opacity, animationDuration);
+        PartyController.Instance.AnimatePanel(2, opacity, animationDuration);
+
+        CharacterSpriteController.Instance.FadeSprite(opacity == 1f ? (Flags.isActive ? 0.4f : 1f) : 0f, animationDuration); // TODO: Denug.
     }
 
     #endregion

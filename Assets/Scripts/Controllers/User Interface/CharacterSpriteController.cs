@@ -1,10 +1,37 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 ///
 /// </summary>
 public class CharacterSpriteController : MonoBehaviour
 {
+    #region Fields
+
+    private static CharacterSpriteController instance;
+
+    #endregion
+
+    #region Properties
+
+    /// <summary>
+    /// Singleton pattern.
+    /// </summary>
+    public static CharacterSpriteController Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<CharacterSpriteController>(); // TODO: "FindObjectOfType" = bad performance. Think of better.
+            }
+
+            return instance;
+        }
+    }
+
+    #endregion
+
     #region Variables
 
     private Animator animator;
@@ -17,6 +44,11 @@ public class CharacterSpriteController : MonoBehaviour
     {
         animator.SetBool(activeMenu, true);
         animator.SetBool(inactiveMenu, false);
+    }
+
+    public void SetSprite(Sprite sprite)
+    {
+        transform.Find("Pokémon/Sprite").GetComponent<Image>().sprite = sprite; // TODO: Debug
     }
 
     public void FadeSprite(float opacity, float animationDuration)

@@ -38,7 +38,7 @@ public class PartyUserInterface : UserInterface
 
     public void UpdateSelector(bool isActive, float animationDuration)
     {
-        Color color = isActive ? "#ba2f2f".ToColor() : Color.white;
+        Color color = isActive ? GameManager.instance.oppositeColor : Color.white;
 
         StartCoroutine(selector.FadeColor(color, animationDuration));
     }
@@ -55,8 +55,8 @@ public class PartyUserInterface : UserInterface
         UpdateSelectedObject(0, 1);
 
         statsUserInterface.SetInformation(member);
-        
-        //UpdateSprite(member);
+
+        SetCharacterSprite(member.Species.Sprites.FrontSprite);
     }
 
     public void AnimatePanel(int panel, float opacity, float animationDuration)
@@ -72,6 +72,11 @@ public class PartyUserInterface : UserInterface
         {
             AnimatePanel(informationPanel, opacity, animationDuration);
         }
+
+        if (informationPanel.GetComponent<CanvasGroup>().alpha != 0)
+        {
+            FadeCharacterSprite(opacity, animationDuration);
+        }
     }
 
     private void AnimatePanel(PartyInformationController panel, float opacity, float animationDuration)
@@ -79,21 +84,6 @@ public class PartyUserInterface : UserInterface
         int index = informationPanels.IndexOf(panel);
 
         AnimatePanel(index, opacity, animationDuration);
-    }
-
-    private void AnimatePanels(int panel, float opacity, float animationDuration)
-    {
-        for (int i = 0; i < informationPanels.Count; i++)
-        {
-            if (i == panel)
-            {
-                continue;
-            }
-            else if (informationPanels[i].GetComponent<CanvasGroup>().alpha != 0)
-            {
-                AnimatePanel(i, opacity, animationDuration);
-            }
-        }
     }
 
     public void AnimatePanel(GameObject panel, float opacity, float animationDuration)
@@ -109,6 +99,7 @@ public class PartyUserInterface : UserInterface
         learnedMovesPanel.AnimatePanel(isActive);
         AnimatePanel(statsPanel.gameObject, opacity, animationDuration);
         AnimatePanel(informationPanel.gameObject, opacity, animationDuration);
+        //FadeCharacterSprite(opacity, animationDuration);
 
         informationPanels[0] = isActive ? learnedMovesPanel : informationPanel;
 
@@ -121,6 +112,8 @@ public class PartyUserInterface : UserInterface
         else
         {
             informationPanels.Insert(1, statsPanel);
+
+            StartCoroutine(learnedMovesPanel.SetActive(false));
         }
 
         return isActive;
