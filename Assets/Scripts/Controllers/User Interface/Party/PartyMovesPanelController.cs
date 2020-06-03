@@ -33,6 +33,7 @@ public class PartyMovesPanelController : PartyInformationController
             float opacity = isActive ? 0.4f : 1f;
 
             PartyController.Instance.AnimatePanels(this, opacity);
+            PartyController.Instance.UpdateSelector(isActive);
         }
         else if (Input.GetButtonDown("Cancel") && isActive)
         {

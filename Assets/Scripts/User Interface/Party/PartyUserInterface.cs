@@ -34,6 +34,13 @@ public class PartyUserInterface : UserInterface
         StartCoroutine(informationPanels[previousValue].SetActive(false));
 
         StartCoroutine(UpdateSelector(informationPanels[selectedValue].transform));
+    } 
+
+    public void UpdateSelector(bool isActive, float animationDuration)
+    {
+        Color color = isActive ? Color.red : Color.white;
+
+        StartCoroutine(selector.FadeColor(color, animationDuration));
     }
 
     public void UpdateSelectedPartyMember(PartyMember member)
@@ -59,22 +66,6 @@ public class PartyUserInterface : UserInterface
 
     public void AnimatePanels(PartyInformationController panel, float opacity, float animationDuration)
     {
-        /*
-        foreach (PartyInformationController informationPanel in informationPanels)
-        {
-            if (informationPanel == panel)
-            {
-                continue;
-            }
-            else if (informationPanel.GetComponent<CanvasGroup>().alpha != 0)
-            {
-                int index = informationPanels.IndexOf(panel);
-
-                AnimatePanel(index, opacity, animationDuration);
-            }
-        }
-        */
-        
         List<PartyInformationController> nonSelectedPanels = informationPanels.Where(p => p != panel && p.GetComponent<CanvasGroup>().alpha != 0).ToList();
 
         foreach (PartyInformationController informationPanel in nonSelectedPanels)
@@ -104,8 +95,6 @@ public class PartyUserInterface : UserInterface
             }
         }
     }
-
-
 
     public void AnimatePanel(GameObject panel, float opacity, float animationDuration)
     {

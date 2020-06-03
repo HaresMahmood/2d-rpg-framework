@@ -72,6 +72,11 @@ public class PartyController : UserInterfaceController
         userInterface.AnimatePanels(panel, opacity, animationDuration);
     }
 
+    public void UpdateSelector(bool isActive, float animationDuration = 0.15f)
+    {
+        userInterface.UpdateSelector(isActive, animationDuration);
+    }
+
     protected override void GetInput(string axisName)
     {
         bool hasInput = RegularInput(UserInterface.MaxObjects, axisName);
