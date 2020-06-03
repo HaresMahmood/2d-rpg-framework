@@ -59,9 +59,35 @@ public class PartyUserInterface : UserInterface
 
     public void AnimatePanels(PartyInformationController panel, float opacity, float animationDuration)
     {
+        /*
+        foreach (PartyInformationController informationPanel in informationPanels)
+        {
+            if (informationPanel == panel)
+            {
+                continue;
+            }
+            else if (informationPanel.GetComponent<CanvasGroup>().alpha != 0)
+            {
+                int index = informationPanels.IndexOf(panel);
+
+                AnimatePanel(index, opacity, animationDuration);
+            }
+        }
+        */
+
+        List<PartyInformationController> nonSelectedPanels = informationPanels.Where(p => p != informationPanel && p.GetComponent<CanvasGroup>().alpha != 0).ToList();
+
+        foreach (PartyInformationController informationPanel in nonSelectedPanels)
+        {
+            AnimatePanel(informationPanel, opacity, animationDuration);
+        }
+    }
+
+    private void AnimatePanel(PartyInformationController panel, float opacity, float animationDuration)
+    {
         int index = informationPanels.IndexOf(panel);
 
-        AnimatePanels(index, opacity, animationDuration);
+        AnimatePanel(index, opacity, animationDuration);
     }
 
     private void AnimatePanels(int panel, float opacity, float animationDuration)
@@ -78,6 +104,8 @@ public class PartyUserInterface : UserInterface
             }
         }
     }
+
+
 
     public void AnimatePanel(GameObject panel, float opacity, float animationDuration)
     {

@@ -558,6 +558,16 @@ public static class ExtensionMethods
         list.Insert(destination, item);
     }
 
+    public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
+    {
+        //source.ThrowIfNull("source");
+        //action.ThrowIfNull("action");
+        foreach (T element in source)
+        {
+            action(element);
+        }
+    }
+
     /*
     public static IEnumerator AnimateIndicator(this GameObject indicator, float waitTime)
     {
