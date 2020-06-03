@@ -74,8 +74,8 @@ public class PartyUserInterface : UserInterface
             }
         }
         */
-
-        List<PartyInformationController> nonSelectedPanels = informationPanels.Where(p => p != informationPanel && p.GetComponent<CanvasGroup>().alpha != 0).ToList();
+        
+        List<PartyInformationController> nonSelectedPanels = informationPanels.Where(p => p != panel && p.GetComponent<CanvasGroup>().alpha != 0).ToList();
 
         foreach (PartyInformationController informationPanel in nonSelectedPanels)
         {
