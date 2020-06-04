@@ -22,13 +22,6 @@ public class PartyMovesPanelController : PartyInformationController
 
         yield return null;
 
-        /*
-        float opacity = IsActive ? 0.4f : 1f;
-
-        PartyController.Instance.AnimatePanels(this, opacity);
-        PartyController.Instance.UpdateSelector(IsActive);
-        */
-
         if (!isActive && IsActive)
         {
             IsActive = false;
@@ -36,6 +29,20 @@ public class PartyMovesPanelController : PartyInformationController
             PartyController.Instance.AnimatePanels(this, 1f, false);
             PartyController.Instance.UpdateSelector(IsActive);
         }
+        else if (isActive && IsActive)
+        {
+            Debug.Log(true);
+
+            float opacity = IsActive ? 0.4f : 1f;
+
+            PartyController.Instance.AnimatePanels(this, opacity);
+            PartyController.Instance.UpdateSelector(IsActive);
+        }
+    }
+
+    public void InsertMove(PartyMember member, List<PartyMember.MemberMove> moves)
+    {
+        ((PartyMovesPanel)userInterface).InsertMove(member, moves, selectedValue);
     }
 
     protected override void GetInput(string axisName)

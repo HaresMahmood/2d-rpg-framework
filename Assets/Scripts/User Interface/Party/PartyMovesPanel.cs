@@ -30,6 +30,12 @@ public class PartyMovesPanel : PartyInformationUserInterface
         UpdateSelectedObject(selectedValue, increment);
     }
 
+    public void InsertMove(PartyMember member, List<PartyMember.MemberMove> moves, int selectedValue)
+    {
+        GetMoves(member).Insert(selectedValue, moves[selectedValue]);
+        SetInformation(GetMoves(member));
+    }
+
     protected virtual List<PartyMember.MemberMove> GetMoves(PartyMember member)
     {
         return member.ActiveMoves; // Debug

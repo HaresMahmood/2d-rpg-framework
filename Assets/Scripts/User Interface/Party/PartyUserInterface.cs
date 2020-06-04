@@ -30,19 +30,12 @@ public class PartyUserInterface : UserInterface
     {
         int previousValue = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, -increment);
 
-        /*
-        if (informationPanels[previousValue] is PartyMovesPanelController)
+        if (informationPanels[previousValue] is PartyMovesPanelController && informationPanels[selectedValue] is PartyMovesPanelController)
         {
-            if (informationPanels[selectedValue] is PartyMovesPanelController)
-            {
-                ((PartyMovesPanelController)informationPanels[selectedValue]).IsActive = ((PartyMovesPanelController)informationPanels[previousValue]).IsActive;
-            }
-            else
-            {
-                ((PartyMovesPanelController)informationPanels[previousValue]).IsActive = false;
-            }
+            ((PartyMovesPanelController)informationPanels[selectedValue]).IsActive = ((PartyMovesPanelController)informationPanels[previousValue]).IsActive;
+
+            ((PartyMovesPanelController)informationPanels[selectedValue]).InsertMove(PartyController.Instance.party.playerParty[selectedValue], PartyController.Instance.party.playerParty[selectedValue].ActiveMoves);
         }
-        */
 
         StartCoroutine(informationPanels[selectedValue].SetActive(true));
         StartCoroutine(informationPanels[previousValue].SetActive(false));
