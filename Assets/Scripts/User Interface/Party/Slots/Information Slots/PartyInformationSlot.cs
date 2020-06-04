@@ -29,6 +29,11 @@ public class PartyInformationSlot : Slot
     {
         this.isActive = isActive;
 
+        if (!gameObject.activeSelf && isActive)
+        {
+            gameObject.SetActive(true);
+        }
+
         informationContainers[1].gameObject.SetActive(isActive);
         informationContainers[2].gameObject.SetActive(isActive);
 

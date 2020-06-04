@@ -31,8 +31,6 @@ public class PartyMovesPanelController : PartyInformationController
         }
         else if (isActive && IsActive)
         {
-            Debug.Log(true);
-
             float opacity = IsActive ? 0.4f : 1f;
 
             PartyController.Instance.AnimatePanels(this, opacity);
@@ -40,9 +38,19 @@ public class PartyMovesPanelController : PartyInformationController
         }
     }
 
-    public void InsertMove(PartyMember member, List<PartyMember.MemberMove> moves)
+    public void InsertMove(PartyMember member, PartyMember.MemberMove move)
     {
-        ((PartyMovesPanel)userInterface).InsertMove(member, moves, selectedValue);
+        ((PartyMovesPanel)userInterface).InsertMove(member, move, selectedValue);
+    }
+
+    public void RemoveMove(PartyMember member)
+    {
+        ((PartyMovesPanel)userInterface).RemovetMove(member, selectedValue);
+    }
+
+    public PartyMember.MemberMove GetSelectedMove(PartyMember member)
+    {
+        return ((PartyMovesPanel)userInterface).GetMoves(member)[selectedValue];
     }
 
     protected override void GetInput(string axisName)

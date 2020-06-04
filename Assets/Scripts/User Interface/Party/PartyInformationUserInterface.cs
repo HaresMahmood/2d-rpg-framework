@@ -102,7 +102,11 @@ public class PartyInformationUserInterface : UserInterface
         int previousValue = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, increment);
 
         informationSlots[selectedValue].SetActive(true);
-        informationSlots[previousValue].SetActive(false);
+
+        if (MaxObjects > 1)
+        {
+            informationSlots[previousValue].SetActive(false);
+        }
     }
 
     public virtual void ActivateSlot(int selectedSlot, bool isActive)

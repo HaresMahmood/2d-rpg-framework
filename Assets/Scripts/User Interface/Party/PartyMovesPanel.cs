@@ -7,7 +7,18 @@ using UnityEngine;
 /// </summary>
 public class PartyMovesPanel : PartyInformationUserInterface
 {
+    #region Variables
+
+    private List<PartyInformationSlot> allSlots;
+
+    #endregion
+
     #region Misccellaneous Methods
+
+    public virtual List<PartyMember.MemberMove> GetMoves(PartyMember member)
+    {
+        return member.ActiveMoves; // Debug
+    }
 
     public override void SetInformation(PartyMember member)
     {
@@ -30,20 +41,33 @@ public class PartyMovesPanel : PartyInformationUserInterface
         UpdateSelectedObject(selectedValue, increment);
     }
 
-    public void InsertMove(PartyMember member, List<PartyMember.MemberMove> moves, int selectedValue)
+    public void InsertMove(PartyMember member, PartyMember.MemberMove move, int selectedValue)
     {
-        GetMoves(member).Insert(selectedValue, moves[selectedValue]);
+        GetMoves(member).Insert(selectedValue, move);
         SetInformation(GetMoves(member));
+        UpdateSelectedObject(selectedValue, -1);
     }
 
-    protected virtual List<PartyMember.MemberMove> GetMoves(PartyMember member)
+    public void RemovetMove(PartyMember member, int selectedValue)
     {
-        return member.ActiveMoves; // Debug
+        GetMoves(member).RemoveAt(selectedValue);
+        SetInformation(GetMoves(member));
+
+        int previousValue = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, -1);
+
+        UpdateSelectedObject(previousValue, -1);
     }
 
     private void SetInformation(List<PartyMember.MemberMove> moves)
     {
         int counter = 0;
+
+        informationSlots = allSlots.ToList();
+
+        foreach (PartyInformationSlot slot in informationSlots)
+        {
+            slot.SetActive(true);
+        }
 
         foreach (PartyMember.MemberMove move in moves)
         {
@@ -58,8 +82,6 @@ public class PartyMovesPanel : PartyInformationUserInterface
         }
 
         informationSlots = RemoveInactiveObjects(informationSlots);
-
-        informationSlots = GetComponentsInChildren<PartyInformationSlot>().ToList();
     }
 
     private List<PartyInformationSlot> RemoveInactiveObjects(List<PartyInformationSlot> source)
@@ -69,6 +91,17 @@ public class PartyMovesPanel : PartyInformationUserInterface
         list.RemoveAll(panel => !panel.gameObject.activeSelf);
 
         return list;
+    }
+
+    #endregion
+
+    #region Unity Methods
+
+    protected override void Awake()
+    {
+        allSlots = GetComponentsInChildren<PartyInformationSlot>().ToList();
+
+        base.Awake();
     }
 
     #endregion

@@ -16,7 +16,7 @@ public class PartyLearnedMovesUserInterface : PartyMovesPanel
         UpdateScrollbar(MaxObjects, selectedValue);
     }
 
-    protected override List<PartyMember.MemberMove> GetMoves(PartyMember member)
+    public override List<PartyMember.MemberMove> GetMoves(PartyMember member)
     {
         return member.LearnedMoves;
     }
