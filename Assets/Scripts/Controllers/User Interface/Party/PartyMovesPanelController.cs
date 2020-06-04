@@ -7,17 +7,33 @@ using UnityEngine;
 /// </summary>
 public class PartyMovesPanelController : PartyInformationController
 {
-    #region Variables
+    #region Properties
 
-    private bool isActive; // TODO: Bad name
+    // TODO: bad name
+    public bool IsActive { get; set; }
 
     #endregion
 
     #region Miscellaneous Methods
 
+    public override IEnumerator SetActive(bool isActive, bool condition = true)
+    {
+        StartCoroutine(base.SetActive(isActive));
+
+        yield return null;
+
+        if (!condition)
+        {
+            float opacity = IsActive ? 0.4f : 1f;
+
+            PartyController.Instance.AnimatePanels(this, opacity);
+            PartyController.Instance.UpdateSelector(IsActive);
+        }
+    }
+
     protected override void GetInput(string axisName)
     {
-        if (isActive)
+        if (IsActive)
         {
             GetInput();
         }
@@ -28,19 +44,19 @@ public class PartyMovesPanelController : PartyInformationController
 
         if (Input.GetButtonDown("Interact"))
         {
-            isActive = !isActive;
+            IsActive = !IsActive;
         }
-        else if (Input.GetButtonDown("Cancel") && isActive)
+        else if (Input.GetButtonDown("Cancel") && IsActive)
         {
-            isActive = false;
+            IsActive = false;
         }
 
         if (Input.GetButtonDown("Interact") || Input.GetButtonDown("Cancel"))
         {
-            float opacity = isActive ? 0.4f : 1f;
+            float opacity = IsActive ? 0.4f : 1f;
 
             PartyController.Instance.AnimatePanels(this, opacity);
-            PartyController.Instance.UpdateSelector(isActive);
+            PartyController.Instance.UpdateSelector(IsActive);
         }
     }
 

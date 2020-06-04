@@ -43,6 +43,10 @@ public class PartyController : UserInterfaceController
 
     public Party party;
 
+    // Debug
+    private bool isRarrangingMoves;
+    private bool isActive; // TODO: Bad name
+
     #endregion
 
     #region Miscellaneous Methods
@@ -90,11 +94,11 @@ public class PartyController : UserInterfaceController
         {
             bool isActive = userInterface.AnimatePanel();
 
-            CharacterSpriteController.Instance.FadeSprite(isActive ? 0f : 1f, 0.15f); // TODO: Debug.
-
             selectedValue = isActive ? 1 : 0;
 
             UpdateSelectedObject(selectedValue, 1);
+
+            CharacterSpriteController.Instance.FadeSprite(isActive ? 0f : 1f, 0.15f); // TODO: Debug.
         }
     }
 

@@ -28,10 +28,29 @@ public class PartyUserInterface : UserInterface
 
     public override void UpdateSelectedObject(int selectedValue, int increment)
     {
+        bool selectedCondition = true;
+        bool previousCondition = true;
+
         int previousValue = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, -increment);
 
-        StartCoroutine(informationPanels[selectedValue].SetActive(true));
-        StartCoroutine(informationPanels[previousValue].SetActive(false));
+        if (informationPanels[previousValue] is PartyMovesPanelController)
+        {
+            if (informationPanels[selectedValue] is PartyMovesPanelController)
+            {
+                ((PartyMovesPanelController)informationPanels[selectedValue]).IsActive = ((PartyMovesPanelController)informationPanels[previousValue]).IsActive;
+
+                previousCondition = false;
+            }
+            else
+            {
+                ((PartyMovesPanelController)informationPanels[previousValue]).IsActive = false;
+
+                selectedCondition = false;
+            }
+        }
+
+        StartCoroutine(informationPanels[selectedValue].SetActive(true, selectedCondition));
+        StartCoroutine(informationPanels[previousValue].SetActive(false, previousCondition));
 
         StartCoroutine(UpdateSelector(informationPanels[selectedValue].transform));
     } 
@@ -76,6 +95,11 @@ public class PartyUserInterface : UserInterface
         if (informationPanel.GetComponent<CanvasGroup>().alpha != 0)
         {
             FadeCharacterSprite(opacity, animationDuration);
+        }
+
+        if (panel.GetComponent<CanvasGroup>().alpha != (opacity != 1f ? 1f : opacity))
+        {
+            AnimatePanel(panel, opacity != 1f ? 1f : opacity, animationDuration);
         }
     }
 
