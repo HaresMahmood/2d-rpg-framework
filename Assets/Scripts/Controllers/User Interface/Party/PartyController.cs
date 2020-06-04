@@ -71,9 +71,9 @@ public class PartyController : UserInterfaceController
         userInterface.AnimatePanel(panel, opacity, animationDuration);
     }
 
-    public void AnimatePanels(PartyInformationController panel, float opacity, float animationDuration = 0.15f)
+    public void AnimatePanels(PartyInformationController panel, float opacity, bool condition = true, float animationDuration = 0.15f)
     {
-        userInterface.AnimatePanels(panel, opacity, animationDuration);
+        userInterface.AnimatePanels(panel, opacity, condition, animationDuration);
     }
 
     public void UpdateSelector(bool isActive, float animationDuration = 0.15f)

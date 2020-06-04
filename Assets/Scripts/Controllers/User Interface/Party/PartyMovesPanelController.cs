@@ -22,11 +22,18 @@ public class PartyMovesPanelController : PartyInformationController
 
         yield return null;
 
-        if (!condition)
-        {
-            float opacity = IsActive ? 0.4f : 1f;
+        /*
+        float opacity = IsActive ? 0.4f : 1f;
 
-            PartyController.Instance.AnimatePanels(this, opacity);
+        PartyController.Instance.AnimatePanels(this, opacity);
+        PartyController.Instance.UpdateSelector(IsActive);
+        */
+
+        if (!isActive && IsActive)
+        {
+            IsActive = false;
+
+            PartyController.Instance.AnimatePanels(this, 1f, false);
             PartyController.Instance.UpdateSelector(IsActive);
         }
     }

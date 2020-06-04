@@ -28,29 +28,24 @@ public class PartyUserInterface : UserInterface
 
     public override void UpdateSelectedObject(int selectedValue, int increment)
     {
-        bool selectedCondition = true;
-        bool previousCondition = true;
-
         int previousValue = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, -increment);
 
+        /*
         if (informationPanels[previousValue] is PartyMovesPanelController)
         {
             if (informationPanels[selectedValue] is PartyMovesPanelController)
             {
                 ((PartyMovesPanelController)informationPanels[selectedValue]).IsActive = ((PartyMovesPanelController)informationPanels[previousValue]).IsActive;
-
-                previousCondition = false;
             }
             else
             {
                 ((PartyMovesPanelController)informationPanels[previousValue]).IsActive = false;
-
-                selectedCondition = false;
             }
         }
+        */
 
-        StartCoroutine(informationPanels[selectedValue].SetActive(true, selectedCondition));
-        StartCoroutine(informationPanels[previousValue].SetActive(false, previousCondition));
+        StartCoroutine(informationPanels[selectedValue].SetActive(true));
+        StartCoroutine(informationPanels[previousValue].SetActive(false));
 
         StartCoroutine(UpdateSelector(informationPanels[selectedValue].transform));
     } 
@@ -83,24 +78,31 @@ public class PartyUserInterface : UserInterface
         StartCoroutine(informationPanels[panel].gameObject.FadeOpacity(opacity, animationDuration));
     }
 
-    public void AnimatePanels(PartyInformationController panel, float opacity, float animationDuration)
+    public void AnimatePanels(PartyInformationController panel, float opacity, bool condition, float animationDuration) // TODO: Weird bool name
     {
         List<PartyInformationController> nonSelectedPanels = informationPanels.Where(p => p != panel && p.GetComponent<CanvasGroup>().alpha != 0).ToList();
+
+        if (nonSelectedPanels.Contains(learnedMovesPanel) && !condition)
+        {
+            nonSelectedPanels.Remove(learnedMovesPanel);
+        }
 
         foreach (PartyInformationController informationPanel in nonSelectedPanels)
         {
             AnimatePanel(informationPanel, opacity, animationDuration);
         }
 
-        if (informationPanel.GetComponent<CanvasGroup>().alpha != 0)
+        if (informationPanel.GetComponent<CanvasGroup>().alpha != 0 && condition)
         {
             FadeCharacterSprite(opacity, animationDuration);
         }
 
+        /*
         if (panel.GetComponent<CanvasGroup>().alpha != (opacity != 1f ? 1f : opacity))
         {
             AnimatePanel(panel, opacity != 1f ? 1f : opacity, animationDuration);
         }
+        */
     }
 
     private void AnimatePanel(PartyInformationController panel, float opacity, float animationDuration)
