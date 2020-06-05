@@ -33,10 +33,13 @@ public class PartyUserInterface : UserInterface
         // TODO: Debug
         if (informationPanels[previousValue] is PartyMovesPanelController && informationPanels[selectedValue] is PartyMovesPanelController && ((PartyMovesPanelController)informationPanels[previousValue]).IsActive)
         {
-            ((PartyMovesPanelController)informationPanels[selectedValue]).IsActive = ((PartyMovesPanelController)informationPanels[previousValue]).IsActive;
+            if (((PartyMovesPanelController)informationPanels[selectedValue]).CanInsertMove(PartyController.Instance.party.playerParty[0]) && ((PartyMovesPanelController)informationPanels[previousValue]).CanRemoveMove(PartyController.Instance.party.playerParty[0]))
+            {
+                ((PartyMovesPanelController)informationPanels[selectedValue]).InsertMove(PartyController.Instance.party.playerParty[0], ((PartyMovesPanelController)informationPanels[previousValue]).GetSelectedMove(PartyController.Instance.party.playerParty[0]));
+                ((PartyMovesPanelController)informationPanels[previousValue]).RemoveMove(PartyController.Instance.party.playerParty[0]);
 
-            ((PartyMovesPanelController)informationPanels[selectedValue]).InsertMove(PartyController.Instance.party.playerParty[selectedValue], ((PartyMovesPanelController)informationPanels[previousValue]).GetSelectedMove(PartyController.Instance.party.playerParty[selectedValue]));
-            ((PartyMovesPanelController)informationPanels[previousValue]).RemoveMove(PartyController.Instance.party.playerParty[selectedValue]);
+                ((PartyMovesPanelController)informationPanels[selectedValue]).IsActive = ((PartyMovesPanelController)informationPanels[previousValue]).IsActive;
+            }
         }
 
         StartCoroutine(informationPanels[selectedValue].SetActive(true));

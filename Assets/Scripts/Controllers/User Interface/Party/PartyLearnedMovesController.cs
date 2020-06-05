@@ -22,8 +22,6 @@ public class PartyLearnedMovesController : PartyMovesPanelController
         UserInterface.UpdateSelectedObject(0);
         userInterface.ActivateSlot(0, false);
 
-        Debug.Log(true);
-
         selectedValue = 0;
     }
 

@@ -38,6 +38,17 @@ public class PartyMovesPanelController : PartyInformationController
         }
     }
 
+    public bool CanInsertMove(PartyMember member)
+    {
+        return ((PartyMovesPanel)userInterface).CanInsertMove(member);
+    }
+        
+
+    public bool CanRemoveMove(PartyMember member)
+    {
+        return ((PartyMovesPanel)userInterface).GetMoves(member).Count > 1;
+    }
+
     public void InsertMove(PartyMember member, PartyMember.MemberMove move)
     {
         ((PartyMovesPanel)userInterface).InsertMove(member, move, selectedValue);
@@ -45,7 +56,7 @@ public class PartyMovesPanelController : PartyInformationController
 
     public void RemoveMove(PartyMember member)
     {
-        ((PartyMovesPanel)userInterface).RemovetMove(member, selectedValue);
+        selectedValue = ((PartyMovesPanel)userInterface).RemovetMove(member, selectedValue);
     }
 
     public PartyMember.MemberMove GetSelectedMove(PartyMember member)

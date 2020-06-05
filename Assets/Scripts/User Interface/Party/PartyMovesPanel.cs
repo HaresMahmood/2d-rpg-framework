@@ -41,6 +41,11 @@ public class PartyMovesPanel : PartyInformationUserInterface
         UpdateSelectedObject(selectedValue, increment);
     }
 
+    public bool CanInsertMove(PartyMember member)
+    {
+        return (GetMoves(member).Count + 1) <= allSlots.Count;
+    }
+
     public void InsertMove(PartyMember member, PartyMember.MemberMove move, int selectedValue)
     {
         GetMoves(member).Insert(selectedValue, move);
@@ -48,14 +53,22 @@ public class PartyMovesPanel : PartyInformationUserInterface
         UpdateSelectedObject(selectedValue, -1);
     }
 
-    public void RemovetMove(PartyMember member, int selectedValue)
+    public int RemovetMove(PartyMember member, int selectedValue)
     {
         GetMoves(member).RemoveAt(selectedValue);
         SetInformation(GetMoves(member));
 
-        int previousValue = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, -1);
+
+        int previousValue = selectedValue;
+
+        if (previousValue > (MaxObjects - 1))
+        {
+            previousValue = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, -1);
+        }
 
         UpdateSelectedObject(previousValue, -1);
+
+        return previousValue;
     }
 
     private void SetInformation(List<PartyMember.MemberMove> moves)
