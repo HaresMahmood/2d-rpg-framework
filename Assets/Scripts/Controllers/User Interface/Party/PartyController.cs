@@ -96,7 +96,7 @@ public class PartyController : UserInterfaceController
 
             selectedValue = isActive ? 1 : 0;
 
-            UpdateSelectedObject(selectedValue, -1);
+            UpdateSelectedObject(selectedValue, 1);
 
             CharacterSpriteController.Instance.FadeSprite(isActive ? 0f : 1f, 0.15f); // TODO: Debug.
         }
