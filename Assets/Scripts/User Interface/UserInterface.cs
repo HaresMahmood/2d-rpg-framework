@@ -78,6 +78,30 @@ public abstract class UserInterface : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Animates and updates the position of the selector. Dynamically changes position and size of selector 
+    /// depending on what situation it is used for. If no value is selected, the indicator completely fades out.
+    /// </summary>
+    /// <param name="objectSlots"> List of buttons at with the selector can be positioned. </param>
+    /// <param name="selectedValue"> Index of the value currently selected. </param>
+    /// <param name="animationDuration"> Duration of the animation/fade. </param>
+    /// <returns> Co-routine. </returns>
+    protected virtual IEnumerator UpdateSelector(Vector2 selectedObjectPosition, float animationDuration = 0.1f)
+    {
+        if (!selector.activeSelf)
+        {
+            selector.SetActive(true);
+        }
+
+        selectorAnimator.enabled = false;
+        StartCoroutine(selector.FadeOpacity(0f, animationDuration));
+
+        yield return new WaitForSecondsRealtime(animationDuration);
+
+        selector.transform.position = selectedObjectPosition;
+        selectorAnimator.enabled = true;
+    }
+
     protected virtual void UpdateScrollbar(int maxObjects = -1, int selectedValue = -1, float animationDuration = 0.08f)
     {
         if (maxObjects > -1)

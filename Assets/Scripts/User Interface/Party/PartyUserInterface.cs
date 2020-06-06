@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,6 +23,8 @@ public class PartyUserInterface : UserInterface
 
     private StatsUserInterface statsUserInterface;
 
+    private PartyMember selectedMember;
+
     #endregion
 
     #region Miscellaneous Methods
@@ -33,10 +36,10 @@ public class PartyUserInterface : UserInterface
         // TODO: Debug
         if (informationPanels[previousValue] is PartyMovesPanelController && informationPanels[selectedValue] is PartyMovesPanelController && ((PartyMovesPanelController)informationPanels[previousValue]).IsActive)
         {
-            if (((PartyMovesPanelController)informationPanels[selectedValue]).CanInsertMove(PartyController.Instance.party.playerParty[0]) && ((PartyMovesPanelController)informationPanels[previousValue]).CanRemoveMove(PartyController.Instance.party.playerParty[0]))
+            if (((PartyMovesPanelController)informationPanels[selectedValue]).CanInsertMove(selectedMember) && ((PartyMovesPanelController)informationPanels[previousValue]).CanRemoveMove(selectedMember))
             {
-                ((PartyMovesPanelController)informationPanels[selectedValue]).InsertMove(PartyController.Instance.party.playerParty[0], ((PartyMovesPanelController)informationPanels[previousValue]).GetSelectedMove(PartyController.Instance.party.playerParty[0]));
-                ((PartyMovesPanelController)informationPanels[previousValue]).RemoveMove(PartyController.Instance.party.playerParty[0]);
+                ((PartyMovesPanelController)informationPanels[selectedValue]).InsertMove(selectedMember, ((PartyMovesPanelController)informationPanels[previousValue]).GetSelectedMove(selectedMember));
+                ((PartyMovesPanelController)informationPanels[previousValue]).RemoveMove(selectedMember);
 
                 ((PartyMovesPanelController)informationPanels[selectedValue]).IsActive = ((PartyMovesPanelController)informationPanels[previousValue]).IsActive;
             }
@@ -45,7 +48,7 @@ public class PartyUserInterface : UserInterface
         StartCoroutine(informationPanels[selectedValue].SetActive(true));
         StartCoroutine(informationPanels[previousValue].SetActive(false));
 
-        StartCoroutine(UpdateSelector(informationPanels[selectedValue].transform));
+        StartCoroutine(UpdateSelector(new Vector2(informationPanels[selectedValue].transform.position.x, selector.transform.position.y)));
     } 
 
     public void UpdateSelector(bool isActive, float animationDuration)
@@ -69,6 +72,8 @@ public class PartyUserInterface : UserInterface
         statsUserInterface.SetInformation(member);
 
         SetCharacterSprite(member.Species.Sprites.FrontSprite);
+
+        selectedMember = member;
     }
 
     public void AnimatePanel(int panel, float opacity, float animationDuration)
@@ -159,7 +164,7 @@ public class PartyUserInterface : UserInterface
         informationPanel = informationPanels[0];
         statsPanel = (StatsController)informationPanels[1];
 
-        statsUserInterface = transform.Find("Stats").GetComponent<StatsUserInterface>();
+        statsUserInterface = transform.Find("Stats/Stats").GetComponent<StatsUserInterface>();
 
         //StartCoroutine(FindObjectOfType<BottomPanelUserInterface>().ChangePanelButtons(InventoryController.instance.buttons));
 
