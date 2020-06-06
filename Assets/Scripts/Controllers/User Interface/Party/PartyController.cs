@@ -71,14 +71,14 @@ public class PartyController : UserInterfaceController
         userInterface.AnimatePanel(panel, opacity, animationDuration);
     }
 
-    public void AnimatePanels(PartyInformationController panel, float opacity, bool condition = true, float animationDuration = 0.15f)
+    public void AnimatePanels(PartyInformationController panel, float opacity, bool condition = true)
     {
-        userInterface.AnimatePanels(panel, opacity, condition, animationDuration);
+        userInterface.AnimatePanels(panel, opacity, condition);
     }
 
-    public void UpdateSelector(bool isActive, float animationDuration = 0.15f)
+    public void UpdateSelector(bool isActive)
     {
-        userInterface.UpdateSelector(isActive, animationDuration);
+        userInterface.UpdateSelector(isActive);
     }
 
     protected override void GetInput(string axisName)

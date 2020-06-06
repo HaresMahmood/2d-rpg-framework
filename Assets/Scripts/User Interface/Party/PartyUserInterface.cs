@@ -44,6 +44,11 @@ public class PartyUserInterface : UserInterface
                 ((PartyMovesPanelController)informationPanels[selectedValue]).IsActive = ((PartyMovesPanelController)informationPanels[previousValue]).IsActive;
             }
         }
+        else if (informationPanels[previousValue] is PartyMovesPanelController && (!(informationPanels[selectedValue] is PartyMovesPanelController)))
+        {
+            //AnimatePanels(informationPanels[previousValue], 1f, false);
+            UpdateSelector(false);
+        }
 
         StartCoroutine(informationPanels[selectedValue].SetActive(true));
         StartCoroutine(informationPanels[previousValue].SetActive(false));
@@ -51,7 +56,7 @@ public class PartyUserInterface : UserInterface
         StartCoroutine(UpdateSelector(new Vector2(informationPanels[selectedValue].transform.position.x, selector.transform.position.y)));
     } 
 
-    public void UpdateSelector(bool isActive, float animationDuration)
+    public void UpdateSelector(bool isActive, float animationDuration = 0.15f)
     {
         Color color = isActive ? GameManager.instance.oppositeColor : Color.white;
 
@@ -81,7 +86,7 @@ public class PartyUserInterface : UserInterface
         StartCoroutine(informationPanels[panel].gameObject.FadeOpacity(opacity, animationDuration));
     }
 
-    public void AnimatePanels(PartyInformationController panel, float opacity, bool condition, float animationDuration) // TODO: Weird bool name
+    public void AnimatePanels(PartyInformationController panel, float opacity, bool condition, float animationDuration = 0.15f) // TODO: Weird bool name
     {
         List<PartyInformationController> nonSelectedPanels = informationPanels.Where(p => p != panel && p.GetComponent<CanvasGroup>().alpha != 0).ToList();
 

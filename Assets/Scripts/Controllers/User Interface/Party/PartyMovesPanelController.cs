@@ -27,7 +27,6 @@ public class PartyMovesPanelController : PartyInformationController
             IsActive = false;
 
             PartyController.Instance.AnimatePanels(this, 1f, false);
-            PartyController.Instance.UpdateSelector(IsActive);
         }
         else if (isActive && IsActive)
         {
