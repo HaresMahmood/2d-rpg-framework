@@ -127,7 +127,10 @@ public class PartyUserInterface : UserInterface
 
     public bool AnimatePanel(float animationDuration = 0.15f)
     {
+        //bool active = 
+
         bool isActive = !learnedMovesPanel.GetComponent<Animator>().GetBool("isActive");
+
         float opacity = isActive ? 0f : 1f;
 
         learnedMovesPanel.AnimatePanel(isActive);

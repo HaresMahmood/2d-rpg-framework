@@ -43,17 +43,13 @@ public class PartyController : UserInterfaceController
 
     public Party party;
 
-    // Debug
-    private bool isRarrangingMoves;
-    private bool isActive; // TODO: Bad name
-
     #endregion
 
     #region Miscellaneous Methods
 
     public override IEnumerator SetActive(bool isActive, bool condition = true)
     {
-        int previousValue = -(int)(Input.GetAxisRaw("Horizontal") == 0 ? -1 : Input.GetAxisRaw("Horizontal"));
+        //int previousValue = -(int)(Input.GetAxisRaw("Horizontal") == 0 ? -1 : Input.GetAxisRaw("Horizontal"));
 
         yield return null;
 
@@ -61,8 +57,16 @@ public class PartyController : UserInterfaceController
 
         if (isActive && condition)
         {
-            UpdateSelectedObject(selectedValue, previousValue);
-            userInterface.UpdateSelectedPartyMember(party.playerParty[0]);
+            UpdateSelectedObject(selectedValue, 1);
+        }
+        else if (condition)
+        {
+            //userInterface.AnimatePanel(false);
+            UpdateSelectedObject(selectedValue, 0);
+
+            selectedValue = 0;
+
+            CharacterSpriteController.Instance.FadeSprite(1f, 0.15f); // TODO: Debug.
         }
     }
 
@@ -138,6 +142,14 @@ public class PartyController : UserInterfaceController
         base.Awake();
     }
     */
+
+    /// <summary>
+    /// Awake is called when the script instance is being loaded.
+    /// </summary>
+    private void Start()
+    {
+        userInterface.UpdateSelectedPartyMember(party.playerParty[0]);
+    }
 
     /// <summary>
     /// Update is called once per frame.

@@ -46,6 +46,7 @@ public class PartyBasicSlot : PartyInformationSlot
         else
         {
             genders[(int)member.Gender.Value - 1].gameObject.SetActive(true);
+
             genders[ExtensionMethods.IncrementInt((int)member.Gender.Value - 1, 0, 2, 1)].gameObject.SetActive(false);
         }
 
