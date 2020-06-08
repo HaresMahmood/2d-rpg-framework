@@ -49,7 +49,7 @@ public abstract class UserInterface : MonoBehaviour
     }
 
     public virtual void UpdateSelectedObject(int selectedValue, int increment = -1)
-    {   }
+    { }
 
     /// <summary>
     /// Animates and updates the position of the selector. Dynamically changes position and size of selector 

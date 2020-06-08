@@ -53,7 +53,14 @@ public class PartyUserInterface : UserInterface
         StartCoroutine(informationPanels[selectedValue].SetActive(true));
         StartCoroutine(informationPanels[previousValue].SetActive(false));
 
-        StartCoroutine(UpdateSelector(new Vector2(informationPanels[selectedValue].transform.position.x, selector.transform.position.y)));
+        if (increment != 0)
+        {
+            StartCoroutine(UpdateSelector(new Vector2(informationPanels[selectedValue].transform.position.x, selector.transform.position.y)));
+        }
+        else
+        {
+            StartCoroutine(UpdateSelector());
+        }
     } 
 
     public void UpdateSelector(bool isActive, float animationDuration = 0.15f)

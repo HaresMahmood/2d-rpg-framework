@@ -57,11 +57,14 @@ public class PartyController : UserInterfaceController
 
         if (isActive && condition)
         {
+            yield return new WaitForSecondsRealtime(0.3f);
+
             UpdateSelectedObject(selectedValue, 1);
         }
         else if (condition)
         {
-            //userInterface.AnimatePanel(false);
+            //userInterface.AnimatePanel(false); // TODO:
+
             UpdateSelectedObject(selectedValue, 0);
 
             selectedValue = 0;
