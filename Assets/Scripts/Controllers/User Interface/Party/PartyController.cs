@@ -43,6 +43,8 @@ public class PartyController : UserInterfaceController
 
     public Party party;
 
+    private int selectedMember;
+
     #endregion
 
     #region Miscellaneous Methods
@@ -90,11 +92,23 @@ public class PartyController : UserInterfaceController
 
     protected override void GetInput(string axisName)
     {
-        bool hasInput = RegularInput(UserInterface.MaxObjects, axisName);
-
-        if (hasInput)
+        if (Input.GetAxisRaw("Trigger") == 0)
         {
-            UpdateSelectedObject(selectedValue, (int)(Input.GetAxisRaw(axisName)));
+            bool hasInput = RegularInput(UserInterface.MaxObjects, axisName);
+
+            if (hasInput)
+            {
+                UpdateSelectedObject(selectedValue, (int)(Input.GetAxisRaw(axisName)));
+            }
+        }
+        else {
+            bool hasInput = TriggerInput(party.playerParty.Count);
+            if (hasInput)
+            {
+                StartCoroutine(SetActive(false));
+                userInterface.UpdateSelectedPartyMember(party.playerParty[selectedMember]);
+                StartCoroutine(SetActive(true));
+            }
         }
 
         if (Input.GetButtonDown("Toggle"))
@@ -107,6 +121,14 @@ public class PartyController : UserInterfaceController
 
             CharacterSpriteController.Instance.FadeSprite(isActive ? 0f : 1f, 0.15f); // TODO: Debug.
         }
+    }
+
+    private bool TriggerInput(int max)
+    {
+        bool hasInput;
+        (selectedMember, hasInput) = input.GetInput("Trigger", TestInput.Axis.Horizontal, max, selectedMember);
+
+        return hasInput;
     }
 
     #endregion

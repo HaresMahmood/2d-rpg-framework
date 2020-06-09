@@ -47,7 +47,7 @@ public class PartyBasicSlot : PartyInformationSlot
         {
             genders[(int)member.Gender.Value - 1].gameObject.SetActive(true);
 
-            genders[ExtensionMethods.IncrementInt((int)member.Gender.Value - 1, 0, 2, 1)].gameObject.SetActive(false);
+            genders[ExtensionMethods.IncrementInt((int)member.Gender.Value - 1, 0, 2, 1)].gameObject.SetActive(false); // TODO: Not working
         }
 
         categoryText.SetText(member.Species.Category);
