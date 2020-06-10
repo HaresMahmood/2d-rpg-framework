@@ -14,6 +14,7 @@ public class Mission : Categorizable
     [SerializeField] private string destination;
     [SerializeField] private MissionReward reward;
     [SerializeField] private bool isCompleted;
+    [SerializeField] private bool isFailed;
 
     #endregion
 
@@ -64,6 +65,12 @@ public class Mission : Categorizable
     {
         get { return isCompleted; }
         private set { isCompleted = value; }
+    }
+
+    public bool IsFailed
+    {
+        get { return isFailed; }
+        private set { isFailed = value; }
     }
 
     #endregion

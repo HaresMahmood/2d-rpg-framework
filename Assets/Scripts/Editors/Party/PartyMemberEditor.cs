@@ -10,7 +10,7 @@ public class PartyMemberEditor : Editor
      
     private new PartyMember target;
 
-    private static bool showDexInfo = true;
+    private static bool showBasicInfo = true;
     private static bool showStatusAilment = false;
     private static bool showNoName = true;
     private static bool showProgression = false;
@@ -93,10 +93,10 @@ public class PartyMemberEditor : Editor
         GUILayout.EndHorizontal();
         GUILayout.EndHorizontal();
 
-        showDexInfo = EditorGUILayout.Foldout(showDexInfo, "Basic Information", foldoutStyle);
+        showBasicInfo = EditorGUILayout.Foldout(showBasicInfo, "Basic Information", foldoutStyle);
         GUILayout.Space(5);
 
-        if (showDexInfo)
+        if (showBasicInfo)
         {
             GUILayout.BeginHorizontal();
             GUILayout.Space(15);
