@@ -37,7 +37,7 @@ public class MissionOtherPanel : InformationUserInterface
 
         remainingText.SetText(mission.Remaining);
         assigneeText.SetText(mission.Assignee.name);
-        locationText.SetText(mission.Location);
+        locationText.SetText(mission.Origin);
 
         rewardText.SetText(mission.Reward.Amount.ToString());
         //rewardSprite.sprite = mission.Reward.Item.sprite;

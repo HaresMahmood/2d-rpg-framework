@@ -10,7 +10,8 @@ public class Mission : Categorizable
     [SerializeField] private string objective;
     [SerializeField] private string remaining;
     [SerializeField] private Character assignee;
-    [SerializeField] private string location;
+    [SerializeField] private string origin;
+    [SerializeField] private string destination;
     [SerializeField] private MissionReward reward;
     [SerializeField] private bool isCompleted;
 
@@ -41,10 +42,16 @@ public class Mission : Categorizable
         private set { assignee = value; }
     }
 
-    public string Location
+    public string Origin
     {
-        get { return location; }
-        private set { location = value; }
+        get { return origin; }
+        private set { origin = value; }
+    }
+
+    public string Destination
+    {
+        get { return destination; }
+        private set { destination = value; }
     }
 
     public MissionReward Reward
@@ -112,10 +119,13 @@ public class Mission : Categorizable
     {
         #region Fields
 
+        [SerializeField] private Type type;
+
         [SerializeField] private int amount;
         [SerializeField] private Item item;
 
         #endregion
+
 
         #region Properties
 
@@ -129,6 +139,17 @@ public class Mission : Categorizable
         {
             get { return item; }
             private set { item = value; }
+        }
+
+        #endregion
+
+        #region Enums
+
+        private enum Type
+        {
+            Money,
+            Item,
+            Experience
         }
 
         #endregion
