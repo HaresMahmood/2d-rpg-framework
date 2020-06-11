@@ -131,7 +131,7 @@ public class Mission : Categorizable
     {
         #region Fields
 
-        [SerializeField] private Type type;
+        [SerializeField] private MissionType type;
 
         [SerializeField] private int amount;
         [SerializeField] private Item item;
@@ -140,6 +140,12 @@ public class Mission : Categorizable
 
 
         #region Properties
+
+        public MissionType Type
+        {
+            get { return type; }
+            set { type = value; }
+        }
 
         public int Amount
         {
@@ -157,7 +163,7 @@ public class Mission : Categorizable
 
         #region Enums
 
-        private enum Type
+        public enum MissionType
         {
             Money,
             Item,

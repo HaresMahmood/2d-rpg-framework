@@ -11,9 +11,8 @@ public class MissionEditor : Editor
     private new Mission target;
 
     private static bool showBasicInfo = true;
-    private static bool showLocation = true;
+    private static bool showLocation = false;
     private static bool showReward = true;
-    private static bool showRewards = false;
 
     #endregion
 
@@ -97,7 +96,7 @@ public class MissionEditor : Editor
         showLocation = EditorGUILayout.Foldout(showLocation, "Location", foldoutStyle);
         GUILayout.Space(5);
 
-        if (showReward)
+        if (showLocation)
         {
             GUILayout.BeginHorizontal();
             GUILayout.Space(15);
@@ -117,118 +116,73 @@ public class MissionEditor : Editor
         ExtensionMethods.DrawUILine("#525252".ToColor());
         GUILayout.Space(2);
 
-        showReward = EditorGUILayout.Foldout(showReward, "Reward", foldoutStyle);
-        GUILayout.Space(5);
+        GUILayout.BeginHorizontal();
+
+        showReward = EditorGUILayout.Foldout(showReward, $"Rewards ({target.Rewards.Count})", foldoutStyle);
+
+        EditorGUI.BeginDisabledGroup(!showReward || target.Rewards.Count >= 3);
+
+        if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
+        {
+            target.Rewards.Add(new Mission.MissionReward());
+        }
+
+        EditorGUI.EndDisabledGroup();
+        GUILayout.EndHorizontal();
 
         if (showReward)
         {
-            showRewards = EditorGUILayout.Foldout(showRewards, $"Rewards ({target.Rewards.Count})");
+            GUILayout.BeginHorizontal();
+            GUILayout.Space(15);
+            GUILayout.BeginVertical();
+            GUILayout.BeginVertical();
+            GUILayout.BeginVertical();
 
-            EditorGUI.BeginDisabledGroup(!showRewards || target.Rewards.Count >= 3);
-
-            if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
+            for (int i = 0; i < target.Rewards.Count; i++)
             {
-                target.Rewards.Add(new Mission.MissionReward());
-            }
+                Mission.MissionReward reward = target.Rewards[i];
 
-            EditorGUI.EndDisabledGroup();
+                GUILayout.BeginVertical("Box");
+                GUILayout.BeginHorizontal();
 
-            GUILayout.EndHorizontal();
+                EditorGUILayout.LabelField($"{i + 1}.", GUILayout.Width(45));
+                EditorGUILayout.LabelField(new GUIContent("Type", "Dex number of this Pokémon.\n\n" +
+                "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+                reward.Type = (Mission.MissionReward.MissionType)EditorGUILayout.EnumPopup(reward.Type);
 
-            if (showRewards)
-            {
-                GUILayout.BeginVertical();
+                EditorGUI.BeginDisabledGroup(i == 0);
 
-                for (int i = 0; i < target.Rewards.Count; i++)
+                if (GUILayout.Button("↑", GUILayout.Width(18), GUILayout.Height(18)))
                 {
-                    Mission.MissionReward move = target.Rewards[i];
-
-                    GUILayout.BeginVertical("Box");
-                    GUILayout.BeginHorizontal();
-
-                    EditorGUILayout.LabelField($"{i + 1}.", GUILayout.Width(45));
-                    //move.Value = (Move)EditorGUILayout.ObjectField(move.Value, typeof(Move), false);
-
-                    EditorGUI.BeginDisabledGroup(i == 0);
-
-                    if (GUILayout.Button("↑", GUILayout.Width(18), GUILayout.Height(18)))
-                    {
-                        target.Rewards.RemoveAt(i);
-                        target.Rewards.Insert(i - 1, move);
-                    }
-
-                    EditorGUI.EndDisabledGroup();
-                    EditorGUI.BeginDisabledGroup(i == target.Rewards.Count - 1);
-
-                    if (GUILayout.Button("↓", GUILayout.Width(18), GUILayout.Height(18)))
-                    {
-                        target.Rewards.RemoveAt(i);
-                        target.Rewards.Insert(i + 1, move);
-                    }
-
-                    EditorGUI.EndDisabledGroup();
-
-                    if (GUILayout.Button("-", GUILayout.Width(18), GUILayout.Height(18)))
-                    {
-                        target.Rewards.RemoveAt(i);
-                    }
-
-                    GUILayout.EndHorizontal();
-
-                    /*
-                    if (move.Value != null)
-                    {
-                        GUILayout.BeginHorizontal();
-                        GUILayout.BeginHorizontal();
-
-                        EditorGUILayout.LabelField(new GUIContent("PP", "Name of this Pokémon.\n\n" +
-                        "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(45));
-                        move.PP = EditorGUILayout.IntField(move.PP);
-                        EditorGUILayout.LabelField("/", GUILayout.Width(10));
-                        GUI.enabled = false;
-                        EditorGUILayout.SelectableLabel(move.Value.pp.ToString(), EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
-                        GUI.enabled = true;
-
-                        GUILayout.BeginHorizontal();
-
-                        EditorGUILayout.LabelField(new GUIContent("ACC.", "Name of this Pokémon.\n\n" +
-                        "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(45));
-                        GUI.enabled = false;
-                        EditorGUILayout.SelectableLabel(move.Value.accuracy.ToString(), EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
-                        GUI.enabled = true;
-
-                        GUILayout.EndHorizontal();
-
-                        GUILayout.BeginHorizontal();
-
-                        EditorGUILayout.LabelField(new GUIContent("POW.", "Name of this Pokémon.\n\n" +
-                        "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(45));
-                        GUI.enabled = false;
-                        EditorGUILayout.SelectableLabel(move.Value.power.ToString(), EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
-                        GUI.enabled = true;
-
-                        GUILayout.EndHorizontal();
-                        GUILayout.EndHorizontal();
-                        GUILayout.EndHorizontal();
-                        GUILayout.BeginHorizontal();
-
-                        EditorGUILayout.LabelField(new GUIContent("Desc.", "Name of this Pokémon.\n\n" +
-                        "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(45));
-                        GUI.enabled = false;
-                        EditorGUILayout.SelectableLabel(move.Value.description, EditorStyles.textArea);
-                        GUI.enabled = true;
-
-                        GUILayout.EndHorizontal();
-                    }
-                    */
-
-                    GUILayout.EndVertical();
+                    target.Rewards.RemoveAt(i);
+                    target.Rewards.Insert(i - 1, reward);
                 }
 
+                EditorGUI.EndDisabledGroup();
+                EditorGUI.BeginDisabledGroup(i == target.Rewards.Count - 1);
+
+                if (GUILayout.Button("↓", GUILayout.Width(18), GUILayout.Height(18)))
+                {
+                    target.Rewards.RemoveAt(i);
+                    target.Rewards.Insert(i + 1, reward);
+                }
+
+                EditorGUI.EndDisabledGroup();
+
+                if (GUILayout.Button("-", GUILayout.Width(18), GUILayout.Height(18)))
+                {
+                    target.Rewards.RemoveAt(i);
+                }
+
+                GUILayout.EndHorizontal();
                 GUILayout.EndVertical();
             }
 
-            GUILayout.BeginHorizontal();
+            GUILayout.EndVertical();
+
+            GUILayout.EndVertical();
+            GUILayout.EndVertical();
+            GUILayout.EndHorizontal();
         }
 
         GUILayout.Space(2);
