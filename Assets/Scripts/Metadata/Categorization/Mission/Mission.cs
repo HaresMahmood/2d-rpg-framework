@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Mission", menuName = "Categorizable/Mission")]
@@ -12,7 +13,7 @@ public class Mission : Categorizable
     [SerializeField] private Character assignee;
     [SerializeField] private string origin;
     [SerializeField] private string destination;
-    [SerializeField] private MissionReward reward;
+    [SerializeField] private List<MissionReward> rewards = new List<MissionReward>();
     [SerializeField] private bool isCompleted;
     [SerializeField] private bool isFailed;
 
@@ -55,10 +56,9 @@ public class Mission : Categorizable
         private set { destination = value; }
     }
 
-    public MissionReward Reward
+    public List<MissionReward> Rewards
     {
-        get { return reward; }
-        private set { reward = value; }
+        get { return rewards; }
     }
 
     public bool IsCompleted
@@ -88,6 +88,12 @@ public class Mission : Categorizable
 
         #region Properties
 
+        public Category EnumValue
+        {
+            get { return value; }
+            set { this.value = value; }
+        }
+
         protected override string Value
         {
             get { return value.ToString(); }
@@ -97,11 +103,10 @@ public class Mission : Categorizable
 
         #region Enums
 
-        private enum Category
+        public enum Category
         {
             Main,
-            Side,
-            Other
+            Side
         }
 
         #endregion
