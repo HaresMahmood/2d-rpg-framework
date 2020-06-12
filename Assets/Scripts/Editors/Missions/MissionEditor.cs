@@ -175,11 +175,25 @@ public class MissionEditor : Editor
                 }
 
                 GUILayout.EndHorizontal();
+                GUILayout.BeginHorizontal();
+                GUILayout.Space(48);
+
+                if (reward.Type == Mission.MissionReward.MissionType.Item)
+                {
+                    EditorGUILayout.LabelField(new GUIContent("Item", "Dex number of this Pokémon.\n\n" +
+                    "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+                    reward.Item = (Item)EditorGUILayout.ObjectField(reward.Item, typeof(Item), false);
+                }
+
+                EditorGUILayout.LabelField(new GUIContent("Amount", "Dex number of this Pokémon.\n\n" +
+                "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+                reward.Amount = EditorGUILayout.IntSlider(reward.Amount, 1, (reward.Type == Mission.MissionReward.MissionType.Experience ? 2000 : (reward.Type == Mission.MissionReward.MissionType.Item ? 10 : 50000)));
+
+                GUILayout.EndHorizontal();
                 GUILayout.EndVertical();
             }
 
             GUILayout.EndVertical();
-
             GUILayout.EndVertical();
             GUILayout.EndVertical();
             GUILayout.EndHorizontal();
@@ -191,6 +205,6 @@ public class MissionEditor : Editor
 
         EditorUtility.SetDirty(target);
 
-        base.OnInspectorGUI();
+        //base.OnInspectorGUI();
     }
 }

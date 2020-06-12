@@ -132,7 +132,6 @@ public class Mission : Categorizable
         #region Fields
 
         [SerializeField] private MissionType type;
-
         [SerializeField] private int amount;
         [SerializeField] private Item item;
 
@@ -150,13 +149,13 @@ public class Mission : Categorizable
         public int Amount
         {
             get { return amount; }
-            private set { amount = value; }
+            set { amount = value; }
         }
 
         public Item Item
         {
             get { return item; }
-            private set { item = value; }
+            set { item = value; }
         }
 
         #endregion
