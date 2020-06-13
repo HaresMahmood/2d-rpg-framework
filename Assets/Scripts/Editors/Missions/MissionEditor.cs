@@ -12,7 +12,8 @@ public class MissionEditor : Editor
 
     private static bool showBasicInfo = true;
     private static bool showLocation = false;
-    private static bool showReward = true;
+    private static bool showGoals = true;
+    private static bool showRewards = false;
 
     #endregion
 
@@ -34,8 +35,8 @@ public class MissionEditor : Editor
         GUILayout.FlexibleSpace();
         GUILayout.BeginHorizontal();
         GUILayout.FlexibleSpace();
-
-        GUILayout.Label($"{target.Categorization.ToString()} - {target.Name} - {(target.IsCompleted ? "Completed" : (target.IsFailed ? "Failed" : ("% completed")))}");
+       
+        GUILayout.Label($"{target.Categorization.ToString()} - {target.Name} - {(target.IsCompleted ? "Completed" : (target.IsFailed ? "Failed" : (target.Goals.Count == 0 ? "Add a goal via the \"Goals\" tab..." :  ($"{target.Goals.Where(g => false).Count() / target.Goals.Count() * 100}% completed"))))}");
 
         GUILayout.FlexibleSpace();
         GUILayout.EndHorizontal();
@@ -118,9 +119,89 @@ public class MissionEditor : Editor
 
         GUILayout.BeginHorizontal();
 
-        showReward = EditorGUILayout.Foldout(showReward, $"Rewards ({target.Rewards.Count})", foldoutStyle);
+        showGoals = EditorGUILayout.Foldout(showGoals, $"Goals ({target.Goals.Count})", foldoutStyle);
 
-        EditorGUI.BeginDisabledGroup(!showReward || target.Rewards.Count >= 3);
+        EditorGUI.BeginDisabledGroup(!showGoals || target.Goals.Count >= 5);
+
+        if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
+        {
+            target.Goals.Add(new Mission.MissionGoal());
+        }
+
+        EditorGUI.EndDisabledGroup();
+        GUILayout.EndHorizontal();
+
+        if (showGoals)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Space(15);
+            GUILayout.BeginVertical();
+            GUILayout.BeginVertical();
+            GUILayout.BeginVertical();
+
+            for (int i = 0; i < target.Goals.Count; i++)
+            {
+                Mission.MissionGoal goal = target.Goals[i];
+
+                GUILayout.BeginVertical("Box");
+                GUILayout.BeginHorizontal();
+
+                EditorGUILayout.LabelField($"{i + 1}.", GUILayout.Width(45));
+
+                //EditorGUILayout.LabelField(new GUIContent("Completed", "Dex number of this Pokémon.\n\n" +
+                //"- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+
+                EditorGUILayout.LabelField(new GUIContent("Type", "Dex number of this Pokémon.\n\n" +
+                "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+                goal.Type = (Mission.MissionGoal.GoalType)EditorGUILayout.EnumPopup(goal.Type);
+
+                GUILayout.Space(10);
+                goal.IsCompleted = EditorGUILayout.Toggle(goal.IsCompleted, GUILayout.Width(10));
+                GUILayout.Space(10);
+
+                EditorGUI.BeginDisabledGroup(i == 0);
+
+                if (GUILayout.Button("↑", GUILayout.Width(18), GUILayout.Height(18)))
+                {
+                    target.Goals.RemoveAt(i);
+                    target.Goals.Insert(i - 1, goal);
+                }
+
+                EditorGUI.EndDisabledGroup();
+                EditorGUI.BeginDisabledGroup(i == target.Rewards.Count - 1);
+
+                if (GUILayout.Button("↓", GUILayout.Width(18), GUILayout.Height(18)))
+                {
+                    target.Goals.RemoveAt(i);
+                    target.Goals.Insert(i + 1, goal);
+                }
+
+                EditorGUI.EndDisabledGroup();
+
+                if (GUILayout.Button("-", GUILayout.Width(18), GUILayout.Height(18)))
+                {
+                    target.Goals.RemoveAt(i);
+                }
+
+                GUILayout.EndHorizontal();
+                GUILayout.EndVertical();
+            }
+
+            GUILayout.EndVertical();
+            GUILayout.EndVertical();
+            GUILayout.EndVertical();
+            GUILayout.EndHorizontal();
+        }
+
+        GUILayout.Space(2);
+        ExtensionMethods.DrawUILine("#525252".ToColor());
+        GUILayout.Space(2);
+
+        GUILayout.BeginHorizontal();
+
+        showRewards = EditorGUILayout.Foldout(showRewards, $"Rewards ({target.Rewards.Count})", foldoutStyle);
+
+        EditorGUI.BeginDisabledGroup(!showRewards || target.Rewards.Count >= 3);
 
         if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
         {
@@ -130,7 +211,7 @@ public class MissionEditor : Editor
         EditorGUI.EndDisabledGroup();
         GUILayout.EndHorizontal();
 
-        if (showReward)
+        if (showRewards)
         {
             GUILayout.BeginHorizontal();
             GUILayout.Space(15);
@@ -148,7 +229,7 @@ public class MissionEditor : Editor
                 EditorGUILayout.LabelField($"{i + 1}.", GUILayout.Width(45));
                 EditorGUILayout.LabelField(new GUIContent("Type", "Dex number of this Pokémon.\n\n" +
                 "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-                reward.Type = (Mission.MissionReward.MissionType)EditorGUILayout.EnumPopup(reward.Type);
+                reward.Type = (Mission.MissionReward.RewardType)EditorGUILayout.EnumPopup(reward.Type);
 
                 EditorGUI.BeginDisabledGroup(i == 0);
 
@@ -178,7 +259,7 @@ public class MissionEditor : Editor
                 GUILayout.BeginHorizontal();
                 GUILayout.Space(48);
 
-                if (reward.Type == Mission.MissionReward.MissionType.Item)
+                if (reward.Type == Mission.MissionReward.RewardType.Item)
                 {
                     EditorGUILayout.LabelField(new GUIContent("Item", "Dex number of this Pokémon.\n\n" +
                     "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
@@ -187,7 +268,7 @@ public class MissionEditor : Editor
 
                 EditorGUILayout.LabelField(new GUIContent("Amount", "Dex number of this Pokémon.\n\n" +
                 "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-                reward.Amount = EditorGUILayout.IntSlider(reward.Amount, 1, (reward.Type == Mission.MissionReward.MissionType.Experience ? 2000 : (reward.Type == Mission.MissionReward.MissionType.Item ? 10 : 50000)));
+                reward.Amount = EditorGUILayout.IntSlider(reward.Amount, 1, (reward.Type == Mission.MissionReward.RewardType.Experience ? 2000 : (reward.Type == Mission.MissionReward.RewardType.Item ? 10 : 50000)));
 
                 GUILayout.EndHorizontal();
                 GUILayout.EndVertical();
@@ -205,6 +286,6 @@ public class MissionEditor : Editor
 
         EditorUtility.SetDirty(target);
 
-        //base.OnInspectorGUI();
+        base.OnInspectorGUI();
     }
 }

@@ -13,6 +13,7 @@ public class Mission : Categorizable
     [SerializeField] private Character assignee;
     [SerializeField] private string origin;
     [SerializeField] private string destination;
+    [SerializeField] private List<MissionGoal> goals = new List<MissionGoal>();
     [SerializeField] private List<MissionReward> rewards = new List<MissionReward>();
     [SerializeField] private bool isCompleted;
     [SerializeField] private bool isFailed;
@@ -54,6 +55,11 @@ public class Mission : Categorizable
     {
         get { return destination; }
         private set { destination = value; }
+    }
+
+    public List<MissionGoal> Goals
+    {
+        get { return goals; }
     }
 
     public List<MissionReward> Rewards
@@ -127,20 +133,59 @@ public class Mission : Categorizable
     }
 
     [System.Serializable]
+    public class MissionGoal
+    {
+        #region Fields
+
+        [SerializeField] private GoalType type;
+        [SerializeField] private bool isCompleted;
+
+        #endregion
+
+        #region Properties
+
+        public GoalType Type
+        {
+            get { return type; }
+            set { type = value; }
+        }
+
+        public bool IsCompleted
+        {
+            get { return isCompleted; }
+            set { isCompleted = value; }
+        }
+
+        #endregion
+
+        #region Enums
+
+        public enum GoalType
+        {
+            Talk,
+            Kill,
+            Gather,
+            Deliver,
+            Escort
+        }
+
+        #endregion
+    }
+
+    [System.Serializable]
     public class MissionReward
     {
         #region Fields
 
-        [SerializeField] private MissionType type;
+        [SerializeField] private RewardType type;
         [SerializeField] private int amount;
         [SerializeField] private Item item;
 
         #endregion
 
-
         #region Properties
 
-        public MissionType Type
+        public RewardType Type
         {
             get { return type; }
             set { type = value; }
@@ -162,7 +207,7 @@ public class Mission : Categorizable
 
         #region Enums
 
-        public enum MissionType
+        public enum RewardType
         {
             Money,
             Item,
