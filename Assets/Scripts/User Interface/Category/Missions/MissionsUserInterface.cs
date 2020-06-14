@@ -19,7 +19,7 @@ public class MissionsUserInterface : CategoryUserInterface
 
     protected override void UpdateCategoryObjectsList(List<Categorizable> categorizables, string value, int maxViewableObjects, float animationDuration = 0.15f, float animationDelay = 0.02f)
     {
-        categorizables = categorizables.OrderBy(mission => ((Mission)mission).IsCompleted).ToList();
+        //categorizables = categorizables.OrderBy(mission => ((Mission)mission).IsCompleted).ToList();
 
         base.UpdateCategoryObjectsList(categorizables, value, maxViewableObjects, animationDuration, animationDelay);
     }

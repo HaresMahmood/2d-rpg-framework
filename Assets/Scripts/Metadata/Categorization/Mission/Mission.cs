@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,7 +16,6 @@ public class Mission : Categorizable
     [SerializeField] private string destination;
     [SerializeField] private List<MissionGoal> goals = new List<MissionGoal>();
     [SerializeField] private List<MissionReward> rewards = new List<MissionReward>();
-    [SerializeField] private bool isCompleted;
     [SerializeField] private bool isFailed;
 
     #endregion
@@ -31,12 +31,6 @@ public class Mission : Categorizable
     {
         get { return objective; }
         private set { objective = value; }
-    }
-
-    public string Remaining
-    {
-        get { return remaining; }
-        private set { remaining = value; }
     }
 
     public Character Assignee
@@ -67,16 +61,20 @@ public class Mission : Categorizable
         get { return rewards; }
     }
 
-    public bool IsCompleted
+    public int CompletionPercentage
     {
-        get { return isCompleted; }
-        private set { isCompleted = value; }
+        get
+        {
+            return (int)Math.Round(Goals.Where(g => g.IsCompleted == true).Count() / (float)Goals.Count() * 100);
+        }
     }
 
     public bool IsFailed
     {
-        get { return isFailed; }
-        private set { isFailed = value; }
+        get 
+        {
+            return Goals.Where(g => g.IsFailed == true).Count() > 0;
+        }
     }
 
     #endregion
@@ -139,7 +137,12 @@ public class Mission : Categorizable
 
         [SerializeField] private GoalType type;
         [SerializeField] private bool isCompleted;
+        [SerializeField] private bool isFailed;
 
+        [SerializeField] private Character character;
+        [SerializeField] private Pokemon pokemon;
+        [SerializeField] private Item item;
+         
         #endregion
 
         #region Properties
@@ -156,6 +159,30 @@ public class Mission : Categorizable
             set { isCompleted = value; }
         }
 
+        public bool IsFailed
+        {
+            get { return isFailed; }
+            set { isFailed = value; }
+        }
+
+        public Character Character
+        {
+            get { return character; }
+            set { character = value; }
+        }
+
+        public Pokemon Pokemon
+        {
+            get { return pokemon; }
+            set { pokemon = value; }
+        }
+
+        public Item Item
+        {
+            get { return item; }
+            set { item = value; }
+        }
+
         #endregion
 
         #region Enums
@@ -163,7 +190,7 @@ public class Mission : Categorizable
         public enum GoalType
         {
             Talk,
-            Kill,
+            Battle,
             Gather,
             Deliver,
             Escort

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
 
 [CustomEditor(typeof(Mission)), CanEditMultipleObjects]
@@ -35,8 +33,8 @@ public class MissionEditor : Editor
         GUILayout.FlexibleSpace();
         GUILayout.BeginHorizontal();
         GUILayout.FlexibleSpace();
-       
-        GUILayout.Label($"{target.Categorization.ToString()} - {target.Name} - {(target.IsCompleted ? "Completed" : (target.IsFailed ? "Failed" : (target.Goals.Count == 0 ? "Add a goal via the \"Goals\" tab..." :  ($"{(int)Math.Round(target.Goals.Where(g => g.IsCompleted == true).Count() / (float)target.Goals.Count() * 100)}% completed"))))}");
+
+        GUILayout.Label($"{target.Categorization.ToString()} - {target.Name} - {(target.IsFailed ? "Failed" : (target.Goals.Count == 0 ? "Add a goal via the \"Goals\" tab..." : $"{target.CompletionPercentage}% completed"))}");
 
         GUILayout.FlexibleSpace();
         GUILayout.EndHorizontal();
@@ -148,16 +146,13 @@ public class MissionEditor : Editor
 
                 EditorGUILayout.LabelField($"{i + 1}.", GUILayout.Width(45));
 
-                //EditorGUILayout.LabelField(new GUIContent("Completed", "Dex number of this Pokémon.\n\n" +
-                //"- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+                EditorGUI.BeginDisabledGroup(goal.IsCompleted || goal.IsFailed);
 
                 EditorGUILayout.LabelField(new GUIContent("Type", "Dex number of this Pokémon.\n\n" +
                 "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
                 goal.Type = (Mission.MissionGoal.GoalType)EditorGUILayout.EnumPopup(goal.Type);
 
-                GUILayout.Space(10);
-                goal.IsCompleted = EditorGUILayout.Toggle(goal.IsCompleted, GUILayout.Width(10));
-                GUILayout.Space(10);
+                EditorGUI.EndDisabledGroup();
 
                 EditorGUI.BeginDisabledGroup(i == 0);
 
@@ -183,6 +178,49 @@ public class MissionEditor : Editor
                     target.Goals.RemoveAt(i);
                 }
 
+                GUILayout.EndHorizontal();
+                GUILayout.BeginHorizontal();
+                GUILayout.Space(48);
+                EditorGUI.BeginDisabledGroup(goal.IsCompleted || goal.IsFailed);
+
+                if (goal.Type == Mission.MissionGoal.GoalType.Talk || goal.Type == Mission.MissionGoal.GoalType.Deliver || goal.Type == Mission.MissionGoal.GoalType.Escort)
+                {
+                    EditorGUILayout.LabelField(new GUIContent("Character", "Dex number of this Pokémon.\n\n" +
+                    "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+                    goal.Character = (Character)EditorGUILayout.ObjectField(goal.Character, typeof(Character), false);
+                }
+                else if (goal.Type == Mission.MissionGoal.GoalType.Battle)
+                {
+                    EditorGUILayout.LabelField(new GUIContent("Pokémon", "Dex number of this Pokémon.\n\n" +
+                    "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+                    goal.Pokemon = (Pokemon)EditorGUILayout.ObjectField(goal.Pokemon, typeof(Pokemon), false);
+                }
+                else if (goal.Type == Mission.MissionGoal.GoalType.Gather)
+                {
+                    EditorGUILayout.LabelField(new GUIContent("Item", "Dex number of this Pokémon.\n\n" +
+                    "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+                    goal.Item = (Item)EditorGUILayout.ObjectField(goal.Item, typeof(Item), false);
+                }
+                else if (goal.Type == Mission.MissionGoal.GoalType.Gather)
+                {
+                    EditorGUILayout.LabelField(new GUIContent("Item", "Dex number of this Pokémon.\n\n" +
+                    "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+                    goal.Item = (Item)EditorGUILayout.ObjectField(goal.Item, typeof(Item), false);
+                }
+
+                EditorGUI.EndDisabledGroup();
+                EditorGUI.BeginDisabledGroup(goal.IsFailed);
+
+                EditorGUILayout.LabelField(new GUIContent("✓", "Checked if goal is failed."), GUILayout.Width(15));
+                goal.IsCompleted = EditorGUILayout.Toggle(goal.IsCompleted, GUILayout.Width(15));
+
+                EditorGUI.EndDisabledGroup();
+                EditorGUI.BeginDisabledGroup(goal.IsCompleted);
+
+                EditorGUILayout.LabelField(new GUIContent("x", "Checked if goal is completed."), GUILayout.Width(15));
+                goal.IsFailed = EditorGUILayout.Toggle(goal.IsFailed, GUILayout.Width(15));
+
+                EditorGUI.EndDisabledGroup();
                 GUILayout.EndHorizontal();
                 GUILayout.EndVertical();
             }

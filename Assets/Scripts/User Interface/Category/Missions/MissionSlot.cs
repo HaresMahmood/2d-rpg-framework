@@ -24,6 +24,7 @@ public class MissionSlot : CategorizableSlot
 
     protected override void SetInformation<T>(T slotObject)
     {
+        /*
         Mission mission = (Mission)Convert.ChangeType(slotObject, typeof(Mission));
 
         nameText.SetText(mission.Name);
@@ -40,6 +41,7 @@ public class MissionSlot : CategorizableSlot
         {
             FadeSlot(1f);
         }
+        */
     }
 
     private void FadeSlot(float opacity)

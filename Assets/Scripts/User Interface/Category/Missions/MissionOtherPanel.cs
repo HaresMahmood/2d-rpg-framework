@@ -31,6 +31,7 @@ public class MissionOtherPanel : InformationUserInterface
 
     public override void SetValues(ScriptableObject selectedObject)
     {
+        /*
         Mission mission = (Mission)selectedObject;        
         Color statusColor = mission.IsCompleted ? "#3CA658".ToColor() : "#5C5C5C".ToColor();
         string status = mission.IsCompleted ? "Completed" : "Not completed";
@@ -39,14 +40,15 @@ public class MissionOtherPanel : InformationUserInterface
         assigneeText.SetText(mission.Assignee.name);
         locationText.SetText(mission.Origin);
 
-        //rewardText.SetText(mission.Rewards.Amount.ToString());
-        //rewardSprite.sprite = mission.Reward.Item.sprite;
+        rewardText.SetText(mission.Rewards.Amount.ToString());
+        rewardSprite.sprite = mission.Reward.Item.sprite;
 
         statusValue.SetText(status);
         if (statusValue.color != statusColor)
         {
             statusValue.color = statusColor;
         }
+        */
     }
 
     public override void FadePanel(Transform panel, float opacity, float animationDuration)
