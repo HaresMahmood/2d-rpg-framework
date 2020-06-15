@@ -142,6 +142,8 @@ public class Mission : Categorizable
         [SerializeField] private Character character;
         [SerializeField] private Pokemon pokemon;
         [SerializeField] private Item item;
+
+        [SerializeField] private int amount;
          
         #endregion
 
@@ -181,6 +183,12 @@ public class Mission : Categorizable
         {
             get { return item; }
             set { item = value; }
+        }
+
+        public int Amount
+        {
+            get { return amount; }
+            set { amount = value; }
         }
 
         #endregion

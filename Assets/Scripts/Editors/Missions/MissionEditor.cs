@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 using UnityEditor;
 
 [CustomEditor(typeof(Mission)), CanEditMultipleObjects]
@@ -146,7 +147,7 @@ public class MissionEditor : Editor
 
                 EditorGUILayout.LabelField($"{i + 1}.", GUILayout.Width(45));
 
-                EditorGUI.BeginDisabledGroup(goal.IsCompleted || goal.IsFailed);
+                EditorGUI.BeginDisabledGroup(goal.IsCompleted || goal.IsFailed || (target.Goals.Where(g => target.Goals.IndexOf(g) < target.Goals.IndexOf(goal) && g.IsFailed == true).Count() > 0));
 
                 EditorGUILayout.LabelField(new GUIContent("Type", "Dex number of this Pokémon.\n\n" +
                 "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
@@ -181,41 +182,81 @@ public class MissionEditor : Editor
                 GUILayout.EndHorizontal();
                 GUILayout.BeginHorizontal();
                 GUILayout.Space(48);
-                EditorGUI.BeginDisabledGroup(goal.IsCompleted || goal.IsFailed);
 
                 if (goal.Type == Mission.MissionGoal.GoalType.Talk || goal.Type == Mission.MissionGoal.GoalType.Deliver || goal.Type == Mission.MissionGoal.GoalType.Escort)
                 {
+                    EditorGUI.BeginDisabledGroup(goal.Character == null ? false : (goal.IsCompleted || goal.IsFailed || (target.Goals.Where(g => target.Goals.IndexOf(g) < target.Goals.IndexOf(goal) && g.IsFailed == true).Count() > 0)));
+
                     EditorGUILayout.LabelField(new GUIContent("Character", "Dex number of this Pokémon.\n\n" +
                     "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
                     goal.Character = (Character)EditorGUILayout.ObjectField(goal.Character, typeof(Character), false);
+
+                    EditorGUI.EndDisabledGroup();
                 }
                 else if (goal.Type == Mission.MissionGoal.GoalType.Battle)
                 {
+                    EditorGUI.BeginDisabledGroup(goal.Pokemon == null ? false : (goal.IsCompleted || goal.IsFailed || (target.Goals.Where(g => target.Goals.IndexOf(g) < target.Goals.IndexOf(goal) && g.IsFailed == true).Count() > 0)));
+
                     EditorGUILayout.LabelField(new GUIContent("Pokémon", "Dex number of this Pokémon.\n\n" +
                     "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
                     goal.Pokemon = (Pokemon)EditorGUILayout.ObjectField(goal.Pokemon, typeof(Pokemon), false);
+
+                    if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
+                    {
+                        goal.Amount = Mathf.Clamp(++goal.Amount, 0, 5);
+                    }
+
+                    goal.Amount = EditorGUILayout.IntField(goal.Amount, GUILayout.Width(18));
+
+                    if (GUILayout.Button("-", GUILayout.Width(18), GUILayout.Height(18)))
+                    {
+                        goal.Amount = Mathf.Clamp(--goal.Amount, 0, 5);
+                    }
+
+                    EditorGUI.EndDisabledGroup();
                 }
                 else if (goal.Type == Mission.MissionGoal.GoalType.Gather)
                 {
+                    EditorGUI.BeginDisabledGroup(goal.Item == null ? false : (goal.IsCompleted || goal.IsFailed || (target.Goals.Where(g => target.Goals.IndexOf(g) < target.Goals.IndexOf(goal) && g.IsFailed == true).Count() > 0)));
+
                     EditorGUILayout.LabelField(new GUIContent("Item", "Dex number of this Pokémon.\n\n" +
                     "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
                     goal.Item = (Item)EditorGUILayout.ObjectField(goal.Item, typeof(Item), false);
-                }
-                else if (goal.Type == Mission.MissionGoal.GoalType.Gather)
-                {
-                    EditorGUILayout.LabelField(new GUIContent("Item", "Dex number of this Pokémon.\n\n" +
-                    "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-                    goal.Item = (Item)EditorGUILayout.ObjectField(goal.Item, typeof(Item), false);
+
+                    if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
+                    {
+                        goal.Amount = Mathf.Clamp(++goal.Amount, 0, 5);
+                    }
+
+                    goal.Amount = EditorGUILayout.IntField(goal.Amount, GUILayout.Width(18));
+
+                    if (GUILayout.Button("-", GUILayout.Width(18), GUILayout.Height(18)))
+                    {
+                        goal.Amount = Mathf.Clamp(--goal.Amount, 0, 5);
+                    }
+
+                    EditorGUI.EndDisabledGroup();
                 }
 
-                EditorGUI.EndDisabledGroup();
-                EditorGUI.BeginDisabledGroup(goal.IsFailed);
+                GUILayout.Space(10);
+
+                EditorGUI.BeginDisabledGroup(goal.IsFailed || (target.Goals.Where(g => target.Goals.IndexOf(g) < target.Goals.IndexOf(goal) && g.IsFailed == true).Count() > 0));
+
+                if (target.Goals.Where(g => target.Goals.IndexOf(g) < target.Goals.IndexOf(goal) && g.IsFailed == true).Count() > 0)
+                {
+                    goal.IsCompleted = false;
+                }
 
                 EditorGUILayout.LabelField(new GUIContent("✓", "Checked if goal is failed."), GUILayout.Width(15));
                 goal.IsCompleted = EditorGUILayout.Toggle(goal.IsCompleted, GUILayout.Width(15));
 
                 EditorGUI.EndDisabledGroup();
-                EditorGUI.BeginDisabledGroup(goal.IsCompleted);
+                EditorGUI.BeginDisabledGroup(goal.IsCompleted || (target.Goals.Where(g => target.Goals.IndexOf(g) < target.Goals.IndexOf(goal) && g.IsFailed == true).Count() > 0));
+
+                if (target.Goals.Where(g => target.Goals.IndexOf(g) < target.Goals.IndexOf(goal) && g.IsFailed == true).Count() > 0)
+                {
+                    goal.IsFailed = true;
+                }
 
                 EditorGUILayout.LabelField(new GUIContent("x", "Checked if goal is completed."), GUILayout.Width(15));
                 goal.IsFailed = EditorGUILayout.Toggle(goal.IsFailed, GUILayout.Width(15));
