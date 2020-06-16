@@ -11,7 +11,7 @@ public class MissionEditor : Editor
 
     private static bool showBasicInfo = true;
     private static bool showLocation = false;
-    private static bool showGoals = true;
+    private static bool showGoals = false;
     private static bool showRewards = false;
 
     #endregion
