@@ -120,7 +120,7 @@ public class MissionEditor : Editor
 
         showGoals = EditorGUILayout.Foldout(showGoals, $"Goals ({target.Goals.Count})", foldoutStyle);
 
-        EditorGUI.BeginDisabledGroup(!showGoals || target.Goals.Count >= 5);
+        EditorGUI.BeginDisabledGroup(!showGoals || target.Goals.Count >= 10);
 
         if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
         {
