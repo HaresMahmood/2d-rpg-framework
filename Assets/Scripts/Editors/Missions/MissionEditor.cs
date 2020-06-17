@@ -10,7 +10,7 @@ public class MissionEditor : Editor
     private new Mission target;
 
     private static bool showBasicInfo = true;
-    private static bool showLocation = false;
+    private static bool showOriginAndDestination = true;
     private static bool showGoals = false;
     private static bool showRewards = false;
 
@@ -93,19 +93,39 @@ public class MissionEditor : Editor
         ExtensionMethods.DrawUILine("#525252".ToColor());
         GUILayout.Space(2);
 
-        showLocation = EditorGUILayout.Foldout(showLocation, "Location", foldoutStyle);
+        showOriginAndDestination = EditorGUILayout.Foldout(showOriginAndDestination, "Origin and Destination", foldoutStyle);
         GUILayout.Space(5);
 
-        if (showLocation)
+        if (showOriginAndDestination)
         {
             GUILayout.BeginHorizontal();
             GUILayout.Space(15);
             GUILayout.BeginVertical();
             GUILayout.BeginHorizontal("Box");
 
-            EditorGUILayout.LabelField(new GUIContent("Status Ailment", "Dex number of this Pokémon.\n\n" +
-            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-            //target.Ailment.Value = (PartyMember.StatusAilment.Ailment)EditorGUILayout.EnumPopup(target.Ailment.Value);
+            EditorGUILayout.LabelField(new GUIContent("Destination", "Character assigning this mission."), GUILayout.Width(95));
+            target.OriginDestination.Destination = EditorGUILayout.TextField(target.OriginDestination.Destination);
+
+            GUILayout.EndHorizontal();
+
+            EditorGUILayout.LabelField("Auto-assigned Fields");
+
+            GUILayout.BeginHorizontal("Box");
+            EditorGUILayout.LabelField(new GUIContent("Origin", "Character assigning this mission."), GUILayout.Width(95));
+
+            GUI.enabled = false;
+            target.OriginDestination.Origin = EditorGUILayout.TextField(target.OriginDestination.Origin);
+            GUI.enabled = true;
+
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal("Box");
+
+            EditorGUILayout.LabelField(new GUIContent("Assignee", "Character assigning this mission.\n\n" +
+            "This field is assigned automatically."), GUILayout.Width(95));
+
+            GUI.enabled = false;
+            target.OriginDestination.Assignee = (Character)EditorGUILayout.ObjectField(target.OriginDestination.Assignee, typeof(Character), false);
+            GUI.enabled = true;
 
             GUILayout.EndHorizontal();
             EditorGUILayout.EndVertical();

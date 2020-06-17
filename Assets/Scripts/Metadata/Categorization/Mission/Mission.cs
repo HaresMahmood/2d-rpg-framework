@@ -10,10 +10,7 @@ public class Mission : Categorizable
 
     [SerializeField] private MissionCategory categorization = new MissionCategory();
     [SerializeField] private string objective;
-    [SerializeField] private string remaining;
-    [SerializeField] private Character assignee;
-    [SerializeField] private string origin;
-    [SerializeField] private string destination;
+    [SerializeField] private MissionOriginDestination originDestination = new MissionOriginDestination();
     [SerializeField] private List<MissionGoal> goals = new List<MissionGoal>();
     [SerializeField] private List<MissionReward> rewards = new List<MissionReward>();
     [SerializeField] private bool isFailed;
@@ -33,22 +30,9 @@ public class Mission : Categorizable
         private set { objective = value; }
     }
 
-    public Character Assignee
+    public MissionOriginDestination OriginDestination
     {
-        get { return assignee; }
-        private set { assignee = value; }
-    }
-
-    public string Origin
-    {
-        get { return origin; }
-        private set { origin = value; }
-    }
-
-    public string Destination
-    {
-        get { return destination; }
-        private set { destination = value; }
+        get { return originDestination; }
     }
 
     public List<MissionGoal> Goals
@@ -125,6 +109,40 @@ public class Mission : Categorizable
         public override int GetTotalCategories()
         {
             return Enum.GetNames(typeof(Category)).Length;
+        }
+
+        #endregion
+    }
+
+    [Serializable]
+    public class MissionOriginDestination
+    {
+        #region Fields
+
+        [SerializeField] private Character assignee;
+        [SerializeField] private string origin;
+        [SerializeField] private string destination;
+
+        #endregion
+
+        #region Properties
+
+        public Character Assignee
+        {
+            get { return assignee; }
+            set { assignee = value; }
+        }
+
+        public string Origin
+        {
+            get { return origin; }
+            set { origin = value; }
+        }
+
+        public string Destination
+        {
+            get { return destination; }
+            set { destination = value; }
         }
 
         #endregion
