@@ -12,7 +12,6 @@ public class Mission : Categorizable
     [SerializeField] private MissionOriginDestination originDestination = new MissionOriginDestination();
     [SerializeField] private List<MissionGoal> goals = new List<MissionGoal>();
     [SerializeField] private List<MissionReward> rewards = new List<MissionReward>();
-    [SerializeField] private bool isFailed;
 
     #endregion
 
