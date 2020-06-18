@@ -107,27 +107,24 @@ public class MissionEditor : Editor
             target.OriginDestination.Destination = EditorGUILayout.TextField(target.OriginDestination.Destination);
 
             GUILayout.EndHorizontal();
+            GUI.enabled = false;
 
-            EditorGUILayout.LabelField("Auto-assigned Fields");
+            EditorGUILayout.LabelField("Auto-assigned Fields:");
 
             GUILayout.BeginHorizontal("Box");
-            EditorGUILayout.LabelField(new GUIContent("Origin", "Character assigning this mission."), GUILayout.Width(95));
 
-            GUI.enabled = false;
+            EditorGUILayout.LabelField(new GUIContent("Origin", "Character assigning this mission."), GUILayout.Width(95));
             target.OriginDestination.Origin = EditorGUILayout.TextField(target.OriginDestination.Origin);
-            GUI.enabled = true;
 
             GUILayout.EndHorizontal();
             GUILayout.BeginHorizontal("Box");
 
             EditorGUILayout.LabelField(new GUIContent("Assignee", "Character assigning this mission.\n\n" +
             "This field is assigned automatically."), GUILayout.Width(95));
-
-            GUI.enabled = false;
             target.OriginDestination.Assignee = (Character)EditorGUILayout.ObjectField(target.OriginDestination.Assignee, typeof(Character), false);
-            GUI.enabled = true;
 
             GUILayout.EndHorizontal();
+            GUI.enabled = true;
             EditorGUILayout.EndVertical();
             GUILayout.EndHorizontal();
         }
