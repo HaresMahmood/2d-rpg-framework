@@ -107,10 +107,11 @@ public class MissionEditor : Editor
             target.OriginDestination.Destination = EditorGUILayout.TextField(target.OriginDestination.Destination);
 
             GUILayout.EndHorizontal();
+            GUILayout.BeginVertical("Box");
+
+            EditorGUILayout.LabelField("Auto-fields:");
+
             GUI.enabled = false;
-
-            EditorGUILayout.LabelField("Auto-assigned Fields:");
-
             GUILayout.BeginHorizontal("Box");
 
             EditorGUILayout.LabelField(new GUIContent("Origin", "Character assigning this mission."), GUILayout.Width(95));
@@ -125,6 +126,7 @@ public class MissionEditor : Editor
 
             GUILayout.EndHorizontal();
             GUI.enabled = true;
+            GUILayout.EndVertical();
             EditorGUILayout.EndVertical();
             GUILayout.EndHorizontal();
         }
@@ -382,6 +384,6 @@ public class MissionEditor : Editor
 
         EditorUtility.SetDirty(target);
 
-        base.OnInspectorGUI();
+        //base.OnInspectorGUI();
     }
 }
