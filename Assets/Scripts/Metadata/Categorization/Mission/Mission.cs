@@ -9,7 +9,6 @@ public class Mission : Categorizable
     #region Fields
 
     [SerializeField] private MissionCategory categorization = new MissionCategory();
-    [SerializeField] private string objective;
     [SerializeField] private MissionOriginDestination originDestination = new MissionOriginDestination();
     [SerializeField] private List<MissionGoal> goals = new List<MissionGoal>();
     [SerializeField] private List<MissionReward> rewards = new List<MissionReward>();
@@ -22,12 +21,6 @@ public class Mission : Categorizable
     public override Category Categorization
     {
         get { return categorization; }
-    }
-
-    public string Objective
-    {
-        get { return objective; }
-        private set { objective = value; }
     }
 
     public MissionOriginDestination OriginDestination

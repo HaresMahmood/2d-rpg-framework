@@ -10,7 +10,7 @@ public class MissionEditor : Editor
     private new Mission target;
 
     private static bool showBasicInfo = true;
-    private static bool showOriginAndDestination = true;
+    private static bool showOriginAndDestination = false;
     private static bool showGoals = false;
     private static bool showRewards = false;
 
