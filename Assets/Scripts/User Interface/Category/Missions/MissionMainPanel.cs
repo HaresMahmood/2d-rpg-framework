@@ -29,7 +29,7 @@ public class MissionMainPanel : InformationUserInterface
         Mission mission = (Mission)selectedObject;
 
         nameText.SetText(mission.Name);
-        objectiveText.SetText(mission.Objective);
+        //objectiveText.SetText(mission.Objective);
         descriptionText.SetText(mission.Description);
     }
 

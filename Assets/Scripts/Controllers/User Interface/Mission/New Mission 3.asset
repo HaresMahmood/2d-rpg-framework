@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: New Mission 3
   m_EditorClassIdentifier: 
   id: 0
-  Name: Fiery Emblem
-  objective: Kill every last one of them.
+  name: 
   description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam accumsan
     metus in dapibus congue. Aliquam a est dictum, elementum ante sed, sollicitudin
     leo. Nulla vel ante diam. <br><br> Nam sit amet neque elit. Quisque euismod placerat
@@ -22,10 +21,11 @@ MonoBehaviour:
     vehicula egestas leo. Duis porttitor ut leo in maximus. Pellentesque habitant
     morbi tristique senectus et netus et malesuada fames ac turpis egestas. Cras
     eu porttitor eros.
-  category: 0
-  remaining: 0/2
-  assignee: {fileID: 11400000, guid: 92292d809f583ec42ac68c4a618c66d7, type: 2}
-  location: Corburgus Town
-  rewardAmount: 13
-  rewardItem: {fileID: 11400000, guid: a8507a4131aade8438059c8c369b567a, type: 2}
-  isCompleted: 0
+  categorization:
+    value: 0
+  originDestination:
+    assignee: {fileID: 0}
+    origin: 
+    destination: 
+  goals: []
+  rewards: []
