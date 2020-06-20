@@ -208,7 +208,7 @@ public class Mission : Categorizable
         public enum GoalType
         {
             Talk,
-            Battle,
+            Defeat,
             Gather,
             Deliver,
             Escort

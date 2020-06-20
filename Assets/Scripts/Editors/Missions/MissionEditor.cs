@@ -212,7 +212,8 @@ public class MissionEditor : Editor
 
                     EditorGUI.EndDisabledGroup();
                 }
-                else if (goal.Type == Mission.MissionGoal.GoalType.Battle)
+                
+                if (goal.Type == Mission.MissionGoal.GoalType.Defeat)
                 {
                     EditorGUI.BeginDisabledGroup(goal.Pokemon == null ? false : (goal.IsCompleted || goal.IsFailed || (target.Goals.Where(g => target.Goals.IndexOf(g) < target.Goals.IndexOf(goal) && g.IsFailed == true).Count() > 0)));
 
@@ -222,19 +223,20 @@ public class MissionEditor : Editor
 
                     if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
                     {
-                        goal.Amount = Mathf.Clamp(++goal.Amount, 0, 5);
+                        goal.Amount = Mathf.Clamp(++goal.Amount, 1, 5);
                     }
 
                     goal.Amount = EditorGUILayout.IntField(goal.Amount, GUILayout.Width(18));
 
                     if (GUILayout.Button("-", GUILayout.Width(18), GUILayout.Height(18)))
                     {
-                        goal.Amount = Mathf.Clamp(--goal.Amount, 0, 5);
+                        goal.Amount = Mathf.Clamp(--goal.Amount, 1, 5);
                     }
 
                     EditorGUI.EndDisabledGroup();
                 }
-                else if (goal.Type == Mission.MissionGoal.GoalType.Gather)
+               
+                if (goal.Type == Mission.MissionGoal.GoalType.Gather || goal.Type == Mission.MissionGoal.GoalType.Deliver)
                 {
                     EditorGUI.BeginDisabledGroup(goal.Item == null ? false : (goal.IsCompleted || goal.IsFailed || (target.Goals.Where(g => target.Goals.IndexOf(g) < target.Goals.IndexOf(goal) && g.IsFailed == true).Count() > 0)));
 
@@ -244,14 +246,14 @@ public class MissionEditor : Editor
 
                     if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
                     {
-                        goal.Amount = Mathf.Clamp(++goal.Amount, 0, 5);
+                        goal.Amount = Mathf.Clamp(++goal.Amount, 1, 5);
                     }
 
                     goal.Amount = EditorGUILayout.IntField(goal.Amount, GUILayout.Width(18));
 
                     if (GUILayout.Button("-", GUILayout.Width(18), GUILayout.Height(18)))
                     {
-                        goal.Amount = Mathf.Clamp(--goal.Amount, 0, 5);
+                        goal.Amount = Mathf.Clamp(--goal.Amount, 1, 5);
                     }
 
                     EditorGUI.EndDisabledGroup();

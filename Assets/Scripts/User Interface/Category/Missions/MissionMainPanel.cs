@@ -16,8 +16,9 @@ public class MissionMainPanel : InformationUserInterface
 
     #region Variables
 
+    private MissionGoalsUserInterface goals;
+
     private TextMeshProUGUI nameText;
-    private TextMeshProUGUI objectiveText;
     private TextMeshProUGUI descriptionText;
 
     #endregion
@@ -29,8 +30,9 @@ public class MissionMainPanel : InformationUserInterface
         Mission mission = (Mission)selectedObject;
 
         nameText.SetText(mission.Name);
-        //objectiveText.SetText(mission.Objective);
         descriptionText.SetText(mission.Description);
+
+        goals.SetInformation(mission);
     }
 
     #endregion
@@ -45,8 +47,9 @@ public class MissionMainPanel : InformationUserInterface
         InformationPanel = transform.Find("Information");
 
         nameText = InformationPanel.Find("Name").GetComponentInChildren<TextMeshProUGUI>();
-        objectiveText = InformationPanel.Find("Objective/Value").GetComponent<TextMeshProUGUI>();
         descriptionText = InformationPanel.Find("Description/Value").GetComponent<TextMeshProUGUI>();
+
+        goals = transform.Find("Goals/Nodes").GetComponent<MissionGoalsUserInterface>();
     }
 
     #endregion
