@@ -35,7 +35,7 @@ public class MissionEditor : Editor
         GUILayout.BeginHorizontal();
         GUILayout.FlexibleSpace();
 
-        GUILayout.Label($"{target.Categorization.ToString()} - {target.Name} - {(target.IsFailed ? "Failed" : (target.Goals.Count == 0 ? "Add a goal via the \"Goals\" tab..." : $"{target.CompletionPercentage}% completed"))}");
+        GUILayout.Label($"{target.Categorization.ToString()} - {target.Name} - {(target.IsFailed ? "Failed" : (target.Goals.Count == 0 ? "Add a goal via the \"Goals\" tab..." : $"{target.CompletionPercentage}% Completed"))}");
 
         GUILayout.FlexibleSpace();
         GUILayout.EndHorizontal();

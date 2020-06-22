@@ -10,8 +10,8 @@ public class MissionSlot : CategorizableSlot
     #region Variables
 
     private TextMeshProUGUI nameText;
-    private TextMeshProUGUI objectiveText;
-    private TextMeshProUGUI remainingText;
+    private TextMeshProUGUI locationText;
+    private TextMeshProUGUI progressText;
 
     #endregion
 
@@ -24,15 +24,30 @@ public class MissionSlot : CategorizableSlot
 
     protected override void SetInformation<T>(T slotObject)
     {
-        /*
         Mission mission = (Mission)Convert.ChangeType(slotObject, typeof(Mission));
 
         nameText.SetText(mission.Name);
-        objectiveText.SetText(mission.Objective);
 
-        remainingText.SetText(mission.Remaining);
-        remainingText.GetComponent<AutoTextWidth>().UpdateWidth(mission.Remaining);
+        locationText.SetText(mission.OriginDestination.Destination);
+        locationText.GetComponent<AutoTextWidth>().UpdateWidth(locationText.text);
 
+        progressText.SetText(mission.IsFailed ? "Failed" : $"{mission.CompletionPercentage}% Completed");
+        progressText.GetComponent<AutoTextWidth>().UpdateWidth(progressText.text);
+
+        if (mission.CompletionPercentage != 100 && !mission.IsFailed)
+        {
+            progressText.color = "#787878".ToColor();
+        }
+        else if (mission.CompletionPercentage == 100 && !mission.IsFailed)
+        {
+            progressText.color = "#76BA68".ToColor();
+        }
+        else
+        {
+            progressText.color = "#B96968".ToColor();
+        }
+
+        /*
         if (mission.IsCompleted && nameText.color.a != 0.5f)
         {
             FadeSlot(0.5f);
@@ -47,7 +62,7 @@ public class MissionSlot : CategorizableSlot
     private void FadeSlot(float opacity)
     {
         nameText.alpha = opacity;
-        objectiveText.transform.parent.GetComponent<CanvasGroup>().alpha = opacity;
+        locationText.transform.parent.GetComponent<CanvasGroup>().alpha = opacity;
     }
 
 
@@ -63,8 +78,8 @@ public class MissionSlot : CategorizableSlot
         slot = transform;
 
         nameText = transform.Find("Name").GetComponent<TextMeshProUGUI>();
-        objectiveText = transform.Find("Information/Objective").GetComponent<TextMeshProUGUI>();
-        remainingText = transform.Find("Information/Remaining").GetComponent<TextMeshProUGUI>();
+        locationText = transform.Find("Information/Location").GetComponent<TextMeshProUGUI>();
+        progressText = transform.Find("Information/Progress").GetComponent<TextMeshProUGUI>();
     }
 
     #endregion

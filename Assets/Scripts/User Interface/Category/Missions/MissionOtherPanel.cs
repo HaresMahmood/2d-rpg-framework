@@ -53,9 +53,9 @@ public class MissionOtherPanel : InformationUserInterface
 
     public override void FadePanel(Transform panel, float opacity, float animationDuration)
     {
-        base.FadePanel(panel, opacity, animationDuration);
+        //base.FadePanel(panel, opacity, animationDuration);
 
-        StartCoroutine(statusValue.transform.parent.gameObject.FadeOpacity(opacity, animationDuration));
+        //StartCoroutine(statusValue.transform.parent.gameObject.FadeOpacity(opacity, animationDuration));
     }
 
     #endregion
@@ -67,16 +67,16 @@ public class MissionOtherPanel : InformationUserInterface
     /// </summary>
     protected override void Awake()
     {
-        InformationPanel = transform.Find("Information");
+        //InformationPanel = transform.Find("Information");
 
-        remainingText = InformationPanel.Find("Remaining/Value").GetComponent<TextMeshProUGUI>();
-        assigneeText = InformationPanel.Find("Assignee/Value").GetComponent<TextMeshProUGUI>();
-        locationText = InformationPanel.Find("Location/Value").GetComponent<TextMeshProUGUI>();
+        //remainingText = InformationPanel.Find("Remaining/Value").GetComponent<TextMeshProUGUI>();
+        //assigneeText = InformationPanel.Find("Assignee/Value").GetComponent<TextMeshProUGUI>();
+        //locationText = InformationPanel.Find("Location/Value").GetComponent<TextMeshProUGUI>();
 
-        rewardText = InformationPanel.Find("Reward/Value/Value").GetComponent<TextMeshProUGUI>();
-        rewardSprite = InformationPanel.Find("Reward/Value/Item").GetComponent<Image>();
+        //rewardText = InformationPanel.Find("Reward/Value/Value").GetComponent<TextMeshProUGUI>();
+        //rewardSprite = InformationPanel.Find("Reward/Value/Item").GetComponent<Image>();
 
-        statusValue = transform.Find("Status/Value").GetComponent<TextMeshProUGUI>();
+        //statusValue = transform.Find("Status/Value").GetComponent<TextMeshProUGUI>();
     }
 
     #endregion
