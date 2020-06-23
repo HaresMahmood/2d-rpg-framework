@@ -47,7 +47,7 @@ public abstract class CategoryUserInterface : UserInterface
             categoryPanel.AnimateCategory(selectedCategory, increment);
             StartCoroutine(categoryPanel.UpdateCategoryName(selectedCategory, value));
             ResetCategoryObjects();
-            UpdateCategoryObjectsList(categorizables, value, maxViewableObjects);
+            StartCoroutine(UpdateCategoryObjectsList(categorizables, value, maxViewableObjects));
         }
         else
         {
@@ -68,7 +68,7 @@ public abstract class CategoryUserInterface : UserInterface
         this.selectedValue = selectedValue;
     }
 
-    protected virtual void UpdateCategoryObjectsList(List<Categorizable> categorizables, string value, int maxViewableObjects, float animationDuration = 0.15f, float animationDelay = 0.02f)
+    protected virtual IEnumerator UpdateCategoryObjectsList(List<Categorizable> categorizables, string value, int maxViewableObjects, float animationDuration = 0.15f, float animationDelay = 0.04f)
     {
         #if DEBUG
         if (GameManager.Debug())
@@ -87,10 +87,6 @@ public abstract class CategoryUserInterface : UserInterface
             {
                 UpdateScrollbar();
             }
-            else
-            {
-                UpdateScrollbar(MaxObjects);
-            }
 
             ToggleEmptyPanel(true);
 
@@ -98,7 +94,10 @@ public abstract class CategoryUserInterface : UserInterface
 
             if (activeCategorizables.Count > maxViewableObjects)
             {
+                yield return new WaitForSecondsRealtime(maxViewableObjects * animationDelay);
+
                 StartCoroutine(ActiveSlots(max, activeCategorizables.Count));
+                UpdateScrollbar(MaxObjects);
             }
         }
         else

@@ -37,6 +37,8 @@ public abstract class CategorizableSlot : Slot
 
     private IEnumerator FadeOpacity(float opacity, float duration)
     {
+        yield return null;
+
         StartCoroutine(slot.gameObject.FadeOpacity(opacity, duration));
 
         yield return new WaitForSecondsRealtime(duration);

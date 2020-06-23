@@ -7,7 +7,7 @@ public class MissionsController : CategoryUserInterfaceController
 {
     #region Constants
 
-    public override int MaxViewableObjects => 7;
+    public override int MaxViewableObjects => 6;
 
     #endregion
 
