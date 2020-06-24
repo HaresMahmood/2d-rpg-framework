@@ -68,7 +68,7 @@ public abstract class CategoryUserInterface : UserInterface
         this.selectedValue = selectedValue;
     }
 
-    protected virtual IEnumerator UpdateCategoryObjectsList(List<Categorizable> categorizables, string value, int maxViewableObjects, float animationDuration = 0.15f, float animationDelay = 0.04f)
+    protected virtual IEnumerator UpdateCategoryObjectsList(List<Categorizable> categorizables, string value, int maxViewableObjects, float animationDuration = 0.15f, float animationDelay = 0.02f)
     {
         #if DEBUG
         if (GameManager.Debug())
