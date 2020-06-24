@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,14 +18,29 @@ public class MissionsUserInterface : CategoryUserInterface
         base.UpdateSelectedObject(selectedValue, increment);
     }
 
-    /*
-    protected override void UpdateCategoryObjectsList(List<Categorizable> categorizables, string value, int maxViewableObjects, float animationDuration = 0.15f, float animationDelay = 0.02f)
+    // Debug
+    public override void UpdateSelectedCategory(List<Categorizable> categorizables, int selectedCategory, int selectedValue, int increment, int maxViewableObjects)
     {
-        //categorizables = categorizables.OrderBy(mission => ((Mission)mission).IsCompleted).ToList();
+        {
+            if (this.selectedCategory != selectedCategory)
+            {
+                string value = categorizables[0].Categorization.GetCategoryFromIndex(selectedCategory);
 
-        base.UpdateCategoryObjectsList(categorizables, value, maxViewableObjects, animationDuration, animationDelay);
+                this.selectedCategory = selectedCategory;
+
+                categoryPanel.AnimateCategory(selectedCategory, increment);
+                StartCoroutine(categoryPanel.UpdateCategoryName(selectedCategory, value));
+                ResetCategoryObjects();
+                StartCoroutine(UpdateCategoryObjectsList(categorizables, value, maxViewableObjects, 0.2f, 0.07f));
+            }
+            else
+            {
+                ActiveSlot(selectedValue, -1);
+            }
+
+            UpdateSelectedObject(selectedValue);
+        }
     }
-    */
 
     protected override void ActiveSlot(int index, float animationDuration)
     {

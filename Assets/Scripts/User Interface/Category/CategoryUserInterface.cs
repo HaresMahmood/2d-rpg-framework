@@ -30,13 +30,13 @@ public abstract class CategoryUserInterface : UserInterface
 
     protected int selectedValue;
 
-    private int selectedCategory = -1;
+    protected int selectedCategory = -1;
 
     #endregion
 
     #region Miscellaneous Methods
 
-    public void UpdateSelectedCategory(List<Categorizable> categorizables, int selectedCategory, int selectedValue, int increment, int maxViewableObjects)
+    public virtual void UpdateSelectedCategory(List<Categorizable> categorizables, int selectedCategory, int selectedValue, int increment, int maxViewableObjects) //  , float animationDuration =, float animationDelay = default)
     {
         if (this.selectedCategory != selectedCategory)
         {
@@ -47,7 +47,7 @@ public abstract class CategoryUserInterface : UserInterface
             categoryPanel.AnimateCategory(selectedCategory, increment);
             StartCoroutine(categoryPanel.UpdateCategoryName(selectedCategory, value));
             ResetCategoryObjects();
-            StartCoroutine(UpdateCategoryObjectsList(categorizables, value, maxViewableObjects));
+            StartCoroutine(UpdateCategoryObjectsList(categorizables, value, maxViewableObjects)); // , animationDuration, animationDelay
         }
         else
         {
@@ -68,7 +68,7 @@ public abstract class CategoryUserInterface : UserInterface
         this.selectedValue = selectedValue;
     }
 
-    protected virtual IEnumerator UpdateCategoryObjectsList(List<Categorizable> categorizables, string value, int maxViewableObjects, float animationDuration = 0.15f, float animationDelay = 0.02f)
+    protected virtual IEnumerator UpdateCategoryObjectsList(List<Categorizable> categorizables, string value, int maxViewableObjects, float animationDuration = 0.15f, float animationDelay = 0.015f)
     {
         #if DEBUG
         if (GameManager.Debug())
@@ -156,7 +156,7 @@ public abstract class CategoryUserInterface : UserInterface
     }
     */
 
-    private void ResetCategoryObjects()
+    protected void ResetCategoryObjects()
     {
         #if DEBUG
         if (GameManager.Debug())

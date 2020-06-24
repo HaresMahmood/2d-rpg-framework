@@ -18,6 +18,13 @@ public sealed class InventoryUserInterface : CategoryUserInterface
 
     #region Miscellaneous Methods
 
+    /*
+    public override void UpdateSelectedCategory(List<Categorizable> categorizables, int selectedCategory, int selectedValue, int increment, int maxViewableObjects, float animationDuration = 0.15f, float animationDelay = 0.015f)
+    {
+        base.UpdateSelectedCategory(categorizables, selectedCategory, selectedValue, increment, maxViewableObjects, animationDuration, animationDelay);
+    }
+    */
+
     public void ActiveSubMenu(int selectedValue, float opacity = 0.5f)
     {
         if (activeCategorizables.Count > 0)
