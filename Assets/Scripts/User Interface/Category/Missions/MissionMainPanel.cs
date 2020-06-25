@@ -35,6 +35,13 @@ public class MissionMainPanel : InformationUserInterface
         goals.SetInformation(mission);
     }
 
+    public override void FadePanel(Transform panel, float opacity, float animationDuration)
+    {
+        base.FadePanel(panel, opacity, animationDuration);
+
+        StartCoroutine(goals.transform.parent.gameObject.FadeOpacity(opacity, animationDuration));
+    }
+
     #endregion
 
     #region Unity Methods
