@@ -70,7 +70,22 @@ public class MissionsController : CategoryUserInterfaceController
 
     #region Miscellaneous Methods
 
+    protected override void InteractInput(int selectedValue)
+    {
+        //base.InteractInput(selectedValue);
 
+        ((MissionsUserInterface)UserInterface).ActivateSubMenu(selectedValue);
+    }
+
+    protected override void GetInput(string axis)
+    {
+        base.GetInput(axis);
+
+        if (Input.GetButtonDown("Interact"))
+        {
+            InteractInput(selectedValue);
+        }
+    }
 
     #endregion
 
