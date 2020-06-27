@@ -70,9 +70,14 @@ public class MissionsController : CategoryUserInterfaceController
 
     #region Miscellaneous Methods
 
+    public void SetActive(bool isActive)
+    {
+        Flags.isActive = isActive;
+    }
+
     protected override void InteractInput(int selectedValue)
     {
-        //base.InteractInput(selectedValue);
+        base.InteractInput(selectedValue);
 
         ((MissionsUserInterface)UserInterface).ActivateSubMenu(selectedValue);
     }

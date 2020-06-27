@@ -43,10 +43,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de58ecb25fc96f54ab94d97098f9fc6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  party: {fileID: 0}
-  userInterface: {fileID: 0}
   buttons: []
-  chartMaterial: {fileID: 0}
+  userInterface: {fileID: 0}
+  party: {fileID: 0}
 --- !u!1 &1433313799231144793
 GameObject:
   m_ObjectHideFlags: 0
@@ -57,6 +56,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8645750827348014655}
   - component: {fileID: 3635178087494467177}
+  - component: {fileID: 2775853712139070914}
   m_Layer: 0
   m_Name: Missions
   m_TagString: Untagged
@@ -90,9 +90,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b38fae8bd91410c47a5b9895d40b39b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  missions: {fileID: 11400000, guid: 9b180933d1a6ea4409f5cf14cda65f47, type: 2}
-  userInterface: {fileID: 0}
   buttons: []
+  userInterface: {fileID: 0}
+  missions: {fileID: 0}
+  sortingMethod: 0
+--- !u!114 &2775853712139070914
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1433313799231144793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc196ace325388b4d925b67bd7f84dc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttons: []
+  userInterface: {fileID: 0}
 --- !u!1 &1588163222089477265
 GameObject:
   m_ObjectHideFlags: 0
@@ -228,8 +243,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aeec81b4d8b91b499e78f5d3f1fb3bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  userInterface: {fileID: 0}
-  buttons: []
 --- !u!1 &4563878083279935505
 GameObject:
   m_ObjectHideFlags: 0
@@ -359,6 +372,7 @@ MonoBehaviour:
   playerInRange: 0
   playerName: Hilliard
   debug: 0
+  oppositeColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &7727496629757164840
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -502,7 +516,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3652c8217f5aa00449039e8d23ef37f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  userInterface: {fileID: 0}
   buttons: []
   userInterface: {fileID: 0}
   inventory: {fileID: 0}

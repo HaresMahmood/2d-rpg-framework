@@ -44,7 +44,10 @@ public class MissionsUserInterface : CategoryUserInterface
 
     public void ActivateSubMenu(int selectedValue)
     {
+        //informationPanel.AnimatePanel(selectedCategorizable);
+
         informationPanel.transform.Find("Main Information").GetComponent<Animator>().SetBool("isActive", !informationPanel.transform.Find("Main Information").GetComponent<Animator>().GetBool("isActive"));
+        StartCoroutine(MissionInformationController.Instance.SetActive(informationPanel.transform.Find("Main Information").GetComponent<Animator>().GetBool("isActive")));
     }
 
     protected override void ActiveSlot(int index, float animationDuration)
