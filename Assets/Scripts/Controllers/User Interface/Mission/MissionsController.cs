@@ -42,6 +42,8 @@ public class MissionsController : CategoryUserInterfaceController
         get { return userInterface; }
     }
 
+    public Mission SelectedMission { get; private set;  }
+
     #endregion
 
     #region Variables
@@ -90,6 +92,8 @@ public class MissionsController : CategoryUserInterfaceController
         {
             InteractInput(selectedValue);
         }
+
+        SelectedMission = missions.mission[selectedValue];
     }
 
     #endregion

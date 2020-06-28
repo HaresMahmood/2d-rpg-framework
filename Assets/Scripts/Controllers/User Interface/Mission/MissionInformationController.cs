@@ -49,20 +49,20 @@ public class MissionInformationController : UserInterfaceController
         yield return null;
 
         Flags.isActive = isActive;
+
+        userInterface.ToggleSubMenu(MissionsController.Instance.SelectedMission, isActive);
     }
 
     protected override void InteractInput(int selectedValue)
     {
-        //StartCoroutine(UserInterface.AnimateSelector());
-
-        //((ItemInformationUserInterface)UserInterface).InvokeItemBehavior(selectedValue);
-
-        Debug.Log("Enter");
+        userInterface.InvokeBehavior(selectedValue);
     }
 
     protected override void CancelInput(int selectedValue)
     {
-        userInterface.Cancel();
+        userInterface.Cancel(selectedValue);
+
+        selectedValue = 0;
     }
 
     protected override void GetInput(string axisName)

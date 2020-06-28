@@ -17,15 +17,16 @@ public class MissionInformationUserInterface : InformationUserInterface
 
     private List<MenuButton> buttons = new List<MenuButton>();
 
-    private int selectedValue;
-
     #endregion
 
     #region Behavior Definitions
 
-    public void Cancel()
+    public void Cancel(int selectedValue)
     {
         buttons[selectedValue].AnimateButton(false);
+        UpdateSelectedObject(0, 1);
+        buttons[0].AnimateButton(false);
+
         MissionsController.Instance.SetActive(true);
         ((MissionsUserInterface)MissionsController.Instance.UserInterface).ActivateSubMenu(0);
         StartCoroutine(MissionInformationController.Instance.SetActive(false));
@@ -42,8 +43,28 @@ public class MissionInformationUserInterface : InformationUserInterface
         StartCoroutine(UpdateSelector(buttons[selectedValue].transform));
         buttons[selectedValue].AnimateButton(true);
         buttons[previousValue].AnimateButton(false);
+    }
 
-        this.selectedValue = selectedValue;
+    public void ToggleSubMenu(Mission mission, bool isActive)
+    {
+        UpdateSelectedObject(0, 1);
+    }
+
+    public void InvokeBehavior(int selectedValue)
+    {
+        // Debug
+        if (selectedValue == 0)
+        {
+
+        }
+        else if (selectedValue == 1)
+        {
+
+        }
+        else
+        {
+            Cancel(selectedValue);
+        }
     }
 
     #endregion
