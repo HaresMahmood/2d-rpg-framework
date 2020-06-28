@@ -16,10 +16,23 @@ public class MissionInformationUserInterface : InformationUserInterface
     #region Variables
 
     private List<MenuButton> buttons = new List<MenuButton>();
+    private Mission selectedMission;
 
     #endregion
 
     #region Behavior Definitions
+
+    private void Activate()
+    {
+        selectedMission.IsActive = !selectedMission.IsActive;
+    }
+
+    private void GiveUp()
+    {
+        Debug.Log("Gave up mission!");
+
+        //MissionsController.Instance.
+    }
 
     public void Cancel(int selectedValue)
     {
@@ -48,6 +61,11 @@ public class MissionInformationUserInterface : InformationUserInterface
     public void ToggleSubMenu(Mission mission, bool isActive)
     {
         UpdateSelectedObject(0, 1);
+
+        if (isActive)
+        {
+            selectedMission = mission;
+        }
     }
 
     public void InvokeBehavior(int selectedValue)
@@ -55,11 +73,11 @@ public class MissionInformationUserInterface : InformationUserInterface
         // Debug
         if (selectedValue == 0)
         {
-
+            Activate();
         }
         else if (selectedValue == 1)
         {
-
+            GiveUp();
         }
         else
         {
