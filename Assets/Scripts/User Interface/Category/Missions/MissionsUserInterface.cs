@@ -42,12 +42,35 @@ public class MissionsUserInterface : CategoryUserInterface
         }
     }
 
-    public void ActivateSubMenu(int selectedValue)
+    public void ActivateSubMenu(int selectedValue, float animationDuration = 0.1f)
     {
+        bool isActive = informationPanel.transform.Find("Main Information").GetComponent<Animator>().GetBool("isActive");
+
         //informationPanel.AnimatePanel(selectedCategorizable);
 
         informationPanel.transform.Find("Main Information").GetComponent<Animator>().SetBool("isActive", !informationPanel.transform.Find("Main Information").GetComponent<Animator>().GetBool("isActive"));
         StartCoroutine(MissionInformationController.Instance.SetActive(informationPanel.transform.Find("Main Information").GetComponent<Animator>().GetBool("isActive")));
+   
+        foreach (MissionSlot slot in categorizableSlots)
+        {
+            if (categorizableSlots.IndexOf(slot) != selectedValue  && slot.gameObject.activeSelf)
+            {
+                StartCoroutine(slot.gameObject.FadeOpacity(isActive ? 1f : 0.3f, animationDuration));
+            }
+        }
+    }
+
+    public void ActivateMission()
+    {
+        if (MissionsController.Instance.missions.mission.Find(m => m.IsActive == true) != null)
+        {
+            MissionsController.Instance.missions.mission.Find(m => m.IsActive == true).IsActive = false;
+            ((MissionSlot)categorizableSlots[activeCategorizables.IndexOf(MissionsController.Instance.missions.mission.Find(m => m.IsActive == true))]).ActivateMission(false);
+        }
+
+        MissionsController.Instance.SelectedMission.IsActive = !MissionsController.Instance.SelectedMission.IsActive;
+
+        ((MissionSlot)categorizableSlots[activeCategorizables.IndexOf(MissionsController.Instance.SelectedMission)]).ActivateMission(MissionsController.Instance.SelectedMission.IsActive);
     }
 
     protected override void ActiveSlot(int index, float animationDuration)

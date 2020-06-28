@@ -48,7 +48,7 @@ public class MissionsController : CategoryUserInterfaceController
 
     #region Variables
 
-    [SerializeField] private Missions missions;
+    public Missions missions; // Debug
 
     [Header("Values")]
     [SerializeField] private SortingMethod sortingMethod = SortingMethod.None;

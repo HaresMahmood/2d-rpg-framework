@@ -13,14 +13,23 @@ public class MissionSlot : CategorizableSlot
     private TextMeshProUGUI locationText;
     private TextMeshProUGUI progressText;
 
+    private GameObject activeMission;
+
     #endregion
 
     #region Miscellaneous Methods
 
+    public void ActivateMission(bool isActive)
+    {
+        activeMission.SetActive(isActive);
+    }
+
+    /*
     public void DeactivateSlot()
     {
         base.Awake();
     }
+    */
 
     protected override void SetInformation<T>(T slotObject)
     {
@@ -33,6 +42,8 @@ public class MissionSlot : CategorizableSlot
 
         progressText.SetText(mission.IsFailed ? "Failed" : $"{mission.CompletionPercentage}% Completed");
         progressText.GetComponent<AutoTextWidth>().UpdateWidth(progressText.text);
+
+        ActivateMission(mission.IsActive);
 
         if (mission.CompletionPercentage != 100 && !mission.IsFailed)
         {
@@ -80,6 +91,8 @@ public class MissionSlot : CategorizableSlot
         nameText = transform.Find("Name").GetComponent<TextMeshProUGUI>();
         locationText = transform.Find("Information/Location").GetComponent<TextMeshProUGUI>();
         progressText = transform.Find("Information/Progress").GetComponent<TextMeshProUGUI>();
+
+        activeMission = transform.Find("Active").gameObject;
     }
 
     #endregion

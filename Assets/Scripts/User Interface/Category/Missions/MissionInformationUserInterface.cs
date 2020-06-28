@@ -24,7 +24,7 @@ public class MissionInformationUserInterface : InformationUserInterface
 
     private void Activate()
     {
-        selectedMission.IsActive = !selectedMission.IsActive;
+        ((MissionsUserInterface)MissionsController.Instance.UserInterface).ActivateMission();
     }
 
     private void GiveUp()
