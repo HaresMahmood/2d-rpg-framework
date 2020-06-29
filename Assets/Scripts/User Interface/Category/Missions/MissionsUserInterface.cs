@@ -9,6 +9,12 @@ using UnityEngine.UI;
 /// </summary>
 public class MissionsUserInterface : CategoryUserInterface
 {
+    #region Variables
+
+    private GameObject missionEmptyPanel;
+
+    #endregion
+
     #region Miscellaneous Methods
 
     public override void UpdateSelectedObject(int selectedValue, int increment = -1)
@@ -84,6 +90,15 @@ public class MissionsUserInterface : CategoryUserInterface
         ((MissionSlot)categorizableSlots[selectedValue]).ActivateMission(((Mission)activeCategorizables[selectedValue]).IsActive);
     }
 
+    protected override void ToggleEmptyPanel(bool isActive, float animationDuration = 0.15f)
+    {
+        float opacity = isActive ? 0f : 1f;
+
+        StartCoroutine(missionEmptyPanel.FadeOpacity(opacity, animationDuration));
+
+        base.ToggleEmptyPanel(isActive, animationDuration);
+    }
+
     protected override void ActiveSlot(int index, float animationDuration)
     {
         base.ActiveSlot(index, animationDuration);
@@ -110,6 +125,8 @@ public class MissionsUserInterface : CategoryUserInterface
         categorizablePanel = rightPanel.Find("Information Panel").gameObject;
 
         emptyPanel = rightPanel.Find("Empty Panel").gameObject;
+
+        missionEmptyPanel = leftPanel.Find("Empty Panel").gameObject;
 
         categorizableSlots = leftPanel.Find("List/Mission List").GetComponentsInChildren<CategorizableSlot>().ToList();
 
