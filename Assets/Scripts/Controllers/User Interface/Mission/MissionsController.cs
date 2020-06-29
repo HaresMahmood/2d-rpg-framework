@@ -48,7 +48,7 @@ public class MissionsController : CategoryUserInterfaceController
 
     #region Variables
 
-    public Missions missions; // Debug
+    [SerializeField] private Missions missions; // Debug
 
     [Header("Values")]
     [SerializeField] private SortingMethod sortingMethod = SortingMethod.None;
@@ -75,6 +75,13 @@ public class MissionsController : CategoryUserInterfaceController
     public void SetActive(bool isActive)
     {
         Flags.isActive = isActive;
+
+        userInterface.ActivateSubMenu(selectedValue);
+    }
+
+    public void ActivateMission()
+    {
+        userInterface.ActivateMission(missions.mission, selectedValue);
     }
 
     protected override void InteractInput(int selectedValue)

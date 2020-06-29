@@ -24,7 +24,7 @@ public class MissionInformationUserInterface : InformationUserInterface
 
     private void Activate()
     {
-        ((MissionsUserInterface)MissionsController.Instance.UserInterface).ActivateMission();
+        MissionsController.Instance.ActivateMission();
     }
 
     private void GiveUp()
@@ -41,7 +41,6 @@ public class MissionInformationUserInterface : InformationUserInterface
         buttons[0].AnimateButton(false);
 
         MissionsController.Instance.SetActive(true);
-        ((MissionsUserInterface)MissionsController.Instance.UserInterface).ActivateSubMenu(0);
         StartCoroutine(MissionInformationController.Instance.SetActive(false));
     }
 
