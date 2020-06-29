@@ -86,7 +86,6 @@ public class MissionsUserInterface : CategoryUserInterface
         }
 
         ((Mission)activeCategorizables[selectedValue]).IsActive = !((Mission)activeCategorizables[selectedValue]).IsActive;
-
         ((MissionSlot)categorizableSlots[selectedValue]).ActivateMission(((Mission)activeCategorizables[selectedValue]).IsActive);
     }
 

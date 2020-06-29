@@ -13,7 +13,7 @@ public class MissionSlot : CategorizableSlot
     private TextMeshProUGUI locationText;
     private TextMeshProUGUI progressText;
 
-    private GameObject activeMission;
+    private Animator activeMissionIcon;
 
     #endregion
 
@@ -21,7 +21,7 @@ public class MissionSlot : CategorizableSlot
 
     public void ActivateMission(bool isActive)
     {
-        activeMission.SetActive(isActive);
+        activeMissionIcon.SetBool("isActive", isActive);
     }
 
     /*
@@ -92,7 +92,7 @@ public class MissionSlot : CategorizableSlot
         locationText = transform.Find("Information/Location").GetComponent<TextMeshProUGUI>();
         progressText = transform.Find("Information/Progress").GetComponent<TextMeshProUGUI>();
 
-        activeMission = transform.Find("Active").gameObject;
+        activeMissionIcon = transform.Find("Active").GetComponent<Animator>();
     }
 
     #endregion
