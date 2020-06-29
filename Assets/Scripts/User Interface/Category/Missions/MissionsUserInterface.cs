@@ -105,7 +105,7 @@ public class MissionsUserInterface : CategoryUserInterface
 
         selector = leftPanel.Find("List/Selector").gameObject;
 
-        scrollbar = leftPanel.Find("List/Scrollbar").GetComponent<Scrollbar>();
+        scrollbar = leftPanel.Find("Scrollbar").GetComponent<Scrollbar>();
 
         categorizablePanel = rightPanel.Find("Information Panel").gameObject;
 
