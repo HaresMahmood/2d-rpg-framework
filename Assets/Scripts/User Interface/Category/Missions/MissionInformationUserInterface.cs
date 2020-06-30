@@ -29,9 +29,7 @@ public class MissionInformationUserInterface : InformationUserInterface
 
     private void GiveUp()
     {
-        Debug.Log("Gave up mission!");
-
-        //MissionsController.Instance.
+        MissionsController.Instance.GiveUpMission();
     }
 
     public void Cancel(int selectedValue)

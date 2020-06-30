@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.PlayerLoop;
 
 /// <summary>
 ///
@@ -52,22 +53,25 @@ public class MissionsUserInterface : CategoryUserInterface
     {
         //informationPanel.AnimatePanel(selectedCategorizable);
 
-        informationPanel.transform.Find("Main Information").GetComponent<Animator>().SetBool("isActive", !informationPanel.transform.Find("Main Information").GetComponent<Animator>().GetBool("isActive"));
-        StartCoroutine(MissionInformationController.Instance.SetActive(informationPanel.transform.Find("Main Information").GetComponent<Animator>().GetBool("isActive")));
-
-        bool isActive = informationPanel.transform.Find("Main Information").GetComponent<Animator>().GetBool("isActive");
-
-        foreach (MissionSlot slot in categorizableSlots)
+        if (activeCategorizables.Count != 0 && !((Mission)activeCategorizables[selectedValue]).IsFailed && ((Mission)activeCategorizables[selectedValue]).CompletionPercentage != 100f)
         {
-            if (categorizableSlots.IndexOf(slot) != selectedValue  && slot.gameObject.activeSelf)
+            informationPanel.transform.Find("Main Information").GetComponent<Animator>().SetBool("isActive", !informationPanel.transform.Find("Main Information").GetComponent<Animator>().GetBool("isActive"));
+            StartCoroutine(MissionInformationController.Instance.SetActive(informationPanel.transform.Find("Main Information").GetComponent<Animator>().GetBool("isActive")));
+
+            bool isActive = informationPanel.transform.Find("Main Information").GetComponent<Animator>().GetBool("isActive");
+
+            foreach (MissionSlot slot in categorizableSlots)
             {
-                StartCoroutine(slot.gameObject.FadeOpacity(isActive ? 0.3f : 1f, animationDuration));
+                if (categorizableSlots.IndexOf(slot) != selectedValue && slot.gameObject.activeSelf)
+                {
+                    StartCoroutine(slot.gameObject.FadeOpacity(isActive ? 0.3f : 1f, animationDuration));
+                }
             }
-        }
 
-        if (!isActive)
-        {
-            selector.SetActive(true);
+            if (!isActive)
+            {
+                selector.SetActive(true);
+            }
         }
     }
 
@@ -87,6 +91,15 @@ public class MissionsUserInterface : CategoryUserInterface
 
         ((Mission)activeCategorizables[selectedValue]).IsActive = !((Mission)activeCategorizables[selectedValue]).IsActive;
         ((MissionSlot)categorizableSlots[selectedValue]).ActivateMission(((Mission)activeCategorizables[selectedValue]).IsActive);
+    }
+
+    public void GiveUpMission(List<Mission> missions, int selectedValue, int selectedCategory)
+    {
+        List<Categorizable> categorizableObjects = new List<Categorizable>();
+        
+        missions.RemoveAt(selectedValue);
+        categorizableObjects.AddRange(missions);
+        UpdateSelectedCategory(categorizableObjects, selectedCategory, selectedValue, 1, MaxObjects);
     }
 
     protected override void ToggleEmptyPanel(bool isActive, float animationDuration = 0.15f)

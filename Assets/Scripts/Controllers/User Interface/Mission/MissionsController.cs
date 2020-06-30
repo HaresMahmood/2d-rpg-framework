@@ -84,6 +84,11 @@ public class MissionsController : CategoryUserInterfaceController
         userInterface.ActivateMission(missions.mission, selectedValue);
     }
 
+    public void GiveUpMission()
+    {
+        userInterface.GiveUpMission(missions.mission, selectedValue, selectedCategory);
+    }
+
     protected override void InteractInput(int selectedValue)
     {
         base.InteractInput(selectedValue);
