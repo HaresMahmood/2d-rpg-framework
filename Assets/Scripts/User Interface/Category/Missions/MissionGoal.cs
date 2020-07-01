@@ -14,13 +14,13 @@ public class MissionGoal : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    public void SetInformation(Mission.MissionGoal goal, float animationDuration = 0.15f)
+    public void SetInformation(Mission.MissionGoal goal)
     {
         string objective = goal.Type == Mission.MissionGoal.GoalType.Talk || goal.Type == Mission.MissionGoal.GoalType.Escort ? goal.Character.name : (goal.Type == Mission.MissionGoal.GoalType.Defeat ? goal.Pokemon.Name : (goal.Type == Mission.MissionGoal.GoalType.Deliver ? $"{goal.Item.Name} to {goal.Character.name}" : goal.Item.Name));
 
         descriptionText.SetText($"{goal.Type}{(goal.Type == Mission.MissionGoal.GoalType.Talk ? " to" : "")}{(goal.Type == Mission.MissionGoal.GoalType.Gather || goal.Type == Mission.MissionGoal.GoalType.Defeat || goal.Type == Mission.MissionGoal.GoalType.Deliver ? $" {goal.Amount}" : "")} {objective}");
 
-        StartCoroutine(gameObject.FadeOpacity(goal.IsCompleted || goal.IsFailed ? 0.3f : 1f, animationDuration));
+        GetComponent<CanvasGroup>().alpha = goal.IsCompleted || goal.IsFailed ? 0.3f : 1f;
 
         if (!gameObject.activeSelf)
         {

@@ -17,6 +17,11 @@ public class MissionGoalsUserInterface : MonoBehaviour
 
     public void SetInformation(Mission mission)
     {
+        for (int i = 0; i < goals.Count; i++)
+        {
+            goals[i].gameObject.SetActive(true);
+        }
+
         int counter = 0;
 
         foreach (Mission.MissionGoal goal in mission.Goals)
