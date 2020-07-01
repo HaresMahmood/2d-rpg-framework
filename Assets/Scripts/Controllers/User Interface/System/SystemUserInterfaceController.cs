@@ -9,8 +9,10 @@ using UnityEngine.UI;
 /// <summary>
 ///
 /// </summary>
-public class SystemManager : MonoBehaviour
+public class SystemUserInterfaceController : MonoBehaviour
 {
+
+
     /*
     #region Constants
 

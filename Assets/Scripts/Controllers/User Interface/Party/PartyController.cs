@@ -173,7 +173,7 @@ public class PartyController : UserInterfaceController
     /// </summary>
     private void Start()
     {
-        userInterface.UpdateSelectedPartyMember(party.playerParty[0]);
+        userInterface.UpdateSelectedPartyMember(party.playerParty[0]); // Debug
     }
 
     /// <summary>
