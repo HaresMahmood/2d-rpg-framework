@@ -8,73 +8,21 @@ using UnityEngine.UI;
 /// <summary>
 ///
 /// </summary>
-public class SettingValue : MonoBehaviour
+public class SettingUserInterfaceController : UserInterfaceController
 {
     #region Variables
 
-    [SerializeField] private Type type;
     //[SerializeField] private SettingsManager.ViewingMode viewingMode;
-    [SerializeField] private List<string> values = new List<string>();
-    [SerializeField] private string defaultValue;
-    [TextArea(1,2)] [SerializeField] private string description;
-    [ReadOnly] [SerializeField] private string selectedValue;
-    [ReadOnly] [SerializeField] private bool isSelected;
-    [ReadOnly] [SerializeField] private bool isDirty;
 
     private TextMeshProUGUI valueText;
-
-    private TestInput input = new TestInput();
-
-    private int selectedIndex;
-
-    #endregion
-
-    #region Accessor Methods
-
-    /*
-    public SettingsManager.ViewingMode GetViewingMode()
-    {
-        return viewingMode;
-    }
-    */
-
-
-    public List<string> GetValues()
-    {
-        return values;
-    }
-
-    public string GetSelectedValue()
-    {
-        return selectedValue;
-    }
-
-    public string GetDescription()
-    {
-        return description;
-    }
-
-    public bool GetStatus()
-    {
-        return isSelected;
-    }
-
-    #endregion
-
-    #region Helper Methods
-
-    public void SetStatus(bool status)
-    {
-        isSelected = status;
-    }
 
     #endregion
 
     #region Miscellaneous Methods
 
+    /*
     private void GetInput()
     {
-        /*
         if (SystemManager.instance.flags.isActive && isSelected)
         {
             if (type != Type.Color)
@@ -91,9 +39,10 @@ public class SettingValue : MonoBehaviour
                 UpdateUserInterface();
             }
         }
-        */
     }
+    */
 
+    /*
      private void UpdateUserInterface()
     {
         selectedValue = values[selectedIndex];
@@ -152,37 +101,39 @@ public class SettingValue : MonoBehaviour
         UpdateUserInterface();
     }
 
-    #endregion
-
-    #region Event Methods
-
-    private void SettingValue_OnUserInput(object sender, EventArgs e)
+    protected override void GetInput(string axis)
     {
-        //UpdateUserInterface();
-        input.OnUserInput -= SettingValue_OnUserInput;
+        base.GetInput(axis);
+
+        if (Input.GetButtonDown("Remove"))
+        {
+            // Reset value
+        }
     }
+    */
 
     #endregion
 
     #region Unity Methods
 
     /// <summary>
+    /// Update is called once per frame.
+    /// </summary>
+    protected override void Update()
+    {
+        if (Flags.isActive)
+        {
+            GetInput("Horizontal");
+        }
+    }
+
+    /*
+    /// <summary>
     /// Awake is called when the script instance is being loaded.
     /// </summary>
     private void Awake()
     {
         valueText = transform.Find("Value").GetComponentInChildren<TextMeshProUGUI>();
-
-        if (type == Type.Color)
-        {
-            for (int i = 0; i < values.Count; i++)
-            {
-                values[i] = i.ToString();
-            }
-            float H;
-            Color.RGBToHSV(GameManager.GetAccentColor(), out H, out _, out _);
-            defaultValue = Mathf.RoundToInt((H * 100)).ToString();
-        }
 
         if (string.IsNullOrEmpty(selectedValue) && !string.IsNullOrEmpty(defaultValue))
         {
@@ -196,20 +147,7 @@ public class SettingValue : MonoBehaviour
             UpdateSlider(selectedIndex);
         }
     }
-
-    /// <summary>
-    /// Update is called once per frame.
-    /// </summary>
-    private void Update()
-    {
-        GetInput();
-
-        // Debug
-        if (Input.GetButtonDown("Remove"))
-        {
-            ResetValue();
-        }
-    }
+    */
 
     #endregion
 }
