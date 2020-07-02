@@ -10,11 +10,10 @@ using UnityEngine.UI;
 /// </summary>
 public class SettingValue : MonoBehaviour
 {
-    /*
     #region Variables
 
     [SerializeField] private Type type;
-    [SerializeField] private SettingsManager.ViewingMode viewingMode;
+    //[SerializeField] private SettingsManager.ViewingMode viewingMode;
     [SerializeField] private List<string> values = new List<string>();
     [SerializeField] private string defaultValue;
     [TextArea(1,2)] [SerializeField] private string description;
@@ -28,27 +27,17 @@ public class SettingValue : MonoBehaviour
 
     private int selectedIndex;
 
-
-
-    #region Enums
-
-    public enum Type
-    { 
-        Slider,
-        Carousel,
-        Color
-    }
-
-    #endregion
-
     #endregion
 
     #region Accessor Methods
 
+    /*
     public SettingsManager.ViewingMode GetViewingMode()
     {
         return viewingMode;
     }
+    */
+
 
     public List<string> GetValues()
     {
@@ -85,6 +74,7 @@ public class SettingValue : MonoBehaviour
 
     private void GetInput()
     {
+        /*
         if (SystemManager.instance.flags.isActive && isSelected)
         {
             if (type != Type.Color)
@@ -101,6 +91,7 @@ public class SettingValue : MonoBehaviour
                 UpdateUserInterface();
             }
         }
+        */
     }
 
      private void UpdateUserInterface()
@@ -151,7 +142,7 @@ public class SettingValue : MonoBehaviour
         float totalValues = (float)(values.Count);
         float targetValue = 1f - (float)value / (totalValues - 1);
 
-        StartCoroutine(slider.LerpSlider(targetValue, 0.15f));
+        //StartCoroutine(slider.LerpSlider(targetValue, 0.15f));
     }
 
     private void ResetValue()
@@ -221,5 +212,4 @@ public class SettingValue : MonoBehaviour
     }
 
     #endregion
-    */
 }
