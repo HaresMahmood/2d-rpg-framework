@@ -1,20 +1,43 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 /// <summary>
 ///
 /// </summary>
 public class SettingUserInterfaceController : UserInterfaceController
 {
-    #region Variables
+    #region Fields
 
-    //[SerializeField] private SettingsManager.ViewingMode viewingMode;
+    //private static SettingUserInterfaceController instance;
 
-    private TextMeshProUGUI valueText;
+    //[SerializeField] private SettingUserInterface userInterface;
+    [SerializeField] private Setting setting;
+
+    #endregion
+
+    #region Properties
+
+    /*
+    /// <summary>
+    /// Singleton pattern.
+    /// </summary>
+    public static SettingUserInterfaceController Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<SettingUserInterfaceController>();
+            }
+
+            return instance;
+        }
+    }
+     */
+
+    public Setting Setting
+    {
+        get { return setting; }
+    }
 
     #endregion
 

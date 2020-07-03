@@ -5,6 +5,8 @@ using UnityEngine;
 /// <summary>
 ///
 /// </summary>
+
+[CreateAssetMenu(fileName = "New Setting", menuName = "Setting")]
 public class Setting : ScriptableObject
 {
     #region Fields

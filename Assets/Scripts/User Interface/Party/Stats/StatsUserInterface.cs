@@ -54,7 +54,7 @@ public class StatsUserInterface : PartyInformationUserInterface
         speedText.SetText(member.Stats.Stats[Pokemon.Stat.Speed].ToString());
 
         hpBar.fillRect.GetComponent<Image>().color = color.ToColor(); 
-        StartCoroutine(LerpSlider(hpBar, hp, 0.15f));
+        StartCoroutine(hpBar.LerpSlider(hp, 0.15f));
 
         radarChart.SetInformation(member.Stats.Stats.Values.ToList());
 
@@ -98,31 +98,6 @@ public class StatsUserInterface : PartyInformationUserInterface
     private TextMeshProUGUI GetUserInterfaceText(Transform parent)
     {
         return parent.Find("Amount").GetComponent<TextMeshProUGUI>();
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name=""></param>
-    /// <param name=""></param>
-    /// <returns></returns>
-    private IEnumerator LerpSlider(Slider slider, float targetValue, float duration)
-    {
-        float initialValue = slider.value;
-
-        float t = 0; // Tracks how many seconds we've been fading.
-        while (t < duration) // While time is less than the duration of the fade, ...
-        {
-            if (Time.timeScale == 0)
-                t += Time.unscaledDeltaTime;
-            else
-                t += Time.deltaTime;
-            float blend = Mathf.Clamp01(t / duration); // Turns the time into an interpolation factor between 0 and 1. 
-
-            slider.value = Mathf.Lerp(initialValue, targetValue, blend);
-
-            yield return null; // Wait one frame, then repeat.
-        }
     }
 
     private List<int> GetAverageFromLists(List<List<int>> input)
