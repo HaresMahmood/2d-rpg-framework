@@ -34,10 +34,10 @@ public class SettingsUserInterface : UserInterface
         UpdateSelectedCategory(selectedValue, previousValue);
     }
 
-    private void UpdateNavigationTextColor(int selectedValue, int previousValue)
+    private void UpdateNavigationTextColor(int selectedValue, int previousValue, float animationDuration = 0.1f)
     {
-        StartCoroutine(navigation[selectedValue].Find("Text").gameObject.FadeColor(GameManager.GetAccentColor(), 0.15f));
-        StartCoroutine(navigation[previousValue].Find("Text").gameObject.FadeColor(Color.white, 0.15f));
+        StartCoroutine(navigation[selectedValue].Find("Text").gameObject.FadeColor(GameManager.GetAccentColor(), animationDuration));
+        StartCoroutine(navigation[previousValue].Find("Text").gameObject.FadeColor(Color.white, animationDuration));
     }
 
     private void UpdateSelectedCategory(int selectedValue, int previousValue)
