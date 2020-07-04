@@ -20,6 +20,7 @@ public class SettingsUserInterface : UserInterface
     #region Variables
 
     List<Transform> navigation;
+    List<SettingCategory> categories;
 
     #endregion
 
@@ -29,8 +30,20 @@ public class SettingsUserInterface : UserInterface
     {
         int previousValue = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, increment);
 
-        StartCoroutine(navigation[selectedValue].gameObject.FadeOpacity(0.3f, 0.15f));
-        StartCoroutine(navigation[previousValue].gameObject.FadeOpacity(1f, 0.15f));
+        UpdateNavigationTextColor(selectedValue, previousValue);
+        UpdateSelectedCategory(selectedValue, previousValue);
+    }
+
+    private void UpdateNavigationTextColor(int selectedValue, int previousValue)
+    {
+        StartCoroutine(navigation[selectedValue].Find("Text").gameObject.FadeColor(GameManager.GetAccentColor(), 0.15f));
+        StartCoroutine(navigation[previousValue].Find("Text").gameObject.FadeColor(Color.white, 0.15f));
+    }
+
+    private void UpdateSelectedCategory(int selectedValue, int previousValue)
+    {
+        categories[selectedValue].gameObject.SetActive(true);
+        categories[previousValue].gameObject.SetActive(false);
     }
 
     #endregion
@@ -43,6 +56,14 @@ public class SettingsUserInterface : UserInterface
     protected override void Awake()
     {
         navigation = transform.parent.Find("Navigation").GetChildren().ToList();
+
+        // Debug
+        categories = transform.Find("Viewport").GetComponentsInChildren<SettingCategory>().ToList();
+
+        for (int i = 1; i < categories.Count; i++)
+        {
+            categories[i].gameObject.SetActive(false);
+        }
     }
 
     #endregion
