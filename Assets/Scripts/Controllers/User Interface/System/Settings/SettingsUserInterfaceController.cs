@@ -13,7 +13,7 @@ public class SettingsUserInterfaceController : UserInterfaceController
 
     private static SettingsUserInterfaceController instance;
 
-    //[SerializeField] private PartyUserInterface userInterface;
+    [SerializeField] private SettingsUserInterface userInterface;
 
     #endregion
 
@@ -37,7 +37,7 @@ public class SettingsUserInterfaceController : UserInterfaceController
 
     public override UserInterface UserInterface
     {
-        get { return null; }
+        get { return userInterface; }
     }
 
     #endregion
@@ -46,8 +46,9 @@ public class SettingsUserInterfaceController : UserInterfaceController
 
     public override IEnumerator SetActive(bool isActive, bool condition = true)
     {
-        yield return null;
-        StartCoroutine(base.SetActive(isActive, condition));
+        Flags.isActive = isActive;
+        UpdateSelectedObject(selectedValue, 1);
+        yield break;
     }
 
     protected override void GetInput(string axisName)

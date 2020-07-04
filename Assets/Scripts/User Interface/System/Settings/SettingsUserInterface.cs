@@ -9,8 +9,46 @@ using UnityEngine.UI;
 /// <summary>
 ///
 /// </summary>
-public class SettingsUserInterface : MonoBehaviour
+public class SettingsUserInterface : UserInterface
 {
+    #region Constants
+
+    public override int MaxObjects => navigation.Count;
+
+    #endregion
+
+    #region Variables
+
+    List<Transform> navigation;
+
+    #endregion
+
+    #region Miscellaneous Methods
+
+    public override void UpdateSelectedObject(int selectedValue, int increment)
+    {
+        int previousValue = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, increment);
+
+        Debug.Log(increment + " " + previousValue);
+
+        StartCoroutine(navigation[selectedValue].gameObject.FadeOpacity(0.3f, 0.15f));
+        StartCoroutine(navigation[previousValue].gameObject.FadeOpacity(1f, 0.15f));
+    }
+
+    #endregion
+
+    #region Unity Methods
+
+    /// <summary>
+    /// Awake is called when the script instance is being loaded.
+    /// </summary>
+    protected override void Awake()
+    {
+        navigation = transform.parent.Find("Navigation").GetChildren().ToList();
+    }
+
+    #endregion
+
     /*
     #region Variables
 

@@ -14,8 +14,7 @@ public class SystemUserInterfaceController : UserInterfaceController
     public override IEnumerator SetActive(bool isActive, bool condition = true)
     {
         StartCoroutine(GetComponent<SettingsUserInterfaceController>().SetActive(isActive));
-        yield return null;
-        StartCoroutine(base.SetActive(isActive, condition));
+        yield break;
     }
 
     /*
