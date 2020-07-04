@@ -53,7 +53,11 @@ public class SettingsUserInterfaceController : UserInterfaceController
 
     protected override void GetInput(string axisName)
     {
-        base.GetInput(axisName);
+        bool hasInput = RegularInput(UserInterface.MaxObjects, axisName);
+        if (hasInput)
+        {
+            UpdateSelectedObject(selectedValue, (int)Input.GetAxisRaw(axisName));
+        }
 
         if (Input.GetButtonDown("Toggle"))
         {

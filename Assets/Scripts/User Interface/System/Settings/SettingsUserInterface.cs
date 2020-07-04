@@ -29,8 +29,6 @@ public class SettingsUserInterface : UserInterface
     {
         int previousValue = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, increment);
 
-        Debug.Log(increment + " " + previousValue);
-
         StartCoroutine(navigation[selectedValue].gameObject.FadeOpacity(0.3f, 0.15f));
         StartCoroutine(navigation[previousValue].gameObject.FadeOpacity(1f, 0.15f));
     }
