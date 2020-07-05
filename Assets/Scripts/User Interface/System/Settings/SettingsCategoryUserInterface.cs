@@ -17,7 +17,7 @@ public class SettingsCategoryUserInterface : UserInterface
 
     #region Variables
 
-    private List<SettingUserInterface> settings;
+    private List<SettingUserInterfaceController> settings;
 
     private Scrollbar scrollBar;
     private TextMeshProUGUI descriptionText;
@@ -28,6 +28,11 @@ public class SettingsCategoryUserInterface : UserInterface
 
     public override void UpdateSelectedObject(int selectedValue, int increment)
     {
+        int previousValue = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, increment);
+
+        StartCoroutine(settings[selectedValue].SetActive(true));
+        StartCoroutine(settings[previousValue].SetActive(false));
+
         StartCoroutine(UpdateSelector(settings[selectedValue].transform.Find("Value")));
     }
 
@@ -70,7 +75,7 @@ public class SettingsCategoryUserInterface : UserInterface
     /// </summary>
     protected override void Awake()
     {
-        settings = GetComponentsInChildren<SettingUserInterface>().ToList();
+        settings = GetComponentsInChildren<SettingUserInterfaceController>().ToList();
 
 
         selector = transform.parent.Find("Selector").gameObject;

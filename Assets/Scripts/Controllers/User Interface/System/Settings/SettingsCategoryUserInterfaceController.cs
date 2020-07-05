@@ -26,7 +26,15 @@ public class SettingsCategoryUserInterfaceController : UserInterfaceController
 
     public override IEnumerator SetActive(bool isActive, bool condition = true)
     {
+        selectedValue = isActive ? selectedValue : 0;
+
+        if (isActive)
+        {
+            userInterface.UpdateSelectedObject(selectedValue, 1);
+        }
+
         userInterface.ActivatePanel(isActive ? 1f : 0.3f);
+
         Flags.isActive = isActive;
 
         yield break;
@@ -47,7 +55,12 @@ public class SettingsCategoryUserInterfaceController : UserInterfaceController
 
     protected override void GetInput(string axisName)
     {
-        base.GetInput(axisName);
+        bool hasInput = RegularInput(UserInterface.MaxObjects, axisName);
+
+        if (hasInput)
+        {
+            UpdateSelectedObject(selectedValue, (int)Input.GetAxisRaw(axisName));
+        }
 
         if (Input.GetButtonDown("Cancel"))
         {

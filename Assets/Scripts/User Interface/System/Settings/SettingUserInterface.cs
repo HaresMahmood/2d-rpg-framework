@@ -1,4 +1,6 @@
-﻿using UnityEngine.UI;
+﻿using System.Collections;
+using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 /// <summary>
@@ -33,6 +35,7 @@ public class SettingUserInterface : UserInterface
         }
 
         valueText.SetText(value);
+        controller.Setting.Value = value;
     }
 
     /*
@@ -48,18 +51,21 @@ public class SettingUserInterface : UserInterface
     }
     */
 
-    private void UpdateSlider(int selectedValue, float animationDuration = 0.15f)
+    private void UpdateSlider(int selectedValue, float animationDuration = 0.1f)
     {
         float totalValues = (float)(controller.Setting.Values.Count);
-        float targetValue = 1f - (float)selectedValue / (totalValues - 1);
+        float targetValue = 1f - (float)selectedValue / (totalValues);
 
-        StartCoroutine(slider.LerpSlider(targetValue, animationDuration));
+        slider.value = targetValue;
+
+        //StartCoroutine(slider.LerpSlider(targetValue, animationDuration));
     }
 
     private int ResetValue()
     {
         int selectedValue = controller.Setting.Values.IndexOf(controller.Setting.DefaultValue);
 
+        controller.Setting.Value = controller.Setting.DefaultValue;
         UpdateSelectedObject(selectedValue);
 
         return selectedValue;
@@ -82,6 +88,11 @@ public class SettingUserInterface : UserInterface
         }
 
         valueText = transform.Find("Value/Value").GetComponent<TextMeshProUGUI>();
+    }
+
+    private void Start()
+    {
+        UpdateSelectedObject(controller.Setting.Values.IndexOf(controller.Setting.Value));
     }
 
     #endregion

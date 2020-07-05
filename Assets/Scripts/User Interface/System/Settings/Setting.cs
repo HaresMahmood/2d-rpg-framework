@@ -13,6 +13,7 @@ public class Setting : ScriptableObject
 
     [SerializeField] private SettingType type;
     [SerializeField] private List<string> values = new List<string>();
+    [SerializeField] private string value;
     [SerializeField] private string defaultValue;
     [SerializeField] [TextArea] private string description;  
 
@@ -32,8 +33,14 @@ public class Setting : ScriptableObject
 
     public string DefaultValue
     {
-        get { return defaultValue; }
+        get { if (value == "") { defaultValue = values[0]; } return defaultValue; }
         set { defaultValue = value; }
+    }
+
+    public string Value
+    {
+        get { if (value == "") { value = defaultValue; } return value; }
+        set { this.value = value; }
     }
 
     public string Description

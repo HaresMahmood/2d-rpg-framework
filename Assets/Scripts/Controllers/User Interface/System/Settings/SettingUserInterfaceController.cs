@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 /// <summary>
 ///
@@ -11,6 +12,8 @@ public class SettingUserInterfaceController : UserInterfaceController
 
     //[SerializeField] private SettingUserInterface userInterface;
     [SerializeField] private Setting setting;
+
+    private SettingUserInterface userInterface;
 
     #endregion
 
@@ -39,9 +42,20 @@ public class SettingUserInterfaceController : UserInterfaceController
         get { return setting; }
     }
 
+    public override UserInterface UserInterface
+    {
+        get { return userInterface; }
+    }
+
     #endregion
 
     #region Miscellaneous Methods
+
+    public override IEnumerator SetActive(bool isActive, bool condition = true)
+    {
+        Flags.isActive = isActive;
+        yield break;
+    }
 
     /*
     private void GetInput()
@@ -138,6 +152,13 @@ public class SettingUserInterfaceController : UserInterfaceController
     #endregion
 
     #region Unity Methods
+
+    private void Awake()
+    {
+        userInterface = GetComponent<SettingUserInterface>();
+
+        selectedValue = Setting.Values.IndexOf(Setting.Value);
+    }
 
     /// <summary>
     /// Update is called once per frame.

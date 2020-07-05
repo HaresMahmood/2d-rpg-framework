@@ -46,14 +46,15 @@ public class SettingsUserInterfaceController : UserInterfaceController
 
     public override IEnumerator SetActive(bool isActive, bool condition = true)
     {
-        Flags.isActive = isActive;
         UpdateSelectedObject(selectedValue, 1);
+        Flags.isActive = isActive;
         yield break;
     }
 
     protected override void GetInput(string axisName)
     {
         bool hasInput = RegularInput(UserInterface.MaxObjects, axisName);
+
         if (hasInput)
         {
             UpdateSelectedObject(selectedValue, (int)Input.GetAxisRaw(axisName));
