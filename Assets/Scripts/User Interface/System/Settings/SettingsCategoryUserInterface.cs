@@ -26,6 +26,11 @@ public class SettingsCategoryUserInterface : UserInterface
 
     #region MIscellaneous Methods
 
+    public override void UpdateSelectedObject(int selectedValue, int increment)
+    {
+        StartCoroutine(UpdateSelector(settings[selectedValue].transform.Find("Value")));
+    }
+
     public IEnumerator FadePanel(float opacity, float animationDuration)
     {
         if (opacity == 1)

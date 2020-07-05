@@ -47,7 +47,7 @@ public class SettingsCategoryUserInterfaceController : UserInterfaceController
 
     protected override void GetInput(string axisName)
     {
-        //base.GetInput(axisName);
+        base.GetInput(axisName);
 
         if (Input.GetButtonDown("Cancel"))
         {
