@@ -19,8 +19,10 @@ public class SettingsUserInterface : UserInterface
 
     #region Variables
 
-    List<Transform> navigation;
-    List<SettingCategory> categories;
+    private List<Transform> navigation;
+    private List<SettingsCategoryUserInterfaceController> categories;
+
+    private ScrollRect scrollRect;
 
     #endregion
 
@@ -31,7 +33,14 @@ public class SettingsUserInterface : UserInterface
         int previousValue = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, increment);
 
         UpdateNavigationTextColor(selectedValue, previousValue);
-        UpdateSelectedCategory(selectedValue, previousValue);
+        StartCoroutine(UpdateSelectedCategory(selectedValue, previousValue));
+
+        scrollRect.content = categories[selectedValue].GetComponent<RectTransform>();
+    }
+
+    public void ActivateCategory(int selectedValue)
+    {
+        StartCoroutine(categories[selectedValue].SetActive(true));
     }
 
     private void UpdateNavigationTextColor(int selectedValue, int previousValue, float animationDuration = 0.1f)
@@ -40,10 +49,13 @@ public class SettingsUserInterface : UserInterface
         StartCoroutine(navigation[previousValue].Find("Text").gameObject.FadeColor(Color.white, animationDuration));
     }
 
-    private void UpdateSelectedCategory(int selectedValue, int previousValue)
+    private IEnumerator UpdateSelectedCategory(int selectedValue, int previousValue, float animationDuration = 0.10f)
     {
-        categories[selectedValue].gameObject.SetActive(true);
-        categories[previousValue].gameObject.SetActive(false);
+        categories[previousValue].ActivatePanel(0f, animationDuration);
+
+        yield return new WaitForSecondsRealtime(animationDuration);
+
+        categories[selectedValue].ActivatePanel(0.3f, animationDuration);
     }
 
     #endregion
@@ -57,13 +69,22 @@ public class SettingsUserInterface : UserInterface
     {
         navigation = transform.parent.Find("Navigation").GetChildren().ToList();
 
-        // Debug
-        categories = transform.Find("Viewport").GetComponentsInChildren<SettingCategory>().ToList();
+        scrollRect = transform.Find("Viewport").GetComponent<ScrollRect>();
 
-        for (int i = 1; i < categories.Count; i++)
+        categories = transform.Find("Viewport").GetComponentsInChildren<SettingsCategoryUserInterfaceController>().ToList();
+
+        for (int i = 2; i < categories.Count; i++)
         {
             categories[i].gameObject.SetActive(false);
         }
+    }
+
+    /// <summary>
+    /// Start
+    /// </summary>
+    private void Start()
+    {
+        StartCoroutine(categories[0].SetActive(false));
     }
 
     #endregion

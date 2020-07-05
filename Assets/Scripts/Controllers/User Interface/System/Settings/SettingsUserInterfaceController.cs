@@ -66,7 +66,8 @@ public class SettingsUserInterfaceController : UserInterfaceController
 
         if (Input.GetButtonDown("Interact"))
         {
-            Debug.Log("Pressed Enter.");
+            Flags.isActive = false;
+            userInterface.ActivateCategory(selectedValue);
         }
     }
 
