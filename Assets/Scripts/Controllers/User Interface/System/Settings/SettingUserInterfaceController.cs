@@ -57,6 +57,16 @@ public class SettingUserInterfaceController : UserInterfaceController
         yield break;
     }
 
+    protected override bool RegularInput(int max, string axisName)
+    {
+        TestInput.Axis axis = axisName.Equals("Horizontal") ? TestInput.Axis.Horizontal : TestInput.Axis.Vertical;
+
+        bool hasInput;
+        (selectedValue, hasInput) = input.GetInput(axisName, axis, max, selectedValue, true);
+
+        return hasInput;
+    }
+
     /*
     private void GetInput()
     {

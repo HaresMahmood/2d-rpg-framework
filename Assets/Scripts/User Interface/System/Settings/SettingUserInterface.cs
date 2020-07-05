@@ -54,7 +54,7 @@ public class SettingUserInterface : UserInterface
     private void UpdateSlider(int selectedValue, float animationDuration = 0.1f)
     {
         float totalValues = (float)(controller.Setting.Values.Count);
-        float targetValue = 1f - (float)selectedValue / (totalValues);
+        float targetValue = 1f - (float)selectedValue / (totalValues - 1);
 
         slider.value = targetValue;
 
