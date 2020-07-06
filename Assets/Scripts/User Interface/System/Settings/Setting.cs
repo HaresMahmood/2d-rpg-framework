@@ -11,11 +11,12 @@ public class Setting : ScriptableObject
 {
     #region Fields
 
+    [SerializeField] private SettingSortingCategory sortingCategory;
     [SerializeField] private SettingType type;
     [SerializeField] private List<string> values = new List<string>();
     [SerializeField] private string value;
     [SerializeField] private string defaultValue;
-    [SerializeField] [TextArea] private string description;  
+    [SerializeField] [TextArea] private string description;
 
     #endregion
 
@@ -26,6 +27,13 @@ public class Setting : ScriptableObject
         get { return type; }
         set { type = value; }
     }
+
+    public SettingSortingCategory SortingCategory
+    {
+        get { return sortingCategory; }
+        set { sortingCategory = value; }
+    }
+
     public List<string> Values
     {
         get { return values; }
@@ -52,6 +60,13 @@ public class Setting : ScriptableObject
     #endregion
 
     #region Enums
+
+    public enum SettingSortingCategory
+    {
+        Basic,
+        Intermediate,
+        Advanced
+    }
 
     public enum SettingType
     {
