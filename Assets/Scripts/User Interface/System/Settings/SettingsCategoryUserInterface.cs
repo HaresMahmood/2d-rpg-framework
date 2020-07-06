@@ -33,6 +33,7 @@ public class SettingsCategoryUserInterface : UserInterface
         StartCoroutine(settings[selectedValue].SetActive(true));
         StartCoroutine(settings[previousValue].SetActive(false));
 
+        StartCoroutine(UpdateDescriptionText(selectedValue));
         StartCoroutine(UpdateSelector(settings[selectedValue].transform.Find("Value")));
     }
 
@@ -67,7 +68,7 @@ public class SettingsCategoryUserInterface : UserInterface
     public void ActivatePanel(float opacity, float animationDuration = 0.1f)
     {
         StartCoroutine(UpdateSelector(opacity == 1f ? settings[0].transform.Find("Value") : null));
-        StartCoroutine(descriptionText.gameObject.FadeOpacity(opacity, animationDuration));
+        StartCoroutine(descriptionText.gameObject.FadeOpacity(opacity == 1f ? 1f : 0f, animationDuration));
 
         if (scrollbar.gameObject.activeSelf)
         {
@@ -80,6 +81,16 @@ public class SettingsCategoryUserInterface : UserInterface
     public void ActivateSlot(int selectedValue, bool isActive)
     {
         StartCoroutine(settings[selectedValue].SetActive(isActive));
+    }
+
+    private IEnumerator UpdateDescriptionText(int selectedValue, float animationDuration = 0.1f)
+    {
+        StartCoroutine(descriptionText.gameObject.FadeOpacity(0f, animationDuration));
+
+        yield return new WaitForSecondsRealtime(animationDuration);
+
+        descriptionText.SetText(settings[selectedValue].Setting.Description);
+        StartCoroutine(descriptionText.gameObject.FadeOpacity(1f, animationDuration));
     }
 
     #endregion
