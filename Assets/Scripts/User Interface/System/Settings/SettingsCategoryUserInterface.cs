@@ -36,6 +36,17 @@ public class SettingsCategoryUserInterface : UserInterface
         StartCoroutine(UpdateSelector(settings[selectedValue].transform.Find("Value")));
     }
 
+    public void UpdateSelectedObject(int selectedValue, int previousValue, bool isActive)
+    {
+        StartCoroutine(settings[selectedValue].SetActive(true));
+        StartCoroutine(settings[previousValue].SetActive(false));
+
+        if (isActive)
+        {
+            StartCoroutine(UpdateSelector(settings[selectedValue].transform.Find("Value")));
+        }
+    }
+
     public IEnumerator FadePanel(float opacity, float animationDuration)
     {
         if (opacity == 1)
@@ -64,6 +75,11 @@ public class SettingsCategoryUserInterface : UserInterface
         }
 
         StartCoroutine(FadePanel(opacity, animationDuration));
+    }
+
+    public void ActivateSlot(int selectedValue, bool isActive)
+    {
+        StartCoroutine(settings[selectedValue].SetActive(isActive));
     }
 
     #endregion

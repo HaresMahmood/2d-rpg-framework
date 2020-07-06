@@ -26,15 +26,14 @@ public class SettingsCategoryUserInterfaceController : UserInterfaceController
 
     public override IEnumerator SetActive(bool isActive, bool condition = true)
     {
-        selectedValue = isActive ? selectedValue : 0;
-
-        if (isActive)
+        if (!isActive)
         {
-            userInterface.UpdateSelectedObject(selectedValue, 1);
+            userInterface.UpdateSelectedObject(0, selectedValue, false);
         }
 
         userInterface.ActivatePanel(isActive ? 1f : 0.3f);
 
+        selectedValue = 0;
         Flags.isActive = isActive;
 
         yield break;
