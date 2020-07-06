@@ -21,6 +21,8 @@ public class SettingUserInterface : UserInterface
     private Slider slider;
     private TextMeshProUGUI valueText;
 
+    private bool isActive = false; // Debug
+
     #endregion
 
     #region Miscellaneous Methods
@@ -31,7 +33,7 @@ public class SettingUserInterface : UserInterface
 
         if (controller.Setting.Type == Setting.SettingType.Slider)
         {
-            UpdateSlider(int.Parse(value));
+            UpdateSlider(int.Parse(value), isActive);
         }
 
         valueText.SetText(value);
@@ -51,14 +53,19 @@ public class SettingUserInterface : UserInterface
     }
     */
 
-    private void UpdateSlider(int selectedValue, float animationDuration = 0.1f)
+    private void UpdateSlider(int selectedValue, bool isActive, float animationDuration = 0.1f)
     {
         float totalValues = (float)(controller.Setting.Values.Count);
         float targetValue = 1f - (float)selectedValue / (totalValues - 1);
 
-        slider.value = targetValue;
-
-        //StartCoroutine(slider.LerpSlider(targetValue, animationDuration));
+        if (isActive)
+        {
+            StartCoroutine(slider.LerpSlider(targetValue, animationDuration));
+        }
+        else
+        {
+            slider.value = targetValue;
+        }
     }
 
     private int ResetValue()
@@ -88,11 +95,13 @@ public class SettingUserInterface : UserInterface
         }
 
         valueText = transform.Find("Value/Value").GetComponent<TextMeshProUGUI>();
+
+        UpdateSelectedObject(controller.Setting.Values.IndexOf(controller.Setting.Value));
     }
 
     private void Start()
     {
-        UpdateSelectedObject(controller.Setting.Values.IndexOf(controller.Setting.Value));
+        isActive = true;
     }
 
     #endregion

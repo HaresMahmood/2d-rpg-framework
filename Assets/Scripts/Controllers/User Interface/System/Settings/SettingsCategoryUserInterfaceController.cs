@@ -30,6 +30,10 @@ public class SettingsCategoryUserInterfaceController : UserInterfaceController
         {
             userInterface.UpdateSelectedObject(0, selectedValue, false);
         }
+        else
+        {
+            userInterface.UpdateSelectedObject(0, 1);
+        }
 
         userInterface.ActivatePanel(isActive ? 1f : 0.3f);
 
