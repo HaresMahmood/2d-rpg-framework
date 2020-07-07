@@ -20,6 +20,8 @@ public class SystemUserInterface : UserInterface
     #region Variables
 
     private List<Transform> navigation;
+    private List<SystemUserInterfaceBase> menus;
+    private Animator animator;
 
     #endregion
 
@@ -30,6 +32,15 @@ public class SystemUserInterface : UserInterface
         int previousValue = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, increment);
 
         UpdateNavigationTextColor(selectedValue, previousValue);
+    }
+
+    // TODO: Debug
+    public void UpdateSelectedCategory(int selectedValue, bool isActive, float animationDuration = 0.1f)
+    {
+        animator.SetBool($"isIn{menus[selectedValue].name}", isActive);
+        animator.SetBool("isInHighlevel", !isActive);
+        menus[selectedValue].SetActive(isActive);
+        StartCoroutine(menus[selectedValue].gameObject.FadeOpacity(isActive ? 1f : 0f, animationDuration));
     }
 
     private void UpdateNavigationTextColor(int selectedValue, int previousValue, float animationDuration = 0.1f)
@@ -48,6 +59,9 @@ public class SystemUserInterface : UserInterface
     protected override void Awake()
     {
         navigation = transform.Find("Navigation").GetChildren().ToList();
+        menus = transform.GetComponentsInChildren<SystemUserInterfaceBase>().ToList();
+
+        animator = transform.Find("Navigation").GetComponent<Animator>();
     }
 
     #endregion

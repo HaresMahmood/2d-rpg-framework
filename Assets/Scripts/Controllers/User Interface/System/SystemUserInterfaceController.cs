@@ -42,6 +42,11 @@ public class SystemUserInterfaceController : UserInterfaceController
 
     public override IEnumerator SetActive(bool isActive, bool condition = true)
     {
+        if (!condition)
+        {
+            userInterface.UpdateSelectedCategory(selectedValue, false);
+        }
+
         UpdateSelectedObject(selectedValue, 0);
         selectedValue = 0;
         UpdateSelectedObject(selectedValue, 1);
@@ -58,7 +63,7 @@ public class SystemUserInterfaceController : UserInterfaceController
         if (Input.GetButtonDown("Interact"))
         {
             StartCoroutine(SetActive(false));
-            StartCoroutine(GetComponent<SettingsUserInterfaceController>().SetActive(true));
+            userInterface.UpdateSelectedCategory(selectedValue, true);
         }
     }
 

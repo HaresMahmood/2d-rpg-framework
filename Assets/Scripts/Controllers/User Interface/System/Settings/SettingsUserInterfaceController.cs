@@ -47,12 +47,12 @@ public class SettingsUserInterfaceController : UserInterfaceController
 
     public override IEnumerator SetActive(bool isActive, bool condition = true)
     {
-        UpdateSelectedObject(selectedValue, 0);
-        selectedValue = 0;
-        UpdateSelectedObject(selectedValue, 1);
-
         if (condition)
         {
+            UpdateSelectedObject(selectedValue, 0);
+            selectedValue = 0;
+            UpdateSelectedObject(selectedValue, 1);
+
             yield return new WaitForSecondsRealtime(0.1f);
         }
 
@@ -77,7 +77,7 @@ public class SettingsUserInterfaceController : UserInterfaceController
         if (Input.GetButtonDown("Cancel"))
         {
             StartCoroutine(SetActive(false));
-            StartCoroutine(GetComponent<SystemUserInterfaceController>().SetActive(true));
+            StartCoroutine(GetComponent<SystemUserInterfaceController>().SetActive(true, false));
         }
     }
 

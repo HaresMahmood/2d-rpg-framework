@@ -6,7 +6,7 @@ using UnityEngine.UI;
 /// <summary>
 ///
 /// </summary>
-public class SettingsUserInterface : UserInterface
+public class SettingsUserInterface : SystemUserInterfaceBase
 {
     #region Constants
 
@@ -24,6 +24,11 @@ public class SettingsUserInterface : UserInterface
     #endregion
 
     #region Miscellaneous Methods
+
+    public override void SetActive(bool isActive)
+    {
+        StartCoroutine(SettingsUserInterfaceController.Instance.SetActive(isActive));
+    }
 
     public override void UpdateSelectedObject(int selectedValue, int increment)
     {
