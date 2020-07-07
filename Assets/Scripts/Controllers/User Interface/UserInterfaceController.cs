@@ -91,7 +91,7 @@ public abstract class UserInterfaceController : MonoBehaviour
         bool hasInput = RegularInput(UserInterface.MaxObjects, axisName);
         if (hasInput)
         {
-            UpdateSelectedObject(selectedValue);
+            UpdateSelectedObject(selectedValue, (int)Input.GetAxisRaw(axisName));
         }
     }
 

@@ -9,8 +9,49 @@ using TMPro;
 /// <summary>
 ///
 /// </summary>
-public class SystemUserInterface : MonoBehaviour
+public class SystemUserInterface : UserInterface
 {
+    #region Constants
+
+    public override int MaxObjects => navigation.Count;
+
+    #endregion
+
+    #region Variables
+
+    private List<Transform> navigation;
+
+    #endregion
+
+    #region Miscellaneous Methods
+
+    public override void UpdateSelectedObject(int selectedValue, int increment)
+    {
+        int previousValue = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, increment);
+
+        UpdateNavigationTextColor(selectedValue, previousValue);
+    }
+
+    private void UpdateNavigationTextColor(int selectedValue, int previousValue, float animationDuration = 0.1f)
+    {
+        StartCoroutine(navigation[selectedValue].Find("Text").gameObject.FadeColor(GameManager.GetAccentColor(), animationDuration));
+        StartCoroutine(navigation[previousValue].Find("Text").gameObject.FadeColor(Color.white, animationDuration));
+    }
+
+    #endregion
+
+    #region Unity Methods
+
+    /// <summary>
+    /// Awake is called when the script instance is being loaded.
+    /// </summary>
+    protected override void Awake()
+    {
+        navigation = transform.Find("Navigation").GetChildren().ToList();
+    }
+
+    #endregion
+
     /*
     #region Variables
 

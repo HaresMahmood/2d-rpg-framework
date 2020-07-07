@@ -1,21 +1,68 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using TMPro;
+﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 
 /// <summary>
 ///
 /// </summary>
 public class SystemUserInterfaceController : UserInterfaceController
 {
+    #region Fields
+
+    private static SystemUserInterfaceController instance;
+    [SerializeField] private SystemUserInterface userInterface;
+
+    #endregion
+
+    #region Properties
+
+    /// <summary>
+    /// Singleton pattern.
+    /// </summary>
+    public static SystemUserInterfaceController Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<SystemUserInterfaceController>();
+            }
+
+            return instance;
+        }
+    }
+
+    public override UserInterface UserInterface
+    {
+        get { return userInterface; }
+    }
+
+    #endregion
+
+    #region Miscellaneous Methods
+
     public override IEnumerator SetActive(bool isActive, bool condition = true)
     {
-        StartCoroutine(GetComponent<SettingsUserInterfaceController>().SetActive(isActive));
-        yield break;
+        UpdateSelectedObject(selectedValue, 0);
+        selectedValue = 0;
+        UpdateSelectedObject(selectedValue, 1);
+
+        yield return new WaitForSecondsRealtime(0.1f);
+
+        Flags.isActive = isActive;
     }
+
+    protected override void GetInput(string axisName)
+    {
+        base.GetInput(axisName);
+
+        if (Input.GetButtonDown("Interact"))
+        {
+            StartCoroutine(SetActive(false));
+            StartCoroutine(GetComponent<SettingsUserInterfaceController>().SetActive(true));
+        }
+    }
+
+    #endregion
 
     /*
     #region Constants

@@ -68,7 +68,7 @@ public class SettingsCategoryUserInterfaceController : UserInterfaceController
         if (Input.GetButtonDown("Cancel"))
         {
             StartCoroutine(SetActive(false));
-            StartCoroutine(SettingsUserInterfaceController.Instance.SetActive(true));
+            StartCoroutine(SettingsUserInterfaceController.Instance.SetActive(true, false));
         }
     }
 

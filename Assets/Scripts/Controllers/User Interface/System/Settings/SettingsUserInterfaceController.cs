@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.Animations;
 
 /// <summary>
 ///
@@ -46,19 +47,21 @@ public class SettingsUserInterfaceController : UserInterfaceController
 
     public override IEnumerator SetActive(bool isActive, bool condition = true)
     {
+        UpdateSelectedObject(selectedValue, 0);
+        selectedValue = 0;
         UpdateSelectedObject(selectedValue, 1);
+
+        if (condition)
+        {
+            yield return new WaitForSecondsRealtime(0.1f);
+        }
+
         Flags.isActive = isActive;
-        yield break;
     }
 
     protected override void GetInput(string axisName)
     {
-        bool hasInput = RegularInput(UserInterface.MaxObjects, axisName);
-
-        if (hasInput)
-        {
-            UpdateSelectedObject(selectedValue, (int)Input.GetAxisRaw(axisName));
-        }
+        base.GetInput(axisName);
 
         if (Input.GetButtonDown("Toggle"))
         {
@@ -69,6 +72,12 @@ public class SettingsUserInterfaceController : UserInterfaceController
         {
             Flags.isActive = false;
             userInterface.ActivateCategory(selectedValue);
+        }
+
+        if (Input.GetButtonDown("Cancel"))
+        {
+            StartCoroutine(SetActive(false));
+            StartCoroutine(GetComponent<SystemUserInterfaceController>().SetActive(true));
         }
     }
 
