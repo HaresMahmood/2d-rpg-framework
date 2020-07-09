@@ -5,8 +5,91 @@ using UnityEngine;
 /// <summary>
 ///
 /// </summary>
-public class SaveManager : MonoBehaviour
+public class SaveUserInterfcaeController : UserInterfaceController
 {
+    #region Fields
+
+    private static SaveUserInterfcaeController instance;
+
+    [SerializeField] private SaveUserInterface userInterface;
+
+    #endregion
+
+    #region Properties
+
+    /// <summary>
+    /// Singleton pattern.
+    /// </summary>
+    public static SaveUserInterfcaeController Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<SaveUserInterfcaeController>();
+            }
+
+            return instance;
+        }
+    }
+
+    public override UserInterface UserInterface
+    {
+        get { return userInterface; }
+    }
+
+    #endregion
+
+    #region Miscellaneous Methods
+
+    public override IEnumerator SetActive(bool isActive, bool condition = true)
+    {
+        if (condition)
+        {
+            //UpdateSelectedObject(selectedValue, 0);
+            selectedValue = 0;
+            //UpdateSelectedObject(selectedValue, 1);
+
+            yield return new WaitForSecondsRealtime(0.1f);
+        }
+
+        Flags.isActive = isActive;
+    }
+
+    protected override void GetInput(string axisName)
+    {
+        base.GetInput(axisName);
+
+        if (Input.GetButtonDown("Interact"))
+        {
+            Flags.isActive = false;
+            //userInterface.ActivateCategory(selectedValue);
+        }
+
+        if (Input.GetButtonDown("Cancel"))
+        {
+            StartCoroutine(SetActive(false));
+            StartCoroutine(GetComponent<SystemUserInterfaceController>().SetActive(true, false));
+        }
+    }
+
+    #endregion
+
+    #region Unity Methods
+
+    /// <summary>
+    /// Update is called once per frame.
+    /// </summary>
+    protected override void Update()
+    {
+        if (Flags.isActive)
+        {
+            GetInput("Horizontal");
+        }
+    }
+
+    #endregion
+
     /*
     #region Variables
 

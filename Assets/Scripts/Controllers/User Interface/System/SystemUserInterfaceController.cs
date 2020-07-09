@@ -45,13 +45,18 @@ public class SystemUserInterfaceController : UserInterfaceController
         if (!condition)
         {
             userInterface.UpdateSelectedCategory(selectedValue, false);
+            selectedValue = 0;
+
+            StartCoroutine(userInterface.SetIdle());
         }
 
         UpdateSelectedObject(selectedValue, 0);
-        selectedValue = 0;
-        UpdateSelectedObject(selectedValue, 1);
+        UpdateSelectedObject(0, 1);
 
-        yield return new WaitForSecondsRealtime(0.1f);
+        if (condition)
+        {
+            yield return new WaitForSecondsRealtime(0.1f);
+        }
 
         Flags.isActive = isActive;
     }
@@ -62,8 +67,8 @@ public class SystemUserInterfaceController : UserInterfaceController
 
         if (Input.GetButtonDown("Interact"))
         {
-            StartCoroutine(SetActive(false));
             userInterface.UpdateSelectedCategory(selectedValue, true);
+            StartCoroutine(SetActive(false));
         }
     }
 

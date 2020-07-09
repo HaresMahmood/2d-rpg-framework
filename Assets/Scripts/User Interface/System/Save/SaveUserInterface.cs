@@ -9,8 +9,23 @@ using UnityEngine.UI;
 /// <summary>
 ///
 /// </summary>
-public class SaveUserInterface : MonoBehaviour
+public class SaveUserInterface : SystemUserInterfaceBase
 {
+    #region Constants
+
+    public override int MaxObjects => 2;
+
+    #endregion
+
+    #region Miscellenaous Methods
+
+    public override void SetActive(bool isActive)
+    {
+        StartCoroutine(SaveUserInterfcaeController.Instance.SetActive(isActive));
+    }
+
+    #endregion
+
     /*
     #region Variables
 

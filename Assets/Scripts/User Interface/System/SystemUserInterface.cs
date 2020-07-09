@@ -37,10 +37,23 @@ public class SystemUserInterface : UserInterface
     // TODO: Debug
     public void UpdateSelectedCategory(int selectedValue, bool isActive, float animationDuration = 0.1f)
     {
+       selectedValue = Mathf.Clamp(selectedValue, 0, 1);
+
+        Debug.Log(menus[selectedValue].name);
+
         animator.SetBool($"isIn{menus[selectedValue].name}", isActive);
         animator.SetBool("isInHighlevel", !isActive);
         menus[selectedValue].SetActive(isActive);
         StartCoroutine(menus[selectedValue].gameObject.FadeOpacity(isActive ? 1f : 0f, animationDuration));
+    }
+
+    public IEnumerator SetIdle()
+    {
+        yield return null;
+
+        yield return new WaitForSecondsRealtime(animator.GetAnimationTime());
+
+        animator.SetBool("isInHighlevel", false);
     }
 
     private void UpdateNavigationTextColor(int selectedValue, int previousValue, float animationDuration = 0.1f)
