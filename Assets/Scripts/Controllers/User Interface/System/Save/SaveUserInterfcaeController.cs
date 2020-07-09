@@ -46,9 +46,8 @@ public class SaveUserInterfcaeController : UserInterfaceController
     {
         if (condition)
         {
-            //UpdateSelectedObject(selectedValue, 0);
             selectedValue = 0;
-            //UpdateSelectedObject(selectedValue, 1);
+            userInterface.AcivatePanel(isActive);
 
             yield return new WaitForSecondsRealtime(0.1f);
         }
@@ -62,8 +61,10 @@ public class SaveUserInterfcaeController : UserInterfaceController
 
         if (Input.GetButtonDown("Interact"))
         {
-            Flags.isActive = false;
-            //userInterface.ActivateCategory(selectedValue);
+            StartCoroutine(UserInterface.AnimateSelector());
+
+            StartCoroutine(SetActive(false));
+            StartCoroutine(GetComponent<SystemUserInterfaceController>().SetActive(true, false));
         }
 
         if (Input.GetButtonDown("Cancel"))

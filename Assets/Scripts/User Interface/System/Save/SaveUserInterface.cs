@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using TMPro;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 /// <summary>
 ///
@@ -13,7 +8,14 @@ public class SaveUserInterface : SystemUserInterfaceBase
 {
     #region Constants
 
-    public override int MaxObjects => 2;
+    public override int MaxObjects => buttons.Count;
+
+    #endregion
+
+    #region Variables
+
+    private List<MenuButton> buttons;
+    private Animator animator;
 
     #endregion
 
@@ -22,6 +24,39 @@ public class SaveUserInterface : SystemUserInterfaceBase
     public override void SetActive(bool isActive)
     {
         StartCoroutine(SaveUserInterfcaeController.Instance.SetActive(isActive));
+    }
+
+    public override void UpdateSelectedObject(int selectedValue, int increment = -1)
+    {
+        int previousValue = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, -increment);
+
+        buttons[selectedValue].AnimateButton(true);
+        buttons[previousValue].AnimateButton(false);
+
+        StartCoroutine(UpdateSelector(buttons[selectedValue].transform));
+    }
+
+    public void AcivatePanel(bool isActive)
+    {
+        animator.SetBool("isActive", isActive);
+        UpdateSelectedObject(0, 1);
+    }
+
+    #endregion
+
+        #region Unity Methods
+
+        /// <summary>
+        /// Awake is called when the script instance is being loaded.
+        /// </summary>
+    protected override void Awake()
+    {
+        buttons = transform.Find("Confirmation").GetComponentsInChildren<MenuButton>().ToList();
+        animator = transform.Find("Confirmation").GetComponent<Animator>();
+
+        selector = transform.Find("Confirmation/Selector").gameObject;
+
+        base.Awake();
     }
 
     #endregion

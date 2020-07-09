@@ -37,7 +37,7 @@ public class SystemUserInterface : UserInterface
     // TODO: Debug
     public void UpdateSelectedCategory(int selectedValue, bool isActive, float animationDuration = 0.1f)
     {
-       selectedValue = Mathf.Clamp(selectedValue, 0, 1);
+       selectedValue = Mathf.Clamp(selectedValue, 0, 2);
 
         Debug.Log(menus[selectedValue].name);
 
