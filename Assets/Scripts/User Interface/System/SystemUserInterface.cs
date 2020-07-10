@@ -47,6 +47,11 @@ public class SystemUserInterface : UserInterface
         StartCoroutine(menus[selectedValue].gameObject.FadeOpacity(isActive ? 1f : 0f, animationDuration));
     }
 
+    public void UpdateNavigationTextColor(int selectedValue, bool isActive, float animationDuration = 0.1f)
+    {
+        StartCoroutine(navigation[selectedValue].Find("Text").gameObject.FadeColor(isActive ? GameManager.GetAccentColor() : Color.white, animationDuration));
+    }
+
     public IEnumerator SetIdle()
     {
         yield return null;

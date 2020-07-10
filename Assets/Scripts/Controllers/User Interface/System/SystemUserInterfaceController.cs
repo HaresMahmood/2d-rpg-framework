@@ -45,12 +45,13 @@ public class SystemUserInterfaceController : UserInterfaceController
         if (!condition)
         {
             userInterface.UpdateSelectedCategory(selectedValue, false);
+            userInterface.UpdateNavigationTextColor(selectedValue, false);
             selectedValue = 0;
 
             StartCoroutine(userInterface.SetIdle());
         }
 
-        UpdateSelectedObject(selectedValue, 0);
+        userInterface.UpdateNavigationTextColor(selectedValue, false);
         UpdateSelectedObject(0, 1);
 
         if (condition)
