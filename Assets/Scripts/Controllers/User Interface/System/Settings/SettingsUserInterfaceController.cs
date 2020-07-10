@@ -67,7 +67,7 @@ public class SettingsUserInterfaceController : UserInterfaceController
         if (Input.GetButtonDown("Interact"))
         {
             Flags.isActive = false;
-            userInterface.ActivateCategory(selectedValue, true);
+            userInterface.ActivateCategory(selectedValue);
         }
 
         if (Input.GetButtonDown("Cancel"))

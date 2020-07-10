@@ -40,9 +40,14 @@ public class SettingsUserInterface : SystemUserInterfaceBase
         scrollRect.content = categories[selectedValue].GetComponent<RectTransform>();
     }
 
-    public void ActivateCategory(int selectedValue, bool isActive)
+    public void ActivateCategory(int selectedValue)
     {
-        StartCoroutine(categories[selectedValue].SetActive(isActive));
+        StartCoroutine(categories[selectedValue].SetActive(true));
+    }
+
+    public void ActivateCategory(int selectedValue, bool isActive, float animationDuration = 0.1f)
+    {
+        categories[selectedValue].ActivatePanel(isActive ? 0.3f : 0f, animationDuration);
     }
 
     private void UpdateNavigationTextColor(int selectedValue, int previousValue, float animationDuration = 0.1f)
@@ -51,7 +56,7 @@ public class SettingsUserInterface : SystemUserInterfaceBase
         StartCoroutine(navigation[previousValue].Find("Text").gameObject.FadeColor(Color.white, animationDuration));
     }
 
-    private IEnumerator UpdateSelectedCategory(int selectedValue, int previousValue, float animationDuration = 0.10f)
+    private IEnumerator UpdateSelectedCategory(int selectedValue, int previousValue, float animationDuration = 0.1f)
     {
         categories[previousValue].ActivatePanel(0f, animationDuration);
 
