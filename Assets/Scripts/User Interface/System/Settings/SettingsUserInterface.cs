@@ -40,9 +40,9 @@ public class SettingsUserInterface : SystemUserInterfaceBase
         scrollRect.content = categories[selectedValue].GetComponent<RectTransform>();
     }
 
-    public void ActivateCategory(int selectedValue)
+    public void ActivateCategory(int selectedValue, bool isActive)
     {
-        StartCoroutine(categories[selectedValue].SetActive(true));
+        StartCoroutine(categories[selectedValue].SetActive(isActive));
     }
 
     private void UpdateNavigationTextColor(int selectedValue, int previousValue, float animationDuration = 0.1f)

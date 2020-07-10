@@ -45,7 +45,7 @@ public class SettingsUserInterfaceController : UserInterfaceController
     {
         if (condition)
         {
-            UpdateSelectedObject(selectedValue, 0);
+            userInterface.ActivateCategory(selectedValue, false);
             selectedValue = 0;
             UpdateSelectedObject(selectedValue, 1);
 
@@ -67,7 +67,7 @@ public class SettingsUserInterfaceController : UserInterfaceController
         if (Input.GetButtonDown("Interact"))
         {
             Flags.isActive = false;
-            userInterface.ActivateCategory(selectedValue);
+            userInterface.ActivateCategory(selectedValue, true);
         }
 
         if (Input.GetButtonDown("Cancel"))
