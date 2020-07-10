@@ -45,6 +45,8 @@ public class SettingsUserInterfaceController : UserInterfaceController
     {
         if (condition)
         {
+            userInterface.UpdateCategoryNames(isActive);
+
             userInterface.ActivateCategory(selectedValue, false);
             selectedValue = 0;
             UpdateSelectedObject(selectedValue, 1);

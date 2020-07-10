@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 /// <summary>
 ///
@@ -11,6 +12,8 @@ public class SettingsUserInterface : SystemUserInterfaceBase
     #region Constants
 
     public override int MaxObjects => navigation.Count;
+    private readonly string[] settingsNavigation = new string[] { "General", "Battle", "Customization", "Accessibility" };
+    private readonly string[] systemNavigation = new string[] { "Save", "Load", "Settings", "Quit" };
 
     #endregion
 
@@ -38,6 +41,15 @@ public class SettingsUserInterface : SystemUserInterfaceBase
         StartCoroutine(UpdateSelectedCategory(selectedValue, previousValue));
 
         scrollRect.content = categories[selectedValue].GetComponent<RectTransform>();
+    }
+
+    public void UpdateCategoryNames(bool isActive)
+    {
+        for (int i = 0; i < navigation.Count; i++)
+        {
+            navigation[i].Find("Text").GetComponent<TextMeshProUGUI>().SetText(isActive ? settingsNavigation[i] : systemNavigation[i]);
+            //navigation[i].Find("Text").GetComponent<AutoTextWidth>().UpdateWidth(isActive ? settingsNavigation[i] : systemNavigation[i]);
+        }
     }
 
     public void ActivateCategory(int selectedValue)
