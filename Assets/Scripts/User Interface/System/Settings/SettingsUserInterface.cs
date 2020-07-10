@@ -48,7 +48,6 @@ public class SettingsUserInterface : SystemUserInterfaceBase
         for (int i = 0; i < navigation.Count; i++)
         {
             navigation[i].Find("Text").GetComponent<TextMeshProUGUI>().SetText(isActive ? settingsNavigation[i] : systemNavigation[i]);
-            //navigation[i].Find("Text").GetComponent<AutoTextWidth>().UpdateWidth(isActive ? settingsNavigation[i] : systemNavigation[i]);
         }
     }
 
