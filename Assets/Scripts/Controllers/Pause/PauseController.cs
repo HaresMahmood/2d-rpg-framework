@@ -46,7 +46,17 @@ public class PauseController : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    protected virtual void GetInput()
+    private void SetActive(bool isActive)
+    {
+        Time.timeScale = flags.isPaused ? 0 : 1;
+
+        Debug.Log(Time.timeScale);
+
+        //CameraController.instance.GetComponent<PostprocessingBlur>().enabled = flags.isActive;
+        StartCoroutine(GetComponent<PauseUserInterfaceController>().SetActive(isActive));
+    }
+
+    private void GetInput()
     {
         if (Input.GetButtonDown("Start"))
         {
@@ -54,11 +64,6 @@ public class PauseController : MonoBehaviour
 
             SetActive(Flags.isPaused);
         }
-    }
-
-    private void SetActive(bool isActive)
-    {
-        StartCoroutine(GetComponent<PauseUserInterfaceController>().SetActive(isActive));
     }
 
     #endregion
