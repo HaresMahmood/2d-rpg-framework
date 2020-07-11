@@ -17,8 +17,6 @@ public class InventoryController : CategoryUserInterfaceController
 
     [SerializeField] private InventoryUserInterface userInterface;
 
-    private InventoryFlags flags = new InventoryFlags(false, false);
-
     #endregion
 
     #region Properties
@@ -44,11 +42,6 @@ public class InventoryController : CategoryUserInterfaceController
         get { return userInterface; }
     }
 
-    protected override UserInterfaceFlags Flags
-    {
-        get { return flags; }
-    }
-
     #endregion
 
     #region Variables
@@ -71,20 +64,6 @@ public class InventoryController : CategoryUserInterfaceController
         AmountDescending,
         FavoriteFirst,
         NewFirst
-    }
-
-    #endregion
-
-    #region Nested Classes
-
-    protected sealed class InventoryFlags : UserInterfaceFlags
-    {
-        public bool isInSubmenu { get; set; }
-
-        internal InventoryFlags(bool isActive, bool isInSubmenu) : base(isActive)
-        {
-            this.isInSubmenu = isInSubmenu;
-        }
     }
 
     #endregion

@@ -46,11 +46,6 @@ public class PauseController : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    private void SetActive(bool isActive)
-    {
-        StartCoroutine(GetComponent<PauseUserInterfaceController>().SetActive(isActive));
-    }
-
     protected virtual void GetInput()
     {
         if (Input.GetButtonDown("Start"))
@@ -59,6 +54,11 @@ public class PauseController : MonoBehaviour
 
             SetActive(Flags.isPaused);
         }
+    }
+
+    private void SetActive(bool isActive)
+    {
+        StartCoroutine(GetComponent<PauseUserInterfaceController>().SetActive(isActive));
     }
 
     #endregion

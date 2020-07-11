@@ -15,6 +15,11 @@ public class SystemUserInterface : PauseUserInterfaceBase
 
     public override int MaxObjects => navigation.Count;
 
+    public override UserInterfaceController Controller
+    {
+        get => SystemUserInterfaceController.Instance;
+    }
+
     #endregion
 
     #region Variables
@@ -26,11 +31,6 @@ public class SystemUserInterface : PauseUserInterfaceBase
     #endregion
 
     #region Miscellaneous Methods
-
-    public override void SetActive(bool isActive, bool condition = true)
-    {
-        StartCoroutine(SystemUserInterfaceController.Instance.SetActive(isActive, condition));
-    }
 
     public override void UpdateSelectedObject(int selectedValue, int increment)
     {

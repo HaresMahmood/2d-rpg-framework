@@ -12,6 +12,11 @@ public class PartyUserInterface : PauseUserInterfaceBase
 
     public override int MaxObjects => informationPanels.Count - 1;
 
+    public override UserInterfaceController Controller
+    {
+        get => PartyController.Instance;
+    }
+
     #endregion
 
     #region Variables
@@ -28,11 +33,6 @@ public class PartyUserInterface : PauseUserInterfaceBase
     #endregion
 
     #region Miscellaneous Methods
-
-    public override void SetActive(bool isActive, bool condition = true)
-    {
-        StartCoroutine(PartyController.Instance.SetActive(isActive, condition));
-    }
 
     public override void UpdateSelectedObject(int selectedValue, int increment)
     {

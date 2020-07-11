@@ -23,7 +23,7 @@ public abstract class UserInterfaceController : MonoBehaviour
         set { }
     }
 
-    protected virtual UserInterfaceFlags Flags
+    public virtual UserInterfaceFlags Flags
     {
         get { return flags; }
     }
@@ -43,9 +43,9 @@ public abstract class UserInterfaceController : MonoBehaviour
 
     #region Nested Classes
 
-    protected class UserInterfaceFlags
+    public class UserInterfaceFlags
     {
-        internal bool isActive { get; set; }
+        public bool isActive { get; internal set; }
 
         internal UserInterfaceFlags(bool isActive)
         {

@@ -33,6 +33,7 @@ public class SettingsUserInterface : SystemUserInterfaceBase
         StartCoroutine(SettingsUserInterfaceController.Instance.SetActive(isActive));
     }
 
+
     public override void UpdateSelectedObject(int selectedValue, int increment)
     {
         int previousValue = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, increment);

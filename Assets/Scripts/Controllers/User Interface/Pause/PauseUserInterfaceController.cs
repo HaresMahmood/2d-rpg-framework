@@ -50,6 +50,11 @@ public class PauseUserInterfaceController : UserInterfaceController
         yield break;
     }
 
+    public bool CanExit()
+    {
+        return userInterface.GetActiveMenu(selectedValue).Flags.isActive;
+    }
+
     protected override bool RegularInput(int max, string axisName)
     {
         TestInput.Axis axis = TestInput.Axis.Horizontal;
@@ -58,6 +63,16 @@ public class PauseUserInterfaceController : UserInterfaceController
         (selectedValue, hasInput) = input.GetInput(axisName, axis, max, selectedValue);
 
         return hasInput;
+    }
+
+    protected override void GetInput(string axisName)
+    {
+        base.GetInput(axisName);
+
+        if (Input.GetButtonDown("Cancel") && CanExit())
+        {
+            //StartCoroutine(SetActive(false));
+        }
     }
 
     #endregion

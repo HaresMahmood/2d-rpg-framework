@@ -10,6 +10,15 @@ using UnityEngine.PlayerLoop;
 /// </summary>
 public class MissionsUserInterface : CategoryUserInterface
 {
+    #region Constants
+
+    public override UserInterfaceController Controller
+    {
+        get => MissionsController.Instance;
+    }
+
+    #endregion
+
     #region Variables
 
     private GameObject missionEmptyPanel;
@@ -17,11 +26,6 @@ public class MissionsUserInterface : CategoryUserInterface
     #endregion
 
     #region Miscellaneous Methods
-
-    public override void SetActive(bool isActive, bool condition = true)
-    {
-        StartCoroutine(MissionsController.Instance.SetActive(isActive, condition));
-    }
 
     public override void UpdateSelectedObject(int selectedValue, int increment = -1)
     {

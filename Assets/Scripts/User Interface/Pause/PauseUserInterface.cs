@@ -32,7 +32,8 @@ public class PauseUserInterface : UserInterface
         int previousValue = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, -increment);
         int nextValue = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, increment);
 
-        AnimateMenus(selectedValue, previousValue);
+        AnimateMenus(selectedValue, previousValue, -increment);
+        UpdateNavigationText(selectedValue, previousValue, nextValue);
 
         menus[selectedValue].SetActive(true);
         menus[previousValue].SetActive(false);
@@ -45,10 +46,55 @@ public class PauseUserInterface : UserInterface
         UpdateSelectedObject(selectedValue, isActive ? 1 : 0);
     }
 
-    private void AnimateMenus(int selectedValue, int previousValue)
+    public UserInterfaceController GetActiveMenu(int selectedValue)
     {
-        StartCoroutine(menus[selectedValue].gameObject.FadeOpacity(1f, 0.1f));
-        StartCoroutine(menus[previousValue].gameObject.FadeOpacity(0f, 0.1f));
+        return menus[selectedValue].Controller;
+    }
+
+    private void AnimateMenus(int selectedValue, int previousValue, int increment)
+    {
+        StartCoroutine(AnimateMenu(selectedValue, increment, true));
+        StartCoroutine(AnimateMenu(previousValue, increment, false));
+    }
+
+    /*
+    private IEnumerator AnimateMenus(int selectedMenu, int previousMenu, int increment)
+    {
+        menus[selectedMenu].gameObject.SetActive(true); yield return null;
+
+        menus[selectedMenu].GetComponent<Animator>().SetFloat(blend, increment);
+        menus[previousMenu].GetComponent<Animator>().SetFloat(blend, increment);
+
+        menus[selectedMenu].GetComponent<Animator>().SetBool("isSelected", true);
+        StartCoroutine(menus[selectedMenu].gameObject.FadeOpacity(1f, 0.1f));
+
+        menus[previousMenu].GetComponent<Animator>().SetBool("isSelected", false);
+        StartCoroutine(menus[previousMenu].gameObject.FadeOpacity(0f, 0.1f));
+        yield return new WaitForSecondsRealtime(0.2f);
+        menus[previousMenu].gameObject.SetActive(false);
+    }
+    */
+
+    private IEnumerator AnimateMenu(int selectedValue, int increment, bool isActive)
+    {
+        if (isActive)
+        {
+            //menus[selectedValue].gameObject.SetActive(true);
+        }
+
+        menus[selectedValue].GetComponent<Animator>().SetFloat("Blend", increment);
+        menus[selectedValue].GetComponent<Animator>().SetBool("isSelected", isActive);
+
+        yield return null;
+
+        StartCoroutine(menus[selectedValue].gameObject.FadeOpacity(isActive ? 1f : 0f, menus[selectedValue].GetComponent<Animator>().GetAnimationTime() / 2));
+
+        if (!isActive)
+        {
+            yield return new WaitForSecondsRealtime(menus[selectedValue].GetComponent<Animator>().GetAnimationTime());
+
+            //menus[selectedValue].gameObject.SetActive(false);
+        }
     }
 
     private void UpdateNavigationText(int selectedValue, int previousValue, int nextValue)
@@ -68,6 +114,18 @@ public class PauseUserInterface : UserInterface
     protected override void Awake()
     {
         menus = GetComponentsInChildren<PauseUserInterfaceBase>().ToList();
+
+        currentMenuText = transform.Find("Top Panel/Navigation/Middle/Current/Text").GetComponent<TextMeshProUGUI>();
+        previousMenuText = transform.Find("Top Panel/Navigation/Left/Previous/Text").GetComponent<TextMeshProUGUI>();
+        nextMenuText = transform.Find("Top Panel/Navigation/Right/Next/Text").GetComponent<TextMeshProUGUI>();
+    }
+
+    private void Start()
+    {
+        foreach (PauseUserInterfaceBase menu in menus)
+        {
+            //menu.gameObject.SetActive(false);
+        }
     }
 
     #endregion

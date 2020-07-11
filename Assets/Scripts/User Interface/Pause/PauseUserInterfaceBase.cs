@@ -5,18 +5,25 @@ using UnityEngine;
 /// <summary>
 ///
 /// </summary>
-public class PauseUserInterfaceBase : UserInterface
+public abstract class PauseUserInterfaceBase : UserInterface
 {
     #region Constants
 
     public override int MaxObjects => throw new System.NotImplementedException();
+
+    public abstract UserInterfaceController Controller
+    {
+        get;
+    }
 
     #endregion
 
     #region Miscellaneous Methods
 
     public virtual void SetActive(bool isActive, bool condition = true)
-    { }
+    {
+        StartCoroutine(Controller.SetActive(isActive, condition));
+    }
 
     #endregion
 }

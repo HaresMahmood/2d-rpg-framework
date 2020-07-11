@@ -10,6 +10,15 @@ using TMPro;
 /// </summary>
 public sealed class InventoryUserInterface : CategoryUserInterface
 {
+    #region Constants
+
+    public override UserInterfaceController Controller
+    {
+        get => InventoryController.Instance;
+    }
+
+    #endregion
+
     #region Variables
 
     private GameObject middlePanel;
@@ -23,12 +32,7 @@ public sealed class InventoryUserInterface : CategoryUserInterface
     {
         base.UpdateSelectedCategory(categorizables, selectedCategory, selectedValue, increment, maxViewableObjects, animationDuration, animationDelay);
     }
-    */
-
-    public override void SetActive(bool isActive, bool condition = true)
-    {
-        StartCoroutine(InventoryController.Instance.SetActive(isActive, condition));
-    }    
+    */   
 
     public void ActiveSubMenu(int selectedValue, float opacity = 0.5f)
     {
