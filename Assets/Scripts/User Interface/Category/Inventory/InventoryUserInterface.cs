@@ -25,6 +25,11 @@ public sealed class InventoryUserInterface : CategoryUserInterface
     }
     */
 
+    public override void SetActive(bool isActive, bool condition = true)
+    {
+        StartCoroutine(InventoryController.Instance.SetActive(isActive, condition));
+    }    
+
     public void ActiveSubMenu(int selectedValue, float opacity = 0.5f)
     {
         if (activeCategorizables.Count > 0)

@@ -18,6 +18,11 @@ public class MissionsUserInterface : CategoryUserInterface
 
     #region Miscellaneous Methods
 
+    public override void SetActive(bool isActive, bool condition = true)
+    {
+        StartCoroutine(MissionsController.Instance.SetActive(isActive, condition));
+    }
+
     public override void UpdateSelectedObject(int selectedValue, int increment = -1)
     {
         UpdateScrollbar(MaxObjects, selectedValue);

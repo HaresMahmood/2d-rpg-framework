@@ -1,10 +1,83 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 /// <summary>
 ///
 /// </summary>
-public class PauseManager : MonoBehaviour
+public class PauseUserInterfaceController : UserInterfaceController
 {
+    #region Fields
+
+    private static PauseUserInterfaceController instance;
+
+    [SerializeField] private PauseUserInterface userInterface;
+
+    #endregion
+
+    #region Properties
+
+    /// <summary>
+    /// Singleton pattern.
+    /// </summary>
+    public static PauseUserInterfaceController Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<PauseUserInterfaceController>();
+            }
+
+            return instance;
+        }
+    }
+
+    public override UserInterface UserInterface
+    {
+        get { return userInterface; }
+    }
+
+    #endregion
+
+    #region Miscelleneouos Methods
+
+    public override IEnumerator SetActive(bool isActive, bool condition = true)
+    {
+        Flags.isActive = isActive;
+
+        userInterface.ActivateMenu(selectedValue, isActive);
+
+        yield break;
+    }
+
+    protected override bool RegularInput(int max, string axisName)
+    {
+        TestInput.Axis axis = TestInput.Axis.Horizontal;
+
+        bool hasInput;
+        (selectedValue, hasInput) = input.GetInput(axisName, axis, max, selectedValue);
+
+        return hasInput;
+    }
+
+    #endregion
+
+    #region Unity Methods
+
+    /// <summary>
+    /// Update is called once per frame.
+    /// </summary>
+    protected override void Update()
+    {
+        if (Flags.isActive)
+        {
+            GetInput("Face Trigger");
+        }
+    }
+
+    #endregion
+
+    /*
     #region Constants
 
     public readonly string[] menuNames = new string[] { "Missions", "Party", "Inventory", "System" };
@@ -13,7 +86,7 @@ public class PauseManager : MonoBehaviour
 
     #region Variables
 
-    public static PauseManager instance;
+    public static PauseUserInterfaceController instance;
 
     [Header("Setup")]
     [SerializeField] private PauseUserInterface userInterface;
@@ -221,4 +294,5 @@ public class PauseManager : MonoBehaviour
     }
 
     #endregion
+    */
 }

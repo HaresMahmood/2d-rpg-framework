@@ -59,7 +59,7 @@ public class PlayerMovement : MovingObject
             SetMoveAnimations(); // Turns all move animations off.
         }
 
-        if (!canMove || isMoving || onCoolDown || onExit || PauseManager.instance.flags.isActive) return; // We wait until Player is done moving or while game is paused.
+        if (!canMove || isMoving || onCoolDown || onExit) return; // We wait until Player is done moving or while game is paused. || PauseUserInterfaceController.instance.flags.isActive
 
         if (input.Count > 1)
         {

@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 ///
 /// </summary>
-public class PartyUserInterface : UserInterface
+public class PartyUserInterface : PauseUserInterfaceBase
 {
     #region Constants
 
@@ -28,6 +28,11 @@ public class PartyUserInterface : UserInterface
     #endregion
 
     #region Miscellaneous Methods
+
+    public override void SetActive(bool isActive, bool condition = true)
+    {
+        StartCoroutine(PartyController.Instance.SetActive(isActive, condition));
+    }
 
     public override void UpdateSelectedObject(int selectedValue, int increment)
     {

@@ -9,7 +9,7 @@ using TMPro;
 /// <summary>
 ///
 /// </summary>
-public class SystemUserInterface : UserInterface
+public class SystemUserInterface : PauseUserInterfaceBase
 {
     #region Constants
 
@@ -26,6 +26,11 @@ public class SystemUserInterface : UserInterface
     #endregion
 
     #region Miscellaneous Methods
+
+    public override void SetActive(bool isActive, bool condition = true)
+    {
+        StartCoroutine(SystemUserInterfaceController.Instance.SetActive(isActive, condition));
+    }
 
     public override void UpdateSelectedObject(int selectedValue, int increment)
     {

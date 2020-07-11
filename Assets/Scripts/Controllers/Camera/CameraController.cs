@@ -29,11 +29,11 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     private void LateUpdate()
     {
-        if (!PauseManager.instance.flags.isActive && (transform.position != target.position))
-        {
-            Vector3 targetPos = new Vector3(target.position.x, target.position.y, transform.position.z);
-            transform.position = Vector3.Lerp(transform.position, targetPos, moveSpeed * Time.deltaTime);
-        }
+        //if (!PauseUserInterfaceController.instance.flags.isActive && (transform.position != target.position))
+        //{
+        //    Vector3 targetPos = new Vector3(target.position.x, target.position.y, transform.position.z);
+        //    transform.position = Vector3.Lerp(transform.position, targetPos, moveSpeed * Time.deltaTime);
+        //}
     }
 
     /*

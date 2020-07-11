@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 ///
 /// </summary>
-public abstract class CategoryUserInterface : UserInterface
+public abstract class CategoryUserInterface : PauseUserInterfaceBase
 {
     #region Constants
 

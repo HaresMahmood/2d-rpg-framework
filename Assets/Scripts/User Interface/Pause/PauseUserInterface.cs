@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -6,8 +7,72 @@ using TMPro;
 /// <summary>
 ///
 /// </summary>
-public class PauseUserInterface : MonoBehaviour
+public class PauseUserInterface : UserInterface
 {
+    #region Constants
+
+    public override int MaxObjects => menus.Count;
+
+    #endregion
+
+    #region Variables
+
+    private List<PauseUserInterfaceBase> menus;
+
+    private TextMeshProUGUI currentMenuText;
+    private TextMeshProUGUI previousMenuText;
+    private TextMeshProUGUI nextMenuText;
+
+    #endregion
+
+    #region Miscellaneous Methods
+
+    public override void UpdateSelectedObject(int selectedValue, int increment)
+    {
+        int previousValue = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, -increment);
+        int nextValue = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, increment);
+
+        AnimateMenus(selectedValue, previousValue);
+
+        menus[selectedValue].SetActive(true);
+        menus[previousValue].SetActive(false);
+    }
+
+    public void ActivateMenu(int selectedValue, bool isActive, float animationDuration = 0.15f)
+    {
+        StartCoroutine(gameObject.FadeOpacity(isActive ? 1f : 0f, animationDuration));
+
+        UpdateSelectedObject(selectedValue, isActive ? 1 : 0);
+    }
+
+    private void AnimateMenus(int selectedValue, int previousValue)
+    {
+        StartCoroutine(menus[selectedValue].gameObject.FadeOpacity(1f, 0.1f));
+        StartCoroutine(menus[previousValue].gameObject.FadeOpacity(0f, 0.1f));
+    }
+
+    private void UpdateNavigationText(int selectedValue, int previousValue, int nextValue)
+    {
+        currentMenuText.SetText(menus[selectedValue].name);
+        previousMenuText.SetText(menus[previousValue].name);
+        nextMenuText.SetText(menus[nextValue].name);
+    }
+
+    #endregion
+
+    #region Unity Methods
+
+    /// <summary>
+    /// Awake is called when the script instance is being loaded.
+    /// </summary>
+    protected override void Awake()
+    {
+        menus = GetComponentsInChildren<PauseUserInterfaceBase>().ToList();
+    }
+
+    #endregion
+
+    /*
     #region Variables
 
     public GameObject pauseContainer { get; private set; }
@@ -94,7 +159,6 @@ public class PauseUserInterface : MonoBehaviour
         {
             partySlots[party.playerParty.IndexOf(pokemon)].GetComponent<SidebarSlot>().PopulateSlot(pokemon);
         }
-        */
     }
 
     private void SetMenuText(int selectedMenu, int increment, bool animate)
@@ -103,19 +167,19 @@ public class PauseUserInterface : MonoBehaviour
         TextMeshProUGUI previousText = menuNavigation.transform.Find("Left/Previous").GetComponentInChildren<TextMeshProUGUI>();
         TextMeshProUGUI nextText = menuNavigation.transform.Find("Right/Next").GetComponentInChildren<TextMeshProUGUI>();
 
-        int previousMenu = ExtensionMethods.IncrementInt(selectedMenu, 0, PauseManager.instance.menuNames.Length, increment);
-        int nextMenu = ExtensionMethods.IncrementInt(selectedMenu, 0, PauseManager.instance.menuNames.Length, -increment);
+        int previousMenu = ExtensionMethods.IncrementInt(selectedMenu, 0, PauseUserInterfaceController.instance.menuNames.Length, increment);
+        int nextMenu = ExtensionMethods.IncrementInt(selectedMenu, 0, PauseUserInterfaceController.instance.menuNames.Length, -increment);
 
-        currentText.SetText(PauseManager.instance.menuNames[selectedMenu]);
-        previousText.SetText(PauseManager.instance.menuNames[previousMenu]);
-        nextText.SetText(PauseManager.instance.menuNames[nextMenu]);
+        currentText.SetText(PauseUserInterfaceController.instance.menuNames[selectedMenu]);
+        previousText.SetText(PauseUserInterfaceController.instance.menuNames[previousMenu]);
+        nextText.SetText(PauseUserInterfaceController.instance.menuNames[nextMenu]);
     }
 
     private void UpdateNavigationProgress(int selectedMenu, int increment, float animationDuration)
     {
         Transform[] progress = menuNavigation.transform.Find("Middle/Progress").GetChildren();
 
-        int previousMenu = ExtensionMethods.IncrementInt(selectedMenu, 0, PauseManager.instance.menuNames.Length, increment);
+        int previousMenu = ExtensionMethods.IncrementInt(selectedMenu, 0, PauseUserInterfaceController.instance.menuNames.Length, increment);
 
         StartCoroutine(progress[selectedMenu].gameObject.FadeColor(GameManager.GetAccentColor(), animationDuration));
         StartCoroutine(progress[previousMenu].gameObject.FadeColor("#696969".ToColor(), animationDuration));
@@ -132,7 +196,6 @@ public class PauseUserInterface : MonoBehaviour
 
             indicator.transform.position = partySlots[selectedSlot].position;
 
-            /*
             if (selectedSlot >= PartyManager.instance.party.playerParty.Count)
             {
                 indicator.transform.Find("Party Indicator").gameObject.SetActive(false);
@@ -148,7 +211,6 @@ public class PauseUserInterface : MonoBehaviour
                 indicator.transform.position = new Vector2(indicator.transform.position.x, partySlots[selectedSlot].position.y);
                 indicator.transform.Find("Party Indicator").gameObject.SetActive(true);
             }
-            */
 
             yield return null;
             indicatorAnimator.enabled = true;
@@ -157,7 +219,7 @@ public class PauseUserInterface : MonoBehaviour
 
     public void UpdateMenus(int selectedMenu, int increment, float animationDuration, bool animate = true)
     {
-        int previousMenu = ExtensionMethods.IncrementInt(selectedMenu, 0, PauseManager.instance.menuNames.Length, increment);
+        int previousMenu = ExtensionMethods.IncrementInt(selectedMenu, 0, PauseUserInterfaceController.instance.menuNames.Length, increment);
 
         UpdateNavigationProgress(selectedMenu, increment, animationDuration);
         SetMenuText(selectedMenu, increment, animate);
@@ -195,15 +257,14 @@ public class PauseUserInterface : MonoBehaviour
 
     private void AnimateCharacterSprite(int selectedMenu, int previousMenu, int increment)
     {
-        string activeMenu = $"isIn{PauseManager.instance.menuNames[selectedMenu]}"; ;
-        string inactiveMenu = $"isIn{PauseManager.instance.menuNames[previousMenu]}";
+        string activeMenu = $"isIn{PauseUserInterfaceController.instance.menuNames[selectedMenu]}"; ;
+        string inactiveMenu = $"isIn{PauseUserInterfaceController.instance.menuNames[previousMenu]}";
 
         characterSprite.GetComponent<CharacterSpriteController>().SetAnimation(activeMenu, inactiveMenu);
     }
 
     private void AnimatePartySlot(int selectedSlot, int increment)
     {
-        /*
         if (selectedSlot < PartyManager.instance.party.playerParty.Count)
         {
             int previousSlot = ExtensionMethods.IncrementInt(selectedSlot, 0, PartyManager.instance.party.playerParty.Count, increment);
@@ -211,7 +272,6 @@ public class PauseUserInterface : MonoBehaviour
             partySlots[selectedSlot].GetComponent<Animator>().SetBool("isSelected", true);
             partySlots[previousSlot].GetComponent<Animator>().SetBool("isSelected", false);
         }
-        */
     }
 
     #endregion
@@ -243,13 +303,6 @@ public class PauseUserInterface : MonoBehaviour
         pauseContainer.SetActive(false);
     }
 
-    /// <summary>
-    /// Update is called once per frame.
-    /// </summary>
-    private void Update()
-    {
-        
-    }
-
     #endregion
+    */
 }
