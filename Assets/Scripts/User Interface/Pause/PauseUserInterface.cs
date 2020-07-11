@@ -39,11 +39,10 @@ public class PauseUserInterface : UserInterface
         menus[previousValue].SetActive(false);
     }
 
-    public void ActivateMenu(int selectedValue, bool isActive, float animationDuration = 0.15f)
+    public void ActivateMenu(int selectedValue, bool isActive)
     {
-        StartCoroutine(gameObject.FadeOpacity(isActive ? 1f : 0f, animationDuration));
-
         UpdateSelectedObject(selectedValue, isActive ? 1 : 0);
+        StartCoroutine(AnimatePanel(isActive));
     }
 
     public UserInterfaceController GetActiveMenu(int selectedValue)
@@ -94,6 +93,23 @@ public class PauseUserInterface : UserInterface
             yield return new WaitForSecondsRealtime(menus[selectedValue].GetComponent<Animator>().GetAnimationTime());
 
             //menus[selectedValue].gameObject.SetActive(false);
+        }
+    }
+
+    private IEnumerator AnimatePanel(bool isActive, float animationDuration = 0.15f)
+    {
+        if (isActive)
+        {
+            gameObject.SetActive(true);
+        }
+
+        StartCoroutine(gameObject.FadeOpacity(isActive ? 1f : 0f, animationDuration));
+
+        if (!isActive)
+        {
+            yield return new WaitForSecondsRealtime(animationDuration);
+
+            gameObject.SetActive(false);
         }
     }
 
