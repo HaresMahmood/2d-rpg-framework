@@ -1,12 +1,82 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
 /// <summary>
 ///
 /// </summary>
-public class SidebarSlot : MonoBehaviour
+public class SidebarSlot : Slot
 {
+    #region Variables
+
+    private Image sprite;
+    private Image heldItem;
+
+    private TextMeshProUGUI nameText;
+    private TextMeshProUGUI levelText;
+
+    private Slider hpBar;
+
+    #endregion
+
+    #region Miscellaneous Methods
+
+    public void DeactivateSlot()
+    {
+        //base.Awake();
+        StartCoroutine(gameObject.FadeOpacity(0f, 0.1f));
+    }
+
+    protected override void SetInformation<T>(T slotObject)
+    {
+        if (GetComponent<CanvasGroup>().alpha == 0)
+        {
+            StartCoroutine(gameObject.FadeOpacity(1f, 0.1f));
+        }
+
+        PartyMember member = (PartyMember)Convert.ChangeType(slotObject, typeof(PartyMember));
+
+        sprite.sprite = member.Species.Sprites.MenuSprite;
+
+        if (heldItem.sprite != null)
+        {
+            heldItem.GetComponent<CanvasGroup>().alpha = 1;
+            heldItem.sprite = member.HeldItem.Sprite;
+        }
+        else
+        {
+            heldItem.GetComponent<CanvasGroup>().alpha = 0;
+        }
+
+        nameText.SetText(member.Nickname != "" ? member.Nickname : member.Species.Name);
+        levelText.SetText(member.Progression.Level.ToString());
+
+        hpBar.value = (float)member.Stats.HP / (float)member.Stats.Stats[Pokemon.Stat.HP];
+    }
+
+    #endregion
+
+    #region Unity Methods
+
+    /// <summary>
+    /// Awake is called when the script instance is being loaded.
+    /// </summary>
+    protected override void Awake()
+    {
+        sprite = transform.Find("Sprite").GetComponent<Image>();
+        heldItem = transform.Find("Held Item").GetComponent<Image>();
+
+        nameText = transform.Find("Information/Name").GetComponent<TextMeshProUGUI>();
+        levelText = transform.Find("Information/Level/Value").GetComponent<TextMeshProUGUI>();
+
+        hpBar = transform.Find("Health Bar").GetComponent<Slider>();
+
+    }
+
+    #endregion
+
+    /*
     #region Variables
 
     private Transform slot;
@@ -118,4 +188,5 @@ public class SidebarSlot : MonoBehaviour
     }
 
     #endregion
+    */
 }
