@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using JetBrains.Annotations;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,7 +10,7 @@ public class SidebarUserInterface : UserInterface
 {
     #region Constants
 
-    public override int MaxObjects => (Party.Count); // + 1
+    public override int MaxObjects => (Party.Count + 1);
 
     #endregion
 
@@ -21,18 +22,59 @@ public class SidebarUserInterface : UserInterface
 
     #region Variables
 
-    List<SidebarSlot> slots;
+    private List<SidebarSlot> slots;
+    private Transform editButton;
 
     #endregion
 
     #region Miscellaneous Methods
 
     public override void UpdateSelectedObject(int selectedValue, int increment)
-    {
+    { 
+        Transform selectedObject = null;
         int previousValue = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, increment);
 
-        slots[selectedValue].AnimateSlot(true);
-        slots[previousValue].AnimateSlot(false);
+        if (selectedValue != (MaxObjects - 1))
+        {
+            slots[selectedValue].AnimateSlot(true);
+
+            selectedObject = slots[selectedValue].transform;
+        }
+        else
+        {
+            selectedObject = editButton;
+        }
+
+        if (previousValue != (MaxObjects - 1))
+        {
+            slots[previousValue].AnimateSlot(false);
+        }
+
+        StartCoroutine(UpdateSelector(selectedObject));
+    }
+
+    /// <summary>
+    /// Animates and updates the position of the selector. Dynamically changes position and size of selector 
+    /// depending on what situation it is used for. If no value is selected, the indicator completely fades out.
+    /// </summary>
+    /// <param name="objectSlots"> List of buttons at with the selector can be positioned. </param>
+    /// <param name="selectedValue"> Index of the value currently selected. </param>
+    /// <param name="animationDuration"> Duration of the animation/fade. </param>
+    /// <returns> Co-routine. </returns>
+    protected override IEnumerator UpdateSelector(Transform selectedObject = null, float animationDuration = 0.1f)
+    {
+        yield return null;
+
+        StartCoroutine(base.UpdateSelector(selectedObject, animationDuration));
+
+        if (selectedObject != null)
+        {
+            yield return new WaitForSecondsRealtime(animationDuration);
+
+            selector.transform.Find(selectedObject.GetComponent<SidebarSlot>() == null ? "Edit" : "Party").gameObject.SetActive(true);
+            selector.transform.Find(selectedObject.GetComponent<SidebarSlot>() == null ? "Party" : "Edit").gameObject.SetActive(false);
+        }
+
     }
 
     #endregion
@@ -45,9 +87,10 @@ public class SidebarUserInterface : UserInterface
     protected override void Awake()
     {
         selector = transform.Find("Selectors").gameObject;
+        editButton = transform.Find("Edit");
         slots = GetComponentsInChildren<SidebarSlot>().ToList();
 
-        //base.Awake();
+        base.Awake();
     }
 
     /// <summary>

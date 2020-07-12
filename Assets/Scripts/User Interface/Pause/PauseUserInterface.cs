@@ -100,7 +100,7 @@ public class PauseUserInterface : UserInterface
     {
         if (isActive)
         {
-            gameObject.SetActive(true);
+            //gameObject.SetActive(true);
         }
 
         StartCoroutine(gameObject.FadeOpacity(isActive ? 1f : 0f, animationDuration));
@@ -109,7 +109,7 @@ public class PauseUserInterface : UserInterface
         {
             yield return new WaitForSecondsRealtime(animationDuration);
 
-            gameObject.SetActive(false);
+            //gameObject.SetActive(false);
         }
     }
 
