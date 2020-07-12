@@ -10,6 +10,8 @@ public class SidebarSlot : Slot
 {
     #region Variables
 
+    private Animator animator;
+
     private Image sprite;
     private Image heldItem;
 
@@ -22,6 +24,11 @@ public class SidebarSlot : Slot
 
     #region Miscellaneous Methods
 
+    public void AnimateSlot(bool isActive)
+    {
+        animator.SetBool("isActive", isActive);
+    }
+
     public void DeactivateSlot()
     {
         //base.Awake();
@@ -30,12 +37,15 @@ public class SidebarSlot : Slot
 
     protected override void SetInformation<T>(T slotObject)
     {
+        PartyMember member = (PartyMember)Convert.ChangeType(slotObject, typeof(PartyMember));
+
+        float hp = (float)member.Stats.HP / (float)member.Stats.Stats[Pokemon.Stat.HP];
+        string color = hp >= 0.5f ? "#67FF8F" : (hp >= 0.25f ? "#FFB766" : "#FF7766");
+
         if (GetComponent<CanvasGroup>().alpha == 0)
         {
             StartCoroutine(gameObject.FadeOpacity(1f, 0.1f));
         }
-
-        PartyMember member = (PartyMember)Convert.ChangeType(slotObject, typeof(PartyMember));
 
         sprite.sprite = member.Species.Sprites.MenuSprite;
 
@@ -52,7 +62,8 @@ public class SidebarSlot : Slot
         nameText.SetText(member.Nickname != "" ? member.Nickname : member.Species.Name);
         levelText.SetText(member.Progression.Level.ToString());
 
-        hpBar.value = (float)member.Stats.HP / (float)member.Stats.Stats[Pokemon.Stat.HP];
+        hpBar.value = hp;
+        hpBar.fillRect.GetComponent<Image>().color = color.ToColor();
     }
 
     #endregion
@@ -64,6 +75,8 @@ public class SidebarSlot : Slot
     /// </summary>
     protected override void Awake()
     {
+        animator = GetComponent<Animator>();
+
         sprite = transform.Find("Sprite").GetComponent<Image>();
         heldItem = transform.Find("Held Item").GetComponent<Image>();
 

@@ -9,7 +9,7 @@ public class SidebarUserInterface : UserInterface
 {
     #region Constants
 
-    public override int MaxObjects => Party.Count;
+    public override int MaxObjects => (Party.Count); // + 1
 
     #endregion
 
@@ -27,7 +27,13 @@ public class SidebarUserInterface : UserInterface
 
     #region Miscellaneous Methods
 
+    public override void UpdateSelectedObject(int selectedValue, int increment)
+    {
+        int previousValue = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, increment);
 
+        slots[selectedValue].AnimateSlot(true);
+        slots[previousValue].AnimateSlot(false);
+    }
 
     #endregion
 
@@ -38,7 +44,10 @@ public class SidebarUserInterface : UserInterface
     /// </summary>
     protected override void Awake()
     {
-        slots = GetComponentsInChildren<SidebarSlot>().ToList();   
+        selector = transform.Find("Selectors").gameObject;
+        slots = GetComponentsInChildren<SidebarSlot>().ToList();
+
+        //base.Awake();
     }
 
     /// <summary>
@@ -54,7 +63,7 @@ public class SidebarUserInterface : UserInterface
             counter = i;
         }
 
-        if (counter < slots.Count - 1)
+        if (++counter < slots.Count)
         {
             for (int i = counter; i < slots.Count; i++)
             {

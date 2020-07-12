@@ -47,7 +47,14 @@ public class SidebarUserInterfaceController : UserInterfaceController
 
     #region Miscellaneous Methods
 
+    public override IEnumerator SetActive(bool isActive, bool condition = true)
+    {
+        userInterface.UpdateSelectedObject(selectedValue, isActive ? 1 : 0);
 
+        Flags.isActive = isActive;
+
+        yield break;
+    }
 
     #endregion
 
