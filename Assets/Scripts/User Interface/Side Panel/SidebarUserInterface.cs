@@ -1,5 +1,4 @@
-﻿using JetBrains.Annotations;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,7 +21,11 @@ public class SidebarUserInterface : UserInterface
 
     #region Variables
 
+    private EditUserInterface editUserInterface;
+
     private List<SidebarSlot> slots;
+
+    private Animator animator;
     private Transform editButton;
 
     #endregion
@@ -53,9 +56,16 @@ public class SidebarUserInterface : UserInterface
         StartCoroutine(UpdateSelector(selectedObject));
     }
 
-    public void ActivateMenu(int selectedValue, bool isActive)
+    public bool ActivateMenu(int selectedValue, bool isActive)
     {
+        if (selectedValue == (MaxObjects - 1))
+        {
+            animator.SetBool("isActive", isActive);
 
+            return true;
+        }
+
+        return false;
     }
 
     /// <summary>
@@ -91,8 +101,12 @@ public class SidebarUserInterface : UserInterface
     /// </summary>
     protected override void Awake()
     {
+        editUserInterface = transform.Find("Full Party").GetComponent<EditUserInterface>();
+
+        animator = GetComponent<Animator>();
         selector = transform.Find("Selectors").gameObject;
         editButton = transform.Find("Edit");
+
         slots = GetComponentsInChildren<SidebarSlot>().ToList();
 
         base.Awake();
@@ -118,6 +132,9 @@ public class SidebarUserInterface : UserInterface
                 slots[i].DeactivateSlot();
             }
         }
+
+        editUserInterface.UpdateInformation(Party);
+        editUserInterface.gameObject.SetActive(false);
     }
 
     #endregion

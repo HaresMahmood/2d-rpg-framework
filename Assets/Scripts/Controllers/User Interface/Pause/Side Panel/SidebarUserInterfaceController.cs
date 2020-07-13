@@ -62,7 +62,7 @@ public class SidebarUserInterfaceController : UserInterfaceController
 
         if (Input.GetButtonDown("Interact"))
         {
-            Flags.isActive = false;
+            Flags.isActive = userInterface.ActivateMenu(selectedValue, true);
         }
 
         if (Input.GetButtonDown("Cancel"))
