@@ -9,17 +9,38 @@ public class EditUserInterface : UserInterface
 {
     #region Constants
 
-    public override int MaxObjects => slots.Count;
+    public override int MaxObjects => Party.Count;
+
+    #endregion
+
+    #region Properties
+
+    public List<PartyMember> Party { get; set; }
 
     #endregion
 
     #region Variables
 
-    List<FullPartySlot> slots;
+    private List<FullPartySlot> slots;
 
     #endregion
 
     #region Miscellaneous Methods
+
+    public override void UpdateSelectedObject(int selectedValue, int increment = -1)
+    {
+        int previousValue = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, -increment);
+
+        slots[selectedValue].AnimateSlot(0.5f, 0.1f);
+        slots[previousValue].AnimateSlot(0.25f, 0.1f);
+
+        StartCoroutine(UpdateSelector(slots[selectedValue].transform));
+    }
+
+    public void SetActive(bool isActive, bool condition = true)
+    {
+        StartCoroutine(EditUserInterfaceController.Instance.SetActive(isActive, condition));
+    }
 
     public void UpdateInformation(List<PartyMember> party)
     {
@@ -33,7 +54,7 @@ public class EditUserInterface : UserInterface
 
         if (++counter < slots.Count)
         {
-            Debug.Log(true);
+            //Debug.Log(true);
         }
     }
 
@@ -46,7 +67,10 @@ public class EditUserInterface : UserInterface
     /// </summary>
     protected override void Awake()
     {
-        slots = GetComponentsInChildren<FullPartySlot>().ToList();   
+        slots = GetComponentsInChildren<FullPartySlot>().ToList();
+        selector = transform.Find("List/Selector").gameObject;
+
+        base.Awake();
     }
 
     #endregion

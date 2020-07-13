@@ -48,7 +48,7 @@ public class PauseController : MonoBehaviour
 
     private void SetActive(bool isActive)
     {
-        Time.timeScale = flags.isPaused ? 0 : 1;
+        Time.timeScale = Flags.isPaused ? 0 : 1;
 
         Debug.Log(Time.timeScale);
 

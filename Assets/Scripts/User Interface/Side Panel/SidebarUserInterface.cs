@@ -61,11 +61,12 @@ public class SidebarUserInterface : UserInterface
         if (selectedValue == (MaxObjects - 1))
         {
             animator.SetBool("isActive", isActive);
+            editUserInterface.SetActive(isActive);
 
-            return true;
+            return false;
         }
 
-        return false;
+        return true;
     }
 
     /// <summary>
@@ -135,6 +136,8 @@ public class SidebarUserInterface : UserInterface
 
         editUserInterface.UpdateInformation(Party);
         editUserInterface.gameObject.SetActive(false);
+
+        editUserInterface.Party = Party;
     }
 
     #endregion

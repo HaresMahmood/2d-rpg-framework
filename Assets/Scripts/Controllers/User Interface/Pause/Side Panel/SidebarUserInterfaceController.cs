@@ -73,7 +73,7 @@ public class SidebarUserInterfaceController : UserInterfaceController
 
         #endregion
 
-        #region Unity Methods
+    #region Unity Methods
 
         /// <summary>
         /// Awake is called when the script instance is being loaded.

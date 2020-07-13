@@ -16,7 +16,7 @@ public class FullPartySlot : Slot
     private TextMeshProUGUI nameText;
     private TextMeshProUGUI levelText;
 
-    private GameObject gender;
+    private Transform gender;
 
     private Slider hpBar;
     private TextMeshProUGUI hpText;
@@ -24,6 +24,11 @@ public class FullPartySlot : Slot
     #endregion
 
     #region Miscellaneous Methods
+
+    public override void AnimateSlot(float opacity, float duration = -1)
+    {
+        StartCoroutine(sprite.gameObject.FadeOpacity(opacity, duration));
+    }
 
     protected override void SetInformation<T>(T slotObject)
     {
@@ -55,6 +60,21 @@ public class FullPartySlot : Slot
         hpBar.value = hp;
         hpBar.fillRect.GetComponent<Image>().color = color.ToColor();
         hpText.SetText($"<color={color}>{member.Stats.HP}</color>/{member.Stats.Stats[Pokemon.Stat.HP]} <color=#{ColorUtility.ToHtmlStringRGB(GameManager.GetAccentColor())}>HP</color>");
+
+        Transform[] genders = gender.GetChildren();
+
+        // TODO: Create GenderUserInterface class
+        if (member.Gender.Value == PartyMember.MemberGender.Gender.None)
+        {
+            genders[0].gameObject.SetActive(false);
+            genders[1].gameObject.SetActive(false);
+        }
+        else
+        {
+            genders[(int)member.Gender.Value - 1].gameObject.SetActive(true);
+
+            genders[ExtensionMethods.IncrementInt((int)member.Gender.Value - 1, 0, 2, 1)].gameObject.SetActive(false); // TODO: Not working
+        }
     }
 
     #endregion
@@ -72,7 +92,7 @@ public class FullPartySlot : Slot
         nameText = transform.Find("Information/Name").GetComponent<TextMeshProUGUI>();
         levelText = transform.Find("Information/Level & Gender/Level/Value").GetComponent<TextMeshProUGUI>();
 
-        gender = transform.Find("Information/Level & Gender/Gender").gameObject;
+        gender = transform.Find("Information/Level & Gender/Gender");
 
         hpBar = transform.Find("Information/Health/Health Bar").GetComponent<Slider>();
         hpText = transform.Find("Information/Health/Health Bar/Handle Slide Area/Handle/Value").GetComponent<TextMeshProUGUI>();
