@@ -56,14 +56,29 @@ public class SidebarUserInterfaceController : UserInterfaceController
         yield break;
     }
 
-    #endregion
+    protected override void GetInput(string axisName)
+    {
+        base.GetInput(axisName);
 
-    #region Unity Methods
+        if (Input.GetButtonDown("Interact"))
+        {
+            Flags.isActive = false;
+        }
 
-    /// <summary>
-    /// Awake is called when the script instance is being loaded.
-    /// </summary>
-    private void Awake()
+        if (Input.GetButtonDown("Cancel"))
+        {
+            Debug.Log("Cancel");
+        }
+    }
+
+        #endregion
+
+        #region Unity Methods
+
+        /// <summary>
+        /// Awake is called when the script instance is being loaded.
+        /// </summary>
+        private void Awake()
     {
         party = PartyController.Instance.party.playerParty;
         userInterface.Party = party;

@@ -53,6 +53,11 @@ public class SidebarUserInterface : UserInterface
         StartCoroutine(UpdateSelector(selectedObject));
     }
 
+    public void ActivateMenu(int selectedValue, bool isActive)
+    {
+
+    }
+
     /// <summary>
     /// Animates and updates the position of the selector. Dynamically changes position and size of selector 
     /// depending on what situation it is used for. If no value is selected, the indicator completely fades out.
