@@ -43,14 +43,28 @@ public class EditUserInterfaceController : UserInterfaceController
 
     public override IEnumerator SetActive(bool isActive, bool condition = true)
     {
-        Flags.isActive = isActive;
-
-        userInterface.UpdateSelectedObject(selectedValue, isActive ? 1 : 0);
+        userInterface.UpdateSelectedObject(selectedValue, isActive ? -1 : 0);
         selectedValue = 0;
 
-        //Debug.Log(true);
+        yield return null;
 
-        yield break;
+        Flags.isActive = isActive;
+    }
+
+    protected override void GetInput(string axisName)
+    {
+        base.GetInput(axisName);
+
+        if (Input.GetButtonDown("Interact"))
+        {
+            Debug.Log("Interact");
+        }
+
+        if (Input.GetButtonDown("Cancel"))
+        {
+            userInterface.ActivateMenu(false);
+            StartCoroutine(SidebarUserInterfaceController.Instance.SetActive(true));
+        }
     }
 
     #endregion

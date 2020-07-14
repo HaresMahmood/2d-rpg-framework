@@ -56,13 +56,18 @@ public class SidebarUserInterfaceController : UserInterfaceController
         yield break;
     }
 
+    public bool ActivateMenu(bool isActive, int selectedValue = -1)
+    {
+        return userInterface.ActivateMenu(isActive, selectedValue);
+    }
+
     protected override void GetInput(string axisName)
     {
         base.GetInput(axisName);
 
         if (Input.GetButtonDown("Interact"))
         {
-            Flags.isActive = userInterface.ActivateMenu(selectedValue, true);
+            Flags.isActive = ActivateMenu(true, selectedValue);
         }
 
         if (Input.GetButtonDown("Cancel"))

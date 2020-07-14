@@ -37,9 +37,9 @@ public class EditUserInterface : UserInterface
         StartCoroutine(UpdateSelector(slots[selectedValue].transform));
     }
 
-    public void SetActive(bool isActive, bool condition = true)
+    public void ActivateMenu(bool isActive)
     {
-        StartCoroutine(EditUserInterfaceController.Instance.SetActive(isActive, condition));
+        SidebarUserInterfaceController.Instance.ActivateMenu(isActive);
     }
 
     public void UpdateInformation(List<PartyMember> party)

@@ -56,12 +56,12 @@ public class SidebarUserInterface : UserInterface
         StartCoroutine(UpdateSelector(selectedObject));
     }
 
-    public bool ActivateMenu(int selectedValue, bool isActive)
+    public bool ActivateMenu(bool isActive, int selectedValue = -1)
     {
-        if (selectedValue == (MaxObjects - 1))
+        if (selectedValue == (MaxObjects - 1) || selectedValue == -1)
         {
             animator.SetBool("isActive", isActive);
-            editUserInterface.SetActive(isActive);
+            StartCoroutine(EditUserInterfaceController.Instance.SetActive(isActive));
 
             return false;
         }
