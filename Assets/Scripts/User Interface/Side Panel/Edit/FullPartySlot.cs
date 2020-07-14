@@ -28,6 +28,16 @@ public class FullPartySlot : Slot
     public override void AnimateSlot(float opacity, float duration = -1)
     {
         StartCoroutine(sprite.gameObject.FadeOpacity(opacity, duration));
+        sprite.GetComponent<Animator>().SetBool("isActive", opacity == 0.5f);
+    }
+
+    public void AnimateSlot(float opacity)
+    {
+        if (transform.Find("Sprites").GetComponent<CanvasGroup>().alpha != opacity)
+        {
+            transform.Find("Sprites").GetComponent<CanvasGroup>().alpha = opacity;
+            transform.Find("Information").GetComponent<CanvasGroup>().alpha = opacity;
+        }
     }
 
     protected override void SetInformation<T>(T slotObject)
@@ -56,6 +66,7 @@ public class FullPartySlot : Slot
 
         nameText.SetText(member.Nickname != "" ? member.Nickname : member.Species.Name);
         levelText.SetText(member.Progression.Level.ToString());
+        levelText.GetComponent<AutoTextWidth>().UpdateWidth(member.Progression.Level.ToString());
 
         hpBar.value = hp;
         hpBar.fillRect.GetComponent<Image>().color = color.ToColor();
@@ -86,8 +97,8 @@ public class FullPartySlot : Slot
     /// </summary>
     protected override void Awake()
     {
-        sprite = transform.Find("Sprite").GetComponent<Image>();
-        heldItem = transform.Find("Held Item").GetComponent<Image>();
+        sprite = transform.Find("Sprites/Sprite").GetComponent<Image>();
+        heldItem = transform.Find("Sprites/Held Item").GetComponent<Image>();
 
         nameText = transform.Find("Information/Name").GetComponent<TextMeshProUGUI>();
         levelText = transform.Find("Information/Level & Gender/Level/Value").GetComponent<TextMeshProUGUI>();

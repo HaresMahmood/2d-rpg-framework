@@ -50,6 +50,17 @@ public class PauseUserInterface : UserInterface
         return menus[selectedValue].Controller;
     }
 
+    public IEnumerator FadeMenu(int selectedValue, float opacity, float animationDuration)
+    {
+        StartCoroutine(menus[selectedValue].gameObject.FadeOpacity(opacity, animationDuration));
+
+        yield return new WaitForSecondsRealtime(animationDuration);
+
+        menus[selectedValue].SetActive(opacity == 1f); yield return null;
+        //menus[selectedValue].gameObject.SetActive(opacity == 1f);
+
+    }
+
     private void AnimateMenus(int selectedValue, int previousValue, int increment)
     {
         StartCoroutine(AnimateMenu(selectedValue, increment, true));

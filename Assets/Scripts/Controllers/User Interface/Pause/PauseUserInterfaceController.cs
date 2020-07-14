@@ -50,6 +50,13 @@ public class PauseUserInterfaceController : UserInterfaceController
         yield break;
     }
 
+    public void ActivateMenu(float opacity, int selectedValue = -1, float animationDuration = 0.15f)
+    {
+        selectedValue = selectedValue == -1 ? this.selectedValue : selectedValue;
+
+        StartCoroutine(userInterface.FadeMenu(selectedValue, opacity, animationDuration));
+    }
+
     public bool CanExit()
     {
         return userInterface.GetActiveMenu(selectedValue).Flags.isActive;

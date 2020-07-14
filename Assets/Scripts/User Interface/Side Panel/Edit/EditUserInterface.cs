@@ -31,10 +31,18 @@ public class EditUserInterface : UserInterface
     {
         int previousValue = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, -increment);
 
-        slots[selectedValue].AnimateSlot(0.5f, 0.1f);
-        slots[previousValue].AnimateSlot(0.25f, 0.1f);
+        ActivateSlot(selectedValue, true);
+        ActivateSlot(previousValue, false);
+    }
 
-        StartCoroutine(UpdateSelector(slots[selectedValue].transform));
+    public void ActivateSlot(int selectedValue, bool isActive, float animationDuration = 0.1f)
+    {
+        slots[selectedValue].AnimateSlot(isActive ? 0.5f : 0.3f, animationDuration);
+
+        if (isActive)
+        {
+            StartCoroutine(UpdateSelector(slots[selectedValue].transform));
+        }
     }
 
     public void ActivateMenu(bool isActive)
@@ -48,13 +56,17 @@ public class EditUserInterface : UserInterface
 
         for (int i = 0; i < party.Count; i++)
         {
+            slots[i].AnimateSlot(1f);
             slots[i].UpdateInformation(party[i]);
             counter = i;
         }
 
         if (++counter < slots.Count)
         {
-            //Debug.Log(true);
+            for (int i = counter; i < slots.Count; i++)
+            {
+                slots[i].AnimateSlot(0f);
+            }
         }
     }
 

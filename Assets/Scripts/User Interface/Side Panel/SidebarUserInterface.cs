@@ -62,8 +62,9 @@ public class SidebarUserInterface : UserInterface
         {
             animator.SetBool("isActive", isActive);
             StartCoroutine(EditUserInterfaceController.Instance.SetActive(isActive));
+            PauseUserInterfaceController.Instance.ActivateMenu(isActive ? 0f : 1f);
 
-            return false;
+            return isActive;
         }
 
         return true;

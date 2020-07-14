@@ -44,7 +44,12 @@ public class EditUserInterfaceController : UserInterfaceController
     public override IEnumerator SetActive(bool isActive, bool condition = true)
     {
         userInterface.UpdateSelectedObject(selectedValue, isActive ? -1 : 0);
-        selectedValue = 0;
+
+
+        if (!isActive)
+        {
+            selectedValue = 0;
+        }
 
         yield return null;
 
