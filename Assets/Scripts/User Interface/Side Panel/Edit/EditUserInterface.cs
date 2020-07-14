@@ -41,7 +41,7 @@ public class EditUserInterface : UserInterface
 
         if (isActive)
         {
-            StartCoroutine(UpdateSelector(slots[selectedValue].transform));
+            StartCoroutine(base.UpdateSelector(slots[selectedValue].transform));
         }
     }
 
@@ -49,6 +49,7 @@ public class EditUserInterface : UserInterface
     {
         SidebarUserInterfaceController.Instance.ActivateMenu(isActive);
     }
+
 
     public void UpdateInformation(List<PartyMember> party)
     {
@@ -68,6 +69,29 @@ public class EditUserInterface : UserInterface
                 slots[i].AnimateSlot(0f);
             }
         }
+    }
+
+    public void UpdateSelector(bool isActive, float animationDuration = 0.15f)
+    {
+        Color color = isActive ? GameManager.instance.oppositeColor : Color.white;
+
+        StartCoroutine(selector.FadeColor(color, animationDuration));
+    }
+
+    public List<PartyMember> UpdatePosition(int selectedValue, int increment)
+    {
+        int previousValue = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, -increment);
+
+        //GetMoves(member).Move(selectedValue, previousValue);
+
+        PartyMember member = Party[previousValue];
+        Party.Remove(member);
+        Party.Insert(selectedValue, member);
+
+        UpdateInformation(Party);
+        UpdateSelectedObject(selectedValue, increment);
+
+        return Party;
     }
 
     #endregion

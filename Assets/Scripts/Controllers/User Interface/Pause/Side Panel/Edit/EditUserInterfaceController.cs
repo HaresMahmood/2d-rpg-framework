@@ -37,6 +37,9 @@ public class EditUserInterfaceController : UserInterfaceController
         get { return userInterface; }
     }
 
+    // TODO: bad name
+    public bool IsActive { get; set; }
+
     #endregion
 
     #region Miscellaneous Methods
@@ -58,17 +61,41 @@ public class EditUserInterfaceController : UserInterfaceController
 
     protected override void GetInput(string axisName)
     {
-        base.GetInput(axisName);
+        if (IsActive)
+        {
+            GetInput();
+        }
+        else
+        {
+            base.GetInput(axisName);
+        }
 
         if (Input.GetButtonDown("Interact"))
         {
-            Debug.Log("Interact");
+            IsActive = !IsActive;
         }
-
-        if (Input.GetButtonDown("Cancel"))
+        else if (Input.GetButtonDown("Cancel") && IsActive)
+        {
+            IsActive = false;
+        }
+        else if (Input.GetButtonDown("Cancel") && !IsActive)
         {
             userInterface.ActivateMenu(false);
             StartCoroutine(SidebarUserInterfaceController.Instance.SetActive(true));
+        }
+
+        if (Input.GetButtonDown("Interact") || Input.GetButtonDown("Cancel"))
+        {
+            userInterface.UpdateSelector(IsActive);
+        }
+    }
+
+    private void GetInput()
+    {
+        bool hasInput = RegularInput(UserInterface.MaxObjects, "Horizontal");
+        if (hasInput)
+        {
+            PartyController.Instance.party.playerParty = userInterface.UpdatePosition(selectedValue, (int)Input.GetAxisRaw("Horizontal"));
         }
     }
 

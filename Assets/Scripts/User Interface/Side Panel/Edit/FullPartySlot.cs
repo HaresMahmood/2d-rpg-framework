@@ -84,7 +84,7 @@ public class FullPartySlot : Slot
         {
             genders[(int)member.Gender.Value - 1].gameObject.SetActive(true);
 
-            genders[ExtensionMethods.IncrementInt((int)member.Gender.Value - 1, 0, 2, 1)].gameObject.SetActive(false); // TODO: Not working
+            //genders[ExtensionMethods.IncrementInt((int)member.Gender.Value - 1, 0, 2, 1)].gameObject.SetActive(false); // TODO: Not working
         }
     }
 
