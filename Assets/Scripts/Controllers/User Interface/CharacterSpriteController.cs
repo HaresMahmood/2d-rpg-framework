@@ -40,9 +40,10 @@ public class CharacterSpriteController : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    public void SetAnimation(bool isActive)
+    public void SetAnimation(string selectedMenu, string previousMenu)
     {
-        animator.SetBool("isActive", isActive);
+        animator.SetBool($"isIn{selectedMenu}", true);
+        animator.SetBool($"isIn{previousMenu}", false);
     }
 
     public void SetSprite(Sprite sprite)

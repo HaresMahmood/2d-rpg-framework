@@ -54,11 +54,6 @@ public class PartyController : UserInterfaceController
     {
         //int previousValue = -(int)(Input.GetAxisRaw("Horizontal") == 0 ? -1 : Input.GetAxisRaw("Horizontal"));
 
-        if (userInterface.GetComponent<CanvasGroup>().alpha != 1f)
-        {
-            CharacterSpriteController.Instance.SetAnimation(isActive);
-        }
-
         yield return null;
 
         Flags.isActive = isActive;
@@ -76,8 +71,6 @@ public class PartyController : UserInterfaceController
             UpdateSelectedObject(selectedValue, 0);
 
             selectedValue = 0;
-
-            //CharacterSpriteController.Instance.FadeSprite(1f, 0.15f); // TODO: Debug.
         }
     }
 

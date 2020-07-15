@@ -55,15 +55,17 @@ public class PauseUserInterfaceController : UserInterfaceController
         selectedValue = selectedValue == -1 ? this.selectedValue : selectedValue;
 
         StartCoroutine(userInterface.FadeMenu(selectedValue, opacity, animationDuration));
+        CharacterSpriteController.Instance.FadeOpacity(opacity, animationDuration);
 
         return selectedValue;
     }
 
-    public void ActivateMenu(bool isActive, int selectedValue = -1)
+    public void AnimateMenu(float opacity, int selectedValue = -1, float animationDuration = 0.15f)
     {
         selectedValue = selectedValue == -1 ? this.selectedValue : selectedValue;
 
-        userInterface.ActivateMenu(selectedValue, isActive);
+        StartCoroutine(userInterface.FadeMenu(selectedValue, opacity, animationDuration, false));
+        CharacterSpriteController.Instance.FadeOpacity(opacity, animationDuration);
     }
 
     public bool CanExit()

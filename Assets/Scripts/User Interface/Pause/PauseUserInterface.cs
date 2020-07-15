@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEditor;
 
 /// <summary>
 ///
@@ -41,10 +42,15 @@ public class PauseUserInterface : UserInterface
         AnimateMenus(selectedValue, previousValue, -increment);
         UpdateNavigationText(selectedValue, previousValue, nextValue);
 
+        // TODO: Debug
         if (menus[selectedValue] is InventoryUserInterface || menus[selectedValue] is PartyUserInterface)
         {
+            string selectedMenuName = menus[selectedValue].name;
+            string previousMenuName = selectedMenuName == "Inventory" ? "Party" : "Inventory";
+
             StartCoroutine(ActivateSidebar(0.5f));
             StartCoroutine(ActivateCharacterSprite(1f));
+            CharacterSpriteController.Instance.SetAnimation(selectedMenuName, previousMenuName);
         }
         else
         {
@@ -69,15 +75,17 @@ public class PauseUserInterface : UserInterface
         return menus[selectedValue].Controller;
     }
 
-    public IEnumerator FadeMenu(int selectedValue, float opacity, float animationDuration)
+    public IEnumerator FadeMenu(int selectedValue, float opacity, float animationDuration, bool activate = true)
     {
         StartCoroutine(menus[selectedValue].gameObject.FadeOpacity(opacity, animationDuration));
 
-        yield return new WaitForSecondsRealtime(animationDuration);
+        if (activate)
+        {
+            yield return new WaitForSecondsRealtime(animationDuration);
 
-        menus[selectedValue].SetActive(opacity == 1f); yield return null;
-        //menus[selectedValue].gameObject.SetActive(opacity == 1f);
-
+            menus[selectedValue].SetActive(opacity == 1f); yield return null;
+            //menus[selectedValue].gameObject.SetActive(opacity == 1f);
+        }
     }
 
     private void AnimateMenus(int selectedValue, int previousValue, int increment)
