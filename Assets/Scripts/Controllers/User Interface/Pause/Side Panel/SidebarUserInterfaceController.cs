@@ -50,6 +50,8 @@ public class SidebarUserInterfaceController : UserInterfaceController
     public override IEnumerator SetActive(bool isActive, bool condition = true)
     {
         userInterface.UpdateSelectedObject(selectedValue, isActive ? 1 : 0);
+        PauseUserInterfaceController.Instance.ActivateMenu(isActive ? 0.5f : 1f);
+        userInterface.FadePanel(isActive ? 1f : 0.5f);
 
         Flags.isActive = isActive;
 
@@ -70,9 +72,10 @@ public class SidebarUserInterfaceController : UserInterfaceController
             Flags.isActive = ActivateMenu(true, selectedValue);
         }
 
-        if (Input.GetButtonDown("Cancel"))
+        if (Input.GetButtonDown("Cancel") || Input.GetAxisRaw("Horizontal") == 1)
         {
-            Debug.Log("Cancel");
+            PauseUserInterfaceController.Instance.ActivateMenu(true);
+            StartCoroutine(SetActive(false));
         }
     }
 

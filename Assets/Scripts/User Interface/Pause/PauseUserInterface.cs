@@ -19,6 +19,8 @@ public class PauseUserInterface : UserInterface
 
     private List<PauseUserInterfaceBase> menus;
 
+    private SidebarUserInterface sidebar;
+
     private TextMeshProUGUI currentMenuText;
     private TextMeshProUGUI previousMenuText;
     private TextMeshProUGUI nextMenuText;
@@ -37,12 +39,25 @@ public class PauseUserInterface : UserInterface
 
         menus[selectedValue].SetActive(true);
         menus[previousValue].SetActive(false);
+
+        if (menus[selectedValue] is InventoryUserInterface || menus[selectedValue] is PartyUserInterface)
+        {
+            StartCoroutine(ActivateSidebar(0.5f));
+        }
+        else
+        {
+            StartCoroutine(ActivateSidebar(0f));        }
+    }
+
+    public void ActivatePanel(int selectedValue, bool isActive)
+    {
+        UpdateSelectedObject(selectedValue, isActive ? 1 : 0);
+        StartCoroutine(AnimatePanel(isActive));
     }
 
     public void ActivateMenu(int selectedValue, bool isActive)
     {
-        UpdateSelectedObject(selectedValue, isActive ? 1 : 0);
-        StartCoroutine(AnimatePanel(isActive));
+        menus[selectedValue].SetActive(isActive);
     }
 
     public UserInterfaceController GetActiveMenu(int selectedValue)
@@ -131,6 +146,26 @@ public class PauseUserInterface : UserInterface
         nextMenuText.SetText(menus[nextValue].name);
     }
 
+    private IEnumerator ActivateSidebar(float opacity, float animationDuration = 0.15f)
+    {
+        if (sidebar.GetComponent<CanvasGroup>().alpha != opacity)
+        {
+            if (opacity > 0f)
+            {
+                sidebar.gameObject.SetActive(true);
+            }
+
+            StartCoroutine(sidebar.gameObject.FadeOpacity(opacity, animationDuration));
+            
+            if (opacity == 0f)
+            {
+                yield return new WaitForSecondsRealtime(animationDuration);
+
+                sidebar.gameObject.SetActive(false);
+            }
+        }
+    }
+
     #endregion
 
     #region Unity Methods
@@ -141,6 +176,8 @@ public class PauseUserInterface : UserInterface
     protected override void Awake()
     {
         menus = GetComponentsInChildren<PauseUserInterfaceBase>().ToList();
+
+        sidebar = transform.Find("Side Panel").GetComponent<SidebarUserInterface>();
 
         currentMenuText = transform.Find("Top Panel/Navigation/Middle/Current/Text").GetComponent<TextMeshProUGUI>();
         previousMenuText = transform.Find("Top Panel/Navigation/Left/Previous/Text").GetComponent<TextMeshProUGUI>();

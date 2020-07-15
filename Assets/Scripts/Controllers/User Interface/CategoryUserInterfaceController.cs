@@ -67,15 +67,31 @@ public abstract class CategoryUserInterfaceController : UserInterfaceController
         return hasInput;
     }
 
-    protected virtual void GetInput()
+    protected virtual void GetInput(int max)
     {
         if (Input.GetAxisRaw("Trigger") == 0)
         {
+            int selectedValue = this.selectedValue;
             bool hasInput;
-            (selectedValue, hasInput) = input.GetInput("Horizontal", "Vertical", UserInterface.MaxObjects, selectedValue, true, 1, 7); // TODO: Change max value.
+            (this.selectedValue, hasInput) = input.GetInput("Horizontal", "Vertical", UserInterface.MaxObjects, this.selectedValue, true, 1, max);
+
             if (hasInput)
             {
-                UpdateSelectedObject(selectedValue);
+                if (selectedValue % max != 0)
+                {
+                    UpdateSelectedObject(this.selectedValue);
+                }
+                else
+                {
+                    if (selectedValue - this.selectedValue != 1)
+                    {
+                        UpdateSelectedObject(this.selectedValue);
+                    }
+                    else
+                    {
+                        this.selectedValue = selectedValue;
+                    }
+                }
             }
         }
         else
@@ -83,7 +99,7 @@ public abstract class CategoryUserInterfaceController : UserInterfaceController
             bool hasInput = TriggerInput(categoryNames.Count);
             if (hasInput)
             {
-                selectedValue= 0;
+                selectedValue = 0;
                 UpdateSelectedCategory(selectedCategory, selectedValue, (int)Input.GetAxisRaw("Trigger"));
             }
         }

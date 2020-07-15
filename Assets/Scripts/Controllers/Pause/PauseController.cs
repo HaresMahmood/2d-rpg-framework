@@ -54,7 +54,7 @@ public class PauseController : MonoBehaviour
 
         //CameraController.instance.GetComponent<PostprocessingBlur>().enabled = flags.isActive;
         StartCoroutine(GetComponent<PauseUserInterfaceController>().SetActive(isActive));
-        StartCoroutine(GetComponent<SidebarUserInterfaceController>().SetActive(isActive));
+        //StartCoroutine(GetComponent<SidebarUserInterfaceController>().SetActive(isActive));
     }
 
     private void GetInput()

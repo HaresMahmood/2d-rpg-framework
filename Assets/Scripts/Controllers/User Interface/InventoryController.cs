@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 /// <summary>
 ///
@@ -8,6 +9,7 @@ public class InventoryController : CategoryUserInterfaceController
     #region Constants
 
     public override int MaxViewableObjects => 28;
+    private const int maxDivisble = 7;
 
     #endregion
 
@@ -182,13 +184,29 @@ public class InventoryController : CategoryUserInterfaceController
         ((InventoryUserInterface)UserInterface).ActiveSubMenu(selectedValue);
     }
 
-    protected override void GetInput()
+    protected override void GetInput(int max)
     {
-        base.GetInput();
+        base.GetInput(max);
+
+        if (selectedValue % maxDivisble == 0)
+        {
+            StartCoroutine(ActivateSidebar());
+        }
 
         if (Input.GetButtonDown("Interact"))
         {
             InteractInput(selectedValue);
+        }
+    }
+
+    private IEnumerator ActivateSidebar(float waitTime = 0.1f)
+    {
+        yield return new WaitForSecondsRealtime(waitTime);
+
+        if (Input.GetAxisRaw("Horizontal") == -1)
+        {
+            StartCoroutine(SidebarUserInterfaceController.Instance.SetActive(true));
+            StartCoroutine(SetActive(false));
         }
     }
 
@@ -213,7 +231,7 @@ public class InventoryController : CategoryUserInterfaceController
     {
         if (Flags.isActive)
         {
-            GetInput();
+            GetInput(maxDivisble);
         }
     }
 

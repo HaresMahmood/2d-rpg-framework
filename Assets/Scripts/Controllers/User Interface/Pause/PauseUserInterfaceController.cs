@@ -45,16 +45,25 @@ public class PauseUserInterfaceController : UserInterfaceController
     {
         Flags.isActive = isActive;
 
-        userInterface.ActivateMenu(selectedValue, isActive);
+        userInterface.ActivatePanel(selectedValue, isActive);
 
         yield break;
     }
 
-    public void ActivateMenu(float opacity, int selectedValue = -1, float animationDuration = 0.15f)
+    public int ActivateMenu(float opacity, int selectedValue = -1, float animationDuration = 0.15f)
     {
         selectedValue = selectedValue == -1 ? this.selectedValue : selectedValue;
 
         StartCoroutine(userInterface.FadeMenu(selectedValue, opacity, animationDuration));
+
+        return selectedValue;
+    }
+
+    public void ActivateMenu(bool isActive, int selectedValue = -1)
+    {
+        selectedValue = selectedValue == -1 ? this.selectedValue : selectedValue;
+
+        userInterface.ActivateMenu(selectedValue, isActive);
     }
 
     public bool CanExit()

@@ -56,6 +56,11 @@ public class SidebarUserInterface : UserInterface
         StartCoroutine(UpdateSelector(selectedObject));
     }
 
+    public void FadePanel(float opacity, float animationDuration = 0.15f)
+    {
+        StartCoroutine(gameObject.FadeOpacity(opacity, animationDuration));
+    }
+
     public bool ActivateMenu(bool isActive, int selectedValue = -1)
     {
         if (selectedValue == (MaxObjects - 1) || selectedValue == -1)
