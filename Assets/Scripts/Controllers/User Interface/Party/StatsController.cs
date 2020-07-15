@@ -25,7 +25,7 @@ public class StatsController : PartyInformationController
 
         userInterface.ActivateSlot(0, isActive);
 
-        CharacterSpriteController.Instance.FadeSprite(isActive ? 0.4f : 1f, 0.15f); // TODO: Debug.
+        //CharacterSpriteController.Instance.FadeSprite(isActive ? 0.4f : 1f, 0.15f); // TODO: Debug.
     }
     
     protected override void GetInput(string axisName)

@@ -60,7 +60,7 @@ public class PartyController : UserInterfaceController
 
         if (isActive && condition)
         {
-            yield return new WaitForSecondsRealtime(0.3f);
+            yield return new WaitForSecondsRealtime(0.25f);
 
             UpdateSelectedObject(selectedValue, 1);
         }
@@ -72,10 +72,8 @@ public class PartyController : UserInterfaceController
 
             selectedValue = 0;
 
-            CharacterSpriteController.Instance.FadeSprite(1f, 0.15f); // TODO: Debug.
+            //CharacterSpriteController.Instance.FadeSprite(1f, 0.15f); // TODO: Debug.
         }
-
-        Debug.Log(Flags.isActive);
     }
 
     public void AnimatePanel(int panel, float opacity, float animationDuration = 0.15f)
@@ -137,14 +135,11 @@ public class PartyController : UserInterfaceController
     {
         yield return new WaitForSecondsRealtime(waitTime);
 
-        Debug.Log(selectedValue + " " + this.selectedValue);
-
         if (this.selectedValue == 0 && selectedValue == this.selectedValue)
         {
             if (Input.GetAxisRaw("Horizontal") == -1)
             {
                 StartCoroutine(SidebarUserInterfaceController.Instance.SetActive(true));
-                StartCoroutine(SetActive(false));
             }
         }
     }
@@ -214,7 +209,7 @@ public class PartyController : UserInterfaceController
             GetInput("Horizontal");
         }
     }
-    
+
 
     #endregion
 }

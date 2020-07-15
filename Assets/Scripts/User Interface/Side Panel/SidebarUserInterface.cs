@@ -144,6 +144,8 @@ public class SidebarUserInterface : UserInterface
         editUserInterface.gameObject.SetActive(false);
 
         editUserInterface.Party = Party;
+
+        StartCoroutine(UpdateSelector());
     }
 
     #endregion

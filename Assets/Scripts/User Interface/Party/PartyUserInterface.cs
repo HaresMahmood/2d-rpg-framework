@@ -84,7 +84,7 @@ public class PartyUserInterface : PauseUserInterfaceBase
 
         learnedMovesPanel.SetInformation(member);
 
-        UpdateSelectedObject(0, 1);
+        //UpdateSelectedObject(0, 1);
 
         statsUserInterface.SetInformation(member);
 

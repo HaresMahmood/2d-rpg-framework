@@ -206,7 +206,6 @@ public class InventoryController : CategoryUserInterfaceController
         if (Input.GetAxisRaw("Horizontal") == -1)
         {
             StartCoroutine(SidebarUserInterfaceController.Instance.SetActive(true));
-            StartCoroutine(SetActive(false));
         }
     }
 

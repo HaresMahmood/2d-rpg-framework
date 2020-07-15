@@ -66,6 +66,8 @@ public class SidebarUserInterfaceController : UserInterfaceController
     protected override void UpdateSelectedObject(int selectedValue, int increment = -1)
     {
         UserInterface.UpdateSelectedObject(selectedValue, increment);
+
+        selectedValue = Mathf.Clamp(selectedValue, 0, party.Count - 1);
         PartyController.Instance.UpdateSelectedObject(selectedValue);
     }
 
@@ -80,7 +82,6 @@ public class SidebarUserInterfaceController : UserInterfaceController
 
         if (Input.GetButtonDown("Cancel") || Input.GetAxisRaw("Horizontal") == 1)
         {
-            PauseUserInterfaceController.Instance.ActivateMenu(true);
             StartCoroutine(SetActive(false));
         }
     }
