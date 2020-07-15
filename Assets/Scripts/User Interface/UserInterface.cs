@@ -146,7 +146,7 @@ public abstract class UserInterface : MonoBehaviour
 
     protected void FadeCharacterSprite(float opacity, float animationDuration = 0.15f)
     {
-        CharacterSpriteController.Instance.FadeSprite(opacity, animationDuration);
+        CharacterSpriteController.Instance.FadeOpacity(opacity, animationDuration);
     }
 
     #endregion

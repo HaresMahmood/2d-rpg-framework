@@ -53,7 +53,7 @@ public class SidebarUserInterface : UserInterface
             slots[previousValue].AnimateSlot(false);
         }
 
-        StartCoroutine(UpdateSelector(selectedObject));
+        StartCoroutine(UpdateSelector(increment == 0 ? null : selectedObject));
     }
 
     public void FadePanel(float opacity, float animationDuration = 0.15f)

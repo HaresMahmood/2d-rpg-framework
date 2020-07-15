@@ -40,18 +40,18 @@ public class CharacterSpriteController : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    public void SetAnimation(string activeMenu, string inactiveMenu)
+    public void SetAnimation(bool isActive)
     {
-        animator.SetBool(activeMenu, true);
-        animator.SetBool(inactiveMenu, false);
+        animator.SetBool("isActive", isActive);
     }
 
     public void SetSprite(Sprite sprite)
     {
         transform.Find("Pokémon/Sprite").GetComponent<Image>().sprite = sprite; // TODO: Debug
+        transform.Find("Pokémon/Sprite").GetComponent<Image>().SetNativeSize();
     }
 
-    public void FadeSprite(float opacity, float animationDuration)
+    public void FadeOpacity(float opacity, float animationDuration)
     {
         StartCoroutine(gameObject.FadeOpacity(opacity, animationDuration));
     }

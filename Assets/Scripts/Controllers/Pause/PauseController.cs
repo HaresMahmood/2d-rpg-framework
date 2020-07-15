@@ -50,8 +50,6 @@ public class PauseController : MonoBehaviour
     {
         Time.timeScale = Flags.isPaused ? 0 : 1;
 
-        Debug.Log(Time.timeScale);
-
         //CameraController.instance.GetComponent<PostprocessingBlur>().enabled = flags.isActive;
         StartCoroutine(GetComponent<PauseUserInterfaceController>().SetActive(isActive));
         //StartCoroutine(GetComponent<SidebarUserInterfaceController>().SetActive(isActive));

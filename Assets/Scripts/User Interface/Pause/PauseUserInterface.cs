@@ -20,6 +20,7 @@ public class PauseUserInterface : UserInterface
     private List<PauseUserInterfaceBase> menus;
 
     private SidebarUserInterface sidebar;
+    private CharacterSpriteController characterSprite;
 
     private TextMeshProUGUI currentMenuText;
     private TextMeshProUGUI previousMenuText;
@@ -34,19 +35,22 @@ public class PauseUserInterface : UserInterface
         int previousValue = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, -increment);
         int nextValue = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, increment);
 
-        AnimateMenus(selectedValue, previousValue, -increment);
-        UpdateNavigationText(selectedValue, previousValue, nextValue);
-
         menus[selectedValue].SetActive(true);
         menus[previousValue].SetActive(false);
+
+        AnimateMenus(selectedValue, previousValue, -increment);
+        UpdateNavigationText(selectedValue, previousValue, nextValue);
 
         if (menus[selectedValue] is InventoryUserInterface || menus[selectedValue] is PartyUserInterface)
         {
             StartCoroutine(ActivateSidebar(0.5f));
+            StartCoroutine(ActivateCharacterSprite(1f));
         }
         else
         {
-            StartCoroutine(ActivateSidebar(0f));        }
+            StartCoroutine(ActivateSidebar(0f));
+            StartCoroutine(ActivateCharacterSprite(0f));
+        }
     }
 
     public void ActivatePanel(int selectedValue, bool isActive)
@@ -166,6 +170,26 @@ public class PauseUserInterface : UserInterface
         }
     }
 
+    private IEnumerator ActivateCharacterSprite(float opacity, float animationDuration = 0.15f)
+    {
+        if (characterSprite.GetComponent<CanvasGroup>().alpha != opacity)
+        {
+            if (opacity > 0f)
+            {
+                characterSprite.gameObject.SetActive(true);
+            }
+
+            characterSprite.FadeOpacity(opacity, animationDuration);
+
+            if (opacity == 0f)
+            {
+                yield return new WaitForSecondsRealtime(animationDuration);
+
+                characterSprite.gameObject.SetActive(false);
+            }
+        }
+    }
+
     #endregion
 
     #region Unity Methods
@@ -178,6 +202,7 @@ public class PauseUserInterface : UserInterface
         menus = GetComponentsInChildren<PauseUserInterfaceBase>().ToList();
 
         sidebar = transform.Find("Side Panel").GetComponent<SidebarUserInterface>();
+        characterSprite = transform.Find("Character Sprite").GetComponent<CharacterSpriteController>();
 
         currentMenuText = transform.Find("Top Panel/Navigation/Middle/Current/Text").GetComponent<TextMeshProUGUI>();
         previousMenuText = transform.Find("Top Panel/Navigation/Left/Previous/Text").GetComponent<TextMeshProUGUI>();

@@ -38,6 +38,8 @@ public class PlayerInteraction : MonoBehaviour
         animator.SetTrigger("isInactive");
         yield return new WaitForSeconds(animator.GetAnimationTime());
         contextBox.SetActive(false);
+
+        yield break;
     }
 
     public static void UpdatePosition()
