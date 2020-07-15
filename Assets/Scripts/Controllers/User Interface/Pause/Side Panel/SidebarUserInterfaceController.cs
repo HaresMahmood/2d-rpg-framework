@@ -63,6 +63,12 @@ public class SidebarUserInterfaceController : UserInterfaceController
         return userInterface.ActivateMenu(isActive, selectedValue);
     }
 
+    protected override void UpdateSelectedObject(int selectedValue, int increment = -1)
+    {
+        UserInterface.UpdateSelectedObject(selectedValue, increment);
+        PartyController.Instance.UpdateSelectedObject(selectedValue);
+    }
+
     protected override void GetInput(string axisName)
     {
         base.GetInput(axisName);

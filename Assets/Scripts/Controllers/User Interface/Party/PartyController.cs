@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.Animations;
 
 /// <summary>
 ///
@@ -73,6 +74,8 @@ public class PartyController : UserInterfaceController
 
             CharacterSpriteController.Instance.FadeSprite(1f, 0.15f); // TODO: Debug.
         }
+
+        Debug.Log(Flags.isActive);
     }
 
     public void AnimatePanel(int panel, float opacity, float animationDuration = 0.15f)
@@ -90,26 +93,33 @@ public class PartyController : UserInterfaceController
         userInterface.UpdateSelector(isActive);
     }
 
+    public void UpdateSelectedObject(int selectedMember = -1)
+    {
+        if (userInterface.GetComponent<CanvasGroup>().alpha > 0f)
+        {
+            selectedMember = selectedMember == -1 ? this.selectedMember : selectedMember;
+
+            userInterface.UpdateSelectedPartyMember(party.playerParty[selectedMember]);
+            this.selectedMember = selectedMember;
+        }
+    }
+
+    protected override bool RegularInput(int max, string axisName)
+    {
+        int selectedValue = this.selectedValue;
+        TestInput.Axis axis = axisName.Equals("Horizontal") ? TestInput.Axis.Horizontal : TestInput.Axis.Vertical;
+
+        StartCoroutine(ActivateSidebar(selectedValue));
+
+        bool hasInput;
+        (this.selectedValue, hasInput) = input.GetInput(axisName, axis, max, this.selectedValue, true);
+
+        return hasInput;
+    }
+
     protected override void GetInput(string axisName)
     {
-        if (Input.GetAxisRaw("Trigger") == 0)
-        {
-            bool hasInput = RegularInput(UserInterface.MaxObjects, axisName);
-
-            if (hasInput)
-            {
-                UpdateSelectedObject(selectedValue, (int)(Input.GetAxisRaw(axisName)));
-            }
-        }
-        else {
-            bool hasInput = TriggerInput(party.playerParty.Count);
-            if (hasInput)
-            {
-                StartCoroutine(SetActive(false));
-                userInterface.UpdateSelectedPartyMember(party.playerParty[selectedMember]);
-                StartCoroutine(SetActive(true));
-            }
-        }
+        base.GetInput(axisName);
 
         if (Input.GetButtonDown("Toggle"))
         {
@@ -123,6 +133,23 @@ public class PartyController : UserInterfaceController
         }
     }
 
+    private IEnumerator ActivateSidebar(int selectedValue, float waitTime = 0.1f)
+    {
+        yield return new WaitForSecondsRealtime(waitTime);
+
+        Debug.Log(selectedValue + " " + this.selectedValue);
+
+        if (this.selectedValue == 0 && selectedValue == this.selectedValue)
+        {
+            if (Input.GetAxisRaw("Horizontal") == -1)
+            {
+                StartCoroutine(SidebarUserInterfaceController.Instance.SetActive(true));
+                StartCoroutine(SetActive(false));
+            }
+        }
+    }
+
+    /*
     private bool TriggerInput(int max)
     {
         bool hasInput;
@@ -130,6 +157,7 @@ public class PartyController : UserInterfaceController
 
         return hasInput;
     }
+    */
 
     #endregion
 
