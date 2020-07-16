@@ -15,7 +15,7 @@ public class PartyBasicSlot : PartyInformationSlot
     private Transform statusAilment;
 
     private TextMeshProUGUI nameText;
-    private Transform gender;
+    private GenderUserInterface gender;
     private TextMeshProUGUI categoryText;
     private TextMeshProUGUI dexText;
 
@@ -35,20 +35,7 @@ public class PartyBasicSlot : PartyInformationSlot
 
         nameText.SetText((member.Nickname != "" ? member.Nickname : member.Species.Name));
 
-        Transform[] genders = gender.GetChildren();
-
-        // TODO: Create GenderUserInterface class
-        if (member.Gender.Value == PartyMember.MemberGender.Gender.None)
-        {
-            genders[0].gameObject.SetActive(false);
-            genders[1].gameObject.SetActive(false);
-        }
-        else
-        {
-            genders[(int)member.Gender.Value - 1].gameObject.SetActive(true);
-
-            //genders[ExtensionMethods.IncrementInt((int)member.Gender.Value - 1, 0, 2, 1)].gameObject.SetActive(false); // TODO: Not working
-        }
+        gender.UpdateUserInterface(member.Gender.Value);
 
         categoryText.SetText(member.Species.Category);
         categoryText.GetComponent<AutoTextWidth>().UpdateWidth(member.Species.Category);
@@ -83,7 +70,7 @@ public class PartyBasicSlot : PartyInformationSlot
         statusAilment = slot.Find("Status Ailment/Values");
 
         nameText = name.Find("Basic Information/Value").GetComponent<TextMeshProUGUI>();
-        gender = name.Find("Basic Information/Gender");
+        gender = name.Find("Basic Information/Gender").GetComponent<GenderUserInterface>();
         categoryText = name.Find("Dex Information/Category/Value").GetComponent<TextMeshProUGUI>();
         dexText = name.Find("Dex Information/Dex Number/Value").GetComponent<TextMeshProUGUI>();
 
