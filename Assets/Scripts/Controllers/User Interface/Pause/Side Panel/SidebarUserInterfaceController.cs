@@ -69,7 +69,7 @@ public class SidebarUserInterfaceController : UserInterfaceController
     {
         UserInterface.UpdateSelectedObject(selectedValue, increment);
 
-        selectedValue = Mathf.Clamp(selectedValue, 0, party.Count - 1);
+        selectedValue = selectedValue == (userInterface.MaxObjects - 1) ? (increment == 1 ? 0 : party.Count -1) : selectedValue; 
         PartyController.Instance.UpdateSelectedObject(selectedValue);
     }
 
