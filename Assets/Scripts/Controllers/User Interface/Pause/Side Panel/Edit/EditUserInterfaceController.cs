@@ -48,7 +48,6 @@ public class EditUserInterfaceController : UserInterfaceController
     {
         userInterface.UpdateSelectedObject(selectedValue, isActive ? -1 : 0);
 
-
         if (!isActive)
         {
             selectedValue = 0;
@@ -57,6 +56,8 @@ public class EditUserInterfaceController : UserInterfaceController
         yield return null;
 
         Flags.isActive = isActive;
+
+        StartCoroutine(base.SetActive(isActive, condition));
     }
 
     protected override void GetInput(string axisName)

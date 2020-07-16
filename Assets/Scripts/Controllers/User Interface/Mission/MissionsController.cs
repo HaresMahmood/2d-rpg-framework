@@ -77,6 +77,8 @@ public class MissionsController : CategoryUserInterfaceController
         Flags.isActive = isActive;
 
         userInterface.ActivateSubMenu(selectedValue);
+
+        StartCoroutine(BottomPanelUserInterface.Instance.ChangePanelButtons(buttons));
     }
 
     public void ActivateMission()

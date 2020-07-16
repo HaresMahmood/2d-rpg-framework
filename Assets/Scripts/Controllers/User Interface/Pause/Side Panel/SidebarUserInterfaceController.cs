@@ -55,6 +55,8 @@ public class SidebarUserInterfaceController : UserInterfaceController
 
         Flags.isActive = isActive;
 
+        StartCoroutine(base.SetActive(isActive, condition));
+
         yield break;
     }
 

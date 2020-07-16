@@ -26,8 +26,10 @@ public class StatsController : PartyInformationController
         userInterface.ActivateSlot(0, isActive);
 
         CharacterSpriteController.Instance.FadeOpacity(isActive ? 0.4f : 1f, 0.15f); // TODO: Debug.
+
+        StartCoroutine(base.SetActive(isActive, condition));
     }
-    
+
     protected override void GetInput(string axisName)
     {
         base.GetInput(axisName);

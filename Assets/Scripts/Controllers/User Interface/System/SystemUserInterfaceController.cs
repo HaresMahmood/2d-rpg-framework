@@ -60,6 +60,8 @@ public class SystemUserInterfaceController : UserInterfaceController
         }
 
         Flags.isActive = isActive;
+
+        StartCoroutine(base.SetActive(isActive, condition));
     }
 
     protected override void GetInput(string axisName)

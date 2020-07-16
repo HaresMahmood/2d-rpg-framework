@@ -9637,7 +9637,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 746d4ef82ce741643884425f46b1a61e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttons: []
+  buttons:
+  - text: Rearrange Moves
+    sprite: {fileID: 21300000, guid: 0d40ea98e00c9e140a64b62bc3e361af, type: 3}
+  - text: Toggle Moves Menu
+    sprite: {fileID: 21300000, guid: 2530a1c673d62f345a2be841b5afc5bb, type: 3}
+  - text: Back
+    sprite: {fileID: 21300000, guid: d4e0beb796148d84886877025f53b4fb, type: 3}
 --- !u!1 &1300090592869263245
 GameObject:
   m_ObjectHideFlags: 0
@@ -16333,6 +16339,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animationTime: 0.1
+  delay: 0.05
 --- !u!222 &901084195195333193
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -32163,7 +32170,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8487f9b4e57eba94a885a275c06788e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttons: []
+  buttons:
+  - text: Select
+    sprite: {fileID: 21300000, guid: 0d40ea98e00c9e140a64b62bc3e361af, type: 3}
+  - text: Toggle Moves Menu
+    sprite: {fileID: 21300000, guid: 2530a1c673d62f345a2be841b5afc5bb, type: 3}
+  - text: Back
+    sprite: {fileID: 21300000, guid: d4e0beb796148d84886877025f53b4fb, type: 3}
 --- !u!1 &4542907870980464769
 GameObject:
   m_ObjectHideFlags: 0
@@ -33495,7 +33508,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e92879af05d2f26449c9a8843def000b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttons: []
+  buttons:
+  - text: Rearrange Moves
+    sprite: {fileID: 21300000, guid: 0d40ea98e00c9e140a64b62bc3e361af, type: 3}
+  - text: Toggle Moves Menu
+    sprite: {fileID: 21300000, guid: 2530a1c673d62f345a2be841b5afc5bb, type: 3}
+  - text: Back
+    sprite: {fileID: 21300000, guid: d4e0beb796148d84886877025f53b4fb, type: 3}
 --- !u!114 &7692405479714359671
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -56195,7 +56214,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a38e4c70e869c424ba6e56513e1bfe22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttons: []
+  buttons:
+  - text: Toggle Moves Menu
+    sprite: {fileID: 21300000, guid: 2530a1c673d62f345a2be841b5afc5bb, type: 3}
+  - text: Back
+    sprite: {fileID: 21300000, guid: d4e0beb796148d84886877025f53b4fb, type: 3}
 --- !u!114 &5279009365386529661
 MonoBehaviour:
   m_ObjectHideFlags: 0

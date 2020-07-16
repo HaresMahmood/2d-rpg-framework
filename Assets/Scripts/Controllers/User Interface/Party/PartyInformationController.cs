@@ -27,6 +27,8 @@ public class PartyInformationController : UserInterfaceController
         Flags.isActive = isActive;
 
         userInterface.ActivateSlot(selectedValue, isActive);
+
+        StartCoroutine(base.SetActive(isActive, condition));
     }
 
     public void SetInformation(PartyMember member)

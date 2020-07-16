@@ -9,7 +9,7 @@ public class PanelButton
     #region Variables
 
     public string text;
-    public Sprite sprite; // TODO: Rename to image?
+    public Sprite sprite;
 
     #endregion
 

@@ -52,6 +52,8 @@ public abstract class CategoryUserInterfaceController : UserInterfaceController
         {
             UpdateSelectedCategory(selectedCategory, selectedValue, increment);
         }
+
+        StartCoroutine(base.SetActive(isActive, condition));
     }
 
     protected void UpdateSelectedCategory(int selectedCategory, int selectedValue, int increment)

@@ -51,6 +51,8 @@ public class MissionInformationController : UserInterfaceController
         Flags.isActive = isActive;
 
         userInterface.ToggleSubMenu(MissionsController.Instance.SelectedMission, isActive);
+
+        StartCoroutine(base.SetActive(isActive, condition));
     }
 
     protected override void InteractInput(int selectedValue)

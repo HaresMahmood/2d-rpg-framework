@@ -52,6 +52,8 @@ public class ItemInformationController : UserInterfaceController
         yield return null;
 
         Flags.isActive = isActive;
+
+        StartCoroutine(base.SetActive(isActive, condition));
     }
 
     protected override void UpdateSelectedObject(int selectedValue, int increment = -1)
