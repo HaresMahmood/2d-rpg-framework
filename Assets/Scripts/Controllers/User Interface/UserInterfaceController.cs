@@ -59,7 +59,10 @@ public abstract class UserInterfaceController : MonoBehaviour
 
     public virtual IEnumerator SetActive(bool isActive, bool condition = true)
     {
-        StartCoroutine(BottomPanelUserInterface.Instance.ChangePanelButtons(buttons));
+        if (isActive)
+        {
+            StartCoroutine(BottomPanelUserInterface.Instance.ChangePanelButtons(buttons));
+        }
 
         yield break;
     }

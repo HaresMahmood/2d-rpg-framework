@@ -39,18 +39,18 @@ public class BottomPanelUserInterface : MonoBehaviour
     #region Variables
 
     [Header("Settings")]
-    [Range(0.01f, 0.2f)] [SerializeField] private float animationTime;
+    [Range(0.01f, 0.2f)] [SerializeField] private float animationDuration;
     [Range(0.01f, 0.1f)] [SerializeField] private float delay;
 
-    private List<Transform> buttons;
-    private Animator animator;
+    private List<MenuContextButton> buttons;
 
     #endregion
 
     #region Miscellaneous Methods
 
-    public IEnumerator ChangePanelButtons(List<PanelButton> panelButtons)
+    public IEnumerator ChangePanelButtons(List<PanelButton> menuButtons)
     {
+        /*
         foreach (Transform button in buttons)
         {
             StartCoroutine(button.gameObject.FadeOpacity(0f, animationTime));
@@ -80,24 +80,46 @@ public class BottomPanelUserInterface : MonoBehaviour
             StartCoroutine(buttons[i].gameObject.FadeOpacity(1f, animationTime));
             yield return new WaitForSecondsRealtime(delay);
         }
+        */
+
+
+
+        for (int i = 0; i < buttons.Count; i++)
+        {
+            buttons[i].FadeButton(0f, buttons[i].gameObject.activeSelf ? animationDuration : -1);
+
+            yield return new WaitForSecondsRealtime(delay);
+        }
+
+        yield return new WaitForSecondsRealtime(animationDuration); //  + (delay * buttons.Count)
+
+        for (int i = 0; i < menuButtons.Count; i++)
+        {
+            buttons[i].gameObject.SetActive(true);
+            buttons[i].SetValues(menuButtons[i].text, menuButtons[i].icon, menuButtons[i].isAnimated);
+        }
+
+        if (menuButtons.Count < buttons.Count)
+        {
+            for (int i = menuButtons.Count; i < buttons.Count; i++)
+            {
+                buttons[i].gameObject.SetActive(false);
+            }
+        }
+
+        for (int i = 0; i < menuButtons.Count; i++)
+        {
+            buttons[i].FadeButton(1f, animationDuration);
+
+            yield return new WaitForSecondsRealtime(delay);
+        }
+
+        //LayoutRebuilder.ForceRebuildLayoutImmediate(transform.Find("Buttons").GetComponent<RectTransform>());
     }
 
-    public IEnumerator AnimateValue(string text, float waitTime)
+    public void AnimateButton(int index, string value)
     {
-        //StopAllCoroutines();
-        animator.GetComponent<TextMeshProUGUI>().SetText(text);
-        animator.SetBool("isToggling", true);
-        animator.gameObject.SetActive(true);
-
-        float animationTime = animator.GetAnimationTime();
-        waitTime = waitTime < animationTime ? animationTime : waitTime;
-
-        yield return new WaitForSecondsRealtime(waitTime);
-
-        animator.SetBool("isToggling", false); yield return null;
-        animationTime = animator.GetAnimationTime();
-        yield return new WaitForSecondsRealtime(animationTime);
-        animator.gameObject.SetActive(false);
+        StartCoroutine(buttons[index].AnimateButton(value));
     }
 
     #endregion
@@ -109,18 +131,7 @@ public class BottomPanelUserInterface : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        buttons = transform.Find("Buttons").GetChildren().ToList();
-        animator = buttons[(buttons.Count - 1)].GetComponentInChildren<Animator>();
-        animator.gameObject.SetActive(false);
-    }
-
-    /// <summary>
-    /// Start is called before the first frame update.
-    /// </summary>
-    private void Start()
-    {
-        // Sets bottom panel buttons to first screen user will see.
-        
+        buttons = GetComponentsInChildren<MenuContextButton>().ToList();
     }
 
     #endregion

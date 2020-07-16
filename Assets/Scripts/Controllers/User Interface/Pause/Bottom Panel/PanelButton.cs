@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-/// <summary>
+/// <summary>.
 ///
 /// </summary>
 [System.Serializable]
@@ -9,7 +9,8 @@ public class PanelButton
     #region Variables
 
     public string text;
-    public Sprite sprite;
+    public Sprite icon;
+    public bool isAnimated;
 
     #endregion
 
