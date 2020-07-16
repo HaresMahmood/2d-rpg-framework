@@ -32,7 +32,10 @@ public class SidebarSlot : Slot
     public void DeactivateSlot()
     {
         //base.Awake();
-        StartCoroutine(gameObject.FadeOpacity(0f, 0.1f));
+        if (gameObject.activeSelf)
+        {
+            StartCoroutine(gameObject.FadeOpacity(0f, 0.1f));
+        }
     }
 
     protected override void SetInformation<T>(T slotObject)

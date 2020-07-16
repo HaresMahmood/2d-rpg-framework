@@ -69,6 +69,11 @@ public class SidebarUserInterface : UserInterface
             StartCoroutine(EditUserInterfaceController.Instance.SetActive(isActive));
             PauseUserInterfaceController.Instance.AnimateMenu(isActive ? 0f : 1f);
 
+            if (!isActive)
+            {
+                UpdateInformation(false);
+            }
+
             return !isActive;
         }
 
@@ -99,6 +104,28 @@ public class SidebarUserInterface : UserInterface
 
     }
 
+    private void UpdateInformation(bool isActive = true) // TODO: Bad name
+    {
+        int counter = 0;
+
+        for (int i = 0; i < Party.Count; i++)
+        {
+            slots[i].UpdateInformation(Party[i]);
+            counter = i;
+        }
+
+        if (isActive)
+        {
+            if (++counter < slots.Count)
+            {
+                for (int i = counter; i < slots.Count; i++)
+                {
+                    slots[i].DeactivateSlot();
+                }
+            }
+        }
+    }
+
     #endregion
 
     #region Unity Methods
@@ -124,21 +151,7 @@ public class SidebarUserInterface : UserInterface
     /// </summary>
     private void Start()
     {
-        int counter = 0;
-
-        for (int i = 0; i < Party.Count; i++)
-        {
-            slots[i].UpdateInformation(Party[i]);
-            counter = i;
-        }
-
-        if (++counter < slots.Count)
-        {
-            for (int i = counter; i < slots.Count; i++)
-            {
-                slots[i].DeactivateSlot();
-            }
-        }
+        UpdateInformation();
 
         editUserInterface.UpdateInformation(Party);
         editUserInterface.gameObject.SetActive(false);
