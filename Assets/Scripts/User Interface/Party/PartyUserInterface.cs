@@ -36,7 +36,7 @@ public class PartyUserInterface : PauseUserInterfaceBase
 
     public override void UpdateSelectedObject(int selectedValue, int increment)
     {
-        int previousValue = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, -increment);
+        int previousValue = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, -increment, false);
 
         // TODO: Debug
         if (informationPanels[previousValue] is PartyMovesPanelController && informationPanels[selectedValue] is PartyMovesPanelController && ((PartyMovesPanelController)informationPanels[previousValue]).IsActive)
@@ -67,6 +67,11 @@ public class PartyUserInterface : PauseUserInterfaceBase
             StartCoroutine(UpdateSelector());
         }
     } 
+
+    public void ActivatePanel(int selectedValue, bool isActive)
+    {
+        StartCoroutine(informationPanels[selectedValue].SetActive(isActive));
+    }
 
     public void UpdateSelector(bool isActive, float animationDuration = 0.15f)
     {

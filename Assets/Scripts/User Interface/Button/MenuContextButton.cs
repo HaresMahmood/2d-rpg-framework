@@ -27,8 +27,6 @@ public class MenuContextButton : MenuButton
         text.SetText(value);
 
         textWidth.UpdateWidth(value);
-
-        animator.gameObject.SetActive(isAnimated);
     }
 
     public void AnimateButton(string value) // , int waitTimeMultiplier = 7
@@ -61,6 +59,8 @@ public class MenuContextButton : MenuButton
         text = transform.Find("Text").GetComponent<TextMeshProUGUI>();
         animator = transform.Find("Text/Toggle Value").GetComponent<Animator>();
         textWidth = text.GetComponent<AutoTextWidth>();
+
+        animator.gameObject.SetActive(false);
     }
 
     #endregion

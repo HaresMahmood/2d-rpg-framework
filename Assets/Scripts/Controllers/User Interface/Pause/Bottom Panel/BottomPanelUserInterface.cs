@@ -82,7 +82,7 @@ public class BottomPanelUserInterface : MonoBehaviour
         }
         */
 
-
+        gameObject.SetActive(false); gameObject.SetActive(true);
 
         for (int i = 0; i < buttons.Count; i++)
         {
