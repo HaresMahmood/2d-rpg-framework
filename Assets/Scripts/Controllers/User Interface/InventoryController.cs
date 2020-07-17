@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -196,6 +197,15 @@ public class InventoryController : CategoryUserInterfaceController
         if (Input.GetButtonDown("Interact"))
         {
             InteractInput(selectedValue);
+        }
+
+        if (Input.GetButtonDown("Toggle"))
+        {
+            string value = ((SortingMethod)selectedSortingMethod).ToString();
+
+            ToggleInput(value, Enum.GetValues(typeof(SortingMethod)).Length);
+
+            // TODO: Update UI
         }
     }
 

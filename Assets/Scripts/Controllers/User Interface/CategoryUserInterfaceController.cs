@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -35,6 +36,7 @@ public abstract class CategoryUserInterfaceController : UserInterfaceController
     protected List<string> categoryNames;
 
     protected int selectedCategory = 0;
+    protected int selectedSortingMethod;
 
     #endregion
 
@@ -68,6 +70,18 @@ public abstract class CategoryUserInterfaceController : UserInterfaceController
 
         return hasInput;
     }
+
+    protected void ToggleInput(string value, int max)
+    {
+        int index = buttons.IndexOf(buttons.Find(b => b.isAnimated == true));
+
+        BottomPanelUserInterface.Instance.AnimateButton(index, value);
+
+        selectedSortingMethod = ExtensionMethods.IncrementInt(selectedSortingMethod, 0, max, 1);
+    }
+
+    protected virtual void UpdateSortingMethod()
+    { }
 
     protected virtual void GetInput(int max)
     {

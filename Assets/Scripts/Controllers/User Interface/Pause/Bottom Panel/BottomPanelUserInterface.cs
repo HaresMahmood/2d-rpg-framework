@@ -119,7 +119,7 @@ public class BottomPanelUserInterface : MonoBehaviour
 
     public void AnimateButton(int index, string value)
     {
-        StartCoroutine(buttons[index].AnimateButton(value));
+        buttons[index].AnimateButton(value);
     }
 
     #endregion

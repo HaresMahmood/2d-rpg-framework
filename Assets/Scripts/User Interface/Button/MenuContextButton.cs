@@ -31,20 +31,21 @@ public class MenuContextButton : MenuButton
         animator.gameObject.SetActive(isAnimated);
     }
 
-    public IEnumerator AnimateButton(string value, int waitTimeMultiplier = 7)
+    public void AnimateButton(string value) // , int waitTimeMultiplier = 7
     {
+        animator.gameObject.SetActive(false);
+
         animator.GetComponent<TextMeshProUGUI>().SetText(value);
 
-        animator.SetBool("isToggling", true);
-        animator.gameObject.SetActive(true); yield return null;
+        animator.gameObject.SetActive(true);
 
-        yield return new WaitForSecondsRealtime(animator.GetAnimationTime() * waitTimeMultiplier);
+        //yield return new WaitForSecondsRealtime(animator.GetAnimationTime() * waitTimeMultiplier);
 
-        animator.SetBool("isToggling", false); yield return null;
+        //animator.SetBool("isToggling", false); yield return null;
 
-        yield return new WaitForSecondsRealtime(animator.GetAnimationTime());
+        //yield return new WaitForSecondsRealtime(animator.GetAnimationTime());
 
-        animator.gameObject.SetActive(false);
+        //animator.gameObject.SetActive(false);
     }
 
     #endregion

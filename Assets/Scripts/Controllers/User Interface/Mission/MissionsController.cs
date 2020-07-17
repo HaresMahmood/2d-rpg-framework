@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 /// <summary>
 ///
@@ -105,6 +106,15 @@ public class MissionsController : CategoryUserInterfaceController
         if (Input.GetButtonDown("Interact"))
         {
             InteractInput(selectedValue);
+        }
+
+        if (Input.GetButtonDown("Toggle"))
+        {
+            string value = ((SortingMethod)selectedSortingMethod).ToString();
+
+            ToggleInput(value, Enum.GetValues(typeof(SortingMethod)).Length);
+
+            // TODO: Update UI
         }
 
         SelectedMission = missions.mission[selectedValue];
