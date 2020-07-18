@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-[CreateAssetMenu(fileName = "New branch", menuName = "Dialog/Branch")]
+[CreateAssetMenu(fileName = "New Branch", menuName = "Dialog/Branch")]
 public class BranchingDialog : ScriptableObject
 {
     #region Fields
