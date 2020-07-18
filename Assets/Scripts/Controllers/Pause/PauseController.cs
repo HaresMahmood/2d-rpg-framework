@@ -9,16 +9,29 @@ public class PauseController : MonoBehaviour
 {
     #region Fields
 
-    private ControllerFlags flags = new ControllerFlags(true, false);
+    private static PauseController instance;
 
     #endregion
 
     #region Properties
 
-    public ControllerFlags Flags
+    /// <summary>
+    /// Singleton pattern.
+    /// </summary>
+    public static PauseController Instance
     {
-        get { return flags; }
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<PauseController>();
+            }
+
+            return instance;
+        }
     }
+
+    public ControllerFlags Flags { get; } = new ControllerFlags(true, false);
 
     #endregion
 
@@ -50,7 +63,7 @@ public class PauseController : MonoBehaviour
     {
         Time.timeScale = Flags.isPaused ? 0 : 1;
 
-        CameraController.instance.GetComponent<PostprocessingBlur>().enabled = flags.isPaused;
+        CameraController.instance.GetComponent<PostprocessingBlur>().enabled = Flags.isPaused;
         StartCoroutine(GetComponent<PauseUserInterfaceController>().SetActive(isActive));
         //StartCoroutine(GetComponent<SidebarUserInterfaceController>().SetActive(isActive));
     }
