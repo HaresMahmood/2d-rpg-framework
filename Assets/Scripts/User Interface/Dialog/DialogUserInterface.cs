@@ -6,8 +6,14 @@ using TMPro;
 /// <summary>
 ///
 /// </summary>
-public class DialogUserInterface : MonoBehaviour
+public class DialogUserInterface : UserInterface
 {
+    #region Constants
+
+    public override int MaxObjects => 0;
+
+    #endregion
+
     #region Variables
 
     private Animator animator;
@@ -15,11 +21,28 @@ public class DialogUserInterface : MonoBehaviour
     private TextMeshProUGUI dialogText;
     private TextMeshProUGUI nameText;
 
-    private GameObject indicator;
-
     #endregion
 
     #region Miscellaneous Methods
+
+    public IEnumerator ActivatePanel(bool isActive)
+    {
+        if (isActive)
+        {
+            gameObject.SetActive(true);
+        }
+
+        animator.SetBool("isActive", isActive);
+
+        if (!isActive)
+        {
+            yield return null;
+            yield return new WaitForSeconds(animator.GetAnimationTime());
+
+            gameObject.SetActive(false);
+            selector.SetActive(false);
+        }
+    }
 
     public void UpdateInformation(string text, string name)
     {
@@ -41,15 +64,18 @@ public class DialogUserInterface : MonoBehaviour
     /// <summary>
     /// Awake is called when the script instance is being loaded.
     /// </summary>
-    private void Awake()
+    protected override void Awake()
     {
         animator = GetComponent<Animator>();
 
         dialogText = transform.Find("Text").GetComponent<TextMeshProUGUI>();
         dialogText = transform.Find("Name").GetComponent<TextMeshProUGUI>();
 
-        indicator = transform.Find("Selector").gameObject;
-        indicator.SetActive(false);
+        selector = transform.Find("Selector").gameObject;
+
+        base.Awake();
+
+        selector.SetActive(false);
     }
 
 
