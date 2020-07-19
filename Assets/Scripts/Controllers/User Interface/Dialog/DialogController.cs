@@ -55,17 +55,25 @@ public class DialogController : MonoBehaviour
 
     private DialogUserInterfaceController userInterfaceController;
 
+    [SerializeField] private Dialog dialog;
+
     #endregion
 
     #region Miscellaneous Methods
 
+    public void SetActive(bool isActive, List<Dialog.DialogData> dialog)
+    {
+        Flags.isInDialog = isActive;
+
+        userInterfaceController.Dialog = dialog;
+        StartCoroutine(userInterfaceController.SetActive(isActive));
+    }
+
     private void GetInput()
     {
-        if (Input.GetButtonDown("Interact"))
+        if (Input.GetKeyDown(KeyCode.Z)) // Input.GetButtonDown("Interact")
         {
-            Flags.isInDialog = !Flags.isInDialog;
-
-            StartCoroutine(userInterfaceController.SetActive(Flags.isInDialog));
+            SetActive(true, dialog.Data[0].LanguageData);
         }
     }
 

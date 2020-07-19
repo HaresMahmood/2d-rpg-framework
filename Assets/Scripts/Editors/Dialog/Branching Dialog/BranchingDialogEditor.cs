@@ -5,6 +5,7 @@ using UnityEngine;
 [CustomEditor(typeof(BranchingDialog)), CanEditMultipleObjects]
 public class BranchingDialogEditor : Editor
 {
+    /*
     #region Variables
     private BranchingDialog branchingDialog;
 
@@ -119,4 +120,5 @@ public class BranchingDialogEditor : Editor
         branchingDialog.dialogBranches.Add(newDialogBranch);
         EditorUtility.SetDirty(branchingDialog);
     }
+    */
 }

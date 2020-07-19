@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -37,6 +38,8 @@ public class DialogUserInterfaceController : UserInterfaceController
         get { return userInterface; }
     }
 
+    public List<Dialog.DialogData> Dialog { private get; set; }
+
     #endregion
 
     #region Miscellaneous Methods
@@ -44,6 +47,7 @@ public class DialogUserInterfaceController : UserInterfaceController
     public override IEnumerator SetActive(bool isActive, bool condition = true)
     {
         StartCoroutine(userInterface.ActivatePanel(isActive));
+        userInterface.SetText(Dialog[0].Text);
 
         yield return new WaitForSeconds(0.15f);
 

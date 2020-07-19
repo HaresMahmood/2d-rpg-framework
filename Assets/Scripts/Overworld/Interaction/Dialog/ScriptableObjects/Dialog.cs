@@ -6,13 +6,13 @@ public class Dialog : ScriptableObject
 {
     #region Fields
 
-    [SerializeField] private List<List<DialogData>> data = new List<List<DialogData>>();
+    [SerializeField] private List<DialogLanguageData> data = new List<DialogLanguageData>();
 
     #endregion
 
     #region Properties
 
-    public List<List<DialogData>> Data
+    public List<DialogLanguageData> Data
     {
         get { return data; }
     }
@@ -50,6 +50,25 @@ public class Dialog : ScriptableObject
         {
             get { return branch; }
             set { branch = value; }
+        }
+
+        #endregion
+    }
+
+    [System.Serializable]
+    public class DialogLanguageData
+    {
+        #region Fields
+
+        [SerializeField] private List<DialogData> languageData = new List<DialogData>();
+
+        #endregion
+
+        #region Properties
+
+        public List<DialogData> LanguageData
+        {
+            get { return languageData; }
         }
 
         #endregion

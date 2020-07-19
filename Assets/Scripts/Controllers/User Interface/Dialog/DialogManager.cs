@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 public class DialogManager : MonoBehaviour
 {
+    /*
     #region Variables
     public static DialogManager instance;
 
@@ -340,4 +341,5 @@ public class DialogManager : MonoBehaviour
 
         animator.gameObject.SetActive(false);
     }
+    */
 }

@@ -96,6 +96,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -163,6 +164,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81c1c95603bfaa748851fd3fb952eac5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  walkTime: 0.3
   moveTime: 0
   canMove: 1
   isMoving: 0
@@ -175,8 +177,9 @@ MonoBehaviour:
   coll: {fileID: 0}
   anim: {fileID: 0}
   orientation: {x: 0, y: 0}
+  runTime: 0.2
   fidgetDelay: 20
-  idleTimer: 0
+  fidgetTimer: 0
 --- !u!114 &6438746516055661787
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -201,7 +204,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 778195ca6bc605a43ba3e703b82754f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  runOnce: 1
 --- !u!61 &6438746516055661786
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -360,6 +362,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -427,6 +430,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81c1c95603bfaa748851fd3fb952eac5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  walkTime: 0.3
   moveTime: 0
   canMove: 1
   isMoving: 0
@@ -439,8 +443,9 @@ MonoBehaviour:
   coll: {fileID: 0}
   anim: {fileID: 0}
   orientation: {x: 0, y: 0}
+  runTime: 0.2
   fidgetDelay: 10
-  idleTimer: 0
+  fidgetTimer: 0
 --- !u!114 &9020705976908108314
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -465,7 +470,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 778195ca6bc605a43ba3e703b82754f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  runOnce: 0
 --- !u!61 &9020705976908108313
 BoxCollider2D:
   m_ObjectHideFlags: 0

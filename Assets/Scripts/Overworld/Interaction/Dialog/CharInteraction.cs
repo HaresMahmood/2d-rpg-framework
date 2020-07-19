@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class CharInteraction : InteractableObject
 {
+    /*
     #region Variables
 
     private RangeHandler rangeHandler;
@@ -117,4 +118,5 @@ public class CharInteraction : InteractableObject
         if (DialogManager.instance.isActive || DialogManager.instance.isTyping)
             DialogManager.instance.autoAdvance = !DialogManager.instance.autoAdvance; // Toggles autoAdvance bool.
     }
+    */
 }

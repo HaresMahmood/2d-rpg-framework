@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class BranchingDialogManager : MonoBehaviour
 {
+    /*
     public static BranchingDialogManager instance;
 
     private void Awake()
@@ -228,4 +229,5 @@ public class BranchingDialogManager : MonoBehaviour
             //GameManager.instance.transform.GetComponentInChildren<InputManager>().OnUserInput -= InventoryManager_OnUserInput;
         }
     }
+    */
 }

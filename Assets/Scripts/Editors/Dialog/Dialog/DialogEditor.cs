@@ -6,6 +6,7 @@ using UnityEngine;
 [CustomEditor(typeof(Dialog)), CanEditMultipleObjects]
 public class DialogEditor : Editor
 {
+    /*
     #region Variables
 
     private Dialog dialog;
@@ -23,12 +24,10 @@ public class DialogEditor : Editor
     {
         dialog = (Dialog)target;
 
-        /*
         if (dialog.dialogDataDutch.Count == 0)
             dialog.dialogDataDutch = dialog.dialogData.ToList();
         else if (dialog.dialogDataGerman.Count == 0)
             dialog.dialogDataGerman = dialog.dialogData.ToList();
-            */
     }
 
     public override void OnInspectorGUI()
@@ -136,4 +135,5 @@ public class DialogEditor : Editor
 
         EditorGUILayout.EndVertical();
     }
+    */
 }

@@ -5,6 +5,7 @@
 /// </summary>
 public class ItemInteraction : InteractableObject
 {
+    /*
     #region Variables
 
     private RangeHandler rangeHandler;
@@ -39,7 +40,7 @@ public class ItemInteraction : InteractableObject
     /// <summary>
     /// Update is called once per frame.
     /// </summary>
-    protected override void Update()
+    protected void Update()
     {
         base.Update();
 
@@ -57,4 +58,5 @@ public class ItemInteraction : InteractableObject
     }
 
     #endregion
+    */
 }

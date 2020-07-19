@@ -211,11 +211,11 @@ public class PlayerMovement : MovingObject
     /// <returns></returns>
     private void ToggleRunning()
     {
-        if (!DialogManager.instance.isActive)
-        {
-            isRunning = !isRunning;
-            toggleRunning = !toggleRunning;
-        }
+        //if (!DialogManager.instance.isActive)
+        //{
+        //    isRunning = !isRunning;
+        //    toggleRunning = !toggleRunning;
+        //}
 
         SetMoveTimes();
     }

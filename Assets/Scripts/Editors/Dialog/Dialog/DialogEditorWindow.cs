@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class DialogEditorWindow : EditorWindow
 {
+    /*
     #region Variables
 
     private static List<Dialog.DialogData> languageData;
@@ -95,4 +96,5 @@ public class DialogEditorWindow : EditorWindow
         };
         languageData.Add(newSentence);
     }
+    */
 }

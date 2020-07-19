@@ -4,11 +4,13 @@ using UnityEngine;
 public abstract class InteractableObject : MonoBehaviour
 {
 
+
+    /*
     protected virtual void Update()
     {
-        if (CanInteract() && !DialogManager.instance.isActive) // && PauseUserInterfaceController.instance.flags.isActive
+        //if (CanInteract() && !DialogManager.instance.isActive) // && PauseUserInterfaceController.instance.flags.isActive
             SetContextVisible();
-        else
+        //else
             SetContextInvisible();
     }
 
@@ -36,4 +38,5 @@ public abstract class InteractableObject : MonoBehaviour
     {
         PlayerInteraction.contextBox.GetComponentInChildren<TextMeshProUGUI>().SetText(text);
     }
+    */
 }

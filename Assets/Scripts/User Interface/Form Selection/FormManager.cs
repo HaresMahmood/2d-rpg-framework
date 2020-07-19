@@ -30,6 +30,7 @@ public class FormManager : MonoBehaviour
     {
         CheckInput();
 
+        /*
         if (Input.GetButtonDown("Interact") && !DialogManager.instance.isActive)
         {
             Debug.Log("Selected button: " + selectedButton);
@@ -40,6 +41,7 @@ public class FormManager : MonoBehaviour
 
             //DialogManager.instance.StartDialog(dialog);
         }
+        */
     }
 
 
