@@ -61,11 +61,15 @@ public class DialogController : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    public void SetActive(bool isActive, List<Dialog.DialogData> dialog)
+    public void SetActive(bool isActive, List<Dialog.DialogData> dialog = null)
     {
         Flags.isInDialog = isActive;
 
-        userInterfaceController.Dialog = dialog;
+        if (dialog != null)
+        {
+            userInterfaceController.Dialog = dialog;
+        }
+        
         StartCoroutine(userInterfaceController.SetActive(isActive));
     }
 

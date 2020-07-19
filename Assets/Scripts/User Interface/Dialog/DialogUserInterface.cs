@@ -55,9 +55,9 @@ public class DialogUserInterface : UserInterface
         dialogText.FadeTo(text);
     }
 
-    public void Stop()
+    public bool Stop()
     {
-        dialogText.StopFade();
+        return dialogText.StopFade();
     }
 
     /*

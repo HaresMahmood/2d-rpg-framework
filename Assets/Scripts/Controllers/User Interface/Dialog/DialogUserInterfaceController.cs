@@ -42,12 +42,23 @@ public class DialogUserInterfaceController : UserInterfaceController
 
     #endregion
 
+    #region Variables
+
+    private DialogController controller;
+
+    #endregion
+
     #region Miscellaneous Methods
 
     public override IEnumerator SetActive(bool isActive, bool condition = true)
     {
         StartCoroutine(userInterface.ActivatePanel(isActive));
-        userInterface.SetText(Dialog[0].Text);
+
+        if (isActive)
+        {
+            selectedValue = 0;
+            userInterface.SetText(Dialog[selectedValue].Text);
+        }
 
         yield return new WaitForSeconds(0.15f);
 
@@ -56,9 +67,22 @@ public class DialogUserInterfaceController : UserInterfaceController
 
     protected override void GetInput(string axisName)
     {
-        if (Input.GetButtonDown("Interact"))
+        if (Input.GetButtonDown("Interact") || Input.GetButtonDown("Cancel"))
         {
-            userInterface.Stop();
+            if (!userInterface.Stop())
+            {
+                if (selectedValue < Dialog.Count - 1)
+                {
+                    selectedValue++;
+                    userInterface.SetText(Dialog[selectedValue].Text);
+                }
+                else
+                {
+
+                    StartCoroutine(userInterface.ActivatePanel(false));
+                    controller.SetActive(false);
+                }
+            }
 
             //Debug.Log("Pressed Interact");
         }
@@ -75,4 +99,16 @@ public class DialogUserInterfaceController : UserInterfaceController
     }
 
     #endregion
+
+    #region Unity Methods
+
+    /// <summary>
+    /// Awake is called when the script instance is being loaded.
+    /// </summary>
+    private void Awake()
+    {
+        controller = GetComponent<DialogController>();
+    }
+
+    #endregion 
 }
