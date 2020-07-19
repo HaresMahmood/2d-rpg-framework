@@ -1,7 +1,7 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using CharTween.Examples;
 
 /// <summary>
 ///
@@ -53,6 +53,11 @@ public class DialogUserInterface : UserInterface
     public void SetText(string text)
     {
         dialogText.FadeTo(text);
+    }
+
+    public void Stop()
+    {
+        dialogText.StopFade();
     }
 
     /*

@@ -58,7 +58,9 @@ public class DialogUserInterfaceController : UserInterfaceController
     {
         if (Input.GetButtonDown("Interact"))
         {
-            Debug.Log("Pressed Interact");
+            userInterface.Stop();
+
+            //Debug.Log("Pressed Interact");
         }
 
         if (Input.GetButtonDown("Toggle"))
