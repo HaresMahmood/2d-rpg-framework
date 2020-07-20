@@ -22,6 +22,8 @@ public class DialogUserInterface : UserInterface
     private TextFade dialogText;
     private TextMeshProUGUI nameText;
 
+    private Dialog.DialogData dialog;
+
     #endregion
 
     #region Miscellaneous Methods
@@ -45,17 +47,12 @@ public class DialogUserInterface : UserInterface
         }
     }
 
-    public void UpdateInformation(string text, string name)
+    public void UpdateInformation(Dialog.DialogData dialog)
     {
-        nameText.SetText(name);
-        SetText(text);
-    }
+        nameText.SetText(dialog.Character.name);
+        SetText(dialog.Text);
 
-    public void SetText(string text)
-    {
-        nameText.DOFade(1f, 0.1f);
-        selector.SetActive(false);
-        dialogText.FadeTo(text);
+        this.dialog = dialog;
     }
 
     public bool Stop()
@@ -63,10 +60,25 @@ public class DialogUserInterface : UserInterface
         return dialogText.StopFade();
     }
 
+    private void SetText(string text)
+    {
+        nameText.DOFade(1f, 0.1f);
+        selector.SetActive(false);
+        dialogText.FadeTo(text);
+    }
+
     private void DialogText_OnFadeComplete(object sender, System.EventArgs e)
     {
-        selector.SetActive(true);
-        nameText.DOFade(0f, 0.1f);
+        if (dialog.Branch == null)
+        {
+            selector.SetActive(true);
+            nameText.DOFade(0f, 0.1f);
+        }
+        else
+        {
+            StartCoroutine(DialogUserInterfaceController.Instance.SetActive(false, false));
+        }
+
         //StartCoroutine(UpdateSelector(transform.Find("Base")));
     }
 

@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 369e51a9a5a0d9f45aede7dbdbfd6c64, type: 3}
   m_Name: New branch
   m_EditorClassIdentifier: 
-  dialogBranches:
-  - branchOption: Your clothes...
+  branches:
+  - text: Yes
     nextDialog: {fileID: 0}
     branchEvent:
       m_PersistentCalls:
         m_Calls: []
     hasBackButton: 0
-  - branchOption: Nothing.
+  - text: No
     nextDialog: {fileID: 0}
     branchEvent:
       m_PersistentCalls:

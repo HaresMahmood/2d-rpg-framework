@@ -54,13 +54,17 @@ public class DialogUserInterfaceController : UserInterfaceController
     {
         StartCoroutine(userInterface.ActivatePanel(isActive));
 
-        if (isActive)
+        if (isActive && condition)
         {
             selectedValue = 0;
-            userInterface.SetText(Dialog[selectedValue].Text);
-        }
+            userInterface.UpdateInformation(Dialog[selectedValue]);
 
-        yield return new WaitForSeconds(0.15f);
+            yield return new WaitForSeconds(0.15f);
+        }
+        else
+        {
+            // StartCoroutine(DialogBranchUserInterfaceController(true);
+        }
 
         Flags.isActive = isActive;
     }
@@ -74,7 +78,7 @@ public class DialogUserInterfaceController : UserInterfaceController
                 if (selectedValue < Dialog.Count - 1)
                 {
                     selectedValue++;
-                    userInterface.SetText(Dialog[selectedValue].Text);
+                    userInterface.UpdateInformation(Dialog[selectedValue]);
                 }
                 else
                 {
