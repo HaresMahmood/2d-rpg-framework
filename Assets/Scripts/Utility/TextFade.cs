@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using TMPro;
@@ -32,6 +32,12 @@ namespace CharTween.Examples
 
         #endregion
 
+        #region Events
+
+        public event EventHandler OnFadeComplete;
+
+        #endregion
+
         #region Miscellaneous Methods
 
         public void FadeTo(string text)
@@ -51,8 +57,9 @@ namespace CharTween.Examples
                 {
                     sequence.Complete();
 
-                    sequence.OnComplete(() => {
-                        Debug.Log("Done");
+                    sequence.OnComplete(() => 
+                    {
+                        OnFadeComplete?.Invoke(this, EventArgs.Empty);
                     });
 
                     return true;
@@ -73,16 +80,17 @@ namespace CharTween.Examples
 
             sequence = DOTween.Sequence();
 
-            for (var i = start; i <= end; ++i)
+            for (int i = start; i <= end; ++i)
             {
                 var timeOffset = Mathf.Lerp(0, 1, (i - start) / (float)(end - start + 1));
                 var charSequence = DOTween.Sequence();
-                charSequence.Append(tweener.DOFade(i, 0, 0.5f).From());
+                charSequence.Append(tweener.DOFade(i, 0, 0.5f).From()).SetEase(Ease.Linear);
                 sequence.Insert(timeOffset, charSequence);
             }
 
-            sequence.OnComplete(() => {
-                
+            sequence.OnComplete(() =>
+            {
+                OnFadeComplete?.Invoke(this, EventArgs.Empty);
             });
 
             //sequence.SetLoops(-1, LoopType.Yoyo);

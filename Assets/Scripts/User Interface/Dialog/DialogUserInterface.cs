@@ -2,6 +2,7 @@
 using UnityEngine;
 using TMPro;
 using CharTween.Examples;
+using DG.Tweening;
 
 /// <summary>
 ///
@@ -52,12 +53,21 @@ public class DialogUserInterface : UserInterface
 
     public void SetText(string text)
     {
+        nameText.DOFade(1f, 0.1f);
+        selector.SetActive(false);
         dialogText.FadeTo(text);
     }
 
     public bool Stop()
     {
         return dialogText.StopFade();
+    }
+
+    private void DialogText_OnFadeComplete(object sender, System.EventArgs e)
+    {
+        selector.SetActive(true);
+        nameText.DOFade(0f, 0.1f);
+        //StartCoroutine(UpdateSelector(transform.Find("Base")));
     }
 
     /*
@@ -169,6 +179,8 @@ public class DialogUserInterface : UserInterface
         base.Awake();
 
         selector.SetActive(false);
+
+        dialogText.OnFadeComplete += DialogText_OnFadeComplete;
     }
 
 
