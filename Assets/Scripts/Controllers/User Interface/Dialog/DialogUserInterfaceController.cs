@@ -52,8 +52,10 @@ public class DialogUserInterfaceController : UserInterfaceController
 
     public override IEnumerator SetActive(bool isActive, bool condition = true)
     {
-        StartCoroutine(userInterface.ActivatePanel(isActive));
-
+        if (condition)
+        {
+            StartCoroutine(userInterface.ActivatePanel(isActive));
+        }
         if (isActive && condition)
         {
             selectedValue = 0;
@@ -61,9 +63,10 @@ public class DialogUserInterfaceController : UserInterfaceController
 
             yield return new WaitForSeconds(0.15f);
         }
-        else
+        else if (!condition)
         {
-            // StartCoroutine(DialogBranchUserInterfaceController(true);
+            //StartCoroutine(GetComponent<BranchingDialogUserInterfaceController>().SetActive(!isActive)); // TODO: Debug
+            StartCoroutine(userInterface.ActivateBranchedPanel(!isActive));
         }
 
         Flags.isActive = isActive;
@@ -82,9 +85,11 @@ public class DialogUserInterfaceController : UserInterfaceController
                 }
                 else
                 {
-
-                    StartCoroutine(userInterface.ActivatePanel(false));
-                    controller.SetActive(false);
+                    if (Dialog[selectedValue].Branch == null)
+                    {
+                        StartCoroutine(userInterface.ActivatePanel(false));
+                        controller.SetActive(false);
+                    }
                 }
             }
 
@@ -93,7 +98,7 @@ public class DialogUserInterfaceController : UserInterfaceController
 
         if (Input.GetButtonDown("Toggle"))
         {
-            Debug.Log("Pressed Toggle.");
+            Debug.Log("Pressed Toggle");
         }
 
         if (Input.GetButtonDown("Start"))

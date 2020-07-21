@@ -45,6 +45,23 @@ public class DialogUserInterface : UserInterface
             gameObject.SetActive(false);
             selector.SetActive(false);
         }
+
+        Debug.Log(true);
+    }
+
+    public IEnumerator ActivateBranchedPanel(bool isActive)
+    {
+        animator.SetBool("hasBranch", isActive);
+
+        if (!isActive)
+        {
+            animator.SetBool("isBranchInactive", true);
+
+            yield return null;
+            yield return new WaitForSeconds(animator.GetAnimationTime());
+
+            animator.SetBool("isBranchInactive", false);
+        }
     }
 
     public void UpdateInformation(Dialog.DialogData dialog)
@@ -77,6 +94,7 @@ public class DialogUserInterface : UserInterface
         else
         {
             StartCoroutine(DialogUserInterfaceController.Instance.SetActive(false, false));
+            //StartCoroutine(ActivateBranchedPanel(true));
         }
 
         //StartCoroutine(UpdateSelector(transform.Find("Base")));
