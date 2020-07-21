@@ -38,7 +38,7 @@ public class BranchingDialogUserInterfaceController : UserInterfaceController
         get { return userInterface; }
     }
 
-    public List<Dialog.DialogData> Dialog { private get; set; }
+    public List<BranchingDialog.DialogBranch> Branch { private get; set; }
 
     #endregion
 
@@ -46,14 +46,17 @@ public class BranchingDialogUserInterfaceController : UserInterfaceController
 
     public override IEnumerator SetActive(bool isActive, bool condition = true)
     {
-        userInterface.FadeButtons(isActive);
+        //userInterface.FadeButtons(isActive);
 
         if (!isActive)
         {
-            StartCoroutine(GetComponent<DialogUserInterfaceController>().SetActive(isActive)); // TODO: Debug
+            GetComponent<DialogUserInterfaceController>().Dialog = Branch[selectedValue].NextDialog != null ? Branch[selectedValue].NextDialog.Data[0].LanguageData : null;
+            StartCoroutine(GetComponent<DialogUserInterfaceController>().SetActive(!isActive, false)); // TODO: Debug
         }
-
-        yield return new WaitForSeconds(0.15f);
+        else
+        {
+            yield return new WaitForSeconds(0.15f);
+        }
 
         Flags.isActive = isActive;
     }
@@ -63,10 +66,12 @@ public class BranchingDialogUserInterfaceController : UserInterfaceController
         if (Input.GetButtonDown("Interact"))
         {
             StartCoroutine(SetActive(false));
+            Debug.Log("Pressed Interact");
         }
 
         if (Input.GetButtonDown("Cancel"))
         {
+            StartCoroutine(SetActive(false));
             Debug.Log("Pressed Caccel");
         }
 

@@ -52,21 +52,42 @@ public class DialogUserInterfaceController : UserInterfaceController
 
     public override IEnumerator SetActive(bool isActive, bool condition = true)
     {
-        if (condition)
-        {
-            StartCoroutine(userInterface.ActivatePanel(isActive));
-        }
         if (isActive && condition)
         {
             selectedValue = 0;
-            userInterface.UpdateInformation(Dialog[selectedValue]);
+
+            if (Dialog != null)
+            {
+                userInterface.UpdateInformation(Dialog[selectedValue]);
+            }
+            else
+            {
+                StartCoroutine(SetActive(false));
+                yield break;
+            }
 
             yield return new WaitForSeconds(0.15f);
         }
         else if (!condition)
         {
-            //StartCoroutine(GetComponent<BranchingDialogUserInterfaceController>().SetActive(!isActive)); // TODO: Debug
-            StartCoroutine(userInterface.ActivateBranchedPanel(!isActive));
+            //StartCoroutine(userInterface.ActivateBranchedPanel(!isActive));
+
+            if (!isActive)
+            {
+                GetComponent<BranchingDialogUserInterfaceController>().Branch = Dialog[selectedValue].Branch.Branches;
+                StartCoroutine(GetComponent<BranchingDialogUserInterfaceController>().SetActive(!isActive)); // TODO: Debug
+                StartCoroutine(userInterface.ActivateBranchedPanel(!isActive));
+            }
+            else
+            {
+                StartCoroutine(SetActive(isActive));
+                yield break;
+            }
+        }
+
+        if (condition)
+        {
+            StartCoroutine(userInterface.ActivatePanel(isActive));
         }
 
         Flags.isActive = isActive;
@@ -78,7 +99,7 @@ public class DialogUserInterfaceController : UserInterfaceController
         {
             if (!userInterface.Stop())
             {
-                if (selectedValue < Dialog.Count - 1)
+                if (selectedValue < Dialog.Count - 1 || Dialog == null)
                 {
                     selectedValue++;
                     userInterface.UpdateInformation(Dialog[selectedValue]);

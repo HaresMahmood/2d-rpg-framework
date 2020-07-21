@@ -35,6 +35,16 @@ public class DialogUserInterface : UserInterface
             gameObject.SetActive(true);
         }
 
+        if (!isActive && animator.GetBool("hasBranch"))
+        {
+            StartCoroutine(ActivateBranchedPanel(isActive));
+
+            yield return null;
+            yield return new WaitForSeconds(0.2f);
+
+            Debug.Log(true);
+        }
+
         animator.SetBool("isActive", isActive);
 
         if (!isActive)
@@ -45,8 +55,6 @@ public class DialogUserInterface : UserInterface
             gameObject.SetActive(false);
             selector.SetActive(false);
         }
-
-        Debug.Log(true);
     }
 
     public IEnumerator ActivateBranchedPanel(bool isActive)
