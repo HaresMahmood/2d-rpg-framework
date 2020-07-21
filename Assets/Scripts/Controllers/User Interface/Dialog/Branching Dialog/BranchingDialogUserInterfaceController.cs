@@ -46,7 +46,7 @@ public class BranchingDialogUserInterfaceController : UserInterfaceController
 
     public override IEnumerator SetActive(bool isActive, bool condition = true)
     {
-        //userInterface.FadeButtons(isActive);
+        userInterface.FadeButtons(isActive);
 
         if (!isActive)
         {

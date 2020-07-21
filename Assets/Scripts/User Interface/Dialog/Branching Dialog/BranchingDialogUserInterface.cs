@@ -29,11 +29,13 @@ public class BranchingDialogUserInterface : UserInterface
 
         Sequence sequence = DOTween.Sequence();
 
-        for (int i = 0; i <= buttons.Count; i++)
+        for (int i = 0; i < buttons.Count; i++)
         {
-            var timeOffset = Mathf.Lerp(0, 1, (i - start) / (float)(end - start + 1));
+            //float timeOffset = Mathf.Lerp(0, 1, (i - start) / (float)(end - start));
+            float timeOffset = i * 0.08f;
             var charSequence = DOTween.Sequence();
-            charSequence.Append(buttons[i].GetComponent<CanvasGroup>().DOFade(0, 0.5f).From()).SetEase(Ease.Linear);
+
+            charSequence.Append(buttons[i].GetComponent<CanvasGroup>().DOFade(opacity, 0.1f));
             sequence.Insert(timeOffset, charSequence);
         }
     }
