@@ -10,7 +10,7 @@ public class BranchingDialogUserInterface : UserInterface
 {
     #region Constants
 
-    public override int MaxObjects => buttons.Count;
+    public override int MaxObjects => max;
 
     #endregion
 
@@ -18,25 +18,56 @@ public class BranchingDialogUserInterface : UserInterface
 
     private List<MenuButton> buttons;
 
+    private int max;
+
     #endregion
 
     #region Miscellaneous Methods
 
-    public void FadeButtons(bool isActive)
+    public override void UpdateSelectedObject(int selectedValue, int increment = -1)
     {
-        int start = 0; int end = buttons.Count;
+        int previousValue = ExtensionMethods.IncrementInt(selectedValue, 0, MaxObjects, -increment);
+
+        buttons[selectedValue].AnimateButton(true);
+        buttons[previousValue].AnimateButton(false);
+
+        StartCoroutine(UpdateSelector(increment == 0 ? null : buttons[selectedValue].transform));
+    }
+
+    public void FadeButtons(bool isActive, List<BranchingDialog.DialogBranch> branch)
+    {
         float opacity = isActive ? 1f : 0f;
+
+        max = branch.Count;
 
         Sequence sequence = DOTween.Sequence();
 
-        for (int i = 0; i < buttons.Count; i++)
+        if (isActive && branch.Count != buttons.Count)
+        {
+            for (int i = branch.Count; i < buttons.Count; i++)
+            {
+                buttons[i].gameObject.SetActive(false);
+            }
+        }
+
+        for (int i = 0; i < branch.Count; i++)
         {
             //float timeOffset = Mathf.Lerp(0, 1, (i - start) / (float)(end - start));
             float timeOffset = i * 0.08f;
             var charSequence = DOTween.Sequence();
 
+            buttons[i].SetValues(branch[i].Text, null);
+
             charSequence.Append(buttons[i].GetComponent<CanvasGroup>().DOFade(opacity, 0.1f));
             sequence.Insert(timeOffset, charSequence);
+        }
+
+        if (!isActive)
+        {
+            for (int i = 0; i < buttons.Count; i++)
+            {
+                buttons[i].gameObject.SetActive(true);
+            }
         }
     }
 
@@ -49,7 +80,13 @@ public class BranchingDialogUserInterface : UserInterface
     /// </summary>
     protected override void Awake()
     {
-        buttons = GetComponentsInChildren<MenuButton>().ToList();   
+        buttons = GetComponentsInChildren<MenuButton>().ToList();
+
+        selector = transform.Find("Selector").gameObject;
+
+        base.Awake();
+
+        StartCoroutine(UpdateSelector());
     }
 
     #endregion

@@ -46,7 +46,8 @@ public class BranchingDialogUserInterfaceController : UserInterfaceController
 
     public override IEnumerator SetActive(bool isActive, bool condition = true)
     {
-        userInterface.FadeButtons(isActive);
+        userInterface.FadeButtons(isActive, Branch);
+        UpdateSelectedObject(0, isActive ? 1 : 0);
 
         if (!isActive)
         {
@@ -63,6 +64,8 @@ public class BranchingDialogUserInterfaceController : UserInterfaceController
 
     protected override void GetInput(string axisName)
     {
+        base.GetInput(axisName);
+
         if (Input.GetButtonDown("Interact"))
         {
             StartCoroutine(SetActive(false));
