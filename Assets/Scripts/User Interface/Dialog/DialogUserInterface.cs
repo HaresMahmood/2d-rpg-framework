@@ -41,8 +41,6 @@ public class DialogUserInterface : UserInterface
 
             yield return null;
             yield return new WaitForSeconds(0.2f);
-
-            Debug.Log(true);
         }
 
         animator.SetBool("isActive", isActive);

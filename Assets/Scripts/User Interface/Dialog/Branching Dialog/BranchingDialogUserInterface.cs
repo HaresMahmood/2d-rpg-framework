@@ -54,20 +54,24 @@ public class BranchingDialogUserInterface : UserInterface
         {
             //float timeOffset = Mathf.Lerp(0, 1, (i - start) / (float)(end - start));
             float timeOffset = i * 0.08f;
-            var charSequence = DOTween.Sequence();
+            var buttonSequence = DOTween.Sequence();
 
             buttons[i].SetValues(branch[i].Text, null);
 
-            charSequence.Append(buttons[i].GetComponent<CanvasGroup>().DOFade(opacity, 0.1f));
-            sequence.Insert(timeOffset, charSequence);
+            buttonSequence.Append(buttons[i].GetComponent<CanvasGroup>().DOFade(opacity, 0.1f));
+            sequence.Insert(timeOffset, buttonSequence);
         }
+
 
         if (!isActive)
         {
-            for (int i = 0; i < buttons.Count; i++)
+            sequence.OnComplete(() =>
             {
-                buttons[i].gameObject.SetActive(true);
-            }
+                for (int i = 0; i < buttons.Count; i++)
+                {
+                    buttons[i].gameObject.SetActive(true);
+                }
+            });
         }
     }
 

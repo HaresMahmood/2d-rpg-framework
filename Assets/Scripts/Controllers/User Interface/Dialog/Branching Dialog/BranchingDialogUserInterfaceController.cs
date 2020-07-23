@@ -69,7 +69,6 @@ public class BranchingDialogUserInterfaceController : UserInterfaceController
         if (Input.GetButtonDown("Interact"))
         {
             StartCoroutine(SetActive(false));
-            Debug.Log("Pressed Interact");
         }
 
         if (Input.GetButtonDown("Cancel"))
