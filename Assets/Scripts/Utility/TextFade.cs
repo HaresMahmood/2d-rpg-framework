@@ -76,15 +76,15 @@ namespace CharTween.Examples
             this.text.text = text;
 
             var tweener = this.text.GetCharTweener();
-            int start = 0; int end = tweener.CharacterCount;
 
             sequence = DOTween.Sequence();
 
-            for (int i = start; i <= end; ++i)
+            for (int i = 0; i < text.Length; ++i)
             {
-                var timeOffset = Mathf.Lerp(0, 1, (i - start) / (float)(end - start + 1));
+                float timeOffset = Mathf.Lerp(0, 1, (i - 0) / (float)(text.Length - 0 + 1));
                 var charSequence = DOTween.Sequence();
-                charSequence.Append(tweener.DOFade(i, 0, 0.5f).From()).SetEase(Ease.Linear);
+
+                charSequence.Append(tweener.DOFade(i, 0, 0.3f).From());
                 sequence.Insert(timeOffset, charSequence);
             }
 

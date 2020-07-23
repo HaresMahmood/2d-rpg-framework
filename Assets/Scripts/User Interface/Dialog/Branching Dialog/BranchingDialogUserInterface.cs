@@ -52,7 +52,6 @@ public class BranchingDialogUserInterface : UserInterface
 
         for (int i = 0; i < branch.Count; i++)
         {
-            //float timeOffset = Mathf.Lerp(0, 1, (i - start) / (float)(end - start));
             float timeOffset = i * 0.08f;
             var buttonSequence = DOTween.Sequence();
 
