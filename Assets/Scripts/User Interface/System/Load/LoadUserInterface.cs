@@ -43,7 +43,7 @@ public class LoadUserInterface : SystemUserInterfaceBase
     {
         saveSlots = GetComponentsInChildren<SaveSlot>().ToList();
 
-        selector = transform.Find("Base/Viewport/Selector").gameObject;
+        selectorI = transform.Find("Base/Viewport/Selector").gameObject;
         scrollbar = transform.Find("Scrollbar").GetComponent<Scrollbar>();
 
         base.Awake();

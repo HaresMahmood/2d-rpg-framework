@@ -1,0 +1,90 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using DG.Tweening;
+
+/// <summary>
+///
+/// </summary>
+public class SelectorController : MonoBehaviour // TODO: Make animation times serialzable!
+{
+    #region Variables
+
+    private Sequence sequence;
+
+    #endregion
+
+    #region Miscellaneous Methods
+
+    public void UpdatePosition(Transform selectedObject)
+    {
+        Sequence sequence = DOTween.Sequence();
+
+        this.sequence.Kill();
+
+        if (!gameObject.activeSelf)
+        {
+            gameObject.SetActive(true);
+        }
+
+        sequence.Append(GetComponent<CanvasGroup>().DOFade(0f, 0.15f));
+
+        sequence.OnComplete(() =>
+        {
+            if (selectedObject != null)
+            {
+                transform.position = selectedObject.position;
+                Animate();
+            }
+            else
+            {
+                gameObject.SetActive(false);
+            }
+        });
+    }
+
+    public void Deactivate()
+    {
+        Sequence sequence = DOTween.Sequence();
+
+        this.sequence.Kill();
+
+        sequence.Append(GetComponent<RectTransform>().DOScale(0.99f, 0.05f))
+            .Append(GetComponent<CanvasGroup>().DOFade(0f, 0.15f))
+            .Join(GetComponent<RectTransform>().DOScale(1.025f, 0.07f))
+            .Append(GetComponent<RectTransform>().DOScale(1f, 0.08f));
+
+        sequence.OnComplete(() =>
+        {
+            gameObject.SetActive(false);
+        });
+    }
+
+    private void Animate()
+    {
+        sequence = DOTween.Sequence();
+
+        GetComponent<CanvasGroup>().alpha = 0.3f;
+
+        sequence.Append(GetComponent<CanvasGroup>().DOFade(1f, 0.5f))
+            .Append(GetComponent<CanvasGroup>().DOFade(0.3f, 0.5f));
+
+        sequence.SetLoops(-1, LoopType.Yoyo);
+    }
+
+    #endregion
+
+    #region Unity Methods
+
+
+    /// <summary>
+    /// Start is called before the first frame update.
+    /// </summary>
+    private void Start()
+    {
+        Animate();
+    }
+
+    #endregion
+}
+

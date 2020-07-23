@@ -91,7 +91,7 @@ public class MissionInformationUserInterface : InformationUserInterface
     /// </summary>
     protected override void Awake()
     {
-        selector = transform.Find("Selector").gameObject;
+        selectorI = transform.Find("Selector").gameObject;
 
         buttons = transform.GetComponentsInChildren<MenuButton>().ToList();
 

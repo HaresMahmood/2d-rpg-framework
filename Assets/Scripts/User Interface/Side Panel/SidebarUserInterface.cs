@@ -98,8 +98,8 @@ public class SidebarUserInterface : UserInterface
         {
             yield return new WaitForSecondsRealtime(animationDuration);
 
-            selector.transform.Find(selectedObject.GetComponent<SidebarSlot>() == null ? "Edit" : "Party").gameObject.SetActive(true);
-            selector.transform.Find(selectedObject.GetComponent<SidebarSlot>() == null ? "Party" : "Edit").gameObject.SetActive(false);
+            selectorI.transform.Find(selectedObject.GetComponent<SidebarSlot>() == null ? "Edit" : "Party").gameObject.SetActive(true);
+            selectorI.transform.Find(selectedObject.GetComponent<SidebarSlot>() == null ? "Party" : "Edit").gameObject.SetActive(false);
         }
 
     }
@@ -138,7 +138,7 @@ public class SidebarUserInterface : UserInterface
         editUserInterface = transform.Find("Full Party").GetComponent<EditUserInterface>();
 
         animator = GetComponent<Animator>();
-        selector = transform.Find("Selectors").gameObject;
+        selectorI = transform.Find("Selectors").gameObject;
         editButton = transform.Find("Edit");
 
         slots = GetComponentsInChildren<SidebarSlot>().ToList();

@@ -31,7 +31,18 @@ public class BranchingDialogUserInterface : UserInterface
         buttons[selectedValue].AnimateButton(true);
         buttons[previousValue].AnimateButton(false);
 
-        StartCoroutine(UpdateSelector(increment == 0 ? null : buttons[selectedValue].transform));
+        UpdateSelectorPosition(increment == 0 ? null : buttons[selectedValue].transform);
+
+        /*
+        if (increment != 0)
+        {
+            UpdateSelectorPosition(buttons[selectedValue].transform); // increment == 0 ? null : 
+        }
+        else
+        {
+            DeactivateSelector();
+        }
+        */
     }
 
     public void FadeButtons(bool isActive, List<BranchingDialog.DialogBranch> branch)
@@ -85,11 +96,9 @@ public class BranchingDialogUserInterface : UserInterface
     {
         buttons = GetComponentsInChildren<MenuButton>().ToList();
 
-        selector = transform.Find("Selector").gameObject;
+        selector = transform.Find("Selector").GetComponent<SelectorController>();
 
-        base.Awake();
-
-        StartCoroutine(UpdateSelector());
+        selector.gameObject.SetActive(false);
     }
 
     #endregion

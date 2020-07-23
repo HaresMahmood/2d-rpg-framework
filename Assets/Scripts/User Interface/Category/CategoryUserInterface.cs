@@ -112,7 +112,7 @@ public abstract class CategoryUserInterface : PauseUserInterfaceBase
         float opacity = isActive ? 0f : 1f;
         Transform selectedObject = isActive ? categorizableSlots[0].transform : null;
 
-        selector.SetActive(isActive);
+        selectorI.SetActive(isActive);
         StartCoroutine(emptyPanel.FadeOpacity(opacity, animationDuration));
 
         opacity = isActive ? 1f : 0f;

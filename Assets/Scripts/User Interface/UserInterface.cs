@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 /// <summary>
 ///
@@ -16,7 +17,9 @@ public abstract class UserInterface : MonoBehaviour
 
     #region Variables
 
-    protected GameObject selector;
+    protected SelectorController selector;
+
+    protected GameObject selectorI;
 
     protected Animator selectorAnimator;
 
@@ -26,6 +29,11 @@ public abstract class UserInterface : MonoBehaviour
 
     #region Miscellaneous Methods
 
+    public void DeactivateSelector()
+    {
+        selector.Deactivate();
+    }
+
     public IEnumerator AnimateSelector()
     {
         float animationDuration;
@@ -33,7 +41,7 @@ public abstract class UserInterface : MonoBehaviour
         selectorAnimator.SetBool("isPressed", true);
 
         yield return null;
-        animationDuration = selectorAnimator.GetAnimationTime();
+        animationDuration = 0.25f; //selectorAnimator.GetAnimationTime();
 
         if (Time.timeScale == 0)
         {
@@ -44,12 +52,16 @@ public abstract class UserInterface : MonoBehaviour
             yield return new WaitForSeconds(animationDuration);
         }
 
-        selectorAnimator.SetBool("isPressed", false);
-        selector.gameObject.SetActive(false);
+        selectorI.gameObject.SetActive(false);
     }
 
     public virtual void UpdateSelectedObject(int selectedValue, int increment = -1)
     { }
+
+    protected void UpdateSelectorPosition(Transform selectedObject = null)
+    {
+        selector.UpdatePosition(selectedObject);
+    }
 
     /// <summary>
     /// Animates and updates the position of the selector. Dynamically changes position and size of selector 
@@ -61,19 +73,19 @@ public abstract class UserInterface : MonoBehaviour
     /// <returns> Co-routine. </returns>
     protected virtual IEnumerator UpdateSelector(Transform selectedObject = null, float animationDuration = 0.1f)
     {
-        if (!selector.activeSelf)
+        if (!selectorI.activeSelf)
         {
-            selector.SetActive(true);
+            selectorI.SetActive(true);
         }
 
         selectorAnimator.enabled = false;
-        StartCoroutine(selector.FadeOpacity(0f, animationDuration));
+        StartCoroutine(selectorI.FadeOpacity(0f, animationDuration));
 
         if (selectedObject != null)
         {
             yield return new WaitForSecondsRealtime(animationDuration);
 
-            selector.transform.position = selectedObject.position;
+            selectorI.transform.position = selectedObject.position;
             selectorAnimator.enabled = true;
         }
     }
@@ -88,17 +100,17 @@ public abstract class UserInterface : MonoBehaviour
     /// <returns> Co-routine. </returns>
     protected virtual IEnumerator UpdateSelector(Vector2 selectedObjectPosition, float animationDuration = 0.1f)
     {
-        if (!selector.activeSelf)
+        if (!selectorI.activeSelf)
         {
-            selector.SetActive(true);
+            selectorI.SetActive(true);
         }
 
         selectorAnimator.enabled = false;
-        StartCoroutine(selector.FadeOpacity(0f, animationDuration));
+        StartCoroutine(selectorI.FadeOpacity(0f, animationDuration));
 
         yield return new WaitForSecondsRealtime(animationDuration);
 
-        selector.transform.position = selectedObjectPosition;
+        selectorI.transform.position = selectedObjectPosition;
         selectorAnimator.enabled = true;
     }
 
@@ -158,7 +170,7 @@ public abstract class UserInterface : MonoBehaviour
     /// </summary>
     protected virtual void Awake()
     {
-        selectorAnimator = selector.GetComponent<Animator>();
+        selectorAnimator = selectorI.GetComponent<Animator>();
     }
 
     #endregion

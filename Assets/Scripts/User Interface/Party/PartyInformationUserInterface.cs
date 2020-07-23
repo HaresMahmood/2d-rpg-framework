@@ -125,7 +125,7 @@ public class PartyInformationUserInterface : UserInterface
     {
         informationSlots = GetComponentsInChildren<PartyInformationSlot>().ToList();
 
-        selector = transform.parent.Find("Selector").gameObject;
+        selectorI = transform.parent.Find("Selector").gameObject;
 
         base.Awake();
     }

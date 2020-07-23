@@ -104,7 +104,7 @@ public sealed class InventoryUserInterface : CategoryUserInterface
         Transform middle = transform.Find("Middle");
         middlePanel = middle.gameObject;
 
-        selector = middle.Find("Grid/Selector").gameObject;
+        selectorI = middle.Find("Grid/Selector").gameObject;
 
         scrollbar = middle.Find("Grid/Scrollbar").GetComponent<Scrollbar>();
 

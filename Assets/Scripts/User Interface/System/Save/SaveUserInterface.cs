@@ -54,7 +54,7 @@ public class SaveUserInterface : SystemUserInterfaceBase
         buttons = transform.Find("Confirmation").GetComponentsInChildren<MenuButton>().ToList();
         animator = transform.Find("Confirmation").GetComponent<Animator>();
 
-        selector = transform.Find("Confirmation/Selector").gameObject;
+        selectorI = transform.Find("Confirmation/Selector").gameObject;
 
         base.Awake();
     }

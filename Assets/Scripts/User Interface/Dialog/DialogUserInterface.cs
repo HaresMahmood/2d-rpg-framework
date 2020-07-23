@@ -51,7 +51,7 @@ public class DialogUserInterface : UserInterface
             yield return new WaitForSeconds(animator.GetAnimationTime());
 
             gameObject.SetActive(false);
-            selector.SetActive(false);
+            selector.gameObject.SetActive(false);
         }
     }
 
@@ -86,7 +86,9 @@ public class DialogUserInterface : UserInterface
     private void SetText(string text)
     {
         nameText.DOFade(1f, 0.1f);
-        selector.SetActive(false);
+        //selector.SetActive(false);
+        //StartCoroutine(AnimateSelector());
+        DeactivateSelector();
         dialogText.FadeTo(text);
     }
 
@@ -94,7 +96,7 @@ public class DialogUserInterface : UserInterface
     {
         if (dialog.Branch == null)
         {
-            selector.SetActive(true);
+            selector.gameObject.SetActive(true);
             nameText.DOFade(0f, 0.1f);
         }
         else
@@ -210,11 +212,8 @@ public class DialogUserInterface : UserInterface
         dialogText = transform.Find("Text").GetComponent<TextFade>();
         nameText = transform.Find("Name").GetComponent<TextMeshProUGUI>();
 
-        selector = transform.Find("Selector").gameObject;
-
-        base.Awake();
-
-        selector.SetActive(false);
+        selector = transform.Find("Selector").GetComponent<SelectorController>();
+        selector.gameObject.SetActive(false);
 
         dialogText.OnFadeComplete += DialogText_OnFadeComplete;
     }

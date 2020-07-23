@@ -79,7 +79,7 @@ public class MissionsUserInterface : CategoryUserInterface
 
             if (!isActive)
             {
-                selector.SetActive(true);
+                selectorI.SetActive(true);
             }
         }
     }
@@ -139,7 +139,7 @@ public class MissionsUserInterface : CategoryUserInterface
         Transform leftPanel = transform.Find("Left");
         Transform rightPanel = transform.Find("Right");
 
-        selector = leftPanel.Find("List/Selector").gameObject;
+        selectorI = leftPanel.Find("List/Selector").gameObject;
 
         scrollbar = leftPanel.Find("Scrollbar").GetComponent<Scrollbar>();
 

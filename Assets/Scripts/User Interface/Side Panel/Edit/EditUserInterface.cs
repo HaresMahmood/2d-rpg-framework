@@ -75,7 +75,7 @@ public class EditUserInterface : UserInterface
     {
         Color color = isActive ? GameManager.instance.oppositeColor : Color.white;
 
-        StartCoroutine(selector.FadeColor(color, animationDuration));
+        StartCoroutine(selectorI.FadeColor(color, animationDuration));
     }
 
     public List<PartyMember> UpdatePosition(int selectedValue, int increment)
@@ -104,7 +104,7 @@ public class EditUserInterface : UserInterface
     protected override void Awake()
     {
         slots = GetComponentsInChildren<FullPartySlot>().ToList();
-        selector = transform.Find("List/Selector").gameObject;
+        selectorI = transform.Find("List/Selector").gameObject;
 
         base.Awake();
     }

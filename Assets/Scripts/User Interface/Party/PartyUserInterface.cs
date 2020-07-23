@@ -60,7 +60,7 @@ public class PartyUserInterface : PauseUserInterfaceBase
 
         if (increment != 0)
         {
-            StartCoroutine(UpdateSelector(new Vector2(informationPanels[selectedValue].transform.position.x, selector.transform.position.y)));
+            StartCoroutine(UpdateSelector(new Vector2(informationPanels[selectedValue].transform.position.x, selectorI.transform.position.y)));
         }
         else
         {
@@ -77,7 +77,7 @@ public class PartyUserInterface : PauseUserInterfaceBase
     {
         Color color = isActive ? GameManager.instance.oppositeColor : Color.white;
 
-        StartCoroutine(selector.FadeColor(color, animationDuration));
+        StartCoroutine(selectorI.FadeColor(color, animationDuration));
     }
 
     public void UpdateSelectedPartyMember(PartyMember member)
@@ -182,7 +182,7 @@ public class PartyUserInterface : PauseUserInterfaceBase
     /// </summary>
     protected override void Awake()
     {
-        selector = transform.Find("Selector").gameObject;
+        selectorI = transform.Find("Selector").gameObject;
         
         informationPanels = GetComponentsInChildren<PartyInformationController>().ToList();
         learnedMovesPanel = transform.Find("Learned Moves").GetComponent<PartyLearnedMovesController>();

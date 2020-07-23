@@ -105,7 +105,7 @@ public class SettingsCategoryUserInterface : UserInterface
         settings = GetComponentsInChildren<SettingUserInterfaceController>().ToList();
 
 
-        selector = transform.parent.Find("Selector").gameObject;
+        selectorI = transform.parent.Find("Selector").gameObject;
         descriptionText = transform.parent.parent.Find("Description").GetComponent<TextMeshProUGUI>();
         scrollbar = transform.parent.parent.Find("Scrollbar").GetComponent<Scrollbar>();
 
