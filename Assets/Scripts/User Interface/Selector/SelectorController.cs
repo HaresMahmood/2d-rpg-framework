@@ -62,15 +62,31 @@ public class SelectorController : MonoBehaviour // TODO: Make animation times se
 
     private void Animate()
     {
-        sequence = DOTween.Sequence();
+        this.sequence = DOTween.Sequence();
 
-        GetComponent<CanvasGroup>().alpha = 0.3f;
+        GetComponent<CanvasGroup>().alpha = 0.5f;
 
-        sequence.Append(GetComponent<CanvasGroup>().DOFade(1f, 0.5f))
-            .Append(GetComponent<CanvasGroup>().DOFade(0.3f, 0.5f));
+        this.sequence.Append(GetComponent<CanvasGroup>().DOFade(1f, 0.5f))
+            .Append(GetComponent<CanvasGroup>().DOFade(0.5f, 0.5f))
+            .Append(GetComponent<CanvasGroup>().DOFade(1f, 0.5f));
 
-        sequence.SetLoops(-1, LoopType.Yoyo);
+        this.sequence.SetLoops(-1, LoopType.Yoyo);
     }
+
+    /*
+        Sequence sequence = DOTween.Sequence();
+        this.sequence = DOTween.Sequence();
+
+        sequence.Append(GetComponent<CanvasGroup>().DOFade(0.5f, 0.15f));
+
+        sequence.OnComplete(() =>
+        {
+            this.sequence.Append(GetComponent<CanvasGroup>().DOFade(1f, 0.5f))
+                .Append(GetComponent<CanvasGroup>().DOFade(0.5f, 0.5f));
+        });
+
+        this.sequence.SetLoops(-1, LoopType.Restart);
+    */
 
     #endregion
 
@@ -78,9 +94,9 @@ public class SelectorController : MonoBehaviour // TODO: Make animation times se
 
 
     /// <summary>
-    /// Start is called before the first frame update.
+    /// This function is called when the object becomes enabled and active.
     /// </summary>
-    private void Start()
+    private void OnEnable()
     {
         Animate();
     }
