@@ -74,7 +74,7 @@ public class DialogUserInterfaceController : UserInterfaceController
 
             if (!isActive)
             {
-                GetComponent<BranchingDialogUserInterfaceController>().Branch = Dialog[selectedValue].Branch.Branches;
+                GetComponent<BranchingDialogUserInterfaceController>().Branches = Dialog[selectedValue].Branch.Branches;
                 StartCoroutine(GetComponent<BranchingDialogUserInterfaceController>().SetActive(!isActive)); // TODO: Debug
                 StartCoroutine(userInterface.ActivateBranchedPanel(!isActive));
             }

@@ -45,33 +45,32 @@ public class BranchingDialogUserInterface : UserInterface
         */
     }
 
-    public void FadeButtons(bool isActive, List<BranchingDialog.DialogBranch> branch)
+    public void FadeButtons(bool isActive, List<BranchingDialog.DialogBranch> branches)
     {
         float opacity = isActive ? 1f : 0f;
 
-        max = branch.Count;
+        max = branches.Count;
 
         Sequence sequence = DOTween.Sequence();
 
-        if (isActive && branch.Count != buttons.Count)
+        if (isActive && branches.Count != buttons.Count)
         {
-            for (int i = branch.Count; i < buttons.Count; i++)
+            for (int i = branches.Count; i < buttons.Count; i++)
             {
                 buttons[i].gameObject.SetActive(false);
             }
         }
 
-        for (int i = 0; i < branch.Count; i++)
+        for (int i = 0; i < branches.Count; i++)
         {
             float timeOffset = i * 0.08f;
             var buttonSequence = DOTween.Sequence();
 
-            buttons[i].SetValues(branch[i].Text, null);
+            buttons[i].SetValues(branches[i].Text, null);
 
             buttonSequence.Append(buttons[i].GetComponent<CanvasGroup>().DOFade(opacity, 0.1f));
             sequence.Insert(timeOffset, buttonSequence);
         }
-
 
         if (!isActive)
         {
@@ -82,6 +81,16 @@ public class BranchingDialogUserInterface : UserInterface
                     buttons[i].gameObject.SetActive(true);
                 }
             });
+        }
+    }
+
+    public void InvokeButton(BranchingDialog.DialogBranch branch)
+    {
+        Debug.Log("Invoked " + branch.Text);
+
+        if (branch.BranchEvent != null)
+        {
+            branch.BranchEvent.Invoke();
         }
     }
 
