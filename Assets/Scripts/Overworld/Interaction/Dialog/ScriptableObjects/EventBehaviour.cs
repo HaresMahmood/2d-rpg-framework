@@ -5,6 +5,7 @@ public class EventBehaviour : ScriptableObject
 {
     public void ChangeGender()
     {
+        /*
         for (int i = 0; i < GameManager.instance.player.childCount; i++)
         {
             if (GameManager.instance.player.GetChild(i).gameObject.activeSelf == false)
@@ -26,5 +27,6 @@ public class EventBehaviour : ScriptableObject
                 return;
             }
         }
+        */
     }
 }

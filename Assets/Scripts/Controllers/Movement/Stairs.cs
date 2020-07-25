@@ -5,6 +5,7 @@
 /// </summary>
 public class Stairs : MonoBehaviour
 {
+    /*
     #region Variables
 
 
@@ -54,4 +55,5 @@ public class Stairs : MonoBehaviour
     }
 
     #endregion
+    */
 }

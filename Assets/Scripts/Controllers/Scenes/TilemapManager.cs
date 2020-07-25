@@ -22,7 +22,7 @@ public class TilemapManager : MonoBehaviour
     /// <param name="sceneObjects"> All GameObjects found in the scene. </param>
     /// <param name="groundTiles"> List containing ground Tilemaps. </param>
     /// <param name="obstacleTiles"> List containing obstacle Tilemaps </param>
-    public void GetTilemaps(GameObject[] sceneObjects, List<Tilemap> groundTiles, List<Tilemap> obstacleTiles)
+    public void GetTilemaps(GameObject[] sceneObjects, List<Tilemap> obstacleTiles)
     {
         Transform[] ground, obstacles;
 
@@ -35,13 +35,7 @@ public class TilemapManager : MonoBehaviour
                 Transform[] gridObjects = rootObject.GetChildren();
                 foreach (Transform gridObject in gridObjects)
                 {
-                    if (gridObject.name == "Ground")
-                    {
-                        ground = gridObject.transform.GetChildren();
-                        foreach (Transform tileMap in ground)
-                            groundTiles.Add(tileMap.GetComponent<Tilemap>());
-                    }
-                    else if (gridObject.name == "Obstacles")
+                    if (gridObject.name == "Obstacles")
                     {
                         obstacles = gridObject.transform.GetChildren();
                         foreach (Transform tileMap in obstacles)
@@ -52,19 +46,12 @@ public class TilemapManager : MonoBehaviour
         }
     }
 
-    public void RemoveTilemaps(List<Tilemap> groundTiles, List<Tilemap> obstacleTiles)
+    public void RemoveTilemaps(List<Tilemap> obstacleTiles)
     {
         //groundTiles.ClearNullReferences();
         //obstacleTiles.ClearNullReferences();
 
-
-        for (var i = groundTiles.Count - 1; i > -1; i--)
-        {
-            if (groundTiles[i] == null)
-                groundTiles.RemoveAt(i);
-        }
-
-        for (var i = obstacleTiles.Count - 1; i > -1; i--)
+        for (int i = obstacleTiles.Count - 1; i > -1; i--)
         {
             if (obstacleTiles[i] == null)
                 obstacleTiles.RemoveAt(i);

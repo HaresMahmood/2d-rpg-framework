@@ -9,6 +9,7 @@ using UnityEngine;
 /// </summary>
 public class PlayerMovement : MovingObject
 {
+    /*
     #region Variables
 
     [SerializeField] [Range(0.1f, 1f)] private float runTime = 0.2f;
@@ -21,8 +22,6 @@ public class PlayerMovement : MovingObject
     /// Used to determine the state of running.
     /// </summary>
     private bool isRunning, toggleRunning;
-
-    private Queue<Vector2> input = new Queue<Vector2>();
 
     #endregion
 
@@ -47,8 +46,6 @@ public class PlayerMovement : MovingObject
     /// </summary>
     protected override void Update()
     {
-        base.Update();
-
         if (Input.GetButtonDown("Toggle"))
         {
             ToggleRunning();
@@ -59,15 +56,7 @@ public class PlayerMovement : MovingObject
             SetMoveAnimations(); // Turns all move animations off.
         }
 
-        if (!canMove || isMoving || onCoolDown || onExit) return; // We wait until Player is done moving or while game is paused. || PauseUserInterfaceController.instance.flags.isActive
-
-        if (input.Count > 1)
-        {
-            input.Dequeue();
-        }
-
-        //isRunning = false; // By default, Player is not running.
-        canMove = true; // By default, Player is able to move.
+        if (!canMove || isMoving || onCoolDown) return; // We wait until Player is done moving or while game is paused. || PauseUserInterfaceController.instance.flags.isActive
 
         // To store the direction in which Player wants to move.
         int horizontal = 0;
@@ -83,14 +72,12 @@ public class PlayerMovement : MovingObject
             vertical = 0;
         }
 
-        input.Enqueue(new Vector2(horizontal, vertical));
-
 
         if (horizontal != 0 || vertical != 0) // If there is an input, ...
         {
             ResetFidget();
 
-            if (!orientation.Equals(new Vector2(horizontal, vertical)) && input.Peek().Equals(Vector2.zero) && !isRunning)
+            if (!orientation.Equals(new Vector2(horizontal, vertical)) && !isRunning)
             {
                 StartCoroutine(ChangeOrientation(horizontal, vertical, walkTime));
                 return;
@@ -126,11 +113,6 @@ public class PlayerMovement : MovingObject
 
     private Vector2 GetInput()
     {
-        if (input.Count > 2)
-        {
-            input.Dequeue();
-        }
-
         // To store the direction in which Player wants to move.
         int horizontal = 0;
         int vertical = 0;
@@ -145,8 +127,6 @@ public class PlayerMovement : MovingObject
             vertical = 0;
         }
 
-        input.Enqueue(new Vector2(horizontal, vertical));
-
         return new Vector2(horizontal, vertical);
     }
 
@@ -156,23 +136,23 @@ public class PlayerMovement : MovingObject
 
         if (fidgetTimer > fidgetDelay)
         {
-            anim.SetBool("isFidgeting", true);
+            animator.SetBool("isFidgeting", true);
 
             yield return new WaitForEndOfFrame();
-            float waitTime = anim.GetAnimationTime();
+            float waitTime = animator.GetAnimationTime();
 
             yield return new WaitForSeconds(waitTime);
 
-            anim.SetBool("isFidgeting", false);
+            animator.SetBool("isFidgeting", false);
             fidgetTimer = 0;
         }
     }
 
     private void ResetFidget()
     {
-        if (anim.GetBool("isFidgeting"))
+        if (animator.GetBool("isFidgeting"))
         {
-            anim.SetBool("isFidgeting", false);
+            animator.SetBool("isFidgeting", false);
         }
 
         fidgetTimer = 0;
@@ -180,20 +160,6 @@ public class PlayerMovement : MovingObject
 
     private IEnumerator ChangeOrientation(int horizontal, int vertical, float duration)
     {
-        /*
-        //int counter = 0;
-        //while (counter < 10)
-        //{
-        yield return new WaitForSeconds(0.05f);
-        //    counter++;
-        //}
-
-        if (!GetInput().Equals(Vector2.zero))
-        {
-            yield break;
-        }
-        */
-
         SetAnimations(horizontal, vertical); // Sets direction the player is facing in, based on input.
         isMoving = true;
         SetMoveAnimations();
@@ -241,18 +207,19 @@ public class PlayerMovement : MovingObject
     {
         if (isRunning && isMoving) // If Player is running, ...
         {
-            anim.SetBool("isRunning", true);
-            anim.SetBool("isWalking", false);
+            animator.SetBool("isRunning", true);
+            animator.SetBool("isWalking", false);
         }
         else if (!isMoving) // If Player is standing still, ...
         {
-            anim.SetBool("isRunning", false);
-            anim.SetBool("isWalking", false);
+            animator.SetBool("isRunning", false);
+            animator.SetBool("isWalking", false);
         }
         else // If Player is walking, ...
         {
-            anim.SetBool("isRunning", false);
-            anim.SetBool("isWalking", true);
+            animator.SetBool("isRunning", false);
+            animator.SetBool("isWalking", true);
         }
     }
+    */
 }

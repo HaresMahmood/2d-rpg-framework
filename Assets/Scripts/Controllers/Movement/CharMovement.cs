@@ -6,8 +6,9 @@
 /// 
 /// Inherits from MovingObject.
 /// </summary>
-public class CharMovement : MovingObject
+public class CharMovement : MonoBehaviour
 {
+    /*
     #region Variables
 
     private RangeHandler rangeHandler;
@@ -165,4 +166,5 @@ public class CharMovement : MovingObject
                 break;
         }
     }
+    */
 }

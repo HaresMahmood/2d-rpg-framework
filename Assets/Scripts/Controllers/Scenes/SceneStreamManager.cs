@@ -270,13 +270,13 @@ public class SceneStreamManager : MonoBehaviour
 
     public void GetTilemaps(string sceneName)
     {
-        TilemapManager.instance.GetTilemaps(SceneManager.GetSceneByName(sceneName).GetRootGameObjects(), PlayerMovement.groundTiles, PlayerMovement.obstacleTiles);
+        //lemapManager.instance.GetTilemaps(SceneManager.GetSceneByName(sceneName).GetRootGameObjects(), PlayerMovement.obstacleTiles);
     }
 
     public IEnumerator RemoveTilemaps()
     {
         yield return new WaitForEndOfFrame();
-        TilemapManager.instance.RemoveTilemaps(PlayerMovement.groundTiles, PlayerMovement.obstacleTiles);
+        //emapManager.instance.RemoveTilemaps(PlayerMovement.obstacleTiles);
     }
 
     /// <summary>

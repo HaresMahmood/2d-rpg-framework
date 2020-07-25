@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class CharInteraction : InteractableObject
+public class CharacterInteraction : InteractableObject
 {
+
+
     /*
     #region Variables
 

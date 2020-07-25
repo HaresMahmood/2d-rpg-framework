@@ -10,7 +10,7 @@ public class InteractionHandler : MonoBehaviour
     private void Update()
     {
         position = transform.position;
-        orientation = GetComponent<PlayerMovement>().orientation;
+        //orientation = GetComponent<PlayerMovement>().orientation;
     }
 
     public static bool hasOrientation()
