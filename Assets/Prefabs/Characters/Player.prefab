@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2697730638339202666
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5334601002836852629}
+  m_Layer: 0
+  m_Name: Move Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 7866945982896999795, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5334601002836852629
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2697730638339202666}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6868443430243160777}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5205702638655617629
 GameObject:
   m_ObjectHideFlags: 0
@@ -164,22 +194,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81c1c95603bfaa748851fd3fb952eac5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkTime: 0.3
-  moveTime: 0
-  canMove: 1
-  isMoving: 0
-  onCoolDown: 0
-  onExit: 0
-  onGround: 0
-  hasGround: 0
-  hasObstacle: 0
-  hasChar: 0
-  coll: {fileID: 0}
-  anim: {fileID: 0}
-  orientation: {x: 0, y: 0}
-  runTime: 0.2
-  fidgetDelay: 20
-  fidgetTimer: 0
+  moveSpeed: 5
+  collisionLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &6438746516055661787
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -284,6 +302,7 @@ Transform:
   - {fileID: 6381679706897709112}
   - {fileID: 6438746516055661776}
   - {fileID: 5153697618001334955}
+  - {fileID: 5334601002836852629}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -323,22 +342,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81c1c95603bfaa748851fd3fb952eac5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkTime: 0.3
-  moveTime: 0
-  canMove: 1
-  isMoving: 0
-  onCoolDown: 0
-  onExit: 0
-  onGround: 0
-  hasGround: 0
-  hasObstacle: 0
-  hasChar: 0
-  coll: {fileID: 0}
-  anim: {fileID: 0}
-  orientation: {x: 0, y: 0}
-  runTime: 0.2
-  fidgetDelay: 10
-  fidgetTimer: 0
+  moveSpeed: 5
+  collisionLayer:
+    serializedVersion: 2
+    m_Bits: 512
 --- !u!1 &7923063699410992162
 GameObject:
   m_ObjectHideFlags: 0
@@ -507,22 +514,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81c1c95603bfaa748851fd3fb952eac5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkTime: 0.3
-  moveTime: 0
-  canMove: 1
-  isMoving: 0
-  onCoolDown: 0
-  onExit: 0
-  onGround: 0
-  hasGround: 0
-  hasObstacle: 0
-  hasChar: 0
-  coll: {fileID: 0}
-  anim: {fileID: 0}
-  orientation: {x: 0, y: 0}
-  runTime: 0.2
-  fidgetDelay: 10
-  fidgetTimer: 0
+  moveSpeed: 5
+  collisionLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &9020705976908108314
 MonoBehaviour:
   m_ObjectHideFlags: 0

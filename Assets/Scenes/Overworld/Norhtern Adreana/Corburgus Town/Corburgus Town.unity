@@ -625,7 +625,7 @@ GameObject:
   m_Component:
   - component: {fileID: 586687596}
   m_Layer: 0
-  m_Name: Obstacles
+  m_Name: Colliders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -719,8 +719,9 @@ GameObject:
   - component: {fileID: 808175218}
   - component: {fileID: 808175220}
   - component: {fileID: 808175219}
+  - component: {fileID: 808175222}
   - component: {fileID: 808175221}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cliffs (Bottom)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1273,6 +1274,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 778195ca6bc605a43ba3e703b82754f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!19719996 &808175222
+TilemapCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 808175217}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_MaximumTileChangeCount: 1000
+  m_ExtrusionFactor: 0.00001
 --- !u!1 &1010258172
 GameObject:
   m_ObjectHideFlags: 0
@@ -19618,8 +19635,9 @@ GameObject:
   - component: {fileID: 1246213967}
   - component: {fileID: 1246213970}
   - component: {fileID: 1246213969}
+  - component: {fileID: 1246213971}
   - component: {fileID: 1246213968}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cliffs (Top)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19951,6 +19969,22 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!19719996 &1246213971
+TilemapCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1246213966}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_MaximumTileChangeCount: 1000
+  m_ExtrusionFactor: 0.00001
 --- !u!1 &1619152761
 GameObject:
   m_ObjectHideFlags: 0
@@ -20072,11 +20106,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPC
       objectReference: {fileID: 0}
-    - target: {fileID: 1858630852652179108, guid: 029382216f7abb44ba54a39a9a5f8bd4,
-        type: 3}
-      propertyPath: m_TagString
-      value: NPC
-      objectReference: {fileID: 0}
     - target: {fileID: 1858630852652179115, guid: 029382216f7abb44ba54a39a9a5f8bd4,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -20132,17 +20161,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1858630853270779622, guid: 029382216f7abb44ba54a39a9a5f8bd4,
-        type: 3}
-      propertyPath: m_TagString
-      value: Collidable
-      objectReference: {fileID: 0}
-    - target: {fileID: 1858630853270779626, guid: 029382216f7abb44ba54a39a9a5f8bd4,
-        type: 3}
-      propertyPath: dialog
-      value: 
-      objectReference: {fileID: 11400000, guid: 8ca20430d205a8a41975abc0bc779021,
-        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 029382216f7abb44ba54a39a9a5f8bd4, type: 3}
 --- !u!4 &1865360502 stripped

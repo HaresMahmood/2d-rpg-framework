@@ -13,7 +13,8 @@ public abstract class MovingObject : MonoBehaviour
     #region Variables
 
     [Header("Settings")]
-    [SerializeField] [Range(0.1f, 5f)] protected float walkTime = 1f;
+    [SerializeField] [Range(2f, 15f)] protected float moveSpeed = 5f;
+    [SerializeField] [Range(0.1f, 2f)] protected float radius = 0.1f;
 
     /// <summary>
     /// Lists that keep track of Tilemaps. These can
@@ -40,6 +41,13 @@ public abstract class MovingObject : MonoBehaviour
     /// Orientation of Character.
     /// </summary>
     private Vector2 orientation;
+
+
+    [SerializeField] private LayerMask collisionLayer;
+
+    private Transform movePoint;
+
+    
 
     #endregion
 
@@ -132,7 +140,7 @@ public abstract class MovingObject : MonoBehaviour
     protected IEnumerator Move(Vector3 end)
     {
         float remainingDistance = (transform.position - end).sqrMagnitude; // Calculates squared magnitude of the remaining distance, since it is much faster.
-        float inverseMoveTime = 1 / walkTime; // Calculates the inverse move-time, since it is mathematically "cheaper" to divide than to multiply.
+        float inverseMoveTime = 1 / moveSpeed; // Calculates the inverse move-time, since it is mathematically "cheaper" to divide than to multiply.
 
         isMoving = true; // Character is now moving.
 
@@ -208,6 +216,10 @@ public abstract class MovingObject : MonoBehaviour
     {
         animator = GetComponentInChildren<Animator>();
         collider = GetComponentInChildren<Collider2D>();
+
+        movePoint = transform.Find("Move Point");
+
+        movePoint.parent = null;
     }
 
     /// <summary>
@@ -215,6 +227,43 @@ public abstract class MovingObject : MonoBehaviour
     /// </summary>
     protected virtual void Update()
     {
+        transform.position = Vector3.MoveTowards(transform.position, movePoint.position, moveSpeed * Time.deltaTime);
+
+        if (Vector3.Distance(transform.position, movePoint.position) <= 0.05f)
+        {
+            if (Mathf.Abs(Input.GetAxisRaw("Horizontal")) == 1f)
+            {
+                if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(Input.GetAxisRaw("Horizontal"), 0f, 0f), radius, collisionLayer))
+                {
+                    movePoint.position += new Vector3(Input.GetAxisRaw("Horizontal"), 0f, 0f);
+                }
+
+                animator.SetFloat("moveX", Input.GetAxisRaw("Horizontal"));
+                animator.SetFloat("moveY", Input.GetAxisRaw("Vertical"));
+            }
+            else if (Mathf.Abs(Input.GetAxisRaw("Vertical")) == 1f)
+            {
+                if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(0f, Input.GetAxisRaw("Vertical"), 0f), radius, collisionLayer))
+                {
+                    movePoint.position += new Vector3(0f, Input.GetAxisRaw("Vertical"), 0f);
+                }
+
+                animator.SetFloat("moveX", Input.GetAxisRaw("Horizontal"));
+                animator.SetFloat("moveY", Input.GetAxisRaw("Vertical"));
+            }
+            else
+            {
+                animator.SetBool("isWalking", false);
+            }
+
+        }
+        else
+        {
+            animator.SetBool("isWalking", true);
+        }
+    }
+
+    /*
         Debug.Log(isMoving);
 
         if (!isMoving)
@@ -259,7 +308,7 @@ public abstract class MovingObject : MonoBehaviour
         {
             SetMoveAnimations(); // Turns all move animations off.
         }
-    }
+        */
 
     // Debug
     /*

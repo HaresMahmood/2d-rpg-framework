@@ -119,7 +119,7 @@ GameObject:
   - component: {fileID: 1858630853270779625}
   - component: {fileID: 1858630853270779630}
   - component: {fileID: 1858630853270779626}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Hank
   m_TagString: NPC
   m_Icon: {fileID: 0}
@@ -224,22 +224,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0ea60d51c219a749acf4778a43653ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkTime: 0.3
-  moveTime: 0.3
-  canMove: 1
-  isMoving: 0
-  onCoolDown: 0
-  onExit: 0
-  onGround: 0
-  hasGround: 0
-  hasObstacle: 0
-  hasChar: 0
-  coll: {fileID: 0}
-  anim: {fileID: 0}
-  orientation: {x: 0, y: 0}
-  bounds: {fileID: 1858630853621193925}
-  decisionTime: {x: 0, y: 1}
-  direction: {x: 0, y: 0, z: 0}
 --- !u!114 &1858630853270779624
 MonoBehaviour:
   m_ObjectHideFlags: 0
