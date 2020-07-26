@@ -13,8 +13,9 @@ public abstract class MovingObject : MonoBehaviour
     #region Variables
 
     [Header("Settings")]
-    [SerializeField] [Range(2f, 15f)] protected float moveSpeed = 5f;
+    [SerializeField] [Range(2f, 15f)] protected float moveSpeed = 3f;
     [SerializeField] [Range(0.1f, 2f)] protected float radius = 0.1f;
+    [SerializeField] protected LayerMask collisionLayer;
 
     /// <summary>
     /// Animator attached to Character.
@@ -26,12 +27,11 @@ public abstract class MovingObject : MonoBehaviour
     /// </summary>
     private Vector2 orientation;
 
-
-    [SerializeField] private LayerMask collisionLayer;
-
-    private Transform movePoint;
+    protected Transform movePoint;
 
     protected string animatedMovement = "isWalking";
+
+    protected bool canMove = true;
 
     #endregion
 
@@ -94,7 +94,7 @@ public abstract class MovingObject : MonoBehaviour
     /// <summary>
     /// Start is called before the first frame update.
     /// </summary>
-    protected virtual void Start()
+    protected virtual void Awake()
     {
         animator = GetComponentInChildren<Animator>();
 
@@ -107,18 +107,21 @@ public abstract class MovingObject : MonoBehaviour
     /// </summary>
     protected virtual void Update()
     {
-        transform.position = Vector3.MoveTowards(transform.position, movePoint.position, moveSpeed * Time.deltaTime);
+        if (canMove)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, movePoint.position, moveSpeed * Time.deltaTime);
 
-        if (Vector3.Distance(transform.position, movePoint.position) <= 0.05f) //  && !IsTappingButton()
-        {
-            if (!IsTappingButton())
+            if (Vector3.Distance(transform.position, movePoint.position) <= 0.05f) //  && !IsTappingButton()
             {
-                GetInput(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+                if (!IsTappingButton())
+                {
+                    GetInput(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+                }
             }
-        }
-        else
-        {
-            animator.SetBool(animatedMovement, true);
+            else
+            {
+                animator.SetBool(animatedMovement, true);
+            }
         }
     }
 

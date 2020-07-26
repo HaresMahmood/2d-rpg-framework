@@ -6,8 +6,101 @@
 /// 
 /// Inherits from MovingObject.
 /// </summary>
-public class CharMovement : MonoBehaviour
+public class CharacterMovement : MovingObject
 {
+    #region Variables
+
+    [SerializeField] private MovementType movementType;
+
+    private Collider2D bounds;
+
+    #endregion
+
+    #region Enums
+
+    private enum MovementType
+    {
+        Natural,
+        Linear,
+    }
+
+    #endregion
+
+    #region Miscellaneous Methods
+
+    protected override bool GetInput(float horizontal, float vertical)
+    {
+        if (Mathf.Abs(horizontal) == 1f)
+        {
+            if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(horizontal, 0f, 0f), radius, collisionLayer) && (bounds.bounds.Contains(movePoint.position + new Vector3(horizontal, 0f, 0f))))
+            {
+                movePoint.position += new Vector3(horizontal, 0f, 0f);
+            }
+
+            animator.SetFloat("moveX", horizontal);
+            animator.SetFloat("moveY", vertical);
+
+            return true;
+        }
+        else if (Mathf.Abs(vertical) == 1f)
+        {
+            if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(0f, vertical, 0f), radius, collisionLayer) && (bounds.bounds.Contains(movePoint.position + new Vector3(0f, vertical, 0f))))
+            {
+                movePoint.position += new Vector3(0f, vertical, 0f);
+            }
+
+            animator.SetFloat("moveX", horizontal);
+            animator.SetFloat("moveY", vertical);
+
+            return true;
+        }
+        else
+        {
+            DisableMovement();
+        }
+
+        return false;
+    }
+
+    protected override bool IsTappingButton()
+    {
+        return base.IsTappingButton();
+    }
+
+    #endregion
+
+    #region Unity Methods
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        bounds = transform.parent.Find("Bounds").GetComponent<Collider2D>();
+    }
+
+    // TODO: Debug
+    protected override void Update()
+    {
+        if (canMove)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, movePoint.position, moveSpeed * Time.deltaTime);
+
+            if (Vector3.Distance(transform.position, movePoint.position) <= 0.05f) //  && !IsTappingButton()
+            {
+                if (!IsTappingButton())
+                {
+                    GetInput((int)Random.Range(-1, 2), (int)Random.Range(-1, 2));
+                }
+            }
+            else
+            {
+                animator.SetBool(animatedMovement, true);
+            }
+        }
+    }
+
+    #endregion
+
     /*
     #region Variables
 
