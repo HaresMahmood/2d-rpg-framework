@@ -9,6 +9,55 @@ using UnityEngine;
 /// </summary>
 public class PlayerMovement : MovingObject
 {
+    #region Variables
+
+    private bool isRunning;
+
+    #endregion
+
+    #region Miscellaneous Methods
+
+    protected override void GetInput(float horizontal, float vertical)
+    {
+        base.GetInput(horizontal, vertical);
+    }
+
+    protected override bool IsTappingButton()
+    {
+        if (Input.GetButtonDown("Horizontal") || Input.GetButtonDown("Vertical"))
+        {
+            animator.SetFloat("moveX", Input.GetAxisRaw("Horizontal"));
+            animator.SetFloat("moveY", Input.GetAxisRaw("Vertical"));
+
+            //animator.SetBool("isWalking", true);
+
+            return true;
+        }
+
+        return base.IsTappingButton();
+    }
+
+    #endregion
+
+    #region Unity Methods
+
+    protected override void Update()
+    {
+        base.Update();
+
+        if (Input.GetButtonDown("Toggle"))
+        {
+            isRunning = !isRunning;
+
+            animator.SetBool(animatedMovement, false);
+
+            moveSpeed = isRunning ? 5f : 3f;
+            animatedMovement = isRunning ? "isRunning" : "isWalking";
+        }
+    }
+
+    #endregion
+
     /*
     #region Variables
 
