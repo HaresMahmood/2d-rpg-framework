@@ -56,6 +56,14 @@ public class PlayerMovement : MovingObject
         StartCoroutine(EnableFidget());
     }
 
+    private void ToggleRun()
+    {
+        animator.SetBool(animatedMovement, false);
+
+        moveSpeed = isRunning ? 5f : 3f;
+        animatedMovement = isRunning ? "isRunning" : "isWalking";
+    }
+
     private IEnumerator EnableFidget()
     {
         fidgetTimer += Time.deltaTime;
@@ -96,10 +104,13 @@ public class PlayerMovement : MovingObject
         {
             isRunning = !isRunning;
 
-            animator.SetBool(animatedMovement, false);
+            ToggleRun();
+        }
+        if (Input.GetButtonDown("Run") || Input.GetButtonUp("Run"))
+        {
+            isRunning = Input.GetButton("Run");
 
-            moveSpeed = isRunning ? 5f : 3f;
-            animatedMovement = isRunning ? "isRunning" : "isWalking";
+            ToggleRun();
         }
     }
 
