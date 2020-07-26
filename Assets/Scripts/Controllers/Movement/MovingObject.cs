@@ -43,7 +43,7 @@ public abstract class MovingObject : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    protected virtual void GetInput(float horizontal, float vertical)
+    protected virtual bool GetInput(float horizontal, float vertical)
     {
         if (Mathf.Abs(horizontal) == 1f)
         {
@@ -54,6 +54,8 @@ public abstract class MovingObject : MonoBehaviour
 
             animator.SetFloat("moveX", horizontal);
             animator.SetFloat("moveY", vertical);
+
+            return true;
         }
         else if (Mathf.Abs(vertical) == 1f)
         {
@@ -64,16 +66,25 @@ public abstract class MovingObject : MonoBehaviour
 
             animator.SetFloat("moveX", horizontal);
             animator.SetFloat("moveY", vertical);
+
+            return true;
         }
         else
         {
-            animator.SetBool(animatedMovement, false);
+            DisableMovement();
         }
+
+        return false;
     }
 
     protected virtual bool IsTappingButton()
     {
         return false;
+    }
+
+    protected virtual void DisableMovement()
+    {
+        animator.SetBool(animatedMovement, false);
     }
 
     #endregion

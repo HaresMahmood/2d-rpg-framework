@@ -11,15 +11,26 @@ public class PlayerMovement : MovingObject
 {
     #region Variables
 
-    private bool isRunning;
+    [SerializeField] [Range(1f, 30f)] private float fidgetDelay = 5f;
+
+    [Header("Values")]
+    [SerializeField] [ReadOnly] private float fidgetTimer;
+    [SerializeField] [ReadOnly] private bool isRunning;
 
     #endregion
 
     #region Miscellaneous Methods
 
-    protected override void GetInput(float horizontal, float vertical)
+    protected override bool GetInput(float horizontal, float vertical)
     {
-        base.GetInput(horizontal, vertical);
+        bool input = base.GetInput(horizontal, vertical);
+
+        if (input)
+        {
+            ResetFidget();
+        }
+
+        return input;
     }
 
     protected override bool IsTappingButton()
@@ -31,10 +42,46 @@ public class PlayerMovement : MovingObject
 
             //animator.SetBool("isWalking", true);
 
+            ResetFidget();
+
             return true;
         }
 
         return base.IsTappingButton();
+    }
+
+    protected override void DisableMovement()
+    {
+        base.DisableMovement();
+        StartCoroutine(EnableFidget());
+    }
+
+    private IEnumerator EnableFidget()
+    {
+        fidgetTimer += Time.deltaTime;
+
+        if (fidgetTimer > fidgetDelay)
+        {
+            animator.SetBool("isFidgeting", true);
+
+            yield return new WaitForEndOfFrame();
+            float waitTime = animator.GetAnimationTime();
+
+            yield return new WaitForSeconds(waitTime);
+
+            animator.SetBool("isFidgeting", false);
+            fidgetTimer = 0;
+        }
+    }
+
+    private void ResetFidget()
+    {
+        if (animator.GetBool("isFidgeting"))
+        {
+            animator.SetBool("isFidgeting", false);
+        }
+
+        fidgetTimer = 0;
     }
 
     #endregion
