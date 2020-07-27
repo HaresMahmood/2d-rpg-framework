@@ -90,7 +90,7 @@ GameObject:
   - component: {fileID: 6438746516055661789}
   - component: {fileID: 6438746516055661786}
   - component: {fileID: 6438746516055661785}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Female
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -199,6 +199,9 @@ MonoBehaviour:
   collisionLayer:
     serializedVersion: 2
     m_Bits: 0
+  fidgetDelay: 5
+  fidgetTimer: 0
+  isRunning: 0
 --- !u!114 &6438746516055661787
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -348,6 +351,9 @@ MonoBehaviour:
   collisionLayer:
     serializedVersion: 2
     m_Bits: 512
+  fidgetDelay: 5
+  fidgetTimer: 0
+  isRunning: 0
 --- !u!1 &7923063699410992162
 GameObject:
   m_ObjectHideFlags: 0
@@ -411,7 +417,7 @@ GameObject:
   - component: {fileID: 9020705976908108316}
   - component: {fileID: 9020705976908108313}
   - component: {fileID: 9020705976908108312}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Male
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -521,6 +527,9 @@ MonoBehaviour:
   collisionLayer:
     serializedVersion: 2
     m_Bits: 0
+  fidgetDelay: 5
+  fidgetTimer: 0
+  isRunning: 0
 --- !u!114 &9020705976908108314
 MonoBehaviour:
   m_ObjectHideFlags: 0

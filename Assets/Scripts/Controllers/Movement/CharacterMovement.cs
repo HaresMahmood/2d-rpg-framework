@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Timers;
+using System.Collections;
+using UnityEngine;
 
 /// <summary>
 /// Randomly moves NPC to tile, making 
@@ -11,8 +13,12 @@ public class CharacterMovement : MovingObject
     #region Variables
 
     [SerializeField] private MovementType movementType;
+    [SerializeField] [ConditionalField("type", false, MovementType.Natural)] private Vector2 idleTime;
 
     private Collider2D bounds;
+    private Collider2D range;
+
+    private Timer timer;
 
     #endregion
 
@@ -28,54 +34,115 @@ public class CharacterMovement : MovingObject
 
     #region Miscellaneous Methods
 
-    protected override bool GetInput(float horizontal, float vertical)
+    protected override bool IsTappingButton()
     {
-        if (Mathf.Abs(horizontal) == 1f)
+        //return animator.GetBool("isWalking");
+
+        return base.IsTappingButton();
+    }
+
+    private bool GetInput(Vector3 orientation)
+    {
+        if (orientation != Vector3.zero && !Physics2D.OverlapCircle(movePoint.position + orientation, radius, collisionLayer) && bounds.bounds.Contains(movePoint.position + orientation))
         {
-            if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(horizontal, 0f, 0f), radius, collisionLayer) && (bounds.bounds.Contains(movePoint.position + new Vector3(horizontal, 0f, 0f))))
-            {
-                movePoint.position += new Vector3(horizontal, 0f, 0f);
-            }
+            movePoint.position += orientation;
 
-            animator.SetFloat("moveX", horizontal);
-            animator.SetFloat("moveY", vertical);
-
-            return true;
-        }
-        else if (Mathf.Abs(vertical) == 1f)
-        {
-            if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(0f, vertical, 0f), radius, collisionLayer) && (bounds.bounds.Contains(movePoint.position + new Vector3(0f, vertical, 0f))))
-            {
-                movePoint.position += new Vector3(0f, vertical, 0f);
-            }
-
-            animator.SetFloat("moveX", horizontal);
-            animator.SetFloat("moveY", vertical);
+            animator.SetFloat("moveX", orientation.x);
+            animator.SetFloat("moveY", orientation.y);
 
             return true;
         }
         else
         {
             DisableMovement();
+            //StartCoroutine(ChangeOrientation(idleTime));
         }
 
         return false;
     }
 
-    protected override bool IsTappingButton()
+    /// <summary>
+    /// Chooses a random direction for the NPC to move in,
+    /// or ensures NPC stays in place.
+    /// </summary>
+    private void ChangeOrientation()
     {
-        return base.IsTappingButton();
+        // Debug
+        System.Random rnd = new System.Random();
+        int direction = rnd.Next(0, 6);
+
+        switch (direction)
+        {
+            case 0:
+                orientation = Vector3.down;  // Down
+                break;
+            case 1:
+                orientation = Vector3.left; // Left
+                break;
+            case 2:
+                orientation = Vector3.right; // Right
+                break;
+            case 3:
+                orientation = Vector3.up; // Up
+                break;
+            case 4:
+                orientation = Vector3.zero; // Stay in place;
+                break;
+            case 5:
+                orientation = Vector3.zero; // Stay in place;
+                break;
+            default:
+                break;
+        }
+    }
+
+    private IEnumerator ChangeOrientation(Vector2 idleTimer)
+    {
+        timer.Stop();
+
+        float rand = Random.Range(idleTime.x, idleTime.y);
+        Debug.Log(rand);
+        yield return new WaitForSeconds(rand);
+
+        ChangeOrientation();
+        timer.Start();
+    }
+
+    private void OnTimedEvent(object source, ElapsedEventArgs e)
+    {
+        //System.Random rnd = new System.Random();
+        //int interval = rnd.Next((int)idleTime.x, (int)idleTime.y) * 1000;
+        //Debug.Log(interval);
+        //timer.Interval = interval;
+        ChangeOrientation();
     }
 
     #endregion
 
     #region Unity Methods
 
+    /// <summary>
+    /// Awake is called when the script instance is being loaded.
+    /// </summary>
     protected override void Awake()
     {
         base.Awake();
 
         bounds = transform.parent.Find("Bounds").GetComponent<Collider2D>();
+    }
+
+    /// <summary>
+    /// Start is called before the first frame update.
+    /// </summary>
+    private void Start()
+    {
+        ChangeOrientation();
+
+        timer = new Timer();
+        
+        timer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
+        timer.Interval = Random.Range(idleTime.x, idleTime.y) * 1000;
+        timer.Enabled = true;
     }
 
     // TODO: Debug
@@ -89,7 +156,7 @@ public class CharacterMovement : MovingObject
             {
                 if (!IsTappingButton())
                 {
-                    GetInput((int)Random.Range(-1, 2), (int)Random.Range(-1, 2));
+                    GetInput(orientation);
                 }
             }
             else

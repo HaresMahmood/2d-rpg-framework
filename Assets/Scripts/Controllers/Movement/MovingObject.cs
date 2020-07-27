@@ -25,7 +25,7 @@ public abstract class MovingObject : MonoBehaviour
     /// <summary>
     /// Orientation of Character.
     /// </summary>
-    private Vector2 orientation;
+    protected Vector3 orientation;
 
     protected Transform movePoint;
 
@@ -92,7 +92,7 @@ public abstract class MovingObject : MonoBehaviour
     #region Unity Methods
 
     /// <summary>
-    /// Start is called before the first frame update.
+    /// Awake is called when the script instance is being loaded.
     /// </summary>
     protected virtual void Awake()
     {
