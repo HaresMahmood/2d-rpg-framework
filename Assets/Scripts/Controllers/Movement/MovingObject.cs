@@ -74,6 +74,8 @@ public abstract class MovingObject : MonoBehaviour
             DisableMovement();
         }
 
+        orientation = new Vector3(horizontal, vertical);
+
         return false;
     }
 
