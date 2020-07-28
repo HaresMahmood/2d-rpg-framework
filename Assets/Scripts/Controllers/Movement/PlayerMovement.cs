@@ -17,6 +17,8 @@ public class PlayerMovement : MovingObject
     [SerializeField] [ReadOnly] private float fidgetTimer;
     [SerializeField] [ReadOnly] private bool isRunning;
 
+    private InteractionController interactionController;
+
     #endregion
 
     #region Miscellaneous Methods
@@ -43,6 +45,8 @@ public class PlayerMovement : MovingObject
             //animator.SetBool("isWalking", true);
 
             ResetFidget();
+
+            ChangeOrienation(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
             return true;
         }
@@ -94,8 +98,33 @@ public class PlayerMovement : MovingObject
 
     #endregion
 
+    #region Event Methods
+
+    private void InteractionController_OnInteract(object sender, System.EventArgs e)
+    {
+        canMove = !canMove;
+    }
+
+    #endregion
+
     #region Unity Methods
 
+    /// <summary>
+    /// Awake is called when the script instance is being loaded.
+    /// </summary>
+    protected override void Awake()
+    {
+        interactionController = GetComponent<InteractionController>();
+        interactionController.OnInteract += InteractionController_OnInteract;
+
+        collider = transform.Find("Interaction Collider").GetComponent<BoxCollider2D>();
+
+        base.Awake();
+    }
+
+    /// <summary>
+    /// Update is called once per frame.
+    /// </summary>
     protected override void Update()
     {
         base.Update();

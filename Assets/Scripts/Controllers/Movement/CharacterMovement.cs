@@ -36,6 +36,16 @@ public class CharacterMovement : MovingObject
 
     #region Miscellaneous Methods
 
+    public void SetOrientation(Vector3 orientation)
+    {
+        Debug.Log(this.orientation + " - " + orientation);
+
+        this.orientation = orientation * -1;
+
+        animator.SetFloat("moveX", this.orientation.x);
+        animator.SetFloat("moveY", this.orientation.y);
+    }
+
     protected override bool IsTappingButton()
     {
         /*
@@ -56,16 +66,20 @@ public class CharacterMovement : MovingObject
 
     private bool GetInput(Vector3 orientation)
     {
-        if (orientation != Vector3.zero && !Physics2D.OverlapCircle(movePoint.position + orientation, radius, collisionLayer) 
-            && bounds.bounds.Contains(movePoint.position + orientation) && !rangeHandler.IsPlayerInRange
+        if (orientation != Vector3.zero 
+            && !Physics2D.OverlapCircle(movePoint.position + orientation, radius, collisionLayer) 
+            && bounds.bounds.Contains(movePoint.position + orientation)
             && movementType != MovementType.Still)
         {
-            movePoint.position += orientation;
+            if (!rangeHandler.IsPlayerInRange)
+            {
+                movePoint.position += orientation;
 
-            animator.SetFloat("moveX", orientation.x);
-            animator.SetFloat("moveY", orientation.y);
+                animator.SetFloat("moveX", orientation.x);
+                animator.SetFloat("moveY", orientation.y);
 
-            return true;
+                return true;
+            }
         }
         else
         {
@@ -176,6 +190,9 @@ public class CharacterMovement : MovingObject
     }
 
     // TODO: Debug
+    /// <summary>
+    /// Update is called once per frame.
+    /// </summary>
     protected override void Update()
     {
         if (canMove)

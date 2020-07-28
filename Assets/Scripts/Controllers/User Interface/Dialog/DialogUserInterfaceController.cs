@@ -84,6 +84,10 @@ public class DialogUserInterfaceController : UserInterfaceController
                 yield break;
             }
         }
+        else if (!isActive)
+        {
+            controller.SetActive(isActive); // TODO: Debug
+        }
 
         if (condition)
         {

@@ -33,11 +33,13 @@ public abstract class MovingObject : MonoBehaviour
 
     protected bool canMove = true;
 
+    protected new BoxCollider2D collider;
+
     #endregion
 
     #region Properties
 
-
+    public Vector3 Orienation { get { return orientation; } }
 
     #endregion
 
@@ -55,6 +57,8 @@ public abstract class MovingObject : MonoBehaviour
             animator.SetFloat("moveX", horizontal);
             animator.SetFloat("moveY", vertical);
 
+            ChangeOrienation(horizontal, vertical);
+
             return true;
         }
         else if (Mathf.Abs(vertical) == 1f)
@@ -67,14 +71,14 @@ public abstract class MovingObject : MonoBehaviour
             animator.SetFloat("moveX", horizontal);
             animator.SetFloat("moveY", vertical);
 
+            ChangeOrienation(horizontal, vertical);
+
             return true;
         }
         else
         {
             DisableMovement();
         }
-
-        orientation = new Vector3(horizontal, vertical);
 
         return false;
     }
@@ -87,6 +91,12 @@ public abstract class MovingObject : MonoBehaviour
     protected virtual void DisableMovement()
     {
         animator.SetBool(animatedMovement, false);
+    }
+
+    protected virtual void ChangeOrienation(float horizontal, float vertical)
+    {
+        orientation = new Vector3(horizontal, vertical);
+        collider.offset = new Vector2(horizontal, vertical);
     }
 
     #endregion
@@ -105,7 +115,7 @@ public abstract class MovingObject : MonoBehaviour
     }
 
     /// <summary>
-    /// Start is called before the first frame update.
+    /// Update is called once per frame.
     /// </summary>
     protected virtual void Update()
     {

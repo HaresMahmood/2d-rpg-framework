@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -35,6 +35,12 @@ public class DialogController : MonoBehaviour
 
     #endregion
 
+    #region Events
+
+    public event EventHandler OnDialogEnd;
+
+    #endregion
+
     #region Nested Classes
 
     public class ControllerFlags
@@ -55,7 +61,7 @@ public class DialogController : MonoBehaviour
 
     private DialogUserInterfaceController userInterfaceController;
 
-    [SerializeField] private Dialog dialog;
+    [SerializeField] public Dialog dialog;
 
     #endregion
 
@@ -69,15 +75,14 @@ public class DialogController : MonoBehaviour
         {
             userInterfaceController.Dialog = dialog;
         }
-        
-        StartCoroutine(userInterfaceController.SetActive(isActive));
-    }
 
-    private void GetInput()
-    {
-        if (Input.GetKeyDown(KeyCode.Z)) // Input.GetButtonDown("Interact")
+        if (isActive)
         {
-            SetActive(true, dialog.Data[0].LanguageData);
+            StartCoroutine(userInterfaceController.SetActive(isActive));
+        }
+        else
+        { 
+            OnDialogEnd?.Invoke(this, EventArgs.Empty);
         }
     }
 
@@ -93,25 +98,14 @@ public class DialogController : MonoBehaviour
         userInterfaceController = GetComponent<DialogUserInterfaceController>();
     }
 
-
-    /// <summary>
-    /// Start is called before the first frame update.
-    /// </summary>
-    private void Start()
-    {
-        
-    }
-
-    /// <summary>
-    /// Update is called once per frame.
-    /// </summary>
     private void Update()
     {
-        if (Flags.isActive)
+        if (Input.GetKeyDown(KeyCode.Z)) // Input.GetButtonDown("Interact")
         {
-            GetInput();
+            //SetActive(true, dialog.Data[0].LanguageData);
         }
     }
+
 
     #endregion
 }

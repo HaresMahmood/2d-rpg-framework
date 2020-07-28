@@ -92,22 +92,6 @@ public class DialogUserInterface : UserInterface
         dialogText.FadeTo(text);
     }
 
-    private void DialogText_OnFadeComplete(object sender, System.EventArgs e)
-    {
-        if (dialog.Branch == null)
-        {
-            selector.gameObject.SetActive(true);
-            nameText.DOFade(0f, 0.1f);
-        }
-        else
-        {
-            StartCoroutine(DialogUserInterfaceController.Instance.SetActive(false, false));
-            //StartCoroutine(ActivateBranchedPanel(true));
-        }
-
-        //StartCoroutine(UpdateSelector(transform.Find("Base")));
-    }
-
     /*
     /// <summary>
     /// Method to animate vertex colors of a TMP Text object.
@@ -197,6 +181,26 @@ public class DialogUserInterface : UserInterface
         }
     }
     */
+
+    #endregion
+
+    #region Event Methods
+
+    private void DialogText_OnFadeComplete(object sender, System.EventArgs e)
+    {
+        if (dialog.Branch == null)
+        {
+            selector.gameObject.SetActive(true);
+            nameText.DOFade(0f, 0.1f);
+        }
+        else
+        {
+            StartCoroutine(DialogUserInterfaceController.Instance.SetActive(false, false));
+            //StartCoroutine(ActivateBranchedPanel(true));
+        }
+
+        //StartCoroutine(UpdateSelector(transform.Find("Base")));
+    }
 
     #endregion
 
