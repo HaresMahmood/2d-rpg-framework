@@ -45,6 +45,7 @@ public class BranchingDialogUserInterface : UserInterface
         */
     }
 
+    // TODO: Debug
     public void FadeButtons(bool isActive, List<BranchingDialog.DialogBranch> branches)
     {
         float opacity = isActive ? 1f : 0f;
@@ -53,13 +54,22 @@ public class BranchingDialogUserInterface : UserInterface
 
         Sequence sequence = DOTween.Sequence();
 
+
         if (isActive && branches.Count != buttons.Count)
         {
             for (int i = branches.Count; i < buttons.Count; i++)
             {
                 buttons[i].gameObject.SetActive(false);
             }
+
+            UpdateSelectedObject(0, 1);
         }
+        else if (!isActive)
+        {
+            UpdateSelectedObject(0, 0);
+        }
+
+        //yield return null;
 
         for (int i = 0; i < branches.Count; i++)
         {
@@ -107,7 +117,11 @@ public class BranchingDialogUserInterface : UserInterface
 
         selector = transform.Find("Selector").GetComponent<SelectorController>();
 
-        selector.gameObject.SetActive(false);
+    }
+
+    private void Start()
+    {
+        UpdateSelectorPosition();
     }
 
     #endregion

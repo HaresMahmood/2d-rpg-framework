@@ -47,13 +47,13 @@ public class BranchingDialogUserInterfaceController : UserInterfaceController
     public override IEnumerator SetActive(bool isActive, bool condition = true)
     {
         userInterface.FadeButtons(isActive, Branches);
-        UpdateSelectedObject(0, isActive ? 1 : 0);
 
         if (!isActive)
         {
             userInterface.InvokeButton(Branches[selectedValue]);
             GetComponent<DialogUserInterfaceController>().Dialog = Branches[selectedValue].NextDialog != null ? Branches[selectedValue].NextDialog.Data[0].LanguageData : null;
             StartCoroutine(GetComponent<DialogUserInterfaceController>().SetActive(!isActive, false)); // TODO: Debug
+            UpdateSelectedObject(selectedValue, 0);
         }
         else
         {
