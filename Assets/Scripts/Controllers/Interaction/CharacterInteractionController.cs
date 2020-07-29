@@ -22,38 +22,15 @@ public class CharacterInteractionController : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    public void Interact(bool isActive, Vector3 orientation)
+    public void Interact(Vector3 orienation)
     {
-        GetComponent<CharacterMovement>().SetOrientation(orientation);
-    }
+        GetComponent<CharacterMovement>().CanMove = !GetComponent<CharacterMovement>().CanMove;
+        GetComponent<CharacterMovement>().SetOrientation(orienation);
 
-    #endregion
-    
-    #region Unity Methods
-    
-    /// <summary>
-    /// Awake is called when the script instance is being loaded.
-    /// </summary>
-    private void Awake()
-    {
-        
-    }
-
-
-    /// <summary>
-    /// Start is called before the first frame update.
-    /// </summary>
-    private void Start()
-    {
-        
-    }
-
-    /// <summary>
-    /// Update is called once per frame.
-    /// </summary>
-    private void Update()
-    {
-        
+        if (!GetComponent<CharacterMovement>().CanMove)
+        {
+            DialogController.Instance.SetActive(true, dialog.Data[0].LanguageData);
+        }
     }
 
     #endregion

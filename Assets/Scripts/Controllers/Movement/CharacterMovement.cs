@@ -38,8 +38,6 @@ public class CharacterMovement : MovingObject
 
     public void SetOrientation(Vector3 orientation)
     {
-        Debug.Log(this.orientation + " - " + orientation);
-
         this.orientation = orientation * -1;
 
         animator.SetFloat("moveX", this.orientation.x);

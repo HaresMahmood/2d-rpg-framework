@@ -19,6 +19,8 @@ public class InteractionController : MonoBehaviour
 
     private new BoxCollider2D collider;
 
+    private Collider2D other;
+
     #endregion
 
     #region Events
@@ -47,15 +49,14 @@ public class InteractionController : MonoBehaviour
     {
         if (Input.GetButtonDown("Interact"))
         {
-            Collider2D other = Physics2D.OverlapCircle(collider.transform.position + new Vector3(collider.offset.x, collider.offset.y), 0.1f, interactionLayer);
+           other = Physics2D.OverlapCircle(collider.transform.position + new Vector3(collider.offset.x, collider.offset.y), 0.1f, interactionLayer);
 
             if (other)
             {
-                Debug.Log(other);
-                other.GetComponentInParent<CharacterInteractionController>().Interact(true, GetComponent<PlayerMovement>().Orienation);
+                Flags.isActive = false;
+                other.GetComponentInParent<CharacterInteractionController>().Interact(GetComponent<PlayerMovement>().Orienation);
                 DialogController.Instance.SetActive(true, DialogController.Instance.dialog.Data[0].LanguageData);
                 OnInteract?.Invoke(this, EventArgs.Empty);
-                Flags.isActive = false;
             }
         }
     }
@@ -67,6 +68,7 @@ public class InteractionController : MonoBehaviour
     private void DialogController_OnDialogEnd(object sender, System.EventArgs e)
     {
         OnInteract?.Invoke(this, EventArgs.Empty);
+        other.GetComponentInParent<CharacterInteractionController>().Interact(GetComponent<PlayerMovement>().Orienation);
         Flags.isActive = true;
     }
 

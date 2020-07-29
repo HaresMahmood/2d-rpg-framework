@@ -40,6 +40,7 @@ public abstract class MovingObject : MonoBehaviour
     #region Properties
 
     public Vector3 Orienation { get { return orientation; } }
+    public bool CanMove { get { return canMove; } set { canMove = value; } }
 
     #endregion
 
