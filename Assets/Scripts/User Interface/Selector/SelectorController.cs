@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
 using DG.Tweening;
 
 /// <summary>
@@ -24,6 +23,11 @@ public class SelectorController : MonoBehaviour // TODO: Make animation times se
 
         if (!gameObject.activeSelf)
         {
+            if (transform.position != selectedObject.position)
+            {
+                transform.position = selectedObject.position;
+            }
+
             gameObject.SetActive(true);
         }
 
@@ -35,7 +39,11 @@ public class SelectorController : MonoBehaviour // TODO: Make animation times se
 
             if (selectedObject != null)
             {
-                transform.position = selectedObject.position;
+                if (transform.position != selectedObject.position)
+                {
+                    transform.position = selectedObject.position;
+                }
+
                 Animate();
             }
             else

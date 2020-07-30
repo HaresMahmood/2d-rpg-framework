@@ -61,10 +61,6 @@ public class BranchingDialogUserInterface : UserInterface
                 buttons[i].gameObject.SetActive(false);
             }
         }
-        else if (!isActive)
-        {
-            UpdateSelectedObject(0, 0);
-        }
 
         //yield return null;
 
@@ -75,7 +71,7 @@ public class BranchingDialogUserInterface : UserInterface
 
             buttons[i].SetValues(branches[i].Text, null);
 
-            buttonSequence.Append(buttons[i].GetComponent<CanvasGroup>().DOFade(opacity, 0.1f));
+            buttonSequence.Append(buttons[i].GetComponent<CanvasGroup>().DOFade(opacity, 0.2f));
             sequence.Insert(timeOffset, buttonSequence);
         }
 
