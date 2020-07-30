@@ -31,6 +31,8 @@ public class SelectorController : MonoBehaviour // TODO: Make animation times se
 
         sequence.OnComplete(() =>
         {
+            sequence.Kill();
+
             if (selectedObject != null)
             {
                 transform.position = selectedObject.position;
@@ -56,6 +58,7 @@ public class SelectorController : MonoBehaviour // TODO: Make animation times se
 
         sequence.OnComplete(() =>
         {
+            sequence.Kill();
             gameObject.SetActive(false);
         });
     }

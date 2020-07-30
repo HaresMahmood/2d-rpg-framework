@@ -54,8 +54,7 @@ public class InteractionController : MonoBehaviour
             if (other)
             {
                 Flags.isActive = false;
-                other.GetComponentInParent<CharacterInteractionController>().Interact(GetComponent<PlayerMovement>().Orienation);
-                DialogController.Instance.SetActive(true, DialogController.Instance.dialog.Data[0].LanguageData);
+                other.GetComponentInParent<InteractableObject>().Interact(GetComponent<PlayerMovement>().Orienation);
                 OnInteract?.Invoke(this, EventArgs.Empty);
             }
         }

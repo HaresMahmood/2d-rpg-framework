@@ -3,7 +3,7 @@
 /// <summary>
 ///
 /// </summary>
-public class ItemInteraction : InteractableObject
+public class ItemInteraction
 {
     /*
     #region Variables

@@ -54,15 +54,12 @@ public class BranchingDialogUserInterface : UserInterface
 
         Sequence sequence = DOTween.Sequence();
 
-
         if (isActive && branches.Count != buttons.Count)
         {
             for (int i = branches.Count; i < buttons.Count; i++)
             {
                 buttons[i].gameObject.SetActive(false);
             }
-
-            UpdateSelectedObject(0, 1);
         }
         else if (!isActive)
         {
@@ -82,16 +79,20 @@ public class BranchingDialogUserInterface : UserInterface
             sequence.Insert(timeOffset, buttonSequence);
         }
 
-        if (!isActive)
+        sequence.OnComplete(() =>
         {
-            sequence.OnComplete(() =>
+            if (!isActive)
             {
                 for (int i = 0; i < buttons.Count; i++)
                 {
                     buttons[i].gameObject.SetActive(true);
                 }
-            });
-        }
+            }
+            else
+            {
+                UpdateSelectedObject(0, 1);
+            }
+        });
     }
 
     public void InvokeButton(BranchingDialog.DialogBranch branch)
