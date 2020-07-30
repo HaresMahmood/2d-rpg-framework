@@ -53,9 +53,13 @@ public class InteractionController : MonoBehaviour
 
             if (other)
             {
-                Flags.isActive = false;
                 other.GetComponentInParent<InteractableObject>().Interact(GetComponent<PlayerMovement>().Orienation);
                 OnInteract?.Invoke(this, other.GetComponentInParent<InteractableObject>() is CharacterInteractionController);
+
+                if (other.GetComponentInParent<InteractableObject>() is CharacterInteractionController)
+                {
+                    Flags.isActive = false;
+                }
             }
         }
     }
