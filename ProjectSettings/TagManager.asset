@@ -4,7 +4,13 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Enemy
+  - NPC
+  - Canvas
+  - Customizable
+  - Collidable
+  - Stairs
+  - Opposite
+  - Dialog Text
   layers:
   - Default
   - TransparentFX
@@ -14,18 +20,8 @@ TagManager:
   - UI
   - 
   - 
-  - Level
-  - Enemy
-  - Usable
-  - Interactable
-  - IgnorePlayer
-  - Player
-  - Cameras
-  - LitSprites
-  - Destructable
-  - EnemyWeapon
-  - BossWeakPoint
-  - Bullet
+  - Interactables
+  - Colliders
   - 
   - 
   - 
@@ -36,18 +32,34 @@ TagManager:
   - 
   - 
   - 
-  - PlayerDrop
-  - Platform
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
   m_SortingLayers:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Water
-    uniqueID: 2116099231
+  - name: Ground
+    uniqueID: 3024692125
     locked: 0
-  - name: Level
-    uniqueID: 2344118779
+  - name: Obstacles
+    uniqueID: 1368453917
     locked: 0
-  - name: Front
-    uniqueID: 3405993979
+  - name: Particles
+    uniqueID: 1480244413
+    locked: 0
+  - name: Player
+    uniqueID: 2862449319
+    locked: 0
+  - name: Overlay
+    uniqueID: 2042704003
     locked: 0
