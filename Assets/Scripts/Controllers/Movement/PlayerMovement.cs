@@ -100,9 +100,12 @@ public class PlayerMovement : MovingObject
 
     #region Event Methods
 
-    private void InteractionController_OnInteract(object sender, System.EventArgs e)
+    private void InteractionController_OnInteract(object sender, bool condition)
     {
-        canMove = !canMove;
+        if (condition)
+        {
+            canMove = !canMove;
+        }
     }
 
     #endregion

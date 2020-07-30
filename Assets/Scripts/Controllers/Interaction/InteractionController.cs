@@ -25,7 +25,7 @@ public class InteractionController : MonoBehaviour
 
     #region Events
 
-    public event EventHandler OnInteract;
+    public event EventHandler<bool> OnInteract;
 
     #endregion
 
@@ -55,7 +55,7 @@ public class InteractionController : MonoBehaviour
             {
                 Flags.isActive = false;
                 other.GetComponentInParent<InteractableObject>().Interact(GetComponent<PlayerMovement>().Orienation);
-                OnInteract?.Invoke(this, EventArgs.Empty);
+                OnInteract?.Invoke(this, other.GetComponentInParent<InteractableObject>() is CharacterInteractionController);
             }
         }
     }
@@ -66,7 +66,7 @@ public class InteractionController : MonoBehaviour
 
     private void DialogController_OnDialogEnd(object sender, System.EventArgs e)
     {
-        OnInteract?.Invoke(this, EventArgs.Empty);
+        OnInteract?.Invoke(this, true);
         other.GetComponentInParent<CharacterInteractionController>().Interact(GetComponent<PlayerMovement>().Orienation);
         Flags.isActive = true;
     }
