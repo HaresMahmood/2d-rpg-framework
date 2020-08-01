@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
-using UnityEngine.Tilemaps;
-using DG.Tweening;
 
 /// <summary>
 /// Defines collision for Tilemaps and Characters and

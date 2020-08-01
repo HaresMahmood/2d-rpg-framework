@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Timers;
 using UnityEngine;
 
 /// <summary>
@@ -57,7 +56,7 @@ public class PlayerMovement : MovingObject
     protected override void DisableMovement()
     {
         base.DisableMovement();
-        StartCoroutine(EnableFidget());
+        EnableFidget();
     }
 
     private void ToggleRun()
@@ -68,32 +67,34 @@ public class PlayerMovement : MovingObject
         animatedMovement = isRunning ? "isRunning" : "isWalking";
     }
 
-    private IEnumerator EnableFidget()
+    private void EnableFidget()
     {
+        /*
+        yield return new WaitForEndOfFrame();
+        float waitTime = animator.GetAnimationTime();
+
+        yield return new WaitForSeconds(waitTime);
+
+        animator.SetBool("isFidgeting", false);
+        */
+
         fidgetTimer += Time.deltaTime;
 
         if (fidgetTimer > fidgetDelay)
         {
-            animator.SetBool("isFidgeting", true);
-
-            yield return new WaitForEndOfFrame();
-            float waitTime = animator.GetAnimationTime();
-
-            yield return new WaitForSeconds(waitTime);
-
-            animator.SetBool("isFidgeting", false);
-            fidgetTimer = 0;
+            ResetFidget();
+            animator.SetTrigger("isFidgeting");
         }
     }
 
     private void ResetFidget()
     {
-        if (animator.GetBool("isFidgeting"))
-        {
-            animator.SetBool("isFidgeting", false);
-        }
+        animator.ResetTrigger("isFidgeting");
 
         fidgetTimer = 0;
+
+        //timer.Stop();
+        //timer.Start();
     }
 
     #endregion
@@ -110,6 +111,18 @@ public class PlayerMovement : MovingObject
 
     #endregion
 
+    private void OnTimedEvent(object source, ElapsedEventArgs e)
+    {
+        //System.Random rnd = new System.Random();
+        //int interval = rnd.Next((int)idleTime.x, (int)idleTime.y) * 1000;
+        //Debug.Log(interval);
+        //timer.Interval = interval;
+
+        Debug.Log(false);
+
+        Debug.Log(true);
+    }
+
     #region Unity Methods
 
     /// <summary>
@@ -123,6 +136,13 @@ public class PlayerMovement : MovingObject
         collider = transform.Find("Interaction Collider").GetComponent<BoxCollider2D>();
 
         base.Awake();
+    }
+
+    /// <summary>
+    /// Start is called before the first frame update.
+    /// </summary>
+    private void Start()
+    {
     }
 
     /// <summary>
