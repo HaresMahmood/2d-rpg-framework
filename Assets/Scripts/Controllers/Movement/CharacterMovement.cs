@@ -36,60 +36,35 @@ public class CharacterMovement : MovingObject
 
     #region Miscellaneous Methods
 
-    public void SetOrientation(Vector3 orientation)
+    public void ChangeOrientation(Vector3 orientation)
     {
-        this.orientation = orientation * -1;
+        orientation *= -1;
 
-        animator.SetFloat("moveX", this.orientation.x);
-        animator.SetFloat("moveY", this.orientation.y);
+        ChangeOrienation(orientation.x, orientation.y);
     }
 
-    protected override bool IsTappingButton()
+    protected override void GetInput()
     {
-        /*
-        int direction = Random.Range(0, 4);
-
-        if (direction == 3 && task != null && !task.Running)
-        {
-            Debug.Log("Oh yes");
-
-            task = new Task(ChangeOrientation(idleTime));
-
-            return true;
-        }
-        */
-
-        return false;
+        GetInput(orientation);
     }
 
-    private bool GetInput(Vector3 orientation)
+    protected override bool NoCollision(Vector3 orientation)
     {
-        if (orientation != Vector3.zero 
-            && !Physics2D.OverlapCircle(movePoint.position + orientation, radius, collisionLayer) 
+        return orientation != Vector3.zero
+            && base.NoCollision(orientation)
             && bounds.bounds.Contains(movePoint.position + orientation)
-            && movementType != MovementType.Still)
+            && movementType != MovementType.Still
+            && !rangeHandler.IsPlayerInRange;
+    }
+
+    protected override void DisableMovement()
+    {
+        base.DisableMovement();
+
+        if (task != null && !task.Running)
         {
-            if (!rangeHandler.IsPlayerInRange)
-            {
-                movePoint.position += orientation;
-
-                animator.SetFloat("moveX", orientation.x);
-                animator.SetFloat("moveY", orientation.y);
-
-                return true;
-            }
+            task = new Task(ChangeOrientation(idleTime));
         }
-        else
-        {
-            DisableMovement();
-
-            if (task != null && !task.Running)
-            {
-                task = new Task(ChangeOrientation(idleTime));
-            }
-        }
-
-        return false;
     }
 
     /// <summary>
@@ -145,7 +120,6 @@ public class CharacterMovement : MovingObject
         this.orientation = orientation;
     }
 
-
     private void OnTimedEvent(object source, ElapsedEventArgs e)
     {
         //System.Random rnd = new System.Random();
@@ -185,30 +159,6 @@ public class CharacterMovement : MovingObject
         timer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
         timer.Interval = Random.Range(idleTime.x, idleTime.y) * 1000;
         timer.Enabled = true;
-    }
-
-    // TODO: Debug
-    /// <summary>
-    /// Update is called once per frame.
-    /// </summary>
-    protected override void Update()
-    {
-        if (canMove)
-        {
-            transform.position = Vector3.MoveTowards(transform.position, movePoint.position, moveSpeed * Time.deltaTime);
-
-            if (Vector3.Distance(transform.position, movePoint.position) <= 0.05f) //  && !IsTappingButton()
-            {
-                if (!IsTappingButton())
-                {
-                    GetInput(orientation);
-                }
-            }
-            else
-            {
-                animator.SetBool(animatedMovement, true);
-            }
-        }
     }
 
     #endregion

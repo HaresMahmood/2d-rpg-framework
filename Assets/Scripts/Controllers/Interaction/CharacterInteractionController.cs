@@ -20,7 +20,7 @@ public class CharacterInteractionController : InteractableObject
     public override void Interact(Vector3 orienation)
     {
         GetComponent<CharacterMovement>().CanMove = !GetComponent<CharacterMovement>().CanMove;
-        GetComponent<CharacterMovement>().SetOrientation(orienation);
+        GetComponent<CharacterMovement>().ChangeOrientation(orienation);
 
         if (!GetComponent<CharacterMovement>().CanMove)
         {
