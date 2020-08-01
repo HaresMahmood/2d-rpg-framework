@@ -9,25 +9,41 @@ public class OverworldItemsUserInterface : UserInterface
 {
     #region Constants
 
-    public override int MaxObjects => 0;
+    public override int MaxObjects => panels.Count;
 
     #endregion
 
     #region Variables
 
-    List<OverworldItemPanel> panels;
+    private List<OverworldItemPanel> panels;
+
+    private List<OverworldItemPanel> activePanels;
 
     #endregion
 
     #region Miscellaneous Methods
 
-    public IEnumerator SetActive(int selectedValue)
+    public IEnumerator SetActive(int selectedValue, Item item)
     {
+        panels[selectedValue].SetInformation(item);
         panels[selectedValue].gameObject.SetActive(true);
+        StartCoroutine(ActivatePanel(selectedValue));
 
-        yield return null;  yield return new WaitForSecondsRealtime(panels[selectedValue].GetComponent<Animator>().GetAnimationTime());
+        while (activePanels.Count != 0)
+        {
+            yield return null;
+        }
 
         panels[selectedValue].gameObject.SetActive(false);
+    }
+
+    private IEnumerator ActivatePanel(int selectedValue)
+    {
+        activePanels.Add(panels[selectedValue]);
+
+        yield return null; yield return new WaitForSecondsRealtime(panels[selectedValue].GetComponent<Animator>().GetAnimationTime());
+
+        activePanels.Remove(panels[selectedValue]);
     }
 
     #endregion
@@ -46,6 +62,8 @@ public class OverworldItemsUserInterface : UserInterface
         {
             panel.gameObject.SetActive(false);
         }
+
+        activePanels = new List<OverworldItemPanel>();
     }
 
     #endregion

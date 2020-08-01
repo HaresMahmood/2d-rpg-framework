@@ -18,7 +18,9 @@ public class ItemInteractionController : InteractableObject
 
     public override void Interact(Vector3 orienation)
     {
-        Debug.Log(true);
+        OverworldItemsUserInterfaceController.Instance.Item = item;
+        StartCoroutine(OverworldItemsUserInterfaceController.Instance.SetActive(true));
+        Destroy(gameObject);
     }
 
     #endregion

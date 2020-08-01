@@ -7,9 +7,6 @@ using UnityEngine;
 /// </summary>
 public class OverworldItemsUserInterfaceController : UserInterfaceController
 {
-    [InspectorButton("OnButtonClicked")]
-    public bool isActive;
-
     #region Fields
 
     private static OverworldItemsUserInterfaceController instance;
@@ -41,6 +38,8 @@ public class OverworldItemsUserInterfaceController : UserInterfaceController
         get { return userInterface; }
     }
 
+    public Item Item { private get; set; }
+
     #endregion
 
     #region Miscellaneous Methods
@@ -49,17 +48,12 @@ public class OverworldItemsUserInterfaceController : UserInterfaceController
     {
         if (isActive)
         {
-            Debug.Log(true);
+            selectedValue = ExtensionMethods.IncrementInt(selectedValue, 0, UserInterface.MaxObjects, 1);
 
-            StartCoroutine(userInterface.SetActive(++selectedValue));
+            StartCoroutine(userInterface.SetActive(selectedValue, Item));
 
             yield break;
         }
-    }
-
-    private void OnButtonClicked()
-    {
-        StartCoroutine(SetActive(true));
     }
 
     #endregion
