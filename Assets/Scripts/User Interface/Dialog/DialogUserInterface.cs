@@ -28,6 +28,11 @@ public class DialogUserInterface : UserInterface
 
     #region Miscellaneous Methods
 
+    public void PauseDialog(bool isPaused)
+    {
+        Time.timeScale = isPaused ? 0 : 1;
+    }
+
     public IEnumerator ActivatePanel(bool isActive)
     {
         if (isActive)

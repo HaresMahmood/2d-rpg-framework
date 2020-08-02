@@ -38,6 +38,7 @@ public class DialogController : MonoBehaviour
     #region Events
 
     public event EventHandler OnDialogEnd;
+    public event EventHandler OnDialogStart;
 
     #endregion
 
@@ -78,6 +79,7 @@ public class DialogController : MonoBehaviour
 
         if (isActive)
         {
+            OnDialogStart?.Invoke(this, EventArgs.Empty);
             StartCoroutine(userInterfaceController.SetActive(isActive));
         }
         else
