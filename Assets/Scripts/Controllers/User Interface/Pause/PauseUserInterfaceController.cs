@@ -43,7 +43,7 @@ public class PauseUserInterfaceController : UserInterfaceController
 
     public override IEnumerator SetActive(bool isActive, bool condition = true)
     {
-        Flags.isActive = isActive;
+        Flags.IsActive = isActive;
 
         userInterface.ActivatePanel(selectedValue, isActive);
 
@@ -70,7 +70,7 @@ public class PauseUserInterfaceController : UserInterfaceController
 
     public bool CanExit()
     {
-        return userInterface.GetActiveMenu(selectedValue).Flags.isActive;
+        return userInterface.GetActiveMenu(selectedValue).Flags.IsActive;
     }
 
     protected override bool RegularInput(int max, string axisName)
@@ -102,7 +102,7 @@ public class PauseUserInterfaceController : UserInterfaceController
     /// </summary>
     protected override void Update()
     {
-        if (Flags.isActive)
+        if (Flags.IsActive)
         {
             GetInput("Face Trigger");
         }

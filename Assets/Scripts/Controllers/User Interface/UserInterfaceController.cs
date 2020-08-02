@@ -45,11 +45,11 @@ public abstract class UserInterfaceController : MonoBehaviour
 
     public class UserInterfaceFlags
     {
-        public bool isActive { get; internal set; }
+        public bool IsActive { get; internal set; }
 
         internal UserInterfaceFlags(bool isActive)
         {
-            this.isActive = isActive;
+            IsActive = isActive;
         }
     }
 
@@ -84,7 +84,7 @@ public abstract class UserInterfaceController : MonoBehaviour
 
     protected virtual void InteractInput(int selectedValue)
     {
-        Flags.isActive = false;
+        Flags.IsActive = false;
         StartCoroutine(UserInterface.AnimateSelector());
     }
 
@@ -109,7 +109,7 @@ public abstract class UserInterfaceController : MonoBehaviour
     /// </summary>
     protected virtual void Update()
     {
-        if (Flags.isActive)
+        if (Flags.IsActive)
         {
             GetInput("Vertical");
         }

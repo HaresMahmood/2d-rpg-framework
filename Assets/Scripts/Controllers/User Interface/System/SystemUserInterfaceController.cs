@@ -59,7 +59,7 @@ public class SystemUserInterfaceController : UserInterfaceController
             yield return new WaitForSecondsRealtime(0.1f);
         }
 
-        Flags.isActive = isActive;
+        Flags.IsActive = isActive;
 
         StartCoroutine(base.SetActive(isActive, condition));
     }

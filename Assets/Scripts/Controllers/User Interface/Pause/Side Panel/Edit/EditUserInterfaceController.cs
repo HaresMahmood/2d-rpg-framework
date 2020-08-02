@@ -55,7 +55,7 @@ public class EditUserInterfaceController : UserInterfaceController
 
         yield return null;
 
-        Flags.isActive = isActive;
+        Flags.IsActive = isActive;
 
         StartCoroutine(base.SetActive(isActive, condition));
     }
@@ -109,7 +109,7 @@ public class EditUserInterfaceController : UserInterfaceController
     /// </summary>
     protected override void Update()
     {
-        if (Flags.isActive)
+        if (Flags.IsActive)
         {
             GetInput("Horizontal");
         }

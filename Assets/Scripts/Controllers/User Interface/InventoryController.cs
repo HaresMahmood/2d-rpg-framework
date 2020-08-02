@@ -238,7 +238,7 @@ public class InventoryController : CategoryUserInterfaceController
     /// </summary>
     protected override void Update()
     {
-        if (Flags.isActive)
+        if (Flags.IsActive)
         {
             GetInput(maxDivisble);
         }

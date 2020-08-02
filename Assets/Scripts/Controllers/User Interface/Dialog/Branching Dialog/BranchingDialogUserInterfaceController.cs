@@ -60,7 +60,7 @@ public class BranchingDialogUserInterfaceController : UserInterfaceController
             yield return new WaitForSeconds(0.15f);
         }
 
-        Flags.isActive = isActive;
+        Flags.IsActive = isActive;
     }
 
     protected override void GetInput(string axisName)
@@ -98,7 +98,7 @@ public class BranchingDialogUserInterfaceController : UserInterfaceController
     /// </summary>
     protected override void Update()
     {
-        if (Flags.isActive)
+        if (Flags.IsActive)
         {
             GetInput("Horizontal");
         }

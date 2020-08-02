@@ -13,6 +13,8 @@ public class DialogUserInterfaceController : UserInterfaceController
 
     [SerializeField] private DialogUserInterface userInterface;
 
+    private DialogUserInterfaceFlags flags = new DialogUserInterfaceFlags(false, false, false);
+
     #endregion
 
     #region Properties
@@ -38,6 +40,11 @@ public class DialogUserInterfaceController : UserInterfaceController
         get { return userInterface; }
     }
 
+    public override UserInterfaceFlags Flags
+    {
+        get { return flags; }
+    }
+
     public List<Dialog.DialogData> Dialog { private get; set; }
 
     #endregion
@@ -45,6 +52,23 @@ public class DialogUserInterfaceController : UserInterfaceController
     #region Variables
 
     private DialogController controller;
+
+    #endregion
+
+    #region Nested Classes
+
+    public class DialogUserInterfaceFlags : UserInterfaceFlags
+    {
+        public bool IsPaused { get; internal set; }
+        public bool IsAutoAdvanceOn { get; internal set; } // TODO: Bad name
+
+        internal DialogUserInterfaceFlags(bool isActive, bool isPaused, bool isAutoAdvanceOn) : base(isActive)
+        {
+            IsActive = isActive;
+            IsPaused = isPaused;
+            IsAutoAdvanceOn = isAutoAdvanceOn;
+        }
+    }
 
     #endregion
 
@@ -94,7 +118,7 @@ public class DialogUserInterfaceController : UserInterfaceController
             StartCoroutine(userInterface.ActivatePanel(isActive));
         }
 
-        Flags.isActive = isActive;
+        Flags.IsActive = isActive;
     }
 
     protected override void GetInput(string axisName)
@@ -128,7 +152,18 @@ public class DialogUserInterfaceController : UserInterfaceController
 
         if (Input.GetButtonDown("Start"))
         {
-            Debug.Log("Pressed Start");
+            flags.IsPaused = !flags.IsPaused;
+
+            userInterface.PauseDialog(flags.IsPaused);
+        }
+
+        if (Input.GetButtonDown("Remove") && flags.IsPaused)
+        {
+            flags.IsPaused = false;
+
+            userInterface.PauseDialog(flags.IsPaused);
+            StartCoroutine(userInterface.ActivatePanel(false));
+            controller.SetActive(false);
         }
     }
 

@@ -10,11 +10,11 @@ public class StatsController : PartyInformationController
 
     public override IEnumerator SetActive(bool isActive, bool condition = true)
     {
-        if (Flags.isActive != isActive)
+        if (Flags.IsActive != isActive)
         {
             yield return null;
 
-            Flags.isActive = isActive;
+            Flags.IsActive = isActive;
 
             if (this.isActive)
             {
@@ -57,7 +57,7 @@ public class StatsController : PartyInformationController
         PartyController.Instance.AnimatePanel(0, opacity, animationDuration);
         PartyController.Instance.AnimatePanel(2, opacity, animationDuration);
 
-        CharacterSpriteController.Instance.FadeOpacity(opacity == 1f ? (Flags.isActive ? 0.4f : 1f) : 0f, animationDuration); // TODO: Denug.
+        CharacterSpriteController.Instance.FadeOpacity(opacity == 1f ? (Flags.IsActive ? 0.4f : 1f) : 0f, animationDuration); // TODO: Denug.
     }
 
     #endregion

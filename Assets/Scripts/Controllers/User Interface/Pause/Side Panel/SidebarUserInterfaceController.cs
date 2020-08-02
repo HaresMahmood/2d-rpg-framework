@@ -53,7 +53,7 @@ public class SidebarUserInterfaceController : UserInterfaceController
         PauseUserInterfaceController.Instance.ActivateMenu(isActive ? 0.5f : 1f);
         userInterface.FadePanel(isActive ? 1f : 0.5f);
 
-        Flags.isActive = isActive;
+        Flags.IsActive = isActive;
 
         StartCoroutine(base.SetActive(isActive, condition));
 
@@ -79,7 +79,7 @@ public class SidebarUserInterfaceController : UserInterfaceController
 
         if (Input.GetButtonDown("Interact"))
         {
-            Flags.isActive = ActivateMenu(true, selectedValue);
+            Flags.IsActive = ActivateMenu(true, selectedValue);
         }
 
         if (Input.GetButtonDown("Cancel") || Input.GetAxisRaw("Horizontal") == 1)

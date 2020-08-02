@@ -22,6 +22,8 @@ public class DialogUserInterface : UserInterface
     private TextFade dialogText;
     private TextMeshProUGUI nameText;
 
+    private CanvasGroup pausePanel;
+
     private Dialog.DialogData dialog;
 
     #endregion
@@ -31,6 +33,10 @@ public class DialogUserInterface : UserInterface
     public void PauseDialog(bool isPaused)
     {
         Time.timeScale = isPaused ? 0 : 1;
+
+        //pausePanel.DOFade(isPaused ? 1f : 0f, 0.1f);
+
+        StartCoroutine(pausePanel.gameObject.FadeOpacity(isPaused ? 1f : 0f, 0.1f));
     }
 
     public IEnumerator ActivatePanel(bool isActive)
@@ -220,6 +226,8 @@ public class DialogUserInterface : UserInterface
 
         dialogText = transform.Find("Text").GetComponent<TextFade>();
         nameText = transform.Find("Name").GetComponent<TextMeshProUGUI>();
+
+        pausePanel = transform.parent.Find("Pause Panel").GetComponent<CanvasGroup>();
 
         selector = transform.Find("Selector").GetComponent<SelectorController>();
         selector.gameObject.SetActive(false);

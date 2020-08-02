@@ -1,10 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
 ///
 /// </summary>
+// TODOD: Make UserInterfaceController
 public class PauseController : MonoBehaviour
 {
     #region Fields
@@ -37,7 +39,7 @@ public class PauseController : MonoBehaviour
 
     #region Variables
 
-
+    private DialogController dialogController;
 
     #endregion
 
@@ -81,7 +83,26 @@ public class PauseController : MonoBehaviour
 
     #endregion
 
+    #region Event Methodss
+
+    private void DialogController_OnDialog(object sender, System.EventArgs e)
+    {
+        Flags.isActive = !Flags.isActive;
+    }
+
+    #endregion
+
     #region Unity Methods
+
+    /// <summary>
+    /// Start is called before the first frame update.
+    /// </summary>
+    private void Start() // TODO: Debug
+    {
+        dialogController = DialogController.Instance;
+        dialogController.OnDialogStart += DialogController_OnDialog;
+        dialogController.OnDialogEnd += DialogController_OnDialog;
+    }
 
     /// <summary>
     /// Update is called once per frame.

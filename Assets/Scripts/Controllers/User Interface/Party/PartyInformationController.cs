@@ -24,7 +24,7 @@ public class PartyInformationController : UserInterfaceController
     {
         yield return null;
 
-        Flags.isActive = isActive;
+        Flags.IsActive = isActive;
 
         userInterface.ActivateSlot(selectedValue, isActive);
 
