@@ -9,7 +9,7 @@ public abstract class UserInterfaceController : MonoBehaviour
 {
     #region Fields
 
-    private UserInterface userInterface;
+    [SerializeField] private UserInterface userInterfaceDebug;
 
     private UserInterfaceFlags flags = new UserInterfaceFlags(false);
 
@@ -19,7 +19,7 @@ public abstract class UserInterfaceController : MonoBehaviour
 
     public virtual UserInterface UserInterface
     {
-        get { return userInterface; }
+        get { return userInterfaceDebug; }
         set { }
     }
 

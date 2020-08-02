@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -13,7 +14,7 @@ public class DialogUserInterfaceController : UserInterfaceController
 
     [SerializeField] private DialogUserInterface userInterface;
 
-    private DialogUserInterfaceFlags flags = new DialogUserInterfaceFlags(false, false, false);
+    private DialogUserInterfaceFlags flags = new DialogUserInterfaceFlags(false, false);
 
     #endregion
 
@@ -55,17 +56,21 @@ public class DialogUserInterfaceController : UserInterfaceController
 
     #endregion
 
+    #region Events
+
+    public event EventHandler<Type> OnDialogPause;
+
+    #endregion
+
     #region Nested Classes
 
     public class DialogUserInterfaceFlags : UserInterfaceFlags
     {
-        public bool IsPaused { get; internal set; }
         public bool IsAutoAdvanceOn { get; internal set; } // TODO: Bad name
 
-        internal DialogUserInterfaceFlags(bool isActive, bool isPaused, bool isAutoAdvanceOn) : base(isActive)
+        internal DialogUserInterfaceFlags(bool isActive, bool isAutoAdvanceOn) : base(isActive)
         {
             IsActive = isActive;
-            IsPaused = isPaused;
             IsAutoAdvanceOn = isAutoAdvanceOn;
         }
     }
@@ -86,7 +91,7 @@ public class DialogUserInterfaceController : UserInterfaceController
             }
             else
             {
-                StartCoroutine(SetActive(false));
+                StartCoroutine(SetActive(false, true));
                 yield break;
             }
 
@@ -104,7 +109,7 @@ public class DialogUserInterfaceController : UserInterfaceController
             }
             else
             {
-                StartCoroutine(SetActive(isActive));
+                StartCoroutine(SetActive(isActive, true));
                 yield break;
             }
         }
@@ -152,19 +157,33 @@ public class DialogUserInterfaceController : UserInterfaceController
 
         if (Input.GetButtonDown("Start"))
         {
-            flags.IsPaused = !flags.IsPaused;
-
-            userInterface.PauseDialog(flags.IsPaused);
+            StartCoroutine(SetActive(false));
+            OnDialogPause?.Invoke(this, GetType());
         }
+    }
 
-        if (Input.GetButtonDown("Remove") && flags.IsPaused)
+    private IEnumerator SetActive(bool isActive)
+    {
+        yield return null;
+
+        Flags.IsActive = isActive;
+    }
+
+    #endregion
+
+    #region Event Methods
+
+    private void DialogPauseUserInterfaceController_OnDialogUnpause(object sender, Type type)
+    {
+        if (type == GetType())
         {
-            flags.IsPaused = false;
-
-            userInterface.PauseDialog(flags.IsPaused);
-            StartCoroutine(userInterface.ActivatePanel(false));
-            controller.SetActive(false);
+            StartCoroutine(SetActive(true));
         }
+    }
+
+    private void DialogPauseUserInterfaceController_OnDialogSkip(object sender, Type type)
+    {
+        StartCoroutine(SetActive(false, true));
     }
 
     #endregion
@@ -177,6 +196,9 @@ public class DialogUserInterfaceController : UserInterfaceController
     private void Awake()
     {
         controller = GetComponent<DialogController>();
+
+        GetComponent<DialogPauseUserInterfaceController>().OnDialogDUnpause += DialogPauseUserInterfaceController_OnDialogUnpause;
+        GetComponent<DialogPauseUserInterfaceController>().OnDialogSkip += DialogPauseUserInterfaceController_OnDialogSkip;
     }
 
     #endregion 

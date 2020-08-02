@@ -30,15 +30,6 @@ public class DialogUserInterface : UserInterface
 
     #region Miscellaneous Methods
 
-    public void PauseDialog(bool isPaused)
-    {
-        Time.timeScale = isPaused ? 0 : 1;
-
-        //pausePanel.DOFade(isPaused ? 1f : 0f, 0.1f);
-
-        StartCoroutine(pausePanel.gameObject.FadeOpacity(isPaused ? 1f : 0f, 0.1f));
-    }
-
     public IEnumerator ActivatePanel(bool isActive)
     {
         if (isActive)
@@ -64,6 +55,8 @@ public class DialogUserInterface : UserInterface
             gameObject.SetActive(false);
             selector.gameObject.SetActive(false);
         }
+
+        Stop();
     }
 
     public IEnumerator ActivateBranchedPanel(bool isActive)

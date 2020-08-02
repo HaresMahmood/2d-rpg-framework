@@ -178,6 +178,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1198252227}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &188184765 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5235891643322950528, guid: a6561841eebb5f7429af501c8ee03959,
+    type: 3}
+  m_PrefabInstance: {fileID: 766236334}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81cf809982c1f8b42aeb4077900fefd6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &291305098 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3682788949124881246, guid: 9e7cfa39ff75e5844be6b5bfc05ecfa4,
@@ -196,6 +208,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc5ea1cab85311d41b7baab61aa9357c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  userInterfaceDebug: {fileID: 0}
   buttons:
   - text: Select
     icon: {fileID: 21300000, guid: 0d40ea98e00c9e140a64b62bc3e361af, type: 3}
@@ -216,6 +229,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 471e41ab0e5528d478651d64e7777f58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  userInterfaceDebug: {fileID: 0}
   buttons:
   - text: Select
     icon: {fileID: 21300000, guid: 0d40ea98e00c9e140a64b62bc3e361af, type: 3}
@@ -94791,6 +94805,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ad8e12499d5a7745b78d27855a756ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  userInterfaceDebug: {fileID: 0}
   buttons: []
   userInterface: {fileID: 986290230}
 --- !u!114 &933239315
@@ -94805,8 +94820,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ceb1c6aecd833a54abed33b0cfaa33ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  userInterfaceDebug: {fileID: 0}
   buttons: []
   userInterface: {fileID: 1067746921}
+--- !u!114 &933239316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 933239309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6202216686d2661488a883a3a7a7b7cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  userInterfaceDebug: {fileID: 188184765}
+  buttons: []
 --- !u!1 &959140519 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3033431699136254402, guid: a6561841eebb5f7429af501c8ee03959,
@@ -95493,6 +95523,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c69d1a385ec5d084d848c6a0e371f807, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  userInterfaceDebug: {fileID: 0}
   buttons:
   - text: Select
     icon: {fileID: 21300000, guid: 0d40ea98e00c9e140a64b62bc3e361af, type: 3}
@@ -95513,6 +95544,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60748c73a992f7a48b90d51cceb0375c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  userInterfaceDebug: {fileID: 0}
   buttons:
   - text: Select
     icon: {fileID: 21300000, guid: 0d40ea98e00c9e140a64b62bc3e361af, type: 3}
@@ -95672,6 +95704,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dc37871305bf2c4cb78156679f82153, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  userInterfaceDebug: {fileID: 0}
   buttons:
   - text: Select
     icon: {fileID: 21300000, guid: 0d40ea98e00c9e140a64b62bc3e361af, type: 3}
@@ -95692,6 +95725,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af8627592592a504e9126906d532b96d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  userInterfaceDebug: {fileID: 0}
   buttons: []
   userInterface: {fileID: 1764060927}
 --- !u!114 &1824289303 stripped
