@@ -54,9 +54,9 @@ public class DialogUserInterface : UserInterface
 
             gameObject.SetActive(false);
             selector.gameObject.SetActive(false);
-        }
 
-        Stop();
+            Stop();
+        }
     }
 
     public IEnumerator ActivateBranchedPanel(bool isActive)
@@ -199,7 +199,11 @@ public class DialogUserInterface : UserInterface
         }
         else
         {
-            StartCoroutine(DialogUserInterfaceController.Instance.SetActive(false, false));
+            if (gameObject.activeSelf)
+            {
+                StartCoroutine(DialogUserInterfaceController.Instance.SetActive(false, false));
+            }
+
             //StartCoroutine(ActivateBranchedPanel(true));
         }
 
