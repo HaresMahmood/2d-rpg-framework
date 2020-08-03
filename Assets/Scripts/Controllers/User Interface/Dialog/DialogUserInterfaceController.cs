@@ -14,7 +14,7 @@ public class DialogUserInterfaceController : UserInterfaceController
 
     [SerializeField] private DialogUserInterface userInterface;
 
-    private DialogUserInterfaceFlags flags = new DialogUserInterfaceFlags(false, false);
+    private DialogUserInterfaceFlags flags = new DialogUserInterfaceFlags(false, false, false);
 
     #endregion
 
@@ -67,11 +67,13 @@ public class DialogUserInterfaceController : UserInterfaceController
     public class DialogUserInterfaceFlags : UserInterfaceFlags
     {
         public bool IsAutoAdvanceOn { get; internal set; } // TODO: Bad name
+        public bool IsSentenceComplete { get; internal set; } // TODO: Bad name
 
-        internal DialogUserInterfaceFlags(bool isActive, bool isAutoAdvanceOn) : base(isActive)
+        internal DialogUserInterfaceFlags(bool isActive, bool isAutoAdvanceOn, bool isSentenceComplete) : base(isActive)
         {
             IsActive = isActive;
             IsAutoAdvanceOn = isAutoAdvanceOn;
+            IsSentenceComplete = isSentenceComplete;
         }
     }
 
@@ -132,32 +134,24 @@ public class DialogUserInterfaceController : UserInterfaceController
         {
             if (!userInterface.Stop())
             {
-                if (selectedValue < Dialog.Count - 1 || Dialog == null)
-                {
-                    selectedValue++;
-                    userInterface.UpdateInformation(Dialog[selectedValue]);
-                }
-                else
-                {
-                    if (Dialog[selectedValue].Branch == null)
-                    {
-                        StartCoroutine(userInterface.ActivatePanel(false));
-                        controller.SetActive(false);
-                    }
-                }
+                NextSentence();
             }
-
-            //Debug.Log("Pressed Interact");
         }
 
         if (Input.GetButtonDown("Toggle"))
         {
-            Debug.Log("Pressed Toggle");
+            flags.IsAutoAdvanceOn = !flags.IsAutoAdvanceOn;
+
+            //if (flags.IsAutoAdvanceOn && flags.IsSentenceComplete)
+            //{
+            //    NextSentence();
+            //}
         }
 
         if (Input.GetButtonDown("Start"))
         {
             StartCoroutine(SetActive(false));
+
             OnDialogPause?.Invoke(this, GetType());
         }
     }
@@ -167,6 +161,32 @@ public class DialogUserInterfaceController : UserInterfaceController
         yield return null;
 
         Flags.IsActive = isActive;
+    }
+
+    private IEnumerator AutoAdvance(float waitTime = 1.5f)
+    {
+        yield return new WaitForSeconds(waitTime);
+
+        NextSentence();
+    }
+
+    private void NextSentence()
+    {
+        if (selectedValue < Dialog.Count - 1 || Dialog == null)
+        {
+            selectedValue++;
+            userInterface.UpdateInformation(Dialog[selectedValue]);
+        }
+        else
+        {
+            if (Dialog[selectedValue].Branch == null)
+            {
+                StartCoroutine(userInterface.ActivatePanel(false));
+                controller.SetActive(false);
+            }
+        }
+
+        flags.IsSentenceComplete = false;
     }
 
     #endregion
@@ -186,6 +206,16 @@ public class DialogUserInterfaceController : UserInterfaceController
         StartCoroutine(SetActive(false, true));
     }
 
+    private void DialogText_OnFadeComplete(object sender, System.EventArgs e)
+    {
+        flags.IsSentenceComplete = true;
+
+        if (flags.IsAutoAdvanceOn)
+        {
+            StartCoroutine(AutoAdvance());
+        }
+    }
+
     #endregion
 
     #region Unity Methods
@@ -199,6 +229,14 @@ public class DialogUserInterfaceController : UserInterfaceController
 
         GetComponent<DialogPauseUserInterfaceController>().OnDialogDUnpause += DialogPauseUserInterfaceController_OnDialogUnpause;
         GetComponent<DialogPauseUserInterfaceController>().OnDialogSkip += DialogPauseUserInterfaceController_OnDialogSkip;
+    }
+
+    /// <summary>
+    /// Start is called before the first frame update.
+    /// </summary>
+    private void Start()
+    {
+        userInterface.DialogText.OnFadeComplete += DialogText_OnFadeComplete;
     }
 
     #endregion 

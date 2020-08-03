@@ -15,11 +15,16 @@ public class DialogUserInterface : UserInterface
 
     #endregion
 
+    #region Properties
+
+    public TextFade DialogText { get; private set; } 
+
+    #endregion
+
     #region Variables
 
     private Animator animator;
 
-    private TextFade dialogText;
     private TextMeshProUGUI nameText;
 
     private CanvasGroup pausePanel;
@@ -84,7 +89,7 @@ public class DialogUserInterface : UserInterface
 
     public bool Stop()
     {
-        return dialogText.StopFade();
+        return DialogText.StopFade();
     }
 
     private void SetText(string text)
@@ -93,7 +98,7 @@ public class DialogUserInterface : UserInterface
         //selector.SetActive(false);
         //StartCoroutine(AnimateSelector());
         DeactivateSelector();
-        dialogText.FadeTo(text);
+        DialogText.FadeTo(text);
     }
 
     /*
@@ -221,7 +226,7 @@ public class DialogUserInterface : UserInterface
     {
         animator = GetComponent<Animator>();
 
-        dialogText = transform.Find("Text").GetComponent<TextFade>();
+        DialogText = transform.Find("Text").GetComponent<TextFade>();
         nameText = transform.Find("Name").GetComponent<TextMeshProUGUI>();
 
         pausePanel = transform.parent.Find("Pause Panel").GetComponent<CanvasGroup>();
@@ -229,16 +234,7 @@ public class DialogUserInterface : UserInterface
         selector = transform.Find("Selector").GetComponent<SelectorController>();
         selector.gameObject.SetActive(false);
 
-        dialogText.OnFadeComplete += DialogText_OnFadeComplete;
-    }
-
-
-    /// <summary>
-    /// Start is called before the first frame update.
-    /// </summary>
-    private void Start()
-    {
-        
+        DialogText.OnFadeComplete += DialogText_OnFadeComplete;
     }
 
     #endregion
