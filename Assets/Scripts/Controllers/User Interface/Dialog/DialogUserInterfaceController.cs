@@ -118,6 +118,8 @@ public class DialogUserInterfaceController : UserInterfaceController
         else if (!isActive)
         {
             controller.SetActive(isActive); // TODO: Debug
+
+            flags.IsSentenceComplete = false;
         }
 
         if (condition)
@@ -142,10 +144,12 @@ public class DialogUserInterfaceController : UserInterfaceController
         {
             flags.IsAutoAdvanceOn = !flags.IsAutoAdvanceOn;
 
-            //if (flags.IsAutoAdvanceOn && flags.IsSentenceComplete)
-            //{
-            //    NextSentence();
-            //}
+            userInterface.ToggleAutoAdvance(flags.IsAutoAdvanceOn);
+
+            if (flags.IsAutoAdvanceOn && flags.IsSentenceComplete)
+            {
+                NextSentence();
+            }
         }
 
         if (Input.GetButtonDown("Start"))
@@ -172,17 +176,20 @@ public class DialogUserInterfaceController : UserInterfaceController
 
     private void NextSentence()
     {
-        if (selectedValue < Dialog.Count - 1 || Dialog == null)
+        if (Dialog != null)
         {
-            selectedValue++;
-            userInterface.UpdateInformation(Dialog[selectedValue]);
-        }
-        else
-        {
-            if (Dialog[selectedValue].Branch == null)
+            if (selectedValue < Dialog.Count - 1)
             {
-                StartCoroutine(userInterface.ActivatePanel(false));
-                controller.SetActive(false);
+                selectedValue++;
+                userInterface.UpdateInformation(Dialog[selectedValue]);
+            }
+            else
+            {
+                if (Dialog[selectedValue].Branch == null)
+                {
+                    StartCoroutine(userInterface.ActivatePanel(false));
+                    controller.SetActive(false);
+                }
             }
         }
 

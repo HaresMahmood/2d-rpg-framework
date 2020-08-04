@@ -28,6 +28,7 @@ public class DialogUserInterface : UserInterface
     private TextMeshProUGUI nameText;
 
     private CanvasGroup pausePanel;
+    private CanvasGroup autoAdvanceIcon;
 
     private Dialog.DialogData dialog;
 
@@ -90,6 +91,26 @@ public class DialogUserInterface : UserInterface
     public bool Stop()
     {
         return DialogText.StopFade();
+    }
+
+    public void ToggleAutoAdvance(bool isActive)
+    {
+        Sequence sequence = DOTween.Sequence();
+
+        if (!autoAdvanceIcon.gameObject.activeSelf && isActive)
+        {
+            autoAdvanceIcon.gameObject.SetActive(true);
+        }
+
+        sequence.Append(autoAdvanceIcon.DOFade(isActive ? 1f : 0f, 0.15f));
+
+        sequence.OnComplete(() =>
+        {
+            if (!isActive)
+            {
+                autoAdvanceIcon.gameObject.SetActive(false);
+            }
+        });
     }
 
     private void SetText(string text)
@@ -199,8 +220,11 @@ public class DialogUserInterface : UserInterface
     {
         if (dialog.Branch == null)
         {
-            selector.gameObject.SetActive(true);
-            nameText.DOFade(0f, 0.1f);
+            if (!((DialogUserInterfaceController.DialogUserInterfaceFlags)DialogUserInterfaceController.Instance.Flags).IsAutoAdvanceOn) // TODO: Debug
+            {
+                selector.gameObject.SetActive(true);
+                nameText.DOFade(0f, 0.1f);
+            }
         }
         else
         {
@@ -230,6 +254,7 @@ public class DialogUserInterface : UserInterface
         nameText = transform.Find("Name").GetComponent<TextMeshProUGUI>();
 
         pausePanel = transform.parent.Find("Pause Panel").GetComponent<CanvasGroup>();
+        autoAdvanceIcon = transform.Find("Auto Advance").GetComponent<CanvasGroup>();
 
         selector = transform.Find("Selector").GetComponent<SelectorController>();
         selector.gameObject.SetActive(false);
