@@ -130,6 +130,18 @@ public class DialogUserInterfaceController : UserInterfaceController
         Flags.IsActive = isActive;
     }
 
+    public void ToggleAutoAdvance()
+    {
+        flags.IsAutoAdvanceOn = !flags.IsAutoAdvanceOn;
+
+        userInterface.ToggleAutoAdvance(flags.IsAutoAdvanceOn);
+
+        if (flags.IsActive && flags.IsAutoAdvanceOn && flags.IsSentenceComplete)
+        {
+            NextSentence();
+        }
+    }
+
     protected override void GetInput(string axisName)
     {
         if (Input.GetButtonDown("Interact") || Input.GetButtonDown("Cancel"))
@@ -142,14 +154,7 @@ public class DialogUserInterfaceController : UserInterfaceController
 
         if (Input.GetButtonDown("Toggle"))
         {
-            flags.IsAutoAdvanceOn = !flags.IsAutoAdvanceOn;
-
-            userInterface.ToggleAutoAdvance(flags.IsAutoAdvanceOn);
-
-            if (flags.IsAutoAdvanceOn && flags.IsSentenceComplete)
-            {
-                NextSentence();
-            }
+            ToggleAutoAdvance();
         }
 
         if (Input.GetButtonDown("Start"))

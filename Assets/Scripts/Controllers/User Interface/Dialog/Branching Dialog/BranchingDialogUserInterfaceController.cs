@@ -95,7 +95,7 @@ public class BranchingDialogUserInterfaceController : UserInterfaceController
 
         if (Input.GetButtonDown("Toggle"))
         {
-            Debug.Log("Pressed Toggle");
+            GetComponent<DialogUserInterfaceController>().ToggleAutoAdvance(); // TODO: Debug
         }
 
         if (Input.GetButtonDown("Start"))
