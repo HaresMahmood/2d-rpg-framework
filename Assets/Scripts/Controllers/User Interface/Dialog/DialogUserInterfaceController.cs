@@ -52,6 +52,9 @@ public class DialogUserInterfaceController : UserInterfaceController
 
     #region Variables
 
+    [Header("Settings")]
+    [SerializeField] private float waitTime = 1f;
+
     private DialogController controller;
 
     #endregion
@@ -172,7 +175,7 @@ public class DialogUserInterfaceController : UserInterfaceController
         Flags.IsActive = isActive;
     }
 
-    private IEnumerator AutoAdvance(float waitTime = 1.5f)
+    private IEnumerator AutoAdvance()
     {
         yield return new WaitForSeconds(waitTime);
 
