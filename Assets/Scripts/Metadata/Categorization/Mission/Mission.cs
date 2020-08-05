@@ -81,7 +81,7 @@ public class Mission : Categorizable
             set { this.value = value; }
         }
 
-        protected override string Value
+        protected override string StringValue
         {
             get { return value.ToString(); }
         }

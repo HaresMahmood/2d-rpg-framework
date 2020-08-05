@@ -14,6 +14,8 @@ public class ItemEditor : Editor
     private new Item target;
 
     private static bool showBasicInfo = true;
+    private static bool showSprites = false;
+    private static bool showInventoryInformation = true;
 
     #endregion
 
@@ -54,7 +56,6 @@ public class ItemEditor : Editor
         showBasicInfo = EditorGUILayout.Foldout(showBasicInfo, "Basic Information", foldoutStyle);
         GUILayout.Space(5);
 
-        /*
         if (showBasicInfo)
         {
             GUILayout.BeginHorizontal();
@@ -62,78 +63,65 @@ public class ItemEditor : Editor
             GUILayout.BeginVertical();
             GUILayout.BeginHorizontal("Box");
 
-            EditorGUILayout.LabelField(new GUIContent("Species", "Dex number of this Pokémon.\n\n" +
+            EditorGUILayout.LabelField(new GUIContent("ID", "Dex number of this Pokémon.\n\n" +
             "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-            target.Species = (Pokemon)EditorGUILayout.ObjectField(target.Species, typeof(Pokemon), false);
-
-            GUILayout.EndHorizontal();
-
-            GUILayout.BeginHorizontal("Box");
-
-            EditorGUILayout.LabelField(new GUIContent("Nickname", "Name of this Pokémon.\n\n" +
-            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-
-            GUILayout.BeginVertical();
-
-            showNoName = GUILayout.Toggle(showNoName, "None");
-
-
-            if (!showNoName)
-            {
-                GUILayout.BeginHorizontal();
-
-                target.Nickname = EditorGUILayout.TextField(target.Nickname);
-
-                GUILayout.EndHorizontal();
-            }
-            else
-            {
-                target.Nickname = "";
-            }
-
-            GUILayout.EndVertical();
-            GUILayout.EndHorizontal();
-            GUILayout.BeginHorizontal("Box");
-
-            EditorGUILayout.LabelField(new GUIContent("HP", "Category of this Pokémon.\n\n" +
-            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-            target.Stats.HP = EditorGUILayout.IntSlider(target.Stats.HP, 0, target.Stats.Stats[Pokemon.Stat.HP]);
+            target.ID = int.Parse(EditorGUILayout.TextField(target.ID.ToString("000")));
 
             GUILayout.EndHorizontal();
             GUILayout.BeginHorizontal("Box");
 
-            EditorGUILayout.LabelField(new GUIContent("Gender", "Category of this Pokémon.\n\n" +
+            EditorGUILayout.LabelField(new GUIContent("Name", "Category of this Pokémon.\n\n" +
             "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-            target.Gender.Value = (PartyMember.MemberGender.Gender)EditorGUILayout.EnumPopup(target.Gender.Value);
+            target.Name = EditorGUILayout.TextField(target.Name);
+
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal("Box");
+
+            EditorGUILayout.LabelField(new GUIContent("Dex Entry", "Category of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+            target.Description = EditorGUILayout.TextArea(target.Description, GUILayout.MaxHeight(35));
             EditorStyles.textField.wordWrap = true;
 
-            if (target.Gender.Value != PartyMember.MemberGender.Gender.None)
-            {
-                if (GUILayout.Button("Random", GUILayout.Width(100), GUILayout.Height(18)))
-                {
-                    target.Gender.Value = target.Gender.AssignRandom(target.Species);
-                }
-            }
-
             GUILayout.EndHorizontal();
             GUILayout.BeginHorizontal("Box");
 
-            EditorGUILayout.LabelField(new GUIContent("Held Item", "Category of this Pokémon.\n\n" +
+            EditorGUILayout.LabelField(new GUIContent("Category", "Category of this Pokémon.\n\n" +
             "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-            target.HeldItem = (Holdable)EditorGUILayout.ObjectField(target.HeldItem, typeof(Holdable), false);
-
-            GUILayout.EndHorizontal();
-            GUILayout.BeginHorizontal("Box");
-
-            EditorGUILayout.LabelField(new GUIContent("Poké Ball", "Category of this Pokémon.\n\n" +
-            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-            target.PokeBall = (PokeBall)EditorGUILayout.ObjectField(target.PokeBall, typeof(PokeBall), false);
+            ((Item.ItemCategory)target.Categorization).Value = (Item.ItemCategory.CategoryConstant)EditorGUILayout.EnumPopup(((Item.ItemCategory)target.Categorization).Value);
 
             GUILayout.EndHorizontal();
             GUILayout.EndVertical();
             GUILayout.EndHorizontal();
         }
-        */
+
+        GUILayout.Space(2);
+        ExtensionMethods.DrawUILine("#525252".ToColor());
+        GUILayout.Space(2);
+
+        showSprites = EditorGUILayout.Foldout(showSprites, "Sprites", foldoutStyle);
+        GUILayout.Space(5);
+
+        if (showSprites)
+        {
+            int width = Screen.width / 4;
+
+            GUILayout.BeginHorizontal();
+            GUILayout.Space(15);
+            GUILayout.BeginHorizontal("Box");
+
+            EditorGUILayout.LabelField(new GUIContent("Menu", "Dex number of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(35));
+
+            GUILayout.FlexibleSpace();
+            GUILayout.BeginVertical();
+
+            target.Sprite = (Sprite)EditorGUILayout.ObjectField(target.Sprite, typeof(Sprite), false, GUILayout.Width(width), GUILayout.Height(width));
+
+            GUILayout.EndVertical();
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+            GUILayout.EndHorizontal();
+        }
 
         GUILayout.Space(2);
         ExtensionMethods.DrawUILine("#525252".ToColor());
@@ -141,7 +129,7 @@ public class ItemEditor : Editor
 
         EditorUtility.SetDirty(target);
 
-        base.OnInspectorGUI();
+        //base.OnInspectorGUI();
     }
 }
 

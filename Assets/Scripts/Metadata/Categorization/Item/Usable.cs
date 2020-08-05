@@ -34,7 +34,7 @@ public class Usable : Item
 
         #region Properties
 
-        protected override string Value
+        protected override string StringValue
         {
             get { return value.ToString(); }
         }

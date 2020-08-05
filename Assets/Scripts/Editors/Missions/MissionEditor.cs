@@ -183,7 +183,7 @@ public class MissionEditor : Editor
                 }
 
                 EditorGUI.EndDisabledGroup();
-                EditorGUI.BeginDisabledGroup(i == target.Rewards.Count - 1);
+                EditorGUI.BeginDisabledGroup(i == target.Goals.Count - 1);
 
                 if (GUILayout.Button("↓", GUILayout.Width(18), GUILayout.Height(18)))
                 {
