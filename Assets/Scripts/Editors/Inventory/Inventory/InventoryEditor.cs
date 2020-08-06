@@ -12,10 +12,13 @@ public class InventoryEditor : Editor
     private new Inventory target;
 
     private static bool showItem = true;
+    private static bool showList = true;
 
-    private bool sameItem = false;
-    private int tab = 0;
+    private int tab = 1;
     private List<string> categories = new List<string>();
+
+    private static GUIStyle ToggleButtonStyleNormal = null;
+    private static GUIStyle ToggleButtonStyleToggled = null;
 
     #endregion
 
@@ -31,6 +34,13 @@ public class InventoryEditor : Editor
 
     public override void OnInspectorGUI()
     {
+        if (ToggleButtonStyleNormal == null)
+        {
+            ToggleButtonStyleNormal = "Button";
+            ToggleButtonStyleToggled = new GUIStyle(ToggleButtonStyleNormal);
+            ToggleButtonStyleToggled.normal.background = ToggleButtonStyleToggled.active.background;
+        }
+
         tab = GUILayout.Toolbar(tab, categories.ToArray());
         DrawInspector(categories[tab]);
 
@@ -51,14 +61,6 @@ public class InventoryEditor : Editor
 
         GUILayout.BeginHorizontal();
         GUILayout.BeginHorizontal("Box", GUILayout.Height(35));
-        GUILayout.FlexibleSpace();
-
-        //if (target.Sprite != null)
-        //{
-        //    Texture2D itemSprite = target.Sprite.texture;
-        //    GUILayout.Label(itemSprite, GUILayout.Width(30), GUILayout.Height(30));
-        //}
-
         GUILayout.BeginVertical();
         GUILayout.FlexibleSpace();
 
@@ -67,6 +69,19 @@ public class InventoryEditor : Editor
         GUILayout.FlexibleSpace();
         GUILayout.EndVertical();
         GUILayout.FlexibleSpace();
+        GUILayout.BeginHorizontal();
+
+        if (GUILayout.Button("L", showList ? ToggleButtonStyleToggled : ToggleButtonStyleNormal, GUILayout.Width(20), GUILayout.Height(20)))
+        {
+            showList = true;
+        }
+
+        if (GUILayout.Button("G", showList ? ToggleButtonStyleNormal : ToggleButtonStyleToggled, GUILayout.Width(20), GUILayout.Height(20)))
+        {
+            showList = false;
+        }
+
+        GUILayout.EndHorizontal();
         GUILayout.EndHorizontal();
         GUILayout.EndHorizontal();
 
@@ -93,105 +108,119 @@ public class InventoryEditor : Editor
             GUILayout.BeginHorizontal();
             GUILayout.Space(15);
             GUILayout.BeginVertical();
-            GUILayout.BeginVertical();
-            GUILayout.BeginVertical();
 
             for (int i = 0; i < activeCategorizables.Count; i++)
             {
-                Item item = activeCategorizables[i];
-
-                GUILayout.BeginVertical("Box");
                 GUILayout.BeginHorizontal();
 
-                EditorGUILayout.LabelField($"{i + 1}.", GUILayout.Width(45));
-
-                EditorGUILayout.LabelField(new GUIContent("Item", "Dex number of this Pokémon.\n\n" +
-                "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-                Item newItem = (Item)EditorGUILayout.ObjectField(target.items[target.items.IndexOf(item)], typeof(Item), false);
-                target.items[target.items.FindIndex(it => it == item)] = newItem;
-                item = newItem;
-
-                EditorGUI.BeginDisabledGroup(i == 0);
-
-                if (GUILayout.Button("↑", GUILayout.Width(18), GUILayout.Height(18)))
+                for (int j = 1; j < (showList ? 2 : 3); j++)
                 {
-                    activeCategorizables.RemoveAt(i);
-                    activeCategorizables.Insert(i - 1, item);
-                }
-
-                EditorGUI.EndDisabledGroup();
-                EditorGUI.BeginDisabledGroup(i == activeCategorizables.Count - 1);
-
-                if (GUILayout.Button("↓", GUILayout.Width(18), GUILayout.Height(18)))
-                {
-                    activeCategorizables.RemoveAt(i);
-                    activeCategorizables.Insert(i + 1, item);
-                }
-
-                EditorGUI.EndDisabledGroup();
-
-                if (GUILayout.Button("-", GUILayout.Width(18), GUILayout.Height(18)))
-                {
-                    activeCategorizables.RemoveAt(i);
-                }
-
-                GUILayout.EndHorizontal();
-
-                if (item != null)
-                {
-                    GUILayout.BeginHorizontal();
-                    GUILayout.BeginHorizontal();
-
-                    EditorGUILayout.LabelField(new GUIContent("Qty.", "Name of this Pokémon.\n\n" +
-                    "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(45));
-
-                    if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
+                    if (i == activeCategorizables.Count - 1 && !showList)
                     {
-                        item.Quantity = Mathf.Clamp(++item.Quantity, 1, 999);
+                        break;
                     }
 
-                    item.Quantity = EditorGUILayout.IntField(item.Quantity, GUILayout.Width(36));
+                    int counter = Mathf.Clamp((i - 1) + j, 0, activeCategorizables.Count - 1);
+
+                    //Debug.Log($"i: {i}, j: {j}, c: {counter}");
+
+                    Item item = activeCategorizables[counter];
+
+                    GUILayout.BeginVertical("Box");
+                    GUILayout.BeginHorizontal();
+
+                    EditorGUILayout.LabelField($"{counter + 1}.", GUILayout.Width(45));
+
+                    EditorGUILayout.LabelField(new GUIContent("Item", "Dex number of this Pokémon.\n\n" +
+                    "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(45));
+                    Item newItem = (Item)EditorGUILayout.ObjectField(target.items[target.items.IndexOf(item)], typeof(Item), false);
+                    target.items[target.items.FindIndex(it => it == item)] = newItem;
+                    item = newItem;
+
+                    EditorGUI.BeginDisabledGroup(counter == 0);
+
+                    if (GUILayout.Button("↑", GUILayout.Width(18), GUILayout.Height(18)))
+                    {
+                        activeCategorizables.RemoveAt(counter);
+                        activeCategorizables.Insert(counter - 1, item);
+                    }
+
+                    EditorGUI.EndDisabledGroup();
+                    EditorGUI.BeginDisabledGroup(counter == activeCategorizables.Count - 1);
+
+                    if (GUILayout.Button("↓", GUILayout.Width(18), GUILayout.Height(18)))
+                    {
+                        activeCategorizables.RemoveAt(counter);
+                        activeCategorizables.Insert(counter + 1, item);
+                    }
+
+                    EditorGUI.EndDisabledGroup();
 
                     if (GUILayout.Button("-", GUILayout.Width(18), GUILayout.Height(18)))
                     {
-                        item.Quantity = Mathf.Clamp(--item.Quantity, 1, 999);
+                        activeCategorizables.RemoveAt(counter);
                     }
 
-                    GUILayout.BeginHorizontal();
-                    GUILayout.FlexibleSpace();
-                    GUILayout.BeginHorizontal();
-
-                    EditorGUILayout.LabelField(new GUIContent("Fav.", "Name of this Pokémon.\n\n" +
-                    "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(35));
-                    item.IsFavorite = GUILayout.Toggle(item.IsFavorite, GUIContent.none);
-
                     GUILayout.EndHorizontal();
-                    GUILayout.BeginHorizontal();
 
-                    EditorGUILayout.LabelField(new GUIContent("New", "Name of this Pokémon.\n\n" +
-                    "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(35));
-                    item.IsNew = GUILayout.Toggle(item.IsNew, GUIContent.none);
+                    if (item != null)
+                    {
+                        GUILayout.BeginHorizontal();
+                        GUILayout.BeginHorizontal();
 
-                    GUILayout.EndHorizontal();
-                    GUILayout.EndHorizontal();
-                    GUILayout.EndHorizontal();
-                    GUILayout.EndHorizontal();
-                    GUILayout.BeginHorizontal();
+                        EditorGUILayout.LabelField(new GUIContent("Qty.", "Name of this Pokémon.\n\n" +
+                        "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(45));
 
-                    EditorGUILayout.LabelField(new GUIContent("Desc.", "Name of this Pokémon.\n\n" +
-                    "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(45));
-                    GUI.enabled = false;
-                    EditorGUILayout.SelectableLabel(item.Description, EditorStyles.textArea);
-                    GUI.enabled = true;
+                        if (GUILayout.Button("+", GUILayout.Width(18), GUILayout.Height(18)))
+                        {
+                            item.Quantity = Mathf.Clamp(++item.Quantity, 1, 999);
+                        }
+
+                        item.Quantity = EditorGUILayout.IntField(item.Quantity, GUILayout.Width(36));
+
+                        if (GUILayout.Button("-", GUILayout.Width(18), GUILayout.Height(18)))
+                        {
+                            item.Quantity = Mathf.Clamp(--item.Quantity, 1, 999);
+                        }
+
+                        GUILayout.BeginHorizontal();
+                        GUILayout.FlexibleSpace();
+                        GUILayout.BeginHorizontal();
+
+                        EditorGUILayout.LabelField(new GUIContent("Fav.", "Name of this Pokémon.\n\n" +
+                        "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(35));
+                        item.IsFavorite = GUILayout.Toggle(item.IsFavorite, GUIContent.none);
+
+                        GUILayout.EndHorizontal();
+                        GUILayout.BeginHorizontal();
+
+                        EditorGUILayout.LabelField(new GUIContent("New", "Name of this Pokémon.\n\n" +
+                        "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(35));
+                        item.IsNew = GUILayout.Toggle(item.IsNew, GUIContent.none);
+
+                        GUILayout.EndHorizontal();
+                        GUILayout.EndHorizontal();
+                        GUILayout.EndHorizontal();
+                        GUILayout.EndHorizontal();
+                        /*
+                        GUILayout.BeginHorizontal();
+
+                        EditorGUILayout.LabelField(new GUIContent("Desc.", "Name of this Pokémon.\n\n" +
+                        "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(45));
+                        GUI.enabled = false;
+                        EditorGUILayout.SelectableLabel(item.Description, EditorStyles.textArea);
+                        GUI.enabled = true;
+
+                        GUILayout.EndHorizontal();
+                        */
+                    }
 
                     GUILayout.EndHorizontal();
                 }
 
-                GUILayout.EndVertical();
+                GUILayout.EndHorizontal();
             }
 
-            GUILayout.EndVertical();
-            GUILayout.EndVertical();
             GUILayout.EndVertical();
             GUILayout.EndHorizontal();
         }
