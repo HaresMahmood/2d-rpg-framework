@@ -14,7 +14,7 @@ public class InventoryEditor : Editor
     private static bool showItem = true;
     private static bool showList = true;
 
-    private int tab = 1;
+    private int tab = 0;
     private List<string> categories = new List<string>();
 
     private static GUIStyle ToggleButtonStyleNormal = null;

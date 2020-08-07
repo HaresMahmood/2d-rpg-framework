@@ -6,6 +6,8 @@ using UnityEngine;
 [CustomEditor(typeof(Dialog)), CanEditMultipleObjects]
 public class DialogEditor : Editor
 {
+
+
     /*
     #region Variables
 
