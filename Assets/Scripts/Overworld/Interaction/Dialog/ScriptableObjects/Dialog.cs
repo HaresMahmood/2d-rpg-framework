@@ -52,6 +52,8 @@ public class Dialog : ScriptableObject
             set { branch = value; }
         }
 
+        public bool ShowBranch { get; set; }
+
         #endregion
     }
 
@@ -61,6 +63,7 @@ public class Dialog : ScriptableObject
         #region Fields
 
         [SerializeField] private List<DialogData> languageData = new List<DialogData>();
+        [SerializeField] private string language;
 
         #endregion
 
@@ -69,6 +72,12 @@ public class Dialog : ScriptableObject
         public List<DialogData> LanguageData
         {
             get { return languageData; }
+        }
+
+        public string Language
+        {
+            get { return language; }
+            set { language = value; }
         }
 
         #endregion

@@ -12,8 +12,6 @@ public class BranchingDialogEditor : Editor
     private static bool showBranches = true;
     private static bool showList = true;
 
-    private int tab = 0;
-
     #endregion
 
     private void OnEnable()
@@ -113,23 +111,19 @@ public class BranchingDialogEditor : Editor
 
                 GUILayout.EndHorizontal();
                 GUILayout.BeginHorizontal();
-                GUILayout.BeginHorizontal();
 
                 EditorGUILayout.LabelField(new GUIContent("Text", "Name of this Pokémon.\n\n" +
                 "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(45));
                 branch.Text = EditorGUILayout.TextField(branch.Text);
 
-                GUILayout.EndHorizontal();
                 GUILayout.FlexibleSpace();
-                GUILayout.BeginHorizontal();
 
                 EditorGUILayout.LabelField(new GUIContent("Button", "Name of this Pokémon.\n\n" +
                 "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(45));
                 GUI.enabled = false;
-                EditorGUILayout.SelectableLabel(i == (target.Branches.Count - 1) ? "Back" : (i + 1).ToString(), EditorStyles.textField, GUILayout.Width(38), GUILayout.Height(EditorGUIUtility.singleLineHeight));
+                EditorGUILayout.SelectableLabel(i == (target.Branches.Count - 1) ? "Back" : (i + 1).ToString(), EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight)); // GUILayout.Width(38)
                 GUI.enabled = true;
 
-                GUILayout.EndHorizontal();
                 GUILayout.EndHorizontal();
                 GUILayout.BeginHorizontal();
 
@@ -147,6 +141,10 @@ public class BranchingDialogEditor : Editor
 
             GUILayout.EndVertical();
             GUILayout.EndHorizontal();
+
+            GUILayout.Space(2);
+            ExtensionMethods.DrawUILine("#525252".ToColor());
+            GUILayout.Space(2);
         }
 
         //base.OnInspectorGUI();
