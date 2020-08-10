@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "New Party Member", menuName = "Characters/Party Member")]
+[CreateAssetMenu(fileName = "New Party Member", menuName = "Characters/Pokémon/Party Member")]
 public class PartyMember : ScriptableObject
 {
     #region Fields

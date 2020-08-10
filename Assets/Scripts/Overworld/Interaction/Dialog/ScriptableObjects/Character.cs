@@ -1,19 +1,46 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "New NPC", menuName = "Characters/NPC")]
+[CreateAssetMenu(fileName = "New NPC", menuName = "Characters/NPC/Generic")]
 public class Character : ScriptableObject
 {
-    public new string name;
-    public int id;
-    public Sprite portrait;
-    public Gender gender;
-    public bool battleable;
-    //TODO: Create fields for trainers/battleable NPCs.
+    #region Fields
 
-    public enum Gender
+    [SerializeField] private int id;
+    [SerializeField] private new string name;
+    [SerializeField] private CharacterGender gender;
+
+    #endregion
+
+    #region Properties
+
+    public int ID
+    {
+        get { return id; }
+        set { id = value; }
+    }
+
+    public string Name
+    {
+        get { return name; }
+        set { name = value; }
+    }
+
+    public CharacterGender Gender
+    {
+        get { return gender; }
+        set { gender = value; }
+    }
+
+    #endregion
+
+    #region Enums
+
+    public enum CharacterGender
     {
         Male,
         Female,
         Mixed
     }
+
+    #endregion
 }

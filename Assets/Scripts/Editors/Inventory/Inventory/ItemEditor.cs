@@ -53,6 +53,10 @@ public class ItemEditor : Editor
         GUILayout.EndHorizontal();
         GUILayout.EndHorizontal();
 
+        GUILayout.Space(2);
+        ExtensionMethods.DrawUILine("#525252".ToColor());
+        GUILayout.Space(2);
+
         showBasicInfo = EditorGUILayout.Foldout(showBasicInfo, "Basic Information", foldoutStyle);
         GUILayout.Space(5);
 

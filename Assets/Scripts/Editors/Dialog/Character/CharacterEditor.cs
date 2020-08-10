@@ -1,12 +1,89 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(Character)), CanEditMultipleObjects]
 public class CharacterEditor : Editor
 {
+    #region Variables
+
+    private new Character target;
+
+    private static bool showBasicInfo = true;
+
+    #endregion
+
+    private void OnEnable()
+    {
+        target = (Character)base.target;
+    }
+
+    public override void OnInspectorGUI()
+    {
+        GUIStyle foldoutStyle = new GUIStyle(EditorStyles.foldout)
+        {
+            fontStyle = FontStyle.Bold,
+            fontSize = 16
+        };
+
+        GUILayout.BeginVertical("Box", GUILayout.Height(35));
+        GUILayout.FlexibleSpace();
+        GUILayout.BeginHorizontal();
+        GUILayout.FlexibleSpace();
+
+        GUILayout.Label($"#{target.ID:000} - {(target.Name == "" ? "Give this character a name via Basic Information" : target.Name)}");
+
+        GUILayout.FlexibleSpace();
+        GUILayout.EndHorizontal();
+        GUILayout.FlexibleSpace();
+        GUILayout.EndVertical();
+
+        GUILayout.Space(2);
+        ExtensionMethods.DrawUILine("#525252".ToColor());
+        GUILayout.Space(2);
+
+        showBasicInfo = EditorGUILayout.Foldout(showBasicInfo, "Basic Information", foldoutStyle);
+        GUILayout.Space(5);
+
+        if (showBasicInfo)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Space(15);
+            GUILayout.BeginVertical();
+            GUILayout.BeginHorizontal("Box");
+
+            EditorGUILayout.LabelField(new GUIContent("ID", "Dex number of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+            target.ID = int.Parse(EditorGUILayout.TextField(target.ID.ToString("000")));
+
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal("Box");
+
+            EditorGUILayout.LabelField(new GUIContent("Name", "Category of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+            target.Name = EditorGUILayout.TextField(target.Name);
+
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal("Box");
+
+            EditorGUILayout.LabelField(new GUIContent("Gender", "Category of this Pokémon.\n\n" +
+            "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
+            target.Gender = (Character.CharacterGender)EditorGUILayout.EnumPopup(target.Gender);
+            EditorStyles.textField.wordWrap = true;
+
+            GUILayout.EndHorizontal();
+            GUILayout.EndVertical();
+            GUILayout.EndHorizontal();
+        }
+
+        GUILayout.Space(2);
+        ExtensionMethods.DrawUILine("#525252".ToColor());
+
+        EditorUtility.SetDirty(target);
+
+        //base.OnInspectorGUI();
+    }
+
+    /*
     #region Variables
     private Character character;
 
@@ -124,7 +201,7 @@ public class CharacterEditor : Editor
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.LabelField(new GUIContent("Gender", "Gender with which character is addressed. " +
             "Select 'Mixed' for I.E. a character representing a pair of triners"));
-        character.gender = (Character.Gender)EditorGUILayout.EnumPopup(character.gender);
+        character.gender = (Character.CharacterGender)EditorGUILayout.EnumPopup(character.gender);
         EditorUtility.SetDirty(target);
         EditorGUILayout.EndHorizontal();
 
@@ -168,4 +245,5 @@ public class CharacterEditor : Editor
         character.id = Int32.Parse(id);
         EditorUtility.SetDirty(target);
     }
+    */
 }
