@@ -1,6 +1,9 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
+/// <summary>
+///
+/// </summary>
 [CustomEditor(typeof(Character)), CanEditMultipleObjects]
 public class CharacterEditor : Editor
 {
@@ -18,6 +21,15 @@ public class CharacterEditor : Editor
     }
 
     public override void OnInspectorGUI()
+    {
+        DrawInspector(target);
+
+        EditorUtility.SetDirty(target);
+
+        //base.OnInspectorGUI();
+    }
+
+    public virtual void DrawInspector(Character target)
     {
         GUIStyle foldoutStyle = new GUIStyle(EditorStyles.foldout)
         {
@@ -68,7 +80,6 @@ public class CharacterEditor : Editor
             EditorGUILayout.LabelField(new GUIContent("Gender", "Category of this Pokémon.\n\n" +
             "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
             target.Gender = (Character.CharacterGender)EditorGUILayout.EnumPopup(target.Gender);
-            EditorStyles.textField.wordWrap = true;
 
             GUILayout.EndHorizontal();
             GUILayout.EndVertical();
@@ -77,10 +88,7 @@ public class CharacterEditor : Editor
 
         GUILayout.Space(2);
         ExtensionMethods.DrawUILine("#525252".ToColor());
-
-        EditorUtility.SetDirty(target);
-
-        //base.OnInspectorGUI();
+        GUILayout.Space(2);
     }
 
     /*
