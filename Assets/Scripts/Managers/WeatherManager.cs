@@ -244,10 +244,10 @@ public class WeatherManager : MonoBehaviour
     public IEnumerator ChangeWeather()
     {
         //yield return new WaitUntil(() => SceneStreamManager.IsSceneLoaded(SceneStreamManager.instance.GetActiveScene()));
-        while (!SceneStreamManager.IsSceneLoaded(SceneStreamManager.instance.GetActiveScene()))
-        {
+        //while (!SceneStreamManager.IsSceneLoaded(SceneStreamManager.instance.GetActiveScene()))
+        //{
             yield return null;
-        }
+        //}
 
         List<WeatherState> weatherStates = FindObjectOfType<WeatherStates>().GetWeatherStates();
 

@@ -6,14 +6,14 @@ public class StartScene : MonoBehaviour
     /// The scene loaded at the start of the game.
     /// </summary>
     [Tooltip("The scene loaded at the start of the game.")]
-    public string startSceneName = "SampleScene";
+    [SerializeField] private string sceneName = "SampleScene";
 
     /// <summary>
     /// Start is called before the first frame update.
     /// </summary>
     public void Start()
     {
-        SceneStreamManager.SetActive(startSceneName);
+        //SceneStreamManager.SetActive(sceneName);
         Destroy(this);
     }
 }

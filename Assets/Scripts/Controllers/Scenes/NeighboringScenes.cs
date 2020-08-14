@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 /// Add this to the scene's root object. It lists the scene's neighbors.
@@ -8,9 +9,20 @@
 /// </summary>
 public class NeighboringScenes : MonoBehaviour
 {
-    /// <summary>
-    /// The scenes neighboring this scene.
-    /// </summary>
+    #region Fields
+
     [Tooltip("The scenes neighboring this scene.")]
-    public string[] sceneNames;
+    [SerializeField] private List<string> names = new List<string>();
+
+    #endregion
+
+    #region Properties
+
+    public List<string> Names
+    {
+        get { return names; }
+        set { names = value; }
+    }
+
+    #endregion
 }

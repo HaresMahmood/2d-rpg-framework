@@ -11,7 +11,6 @@ public class Trainer : Character
     #region Fields
 
 
-
     #endregion
 
     #region Properties
