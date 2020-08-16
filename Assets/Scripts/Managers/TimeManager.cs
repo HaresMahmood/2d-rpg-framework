@@ -22,9 +22,9 @@ public class TimeManager : MonoBehaviour
     [SerializeField] private Format format;
 
     [Header("Values")]
-    [RenameField("Pause")] [SerializeField] private bool isPaused;
-    [ReadOnly] [SerializeField] private float hours;
-    [ReadOnly] [SerializeField] private float minutes;
+    [SerializeField] private bool isPaused;
+    [SerializeField] private float hours;
+    [SerializeField] private float minutes;
 
     private float day;
 

@@ -16,9 +16,9 @@ public class WeatherManager : MonoBehaviour
     [SerializeField] private Transform particleSystems;
 
     [Header("Values")]
-    [ReadOnly] [SerializeField] private WeatherState previousWeather;
-    [ReadOnly] [SerializeField] private WeatherState weather;
-    [ReadOnly] [SerializeField] private WeatherState nextWeather;
+    [SerializeField] private WeatherState previousWeather;
+    [SerializeField] private WeatherState weather;
+    [SerializeField] private WeatherState nextWeather;
 
     private bool isFlashingLight;
 

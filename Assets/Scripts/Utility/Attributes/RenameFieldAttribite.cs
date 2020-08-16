@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿#if UNITY_EDITOR
+
+using UnityEngine;
 using UnityEditor;
 
 /// <summary>
@@ -21,3 +23,5 @@ public class RenameEditor : PropertyDrawer
         EditorGUI.PropertyField(position, property, new GUIContent((attribute as RenameFieldAttribute).name));
     }
 }
+
+#endif

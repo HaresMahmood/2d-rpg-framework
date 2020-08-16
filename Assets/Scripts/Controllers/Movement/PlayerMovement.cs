@@ -13,8 +13,8 @@ public class PlayerMovement : MovingObject
     [SerializeField] [Range(1f, 30f)] private float fidgetDelay = 10f;
 
     [Header("Values")]
-    [SerializeField] [ReadOnly] private float fidgetTimer;
-    [SerializeField] [ReadOnly] private bool isRunning;
+    [SerializeField] private float fidgetTimer;
+    [SerializeField] private bool isRunning;
 
     private new BoxCollider2D collider;
 

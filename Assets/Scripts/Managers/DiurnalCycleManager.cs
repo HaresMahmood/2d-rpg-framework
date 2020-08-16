@@ -21,7 +21,7 @@ public class DiurnalCycleManager : MonoBehaviour
     [SerializeField] private Color midnight = "001E3E".ToColor();
 
     [Header("Values")]
-    [ReadOnly] [SerializeField] private TimeOfDay timeOfDay;
+    [SerializeField] private TimeOfDay timeOfDay;
 
     private Color lightColor;
     private float lightIntensity;

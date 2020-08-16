@@ -10,8 +10,8 @@ public class TypingUserInterface : ComponentUserInterface
 {
     #region Fields
 
-    [SerializeField] [ReadOnly] private Typing type;
-    [SerializeField] [ReadOnly] private Sprite sprite;
+    [SerializeField] private Typing type;
+    [SerializeField] private Sprite sprite;
 
     #endregion
 

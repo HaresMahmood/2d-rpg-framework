@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if UNITY_EDITOR
+using System;
 using System.Linq;
 using UnityEngine;
 using UnityEditor;
@@ -1220,3 +1221,5 @@ ExtensionMethods.DrawUILine("#525252".ToColor());
 GUILayout.Space(2);
 */
 }
+
+#endif
