@@ -249,20 +249,20 @@ public class WeatherManager : MonoBehaviour
             yield return null;
         //}
 
-        List<WeatherState> weatherStates = FindObjectOfType<WeatherStates>().GetWeatherStates();
+        //List<WeatherState> weatherStates = FindObjectOfType<WeatherStates>().GetWeatherStates();
 
-        if (weather == WeatherState.None)
-        {
-            weather = SetRandomWeather(weatherStates);
-            nextWeather = SetRandomWeather(weatherStates);
-        }
-        else
-        {
-            previousWeather = weather;
-            weather = nextWeather;
-        }
-        nextWeather = SetRandomWeather(weatherStates);
-        SetWeatherEffects(weather);
+        //if (weather == WeatherState.None)
+        //{
+        //    weather = SetRandomWeather(weatherStates);
+        //    nextWeather = SetRandomWeather(weatherStates);
+        //}
+        //else
+        //{
+        //    previousWeather = weather;
+        //    weather = nextWeather;
+        //}
+        //nextWeather = SetRandomWeather(weatherStates);
+        SetWeatherEffects(WeatherState.None);
     }
 
     #endregion

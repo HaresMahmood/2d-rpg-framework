@@ -13,6 +13,32 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class SceneStreamManager : MonoBehaviour
 {
+    #region Fields
+
+    private static SceneStreamManager instance;
+
+    #endregion
+
+    #region Properties
+
+    /// <summary>
+    /// Singleton pattern.
+    /// </summary>
+    public static SceneStreamManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<SceneStreamManager>();
+            }
+
+            return instance;
+        }
+    }
+
+    #endregion
+
     #region Variables
 
     [Header("Settings")]
@@ -62,6 +88,31 @@ public class SceneStreamManager : MonoBehaviour
     #endregion
 
     #region Miscsellaneous Methods
+
+    /// <summary>
+    /// Determines whether a scene is loaded.
+    /// </summary>
+    /// <returns><c>true</c> if loaded; otherwise, <c>false</c>.</returns>
+    /// <param name="sceneName">Scene name.</param>
+    private bool IsLoaded(string sceneName)
+    {
+        return loadedScenes.Contains(sceneName);
+    }
+
+    /// <summary>
+    /// Sets the current scene, loads it, and manages neighbors. The scene must be in your
+    /// project's build settings.
+    /// </summary>
+    /// <param name="sceneName">Scene name.</param>
+    public void SetActiveScene(string sceneName)
+    {
+        if (string.IsNullOrEmpty(sceneName) || string.Equals(sceneName, activeScene))
+        {
+            return;
+        }
+
+        StartCoroutine(LoadActiveScene(sceneName));
+    }
 
     /// <summary>
     /// Loads neighbor scenes within drawDistance, adding them to the near list.
@@ -128,31 +179,6 @@ public class SceneStreamManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Determines whether a scene is loaded.
-    /// </summary>
-    /// <returns><c>true</c> if loaded; otherwise, <c>false</c>.</returns>
-    /// <param name="sceneName">Scene name.</param>
-    public bool IsLoaded(string sceneName)
-    {
-        return loadedScenes.Contains(sceneName);
-    }
-
-    /// <summary>
-    /// Sets the current scene, loads it, and manages neighbors. The scene must be in your
-    /// project's build settings.
-    /// </summary>
-    /// <param name="sceneName">Scene name.</param>
-    public void SetActiveScene(string sceneName)
-    {
-        if (string.IsNullOrEmpty(sceneName) || string.Equals(sceneName, activeScene))
-        {
-            return;
-        }
-
-        StartCoroutine(LoadActiveScene(sceneName));
-    }
-
-    /// <summary>
     /// Loads a scene as the current scene and manages neighbors, loading scenes
     /// within drawDistance and unloading scenes beyond it.
     /// </summary>
@@ -214,7 +240,6 @@ public class SceneStreamManager : MonoBehaviour
         SceneManager.UnloadSceneAsync(sceneName);
     }
 
-
     /// <summary>
     /// Loads a scene and calls an internal delegate when done. The delegate is
     /// used by the LoadNeighbors() method.
@@ -267,6 +292,15 @@ public class SceneStreamManager : MonoBehaviour
         loadedScenes.Add(sceneName);
         onLoaded.Invoke(sceneName);
         if (loadedHandler != null) loadedHandler(sceneName, distance);
+    }
+
+    #endregion
+
+    #region Static Methods
+
+    public static void SetActive(string sceneName)
+    {
+        instance.SetActiveScene(sceneName);
     }
 
     #endregion
