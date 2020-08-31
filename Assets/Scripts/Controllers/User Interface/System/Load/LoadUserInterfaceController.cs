@@ -53,7 +53,7 @@ public class LoadUserInterfaceController : UserInterfaceController
             yield return new WaitForSecondsRealtime(0.1f);
         }
 
-        Flags.isActive = isActive;
+        Flags.IsActive = isActive;
 
         StartCoroutine(base.SetActive(isActive, condition));
     }
@@ -71,7 +71,7 @@ public class LoadUserInterfaceController : UserInterfaceController
 
         if (Input.GetButtonDown("Interact"))
         {
-            Flags.isActive = false;
+            Flags.IsActive = false;
             //userInterface.ActivateCategory(selectedValue);
         }
 

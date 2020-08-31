@@ -53,7 +53,7 @@ public class SettingUserInterfaceController : UserInterfaceController
 
     public override IEnumerator SetActive(bool isActive, bool condition = true)
     {
-        Flags.isActive = isActive;
+        Flags.IsActive = isActive;
         yield break;
     }
 
@@ -175,7 +175,7 @@ public class SettingUserInterfaceController : UserInterfaceController
     /// </summary>
     protected override void Update()
     {
-        if (Flags.isActive)
+        if (Flags.IsActive)
         {
             GetInput("Horizontal");
         }

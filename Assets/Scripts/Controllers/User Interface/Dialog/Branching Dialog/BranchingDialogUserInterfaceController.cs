@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -42,25 +43,39 @@ public class BranchingDialogUserInterfaceController : UserInterfaceController
 
     #endregion
 
+    #region Events
+
+    public event EventHandler<Type> OnDialogPause;
+
+    #endregion
+
     #region Miscellaneous Methods
 
     public override IEnumerator SetActive(bool isActive, bool condition = true)
     {
         userInterface.FadeButtons(isActive, Branches);
-        UpdateSelectedObject(0, isActive ? 1 : 0);
 
         if (!isActive)
         {
-            userInterface.InvokeButton(Branches[selectedValue]);
-            GetComponent<DialogUserInterfaceController>().Dialog = Branches[selectedValue].NextDialog != null ? Branches[selectedValue].NextDialog.Data[0].LanguageData : null;
-            StartCoroutine(GetComponent<DialogUserInterfaceController>().SetActive(!isActive, false)); // TODO: Debug
+            if (condition)
+            {
+                userInterface.InvokeButton(Branches[selectedValue]);
+                GetComponent<DialogUserInterfaceController>().Dialog = Branches[selectedValue].NextDialog != null ? Branches[selectedValue].NextDialog.Data[0].LanguageData : null;
+                StartCoroutine(GetComponent<DialogUserInterfaceController>().SetActive(!isActive, false)); // TODO: Debug
+            }
+            else
+            {
+                GetComponent<DialogUserInterfaceController>().Dialog = null;
+            }
+
+            UpdateSelectedObject(selectedValue, 0);
         }
         else
         {
             yield return new WaitForSeconds(0.15f);
         }
 
-        Flags.isActive = isActive;
+        Flags.IsActive = isActive;
     }
 
     protected override void GetInput(string axisName)
@@ -69,23 +84,51 @@ public class BranchingDialogUserInterfaceController : UserInterfaceController
 
         if (Input.GetButtonDown("Interact"))
         {
-            StartCoroutine(SetActive(false));
+            StartCoroutine(SetActive(false, true));
         }
 
         if (Input.GetButtonDown("Cancel"))
         {
             selectedValue = userInterface.MaxObjects - 1;
-            StartCoroutine(SetActive(false));
+            StartCoroutine(SetActive(false, true));
         }
 
         if (Input.GetButtonDown("Toggle"))
         {
-            Debug.Log("Pressed Toggle");
+            GetComponent<DialogUserInterfaceController>().ToggleAutoAdvance(); // TODO: Debug
         }
 
         if (Input.GetButtonDown("Start"))
         {
-            Debug.Log("Pressed Start");
+            StartCoroutine(SetActive(false));
+            OnDialogPause?.Invoke(this, GetType());
+        }
+    }
+
+    private IEnumerator SetActive(bool isActive)
+    {
+        yield return null;
+
+        Flags.IsActive = isActive;
+    }
+
+    #endregion
+
+    #region Event Methods
+
+    private void DialogPauseUserInterfaceController_OnDialogUnpause(object sender, Type type)
+    {
+        if (type == GetType())
+        {
+            StartCoroutine(SetActive(true));
+        }
+    }
+
+    private void DialogPauseUserInterfaceController_OnDialogSkip(object sender, Type type)
+    {
+        if (type == GetType())
+        {
+            StartCoroutine(SetActive(false, false));
         }
     }
 
@@ -94,11 +137,20 @@ public class BranchingDialogUserInterfaceController : UserInterfaceController
     #region Unity Methods
 
     /// <summary>
+    /// Awake is called when the script instance is being loaded.
+    /// </summary>
+    private void Awake()
+    {
+        GetComponent<DialogPauseUserInterfaceController>().OnDialogDUnpause += DialogPauseUserInterfaceController_OnDialogUnpause;
+        GetComponent<DialogPauseUserInterfaceController>().OnDialogSkip += DialogPauseUserInterfaceController_OnDialogSkip;
+    }
+
+    /// <summary>
     /// Update is called once per frame.
     /// </summary>
     protected override void Update()
     {
-        if (Flags.isActive)
+        if (Flags.IsActive)
         {
             GetInput("Horizontal");
         }

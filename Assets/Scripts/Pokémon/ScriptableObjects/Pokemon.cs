@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Pokémon", menuName = "Characters/Pokémon")]
+[CreateAssetMenu(fileName = "New Species", menuName = "Characters/Pokémon/Species")] // TODO: Change name of class to "Species"
 public class Pokemon : ScriptableObject
 {
     #region Fields

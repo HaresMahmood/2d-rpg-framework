@@ -48,7 +48,7 @@ public class MissionInformationController : UserInterfaceController
 
         yield return null;
 
-        Flags.isActive = isActive;
+        Flags.IsActive = isActive;
 
         userInterface.ToggleSubMenu(MissionsController.Instance.SelectedMission, isActive);
 
@@ -95,7 +95,7 @@ public class MissionInformationController : UserInterfaceController
     /// </summary>
     protected override void Update()
     {
-        if (Flags.isActive)
+        if (Flags.IsActive)
         {
             GetInput("Horizontal");
         }

@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿#if UNITY_EDITOR
+
+using UnityEngine;
 
 /// <summary>
 ///
@@ -21,3 +23,5 @@ public sealed class RevealPropertyAttribute : PropertyAttribute
 
     #endregion
 }
+
+#endif

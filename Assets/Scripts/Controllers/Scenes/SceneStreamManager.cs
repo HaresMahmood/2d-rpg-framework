@@ -13,45 +13,53 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class SceneStreamManager : MonoBehaviour
 {
-    public static SceneStreamManager instance;
+    #region Fields
+
+    private static SceneStreamManager instance;
+
+    #endregion
+
+    #region Properties
 
     /// <summary>
-    /// Awake is called when the script instance is being loaded.
+    /// Singleton pattern.
     /// </summary>
-    private void Awake()
+    public static SceneStreamManager Instance
     {
-        if (instance == null)
-            instance = this;
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<SceneStreamManager>();
+            }
+
+            return instance;
+        }
     }
 
-    /// <summary>
-    /// Max number of neighbors to load out from the current scene.
-    /// </summary>
+    public bool LogDebugInfo 
+    { 
+        get { return debug && Debug.isDebugBuild; } 
+    }
+
+    #endregion
+
+    #region Variables
+
+    [Header("Settings")]
     [Tooltip("Max number of neighbors to load out from the current scene.")]
-    public int drawDistance = 1;
+    [SerializeField] private int drawDistance = 1;
 
-    /// <summary>
-    /// A failsafe in case loading hangs. The script will
-    /// stop waiting for the scene to laod after this set
-    /// amount of time in seconds.
-    /// </summary>
-    [Tooltip("If scene doesn't load after ... seconds, stop waiting.")]
-    public float loadTime = 10f;
-
-    [System.Serializable] public class StringEvent : UnityEvent<string> { }
-    public StringEvent onLoaded = new StringEvent();
-    [System.Serializable] public class StringAsyncEvent : UnityEvent<string, AsyncOperation> { }
-    public StringAsyncEvent onLoading = new StringAsyncEvent();
+    [Tooltip("If scene doesn't load after specified amount of seconds, stop waiting.")]
+    [SerializeField] private float loadTime = 5f;
 
     [Tooltip("Tick to log debug info to the Console window.")]
-    public bool debug = false;
+    [SerializeField] private bool debug = false;
 
-    public bool logDebugInfo { get { return debug && Debug.isDebugBuild; } }
+    [Header("Settings")]
+    [SerializeField] private StringEvent onLoaded = new StringEvent();
 
-    /// <summary>
-    /// // The name of the scene the Player is currently in.
-    /// </summary>
-    private string activeScene = null;
+    [SerializeField] private StringAsyncEvent onLoading = new StringAsyncEvent();
 
     /// <summary>
     /// The names of all loaded scenes.
@@ -70,14 +78,43 @@ public class SceneStreamManager : MonoBehaviour
     private HashSet<string> neighboringScenes = new HashSet<string>();
 
     /// <summary>
+    /// // The name of the scene the Player is currently in.
+    /// </summary>
+    private string activeScene = null;
+
+    #endregion
+
+    #region Events
+
+    private delegate void InternalLoadedHandler(string sceneName, int distance);
+
+    #endregion
+
+    #region Miscsellaneous Methods
+
+    /// <summary>
+    /// Unloads a scene.
+    /// </summary>
+    /// <param name="sceneName">Scene name.</param>
+    public void Unload(string sceneName)
+    {
+        Destroy(GameObject.Find(sceneName));
+        loadedScenes.Remove(sceneName);
+
+        SceneManager.UnloadSceneAsync(sceneName);
+    }
+
+    /// <summary>
     /// Sets the current scene, loads it, and manages neighbors. The scene must be in your
     /// project's build settings.
     /// </summary>
     /// <param name="sceneName">Scene name.</param>
     public void SetActiveScene(string sceneName)
     {
-        if (string.IsNullOrEmpty(sceneName) || string.Equals(sceneName, activeScene)) return;
-        if (logDebugInfo) Debug.Log("Scene Streamer: Setting current scene to " + sceneName + ".");
+        if (string.IsNullOrEmpty(sceneName) || string.Equals(sceneName, activeScene))
+        {
+            return;
+        }
 
         StartCoroutine(LoadActiveScene(sceneName));
     }
@@ -92,29 +129,70 @@ public class SceneStreamManager : MonoBehaviour
     {
         activeScene = sceneName;
 
-        if (!IsLoaded(activeScene)) Load(sceneName);
+        if (!IsLoaded(activeScene))
+        {
+            Load(sceneName);
+        }
 
         float failsafeTime = Time.realtimeSinceStartup + loadTime;
-        while ((loadingScenes.Count > 0) && (Time.realtimeSinceStartup < failsafeTime))
-            yield return null;
 
-        if (Time.realtimeSinceStartup >= failsafeTime && Debug.isDebugBuild) Debug.LogWarning("Scene Streamer: Timed out waiting to load " + sceneName + ".");
-        SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
-
-        // Next load neighbors up to drawDistance, keeping track
-        // of them in the near list:
-        if (logDebugInfo) Debug.Log("Scene Streamer: Loading " + drawDistance + " closest neighbors of " + sceneName + ".");
-        neighboringScenes.Clear();
-        LoadNeighbors(sceneName, 0);
-        failsafeTime = Time.realtimeSinceStartup + loadTime;
         while ((loadingScenes.Count > 0) && (Time.realtimeSinceStartup < failsafeTime))
         {
             yield return null;
         }
-        if (Time.realtimeSinceStartup >= failsafeTime && Debug.isDebugBuild) Debug.LogWarning("Scene Streamer: Timed out waiting to load neighbors of " + sceneName + ".");
+
+        if (Time.realtimeSinceStartup >= failsafeTime && Debug.isDebugBuild)
+        {
+            Debug.LogWarning("Scene Streamer: Timed out waiting to load " + sceneName + ".");
+        }
+
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
+
+        // Next load neighbors up to drawDistance, keeping track of them in the near list:
+        if (LogDebugInfo)
+        {
+            Debug.Log("Scene Streamer: Loading " + drawDistance + " closest neighbors of " + sceneName + ".");
+        }
+
+        neighboringScenes.Clear();
+        LoadNeighbors(sceneName, 0);
+
+        failsafeTime = Time.realtimeSinceStartup + loadTime;
+
+        while ((loadingScenes.Count > 0) && (Time.realtimeSinceStartup < failsafeTime))
+        {
+            yield return null;
+        }
+
+        if (Time.realtimeSinceStartup >= failsafeTime && Debug.isDebugBuild)
+        {
+            Debug.LogWarning("Scene Streamer: Timed out waiting to load neighbors of " + sceneName + ".");
+        }
 
         // Finally unload any scenes not in the near list:
         UnloadFarScenes();
+    }
+
+    /// <summary>
+    /// Loads a scene and calls an internal delegate when done. The delegate is
+    /// used by the LoadNeighbors() method.
+    /// </summary>
+    /// <param name="sceneName">Scene name.</param>
+    /// <param name="loadedHandler">Loaded handler.</param>
+    /// <param name="distance">Distance from the current scene.</param>
+    private void Load(string sceneName, InternalLoadedHandler loadedHandler = null, int distance = 0)
+    {
+        if (IsLoaded(sceneName))
+        {
+            loadedHandler?.Invoke(sceneName, distance);
+            return;
+        }
+
+        loadingScenes.Add(sceneName);
+
+        if (LogDebugInfo && distance > 0) Debug.Log("Scene Streamer: Loading " + sceneName + ".");
+
+        StartCoroutine(LoadAdditiveAsync(sceneName, loadedHandler, distance));
     }
 
     /// <summary>
@@ -124,16 +202,30 @@ public class SceneStreamManager : MonoBehaviour
     /// <param name="distance">Distance.</param>
     private void LoadNeighbors(string sceneName, int distance)
     {
-        if (this.neighboringScenes.Contains(sceneName)) return;
-        this.neighboringScenes.Add(sceneName);
-        if (distance >= drawDistance) return;
-        GameObject scene = GameObject.Find(sceneName);
-        NeighboringScenes neighboringScenes = (scene) ? scene.GetComponent<NeighboringScenes>() : null;
-        if (!neighboringScenes) neighboringScenes = CreateNeighboringScenesList(scene);
-        if (!neighboringScenes) return;
-        for (int i = 0; i < neighboringScenes.sceneNames.Length; i++)
+        if (this.neighboringScenes.Contains(sceneName))
         {
-            Load(neighboringScenes.sceneNames[i], LoadNeighbors, distance + 1);
+            return;
+        }
+
+        this.neighboringScenes.Add(sceneName);
+
+        if (distance >= drawDistance)
+        {
+            return;
+        }
+
+        GameObject scene = GameObject.Find(sceneName);
+        NeighboringScenes neighboringScenes = scene ? scene.GetComponent<NeighboringScenes>() : null;
+
+        if (!neighboringScenes)
+        {
+            neighboringScenes = GetNeighboringScenes(scene);
+            return;
+        }
+
+        for (int i = 0; i < neighboringScenes.Names.Count; i++)
+        {
+            Load(neighboringScenes.Names[i], LoadNeighbors, distance + 1);
         }
     }
 
@@ -145,18 +237,25 @@ public class SceneStreamManager : MonoBehaviour
     /// </summary>
     /// <returns> The neighboring scenes list. </returns>
     /// <param name="scene"> Root GameObject of scene. </param>
-    private NeighboringScenes CreateNeighboringScenesList(GameObject scene)
+    private NeighboringScenes GetNeighboringScenes(GameObject scene)
     {
-        if (!scene) return null;
+        if (!scene)
+        {
+            return null;
+        }
+
         NeighboringScenes neighboringScenes = scene.AddComponent<NeighboringScenes>();
         HashSet<string> neighbors = new HashSet<string>();
-        var sceneEdges = scene.GetComponentsInChildren<SceneEdgeController>();
+        SceneEdgeController[] sceneEdges = scene.GetComponentsInChildren<SceneEdgeController>();
+
         for (int i = 0; i < sceneEdges.Length; i++)
         {
-            neighbors.Add(sceneEdges[i].nextScene);
+            neighbors.Add(sceneEdges[i].NextScene);
         }
-        neighboringScenes.sceneNames = new string[neighbors.Count];
-        neighbors.CopyTo(neighboringScenes.sceneNames);
+
+        neighboringScenes.Names = new string[neighbors.Count].ToList();
+        neighbors.CopyTo(neighboringScenes.Names.ToArray());
+
         return neighboringScenes;
     }
 
@@ -165,40 +264,24 @@ public class SceneStreamManager : MonoBehaviour
     /// </summary>
     /// <returns><c>true</c> if loaded; otherwise, <c>false</c>.</returns>
     /// <param name="sceneName">Scene name.</param>
-    public bool IsLoaded(string sceneName)
+    private bool IsLoaded(string sceneName)
     {
         return loadedScenes.Contains(sceneName);
     }
 
     /// <summary>
-    /// Loads a scene.
+    /// Unloads scenes beyond drawDistance. Assumes the near list has already been populated.
     /// </summary>
-    /// <param name="sceneName">Scene name.</param>
-    public void Load(string sceneName)
+    private void UnloadFarScenes()
     {
-        Load(activeScene, null, 0);
-    }
+        HashSet<string> far = new HashSet<string>(loadedScenes);
 
-    private delegate void InternalLoadedHandler(string sceneName, int distance);
+        far.ExceptWith(neighboringScenes);
 
-    /// <summary>
-    /// Loads a scene and calls an internal delegate when done. The delegate is
-    /// used by the LoadNeighbors() method.
-    /// </summary>
-    /// <param name="sceneName">Scene name.</param>
-    /// <param name="loadedHandler">Loaded handler.</param>
-    /// <param name="distance">Distance from the current scene.</param>
-    private void Load(string sceneName, InternalLoadedHandler loadedHandler, int distance)
-    {
-        if (IsLoaded(sceneName))
+        foreach (string sceneName in far)
         {
-            if (loadedHandler != null) loadedHandler(sceneName, distance);
-            return;
+            Unload(sceneName);
         }
-        loadingScenes.Add(sceneName);
-        if (logDebugInfo && distance > 0) Debug.Log("Scene Streamer: Loading " + sceneName + ".");
-
-        StartCoroutine(LoadAdditiveAsync(sceneName, loadedHandler, distance));
     }
 
     /// <summary>
@@ -212,11 +295,10 @@ public class SceneStreamManager : MonoBehaviour
         AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
 
         onLoading.Invoke(sceneName, asyncOperation);
+
         yield return asyncOperation;
 
         FinishLoad(sceneName, loadedHandler, distance);
-
-        GetTilemaps(sceneName);
     }
 
     /// <summary>
@@ -237,97 +319,24 @@ public class SceneStreamManager : MonoBehaviour
         if (loadedHandler != null) loadedHandler(sceneName, distance);
     }
 
-    /// <summary>
-    /// Unloads scenes beyond drawDistance. Assumes the near list has already been populated.
-    /// </summary>
-    private void UnloadFarScenes()
-    {
-        HashSet<string> far = new HashSet<string>(loadedScenes);
-        far.ExceptWith(neighboringScenes);
-        if (logDebugInfo && far.Count > 0) Debug.Log("Scene Streamer: Unloading scenes more than " + drawDistance + " away from current scene " + activeScene + ".");
+    #endregion
 
-        foreach (var sceneName in far)
-        {
-            Unload(sceneName);
-        }
+    #region Static Methods
 
-        StartCoroutine(RemoveTilemaps());
-    }
-
-    /// <summary>
-    /// Unloads a scene.
-    /// </summary>
-    /// <param name="sceneName">Scene name.</param>
-    public void Unload(string sceneName)
-    {
-        if (logDebugInfo) Debug.Log("Scene Streamer: Unloading scene " + sceneName + ".");
-
-        Destroy(GameObject.Find(sceneName));
-        loadedScenes.Remove(sceneName);
-
-        SceneManager.UnloadSceneAsync(sceneName);
-    }
-
-    public void GetTilemaps(string sceneName)
-    {
-        //lemapManager.instance.GetTilemaps(SceneManager.GetSceneByName(sceneName).GetRootGameObjects(), PlayerMovement.obstacleTiles);
-    }
-
-    public IEnumerator RemoveTilemaps()
-    {
-        yield return new WaitForEndOfFrame();
-        //emapManager.instance.RemoveTilemaps(PlayerMovement.obstacleTiles);
-    }
-
-    /// <summary>
-    /// Sets the current scene.
-    /// </summary>
-    /// <param name="sceneName">Scene name.</param>
     public static void SetActive(string sceneName)
     {
         instance.SetActiveScene(sceneName);
     }
 
-    /// <summary>
-    /// Determines if a scene is loaded.
-    /// </summary>
-    /// <returns><c>true</c> if loaded; otherwise, <c>false</c>.</returns>
-    /// <param name="sceneName">Scene name.</param>
-    public static bool IsSceneLoaded(string sceneName)
-    {
-        return instance.IsLoaded(sceneName);
-    }
+    #endregion
 
-    /// <summary>
-    /// Loads a scene.
-    /// </summary>
-    /// <param name="sceneName">Scene name.</param>
-    public static void LoadScene(string sceneName)
-    {
-        instance.Load(sceneName);
-    }
+    #region Nested Classes
 
-    /// <summary>
-    /// Unloads a scene.
-    /// </summary>
-    /// <param name="sceneName">Scene name.</param>
-    public static void UnloadScene(string sceneName)
-    {
-        instance.Unload(sceneName);
-    }
+    [System.Serializable] public class StringEvent : UnityEvent<string> 
+    { }
 
-    public string GetActiveScene()
-    {
-        return activeScene;   
-    }
+    [System.Serializable] public class StringAsyncEvent : UnityEvent<string, AsyncOperation> 
+    { }
 
-    public static bool IsLoading()
-    {
-        if (instance.loadingScenes.Count == 0)
-        {
-            Debug.Log("TRUE");
-            return true;
-        }
-        return false;
-    }
+    #endregion
 }

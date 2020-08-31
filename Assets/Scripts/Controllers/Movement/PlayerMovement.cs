@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Timers;
 using UnityEngine;
 
 /// <summary>
@@ -11,19 +10,38 @@ public class PlayerMovement : MovingObject
 {
     #region Variables
 
-    [SerializeField] [Range(1f, 30f)] private float fidgetDelay = 5f;
+    [SerializeField] [Range(1f, 30f)] private float fidgetDelay = 10f;
 
     [Header("Values")]
-    [SerializeField] [ReadOnly] private float fidgetTimer;
-    [SerializeField] [ReadOnly] private bool isRunning;
+    [SerializeField] private float fidgetTimer;
+    [SerializeField] private bool isRunning;
+
+    private new BoxCollider2D collider;
+
+    private InteractionController interactionController;
 
     #endregion
 
     #region Miscellaneous Methods
 
-    protected override bool GetInput(float horizontal, float vertical)
+    protected override void GetInput()
     {
-        bool input = base.GetInput(horizontal, vertical);
+        int horizontal = (int)Input.GetAxisRaw("Horizontal");
+        int vertical = (int)Input.GetAxisRaw("Vertical");
+
+        if (Mathf.Abs(horizontal) == 1)
+        {
+            vertical = 0;
+        }
+
+        Vector3 orientation = new Vector3(horizontal, vertical);
+
+        GetInput(orientation);
+    }
+
+    protected override bool GetInput(Vector3 orienation)
+    {
+        bool input = base.GetInput(orienation);
 
         if (input)
         {
@@ -37,12 +55,8 @@ public class PlayerMovement : MovingObject
     {
         if (Input.GetButtonDown("Horizontal") || Input.GetButtonDown("Vertical"))
         {
-            animator.SetFloat("moveX", Input.GetAxisRaw("Horizontal"));
-            animator.SetFloat("moveY", Input.GetAxisRaw("Vertical"));
-
-            //animator.SetBool("isWalking", true);
-
             ResetFidget();
+            ChangeOrienation(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
             return true;
         }
@@ -53,7 +67,15 @@ public class PlayerMovement : MovingObject
     protected override void DisableMovement()
     {
         base.DisableMovement();
-        StartCoroutine(EnableFidget());
+
+        EnableFidget();
+    }
+
+    protected override void ChangeOrienation(float horizontal, float vertical)
+    {
+        base.ChangeOrienation(horizontal, vertical);
+
+        collider.offset = new Vector2(horizontal, vertical);
     }
 
     private void ToggleRun()
@@ -64,42 +86,58 @@ public class PlayerMovement : MovingObject
         animatedMovement = isRunning ? "isRunning" : "isWalking";
     }
 
-    private IEnumerator EnableFidget()
+    private void EnableFidget()
     {
         fidgetTimer += Time.deltaTime;
 
         if (fidgetTimer > fidgetDelay)
         {
-            animator.SetBool("isFidgeting", true);
-
-            yield return new WaitForEndOfFrame();
-            float waitTime = animator.GetAnimationTime();
-
-            yield return new WaitForSeconds(waitTime);
-
-            animator.SetBool("isFidgeting", false);
-            fidgetTimer = 0;
+            ResetFidget();
+            animator.SetTrigger("isFidgeting");
         }
     }
 
     private void ResetFidget()
     {
-        if (animator.GetBool("isFidgeting"))
-        {
-            animator.SetBool("isFidgeting", false);
-        }
+        animator.ResetTrigger("isFidgeting");
 
         fidgetTimer = 0;
     }
 
     #endregion
 
+    #region Event Methods
+
+    private void InteractionController_OnInteract(object sender, bool condition)
+    {
+        if (condition)
+        {
+            canMove = !canMove;
+        }
+    }
+
+    #endregion
+
     #region Unity Methods
 
+    /// <summary>
+    /// Awake is called when the script instance is being loaded.
+    /// </summary>
+    protected override void Awake()
+    {
+        interactionController = GetComponent<InteractionController>();
+        interactionController.OnInteract += InteractionController_OnInteract;
+
+        collider = transform.Find("Interaction Collider").GetComponent<BoxCollider2D>();
+
+        base.Awake();
+    }
+
+    /// <summary>
+    /// Update is called once per frame.
+    /// </summary>
     protected override void Update()
     {
-        base.Update();
-
         if (Input.GetButtonDown("Toggle"))
         {
             isRunning = !isRunning;
@@ -112,6 +150,8 @@ public class PlayerMovement : MovingObject
 
             ToggleRun();
         }
+
+        base.Update();
     }
 
     #endregion

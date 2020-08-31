@@ -2,7 +2,13 @@
 
 public class RangeHandler : MonoBehaviour
 {
-    [HideInInspector] public bool playerInRange;
+    #region Properties
+
+    public bool IsPlayerInRange { get; private set; }
+
+    #endregion
+
+    #region Unity Methods
 
     /// <summary>
     /// Sent when another object enters a trigger collider attached to this object (2D physics only).
@@ -12,8 +18,7 @@ public class RangeHandler : MonoBehaviour
     {
         if (other.CompareTag(GameManager.PlayerTag()))
         {
-            playerInRange = true;
-            GameManager.instance.playerInRange = true;
+            IsPlayerInRange = true;
         }
     }
 
@@ -25,8 +30,9 @@ public class RangeHandler : MonoBehaviour
     {
         if (other.CompareTag(GameManager.PlayerTag()))
         {
-            playerInRange = false;
-            GameManager.instance.playerInRange = false;
+            IsPlayerInRange = false;
         }
     }
+
+    #endregion
 }

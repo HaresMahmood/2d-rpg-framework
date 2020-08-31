@@ -56,7 +56,7 @@ public class PartyController : UserInterfaceController
 
         yield return null;
 
-        Flags.isActive = isActive;
+        Flags.IsActive = isActive;
 
         if (isActive && condition)
         {
@@ -202,7 +202,7 @@ public class PartyController : UserInterfaceController
     /// </summary>
     protected override void Update()
     {
-        if (Flags.isActive)
+        if (Flags.IsActive)
         {
             GetInput("Horizontal");
         }

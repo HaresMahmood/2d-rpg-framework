@@ -305,15 +305,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a516b043198037d4f9d1996808cdf93f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogContainer: {fileID: 0}
-  language: 0
-  typingDelay: 0.03
-  isActive: 0
-  isTyping: 0
-  autoAdvance: 0
-  hasBranchingDialog: 0
-  choiceMade: 0
-  branchingDialog: {fileID: 0}
 --- !u!114 &8602099921811655821
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -326,13 +317,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6b41cf85c5a74e46af20887031d7773, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  eventSystem: {fileID: 0}
-  buttonAnimationDelay: 0.07
-  optionButtonPrefab: {fileID: 0}
-  optionContainer: {fileID: 0}
-  optionIndicator: {fileID: 0}
-  buttonIndex: 0
-  selectedButton: 0
 --- !u!1 &6002379217965659319
 GameObject:
   m_ObjectHideFlags: 0
@@ -501,6 +485,7 @@ GameObject:
   - component: {fileID: 5411629645143428498}
   - component: {fileID: 7945080590092970818}
   - component: {fileID: 1351163362760467619}
+  - component: {fileID: 8234754583912726172}
   m_Layer: 0
   m_Name: InventoryManager
   m_TagString: Untagged
@@ -553,6 +538,20 @@ MonoBehaviour:
   itemGrid: {fileID: 0}
   itemContainerPrefab: {fileID: 2769139777725332638, guid: e109c778a5d70ec4bbbde9c0cbcd2d6e,
     type: 3}
+--- !u!114 &8234754583912726172
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8918571298998130272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25f44241b19a14b47805ddacf287a0ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttons: []
+  userInterface: {fileID: 0}
 --- !u!1001 &3393467421920137384
 PrefabInstance:
   m_ObjectHideFlags: 0

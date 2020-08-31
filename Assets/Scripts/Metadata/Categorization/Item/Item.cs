@@ -27,7 +27,7 @@ public class Item : Categorizable
     public Sprite Sprite
     {
         get { return sprite; }
-        private set { sprite = value; }
+        set { sprite = value; }
     }
 
     public virtual ItemEffect Effect
@@ -38,7 +38,7 @@ public class Item : Categorizable
     public int Quantity
     {
         get { return quantity; }
-        set { Debug.Log(value);  quantity = value; }
+        set { quantity = value; }
     }
 
     public bool IsFavorite
@@ -76,7 +76,13 @@ public class Item : Categorizable
 
         #region Properties
 
-        protected override string Value
+        public CategoryConstant Value
+        {
+            get { return (CategoryConstant)value; }
+            set { this.value = (Category)Mathf.Clamp((int)value, 0, Enum.GetNames(typeof(Category)).Length - 1); }
+        }
+
+        protected override string StringValue
         {
             get { return value.ToString(); }
         }
@@ -99,7 +105,6 @@ public class Item : Categorizable
             TM,
             Berry,
             Other
-
         }
 
         #endregion

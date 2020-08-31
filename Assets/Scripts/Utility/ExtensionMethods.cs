@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -442,6 +444,7 @@ public static class ExtensionMethods
         return sibling;
     }
 
+    #if UNITY_EDITOR
     /// <summary>
     /// 
     /// </summary>
@@ -456,6 +459,7 @@ public static class ExtensionMethods
         r.y += padding / 2;
         EditorGUI.DrawRect(r, color);
     }
+    #endif
 
     /// <summary>
     /// 

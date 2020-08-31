@@ -136,7 +136,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59b137bf022ff8a49bcffe11b1f6579b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerInRange: 0
 --- !u!61 &1255434372671567403
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -208,7 +207,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 778195ca6bc605a43ba3e703b82754f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  runOnce: 0
 --- !u!199 &1255434372680427794
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -225,6 +223,7 @@ ParticleSystemRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -267,6 +266,8 @@ ParticleSystemRenderer:
   m_EnableGPUInstancing: 1
   m_ApplyActiveColorSpace: 1
   m_AllowRoll: 1
+  m_FreeformStretching: 0
+  m_RotateWithStretchDirection: 1
   m_VertexStreams: 00010304
   m_Mesh: {fileID: 0}
   m_Mesh1: {fileID: 0}
@@ -2366,6 +2367,62 @@ ParticleSystem:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
+  LifetimeByEmitterSpeedModule:
+    enabled: 0
+    m_Curve:
+      serializedVersion: 2
+      minMaxState: 1
+      scalar: 1
+      minScalar: 1
+      maxCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 1
+          inSlope: 0
+          outSlope: -0.8
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1
+          value: 0.2
+          inSlope: -0.8
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      minCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    m_Range: {x: 0, y: 1}
   ForceModule:
     enabled: 0
     x:
@@ -4940,9 +4997,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1255434374171468812}
-  - component: {fileID: 1255434374171468803}
   - component: {fileID: 1255434374171468813}
-  - component: {fileID: 6221786216356090311}
+  - component: {fileID: 7975490574064589920}
   m_Layer: 8
   m_Name: Overworld Item
   m_TagString: Collidable
@@ -4968,20 +5024,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1255434374171468803
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1255434374171468815}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b95b091463c68f142ae5289fec4d663f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  overworldItem: {fileID: 0}
-  duration: 0.3
 --- !u!61 &1255434374171468813
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5008,7 +5050,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.98, y: 0.98}
   m_EdgeRadius: 0
---- !u!114 &6221786216356090311
+--- !u!114 &7975490574064589920
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5017,7 +5059,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1255434374171468815}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52abf9112eae38f4ca9b1f203e8cc28e, type: 3}
+  m_Script: {fileID: 11500000, guid: 6746537ac66ee724d9ce0a4fe083214c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &2469898884194640567
@@ -5066,6 +5108,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

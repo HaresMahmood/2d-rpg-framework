@@ -75,7 +75,7 @@ public class MissionsController : CategoryUserInterfaceController
 
     public void SetActive(bool isActive)
     {
-        Flags.isActive = isActive;
+        Flags.IsActive = isActive;
 
         userInterface.ActivateSubMenu(selectedValue);
 

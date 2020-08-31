@@ -12,14 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67de09d52199d944d92ac06b5078ab34, type: 3}
   m_Name: Heal Ball
   m_EditorClassIdentifier: 
-  name: Heal Ball
   id: 0
+  name: Heal Ball
   description: "A remedial Pok\xE9 Ball that restores the HP of a Pok\xE9mon caught
     with it and eliminates any status conditions."
+  categorization:
+    value: 0
   sprite: {fileID: 5884205894442111927, guid: 7233ad1b3e5ed1d46b02dce8aa6ace9c, type: 3}
-  effect: 
-  category: 2
-  amount: 2
-  behavior: {fileID: 0}
+  quantity: 0
   isFavorite: 0
   isNew: 0

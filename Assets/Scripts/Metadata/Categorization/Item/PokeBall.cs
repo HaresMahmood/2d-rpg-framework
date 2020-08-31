@@ -34,7 +34,7 @@ public class PokeBall : Holdable
 
         #region Properties
 
-        protected override string Value
+        protected override string StringValue
         {
             get { return value.ToString(); }
         }

@@ -41,7 +41,7 @@ public abstract class Categorizable : ScriptableObject
     {
         #region Properies
 
-        protected virtual string Value { get; }
+        protected virtual string StringValue { get; }
 
         #endregion
 
@@ -49,7 +49,7 @@ public abstract class Categorizable : ScriptableObject
 
         public override string ToString()
         {
-            return Value;
+            return StringValue;
         }
 
         public virtual string GetCategoryFromIndex(int index)

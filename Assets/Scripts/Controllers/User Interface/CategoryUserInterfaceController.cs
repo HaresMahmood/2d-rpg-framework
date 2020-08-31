@@ -48,7 +48,7 @@ public abstract class CategoryUserInterfaceController : UserInterfaceController
 
         yield return null;
 
-        Flags.isActive = isActive;
+        Flags.IsActive = isActive;
 
         if (isActive && condition)
         {

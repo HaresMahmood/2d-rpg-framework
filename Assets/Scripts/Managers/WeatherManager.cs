@@ -16,9 +16,9 @@ public class WeatherManager : MonoBehaviour
     [SerializeField] private Transform particleSystems;
 
     [Header("Values")]
-    [ReadOnly] [SerializeField] private WeatherState previousWeather;
-    [ReadOnly] [SerializeField] private WeatherState weather;
-    [ReadOnly] [SerializeField] private WeatherState nextWeather;
+    [SerializeField] private WeatherState previousWeather;
+    [SerializeField] private WeatherState weather;
+    [SerializeField] private WeatherState nextWeather;
 
     private bool isFlashingLight;
 
@@ -244,25 +244,25 @@ public class WeatherManager : MonoBehaviour
     public IEnumerator ChangeWeather()
     {
         //yield return new WaitUntil(() => SceneStreamManager.IsSceneLoaded(SceneStreamManager.instance.GetActiveScene()));
-        while (!SceneStreamManager.IsSceneLoaded(SceneStreamManager.instance.GetActiveScene()))
-        {
+        //while (!SceneStreamManager.IsSceneLoaded(SceneStreamManager.instance.GetActiveScene()))
+        //{
             yield return null;
-        }
+        //}
 
-        List<WeatherState> weatherStates = FindObjectOfType<WeatherStates>().GetWeatherStates();
+        //List<WeatherState> weatherStates = FindObjectOfType<WeatherStates>().GetWeatherStates();
 
-        if (weather == WeatherState.None)
-        {
-            weather = SetRandomWeather(weatherStates);
-            nextWeather = SetRandomWeather(weatherStates);
-        }
-        else
-        {
-            previousWeather = weather;
-            weather = nextWeather;
-        }
-        nextWeather = SetRandomWeather(weatherStates);
-        SetWeatherEffects(weather);
+        //if (weather == WeatherState.None)
+        //{
+        //    weather = SetRandomWeather(weatherStates);
+        //    nextWeather = SetRandomWeather(weatherStates);
+        //}
+        //else
+        //{
+        //    previousWeather = weather;
+        //    weather = nextWeather;
+        //}
+        //nextWeather = SetRandomWeather(weatherStates);
+        SetWeatherEffects(WeatherState.None);
     }
 
     #endregion

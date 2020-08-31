@@ -38,7 +38,7 @@ public class SettingsCategoryUserInterfaceController : UserInterfaceController
         userInterface.ActivatePanel(isActive ? 1f : 0.3f);
 
         selectedValue = 0;
-        Flags.isActive = isActive;
+        Flags.IsActive = isActive;
 
         yield break;
     }

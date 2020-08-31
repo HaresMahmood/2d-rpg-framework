@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Tilemaps;
-using DG.Tweening;
+﻿using UnityEngine;
 
 /// <summary>
 /// Defines collision for Tilemaps and Characters and
@@ -37,35 +33,39 @@ public abstract class MovingObject : MonoBehaviour
 
     #region Properties
 
-
+    public Vector3 Orienation { get { return orientation; } }
+    public bool CanMove { get { return canMove; } set { canMove = value; } }
 
     #endregion
 
     #region Miscellaneous Methods
 
-    protected virtual bool GetInput(float horizontal, float vertical)
+    protected virtual void Move()
     {
-        if (Mathf.Abs(horizontal) == 1f)
+        transform.position = Vector3.MoveTowards(transform.position, movePoint.position, moveSpeed * Time.deltaTime);
+
+        if (Vector3.Distance(transform.position, movePoint.position) <= 0.05f) //  && !IsTappingButton()
         {
-            if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(horizontal, 0f, 0f), radius, collisionLayer))
+            if (!IsTappingButton())
             {
-                movePoint.position += new Vector3(horizontal, 0f, 0f);
+                GetInput();
             }
-
-            animator.SetFloat("moveX", horizontal);
-            animator.SetFloat("moveY", vertical);
-
-            return true;
         }
-        else if (Mathf.Abs(vertical) == 1f)
+        else
         {
-            if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(0f, vertical, 0f), radius, collisionLayer))
-            {
-                movePoint.position += new Vector3(0f, vertical, 0f);
-            }
+            animator.SetBool(animatedMovement, true);
+        }
+    }
 
-            animator.SetFloat("moveX", horizontal);
-            animator.SetFloat("moveY", vertical);
+    protected abstract void GetInput();
+
+    protected virtual bool GetInput(Vector3 orientation)
+    {
+        if (NoCollision(orientation))
+        {
+            movePoint.position += orientation;
+
+            ChangeOrienation(orientation.x, orientation.y);
 
             return true;
         }
@@ -77,6 +77,11 @@ public abstract class MovingObject : MonoBehaviour
         return false;
     }
 
+    protected virtual bool NoCollision(Vector3 orientation) // TODO: Bad name
+    {
+        return !Physics2D.OverlapCircle(movePoint.position + orientation, radius, collisionLayer);
+    }
+
     protected virtual bool IsTappingButton()
     {
         return false;
@@ -85,6 +90,14 @@ public abstract class MovingObject : MonoBehaviour
     protected virtual void DisableMovement()
     {
         animator.SetBool(animatedMovement, false);
+    }
+
+    protected virtual void ChangeOrienation(float horizontal, float vertical)
+    {
+        animator.SetFloat("moveX", horizontal);
+        animator.SetFloat("moveY", vertical);
+
+        orientation = new Vector3(horizontal, vertical);
     }
 
     #endregion
@@ -103,25 +116,13 @@ public abstract class MovingObject : MonoBehaviour
     }
 
     /// <summary>
-    /// Start is called before the first frame update.
+    /// Update is called once per frame.
     /// </summary>
     protected virtual void Update()
     {
         if (canMove)
         {
-            transform.position = Vector3.MoveTowards(transform.position, movePoint.position, moveSpeed * Time.deltaTime);
-
-            if (Vector3.Distance(transform.position, movePoint.position) <= 0.05f) //  && !IsTappingButton()
-            {
-                if (!IsTappingButton())
-                {
-                    GetInput(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-                }
-            }
-            else
-            {
-                animator.SetBool(animatedMovement, true);
-            }
+            Move();
         }
     }
 

@@ -30,7 +30,6 @@ public class BranchingDialog : ScriptableObject
         [SerializeField] private string text;
         [SerializeField] private Dialog nextDialog;
         [SerializeField] private UnityEvent branchEvent;
-        [SerializeField] private bool hasBackButton;
 
         #endregion
 
@@ -52,12 +51,6 @@ public class BranchingDialog : ScriptableObject
         {
             get { return branchEvent; }
             set { branchEvent = value; }
-        }
-
-        public bool HasBackButton
-        {
-            get { return hasBackButton; }
-            set { hasBackButton = value; }
         }
 
         #endregion

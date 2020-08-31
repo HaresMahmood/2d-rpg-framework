@@ -52,7 +52,7 @@ public class SaveUserInterfcaeController : UserInterfaceController
             yield return new WaitForSecondsRealtime(0.1f);
         }
 
-        Flags.isActive = isActive;
+        Flags.IsActive = isActive;
 
         StartCoroutine(base.SetActive(isActive, condition));
     }
@@ -85,7 +85,7 @@ public class SaveUserInterfcaeController : UserInterfaceController
     /// </summary>
     protected override void Update()
     {
-        if (Flags.isActive)
+        if (Flags.IsActive)
         {
             GetInput("Horizontal");
         }

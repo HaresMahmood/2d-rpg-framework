@@ -15,12 +15,20 @@ public class DialogUserInterface : UserInterface
 
     #endregion
 
+    #region Properties
+
+    public TextFade DialogText { get; private set; } 
+
+    #endregion
+
     #region Variables
 
     private Animator animator;
 
-    private TextFade dialogText;
     private TextMeshProUGUI nameText;
+
+    private CanvasGroup pausePanel;
+    private CanvasGroup autoAdvanceIcon;
 
     private Dialog.DialogData dialog;
 
@@ -52,6 +60,8 @@ public class DialogUserInterface : UserInterface
 
             gameObject.SetActive(false);
             selector.gameObject.SetActive(false);
+
+            Stop();
         }
     }
 
@@ -80,7 +90,27 @@ public class DialogUserInterface : UserInterface
 
     public bool Stop()
     {
-        return dialogText.StopFade();
+        return DialogText.StopFade();
+    }
+
+    public void ToggleAutoAdvance(bool isActive)
+    {
+        Sequence sequence = DOTween.Sequence();
+
+        if (!autoAdvanceIcon.gameObject.activeSelf && isActive)
+        {
+            autoAdvanceIcon.gameObject.SetActive(true);
+        }
+
+        sequence.Append(autoAdvanceIcon.DOFade(isActive ? 1f : 0f, 0.15f));
+
+        sequence.OnComplete(() =>
+        {
+            if (!isActive)
+            {
+                autoAdvanceIcon.gameObject.SetActive(false);
+            }
+        });
     }
 
     private void SetText(string text)
@@ -89,23 +119,7 @@ public class DialogUserInterface : UserInterface
         //selector.SetActive(false);
         //StartCoroutine(AnimateSelector());
         DeactivateSelector();
-        dialogText.FadeTo(text);
-    }
-
-    private void DialogText_OnFadeComplete(object sender, System.EventArgs e)
-    {
-        if (dialog.Branch == null)
-        {
-            selector.gameObject.SetActive(true);
-            nameText.DOFade(0f, 0.1f);
-        }
-        else
-        {
-            StartCoroutine(DialogUserInterfaceController.Instance.SetActive(false, false));
-            //StartCoroutine(ActivateBranchedPanel(true));
-        }
-
-        //StartCoroutine(UpdateSelector(transform.Find("Base")));
+        DialogText.FadeTo(text);
     }
 
     /*
@@ -200,6 +214,33 @@ public class DialogUserInterface : UserInterface
 
     #endregion
 
+    #region Event Methods
+
+    private void DialogText_OnFadeComplete(object sender, System.EventArgs e)
+    {
+        if (dialog.Branch == null)
+        {
+            if (!((DialogUserInterfaceController.DialogUserInterfaceFlags)DialogUserInterfaceController.Instance.Flags).IsAutoAdvanceOn) // TODO: Debug
+            {
+                selector.gameObject.SetActive(true);
+                nameText.DOFade(0f, 0.1f);
+            }
+        }
+        else
+        {
+            if (gameObject.activeSelf)
+            {
+                StartCoroutine(DialogUserInterfaceController.Instance.SetActive(false, false));
+            }
+
+            //StartCoroutine(ActivateBranchedPanel(true));
+        }
+
+        //StartCoroutine(UpdateSelector(transform.Find("Base")));
+    }
+
+    #endregion
+
     #region Unity Methods
 
     /// <summary>
@@ -209,22 +250,16 @@ public class DialogUserInterface : UserInterface
     {
         animator = GetComponent<Animator>();
 
-        dialogText = transform.Find("Text").GetComponent<TextFade>();
+        DialogText = transform.Find("Text").GetComponent<TextFade>();
         nameText = transform.Find("Name").GetComponent<TextMeshProUGUI>();
+
+        pausePanel = transform.parent.Find("Pause Panel").GetComponent<CanvasGroup>();
+        autoAdvanceIcon = transform.Find("Auto Advance").GetComponent<CanvasGroup>();
 
         selector = transform.Find("Selector").GetComponent<SelectorController>();
         selector.gameObject.SetActive(false);
 
-        dialogText.OnFadeComplete += DialogText_OnFadeComplete;
-    }
-
-
-    /// <summary>
-    /// Start is called before the first frame update.
-    /// </summary>
-    private void Start()
-    {
-        
+        DialogText.OnFadeComplete += DialogText_OnFadeComplete;
     }
 
     #endregion

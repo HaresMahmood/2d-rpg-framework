@@ -48,7 +48,7 @@ public class QuantitySelectorController : UserInterfaceController
 
         yield return null;
 
-        Flags.isActive = isActive;
+        Flags.IsActive = isActive;
     }
 
     protected override void InteractInput(int selectedValue)

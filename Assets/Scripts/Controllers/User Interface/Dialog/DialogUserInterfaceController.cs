@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -12,6 +13,8 @@ public class DialogUserInterfaceController : UserInterfaceController
     private static DialogUserInterfaceController instance;
 
     [SerializeField] private DialogUserInterface userInterface;
+
+    private DialogUserInterfaceFlags flags = new DialogUserInterfaceFlags(false, false, false);
 
     #endregion
 
@@ -38,13 +41,44 @@ public class DialogUserInterfaceController : UserInterfaceController
         get { return userInterface; }
     }
 
+    public override UserInterfaceFlags Flags
+    {
+        get { return flags; }
+    }
+
     public List<Dialog.DialogData> Dialog { private get; set; }
 
     #endregion
 
     #region Variables
 
+    [Header("Settings")]
+    [SerializeField] private float waitTime = 1f;
+
     private DialogController controller;
+
+    #endregion
+
+    #region Events
+
+    public event EventHandler<Type> OnDialogPause;
+
+    #endregion
+
+    #region Nested Classes
+
+    public class DialogUserInterfaceFlags : UserInterfaceFlags
+    {
+        public bool IsAutoAdvanceOn { get; internal set; } // TODO: Bad name
+        public bool IsSentenceComplete { get; internal set; } // TODO: Bad name
+
+        internal DialogUserInterfaceFlags(bool isActive, bool isAutoAdvanceOn, bool isSentenceComplete) : base(isActive)
+        {
+            IsActive = isActive;
+            IsAutoAdvanceOn = isAutoAdvanceOn;
+            IsSentenceComplete = isSentenceComplete;
+        }
+    }
 
     #endregion
 
@@ -62,7 +96,7 @@ public class DialogUserInterfaceController : UserInterfaceController
             }
             else
             {
-                StartCoroutine(SetActive(false));
+                StartCoroutine(SetActive(false, true));
                 yield break;
             }
 
@@ -80,9 +114,15 @@ public class DialogUserInterfaceController : UserInterfaceController
             }
             else
             {
-                StartCoroutine(SetActive(isActive));
+                StartCoroutine(SetActive(isActive, true));
                 yield break;
             }
+        }
+        else if (!isActive)
+        {
+            controller.SetActive(isActive); // TODO: Debug
+
+            flags.IsSentenceComplete = false;
         }
 
         if (condition)
@@ -90,7 +130,19 @@ public class DialogUserInterfaceController : UserInterfaceController
             StartCoroutine(userInterface.ActivatePanel(isActive));
         }
 
-        Flags.isActive = isActive;
+        Flags.IsActive = isActive;
+    }
+
+    public void ToggleAutoAdvance()
+    {
+        flags.IsAutoAdvanceOn = !flags.IsAutoAdvanceOn;
+
+        userInterface.ToggleAutoAdvance(flags.IsAutoAdvanceOn);
+
+        if (flags.IsActive && flags.IsAutoAdvanceOn && flags.IsSentenceComplete)
+        {
+            NextSentence();
+        }
     }
 
     protected override void GetInput(string axisName)
@@ -99,32 +151,83 @@ public class DialogUserInterfaceController : UserInterfaceController
         {
             if (!userInterface.Stop())
             {
-                if (selectedValue < Dialog.Count - 1 || Dialog == null)
-                {
-                    selectedValue++;
-                    userInterface.UpdateInformation(Dialog[selectedValue]);
-                }
-                else
-                {
-                    if (Dialog[selectedValue].Branch == null)
-                    {
-                        StartCoroutine(userInterface.ActivatePanel(false));
-                        controller.SetActive(false);
-                    }
-                }
+                NextSentence();
             }
-
-            //Debug.Log("Pressed Interact");
         }
 
         if (Input.GetButtonDown("Toggle"))
         {
-            Debug.Log("Pressed Toggle");
+            ToggleAutoAdvance();
         }
 
         if (Input.GetButtonDown("Start"))
         {
-            Debug.Log("Pressed Start");
+            StartCoroutine(SetActive(false));
+
+            OnDialogPause?.Invoke(this, GetType());
+        }
+    }
+
+    private IEnumerator SetActive(bool isActive)
+    {
+        yield return null;
+
+        Flags.IsActive = isActive;
+    }
+
+    private IEnumerator AutoAdvance()
+    {
+        yield return new WaitForSeconds(waitTime);
+
+        NextSentence();
+    }
+
+    private void NextSentence()
+    {
+        if (Dialog != null)
+        {
+            if (selectedValue < Dialog.Count - 1)
+            {
+                selectedValue++;
+                userInterface.UpdateInformation(Dialog[selectedValue]);
+            }
+            else
+            {
+                if (Dialog[selectedValue].Branch == null)
+                {
+                    StartCoroutine(userInterface.ActivatePanel(false));
+                    controller.SetActive(false);
+                }
+            }
+        }
+
+        flags.IsSentenceComplete = false;
+    }
+
+    #endregion
+
+    #region Event Methods
+
+    private void DialogPauseUserInterfaceController_OnDialogUnpause(object sender, Type type)
+    {
+        if (type == GetType())
+        {
+            StartCoroutine(SetActive(true));
+        }
+    }
+
+    private void DialogPauseUserInterfaceController_OnDialogSkip(object sender, Type type)
+    {
+        StartCoroutine(SetActive(false, true));
+    }
+
+    private void DialogText_OnFadeComplete(object sender, System.EventArgs e)
+    {
+        flags.IsSentenceComplete = true;
+
+        if (flags.IsAutoAdvanceOn)
+        {
+            StartCoroutine(AutoAdvance());
         }
     }
 
@@ -138,6 +241,17 @@ public class DialogUserInterfaceController : UserInterfaceController
     private void Awake()
     {
         controller = GetComponent<DialogController>();
+
+        GetComponent<DialogPauseUserInterfaceController>().OnDialogDUnpause += DialogPauseUserInterfaceController_OnDialogUnpause;
+        GetComponent<DialogPauseUserInterfaceController>().OnDialogSkip += DialogPauseUserInterfaceController_OnDialogSkip;
+    }
+
+    /// <summary>
+    /// Start is called before the first frame update.
+    /// </summary>
+    private void Start()
+    {
+        userInterface.DialogText.OnFadeComplete += DialogText_OnFadeComplete;
     }
 
     #endregion 
