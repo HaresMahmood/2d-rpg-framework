@@ -27,6 +27,7 @@ public class HoverButton : MonoBehaviour, ISelectHandler, IDeselectHandler, IPoi
     public void OnPointerEnter(PointerEventData eventData)
     {
         transform.Find("Text").gameObject.SetActive(true);
+        transform.Find("Selector").gameObject.SetActive(true);
         GetComponentInParent<MovesUserInterface>().DeselectButtons(GetComponent<Button>());
     }
 
@@ -42,13 +43,20 @@ public class HoverButton : MonoBehaviour, ISelectHandler, IDeselectHandler, IPoi
     public void OnSelect(BaseEventData eventData)
     {
         transform.Find("Text").gameObject.SetActive(true);
+        transform.Find("Selector").gameObject.SetActive(true);
         LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponentInParent<RectTransform>());
     }
 
     public void OnDeselect(BaseEventData eventData)
     {
         transform.Find("Text").gameObject.SetActive(false);
+        transform.Find("Selector").gameObject.SetActive(false);
         LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponentInParent<RectTransform>());
+    }
+
+    public void Awake()
+    {
+        transform.Find("Selector").gameObject.SetActive(false);
     }
 
     #endregion

@@ -25,6 +25,7 @@ public class MovesUserInterface : MonoBehaviour
             //if (button.)
 
             button.transform.Find("Text").gameObject.SetActive(false);
+            button.transform.Find("Selector").gameObject.SetActive(false);
         }
 
         LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponentInParent<RectTransform>());
