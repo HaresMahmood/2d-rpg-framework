@@ -740,7 +740,7 @@ Transform:
   m_Children:
   - {fileID: 692848899}
   m_Father: {fileID: 1989063985}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &402703097
 GameObject:
@@ -2450,6 +2450,7 @@ GameObject:
   - component: {fileID: 833804602}
   - component: {fileID: 833804603}
   - component: {fileID: 833804604}
+  - component: {fileID: 833804605}
   m_Layer: 5
   m_Name: Moves
   m_TagString: Untagged
@@ -2520,6 +2521,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 2
   m_VerticalFit: 2
+--- !u!114 &833804605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 833804601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 588ad7b9b1de41f428bb50db529f683e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &880528652
 GameObject:
   m_ObjectHideFlags: 0
@@ -4260,6 +4273,58 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1417975767
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1417975768}
+  - component: {fileID: 1417975769}
+  m_Layer: 0
+  m_Name: Game
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1417975768
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1417975767}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1989063985}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1417975769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1417975767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d32f2d2633f54434ea460a26e4bafba2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  activePlayer: {fileID: 0}
+  accentColor: {r: 0.31764707, g: 0.7607843, b: 0.9882353, a: 1}
+  dyslexiaFont: {fileID: 0}
+  dyslexiaMode: 0
+  playerInRange: 0
+  playerName: Hilliard
+  debug: 0
+  oppositeColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &1458879853
 GameObject:
   m_ObjectHideFlags: 0
@@ -6597,6 +6662,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 1417975768}
   - {fileID: 342790200}
   m_Father: {fileID: 0}
   m_RootOrder: 5
@@ -7644,6 +7710,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6251952016540305464, guid: 5bf2aa5c9081c7242a0833cf8abd0b54,
+        type: 3}
+      propertyPath: m_Colors.m_NormalColor.a
+      value: 0.6509804
       objectReference: {fileID: 0}
     - target: {fileID: 6890796058512841730, guid: 5bf2aa5c9081c7242a0833cf8abd0b54,
         type: 3}
