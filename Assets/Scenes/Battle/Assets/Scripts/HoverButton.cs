@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 /// <summary>
 ///
 /// </summary>
-public class HoverButton : MonoBehaviour, ISelectHandler, IDeselectHandler, IPointerEnterHandler, IPointerExitHandler
+public class HoverButton : MonoBehaviour, ISelectHandler, IDeselectHandler, IPointerEnterHandler //, IPointerExitHandler
 {
     #region Variables
 
@@ -27,14 +27,16 @@ public class HoverButton : MonoBehaviour, ISelectHandler, IDeselectHandler, IPoi
     public void OnPointerEnter(PointerEventData eventData)
     {
         transform.Find("Text").gameObject.SetActive(true);
-        LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponentInParent<RectTransform>());
+        GetComponentInParent<MovesUserInterface>().DeselectButtons(GetComponent<Button>());
     }
 
+    /*
     public void OnPointerExit(PointerEventData eventData)
     {
         transform.Find("Text").gameObject.SetActive(false);
         LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponentInParent<RectTransform>());
     }
+    */
 
     // When selected.
     public void OnSelect(BaseEventData eventData)
