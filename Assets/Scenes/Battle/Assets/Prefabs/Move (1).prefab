@@ -35,7 +35,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 445, y: 35}
+  m_SizeDelta: {x: 445, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5712652551776327018
 CanvasRenderer:
@@ -96,8 +96,8 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 35
-  m_fontSizeBase: 35
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -188,7 +188,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 445, y: 70}
+  m_SizeDelta: {x: 445, y: 65}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2706453222353098878
 CanvasRenderer:
@@ -249,15 +249,15 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 70
+  m_fontSize: 52
   m_fontSizeBase: 70
   m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 50
+  m_fontSizeMax: 67.5
   m_fontStyle: 0
   m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -268,7 +268,7 @@ MonoBehaviour:
   m_enableWordWrapping: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
-  m_firstOverflowCharacterIndex: 0
+  m_firstOverflowCharacterIndex: -1
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_isTextTruncated: 0
@@ -317,6 +317,7 @@ GameObject:
   - component: {fileID: 2222884862947921633}
   - component: {fileID: 4572950690605187740}
   - component: {fileID: 7231641698534327331}
+  - component: {fileID: 3500548666180725504}
   m_Layer: 5
   m_Name: Icon
   m_TagString: Untagged
@@ -381,6 +382,43 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &3500548666180725504
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4354271399106185254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddb68bb22ede0e042ac0bccc4bc56925, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  icon: {fileID: 0}
+  text: {fileID: 0}
+  icons:
+  - {fileID: 21300000, guid: 8ada73e81a88c574e936eee276d02ede, type: 3}
+  - {fileID: 21300000, guid: 15e8114bba6313345b6d7aa74791c591, type: 3}
+  - {fileID: 21300000, guid: 895c23e04fe5bcf4a8777a4223451c1f, type: 3}
+  - {fileID: 21300000, guid: f295d34ac73d83840a0e46ccf488ef0b, type: 3}
+  - {fileID: 21300000, guid: e409d7ce086b03148bf718f60d1757ce, type: 3}
+  - {fileID: 21300000, guid: 6b49fdd9a7869324ba0f1a5b5790b961, type: 3}
+  - {fileID: 21300000, guid: fe53d383999adcc49b21ad4a25c626bb, type: 3}
+  - {fileID: 21300000, guid: 314929c029e57a94bad3ae62bfad6f20, type: 3}
+  - {fileID: 21300000, guid: b38f31bf77c3c2a4391673060064fb31, type: 3}
+  - {fileID: 21300000, guid: 0468e92407047a3469f0bea1c1daf834, type: 3}
+  - {fileID: 21300000, guid: 3fe1434bd79d45644ac7c89aba0bc5f5, type: 3}
+  - {fileID: 21300000, guid: b6d38e0aa995adb468e225dd0b712a9c, type: 3}
+  - {fileID: 21300000, guid: 2dcb995e50adf8a4faa34fb24bf39179, type: 3}
+  - {fileID: 21300000, guid: 6b49fc2caeb2f8647843c62996ab56e3, type: 3}
+  - {fileID: 21300000, guid: b4a6510540d4b1743bbe14b8e984f1ba, type: 3}
+  - {fileID: 21300000, guid: 66c075194015ee44a94708e6112584a3, type: 3}
+  - {fileID: 21300000, guid: 942e70bd59a2e9244adad16d01befa59, type: 3}
+  - {fileID: 21300000, guid: d7d1ae37dfd0beb44bd351855072a4ae, type: 3}
+  - {fileID: 21300000, guid: 6a79658301ab980458af15dd4ad02719, type: 3}
+  type:
+    value: 0
+  sprite: {fileID: 0}
 --- !u!1 &4906659472107726402
 GameObject:
   m_ObjectHideFlags: 0
@@ -534,7 +572,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 3
-  m_Spacing: 15
+  m_Spacing: 7.5
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
@@ -750,3 +788,4 @@ MonoBehaviour:
   move:
     value: {fileID: 11400000, guid: e02e8ad176deaab409a2edffa7cd44f8, type: 2}
     pp: 0
+  manager: {fileID: 0}

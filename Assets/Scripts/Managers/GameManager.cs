@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
 
     [UnityEngine.Header("Global Settings")]
     [SerializeField] private Transform activePlayer;
-    [SerializeField] private Color accentColor = "51C2FC".ToColor();
+    public Color accentColor = "51C2FC".ToColor();
     [SerializeField] private TMP_FontAsset dyslexiaFont;
     [SerializeField] private bool dyslexiaMode;
 
@@ -42,8 +42,6 @@ public class GameManager : MonoBehaviour
         if (instance == null)
             instance = this;
 
-
-
         if (player != null)
         {
             for (int i = 0; i < player.childCount; i++)
@@ -61,7 +59,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        ApplySettings();
+        //ApplySettings();
     }
 
     private void ApplySettings()

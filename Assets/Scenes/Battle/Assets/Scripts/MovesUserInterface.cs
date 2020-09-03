@@ -40,6 +40,15 @@ public class MovesUserInterface : MonoBehaviour
         buttons = GetComponentsInChildren<Button>().ToList();
     }
 
+    private void Start()
+    {
+        for (int i = 1; i < buttons.Count; i++)
+        {
+            buttons[i].transform.Find("Text").gameObject.SetActive(false);
+            buttons[i].transform.Find("Selector").gameObject.SetActive(false);
+        }
+    }
+
     #endregion
 }
 

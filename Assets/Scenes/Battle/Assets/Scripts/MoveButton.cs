@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -12,11 +10,12 @@ public class MoveButton : MonoBehaviour
     #region Variables
 
     [SerializeField] private PartyMember.MemberMove move;
+    [SerializeField] private GameManager manager;
 
     private TextMeshProUGUI moveName;
     private TextMeshProUGUI pp;
 
-    private Image icon;
+    private TypingIconUserInterface icon;
 
     #endregion
 
@@ -25,9 +24,16 @@ public class MoveButton : MonoBehaviour
     public void SetInformation(PartyMember.MemberMove move)
     {
         moveName.SetText(move.Value.name);
-        pp.SetText($"<color=#{ColorUtility.ToHtmlStringRGB(GameManager.GetAccentColor())}>PP</color> {move.PP.ToString()}/{move.Value.pp}");
+        pp.SetText($"<color=#{ColorUtility.ToHtmlStringRGB(manager.accentColor)}>PP</color> {move.PP}/{move.Value.pp}");
 
-        //icon.sprite = move.Value.
+        icon.Value = move.Value.typing.Value;
+        icon.UpdateUserInterface(icon.Type, icon.Icon);
+
+        float h, s;
+
+        Color.RGBToHSV(new Color(icon.Type.Color.r, icon.Type.Color.g, icon.Type.Color.b), out h, out s, out _);
+        Color color = Color.HSVToRGB(h, s, 0.75f);
+        GetComponent<Image>().color = new Color(color.r, color.g, color.b, 0.5f);
     }
 
     #endregion
@@ -38,7 +44,7 @@ public class MoveButton : MonoBehaviour
     {
         moveName = transform.Find("Text/Name").GetComponent<TextMeshProUGUI>();
         pp = transform.Find("Text/PP").GetComponent<TextMeshProUGUI>();
-        icon = transform.Find("Icon").GetComponent<Image>();
+        icon = transform.Find("Icon").GetComponent<TypingIconUserInterface>();
 
         SetInformation(move);
     }

@@ -54,11 +54,6 @@ public class HoverButton : MonoBehaviour, ISelectHandler, IDeselectHandler, IPoi
         LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponentInParent<RectTransform>());
     }
 
-    public void Awake()
-    {
-        transform.Find("Selector").gameObject.SetActive(false);
-    }
-
     #endregion
 }
 
