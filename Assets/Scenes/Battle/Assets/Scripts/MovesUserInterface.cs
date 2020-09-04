@@ -38,6 +38,11 @@ public class MovesUserInterface : MonoBehaviour
     private void Awake()
     {
         buttons = GetComponentsInChildren<Button>().ToList();
+
+        for (int i = 0; i < buttons.Count; i++)
+        {
+            buttons[i].GetComponent<MoveButton>().Index = i;
+        }
     }
 
     private void Start()

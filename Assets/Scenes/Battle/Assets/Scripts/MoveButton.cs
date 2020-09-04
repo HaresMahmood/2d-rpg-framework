@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -5,11 +6,10 @@ using TMPro;
 /// <summary>
 ///
 /// </summary>
-public class MoveButton : MonoBehaviour
+public class MoveButton : UserInterfaceComponent
 {
     #region Variables
 
-    [SerializeField] private PartyMember.MemberMove move;
     [SerializeField] private GameManager manager;
 
     private TextMeshProUGUI moveName;
@@ -19,10 +19,20 @@ public class MoveButton : MonoBehaviour
 
     #endregion
 
+    #region Properties
+
+    public int Index { private get; set; }
+
+    #endregion
+
     #region Miscellaneous Methods
 
-    public void SetInformation(PartyMember.MemberMove move)
+    public override void SetInformation<T>(T information)
     {
+        Party party = (Party)Convert.ChangeType(information, typeof(Party));
+        PartyMember member = party.playerParty[0];
+        PartyMember.MemberMove move = member.ActiveMoves[Index];
+
         moveName.SetText(move.Value.name);
         pp.SetText($"<color=#{ColorUtility.ToHtmlStringRGB(manager.accentColor)}>PP</color> {move.PP}/{move.Value.pp}");
 
@@ -36,27 +46,11 @@ public class MoveButton : MonoBehaviour
         GetComponent<Image>().color = new Color(color.r, color.g, color.b, 0.5f);
     }
 
-    #endregion
-    
-    #region Unity Methods
-    
-    private void Awake()
+    protected override void SetInspectorValues()
     {
         moveName = transform.Find("Text/Name").GetComponent<TextMeshProUGUI>();
         pp = transform.Find("Text/PP").GetComponent<TextMeshProUGUI>();
         icon = transform.Find("Icon").GetComponent<TypingIconUserInterface>();
-
-        SetInformation(move);
-    }
-
-    private void Start()
-    {
-        
-    }
-
-    private void Update()
-    {
-        
     }
 
     #endregion

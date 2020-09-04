@@ -1029,7 +1029,7 @@ public class PartyMemberEditor : Editor
 
         EditorUtility.SetDirty(target);
 
-        //base.OnInspectorGUI();
+        base.OnInspectorGUI();
     }
 
     /*

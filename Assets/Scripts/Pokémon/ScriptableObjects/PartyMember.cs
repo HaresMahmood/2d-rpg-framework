@@ -22,6 +22,7 @@ public class PartyMember : ScriptableObject
     [SerializeField] private List<MemberMove> learnedMoves = new List<MemberMove>();
     [SerializeField] private Item heldItem;
     [SerializeField] private MemberStats stats = new MemberStats();
+    [SerializeField] private bool isOnField;
 
     #endregion
 
@@ -105,6 +106,12 @@ public class PartyMember : ScriptableObject
     public MemberStats Stats
     {
         get { return stats; }
+    }
+
+    public bool IsOnField
+    {
+        get { return isOnField; }
+        set { isOnField = value; }
     }
 
     #endregion
@@ -495,6 +502,11 @@ public class PartyMember : ScriptableObject
                             color = "B0B0B0".ToColor();
                             break;
                         }
+                    case Ailment.Fainted:
+                        {
+                            color = "808080".ToColor();
+                            break;
+                        }
                     default:
                         {
                             color = Color.white;
@@ -517,7 +529,8 @@ public class PartyMember : ScriptableObject
             Burned,
             Frozen,
             Poisoned,
-            Asleep
+            Asleep,
+            Fainted
         }
 
         #endregion
