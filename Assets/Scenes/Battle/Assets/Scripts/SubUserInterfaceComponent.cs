@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 ///
 /// </summary>
-public class SubUserInterfaceComponent : MonoBehaviour
+public class SubUserInterfaceComponent : MonoBehaviour, UIHandler
 {
     #region Variables
 
@@ -15,25 +15,19 @@ public class SubUserInterfaceComponent : MonoBehaviour
 
     #region Miscellaneous Methods
 
+    public virtual void SetInformation<T>(T information)
+    { }
 
+    public virtual void SetInspectorValues()
+    { }
 
     #endregion
-    
+
     #region Unity Methods
-    
-    private void Awake()
-    {
-        
-    }
 
-    private void Start()
+    protected virtual void Awake()
     {
-        
-    }
-
-    private void Update()
-    {
-        
+        SetInspectorValues();
     }
 
     #endregion

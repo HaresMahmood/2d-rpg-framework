@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 ///
 /// </summary>
-public abstract class UserInterfaceComponent : MonoBehaviour
+public abstract class UserInterfaceComponent : MonoBehaviour, UIHandler
 {
     #region Variables
 
@@ -13,15 +13,16 @@ public abstract class UserInterfaceComponent : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    public abstract void SetInformation<T>(T information);
+    public virtual void SetInformation<T>(T information)
+    { }
 
-    protected virtual void SetInspectorValues() // TODO: Crappy name...
+    public virtual void SetInspectorValues()
     { }
 
     #endregion
-    
+
     #region Unity Methods
-    
+
     protected virtual void Awake()
     {
         SetInspectorValues();

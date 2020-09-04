@@ -5,7 +5,7 @@ using UnityEngine.UI;
 /// <summary>
 ///
 /// </summary>
-public class BenchUserInterfaceComponent : UserInterfaceComponent
+public class BenchSubComponent : SubUserInterfaceComponent
 {
     #region Variables
 
@@ -31,7 +31,7 @@ public class BenchUserInterfaceComponent : UserInterfaceComponent
         bottom.sizeDelta = top.sizeDelta;
     }
 
-    protected override void SetInspectorValues()
+    public override void SetInspectorValues()
     {
         top = transform.Find("Top").GetComponent<RectTransform>();
         bottom = transform.Find("Bottom").GetComponent<RectTransform>();

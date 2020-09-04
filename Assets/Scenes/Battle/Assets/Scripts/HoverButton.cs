@@ -28,7 +28,7 @@ public class HoverButton : MonoBehaviour, ISelectHandler, IDeselectHandler, IPoi
     {
         transform.Find("Text").gameObject.SetActive(true);
         transform.Find("Selector").gameObject.SetActive(true);
-        GetComponentInParent<MovesUserInterface>().DeselectButtons(GetComponent<Button>());
+        GetComponentInParent<MoveButtonUserInterface>().DeselectButtons(GetComponent<Button>());
     }
 
     /*

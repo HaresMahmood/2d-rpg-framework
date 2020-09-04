@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 /// <summary>
 ///
@@ -9,7 +8,7 @@ public class BenchUserInterface : UserInterfaceComponent
 {
     #region Variables
 
-    private List<BenchUserInterfaceComponent> components;
+    private List<BenchSubComponent> components;
 
     #endregion
 
@@ -30,9 +29,9 @@ public class BenchUserInterface : UserInterfaceComponent
         }
     }
 
-    protected override void SetInspectorValues()
+    public override void SetInspectorValues()
     {
-        components = GetComponentsInChildren<BenchUserInterfaceComponent>().ToList();
+        components = GetComponentsInChildren<BenchSubComponent>().ToList();
     }
 
     #endregion

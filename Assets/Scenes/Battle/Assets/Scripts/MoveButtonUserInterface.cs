@@ -6,7 +6,7 @@ using UnityEngine.UI;
 /// <summary>
 ///
 /// </summary>
-public class MovesUserInterface : MonoBehaviour
+public class MoveButtonUserInterface : UserInterfaceComponent
 {
     #region Variables
 
@@ -31,17 +31,27 @@ public class MovesUserInterface : MonoBehaviour
         LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponentInParent<RectTransform>());
     }
 
+    public override void SetInformation<T>(T information)
+    {
+        foreach (Button button in buttons)
+        {
+            button.GetComponent<SubUserInterfaceComponent>().SetInformation(information);
+        }
+    }
+
     #endregion
 
     #region Unity Methods
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         buttons = GetComponentsInChildren<Button>().ToList();
 
         for (int i = 0; i < buttons.Count; i++)
         {
-            buttons[i].GetComponent<MoveButton>().Index = i;
+            buttons[i].GetComponent<MoveButtonSubComponent>().Index = i;
         }
     }
 

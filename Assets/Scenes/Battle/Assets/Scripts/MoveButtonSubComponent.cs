@@ -6,7 +6,7 @@ using TMPro;
 /// <summary>
 ///
 /// </summary>
-public class MoveButton : UserInterfaceComponent
+public class MoveButtonSubComponent : SubUserInterfaceComponent
 {
     #region Variables
 
@@ -46,7 +46,7 @@ public class MoveButton : UserInterfaceComponent
         GetComponent<Image>().color = new Color(color.r, color.g, color.b, 0.5f);
     }
 
-    protected override void SetInspectorValues()
+    public override void SetInspectorValues()
     {
         moveName = transform.Find("Text/Name").GetComponent<TextMeshProUGUI>();
         pp = transform.Find("Text/PP").GetComponent<TextMeshProUGUI>();
