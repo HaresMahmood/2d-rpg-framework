@@ -869,7 +869,7 @@ public class PartyMemberEditor : Editor
                         move.PP = EditorGUILayout.IntField(move.PP);
                         EditorGUILayout.LabelField("/", GUILayout.Width(10));
                         GUI.enabled = false;
-                        EditorGUILayout.SelectableLabel(move.Value.pp.ToString(), EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
+                        EditorGUILayout.SelectableLabel(move.Value.PP.ToString(), EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
                         GUI.enabled = true;
 
                         GUILayout.BeginHorizontal();
@@ -877,7 +877,7 @@ public class PartyMemberEditor : Editor
                         EditorGUILayout.LabelField(new GUIContent("ACC.", "Name of this Pokémon.\n\n" +
                         "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(45));
                         GUI.enabled = false;
-                        EditorGUILayout.SelectableLabel(move.Value.accuracy.ToString(), EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
+                        EditorGUILayout.SelectableLabel(move.Value.Accuracy.ToString(), EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
                         GUI.enabled = true;
 
                         GUILayout.EndHorizontal();
@@ -887,7 +887,7 @@ public class PartyMemberEditor : Editor
                         EditorGUILayout.LabelField(new GUIContent("POW.", "Name of this Pokémon.\n\n" +
                         "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(45));
                         GUI.enabled = false;
-                        EditorGUILayout.SelectableLabel(move.Value.power.ToString(), EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
+                        EditorGUILayout.SelectableLabel(move.Value.Power.ToString(), EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
                         GUI.enabled = true;
 
                         GUILayout.EndHorizontal();
@@ -898,7 +898,7 @@ public class PartyMemberEditor : Editor
                         EditorGUILayout.LabelField(new GUIContent("Desc.", "Name of this Pokémon.\n\n" +
                         "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(45));
                         GUI.enabled = false;
-                        EditorGUILayout.SelectableLabel(move.Value.description, EditorStyles.textArea);
+                        EditorGUILayout.SelectableLabel(move.Value.Description, EditorStyles.textArea);
                         GUI.enabled = true;
 
                         GUILayout.EndHorizontal();
@@ -977,7 +977,7 @@ public class PartyMemberEditor : Editor
                         move.PP = EditorGUILayout.IntField(move.PP);
                         EditorGUILayout.LabelField("/", GUILayout.Width(10));
                         GUI.enabled = false;
-                        EditorGUILayout.SelectableLabel(move.Value.pp.ToString(), EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
+                        EditorGUILayout.SelectableLabel(move.Value.PP.ToString(), EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
                         GUI.enabled = true;
 
                         GUILayout.BeginHorizontal();
@@ -985,7 +985,7 @@ public class PartyMemberEditor : Editor
                         EditorGUILayout.LabelField(new GUIContent("ACC.", "Name of this Pokémon.\n\n" +
                         "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(45));
                         GUI.enabled = false;
-                        EditorGUILayout.SelectableLabel(move.Value.accuracy.ToString(), EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
+                        EditorGUILayout.SelectableLabel(move.Value.Accuracy.ToString(), EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
                         GUI.enabled = true;
 
                         GUILayout.EndHorizontal();
@@ -995,7 +995,7 @@ public class PartyMemberEditor : Editor
                         EditorGUILayout.LabelField(new GUIContent("POW.", "Name of this Pokémon.\n\n" +
                         "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(45));
                         GUI.enabled = false;
-                        EditorGUILayout.SelectableLabel(move.Value.power.ToString(), EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
+                        EditorGUILayout.SelectableLabel(move.Value.Power.ToString(), EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
                         GUI.enabled = true;
 
                         GUILayout.EndHorizontal();
@@ -1006,7 +1006,7 @@ public class PartyMemberEditor : Editor
                         EditorGUILayout.LabelField(new GUIContent("Desc.", "Name of this Pokémon.\n\n" +
                         "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(45));
                         GUI.enabled = false;
-                        EditorGUILayout.SelectableLabel(move.Value.description, EditorStyles.textArea);
+                        EditorGUILayout.SelectableLabel(move.Value.Description, EditorStyles.textArea);
                         GUI.enabled = true;
 
                         GUILayout.EndHorizontal();

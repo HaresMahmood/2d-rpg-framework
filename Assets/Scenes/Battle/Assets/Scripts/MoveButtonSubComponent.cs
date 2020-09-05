@@ -11,6 +11,7 @@ public class MoveButtonSubComponent : SubUserInterfaceComponent
     #region Variables
 
     [SerializeField] private HealthSubComponent enemyHealth;
+    [SerializeField] private BattleUserInterface battleUserInterface;
 
     [Header("Values")]
     [SerializeField] private PartyMember.MemberMove move;
@@ -40,10 +41,10 @@ public class MoveButtonSubComponent : SubUserInterfaceComponent
 
         this.move = move;
 
-        moveName.SetText(move.Value.name);
-        pp.SetText($"<color=#{ColorUtility.ToHtmlStringRGB(manager.accentColor)}>PP</color> {move.PP}/{move.Value.pp}");
+        moveName.SetText(move.Value.Name);
+        pp.SetText($"<color=#{ColorUtility.ToHtmlStringRGB(manager.accentColor)}>PP</color> {move.PP}/{move.Value.PP}");
 
-        icon.Value = move.Value.typing.Value;
+        icon.Value = move.Value.Typing.Value;
         icon.UpdateUserInterface(icon.Type, icon.Icon);
 
         float h, s;
@@ -60,9 +61,27 @@ public class MoveButtonSubComponent : SubUserInterfaceComponent
         icon = transform.Find("Icon").GetComponent<TypingIconUserInterface>();
     }
 
-    private void CalculateDamage()
+    private int CalculateDamage()
     {
+        PartyMember partner = battleUserInterface.Partner;
+        PartyMember enemy = battleUserInterface.Enemy;
 
+        float attackStat = move.Value.Category == Move.MoveCategory.Physical ? partner.Stats.Stats[Pokemon.Stat.Attack] : partner.Stats.Stats[Pokemon.Stat.SpAttack];
+        float defenceStat = move.Value.Category == Move.MoveCategory.Physical ? enemy.Stats.Stats[Pokemon.Stat.Defence] : enemy.Stats.Stats[Pokemon.Stat.SpDefence];
+
+        float modifier = 0.75f // Target (default: one target)
+                       * 1f // Weather (default: neutral weather)
+                       * 1f // Critical (default: non-critical) https://bulbapedia.bulbagarden.net/wiki/Critical_hit
+                       * UnityEngine.Random.Range(0.85f, 1f) // Random
+                       * (partner.Species.PrimaryType == move.Value.Typing || partner.Species.SecondaryType == move.Value.Typing ? 1.5f : 1f) // STAB
+                       * 1f // Type (default: normally effective type)
+                       * 1f // Burn (default: target not burned)
+                       * 1f; // Other (default: "1 in most cases")#
+                       // https://bulbapedia.bulbagarden.net/wiki/Damage
+
+        float damage = (((((float)(2 * partner.Progression.Level) / 5) + 2) * move.Value.Power * (float)attackStat / (float)defenceStat) / 50) * modifier;
+
+        return (int)damage;
     }
 
     #endregion
@@ -71,7 +90,12 @@ public class MoveButtonSubComponent : SubUserInterfaceComponent
 
     private void OnClick()
     {
-        Debug.Log($"{move.Value.power}");
+        int damage = CalculateDamage();
+
+        battleUserInterface.damageText.GetComponentInChildren<TextMeshProUGUI>().SetText(damage.ToString());
+        //battleUserInterface.damageText.SetActive(true);
+
+        Debug.Log(enemyHealth.SetHealth(damage));
     }
 
     #endregion

@@ -30,24 +30,19 @@ public class HealthSubComponent : SubUserInterfaceComponent // TODO: Crap namea
 
     #region Miscellaneous Methods
 
-    public void SetHealth(int health)
+    public bool SetHealth(int health)
     {
         member.Stats.HP -= health;
 
-        if (member.Stats.HP <= 0)
-        {
-            //return false;
-        }
-
         float hp = (float)member.Stats.HP / (float)member.Stats.Stats[Pokemon.Stat.HP];
         string color = hp >= 0.5f ? "#67FF8F" : (hp >= 0.25f ? "#FFB766" : "#FF7766");
-        string hpValue = hpText.text == "HP" ? "" : $"<color={color}>{member.Stats.HP}</color>/{member.Stats.Stats[Pokemon.Stat.HP]} ";
+        string hpValue = ""; //!hpText.text.Contains("/") ? "" : $"<color={color}>{member.Stats.HP}</color>/{member.Stats.Stats[Pokemon.Stat.HP]} ";
 
         hpBar.value = hp;
         hpBar.fillRect.GetComponent<Image>().color = color.ToColor();
         hpText.SetText($"{hpValue}<color=#{ColorUtility.ToHtmlStringRGB(GameManager.GetAccentColor())}>HP</color>");
 
-        //return true;
+        return member.Stats.HP <= 0;
     }
 
     public void AnimateSlot(float opacity, float duration = -1)
@@ -93,7 +88,7 @@ public class HealthSubComponent : SubUserInterfaceComponent // TODO: Crap namea
             expText.SetText($"{exp}% <color=#{ColorUtility.ToHtmlStringRGB(GameManager.GetAccentColor())}>EXP</color>");
         }
 
-        string hpValue = hpText.text == "HP" ? "" : $"<color={color}>{member.Stats.HP}</color>/{member.Stats.Stats[Pokemon.Stat.HP]} ";
+        string hpValue = !hpText.text.Contains("/") ? "" : $"<color={color}>{member.Stats.HP}</color>/{member.Stats.Stats[Pokemon.Stat.HP]} ";
 
         hpBar.value = hp;
         hpBar.fillRect.GetComponent<Image>().color = color.ToColor();

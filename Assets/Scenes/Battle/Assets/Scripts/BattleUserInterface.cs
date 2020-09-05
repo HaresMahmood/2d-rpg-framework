@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 /// <summary>
 ///
@@ -7,10 +8,28 @@ public class BattleUserInterface : XUserInterface<Party>
 {
     #region Variables
 
-    [UnityEngine.SerializeField] private PartyMember enemy;
+    [SerializeField] public GameObject damageText;
+
+    [Header("Values")]
+    [SerializeField] private PartyMember enemy;
+    [SerializeField] private PartyMember partner;
 
     private HealthSubComponent partnerHealth;
     private HealthSubComponent opponentHealth;
+
+    #endregion
+
+    #region Properties
+
+    public PartyMember Enemy
+    {
+        get { return enemy; }
+    }
+
+    public PartyMember Partner
+    {
+        get { return partner; }
+    }
 
     #endregion
 
@@ -26,15 +45,20 @@ public class BattleUserInterface : XUserInterface<Party>
     {
         base.Awake();
 
-        partnerHealth = transform.Find("Canvas/Fighters/Partner").GetComponent<HealthSubComponent>();
-        opponentHealth = transform.Find("Canvas/Fighters/Enemy").GetComponent<HealthSubComponent>();
+        damageText = transform.Find("Canvas (Damage)/Damage").gameObject;
+        //damageText.SetActive(false);
+
+        partnerHealth = transform.Find("Canvas (UI)/Fighters/Partner").GetComponent<HealthSubComponent>();
+        opponentHealth = transform.Find("Canvas (UI)/Fighters/Enemy").GetComponent<HealthSubComponent>();
     }
 
     protected override void Start()
     {
         base.Start();
 
-        partnerHealth.SetInformation(((Party)Convert.ChangeType(information, typeof(Party))).playerParty[0]);
+        partner = (((Party)Convert.ChangeType(information, typeof(Party))).playerParty[0]);
+
+        partnerHealth.SetInformation(partner);
         opponentHealth.SetInformation(enemy);
     }
 
