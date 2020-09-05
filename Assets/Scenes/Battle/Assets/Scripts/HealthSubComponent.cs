@@ -10,6 +10,9 @@ public class HealthSubComponent : SubUserInterfaceComponent // TODO: Crap namea
 {
     #region Variables
 
+    [Header("Values")]
+    [SerializeField] private PartyMember member;
+
     private Image sprite;
 
     private TextMeshProUGUI nameText;
@@ -26,6 +29,26 @@ public class HealthSubComponent : SubUserInterfaceComponent // TODO: Crap namea
     #endregion
 
     #region Miscellaneous Methods
+
+    public void SetHealth(int health)
+    {
+        member.Stats.HP -= health;
+
+        if (member.Stats.HP <= 0)
+        {
+            //return false;
+        }
+
+        float hp = (float)member.Stats.HP / (float)member.Stats.Stats[Pokemon.Stat.HP];
+        string color = hp >= 0.5f ? "#67FF8F" : (hp >= 0.25f ? "#FFB766" : "#FF7766");
+        string hpValue = hpText.text == "HP" ? "" : $"<color={color}>{member.Stats.HP}</color>/{member.Stats.Stats[Pokemon.Stat.HP]} ";
+
+        hpBar.value = hp;
+        hpBar.fillRect.GetComponent<Image>().color = color.ToColor();
+        hpText.SetText($"{hpValue}<color=#{ColorUtility.ToHtmlStringRGB(GameManager.GetAccentColor())}>HP</color>");
+
+        //return true;
+    }
 
     public void AnimateSlot(float opacity, float duration = -1)
     {
@@ -45,6 +68,8 @@ public class HealthSubComponent : SubUserInterfaceComponent // TODO: Crap namea
     public override void SetInformation<T>(T slotObject)
     {
         PartyMember member = (PartyMember)Convert.ChangeType(slotObject, typeof(PartyMember));
+
+        this.member = member;
 
         float hp = (float)member.Stats.HP / (float)member.Stats.Stats[Pokemon.Stat.HP];
         float exp = (float)member.Progression.Value / (float)member.Progression.GetRemaining(member.Species);
