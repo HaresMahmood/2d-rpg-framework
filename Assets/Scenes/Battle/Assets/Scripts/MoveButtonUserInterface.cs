@@ -2,6 +2,7 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 /// <summary>
 ///
@@ -11,6 +12,12 @@ public class MoveButtonUserInterface : UserInterfaceComponent
     #region Variables
 
     private List<Button> buttons;
+
+    #endregion
+
+    #region Events
+
+    public event EventHandler<int> OnPartnerAttack;
 
     #endregion
 
@@ -41,6 +48,15 @@ public class MoveButtonUserInterface : UserInterfaceComponent
 
     #endregion
 
+    #region Event Methods
+
+    private void SubComponent_OnPartnerAttack(object sender, int index)
+    {
+        OnPartnerAttack?.Invoke(this, buttons[index].GetComponent<MoveButtonSubComponent>().Attack());
+    }
+
+    #endregion
+
     #region Unity Methods
 
     protected override void Awake()
@@ -51,6 +67,7 @@ public class MoveButtonUserInterface : UserInterfaceComponent
 
         for (int i = 0; i < buttons.Count; i++)
         {
+            buttons[i].GetComponent<MoveButtonSubComponent>().OnPartnerAttack += SubComponent_OnPartnerAttack;
             buttons[i].GetComponent<MoveButtonSubComponent>().Index = i;
         }
     }

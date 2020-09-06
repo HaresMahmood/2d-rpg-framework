@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 
 /// <summary>
@@ -8,14 +9,18 @@ public class BattleUserInterface : XUserInterface<Party>
 {
     #region Variables
 
-    [SerializeField] public GameObject damageText;
+    [SerializeField] private EnemyController enemyAI;
 
     [Header("Values")]
     [SerializeField] private PartyMember enemy;
     [SerializeField] private PartyMember partner;
+    [Space(5)]
+    [SerializeField] private PartyMember currentAttacker;
+
+    private TextMeshProUGUI damageText;
 
     private HealthSubComponent partnerHealth;
-    private HealthSubComponent opponentHealth;
+    private HealthSubComponent enemyHealth;
 
     #endregion
 
@@ -35,7 +40,35 @@ public class BattleUserInterface : XUserInterface<Party>
 
     #region Miscellaneous Methods
 
+    private bool CheckBattleState()
+    {
+        return currentAttacker.Stats.HP > 0;
+    }
 
+    #endregion
+
+    #region Event Methods
+
+    private void Component_OnPartnerAttack(object sender, int damage)
+    {
+        currentAttacker = partner;
+
+        damageText.SetText(damage.ToString());
+        enemyHealth.SetHealth(damage);
+
+        if (CheckBattleState())
+        {
+            Component_OnEnemyAttack();
+        }
+    }
+
+    private void Component_OnEnemyAttack()
+    {
+        currentAttacker = enemy;
+
+        //damageText.SetText(damage.ToString());
+        partnerHealth.SetHealth(enemyAI.Attack());
+    }
 
     #endregion
 
@@ -45,11 +78,12 @@ public class BattleUserInterface : XUserInterface<Party>
     {
         base.Awake();
 
-        damageText = transform.Find("Canvas (Damage)/Damage").gameObject;
-        //damageText.SetActive(false);
+        damageText = transform.Find("Canvas (Damage)/Damage/Value").GetComponent<TextMeshProUGUI>();
 
         partnerHealth = transform.Find("Canvas (UI)/Fighters/Partner").GetComponent<HealthSubComponent>();
-        opponentHealth = transform.Find("Canvas (UI)/Fighters/Enemy").GetComponent<HealthSubComponent>();
+        enemyHealth = transform.Find("Canvas (UI)/Fighters/Enemy").GetComponent<HealthSubComponent>();
+
+        enemyAI.Enemy = enemy;
     }
 
     protected override void Start()
@@ -59,7 +93,9 @@ public class BattleUserInterface : XUserInterface<Party>
         partner = (((Party)Convert.ChangeType(information, typeof(Party))).playerParty[0]);
 
         partnerHealth.SetInformation(partner);
-        opponentHealth.SetInformation(enemy);
+        enemyHealth.SetInformation(enemy);
+
+        components.Find(c => c is MoveButtonUserInterface).GetComponent<MoveButtonUserInterface>().OnPartnerAttack += Component_OnPartnerAttack;
     }
 
     #endregion

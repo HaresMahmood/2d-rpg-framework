@@ -133,6 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6992320}
   - component: {fileID: 6992321}
+  - component: {fileID: 6992322}
   m_Layer: 0
   m_Name: Battle
   m_TagString: Untagged
@@ -166,7 +167,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cad8787abc4e444487df1843f796fee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  party: {fileID: 0}
+  userInterface: {fileID: 273171515}
+  battleStage: 0
+--- !u!114 &6992322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6992319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d262151da95b1cc46aa2752c1f63139b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  battleUserInterface: {fileID: 273171515}
+  enemy: {fileID: 0}
 --- !u!1 &19198671
 GameObject:
   m_ObjectHideFlags: 0
@@ -651,9 +667,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   information: {fileID: 11400000, guid: 714be781ae39b994c927e1025d05fb87, type: 2}
-  damageText: {fileID: 0}
+  enemyAI: {fileID: 6992322}
   enemy: {fileID: 11400000, guid: e5ef90e47f311744e990ca2e590395f4, type: 2}
   partner: {fileID: 0}
+  currentAttacker: {fileID: 0}
 --- !u!1 &278480823
 GameObject:
   m_ObjectHideFlags: 0

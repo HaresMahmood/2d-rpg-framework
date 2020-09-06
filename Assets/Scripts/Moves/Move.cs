@@ -76,4 +76,28 @@ public class Move : ScriptableObject
     }
 
     #endregion
+
+    #region Miscellaneous Methods
+
+    public int CalculateDamage(PartyMember partner, PartyMember enemy)
+    {
+        float attackStat = category == Move.MoveCategory.Physical ? partner.Stats.Stats[Pokemon.Stat.Attack] : partner.Stats.Stats[Pokemon.Stat.SpAttack];
+        float defenceStat = category == Move.MoveCategory.Physical ? enemy.Stats.Stats[Pokemon.Stat.Defence] : enemy.Stats.Stats[Pokemon.Stat.SpDefence];
+
+        float modifier = 0.75f // Target (default: one target)
+                       * 1f // Weather (default: neutral weather)
+                       * 1f // Critical (default: non-critical) https://bulbapedia.bulbagarden.net/wiki/Critical_hit
+                       * UnityEngine.Random.Range(0.85f, 1f) // Random
+                       * (partner.Species.PrimaryType == typing || partner.Species.SecondaryType == typing ? 1.5f : 1f) // STAB
+                       * 1f // Type (default: normally effective type)
+                       * 1f // Burn (default: target not burned)
+                       * 1f; // Other (default: "1 in most cases")#
+                             // https://bulbapedia.bulbagarden.net/wiki/Damage
+
+        float damage = (((((float)(2 * partner.Progression.Level) / 5) + 2) * power * (float)attackStat / (float)defenceStat) / 50) * modifier;
+
+        return (int)damage;
+    }
+
+    #endregion
 }
