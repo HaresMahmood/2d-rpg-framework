@@ -6,7 +6,7 @@ using TMPro;
 /// <summary>
 ///
 /// </summary>
-public class MoveButtonSubComponent : SubUserInterfaceComponent
+public class MoveButtonSubComponent : UserInterfaceSubComponent
 {
     #region Variables
 

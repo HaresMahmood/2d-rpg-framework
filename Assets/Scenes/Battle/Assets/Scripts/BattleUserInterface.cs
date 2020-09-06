@@ -99,7 +99,7 @@ public class BattleUserInterface : XUserInterface<Party>
         partnerHealth.SetInformation(partner);
         enemyHealth.SetInformation(enemy);
 
-        components.Find(c => c is MoveButtonUserInterface).GetComponent<MoveButtonUserInterface>().OnPartnerAttack += Component_OnPartnerAttack;
+        components.Find(c => c is MoveButtonComponent).GetComponent<MoveButtonComponent>().OnPartnerAttack += Component_OnPartnerAttack;
     }
 
     #endregion

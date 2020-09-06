@@ -4,7 +4,7 @@ using System.Collections.Generic;
 /// <summary>
 ///
 /// </summary>
-public class BenchUserInterface : UserInterfaceComponent
+public class BenchComponent : UserInterfaceComponent
 {
     #region Variables
 

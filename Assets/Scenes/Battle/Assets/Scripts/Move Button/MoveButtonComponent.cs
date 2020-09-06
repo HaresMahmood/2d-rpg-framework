@@ -7,7 +7,7 @@ using System;
 /// <summary>
 ///
 /// </summary>
-public class MoveButtonUserInterface : UserInterfaceComponent
+public class MoveButtonComponent : UserInterfaceComponent
 {
     #region Variables
 
@@ -42,7 +42,7 @@ public class MoveButtonUserInterface : UserInterfaceComponent
     {
         foreach (Button button in buttons)
         {
-            button.GetComponent<SubUserInterfaceComponent>().SetInformation(information);
+            button.GetComponent<UserInterfaceSubComponent>().SetInformation(information);
         }
     }
 

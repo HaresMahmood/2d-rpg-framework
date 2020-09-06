@@ -5,7 +5,7 @@ using UnityEngine.UI;
 /// <summary>
 ///
 /// </summary>
-public class BenchSubComponent : SubUserInterfaceComponent
+public class BenchSubComponent : UserInterfaceSubComponent
 {
     #region Variables
 

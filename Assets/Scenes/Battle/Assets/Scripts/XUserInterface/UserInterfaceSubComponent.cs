@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 ///
 /// </summary>
-public class SubUserInterfaceComponent : MonoBehaviour, UIHandler
+public class UserInterfaceSubComponent : MonoBehaviour, UIHandler
 {
     #region Variables
 

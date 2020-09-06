@@ -6,7 +6,7 @@ using TMPro;
 /// <summary>
 ///
 /// </summary>
-public class HealthSubComponent : SubUserInterfaceComponent // TODO: Crap namea
+public class HealthSubComponent : UserInterfaceSubComponent // TODO: Crap namea
 {
     #region Variables
 
