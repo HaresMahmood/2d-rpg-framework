@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -49,12 +50,12 @@ public class BattleUserInterface : XUserInterface<Party>
 
     #region Event Methods
 
-    private void Component_OnPartnerAttack(object sender, int damage)
+    private void Component_OnPartnerAttack(object sender, List<int> list)
     {
         currentAttacker = partner;
 
-        damageText.SetText(damage.ToString());
-        enemyHealth.SetHealth(damage);
+        damageText.GetComponent<TextCircle>().AnimateText(list[0].ToString(), list[1]);
+        enemyHealth.SetHealth(list[0]);
 
         if (CheckBattleState())
         {
@@ -67,7 +68,10 @@ public class BattleUserInterface : XUserInterface<Party>
         currentAttacker = enemy;
 
         //damageText.SetText(damage.ToString());
-        partnerHealth.SetHealth(enemyAI.Attack());
+
+        (int damage, int power) = enemyAI.Attack();
+
+        partnerHealth.SetHealth(damage);
     }
 
     #endregion
@@ -78,7 +82,7 @@ public class BattleUserInterface : XUserInterface<Party>
     {
         base.Awake();
 
-        damageText = transform.Find("Canvas (Damage)/Damage/Value").GetComponent<TextMeshProUGUI>();
+        damageText = transform.Find("Canvas (Damage)/Damage").GetComponent<TextMeshProUGUI>();
 
         partnerHealth = transform.Find("Canvas (UI)/Fighters/Partner").GetComponent<HealthSubComponent>();
         enemyHealth = transform.Find("Canvas (UI)/Fighters/Enemy").GetComponent<HealthSubComponent>();

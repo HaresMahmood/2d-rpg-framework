@@ -17,7 +17,7 @@ public class MoveButtonUserInterface : UserInterfaceComponent
 
     #region Events
 
-    public event EventHandler<int> OnPartnerAttack;
+    public event EventHandler<List<int>> OnPartnerAttack;
 
     #endregion
 
@@ -52,7 +52,11 @@ public class MoveButtonUserInterface : UserInterfaceComponent
 
     private void SubComponent_OnPartnerAttack(object sender, int index)
     {
-        OnPartnerAttack?.Invoke(this, buttons[index].GetComponent<MoveButtonSubComponent>().Attack());
+        List<int> list = new List<int>();
+        (int damage, int power) = buttons[index].GetComponent<MoveButtonSubComponent>().Attack();
+
+        list.Add(damage); list.Add(power);
+        OnPartnerAttack?.Invoke(this, list);
     }
 
     #endregion

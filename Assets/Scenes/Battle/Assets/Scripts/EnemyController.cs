@@ -27,13 +27,13 @@ public class EnemyController : MonoBehaviour
     
     #region Miscellaneous Methods
 
-    public int Attack()
+    public (int, int) Attack()
     {
         PartyMember.MemberMove move = enemy.ActiveMoves[UnityEngine.Random.Range(0, (enemy.ActiveMoves.Count))];
 
         Debug.Log(move.Value.Name);
 
-        return move.Value.CalculateDamage(battleUserInterface.Partner, battleUserInterface.Enemy);
+        return (move.Value.CalculateDamage(battleUserInterface.Partner, battleUserInterface.Enemy), move.Value.Power);
     }
 
     #endregion

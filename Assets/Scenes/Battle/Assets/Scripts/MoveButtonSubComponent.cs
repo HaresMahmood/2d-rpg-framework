@@ -38,9 +38,9 @@ public class MoveButtonSubComponent : SubUserInterfaceComponent
 
     #region Miscellaneous Methods
 
-    public int Attack()
+    public (int, int) Attack()
     {
-        return move.Value.CalculateDamage(battleUserInterface.Partner, battleUserInterface.Enemy);
+        return (move.Value.CalculateDamage(battleUserInterface.Partner, battleUserInterface.Enemy), move.Value.Power);
     }
 
     public override void SetInformation<T>(T information)
