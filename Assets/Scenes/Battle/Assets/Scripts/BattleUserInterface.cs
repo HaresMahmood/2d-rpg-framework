@@ -18,7 +18,7 @@ public class BattleUserInterface : XUserInterface<Party>
     [Space(5)]
     [SerializeField] private PartyMember currentAttacker;
 
-    private TextMeshProUGUI damageText;
+    private DamageText damageText;
 
     private HealthSubComponent partnerHealth;
     private HealthSubComponent enemyHealth;
@@ -54,7 +54,7 @@ public class BattleUserInterface : XUserInterface<Party>
     {
         currentAttacker = partner;
 
-        damageText.GetComponent<TextCircle>().AnimateText(list[0].ToString(), list[1]);
+        damageText.AnimateText(list[0].ToString(), list[1]);
         enemyHealth.SetHealth(list[0]);
 
         if (CheckBattleState())
@@ -82,7 +82,7 @@ public class BattleUserInterface : XUserInterface<Party>
     {
         base.Awake();
 
-        damageText = transform.Find("Canvas (Damage)/Damage").GetComponent<TextMeshProUGUI>();
+        damageText = transform.Find("Canvas (Damage)/Damage").GetComponent<DamageText>();
 
         partnerHealth = transform.Find("Canvas (UI)/Fighters/Partner").GetComponent<HealthSubComponent>();
         enemyHealth = transform.Find("Canvas (UI)/Fighters/Enemy").GetComponent<HealthSubComponent>();
