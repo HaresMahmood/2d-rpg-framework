@@ -15,7 +15,8 @@ public class MoveButtonSubComponent : UserInterfaceSubComponent
     [Header("Values")]
     [SerializeField] private PartyMember.MemberMove move;
 
-    [SerializeField] private GameManager manager;
+    private GameObject textContainer;
+    private GameObject selector;
 
     private TextMeshProUGUI moveName;
     private TextMeshProUGUI pp;
@@ -28,6 +29,8 @@ public class MoveButtonSubComponent : UserInterfaceSubComponent
 
     public int Index { private get; set; }
 
+    public bool IsSelected { get; private set; }
+
     #endregion
 
     #region Events
@@ -38,9 +41,17 @@ public class MoveButtonSubComponent : UserInterfaceSubComponent
 
     #region Miscellaneous Methods
 
-    public (int, int) Attack()
+    public void SelectButton(bool isSelected)
     {
-        return (move.Value.CalculateDamage(battleUserInterface.Partner, battleUserInterface.Enemy), move.Value.Power);
+        IsSelected = isSelected;
+
+        textContainer.SetActive(isSelected);
+        transform.Find("Selector").gameObject.SetActive(isSelected);
+    }
+
+    public int Attack()
+    {
+        return move.Value.CalculateDamage(battleUserInterface.Partner, battleUserInterface.Enemy);
     }
 
     public override void SetInformation<T>(T information)
@@ -52,7 +63,7 @@ public class MoveButtonSubComponent : UserInterfaceSubComponent
         this.move = move;
 
         moveName.SetText(move.Value.Name);
-        pp.SetText($"<color=#{ColorUtility.ToHtmlStringRGB(manager.accentColor)}>PP</color> {move.PP}/{move.Value.PP}");
+        pp.SetText($"<color=#{ColorUtility.ToHtmlStringRGB(GameManager.instance.accentColor)}>PP</color> {move.PP}/{move.Value.PP}");
 
         icon.Value = move.Value.Typing.Value;
         icon.UpdateUserInterface(icon.Type, icon.Icon);
@@ -66,8 +77,10 @@ public class MoveButtonSubComponent : UserInterfaceSubComponent
 
     public override void SetInspectorValues()
     {
-        moveName = transform.Find("Text/Name").GetComponent<TextMeshProUGUI>();
-        pp = transform.Find("Text/PP").GetComponent<TextMeshProUGUI>();
+        textContainer = transform.Find("Text").gameObject;
+        selector = transform.Find("Selector").gameObject;
+        moveName = textContainer.transform.Find("Name").GetComponent<TextMeshProUGUI>();
+        pp = textContainer.transform.Find("PP").GetComponent<TextMeshProUGUI>();
         icon = transform.Find("Icon").GetComponent<TypingIconUserInterface>();
     }
 

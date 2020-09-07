@@ -1,23 +1,18 @@
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System;
+using UnityEngine.EventSystems;
 
 /// <summary>
 ///
 /// </summary>
 public class MoveButtonComponent : UserInterfaceComponent
 {
-    #region Variables
-
-    private List<Button> buttons;
-
-    #endregion
-
     #region Events
 
-    public event EventHandler<List<int>> OnPartnerAttack;
+    public event EventHandler<int> OnPartnerAttack;
 
     #endregion
 
@@ -25,24 +20,35 @@ public class MoveButtonComponent : UserInterfaceComponent
 
     public void DeselectButtons(Button selectedButton)
     {
-        List<Button> buttons = this.buttons.Where(b => b != selectedButton).ToList();
+        List<UserInterfaceSubComponent> buttons = components.Where(b => b.GetComponent<Button>() != selectedButton && ((MoveButtonSubComponent)b).IsSelected).ToList();
 
-        foreach (Button button in buttons)
+        foreach (UserInterfaceSubComponent button in buttons)
         {
-            //if (button.)
-
-            button.transform.Find("Text").gameObject.SetActive(false);
-            button.transform.Find("Selector").gameObject.SetActive(false);
+            ((MoveButtonSubComponent)button).SelectButton(false);
         }
 
         LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponentInParent<RectTransform>());
     }
 
+    public void EnableButtons(bool isEnabled)
+    {
+        foreach (UserInterfaceSubComponent component in components)
+        {
+            component.GetComponent<Button>().interactable = isEnabled;
+        }
+
+        if (isEnabled)
+        {
+            EventSystem.current.SetSelectedGameObject(components[0].gameObject);
+            ((MoveButtonSubComponent)components[0]).SelectButton(true);
+        }
+    }
+
     public override void SetInformation<T>(T information)
     {
-        foreach (Button button in buttons)
+        foreach (MoveButtonSubComponent component in components)
         {
-            button.GetComponent<UserInterfaceSubComponent>().SetInformation(information);
+            component.SetInformation(information);
         }
     }
 
@@ -52,11 +58,7 @@ public class MoveButtonComponent : UserInterfaceComponent
 
     private void SubComponent_OnPartnerAttack(object sender, int index)
     {
-        List<int> list = new List<int>();
-        (int damage, int power) = buttons[index].GetComponent<MoveButtonSubComponent>().Attack();
-
-        list.Add(damage); list.Add(power);
-        OnPartnerAttack?.Invoke(this, list);
+        OnPartnerAttack?.Invoke(this, components[index].GetComponent<MoveButtonSubComponent>().Attack());
     }
 
     #endregion
@@ -67,21 +69,18 @@ public class MoveButtonComponent : UserInterfaceComponent
     {
         base.Awake();
 
-        buttons = GetComponentsInChildren<Button>().ToList();
-
-        for (int i = 0; i < buttons.Count; i++)
+        for (int i = 0; i < components.Count; i++)
         {
-            buttons[i].GetComponent<MoveButtonSubComponent>().OnPartnerAttack += SubComponent_OnPartnerAttack;
-            buttons[i].GetComponent<MoveButtonSubComponent>().Index = i;
+            ((MoveButtonSubComponent)components[i]).OnPartnerAttack += SubComponent_OnPartnerAttack;
+            ((MoveButtonSubComponent)components[i]).Index = i;
         }
     }
 
     private void Start()
     {
-        for (int i = 1; i < buttons.Count; i++)
+        for (int i = 1; i < components.Count; i++)
         {
-            buttons[i].transform.Find("Text").gameObject.SetActive(false);
-            buttons[i].transform.Find("Selector").gameObject.SetActive(false);
+            ((MoveButtonSubComponent)components[i]).SelectButton(false);
         }
     }
 

@@ -6,12 +6,6 @@ using System.Collections.Generic;
 /// </summary>
 public class BenchComponent : UserInterfaceComponent
 {
-    #region Variables
-
-    private List<BenchSubComponent> components;
-
-    #endregion
-
     #region Miscellaneous Methods
 
     public override void SetInformation<T>(T information)
@@ -28,17 +22,6 @@ public class BenchComponent : UserInterfaceComponent
             components[i].gameObject.SetActive(false);
         }
     }
-
-    public override void SetInspectorValues()
-    {
-        components = GetComponentsInChildren<BenchSubComponent>().ToList();
-    }
-
-    #endregion
-
-    #region Unity Methods
-
-
 
     #endregion
 }

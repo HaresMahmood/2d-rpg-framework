@@ -6,7 +6,7 @@ using TMPro;
 /// <summary>
 ///
 /// </summary>
-public class HealthSubComponent : UserInterfaceSubComponent // TODO: Crap namea
+public class HealthSubComponent : UserInterfaceSubComponent
 {
     #region Variables
 
@@ -36,7 +36,7 @@ public class HealthSubComponent : UserInterfaceSubComponent // TODO: Crap namea
 
         float hp = (float)member.Stats.HP / (float)member.Stats.Stats[Pokemon.Stat.HP];
         string color = hp >= 0.5f ? "#67FF8F" : (hp >= 0.25f ? "#FFB766" : "#FF7766");
-        string hpValue = ""; //!hpText.text.Contains("/") ? "" : $"<color={color}>{member.Stats.HP}</color>/{member.Stats.Stats[Pokemon.Stat.HP]} ";
+        string hpValue = hpText.text == $"<color=#{ColorUtility.ToHtmlStringRGB(GameManager.GetAccentColor())}>{color}>HP</color>" ? "" : $"<color={color}>{member.Stats.HP}</color>/{member.Stats.Stats[Pokemon.Stat.HP]} ";
 
         hpBar.value = hp;
         hpBar.fillRect.GetComponent<Image>().color = color.ToColor();

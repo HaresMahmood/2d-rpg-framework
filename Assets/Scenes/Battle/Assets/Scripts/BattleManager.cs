@@ -21,7 +21,6 @@ public class BattleManager : MonoBehaviour
 
     private enum BattleStage
     {
-        //Start,
         Partner,
         Enemy,
         Won,

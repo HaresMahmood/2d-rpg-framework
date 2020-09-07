@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -7,7 +8,7 @@ public abstract class UserInterfaceComponent : MonoBehaviour, UIHandler
 {
     #region Variables
 
-
+    protected List<UserInterfaceSubComponent> components;
 
     #endregion
 
@@ -17,7 +18,9 @@ public abstract class UserInterfaceComponent : MonoBehaviour, UIHandler
     { }
 
     public virtual void SetInspectorValues()
-    { }
+    {
+        components = GetComponentsInChildren<UserInterfaceSubComponent>().ToList();
+    }
 
     #endregion
 

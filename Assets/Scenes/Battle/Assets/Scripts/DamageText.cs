@@ -1,7 +1,7 @@
+using System;
 using UnityEngine;
 using TMPro;
 using DG.Tweening;
-using CharTween;
 
 /// <summary>
 ///
@@ -18,25 +18,31 @@ public class DamageText : MonoBehaviour
 
     #endregion
 
+    #region Events
+
+    public event EventHandler OnAnimationComplete;
+
+    #endregion
+
     #region Miscellaneous Methods
 
-    public void AnimateText(string text, int power = 10)
+    public void AnimateText(int value)
     {
-        this.text.GetComponent<TextMeshProUGUI>().text = text;
-        this.textShadow.GetComponent<TextMeshProUGUI>().text = text;
+        text.GetComponent<TextMeshProUGUI>().text = value.ToString();
+        textShadow.GetComponent<TextMeshProUGUI>().text = value.ToString();
 
         sequence = DOTween.Sequence();
 
         //charSequence.Append(tweener.DOCircle(i, 0.1f, 0.5f).SetLoops(-1, LoopType.Restart));
         sequence.Append(GetComponent<CanvasGroup>().DOFade(1f, 0.1f));
-        sequence.Append(textShadow.DOPunchPosition(new Vector3(15, 5, 0), 0.5f, 10 + (100 * (power / 100))));
-        sequence.Join(this.text.DOPunchPosition(new Vector3(15, 5, 0), 0.5f, 20 + (100 * (power / 100))));
+        sequence.Append(textShadow.DOPunchPosition(new Vector3(15, 5, 0), 0.5f, 10 + (100 * (value / 100))));
+        sequence.Join(this.text.DOPunchPosition(new Vector3(15, 5, 0), 0.5f, 20 + (100 * (value / 100))));
+        sequence.Append(GetComponent<CanvasGroup>().DOFade(0f, 0.15f));
 
         sequence.OnComplete(() =>
         {
-            sequence.Append(GetComponent<CanvasGroup>().DOFade(0f, 0.15f));
+            OnAnimationComplete?.Invoke(this, EventArgs.Empty);
         });
-
     }
 
     #endregion

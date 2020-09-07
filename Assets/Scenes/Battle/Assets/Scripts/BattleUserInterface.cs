@@ -23,6 +23,8 @@ public class BattleUserInterface : XUserInterface<Party>
     private HealthSubComponent partnerHealth;
     private HealthSubComponent enemyHealth;
 
+    private int currentPartner;
+
     #endregion
 
     #region Properties
@@ -41,6 +43,20 @@ public class BattleUserInterface : XUserInterface<Party>
 
     #region Miscellaneous Methods
 
+    private void SetPartner()
+    {
+        partner = ((Party)Convert.ChangeType(information, typeof(Party))).playerParty[currentPartner];
+
+        partnerHealth.SetInformation(partner);
+
+        currentAttacker = partner;
+    }
+
+    private void SetEnemy()
+    {
+        enemyHealth.SetInformation(enemy);
+    }
+
     private bool CheckBattleState()
     {
         return currentAttacker.Stats.HP > 0;
@@ -50,28 +66,41 @@ public class BattleUserInterface : XUserInterface<Party>
 
     #region Event Methods
 
-    private void Component_OnPartnerAttack(object sender, List<int> list)
+    private void Component_OnPartnerAttack(object sender, int damage)
     {
-        currentAttacker = partner;
-
-        damageText.AnimateText(list[0].ToString(), list[1]);
-        enemyHealth.SetHealth(list[0]);
-
         if (CheckBattleState())
         {
-            Component_OnEnemyAttack();
+            currentAttacker = partner;
+
+            components.Find(c => c is MoveButtonComponent).GetComponent<MoveButtonComponent>().EnableButtons(false);
+
+            damageText.AnimateText(damage);
+            enemyHealth.SetHealth(damage);
         }
     }
 
     private void Component_OnEnemyAttack()
     {
-        currentAttacker = enemy;
+        if (CheckBattleState())
+        {
+            currentAttacker = enemy;
 
-        //damageText.SetText(damage.ToString());
+            int damage = enemyAI.Attack();
+            damageText.AnimateText(damage);
+            partnerHealth.SetHealth(damage);
+        }
+    }
 
-        (int damage, int power) = enemyAI.Attack();
-
-        partnerHealth.SetHealth(damage);
+    private void DamageText_OnAnimationComplete(object sender, EventArgs e)
+    {
+        if (currentAttacker == enemy)
+        {
+            components.Find(c => c is MoveButtonComponent).GetComponent<MoveButtonComponent>().EnableButtons(true);
+        }
+        else
+        {
+            Component_OnEnemyAttack();
+        }
     }
 
     #endregion
@@ -94,12 +123,11 @@ public class BattleUserInterface : XUserInterface<Party>
     {
         base.Start();
 
-        partner = (((Party)Convert.ChangeType(information, typeof(Party))).playerParty[0]);
-
-        partnerHealth.SetInformation(partner);
-        enemyHealth.SetInformation(enemy);
+        SetPartner();
+        SetEnemy();
 
         components.Find(c => c is MoveButtonComponent).GetComponent<MoveButtonComponent>().OnPartnerAttack += Component_OnPartnerAttack;
+        damageText.OnAnimationComplete += DamageText_OnAnimationComplete;
     }
 
     #endregion
