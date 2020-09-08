@@ -27,8 +27,6 @@ public class MoveButtonSubComponent : UserInterfaceSubComponent
 
     #region Properties
 
-    public int Index { private get; set; }
-
     public bool IsSelected { get; private set; }
 
     #endregion
@@ -56,9 +54,7 @@ public class MoveButtonSubComponent : UserInterfaceSubComponent
 
     public override void SetInformation<T>(T information)
     {
-        Party party = (Party)Convert.ChangeType(information, typeof(Party));
-        PartyMember member = party.playerParty[0];
-        PartyMember.MemberMove move = member.ActiveMoves[Index];
+        PartyMember.MemberMove move = (PartyMember.MemberMove)Convert.ChangeType(information, typeof(PartyMember.MemberMove));
 
         this.move = move;
 

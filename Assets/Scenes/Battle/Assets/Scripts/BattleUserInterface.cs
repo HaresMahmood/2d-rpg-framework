@@ -12,6 +12,9 @@ public class BattleUserInterface : XUserInterface<Party>
 
     [SerializeField] private EnemyController enemyAI;
 
+    [Header("Settings")]
+    [SerializeField] private float animationTime;
+
     [Header("Values")]
     [SerializeField] private PartyMember enemy;
     [SerializeField] private PartyMember partner;
@@ -55,6 +58,11 @@ public class BattleUserInterface : XUserInterface<Party>
     private void SetEnemy()
     {
         enemyHealth.SetInformation(enemy);
+    }
+
+    private void Attack(PartyMember currentMember, PartyMember.MemberMove move, int damage)
+    {
+
     }
 
     private bool CheckBattleState()

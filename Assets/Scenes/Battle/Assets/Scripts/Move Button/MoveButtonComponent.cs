@@ -46,9 +46,20 @@ public class MoveButtonComponent : UserInterfaceComponent
 
     public override void SetInformation<T>(T information)
     {
-        foreach (MoveButtonSubComponent component in components)
+        List<PartyMember.MemberMove> moves = ((PartyMember)Convert.ChangeType(information, typeof(PartyMember))).ActiveMoves;
+
+        for (int i = 0; i < moves.Count; i++)
         {
-            component.SetInformation(information);
+            components[i].gameObject.SetActive(true);
+            components[i].SetInformation(moves[i]);
+        }
+
+        if (components.Count > moves.Count)
+        {
+            for (int i = moves.Count - 1; i < components.Count; i++)
+            {
+                components[i].gameObject.SetActive(false);
+            }
         }
     }
 
@@ -72,7 +83,6 @@ public class MoveButtonComponent : UserInterfaceComponent
         for (int i = 0; i < components.Count; i++)
         {
             ((MoveButtonSubComponent)components[i]).OnPartnerAttack += SubComponent_OnPartnerAttack;
-            ((MoveButtonSubComponent)components[i]).Index = i;
         }
     }
 
