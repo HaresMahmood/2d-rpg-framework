@@ -17,7 +17,17 @@ public class XUserInterface<T> : MonoBehaviour
 
     #region Miscellaneous Methods
 
+    protected UserInterfaceComponent FindComponent(string name)
+    {
+        return components.Find(c => c.name == name);
+    }
 
+    /*
+    protected T FindComponent<T>()
+    {
+        return components.Find(c => c is T));
+    }
+    */
 
     #endregion
     

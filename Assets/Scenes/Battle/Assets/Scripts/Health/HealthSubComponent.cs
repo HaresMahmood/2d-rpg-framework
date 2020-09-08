@@ -30,10 +30,8 @@ public class HealthSubComponent : UserInterfaceSubComponent
 
     #region Miscellaneous Methods
 
-    public bool SetHealth(int health)
+    public void SetHealth()
     {
-        member.Stats.HP -= health;
-
         float hp = (float)member.Stats.HP / (float)member.Stats.Stats[Pokemon.Stat.HP];
         string color = hp >= 0.5f ? "#67FF8F" : (hp >= 0.25f ? "#FFB766" : "#FF7766");
         string hpValue = hpText.text == $"<color=#{ColorUtility.ToHtmlStringRGB(GameManager.GetAccentColor())}>{color}>HP</color>" ? "" : $"<color={color}>{member.Stats.HP}</color>/{member.Stats.Stats[Pokemon.Stat.HP]} ";
@@ -41,8 +39,6 @@ public class HealthSubComponent : UserInterfaceSubComponent
         hpBar.value = hp;
         hpBar.fillRect.GetComponent<Image>().color = color.ToColor();
         hpText.SetText($"{hpValue}<color=#{ColorUtility.ToHtmlStringRGB(GameManager.GetAccentColor())}>HP</color>");
-
-        return member.Stats.HP <= 0;
     }
 
     public void AnimateSlot(float opacity, float duration = -1)

@@ -10,12 +10,6 @@ using UnityEngine.EventSystems;
 /// </summary>
 public class MoveButtonComponent : UserInterfaceComponent
 {
-    #region Events
-
-    public event EventHandler<int> OnPartnerAttack;
-
-    #endregion
-
     #region Miscellaneous Methods
 
     public void DeselectButtons(Button selectedButton)
@@ -46,7 +40,11 @@ public class MoveButtonComponent : UserInterfaceComponent
 
     public override void SetInformation<T>(T information)
     {
-        List<PartyMember.MemberMove> moves = ((PartyMember)Convert.ChangeType(information, typeof(PartyMember))).ActiveMoves;
+        Party party = ((Party)Convert.ChangeType(information, typeof(Party)));
+        PartyMember member = party.playerParty[BattleManager.Instance.CurrentPartner];
+        List<PartyMember.MemberMove> moves = member.ActiveMoves;
+
+        SetInspectorValues();
 
         for (int i = 0; i < moves.Count; i++)
         {
@@ -59,32 +57,14 @@ public class MoveButtonComponent : UserInterfaceComponent
             for (int i = moves.Count - 1; i < components.Count; i++)
             {
                 components[i].gameObject.SetActive(false);
+                components.RemoveAt(i);
             }
         }
     }
 
     #endregion
 
-    #region Event Methods
-
-    private void SubComponent_OnPartnerAttack(object sender, int index)
-    {
-        OnPartnerAttack?.Invoke(this, components[index].GetComponent<MoveButtonSubComponent>().Attack());
-    }
-
-    #endregion
-
     #region Unity Methods
-
-    protected override void Awake()
-    {
-        base.Awake();
-
-        for (int i = 0; i < components.Count; i++)
-        {
-            ((MoveButtonSubComponent)components[i]).OnPartnerAttack += SubComponent_OnPartnerAttack;
-        }
-    }
 
     private void Start()
     {

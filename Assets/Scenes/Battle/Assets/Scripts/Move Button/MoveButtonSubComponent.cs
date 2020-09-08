@@ -10,8 +10,6 @@ public class MoveButtonSubComponent : UserInterfaceSubComponent
 {
     #region Variables
 
-    [SerializeField] private BattleUserInterface battleUserInterface;
-
     [Header("Values")]
     [SerializeField] private PartyMember.MemberMove move;
 
@@ -31,12 +29,6 @@ public class MoveButtonSubComponent : UserInterfaceSubComponent
 
     #endregion
 
-    #region Events
-
-    public event EventHandler<int> OnPartnerAttack;
-
-    #endregion
-
     #region Miscellaneous Methods
 
     public void SelectButton(bool isSelected)
@@ -45,11 +37,6 @@ public class MoveButtonSubComponent : UserInterfaceSubComponent
 
         textContainer.SetActive(isSelected);
         transform.Find("Selector").gameObject.SetActive(isSelected);
-    }
-
-    public int Attack()
-    {
-        return move.Value.CalculateDamage(battleUserInterface.Partner, battleUserInterface.Enemy);
     }
 
     public override void SetInformation<T>(T information)
@@ -80,13 +67,9 @@ public class MoveButtonSubComponent : UserInterfaceSubComponent
         icon = transform.Find("Icon").GetComponent<TypingIconUserInterface>();
     }
 
-    #endregion
-
-    #region Event Methods
-
-    private void OnClick()
+    private void Attack()
     {
-        OnPartnerAttack?.Invoke(this, Index);
+        BattleManager.Instance.Attack(move.Value.CalculateDamage(BattleManager.Instance.Partner, BattleManager.Instance.Enemy));
     }
 
     #endregion
@@ -95,7 +78,7 @@ public class MoveButtonSubComponent : UserInterfaceSubComponent
 
     private void Start()
     {
-        GetComponent<Button>().onClick.AddListener(OnClick);
+        GetComponent<Button>().onClick.AddListener(Attack);
     }
 
     #endregion

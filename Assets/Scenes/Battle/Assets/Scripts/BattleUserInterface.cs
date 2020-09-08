@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
 /// <summary>
@@ -8,39 +6,23 @@ using UnityEngine;
 /// </summary>
 public class BattleUserInterface : XUserInterface<Party>
 {
-    #region Variables
+    #region Properties
 
-    [SerializeField] private EnemyController enemyAI;
+    public Party Information { set { information = value; } }
+
+    #endregion
+
+    #region Variables
 
     [Header("Settings")]
     [SerializeField] private float animationTime;
 
-    [Header("Values")]
-    [SerializeField] private PartyMember enemy;
-    [SerializeField] private PartyMember partner;
-    [Space(5)]
-    [SerializeField] private PartyMember currentAttacker;
-
-    private DamageText damageText;
-
     private HealthSubComponent partnerHealth;
     private HealthSubComponent enemyHealth;
 
-    private int currentPartner;
-
     #endregion
 
-    #region Properties
-
-    public PartyMember Enemy
-    {
-        get { return enemy; }
-    }
-
-    public PartyMember Partner
-    {
-        get { return partner; }
-    }
+    #region Events
 
     #endregion
 
@@ -48,67 +30,23 @@ public class BattleUserInterface : XUserInterface<Party>
 
     private void SetPartner()
     {
-        partner = ((Party)Convert.ChangeType(information, typeof(Party))).playerParty[currentPartner];
-
-        partnerHealth.SetInformation(partner);
-
-        currentAttacker = partner;
+        partnerHealth.SetInformation(BattleManager.Instance.Partner);
     }
 
     private void SetEnemy()
     {
-        enemyHealth.SetInformation(enemy);
-    }
-
-    private void Attack(PartyMember currentMember, PartyMember.MemberMove move, int damage)
-    {
-
-    }
-
-    private bool CheckBattleState()
-    {
-        return currentAttacker.Stats.HP > 0;
+        enemyHealth.SetInformation(BattleManager.Instance.Enemy);
     }
 
     #endregion
 
     #region Event Methods
 
-    private void Component_OnPartnerAttack(object sender, int damage)
+    private void Battle_OnAttack(object sender, int damage)
     {
-        if (CheckBattleState())
-        {
-            currentAttacker = partner;
+        HealthSubComponent healthComponent = BattleManager.Instance.Stage == BattleManager.BattleStage.Partner ? enemyHealth : partnerHealth;
 
-            components.Find(c => c is MoveButtonComponent).GetComponent<MoveButtonComponent>().EnableButtons(false);
-
-            damageText.AnimateText(damage);
-            enemyHealth.SetHealth(damage);
-        }
-    }
-
-    private void Component_OnEnemyAttack()
-    {
-        if (CheckBattleState())
-        {
-            currentAttacker = enemy;
-
-            int damage = enemyAI.Attack();
-            damageText.AnimateText(damage);
-            partnerHealth.SetHealth(damage);
-        }
-    }
-
-    private void DamageText_OnAnimationComplete(object sender, EventArgs e)
-    {
-        if (currentAttacker == enemy)
-        {
-            components.Find(c => c is MoveButtonComponent).GetComponent<MoveButtonComponent>().EnableButtons(true);
-        }
-        else
-        {
-            Component_OnEnemyAttack();
-        }
+        healthComponent.SetHealth();
     }
 
     #endregion
@@ -119,12 +57,12 @@ public class BattleUserInterface : XUserInterface<Party>
     {
         base.Awake();
 
-        damageText = transform.Find("Canvas (Damage)/Damage").GetComponent<DamageText>();
+        //damageText = transform.Find("Canvas (Damage)/Damage").GetComponent<DamageText>();
 
         partnerHealth = transform.Find("Canvas (UI)/Fighters/Partner").GetComponent<HealthSubComponent>();
         enemyHealth = transform.Find("Canvas (UI)/Fighters/Enemy").GetComponent<HealthSubComponent>();
 
-        enemyAI.Enemy = enemy;
+        BattleManager.Instance.OnAttack += Battle_OnAttack;
     }
 
     protected override void Start()
@@ -133,9 +71,6 @@ public class BattleUserInterface : XUserInterface<Party>
 
         SetPartner();
         SetEnemy();
-
-        components.Find(c => c is MoveButtonComponent).GetComponent<MoveButtonComponent>().OnPartnerAttack += Component_OnPartnerAttack;
-        damageText.OnAnimationComplete += DamageText_OnAnimationComplete;
     }
 
     #endregion

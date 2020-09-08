@@ -6,34 +6,16 @@ using UnityEngine;
 ///
 /// </summary>
 public class EnemyController : MonoBehaviour
-{
-    #region Variables
-
-    [SerializeField] private BattleUserInterface battleUserInterface;
-
-    [Header("Values")]
-    [SerializeField] private PartyMember enemy;
-
-    #endregion
-
-    #region Properties
-
-    public PartyMember Enemy
-    {
-        set { enemy = value; }
-    }
-
-    #endregion
-    
+{   
     #region Miscellaneous Methods
 
     public int Attack()
     {
-        PartyMember.MemberMove move = enemy.ActiveMoves[UnityEngine.Random.Range(0, (enemy.ActiveMoves.Count))];
+        PartyMember.MemberMove move = BattleManager.Instance.Enemy.ActiveMoves[UnityEngine.Random.Range(0, (BattleManager.Instance.Enemy.ActiveMoves.Count))];
 
         Debug.Log(move.Value.Name);
 
-        return move.Value.CalculateDamage(battleUserInterface.Partner, battleUserInterface.Enemy);
+        return move.Value.CalculateDamage(BattleManager.Instance.Partner, BattleManager.Instance.Enemy);
     }
 
     #endregion
