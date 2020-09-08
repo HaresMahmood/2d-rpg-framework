@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Rendering;
@@ -50,6 +51,7 @@ public class BattleManager : MonoBehaviour
     [Header("Setup")]
     [SerializeField] private Party party;
     [SerializeField] private BattleUserInterface userInterface;
+    [SerializeField] private List<BattleAnimationController> animationControllers;
 
     [Header("Values")]
     [SerializeField] private BattleStage stage;
@@ -66,6 +68,7 @@ public class BattleManager : MonoBehaviour
     public UnityEvent<BattleStage> OnBattleStageChange;
 
     public event EventHandler<int> OnAttack;
+    public event EventHandler<int> OnAttackComplete;
     public event EventHandler OnPartnerFaint;
     public event EventHandler OnEnemyFaint;
 
@@ -87,15 +90,17 @@ public class BattleManager : MonoBehaviour
 
     public void Attack(int damage)
     {
-        OnAttack?.Invoke(this, damage);
+        Debug.Log(animationControllers[(int)stage]);
 
-        AttackComplete(damage);
+        StartCoroutine(animationControllers[(int)stage].Attack(damage));
     }
 
     public void AttackComplete(int damage)
     {
-        currentAttacker = stage == BattleStage.Partner ? enemy : partner;
+        currentAttacker = Stage == BattleStage.Partner ? enemy : partner;
         currentAttacker.Stats.HP = Mathf.Clamp(currentAttacker.Stats.HP -= damage, 0, currentAttacker.Stats.HP);
+
+        OnAttackComplete?.Invoke(this, damage);
 
         ChangeBattleStage();
     }
@@ -135,16 +140,12 @@ public class BattleManager : MonoBehaviour
 
     #endregion
 
-    #region Event Methods
-
-
-
-    #endregion
-
     #region Unity Methods
 
     private void Awake()
     {
+        //animationControllers = FindObjectsOfType<BattleAnimationController>().ToList();
+
         userInterface.Information = party;
     }
 

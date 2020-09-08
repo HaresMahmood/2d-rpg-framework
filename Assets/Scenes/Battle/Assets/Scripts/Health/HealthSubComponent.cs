@@ -32,6 +32,8 @@ public class HealthSubComponent : UserInterfaceSubComponent
 
     public void SetHealth()
     {
+        Debug.Log(member);
+
         float hp = (float)member.Stats.HP / (float)member.Stats.Stats[Pokemon.Stat.HP];
         string color = hp >= 0.5f ? "#67FF8F" : (hp >= 0.25f ? "#FFB766" : "#FF7766");
         string hpValue = hpText.text == $"<color=#{ColorUtility.ToHtmlStringRGB(GameManager.GetAccentColor())}>{color}>HP</color>" ? "" : $"<color={color}>{member.Stats.HP}</color>/{member.Stats.Stats[Pokemon.Stat.HP]} ";

@@ -62,7 +62,7 @@ public class BattleUserInterface : XUserInterface<Party>
         partnerHealth = transform.Find("Canvas (UI)/Fighters/Partner").GetComponent<HealthSubComponent>();
         enemyHealth = transform.Find("Canvas (UI)/Fighters/Enemy").GetComponent<HealthSubComponent>();
 
-        BattleManager.Instance.OnAttack += Battle_OnAttack;
+        BattleManager.Instance.OnAttackComplete += Battle_OnAttack;
     }
 
     protected override void Start()

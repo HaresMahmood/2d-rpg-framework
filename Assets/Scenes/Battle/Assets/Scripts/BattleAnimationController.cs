@@ -1,6 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 ///
@@ -11,36 +11,24 @@ public class BattleAnimationController : MonoBehaviour
 
     [SerializeField] private BattleManager.BattleStage stage;
 
-    private DamageText damage;
+    private DamageText damageText;
+
+    #endregion
+
+    #region Events
+
+    public UnityEvent OnAttackComplete;
 
     #endregion
 
     #region Miscellaneous Methods
 
-
-
-    #endregion
-
-    #region Event Methods
-
-    private void Battle_OnAttack(object sender, int damage)
+    public IEnumerator Attack(int damage)
     {
-        if (BattleManager.Instance.Stage == stage)
-        {
-            this.damage.Damage = damage;
-            GetComponent<Animator>().SetTrigger("Attack");
-        }
-    }
+        yield return new WaitForSeconds(0.5f);
 
-    #endregion
-
-    #region Unity Methods
-
-    private void Awake()
-    {
-        BattleManager.Instance.OnAttack += Battle_OnAttack;
-
-        damage = GetComponentInChildren<DamageText>();
+        BattleManager.Instance.AttackComplete(damage);
+        OnAttackComplete.Invoke();
     }
 
     #endregion
