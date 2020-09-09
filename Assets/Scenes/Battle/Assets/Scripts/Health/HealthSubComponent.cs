@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEngine.Events;
+using DG.Tweening;
   
 
 // TODO: Needs reworking
@@ -49,7 +49,10 @@ public class HealthSubComponent : UserInterfaceSubComponent
         string color = hp >= 0.5f ? "#67FF8F" : (hp >= 0.25f ? "#FFB766" : "#FF7766");
         string hpValue = !hpString.Contains("/") ? "" : $"<color={color}>{member.Stats.HP}</color>/{member.Stats.Stats[Pokemon.Stat.HP]} ";
 
-        hpBar.value = hp;
+        // TODO: Make serializable/Link to BattleUI.
+        //StartCoroutine(hpBar.LerpSlider(hp, 0.15f)); 
+        hpBar.DOValue(hp, 0.15f);
+
         hpBar.fillRect.GetComponent<Image>().color = color.ToColor();
         hpText.SetText($"{hpValue}<color=#{ColorUtility.ToHtmlStringRGB(GameManager.GetAccentColor())}>HP</color>");
     }
