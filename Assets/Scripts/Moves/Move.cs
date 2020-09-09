@@ -94,9 +94,9 @@ public class Move : ScriptableObject
                        * 1f; // Other (default: "1 in most cases")#
                              // https://bulbapedia.bulbagarden.net/wiki/Damage
 
-        float damage = (((((float)(2 * partner.Progression.Level) / 5) + 2) * power * (float)attackStat / (float)defenceStat) / 50) * modifier;
+        float damage = (((float)(2 * partner.Progression.Level) / 5) + 2) * power * (float)attackStat / (float)defenceStat / 50 * modifier;
 
-        return (int)damage;
+        return Mathf.FloorToInt(damage);
     }
 
     #endregion

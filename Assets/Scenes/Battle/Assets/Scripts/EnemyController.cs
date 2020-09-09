@@ -19,24 +19,5 @@ public class EnemyController : MonoBehaviour
     }
 
     #endregion
-
-    #region Unity Methods
-
-    private void Awake()
-    {
-        
-    }
-
-    private void Start()
-    {
-        
-    }
-
-    private void Update()
-    {
-        
-    }
-
-    #endregion
 }
 

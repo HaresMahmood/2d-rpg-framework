@@ -2,6 +2,11 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.Events;
+  
+
+// TODO: Needs reworking
+
 
 /// <summary>
 ///
@@ -28,34 +33,31 @@ public class HealthSubComponent : UserInterfaceSubComponent
 
     #endregion
 
+    #region Events
+
+    //[Header("Events")] [Space(5)]
+    //[SerializeField] private UnityEvent OnStart;
+
+    #endregion
+
     #region Miscellaneous Methods
 
     public void SetHealth()
     {
-        Debug.Log(member);
-
-        float hp = (float)member.Stats.HP / (float)member.Stats.Stats[Pokemon.Stat.HP];
+        string hpString = hpText.GetParsedText() == "" ? hpText.text : hpText.GetParsedText();
+        float hp = (float)member.Stats.HP / member.Stats.Stats[Pokemon.Stat.HP];
         string color = hp >= 0.5f ? "#67FF8F" : (hp >= 0.25f ? "#FFB766" : "#FF7766");
-        string hpValue = hpText.text == $"<color=#{ColorUtility.ToHtmlStringRGB(GameManager.GetAccentColor())}>{color}>HP</color>" ? "" : $"<color={color}>{member.Stats.HP}</color>/{member.Stats.Stats[Pokemon.Stat.HP]} ";
+        string hpValue = !hpString.Contains("/") ? "" : $"<color={color}>{member.Stats.HP}</color>/{member.Stats.Stats[Pokemon.Stat.HP]} ";
 
         hpBar.value = hp;
         hpBar.fillRect.GetComponent<Image>().color = color.ToColor();
         hpText.SetText($"{hpValue}<color=#{ColorUtility.ToHtmlStringRGB(GameManager.GetAccentColor())}>HP</color>");
     }
 
-    public void AnimateSlot(float opacity, float duration = -1)
-    {
-        StartCoroutine(sprite.gameObject.FadeOpacity(opacity, duration));
-        sprite.GetComponent<Animator>().SetBool("isActive", opacity != 0.3f);
-    }
-
     public void AnimateSlot(float opacity)
     {
-        if (transform.Find("Sprites").GetComponent<CanvasGroup>().alpha != opacity)
-        {
-            transform.Find("Sprites").GetComponent<CanvasGroup>().alpha = opacity;
-            transform.Find("Information").GetComponent<CanvasGroup>().alpha = opacity;
-        }
+        StartCoroutine(sprite.gameObject.FadeOpacity(opacity, 0.1f));
+        sprite.GetComponent<Animator>().SetBool("isActive", opacity != 0.2f);
     }
 
     public override void SetInformation<T>(T slotObject)
@@ -63,11 +65,6 @@ public class HealthSubComponent : UserInterfaceSubComponent
         PartyMember member = (PartyMember)Convert.ChangeType(slotObject, typeof(PartyMember));
 
         this.member = member;
-
-        float hp = (float)member.Stats.HP / (float)member.Stats.Stats[Pokemon.Stat.HP];
-        float exp = (float)member.Progression.Value / (float)member.Progression.GetRemaining(member.Species);
-
-        string color = hp >= 0.5f ? "#67FF8F" : (hp >= 0.25f ? "#FFB766" : "#FF7766");
 
         if (GetComponent<CanvasGroup>().alpha == 0)
         {
@@ -80,17 +77,15 @@ public class HealthSubComponent : UserInterfaceSubComponent
         levelText.SetText(member.Progression.Level.ToString());
         levelText.GetComponent<AutoTextWidth>().UpdateWidth(member.Progression.Level.ToString());
 
-        if (expBar != null)
+        if (expBar.gameObject.activeSelf)
         {
+            float exp = (float)member.Progression.Value / member.Progression.GetRemaining(member.Species);
+
             expBar.value = exp;
-            expText.SetText($"{exp}% <color=#{ColorUtility.ToHtmlStringRGB(GameManager.GetAccentColor())}>EXP</color>");
+            expText.SetText($"{(int)(exp * 100)}% <color=#{ColorUtility.ToHtmlStringRGB(GameManager.GetAccentColor())}>EXP</color>");
         }
 
-        string hpValue = !hpText.text.Contains("/") ? "" : $"<color={color}>{member.Stats.HP}</color>/{member.Stats.Stats[Pokemon.Stat.HP]} ";
-
-        hpBar.value = hp;
-        hpBar.fillRect.GetComponent<Image>().color = color.ToColor();
-        hpText.SetText($"{hpValue}<color=#{ColorUtility.ToHtmlStringRGB(GameManager.GetAccentColor())}>HP</color>");
+        SetHealth();
 
         gender.UpdateUserInterface(member.Gender.Value);
     }
@@ -109,6 +104,18 @@ public class HealthSubComponent : UserInterfaceSubComponent
 
         hpBar = transform.Find("Information/Health Bar").GetComponent<Slider>();
         hpText = transform.Find("Information/Health Bar/Handle Slide Area/Handle/Value").GetComponent<TextMeshProUGUI>();
+    }
+
+    #endregion
+
+    #region Unity Methods
+
+    private void Start()
+    {
+        if (expBar.gameObject.activeSelf)
+        {
+            AnimateSlot(0.35f);
+        }
     }
 
     #endregion

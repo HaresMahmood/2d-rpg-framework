@@ -17,7 +17,8 @@ public class BattleAnimationController : MonoBehaviour
 
     #region Events
 
-    public UnityEvent OnAttackComplete;
+    [Header("Events")] [Space(5)]
+    [SerializeField] private UnityEvent OnAttackComplete;
 
     #endregion
 

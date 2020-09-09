@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Rendering;
 
 /// <summary>
 ///
@@ -64,9 +63,7 @@ public class BattleManager : MonoBehaviour
     #endregion
 
     #region Events
-
-    public UnityEvent<BattleStage> OnBattleStageChange;
-
+    
     public event EventHandler<int> OnAttack;
     public event EventHandler<int> OnAttackComplete;
     public event EventHandler OnPartnerFaint;
