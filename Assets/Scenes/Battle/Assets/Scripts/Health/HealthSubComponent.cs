@@ -50,7 +50,6 @@ public class HealthSubComponent : UserInterfaceSubComponent
         string hpValue = !hpString.Contains("/") ? "" : $"<color={color}>{member.Stats.HP}</color>/{member.Stats.Stats[Pokemon.Stat.HP]} ";
 
         // TODO: Make serializable/Link to BattleUI.
-        //StartCoroutine(hpBar.LerpSlider(hp, 0.15f)); 
         hpBar.DOValue(hp, 0.15f);
 
         hpBar.fillRect.GetComponent<Image>().color = color.ToColor();
