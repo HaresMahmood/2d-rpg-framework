@@ -5,11 +5,11 @@ using UnityEngine;
 /// <summary>
 ///
 /// </summary>
-public class UserInterfaceButtons : MonoBehaviour
+public class InputController : MonoBehaviour
 {
     #region Variables
 
-
+    private Controls controls;
 
     #endregion
 
@@ -23,7 +23,9 @@ public class UserInterfaceButtons : MonoBehaviour
     
     private void Awake()
     {
-        
+        controls = new Controls();
+
+
     }
 
     private void Start()
@@ -34,6 +36,17 @@ public class UserInterfaceButtons : MonoBehaviour
     private void Update()
     {
         
+    }
+
+    private void OnEnable()
+    {
+        controls.UI.Enable();
+
+    }
+
+    private void OnDisable()
+    {
+        controls.UI.Disable();
     }
 
     #endregion

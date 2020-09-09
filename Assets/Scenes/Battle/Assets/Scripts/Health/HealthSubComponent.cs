@@ -4,9 +4,9 @@ using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
   
-
-// TODO: Needs reworking
-
+//////////////////////////////////////
+// TODO: Needs reworking (Use DOTween!)
+//////////////////////////////////////
 
 /// <summary>
 ///
