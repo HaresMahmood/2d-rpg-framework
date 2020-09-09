@@ -2,16 +2,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEngine.InputSystem;
 
-public class InputPrompt : MonoBehaviour
+public class ButtonPrompt : MonoBehaviour
 {
     #region Variables
 
-    //[SerializeField] private InputActionReference inputActionReference;
-
+    [Header("Setup")]
     [SerializeField] private List<Prompt> prompts = new List<Prompt>();
-    [SerializeField] InputDevice device;
 
     private TextMeshProUGUI text;
     private Image icon;
@@ -20,9 +17,9 @@ public class InputPrompt : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    private void OnInputDeviceChange(int i)
+    public void SetInformation(int i)
     {
-        text.SetText(prompts[i].text);
+        text.SetAutoTextWidth(prompts[i].text);
 
         icon.sprite = prompts[i].icon;
         icon.gameObject.SetActive(prompts[i].icon != null);
@@ -36,30 +33,11 @@ public class InputPrompt : MonoBehaviour
     {
         text = transform.Find("Button/Binding").GetComponent<TextMeshProUGUI>();
         icon = transform.Find("Button/Icon").GetComponent<Image>();
-
-        /*
-        foreach (InputDevice device in InputSystem.devices)
-        {
-            Debug.Log(device.);
-        }
-
-        InputSystem.onDeviceChange +=
-        (device, change) =>
-        {
-            switch (change)
-            {
-                case InputDeviceChange.Enabled:
-                    Debug.Log(device);
-                    this.device = device;
-                    break;
-            }
-        };
-        */
     }
 
     private void Start()
     {
-        OnInputDeviceChange(0);
+        SetInformation(0);
     }
 
     #endregion
