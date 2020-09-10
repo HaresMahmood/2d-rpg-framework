@@ -647,6 +647,14 @@ public class PartyMember : ScriptableObject
             return stat;
         }
 
+        public void ResetStatChanges()
+        {
+            foreach (Pokemon.Stat stat in values)
+            {
+                statChanges[stat] = 0;
+            }
+        }
+
         public void ResetEVs()
         {
             foreach (Pokemon.Stat stat in values)

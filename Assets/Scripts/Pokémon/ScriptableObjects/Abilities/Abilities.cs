@@ -16,15 +16,26 @@ public class Abilities : MonoBehaviour
 
     #region Miscellaneous Methods
 
+    private void ChangeStat(PartyMember member, Pokemon.Stat stat, int amount)
+    {
+        Mathf.Clamp(BattleManager.Instance.Enemy.Stats.StatChanges[stat] + amount, -6, 6);
+    }
+
+    #endregion
+
+
+    #region Ability Behevior
+
     public void Intimidate()
     {
         if (BattleManager.Instance.Stage == BattleManager.BattleStage.Start)
         {
             OnAbilityInvoke?.Invoke(this, BattleManager.Instance.Partner);
 
-            Mathf.Clamp(BattleManager.Instance.Enemy.Stats.StatChanges[Pokemon.Stat.Attack] - 1, -6, 6);
+            ChangeStat(BattleManager.Instance.Enemy, Pokemon.Stat.Attack, -1);
         }
     }
+
 
     #endregion
 

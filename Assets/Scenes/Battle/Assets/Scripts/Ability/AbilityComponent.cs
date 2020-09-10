@@ -8,7 +8,14 @@ using DG.Tweening;
 ///
 /// </summary>
 public class AbilityComponent : MonoBehaviour
-{
+{ 
+
+
+
+    // TODO: Queue up abilities
+
+
+
     #region Miscellaneous Methods
 
     public void SetInformation(Ability ability, bool reverseArrangement)
