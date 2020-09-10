@@ -67,7 +67,7 @@ public class BattleUserInterface : XUserInterface<Party>
         abilityComponent = transform.Find("Canvas (UI)/Fighters/Middle/Ability").GetComponent<AbilityComponent>();
 
         BattleManager.Instance.OnAttackComplete += Battle_OnAttack;
-        Abilities.OnAbilityInvoke += Abilities_OnAbilityInvoke;
+        AbilityController.OnAbilityInvoke += Abilities_OnAbilityInvoke;
     }
 
     protected override void Start()

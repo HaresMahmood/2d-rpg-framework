@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 ///
 /// </summary>
-public class Abilities : MonoBehaviour
+public class AbilityController : MonoBehaviour
 {
 
 
