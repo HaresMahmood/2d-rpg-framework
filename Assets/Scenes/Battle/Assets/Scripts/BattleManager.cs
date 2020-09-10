@@ -35,6 +35,7 @@ public class BattleManager : MonoBehaviour
     public BattleStage Stage
     {
         get { return stage; }
+        set { stage = value; OnBattleStageChange?.Invoke(this, stage); }
     }
 
     public PartyMember Enemy { get { return enemy; } }
@@ -63,6 +64,9 @@ public class BattleManager : MonoBehaviour
     #endregion
 
     #region Events
+
+    //[Header("Events")] [Space(5)] [SerializeField]
+    public event EventHandler<BattleStage> OnBattleStageChange;
     
     public event EventHandler<int> OnAttack;
     public event EventHandler<int> OnAttackComplete;
@@ -77,6 +81,7 @@ public class BattleManager : MonoBehaviour
     {
         Partner,
         Enemy,
+        Start,
         Won,
         Lost
     }
@@ -87,9 +92,9 @@ public class BattleManager : MonoBehaviour
 
     public void Attack(int damage)
     {
-        Debug.Log(animationControllers[(int)stage]);
+        Debug.Log(animationControllers[(int)Stage]);
 
-        StartCoroutine(animationControllers[(int)stage].Attack(damage));
+        StartCoroutine(animationControllers[(int)Stage].Attack(damage));
     }
 
     public void AttackComplete(int damage)
@@ -108,7 +113,7 @@ public class BattleManager : MonoBehaviour
         {
             if (currentAttacker == partner)
             {
-                stage = BattleStage.Lost;
+                Stage = BattleStage.Lost;
                 OnPartnerFaint?.Invoke(this, EventArgs.Empty);
 
                 /*
@@ -125,13 +130,13 @@ public class BattleManager : MonoBehaviour
             }
             else
             {
-                stage = BattleStage.Won;
+                Stage = BattleStage.Won;
                 OnEnemyFaint?.Invoke(this, EventArgs.Empty);
             }
         }
         else
         {
-            stage = (BattleStage)ExtensionMethods.IncrementInt((int)stage, 0, 2, 1);
+            Stage = (BattleStage)ExtensionMethods.IncrementInt((int)Stage, 0, 2, 1);
         }
     }
 
@@ -148,10 +153,11 @@ public class BattleManager : MonoBehaviour
 
     private void Start()
     {
-        stage = BattleStage.Partner;
-
         partner = party.playerParty[CurrentPartner];
         currentAttacker = partner;
+
+        Stage = BattleStage.Start;
+        Stage = BattleStage.Partner;
     }
 
     #endregion

@@ -20,9 +20,7 @@ public class BattleUserInterface : XUserInterface<Party>
     private HealthSubComponent partnerHealth;
     private HealthSubComponent enemyHealth;
 
-    #endregion
-
-    #region Events
+    private AbilityComponent abilityComponent;
 
     #endregion
 
@@ -49,6 +47,11 @@ public class BattleUserInterface : XUserInterface<Party>
         healthComponent.SetHealth();
     }
 
+    private void Abilities_OnAbilityInvoke(object sender, PartyMember member)
+    {
+        abilityComponent.SetInformation(member.Ability, member == BattleManager.Instance.Partner);
+    }
+
     #endregion
 
     #region Unity Methods
@@ -61,8 +64,10 @@ public class BattleUserInterface : XUserInterface<Party>
 
         partnerHealth = transform.Find("Canvas (UI)/Fighters/Partner").GetComponent<HealthSubComponent>();
         enemyHealth = transform.Find("Canvas (UI)/Fighters/Enemy").GetComponent<HealthSubComponent>();
+        abilityComponent = transform.Find("Canvas (UI)/Fighters/Middle/Ability").GetComponent<AbilityComponent>();
 
         BattleManager.Instance.OnAttackComplete += Battle_OnAttack;
+        Abilities.OnAbilityInvoke += Abilities_OnAbilityInvoke;
     }
 
     protected override void Start()
