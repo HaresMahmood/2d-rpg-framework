@@ -26,16 +26,17 @@ public class AbilityController : MonoBehaviour
 
     #region Ability Behevior
 
-    public void Intimidate()
+    public void Intimidate(PartyMember currentMember)
     {
+        PartyMember otherMember = currentMember == BattleManager.Instance.Partner ? BattleManager.Instance.Enemy : BattleManager.Instance.Partner;
+
         if (BattleManager.Instance.Stage == BattleManager.BattleStage.Start)
         {
-            OnAbilityInvoke?.Invoke(this, BattleManager.Instance.Partner);
+            OnAbilityInvoke?.Invoke(this, currentMember);
 
-            ChangeStat(BattleManager.Instance.Enemy, Pokemon.Stat.Attack, -1);
+            ChangeStat(otherMember, Pokemon.Stat.Attack, -1);
         }
     }
-
 
     #endregion
 
@@ -43,8 +44,8 @@ public class AbilityController : MonoBehaviour
 
     private void Battle_OnBattleStageChange(object sender, BattleManager.BattleStage e)
     {
-        BattleManager.Instance.Partner.Ability?.Logic.Invoke();
-        //BattleManager.Instance.Enemy.Ability?.Logic.Invoke();
+        BattleManager.Instance.Partner.Ability?.Logic.Invoke((PartyMember)BattleManager.Instance.Partner);
+        BattleManager.Instance.Enemy.Ability?.Logic.Invoke((PartyMember)BattleManager.Instance.Enemy);
     }
 
     #endregion

@@ -11,7 +11,7 @@ public class Ability : ScriptableObject
     [SerializeField] private string description;
     [SerializeField] private bool requiresTarget;
     [SerializeField] private GameObject particleEffect;
-    [SerializeField] private UnityEvent logic;
+    [SerializeField] private UnityEvent<PartyMember> logic;
 
     #endregion
 
@@ -47,7 +47,7 @@ public class Ability : ScriptableObject
         set { particleEffect = value; }
     }
 
-    public UnityEvent Logic
+    public UnityEvent<PartyMember> Logic
     {
         get { return logic; }
         set { logic = value; }
