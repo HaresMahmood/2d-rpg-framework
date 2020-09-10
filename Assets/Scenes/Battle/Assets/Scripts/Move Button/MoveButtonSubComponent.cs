@@ -37,6 +37,8 @@ public class MoveButtonSubComponent : UserInterfaceSubComponent
 
         textContainer.SetActive(isSelected);
         transform.Find("Selector").gameObject.SetActive(isSelected);
+
+        LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponentInParent<RectTransform>());
     }
 
     public override void SetInformation<T>(T information)

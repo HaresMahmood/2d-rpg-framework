@@ -26,22 +26,22 @@ public class ButtonPromptController : MonoBehaviour
         buttonPrompts = GetComponentsInChildren<ButtonPrompt>().ToList();
 
         actionAsset.actionMaps[0].actionTriggered +=
-    (InputAction.CallbackContext context) =>
-    {
-        var inputAction = context.action;
-        var binding = inputAction.GetBindingForControl(inputAction.activeControl).Value;
-
-        if (device != binding.groups)
+        (InputAction.CallbackContext context) =>
         {
-            device = binding.groups;
+            var inputAction = context.action;
+            var binding = inputAction.GetBindingForControl(inputAction.activeControl).Value;
 
-            foreach (ButtonPrompt buttonPrompt in buttonPrompts)
+            if (device != binding.groups)
             {
-                buttonPrompt.SetInformation(device == "Gamepad" ? 1 : 0); // TODO: Think of better way of doing this
-                LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponent<RectTransform>());
+                device = binding.groups;
+
+                foreach (ButtonPrompt buttonPrompt in buttonPrompts)
+                {
+                    buttonPrompt.SetInformation(device == "Gamepad" ? 1 : 0); // TODO: Think of better way of doing this
+                    LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponent<RectTransform>());
+                }
             }
-        }
-    };
+        };
     }
 
     #endregion
