@@ -56,10 +56,10 @@ public class AbilityComponent : MonoBehaviour
 
         sequence.OnComplete(() =>
         {
-            if (list.Count > 1)
-            {
-                list.RemoveAt(0);
+            list.RemoveAt(0);
 
+            if (list.Count > 0)
+            {
                 Animate();
             }
         });

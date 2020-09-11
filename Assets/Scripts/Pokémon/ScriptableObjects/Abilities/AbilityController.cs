@@ -38,6 +38,18 @@ public class AbilityController : MonoBehaviour
         }
     }
 
+    public void SpeedBoost(PartyMember currentMember)
+    {
+        BattleManager.BattleStage memberStage = currentMember == BattleManager.Instance.Partner ? BattleManager.BattleStage.Partner : BattleManager.BattleStage.Enemy;
+
+        if (BattleManager.Instance.Stage == BattleManager.BattleStage.Partner)
+        {
+            OnAbilityInvoke?.Invoke(this, currentMember);
+
+            ChangeStat(currentMember, Pokemon.Stat.Speed, 1);
+        }
+    }
+
     #endregion
 
     #region Event Methods
