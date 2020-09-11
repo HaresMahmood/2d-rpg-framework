@@ -14,6 +14,17 @@ using UnityEngine.UI;
 /// </summary>
 public static class ExtensionMethods
 {
+
+    public static void SetAutoTextWidth(this TextMeshProUGUI text, string value)
+    {
+        Vector2 textSize = new Vector2(text.GetPreferredValues(value).x, text.rectTransform.sizeDelta.y);
+
+        text.SetText(value);
+        text.rectTransform.sizeDelta = textSize;
+    }
+
+
+
     /// <summary>
     /// 
     /// </summary>
