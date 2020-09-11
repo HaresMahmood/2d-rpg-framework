@@ -81,8 +81,13 @@ public class Move : ScriptableObject
 
     public int CalculateDamage(PartyMember partner, PartyMember enemy)
     {
-        float attackStat = category == Move.MoveCategory.Physical ? partner.Stats.Stats[Pokemon.Stat.Attack] : partner.Stats.Stats[Pokemon.Stat.SpAttack];
-        float defenceStat = category == Move.MoveCategory.Physical ? enemy.Stats.Stats[Pokemon.Stat.Defence] : enemy.Stats.Stats[Pokemon.Stat.SpDefence];
+        float attackStat = category == Move.MoveCategory.Physical 
+            ? (partner.Stats.Stats[Pokemon.Stat.Attack] * GetStatChangeModifier(partner.Stats.StatChanges[Pokemon.Stat.Attack]))
+            : (partner.Stats.Stats[Pokemon.Stat.SpAttack] * GetStatChangeModifier(partner.Stats.StatChanges[Pokemon.Stat.SpAttack]));
+
+        float defenceStat = category == Move.MoveCategory.Physical 
+            ? (enemy.Stats.Stats[Pokemon.Stat.Defence] * GetStatChangeModifier(enemy.Stats.StatChanges[Pokemon.Stat.Defence])) 
+            : (enemy.Stats.Stats[Pokemon.Stat.SpDefence] * GetStatChangeModifier(enemy.Stats.StatChanges[Pokemon.Stat.SpDefence]));
 
         float modifier = 0.75f // Target (default: one target)
                        * 1f // Weather (default: neutral weather)
@@ -97,6 +102,13 @@ public class Move : ScriptableObject
         float damage = (((float)(2 * partner.Progression.Level) / 5) + 2) * power * (float)attackStat / (float)defenceStat / 50 * modifier;
 
         return Mathf.FloorToInt(damage);
+    }
+
+    private int GetStatChangeModifier(int statChange)
+    {
+        Debug.Log(Mathf.Max(2, 2 + statChange) + " / " +  Mathf.Max(2, 2 + statChange));
+
+        return Mathf.Max(2, 2 + statChange) / Mathf.Max(2, 2 - statChange);
     }
 
     #endregion
