@@ -21,9 +21,6 @@ public class FullPartySlot : Slot
     private Slider hpBar;
     private TextMeshProUGUI hpText;
 
-    private Slider expBar;
-    private TextMeshProUGUI expText;
-
     #endregion
 
     #region Miscellaneous Methods
@@ -48,8 +45,6 @@ public class FullPartySlot : Slot
         PartyMember member = (PartyMember)Convert.ChangeType(slotObject, typeof(PartyMember));
 
         float hp = (float)member.Stats.HP / (float)member.Stats.Stats[Pokemon.Stat.HP];
-        float exp = (float)member.Progression.Value /(float)member.Progression.GetRemaining(member.Species);
-
         string color = hp >= 0.5f ? "#67FF8F" : (hp >= 0.25f ? "#FFB766" : "#FF7766");
 
         if (GetComponent<CanvasGroup>().alpha == 0)
@@ -73,9 +68,6 @@ public class FullPartySlot : Slot
         levelText.SetText(member.Progression.Level.ToString());
         levelText.GetComponent<AutoTextWidth>().UpdateWidth(member.Progression.Level.ToString());
 
-        expBar.value = exp;
-        hpText.SetText($"{exp}% <color=#{ColorUtility.ToHtmlStringRGB(GameManager.GetAccentColor())}>EXP</color>");
-
         hpBar.value = hp;
         hpBar.fillRect.GetComponent<Image>().color = color.ToColor();
         hpText.SetText($"<color={color}>{member.Stats.HP}</color>/{member.Stats.Stats[Pokemon.Stat.HP]} <color=#{ColorUtility.ToHtmlStringRGB(GameManager.GetAccentColor())}>HP</color>");
@@ -95,16 +87,14 @@ public class FullPartySlot : Slot
         sprite = transform.Find("Sprites/Sprite").GetComponent<Image>();
         heldItem = transform.Find("Sprites/Held Item").GetComponent<Image>();
 
-        nameText = transform.Find("Information/Name & Gender/Name").GetComponent<TextMeshProUGUI>();
-        gender = transform.Find("Information/Name & Gender/Gender").GetComponent<GenderUserInterface>();
+        nameText = transform.Find("Information/Name").GetComponent<TextMeshProUGUI>();
+        levelText = transform.Find("Information/Level & Gender/Level/Value").GetComponent<TextMeshProUGUI>();
 
-        levelText = transform.Find("Information/Progression/Level/Value").GetComponent<TextMeshProUGUI>();
+        gender = transform.Find("Information/Level & Gender/Gender").GetComponent<GenderUserInterface>();
 
-        expBar = transform.Find("Information/Progression/Experience Bar").GetComponent<Slider>();
-        expText = transform.Find("Information/Progression/Experience Bar/Handle Slide Area/Handle/Value").GetComponent<TextMeshProUGUI>();
+        hpBar = transform.Find("Information/Health/Health Bar").GetComponent<Slider>();
+        hpText = transform.Find("Information/Health/Health Bar/Handle Slide Area/Handle/Value").GetComponent<TextMeshProUGUI>();
 
-        hpBar = transform.Find("Information/Health Bar").GetComponent<Slider>();
-        hpText = transform.Find("Information/Health Bar/Handle Slide Area/Handle/Value").GetComponent<TextMeshProUGUI>();
     }
 
     #endregion

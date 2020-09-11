@@ -10,8 +10,8 @@ public class TypingUserInterface : ComponentUserInterface
 {
     #region Fields
 
-    [SerializeField] protected Typing type;
-    [SerializeField] protected Sprite sprite;
+    [SerializeField] private Typing type;
+    [SerializeField] private Sprite sprite;
 
     #endregion
 
@@ -31,7 +31,8 @@ public class TypingUserInterface : ComponentUserInterface
 
             if (type.Value != Typing.Type.None)
             {
-                SetSprite();
+                sprite = icons.First(i => i.name.Contains(type.Value.ToString().ToLower()));
+                type.Color = GetColor(type.Value);
             }
         }
     }
@@ -46,7 +47,7 @@ public class TypingUserInterface : ComponentUserInterface
 
     #region Miscellaneous Methods
 
-    public virtual void UpdateUserInterface(Typing type, Sprite sprite)
+    public void UpdateUserInterface(Typing type, Sprite sprite)
     {
         if (text == null)
         {
@@ -75,12 +76,6 @@ public class TypingUserInterface : ComponentUserInterface
             text.gameObject.SetActive(false);
             icon.gameObject.SetActive(false);
         }
-    }
-
-    private void SetSprite()
-    {
-        sprite = icons.First(i => i.name.Contains(type.Value.ToString().ToLower()));
-        type.Color = GetColor(type.Value);
     }
 
     private Color GetColor(Typing.Type type)

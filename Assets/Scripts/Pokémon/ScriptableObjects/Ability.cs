@@ -1,27 +1,20 @@
 ﻿using UnityEngine;
-using UnityEngine.Events;
 
 [CreateAssetMenu(fileName = "New Ability", menuName = "Ability")]
 public class Ability : ScriptableObject
 {
     #region Fields
 
-    [SerializeField] private new string name;
     [SerializeField] private int id;
+    [SerializeField] private new string name;
     [SerializeField] private string description;
     [SerializeField] private bool requiresTarget;
-    [SerializeField] private GameObject particleEffect;
-    [SerializeField] private UnityEvent<PartyMember> logic;
+    //private GameObject particleEffect;
+    //private (Unity)Event trigger;
 
     #endregion
 
     #region Properties
-
-    public string Name
-    {
-        get { return name; }
-        set { name = value; }
-    }
 
     public int ID
     {
@@ -29,28 +22,16 @@ public class Ability : ScriptableObject
         set { id = value; }
     }
 
+    public string Name
+    {
+        get { return name; }
+        set { name = value; }
+    }
+
     public string Description
     {
         get { return description; }
         set { description = value; }
-    }
-
-    public bool RequiresTarget
-    {
-        get { return requiresTarget; }
-        set { requiresTarget = value; }
-    }
-
-    public GameObject PartcileEffect
-    {
-        get { return particleEffect; }
-        set { particleEffect = value; }
-    }
-
-    public UnityEvent<PartyMember> Logic
-    {
-        get { return logic; }
-        set { logic = value; }
     }
 
     #endregion
