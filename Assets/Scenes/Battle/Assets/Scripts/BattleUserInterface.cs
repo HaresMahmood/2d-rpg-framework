@@ -62,9 +62,9 @@ public class BattleUserInterface : XUserInterface<Party>
 
         //damageText = transform.Find("Canvas (Damage)/Damage").GetComponent<DamageText>();
 
-        partnerHealth = transform.Find("Canvas (UI)/Fighters/Partner").GetComponent<HealthSubComponent>();
-        enemyHealth = transform.Find("Canvas (UI)/Fighters/Enemy").GetComponent<HealthSubComponent>();
-        abilityComponent = transform.Find("Canvas (UI)/Fighters/Middle/Ability").GetComponent<AbilityComponent>();
+        partnerHealth = transform.Find("Canvas (Battle)/Fighters/Partner").GetComponent<HealthSubComponent>();
+        enemyHealth = transform.Find("Canvas (Battle)/Fighters/Enemy").GetComponent<HealthSubComponent>();
+        abilityComponent = transform.Find("Canvas (Battle)/Fighters/Middle/Ability").GetComponent<AbilityComponent>();
 
         BattleManager.Instance.OnAttackComplete += Battle_OnAttack;
         AbilityController.OnAbilityInvoke += Abilities_OnAbilityInvoke;
