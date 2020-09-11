@@ -22,8 +22,6 @@ public class PartyMember : ScriptableObject
     [SerializeField] private List<MemberMove> learnedMoves = new List<MemberMove>();
     [SerializeField] private Item heldItem;
     [SerializeField] private MemberStats stats = new MemberStats();
-    [SerializeField] private Ability ability;
-    [SerializeField] private bool isOnField;
 
     #endregion
 
@@ -80,11 +78,13 @@ public class PartyMember : ScriptableObject
         get { return nature; }
     }
 
-    public Ability Ability
+    /*
+    public int Ability
     {
-        get { return ability; }
-        set { ability = value; }
+        get { return level; }
+        private set { level = value; }
     }
+    */
 
     public List<MemberMove> ActiveMoves
     {
@@ -105,12 +105,6 @@ public class PartyMember : ScriptableObject
     public MemberStats Stats
     {
         get { return stats; }
-    }
-
-    public bool IsOnField
-    {
-        get { return isOnField; }
-        set { isOnField = value; }
     }
 
     #endregion
@@ -419,6 +413,12 @@ public class PartyMember : ScriptableObject
     }
 
     [Serializable]
+    public class PokemonAbility
+    {
+
+    }
+
+    [Serializable]
     public class MemberMove
     {
         #region Fields
@@ -495,11 +495,6 @@ public class PartyMember : ScriptableObject
                             color = "B0B0B0".ToColor();
                             break;
                         }
-                    case Ailment.Fainted:
-                        {
-                            color = "808080".ToColor();
-                            break;
-                        }
                     default:
                         {
                             color = Color.white;
@@ -522,8 +517,7 @@ public class PartyMember : ScriptableObject
             Burned,
             Frozen,
             Poisoned,
-            Asleep,
-            Fainted
+            Asleep
         }
 
         #endregion
@@ -542,7 +536,6 @@ public class PartyMember : ScriptableObject
 
         [SerializeField] private int hp;
         [SerializeField] private StatDictionary stats;
-        [SerializeField] private StatDictionary statChanges;
         [SerializeField] private StatDictionary evs;
         [SerializeField] private StatDictionary ivs;
         [SerializeField] private int happiness;
@@ -565,27 +558,12 @@ public class PartyMember : ScriptableObject
                 {
                     foreach (Pokemon.Stat stat in values)
                     {
+                        Debug.Log(stat);
                         stats.Add(stat, 0);
                     }
                 }
 
                 return stats;
-            }
-        }
-
-        public StatDictionary StatChanges
-        {
-            get
-            {
-                if (statChanges.Count == 0)
-                {
-                    foreach (Pokemon.Stat stat in values)
-                    {
-                        statChanges.Add(stat, 0);
-                    }
-                }
-
-                return statChanges;
             }
         }
 
@@ -645,14 +623,6 @@ public class PartyMember : ScriptableObject
             }
 
             return stat;
-        }
-
-        public void ResetStatChanges()
-        {
-            foreach (Pokemon.Stat stat in values)
-            {
-                statChanges[stat] = 0;
-            }
         }
 
         public void ResetEVs()

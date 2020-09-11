@@ -34,19 +34,19 @@ public class PartyMoveSlot : PartyInformationSlot
     {
         PartyMember.MemberMove move = (PartyMember.MemberMove)Convert.ChangeType(slotObject, typeof(PartyMember.MemberMove));
 
-        moveNameText.SetText(move.Value.Name);
+        moveNameText.SetText(move.Value.name);
    
-        ppText.SetText(move.PP.ToString() + "/" + move.Value.PP);
+        ppText.SetText(move.PP.ToString() + "/" + move.Value.pp);
 
-        physicalIcon.SetActive(move.Value.Category == Move.MoveCategory.Physical);
-        specialIcon.SetActive(move.Value.Category == Move.MoveCategory.Special);
-        accuracyText.SetText(move.Value.Accuracy.ToString());
-        powertext.SetText(move.Value.Power.ToString());
+        physicalIcon.SetActive(move.Value.category == Move.Category.Physical);
+        specialIcon.SetActive(move.Value.category == Move.Category.Special);
+        accuracyText.SetText(move.Value.accuracy.ToString());
+        powertext.SetText(move.Value.power.ToString());
 
-        typing.Value = move.Value.Typing.Value;
+        typing.Value = move.Value.typing.Value;
         typing.UpdateUserInterface(typing.Type, typing.Icon);
 
-        descriptionText.SetText(move.Value.Description);
+        descriptionText.SetText(move.Value.description);
 
         float h, s;
 

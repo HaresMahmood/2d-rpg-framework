@@ -79,7 +79,7 @@ namespace CharTween.Examples
 
             sequence = DOTween.Sequence();
 
-            for (int i = 0; i < text.Length; i++)
+            for (int i = 0; i < text.Length; ++i)
             {
                 float timeOffset = Mathf.Lerp(0, 1, (i - 0) / (float)(text.Length - 0 + 1));
                 var charSequence = DOTween.Sequence();
@@ -94,6 +94,13 @@ namespace CharTween.Examples
             });
 
             //sequence.SetLoops(-1, LoopType.Yoyo);
+        }
+
+        private string StripTags(string text)
+        {
+            string pattern = @"<(.|\n)*?>";
+
+            return Regex.Replace(text, pattern, string.Empty);
         }
 
         /*
