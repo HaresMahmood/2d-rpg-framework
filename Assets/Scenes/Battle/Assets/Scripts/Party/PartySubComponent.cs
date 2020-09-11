@@ -11,9 +11,12 @@ using DG.Tweening;
 /// <summary>
 ///
 /// </summary>
-public class HealthSubComponent : UserInterfaceSubComponent
+public class PartySubComponent : UserInterfaceSubComponent
 {
     #region Variables
+
+    [Header("Settings")]
+    [SerializeField] private bool animateAtStart;
 
     [Header("Values")]
     [SerializeField] private PartyMember member;
@@ -114,7 +117,7 @@ public class HealthSubComponent : UserInterfaceSubComponent
 
     private void Start()
     {
-        if (expBar.gameObject.activeSelf)
+        if (animateAtStart)
         {
             AnimateSlot(0.35f);
         }

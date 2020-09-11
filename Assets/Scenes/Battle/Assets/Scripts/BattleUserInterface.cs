@@ -17,8 +17,8 @@ public class BattleUserInterface : XUserInterface<Party>
     [Header("Settings")]
     [SerializeField] private float animationTime;
 
-    private HealthSubComponent partnerHealth;
-    private HealthSubComponent enemyHealth;
+    private PartySubComponent partnerHealth;
+    private PartySubComponent enemyHealth;
 
     private AbilityComponent abilityComponent;
 
@@ -42,7 +42,7 @@ public class BattleUserInterface : XUserInterface<Party>
 
     private void Battle_OnAttack(object sender, int damage)
     {
-        HealthSubComponent healthComponent = BattleManager.Instance.Stage == BattleManager.BattleStage.Partner ? enemyHealth : partnerHealth;
+        PartySubComponent healthComponent = BattleManager.Instance.Stage == BattleManager.BattleStage.Partner ? enemyHealth : partnerHealth;
 
         healthComponent.SetHealth();
     }
@@ -62,8 +62,8 @@ public class BattleUserInterface : XUserInterface<Party>
 
         //damageText = transform.Find("Canvas (Damage)/Damage").GetComponent<DamageText>();
 
-        partnerHealth = transform.Find("Canvas (Battle)/Fighters/Partner").GetComponent<HealthSubComponent>();
-        enemyHealth = transform.Find("Canvas (Battle)/Fighters/Enemy").GetComponent<HealthSubComponent>();
+        partnerHealth = transform.Find("Canvas (Battle)/Fighters/Partner").GetComponent<PartySubComponent>();
+        enemyHealth = transform.Find("Canvas (Battle)/Fighters/Enemy").GetComponent<PartySubComponent>();
         abilityComponent = transform.Find("Canvas (Battle)/Fighters/Middle/Ability").GetComponent<AbilityComponent>();
 
         BattleManager.Instance.OnAttackComplete += Battle_OnAttack;
