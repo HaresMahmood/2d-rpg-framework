@@ -65,6 +65,14 @@ public class PartySubComponent : UserInterfaceSubComponent
         sprite.GetComponent<Animator>().SetBool("isActive", opacity != 0.2f);
     }
 
+    public void AnimateComponent(float opacity)
+    {
+        transform.Find("Sprites").GetComponent<CanvasGroup>().alpha = opacity;
+        transform.Find("Information").GetComponent<CanvasGroup>().alpha = opacity;
+
+        GetComponent<Button>().enabled = opacity != 0f;
+    }
+
     public override void SetInformation<T>(T slotObject)
     {
         PartyMember member = (PartyMember)Convert.ChangeType(slotObject, typeof(PartyMember));
@@ -119,7 +127,7 @@ public class PartySubComponent : UserInterfaceSubComponent
     {
         if (animateAtStart)
         {
-            AnimateSlot(0.35f);
+            AnimateSlot(0.35f); // TODO: Replace with event "OnPartnerStageStart" or something
         }
     }
 

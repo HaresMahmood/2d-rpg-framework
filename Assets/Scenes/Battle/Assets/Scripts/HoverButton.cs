@@ -2,6 +2,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
+//////////////////////////////////////
+// TODO: Redo (make interface)
+//////////////////////////////////////
+
 /// <summary>
 ///
 /// </summary>
