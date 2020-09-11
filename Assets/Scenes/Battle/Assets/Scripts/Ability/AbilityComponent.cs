@@ -12,6 +12,9 @@ public class AbilityComponent : MonoBehaviour
 {
     #region Variables
 
+    [Header("Settings")]
+    [SerializeField] private AnimationCurve curve;
+
     [Header("Values")] [SerializeField]
     private List<ComponentInformation> list; // TODO: Change to Queue (Was not working as expected)
 
@@ -45,9 +48,10 @@ public class AbilityComponent : MonoBehaviour
         SetInformation(list[0]);
 
         sequence.Append(GetComponent<CanvasGroup>().DOFade(1f, 0.1f));
-        //sequence.Join(transform.DOMoveY());
+        sequence.Join(transform.DOBlendableLocalMoveBy(new Vector3(0f, 10f, 0f), 0.2f)).SetEase(curve);
         sequence.AppendInterval(2f);
-        sequence.Append(GetComponent<CanvasGroup>().DOFade(0f, 0.15f));
+        sequence.Append(GetComponent<CanvasGroup>().DOFade(0f, 0.1f));
+        sequence.Join(transform.DOBlendableLocalMoveBy(new Vector3(0f, -15f, 0f), 0.1f));
 
         sequence.OnComplete(() =>
         {
