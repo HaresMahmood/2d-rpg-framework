@@ -64,6 +64,7 @@ GameObject:
   - component: {fileID: 339523911532493219}
   - component: {fileID: 1576676191756091605}
   - component: {fileID: 7383698363704586872}
+  - component: {fileID: 5836281834168149470}
   m_Layer: 5
   m_Name: Female
   m_TagString: Untagged
@@ -128,6 +129,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5836281834168149470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7899282377798471573}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0.33962262, g: 0.33962262, b: 0.33962262, a: 0.54901963}
+  m_EffectDistance: {x: 3.5, y: -2.5}
+  m_UseGraphicAlpha: 1
 --- !u!1 &8271633375047374155
 GameObject:
   m_ObjectHideFlags: 0
@@ -139,6 +155,7 @@ GameObject:
   - component: {fileID: 4814237107611767049}
   - component: {fileID: 900351603986382069}
   - component: {fileID: 1942706562099464930}
+  - component: {fileID: 2740484182117653866}
   m_Layer: 5
   m_Name: Male
   m_TagString: Untagged
@@ -203,3 +220,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2740484182117653866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8271633375047374155}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0.33962262, g: 0.33962262, b: 0.33962262, a: 0.54901963}
+  m_EffectDistance: {x: 3.5, y: -2.5}
+  m_UseGraphicAlpha: 1

@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
 
     [UnityEngine.Header("Global Settings")]
     [SerializeField] private Transform activePlayer;
-    [SerializeField] private Color accentColor = "51C2FC".ToColor();
+    public Color accentColor = "51C2FC".ToColor();
     [SerializeField] private TMP_FontAsset dyslexiaFont;
     [SerializeField] private bool dyslexiaMode;
 
@@ -42,8 +42,6 @@ public class GameManager : MonoBehaviour
         if (instance == null)
             instance = this;
 
-
-
         if (player != null)
         {
             for (int i = 0; i < player.childCount; i++)
@@ -61,11 +59,20 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        ApplySettings();
+        //ApplySettings();
+    }
+
+    public Color GetOppositeColor()
+    {
+        Color.RGBToHSV(accentColor, out float h, out float s, out float v);
+        h = (h + 0.5f) % 1f;
+        return Color.HSVToRGB(h, s, v);
     }
 
     private void ApplySettings()
     {
+        oppositeColor = GetOppositeColor();
+
         if (initialColor != accentColor)
         {
             initialColor = accentColor;
@@ -94,10 +101,6 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
-
-        Color.RGBToHSV(accentColor, out float h, out float s, out float v);
-        h = (h + 180) % 360;
-        //oppositeColor = Color.HSVToRGB(h, s, v);
 
         TextMeshProUGUI[] text = Resources.FindObjectsOfTypeAll<TextMeshProUGUI>();
         foreach (TextMeshProUGUI element in text)
