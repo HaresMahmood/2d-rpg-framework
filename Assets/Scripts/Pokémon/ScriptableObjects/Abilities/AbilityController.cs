@@ -18,7 +18,7 @@ public class AbilityController : MonoBehaviour
 
     private void ChangeStat(PartyMember member, Pokemon.Stat stat, int amount)
     {
-        Mathf.Clamp(BattleManager.Instance.Enemy.Stats.StatChanges[stat] + amount, -6, 6);
+        member.Stats.StatChanges[stat] = Mathf.Clamp(member.Stats.StatChanges[stat] + amount, -6, 6);
     }
 
     #endregion

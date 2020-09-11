@@ -160,6 +160,20 @@ public class BattleManager : MonoBehaviour
         Stage = BattleStage.Partner;
     }
 
+    private void OnDisable()
+    {
+        // TODO: Should actually happen at end of battle
+        partner.Stats.ResetStatChanges();
+        enemy.Stats.ResetStatChanges();
+    }
+
+    private void OnApplicationQuit()
+    {
+        // TODO: Should actually happen at end of battle
+        partner.Stats.ResetStatChanges();
+        enemy.Stats.ResetStatChanges();
+    }
+
     #endregion
 }
 
