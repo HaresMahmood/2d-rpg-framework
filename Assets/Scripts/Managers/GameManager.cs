@@ -94,8 +94,8 @@ public class GameManager : MonoBehaviour
         }
 
         Color.RGBToHSV(accentColor, out float h, out float s, out float v);
-        h = (h + 180) % 360;
-        //oppositeColor = Color.HSVToRGB(h, s, v);
+        h = (h + 0.5f) % 1f;
+        oppositeColor = Color.HSVToRGB(h, s, v);
 
         TextMeshProUGUI[] text = Resources.FindObjectsOfTypeAll<TextMeshProUGUI>();
         foreach (TextMeshProUGUI element in text)
