@@ -72,6 +72,9 @@ public class BattleUserInterface : XUserInterface<Party>
         SetEnemy();
 
         GetComponentInChildren<ButtonPromptController>().SetInformation(GetComponent<ButtonList>().PromptGroups);
+
+        FindComponent("Canvas (Party)").gameObject.SetActive(false);
+        UserInterfaceManager.Instance.PushUserInterface(gameObject);
     }
 
     #endregion
