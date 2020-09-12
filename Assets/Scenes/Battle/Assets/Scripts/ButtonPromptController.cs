@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 /// <summary>
 ///
@@ -13,9 +13,32 @@ public class ButtonPromptController : MonoBehaviour
     [Header("Setup")]
     [SerializeField] private InputActionAsset actionAsset;
 
-    private List<ButtonPrompt> buttonPrompts;
+    private List<ButtonList.ButtonPrompt> promptGroups;
+    private List<PromptSubComponent> buttons;
 
     private string device;
+
+    #endregion
+
+    #region Micellaneous Methods
+
+    public void SetInformation(List<ButtonList.ButtonPrompt> promptGroups)
+    {
+        this.promptGroups = promptGroups;
+
+        for (int i = 0; i < promptGroups.Count; i++)
+        {
+            buttons[i].gameObject.SetActive(true);
+
+            buttons[i].SetInformation(promptGroups[i], device == "Gamepad" ? 1 : 0); // TODO: *[1]
+            LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponent<RectTransform>());
+        }
+
+        for (int i = promptGroups.Count; i < buttons.Count; i++)
+        {
+            buttons[i].gameObject.SetActive(false);
+        }
+    }
 
     #endregion
 
@@ -23,7 +46,13 @@ public class ButtonPromptController : MonoBehaviour
 
     private void Awake()
     {
-        buttonPrompts = GetComponentsInChildren<ButtonPrompt>().ToList();
+        Controls controls = new Controls();
+
+        // TODO: [1]
+        //for (int i = 0; i < controls.controlSchemes.Count; i++)
+        //Debug.Log(controls.controlSchemes[i]);
+
+        buttons = GetComponentsInChildren<PromptSubComponent>().ToList();
 
         actionAsset.actionMaps[0].actionTriggered +=
         (InputAction.CallbackContext context) =>
@@ -31,15 +60,11 @@ public class ButtonPromptController : MonoBehaviour
             var inputAction = context.action;
             var binding = inputAction.GetBindingForControl(inputAction.activeControl).Value;
 
-            if (device != binding.groups)
+            if (device != binding.groups) // TODO: *[i]
             {
                 device = binding.groups;
 
-                foreach (ButtonPrompt buttonPrompt in buttonPrompts)
-                {
-                    buttonPrompt.SetInformation(device == "Gamepad" ? 1 : 0); // TODO: Think of better way of doing this
-                    LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponent<RectTransform>());
-                }
+                //SetInformation(promptGroups);
             }
         };
     }

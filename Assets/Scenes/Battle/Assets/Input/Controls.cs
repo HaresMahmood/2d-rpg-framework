@@ -43,6 +43,22 @@ public class @Controls : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
+                    ""name"": ""Toggle"",
+                    ""type"": ""Button"",
+                    ""id"": ""66bf63e0-1a83-47d3-a11d-71d65da3a939"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Start"",
+                    ""type"": ""Button"",
+                    ""id"": ""879fb948-ade4-4938-b58c-730b71fabb39"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
                     ""name"": ""Point"",
                     ""type"": ""PassThrough"",
                     ""id"": ""c9dd8a19-838a-4a0a-8683-ddc072e3a3b5"",
@@ -79,6 +95,22 @@ public class @Controls : IInputActionCollection, IDisposable
                     ""type"": ""PassThrough"",
                     ""id"": ""5266b4bb-8d35-465d-86e8-ae9e635a05c4"",
                     ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Shoulders"",
+                    ""type"": ""Value"",
+                    ""id"": ""3a6abf24-ebd5-42dc-b462-8103bcfdf042"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Triggers"",
+                    ""type"": ""Value"",
+                    ""id"": ""64719002-d1e6-4467-99a4-5b6575f9ed9e"",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
                 },
@@ -246,10 +278,32 @@ public class @Controls : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""6ca00922-1f34-4b27-8329-6cfdc0c89432"",
-                    ""path"": ""*/{Cancel}"",
+                    ""path"": ""<Keyboard>/backspace"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Cancel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1a11760d-c8d0-4f5b-a333-fca705bf6474"",
+                    ""path"": ""<SwitchProControllerHID>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Cancel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1db0fe06-6ba3-49eb-b97c-f2f14c62c7b2"",
+                    ""path"": ""<XInputController>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
                     ""action"": ""Cancel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -330,6 +384,226 @@ public class @Controls : IInputActionCollection, IDisposable
                     ""action"": ""RightClick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Keyboard"",
+                    ""id"": ""9179ba2e-6ec9-4f84-8ddb-ddfc556dee8b"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Shoulders"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""1d7ec945-9d97-4a19-92cf-9d8ff581c055"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Shoulders"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""496a0507-f57c-4efb-97a0-5219c5f8fa59"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Shoulders"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Gamepad"",
+                    ""id"": ""db48bad0-dc70-41e5-b3b4-3c7f2357eae6"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Shoulders"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""54bfbe0d-f276-483f-addf-9aa6a8d3656c"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Shoulders"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""86809f15-ad22-4574-b397-c011a42254ed"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Shoulders"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Keyboard"",
+                    ""id"": ""e1ed9a35-601d-4dc8-a24d-cbe14b03ee68"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Triggers"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""3a55db9a-8a7b-48c5-9a36-b02de6f16fec"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Triggers"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""00f2b229-b4b1-4974-9083-57fbb8d14bda"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Triggers"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Gamepad"",
+                    ""id"": ""e9374eaa-9934-4492-96fc-498608e50852"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Triggers"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""33668246-1a05-4f6b-82fe-d9dd95301ad7"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Triggers"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""92d632e0-bd32-4d36-8407-3b1b6c8f3368"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Triggers"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8befb83a-9a7e-46ea-ab72-7ec3ab21956d"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Toggle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0bc925ec-3cbe-4580-a5cc-6134066ce685"",
+                    ""path"": ""<SwitchProControllerHID>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Toggle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""15921e40-a198-4695-bf0f-4959f4285ae8"",
+                    ""path"": ""<XInputController>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Toggle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9112da05-2ae5-42c2-893c-b3a9c940d13d"",
+                    ""path"": ""<DualShockGamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Toggle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""08e20b14-3367-4178-8e20-f71d59642f5d"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Start"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""439d1bbd-e139-4da1-8680-5239ee53ed7f"",
+                    ""path"": ""<SwitchProControllerHID>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Start"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6e74db4b-a622-4242-b74b-03a44d6612d0"",
+                    ""path"": ""<XInputController>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Start"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""33365b34-6c3f-4f4f-9563-25515f53fd56"",
+                    ""path"": ""<DualShockGamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Start"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -352,11 +626,15 @@ public class @Controls : IInputActionCollection, IDisposable
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
         m_UI_Submit = m_UI.FindAction("Submit", throwIfNotFound: true);
         m_UI_Cancel = m_UI.FindAction("Cancel", throwIfNotFound: true);
+        m_UI_Toggle = m_UI.FindAction("Toggle", throwIfNotFound: true);
+        m_UI_Start = m_UI.FindAction("Start", throwIfNotFound: true);
         m_UI_Point = m_UI.FindAction("Point", throwIfNotFound: true);
         m_UI_Click = m_UI.FindAction("Click", throwIfNotFound: true);
         m_UI_ScrollWheel = m_UI.FindAction("ScrollWheel", throwIfNotFound: true);
         m_UI_MiddleClick = m_UI.FindAction("MiddleClick", throwIfNotFound: true);
         m_UI_RightClick = m_UI.FindAction("RightClick", throwIfNotFound: true);
+        m_UI_Shoulders = m_UI.FindAction("Shoulders", throwIfNotFound: true);
+        m_UI_Triggers = m_UI.FindAction("Triggers", throwIfNotFound: true);
         m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
     }
@@ -411,11 +689,15 @@ public class @Controls : IInputActionCollection, IDisposable
     private readonly InputAction m_UI_Navigate;
     private readonly InputAction m_UI_Submit;
     private readonly InputAction m_UI_Cancel;
+    private readonly InputAction m_UI_Toggle;
+    private readonly InputAction m_UI_Start;
     private readonly InputAction m_UI_Point;
     private readonly InputAction m_UI_Click;
     private readonly InputAction m_UI_ScrollWheel;
     private readonly InputAction m_UI_MiddleClick;
     private readonly InputAction m_UI_RightClick;
+    private readonly InputAction m_UI_Shoulders;
+    private readonly InputAction m_UI_Triggers;
     private readonly InputAction m_UI_TrackedDevicePosition;
     private readonly InputAction m_UI_TrackedDeviceOrientation;
     public struct UIActions
@@ -425,11 +707,15 @@ public class @Controls : IInputActionCollection, IDisposable
         public InputAction @Navigate => m_Wrapper.m_UI_Navigate;
         public InputAction @Submit => m_Wrapper.m_UI_Submit;
         public InputAction @Cancel => m_Wrapper.m_UI_Cancel;
+        public InputAction @Toggle => m_Wrapper.m_UI_Toggle;
+        public InputAction @Start => m_Wrapper.m_UI_Start;
         public InputAction @Point => m_Wrapper.m_UI_Point;
         public InputAction @Click => m_Wrapper.m_UI_Click;
         public InputAction @ScrollWheel => m_Wrapper.m_UI_ScrollWheel;
         public InputAction @MiddleClick => m_Wrapper.m_UI_MiddleClick;
         public InputAction @RightClick => m_Wrapper.m_UI_RightClick;
+        public InputAction @Shoulders => m_Wrapper.m_UI_Shoulders;
+        public InputAction @Triggers => m_Wrapper.m_UI_Triggers;
         public InputAction @TrackedDevicePosition => m_Wrapper.m_UI_TrackedDevicePosition;
         public InputAction @TrackedDeviceOrientation => m_Wrapper.m_UI_TrackedDeviceOrientation;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
@@ -450,6 +736,12 @@ public class @Controls : IInputActionCollection, IDisposable
                 @Cancel.started -= m_Wrapper.m_UIActionsCallbackInterface.OnCancel;
                 @Cancel.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnCancel;
                 @Cancel.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnCancel;
+                @Toggle.started -= m_Wrapper.m_UIActionsCallbackInterface.OnToggle;
+                @Toggle.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnToggle;
+                @Toggle.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnToggle;
+                @Start.started -= m_Wrapper.m_UIActionsCallbackInterface.OnStart;
+                @Start.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnStart;
+                @Start.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnStart;
                 @Point.started -= m_Wrapper.m_UIActionsCallbackInterface.OnPoint;
                 @Point.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnPoint;
                 @Point.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnPoint;
@@ -465,6 +757,12 @@ public class @Controls : IInputActionCollection, IDisposable
                 @RightClick.started -= m_Wrapper.m_UIActionsCallbackInterface.OnRightClick;
                 @RightClick.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnRightClick;
                 @RightClick.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnRightClick;
+                @Shoulders.started -= m_Wrapper.m_UIActionsCallbackInterface.OnShoulders;
+                @Shoulders.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnShoulders;
+                @Shoulders.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnShoulders;
+                @Triggers.started -= m_Wrapper.m_UIActionsCallbackInterface.OnTriggers;
+                @Triggers.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnTriggers;
+                @Triggers.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnTriggers;
                 @TrackedDevicePosition.started -= m_Wrapper.m_UIActionsCallbackInterface.OnTrackedDevicePosition;
                 @TrackedDevicePosition.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnTrackedDevicePosition;
                 @TrackedDevicePosition.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnTrackedDevicePosition;
@@ -484,6 +782,12 @@ public class @Controls : IInputActionCollection, IDisposable
                 @Cancel.started += instance.OnCancel;
                 @Cancel.performed += instance.OnCancel;
                 @Cancel.canceled += instance.OnCancel;
+                @Toggle.started += instance.OnToggle;
+                @Toggle.performed += instance.OnToggle;
+                @Toggle.canceled += instance.OnToggle;
+                @Start.started += instance.OnStart;
+                @Start.performed += instance.OnStart;
+                @Start.canceled += instance.OnStart;
                 @Point.started += instance.OnPoint;
                 @Point.performed += instance.OnPoint;
                 @Point.canceled += instance.OnPoint;
@@ -499,6 +803,12 @@ public class @Controls : IInputActionCollection, IDisposable
                 @RightClick.started += instance.OnRightClick;
                 @RightClick.performed += instance.OnRightClick;
                 @RightClick.canceled += instance.OnRightClick;
+                @Shoulders.started += instance.OnShoulders;
+                @Shoulders.performed += instance.OnShoulders;
+                @Shoulders.canceled += instance.OnShoulders;
+                @Triggers.started += instance.OnTriggers;
+                @Triggers.performed += instance.OnTriggers;
+                @Triggers.canceled += instance.OnTriggers;
                 @TrackedDevicePosition.started += instance.OnTrackedDevicePosition;
                 @TrackedDevicePosition.performed += instance.OnTrackedDevicePosition;
                 @TrackedDevicePosition.canceled += instance.OnTrackedDevicePosition;
@@ -532,11 +842,15 @@ public class @Controls : IInputActionCollection, IDisposable
         void OnNavigate(InputAction.CallbackContext context);
         void OnSubmit(InputAction.CallbackContext context);
         void OnCancel(InputAction.CallbackContext context);
+        void OnToggle(InputAction.CallbackContext context);
+        void OnStart(InputAction.CallbackContext context);
         void OnPoint(InputAction.CallbackContext context);
         void OnClick(InputAction.CallbackContext context);
         void OnScrollWheel(InputAction.CallbackContext context);
         void OnMiddleClick(InputAction.CallbackContext context);
         void OnRightClick(InputAction.CallbackContext context);
+        void OnShoulders(InputAction.CallbackContext context);
+        void OnTriggers(InputAction.CallbackContext context);
         void OnTrackedDevicePosition(InputAction.CallbackContext context);
         void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
     }

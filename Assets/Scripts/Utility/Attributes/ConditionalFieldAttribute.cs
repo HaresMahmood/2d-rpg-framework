@@ -1,12 +1,12 @@
-﻿using System;
+﻿#if UNITY_EDITOR
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Collections.ObjectModel;
 using System.Reflection;
-#if UNITY_EDITOR
 using UnityEditor;
-#endif
+
 
 /// <summary>
 /// Conditionally Show/Hide field in inspector, based on some other field value 
@@ -28,7 +28,6 @@ public class ConditionalFieldAttribute : PropertyAttribute
         _compareValues = compareValues;
     }
 
-#if UNITY_EDITOR
     public bool CheckBehaviourPropertyVisible(MonoBehaviour behaviour, string propertyName)
     {
         if (string.IsNullOrEmpty(_fieldToCheck)) return true;
@@ -159,10 +158,7 @@ public class ConditionalFieldAttribute : PropertyAttribute
                 return string.Empty;
         }
     }
-#endif
 }
-
-#if UNITY_EDITOR
 [CustomPropertyDrawer(typeof(ConditionalFieldAttribute))]
 public class ConditionalFieldAttributeDrawer : PropertyDrawer
 {

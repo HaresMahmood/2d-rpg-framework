@@ -144,13 +144,6 @@ public class BattleManager : MonoBehaviour
 
     #region Unity Methods
 
-    private void Awake()
-    {
-        //animationControllers = FindObjectsOfType<BattleAnimationController>().ToList();
-
-        userInterface.Information = party;
-    }
-
     private void Start()
     {
         partner = party.playerParty[CurrentPartner];

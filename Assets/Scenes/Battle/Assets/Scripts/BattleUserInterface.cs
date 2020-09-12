@@ -6,12 +6,6 @@ using UnityEngine;
 /// </summary>
 public class BattleUserInterface : XUserInterface<Party>
 {
-    #region Properties
-
-    public Party Information { set { information = value; } }
-
-    #endregion
-
     #region Variables
 
     [Header("Settings")]
@@ -28,7 +22,7 @@ public class BattleUserInterface : XUserInterface<Party>
 
     private void SetPartner()
     {
-        partnerHealth.SetInformation(BattleManager.Instance.Partner);
+        partnerHealth.SetInformation(((Party)Convert.ChangeType(information, typeof(Party))).playerParty[BattleManager.Instance.CurrentPartner]);
     }
 
     private void SetEnemy()
@@ -76,6 +70,8 @@ public class BattleUserInterface : XUserInterface<Party>
 
         SetPartner();
         SetEnemy();
+
+        GetComponentInChildren<ButtonPromptController>().SetInformation(GetComponent<ButtonList>().PromptGroups);
     }
 
     #endregion
