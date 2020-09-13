@@ -18,11 +18,17 @@ public class ButtonList : MonoBehaviour
 
     #region Fields
 
+    [SerializeField] private GameObject firstSelected;
     [SerializeField] private List<ButtonPrompt> promptGroups = new List<ButtonPrompt>();
 
     #endregion
 
     #region Properties
+
+    public GameObject FirstSelected
+    {
+        get { return firstSelected; }
+    }
 
     public List<ButtonPrompt> PromptGroups
     {

@@ -1589,7 +1589,6 @@ GameObject:
   m_Component:
   - component: {fileID: 273171514}
   - component: {fileID: 273171515}
-  - component: {fileID: 273171516}
   m_Layer: 0
   m_Name: UI
   m_TagString: Untagged
@@ -1634,151 +1633,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   information: {fileID: 11400000, guid: 714be781ae39b994c927e1025d05fb87, type: 2}
   animationTime: 0
---- !u!114 &273171516
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 273171513}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e9efdc67bbd21f43955a799caaf7d95, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  promptGroups:
-  - text: Capture
-    action: {fileID: 4859837234501267398, guid: 7b1ef33fd2e04a64fa860215814154c6,
-      type: 3}
-    value: -1
-    onClick:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 701854612}
-          m_TargetAssemblyTypeName: PromptSubComponent, Assembly-CSharp
-          m_MethodName: OnClick
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-    prompts:
-    - text: Q
-      icon: {fileID: 0}
-    - text: L
-      icon: {fileID: 0}
-  - text: Heal
-    action: {fileID: 4859837234501267398, guid: 7b1ef33fd2e04a64fa860215814154c6,
-      type: 3}
-    value: 1
-    onClick:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 507693959}
-          m_TargetAssemblyTypeName: PromptSubComponent, Assembly-CSharp
-          m_MethodName: OnClick
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-    prompts:
-    - text: E
-      icon: {fileID: 0}
-    - text: R
-      icon: {fileID: 0}
-  - text: Party
-    action: {fileID: 5559448308325070525, guid: 7b1ef33fd2e04a64fa860215814154c6,
-      type: 3}
-    value: 0
-    onClick:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1187992285}
-          m_TargetAssemblyTypeName: UnityEngine.CanvasGroup, UnityEngine
-          m_MethodName: set_alpha
-          m_Mode: 4
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0.1
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-        - m_Target: {fileID: 1653332454}
-          m_TargetAssemblyTypeName: UnityEngine.CanvasGroup, UnityEngine
-          m_MethodName: set_alpha
-          m_Mode: 4
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 1
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-    prompts:
-    - text: CTRL
-      icon: {fileID: 0}
-    - text: Y
-      icon: {fileID: 0}
-  - text: Pause
-    action: {fileID: 6210234244876491802, guid: 7b1ef33fd2e04a64fa860215814154c6,
-      type: 3}
-    value: 0
-    onClick:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 728486558}
-          m_TargetAssemblyTypeName: PromptSubComponent, Assembly-CSharp
-          m_MethodName: OnClick
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-    prompts:
-    - text: ESC
-      icon: {fileID: 0}
-    - text: +
-      icon: {fileID: 0}
-  - text: Run
-    action: {fileID: 4899394057911822335, guid: 7b1ef33fd2e04a64fa860215814154c6,
-      type: 3}
-    value: 0
-    onClick:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 482828614}
-          m_TargetAssemblyTypeName: PromptSubComponent, Assembly-CSharp
-          m_MethodName: OnClick
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-    prompts:
-    - text: BS
-      icon: {fileID: 21300000, guid: 18bc11aaa02c10f418755e7110be55a1, type: 3}
-    - text: B
-      icon: {fileID: 0}
 --- !u!1 &278480823
 GameObject:
   m_ObjectHideFlags: 0
@@ -5531,6 +5385,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionAsset: {fileID: -944628639613478452, guid: 7b1ef33fd2e04a64fa860215814154c6,
     type: 3}
+  animationDelay: 0.07
+  animationTime: 0.2
 --- !u!1001 &894788132
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8707,6 +8563,7 @@ GameObject:
   - component: {fileID: 1187992284}
   - component: {fileID: 1187992283}
   - component: {fileID: 1187992282}
+  - component: {fileID: 1187992286}
   m_Layer: 5
   m_Name: Canvas (Battle)
   m_TagString: Untagged
@@ -8808,6 +8665,140 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &1187992286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1187992280}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e9efdc67bbd21f43955a799caaf7d95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  firstSelected: {fileID: 690068373}
+  promptGroups:
+  - text: Capture
+    action: {fileID: 4859837234501267398, guid: 7b1ef33fd2e04a64fa860215814154c6,
+      type: 3}
+    value: -1
+    onClick:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 701854612}
+          m_TargetAssemblyTypeName: PromptSubComponent, Assembly-CSharp
+          m_MethodName: OnClick
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    prompts:
+    - text: Q
+      icon: {fileID: 0}
+    - text: L
+      icon: {fileID: 0}
+  - text: Heal
+    action: {fileID: 4859837234501267398, guid: 7b1ef33fd2e04a64fa860215814154c6,
+      type: 3}
+    value: 1
+    onClick:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 507693959}
+          m_TargetAssemblyTypeName: PromptSubComponent, Assembly-CSharp
+          m_MethodName: OnClick
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    prompts:
+    - text: E
+      icon: {fileID: 0}
+    - text: R
+      icon: {fileID: 0}
+  - text: Party
+    action: {fileID: 5559448308325070525, guid: 7b1ef33fd2e04a64fa860215814154c6,
+      type: 3}
+    value: 0
+    onClick:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 2114862581}
+          m_TargetAssemblyTypeName: UserInterfaceManager, Assembly-CSharp
+          m_MethodName: PushUserInterface
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 1653332448}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    prompts:
+    - text: CTRL
+      icon: {fileID: 0}
+    - text: Y
+      icon: {fileID: 0}
+  - text: Pause
+    action: {fileID: 6210234244876491802, guid: 7b1ef33fd2e04a64fa860215814154c6,
+      type: 3}
+    value: 0
+    onClick:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 728486558}
+          m_TargetAssemblyTypeName: PromptSubComponent, Assembly-CSharp
+          m_MethodName: OnClick
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    prompts:
+    - text: ESC
+      icon: {fileID: 0}
+    - text: +
+      icon: {fileID: 0}
+  - text: Run
+    action: {fileID: 4899394057911822335, guid: 7b1ef33fd2e04a64fa860215814154c6,
+      type: 3}
+    value: 0
+    onClick:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 482828614}
+          m_TargetAssemblyTypeName: PromptSubComponent, Assembly-CSharp
+          m_MethodName: OnClick
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    prompts:
+    - text: BS
+      icon: {fileID: 21300000, guid: 18bc11aaa02c10f418755e7110be55a1, type: 3}
+    - text: B
+      icon: {fileID: 0}
 --- !u!1001 &1215241652
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12096,7 +12087,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1653332448}
   m_Enabled: 1
-  m_Alpha: 0
+  m_Alpha: 1
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -12125,6 +12116,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e9efdc67bbd21f43955a799caaf7d95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  firstSelected: {fileID: 841637711}
   promptGroups:
   - text: Back
     action: {fileID: 4899394057911822335, guid: 7b1ef33fd2e04a64fa860215814154c6,
@@ -12133,27 +12125,15 @@ MonoBehaviour:
     onClick:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1653332454}
-          m_TargetAssemblyTypeName: UnityEngine.CanvasGroup, UnityEngine
-          m_MethodName: set_alpha
-          m_Mode: 4
+        - m_Target: {fileID: 2114862581}
+          m_TargetAssemblyTypeName: UserInterfaceManager, Assembly-CSharp
+          m_MethodName: PopUserInterface
+          m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-        - m_Target: {fileID: 1187992285}
-          m_TargetAssemblyTypeName: UnityEngine.CanvasGroup, UnityEngine
-          m_MethodName: set_alpha
-          m_Mode: 4
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 1
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
@@ -15196,7 +15176,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 296a02f99a0c700459b386815689fec4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prompts: {fileID: 0}
+  prompts: {fileID: 880528656}
   stack: []
 --- !u!1001 &2131306009
 PrefabInstance:

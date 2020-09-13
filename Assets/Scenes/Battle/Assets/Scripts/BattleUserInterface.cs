@@ -71,10 +71,8 @@ public class BattleUserInterface : XUserInterface<Party>
         SetPartner();
         SetEnemy();
 
-        GetComponentInChildren<ButtonPromptController>().SetInformation(GetComponent<ButtonList>().PromptGroups);
-
         FindComponent("Canvas (Party)").gameObject.SetActive(false);
-        UserInterfaceManager.Instance.PushUserInterface(gameObject);
+        UserInterfaceManager.Instance.PushUserInterface(transform.Find("Canvas (Battle)").gameObject);
     }
 
     #endregion

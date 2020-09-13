@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.EventSystems;
 
 /// <summary>
 ///
@@ -72,6 +73,7 @@ public class UserInterfaceManager : MonoBehaviour
 
         if (isActive)
         {
+            EventSystem.current.SetSelectedGameObject(stack[index].GetComponent<ButtonList>().FirstSelected);
             prompts.SetInformation(stack[index].GetComponent<ButtonList>().PromptGroups);
         }
     }
@@ -82,22 +84,9 @@ public class UserInterfaceManager : MonoBehaviour
 
         if (isActive)
         {
+            EventSystem.current.SetSelectedGameObject(ui.GetComponent<ButtonList>().FirstSelected);
             prompts.SetInformation(ui.GetComponent<ButtonList>().PromptGroups);
         }
-    }
-
-    #endregion
-
-    #region Unity Methods
-
-    private void Awake()
-    {
-
-    }
-
-    private void Start()
-    {
-        
     }
 
     #endregion

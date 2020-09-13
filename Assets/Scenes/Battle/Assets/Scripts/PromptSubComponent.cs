@@ -51,12 +51,12 @@ public class PromptSubComponent : MonoBehaviour
 
     public void OnClick()
     {
-        Debug.Log(transform.name);
+        Debug.Log(true);
     }
 
     private void OnActionPerformed(InputAction.CallbackContext context)
     {
-        if (promptGroup.Value == 0 || (promptGroup.Value != 0 && context.ReadValue<float>() == promptGroup.Value))
+        if ((promptGroup.Value == 0 || (promptGroup.Value != 0 && context.ReadValue<float>() == promptGroup.Value)) && button.interactable)
         {
             button.onClick.Invoke();
         }

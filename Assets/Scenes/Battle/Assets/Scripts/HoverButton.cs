@@ -15,7 +15,7 @@ public class HoverButton : MonoBehaviour, ISelectHandler, IDeselectHandler, IPoi
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (GetComponent<Button>().enabled)
+        if (GetComponent<Button>().interactable)
         {
             GetComponent<MoveButtonSubComponent>().SelectButton(true);
             GetComponentInParent<MoveButtonComponent>().DeselectButtons(GetComponent<Button>());
