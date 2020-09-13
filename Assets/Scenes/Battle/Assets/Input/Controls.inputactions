@@ -241,28 +241,6 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "Joystick",
-                    "id": "166cebe3-4ac0-42be-8e0c-7352057c2bd3",
-                    "path": "2DVector",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Navigate",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "939d8f39-3420-4c6c-af16-2ac2b079b38f",
-                    "path": "*/{Submit}",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Submit",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
                     "name": "",
                     "id": "6ca00922-1f34-4b27-8329-6cfdc0c89432",
                     "path": "<Keyboard>/backspace",
@@ -288,6 +266,17 @@
                     "name": "",
                     "id": "1db0fe06-6ba3-49eb-b97c-f2f14c62c7b2",
                     "path": "<XInputController>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Cancel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1e7be2f9-266a-4df6-af8e-21f0f37846d9",
+                    "path": "<DualShockGamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
@@ -540,7 +529,7 @@
                 {
                     "name": "",
                     "id": "9112da05-2ae5-42c2-893c-b3a9c940d13d",
-                    "path": "<DualShockGamepad>/buttonWest",
+                    "path": "<DualShockGamepad>/buttonNorth",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
@@ -589,6 +578,50 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Start",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b7c20918-2e03-4490-99fc-be9f23cbef60",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard & Mouse",
+                    "action": "Submit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0945be96-6364-4560-9d84-dfdf637a65a9",
+                    "path": "<SwitchProControllerHID>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Submit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "431a0906-a7c5-4936-95a4-295c59dc5b8a",
+                    "path": "<XInputController>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Submit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4d1f4ef1-6e36-479e-b4e7-0e02f36281c5",
+                    "path": "<DualShockGamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Submit",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

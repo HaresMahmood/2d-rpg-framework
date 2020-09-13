@@ -91,7 +91,11 @@ public class ButtonPromptController : MonoBehaviour
         //for (int i = 0; i < controls.controlSchemes.Count; i++)
         //Debug.Log(controls.controlSchemes[i]);
 
+        device = controls.controlSchemes[0].ToString();
+
         components = GetComponentsInChildren<PromptSubComponent>().ToList();
+
+        //controls.controlSchemes[0].
 
         actionAsset.actionMaps[0].actionTriggered +=
         (InputAction.CallbackContext context) =>
@@ -99,7 +103,7 @@ public class ButtonPromptController : MonoBehaviour
             var inputAction = context.action;
             var binding = inputAction.GetBindingForControl(inputAction.activeControl).Value;
 
-            if (device != binding.groups) // TODO: *[i]
+            if (device != binding.groups && binding.groups != "") // TODO: *[i]
             {
                 device = binding.groups;
 
