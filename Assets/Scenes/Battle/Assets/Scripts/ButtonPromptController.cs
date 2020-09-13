@@ -16,15 +16,13 @@ public class ButtonPromptController : MonoBehaviour
     [SerializeField] private InputActionAsset actionAsset;
 
     [Header("Settings")]
-    [SerializeField, Range(0.01f, 1f)] private float animationDelay = 0.03f;
-    [SerializeField, Range(0.1f, 5f)] private float animationTime = 0.15f;
+    [SerializeField, Range(0.01f, 1f)] private float animationDelay;
+    [SerializeField, Range(0.1f, 5f)] private float animationTime;
 
     private List<ButtonList.ButtonPrompt> promptGroups;
     private List<PromptSubComponent> components;
 
     private string device;
-
-    private Sequence sequence;
 
     #endregion
 
@@ -33,9 +31,9 @@ public class ButtonPromptController : MonoBehaviour
     public void SetInformation(List<ButtonList.ButtonPrompt> promptGroups)
     {
         List<PromptSubComponent> components = this.components.Where(c => c.gameObject.activeSelf).ToList();
-
-        sequence = DOTween.Sequence();
+        Sequence sequence = DOTween.Sequence();
         this.promptGroups = promptGroups;
+
 
         for (int i = 0; i < components.Count; i++)
         {
@@ -50,6 +48,8 @@ public class ButtonPromptController : MonoBehaviour
 
         sequence.OnComplete(() =>
         {
+            Sequence sequence2 = DOTween.Sequence();
+
             for (int i = 0; i < promptGroups.Count; i++)
             {
                 this.components[i].gameObject.SetActive(true);
@@ -69,7 +69,7 @@ public class ButtonPromptController : MonoBehaviour
                 LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponent<RectTransform>());
 
                 componentSequence.Append(this.components[i].GetComponent<CanvasGroup>().DOFade(1f, animationTime));
-                sequence.Insert(timeOffset, componentSequence);
+                sequence2.Insert(timeOffset, componentSequence);
             }
 
             for (int i = 0; i < promptGroups.Count; i++)

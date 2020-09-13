@@ -69,7 +69,14 @@ public class UserInterfaceManager : MonoBehaviour
 
     private void SetActive(int index, bool isActive)
     {
-        stack[index].SetActive(isActive);
+        if (stack[index].GetComponent<UIAnimation>() != null)
+        {
+            stack[index].GetComponent<UIAnimation>().Animate(isActive);
+        }
+        else
+        {
+            stack[index].SetActive(isActive);
+        }
 
         if (isActive)
         {
@@ -80,7 +87,14 @@ public class UserInterfaceManager : MonoBehaviour
 
     private void SetActive(GameObject ui, bool isActive)
     {
-        ui.SetActive(isActive);
+        if (ui.GetComponent<UIAnimation>() != null)
+        {
+            ui.GetComponent<UIAnimation>().Animate(isActive);
+        }
+        else
+        {
+            ui.SetActive(isActive);
+        }
 
         if (isActive)
         {
