@@ -53,7 +53,7 @@ public class BattleUIAnimation : MonoBehaviour // TODO: Derive from "UIAnimation
         {
             sequence.Append(background.GetComponent<CanvasGroup>().DOFade(0f, animationTime));
             sequence.Join(content.GetComponent<CanvasGroup>().DOFade(0f, animationTime));
-            sequence.Join(content.DOScale(new Vector2(0.9f, 0.95f), animationTime));
+            sequence.Join(content.DOScale(new Vector2(0.95f, 0.95f), animationTime));
 
             sequence.OnComplete(() =>
             {

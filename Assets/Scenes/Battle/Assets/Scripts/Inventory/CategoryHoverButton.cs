@@ -12,29 +12,33 @@ using UnityEngine.UI;
 ///
 /// </summary>
 [RequireComponent(typeof(Button))]
-public class InventoryHoverButton : MonoBehaviour, ISelectHandler, IDeselectHandler, IPointerEnterHandler
+public class CategoryHoverButton : MonoBehaviour, ISelectHandler, IDeselectHandler, IPointerEnterHandler
 {
+    #region Properties
+
+    public bool IsSelected { get; set; }
+
+    #endregion
+
     #region Unity Methods
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (GetComponent<Button>().enabled)
         {
-            UIButtonParentHandler buttonHandler = GetComponentInParent(typeof(UIButtonParentHandler)) as UIButtonParentHandler;
-
-            transform.Find("Selector").gameObject.SetActive(true);
-            buttonHandler.DeselectComponents(GetComponent<UserInterfaceSubComponent>());
+            GetComponentInParent<CategoryComponent>().DeselectComponents(this);
         }
     }
 
     public void OnSelect(BaseEventData eventData)
     {
-        transform.Find("Selector").gameObject.SetActive(true);
+        GetComponentInParent<CategoryComponent>().SelectComponent(this, true);
+
     }
 
     public void OnDeselect(BaseEventData eventData)
     {
-        transform.Find("Selector").gameObject.SetActive(false);
+        GetComponentInParent<CategoryComponent>().SelectComponent(this, false);
     }
 
     #endregion

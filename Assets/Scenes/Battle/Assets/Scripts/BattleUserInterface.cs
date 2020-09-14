@@ -72,6 +72,7 @@ public class BattleUserInterface : XUserInterface<Party>
         SetEnemy();
 
         FindComponent("Canvas (Party)").gameObject.SetActive(false);
+        FindComponent("Canvas (Inventory)").gameObject.SetActive(false);
         UserInterfaceManager.Instance.PushUserInterface(transform.Find("Canvas (Battle)").gameObject);
     }
 
