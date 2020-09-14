@@ -9,10 +9,6 @@ using DG.Tweening;
 /// </summary>
 public class BattleUIAnimation : MonoBehaviour // TODO: Derive from "UIAnimation" class.
 {
-
-    // TODO: Add sub-ui to party ui to test animation!!!
-
-
     #region Variables
 
     [Header("Setup")]
