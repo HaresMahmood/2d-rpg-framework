@@ -2,11 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 ///
 /// </summary>
-public class InventoryComponent : UserInterfaceComponent
+public class InventoryComponent : UserInterfaceComponent, UIButtonParentHandler
 {
     #region Variables
 
@@ -16,19 +17,19 @@ public class InventoryComponent : UserInterfaceComponent
 
     #region Miscellaneous Methods
 
-    public void DeselectComponents(PartySubComponent selectedComponent)
+    public void DeselectComponents(UserInterfaceSubComponent selectedComponent)
     {
-        List<UserInterfaceSubComponent> components = this.components.Where(b => (PartySubComponent)b != selectedComponent && ((PartySubComponent)b).transform.Find("Selector").gameObject.activeSelf).ToList();
+        List<UserInterfaceSubComponent> components = this.components.Where(b => b != selectedComponent && b.transform.Find("Selector").gameObject.activeSelf).ToList();
 
-        foreach (PartySubComponent component in components)
+        foreach (UserInterfaceSubComponent component in components)
         {
-            component.AnimateSlot(0.2f);
             component.transform.Find("Selector").gameObject.SetActive(false);
         }
     }
 
     public override void SetInformation<T>(T information)
     {
+        /*
         List<PartyMember> party = ((Party)Convert.ChangeType(information, typeof(Party))).playerParty;
 
         for (int i = 0; i < party.Count; i++)
@@ -40,6 +41,7 @@ public class InventoryComponent : UserInterfaceComponent
         {
             ((PartySubComponent)components[i]).AnimateComponent(0f);
         }
+        */
     }
 
     #endregion
@@ -48,12 +50,13 @@ public class InventoryComponent : UserInterfaceComponent
 
     private void Start()
     {
-        ((PartySubComponent)components[0]).AnimateSlot(0.35f);
-
         for (int i = 1; i < components.Count; i++)
         {
             components[i].transform.Find("Selector").gameObject.SetActive(false);
         }
+
+        transform.Find("Inventory/Content/Categories").GetComponent<ButtonPromptController>().SetInformation(transform.Find("Inventory/Content/Categories").GetComponent<ButtonList>().PromptGroups);
+        GetComponentInChildren<Scrollbar>().value = 0;
     }
 
     #endregion

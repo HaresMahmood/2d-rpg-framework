@@ -295,6 +295,8 @@ GameObject:
   - component: {fileID: 4401417759078804257}
   - component: {fileID: 8832395168054047533}
   - component: {fileID: 5299135228635361562}
+  - component: {fileID: 1126567583114838374}
+  - component: {fileID: 2502171206967125580}
   m_Layer: 5
   m_Name: Item Slot
   m_TagString: Untagged
@@ -417,6 +419,30 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1126567583114838374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2809344190902818935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e7dfa8f51f64854986dd71baf928ed0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2502171206967125580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2809344190902818935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0540e08bd7158a409c9c3adf052a527, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2981682776145203741
 GameObject:
   m_ObjectHideFlags: 0
@@ -802,7 +828,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColor: {r: 0.9882353, g: 0.5450979, b: 0.31764704, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
