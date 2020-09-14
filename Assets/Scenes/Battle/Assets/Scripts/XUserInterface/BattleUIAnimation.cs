@@ -7,14 +7,10 @@ using DG.Tweening;
 /// <summary>
 ///
 /// </summary>
-public class UIAnimation : MonoBehaviour 
+public class BattleUIAnimation : MonoBehaviour // TODO: Derive from "UIAnimation" class.
 {
 
     // TODO: Add sub-ui to party ui to test animation!!!
-
-
-    // TODO: Chang ename to reflect it's only used in BattleSystem UI
-
 
 
     #region Variables

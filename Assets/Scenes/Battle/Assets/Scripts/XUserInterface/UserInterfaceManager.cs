@@ -69,9 +69,9 @@ public class UserInterfaceManager : MonoBehaviour
 
     private void SetActive(int index, bool isActive)
     {
-        if (stack[index].GetComponent<UIAnimation>() != null)
+        if (stack[index].GetComponent<BattleUIAnimation>() != null)
         {
-            stack[index].GetComponent<UIAnimation>().Animate(isActive);
+            stack[index].GetComponent<BattleUIAnimation>().Animate(isActive);
         }
         else
         {
@@ -87,9 +87,9 @@ public class UserInterfaceManager : MonoBehaviour
 
     private void SetActive(GameObject ui, bool isActive)
     {
-        if (ui.GetComponent<UIAnimation>() != null)
+        if (ui.GetComponent<BattleUIAnimation>() != null)
         {
-            ui.GetComponent<UIAnimation>().Animate(isActive);
+            ui.GetComponent<BattleUIAnimation>().Animate(isActive);
         }
         else
         {
