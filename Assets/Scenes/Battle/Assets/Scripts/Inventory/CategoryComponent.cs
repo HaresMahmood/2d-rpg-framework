@@ -3,13 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using TMPro;
+
+
+//////////////////////////////////////
+// TODO: Basically a complete redo
+// This is a proof of concept!
+//////////////////////////////////////
+
 
 /// <summary>
 ///
 /// </summary>
 public class CategoryComponent : MonoBehaviour
 {
+    #region Properties
+
+    public int SelectedCategory { get; set; }
+
+    #endregion
+
     #region Variables
+
+    [Header("Setup")]
+    [SerializeField] private List<string> categories = new List<string>();
 
     [Header("Settings")]
     [SerializeField, Range(0.01f, 2f)] private float animationTime = 0.2f;
@@ -23,6 +40,7 @@ public class CategoryComponent : MonoBehaviour
     public void SelectComponent(CategoryHoverButton component, bool isSelected)
     {
         component.IsSelected = isSelected;
+        SelectedCategory = components.IndexOf(component);
 
         component.GetComponentInChildren<Image>().DOColor(isSelected ? GameManager.instance.accentColor : Color.white, animationTime); // Tint all images
         //component.GetComponentInChildren<Image>().GetComponent<RectTransform>().DOAnchorPosY(component.transform.position.y + (isSelected ? 3 : -3), animationTime);
@@ -45,9 +63,16 @@ public class CategoryComponent : MonoBehaviour
         }
     }
 
+    public void SetInformation(List<Item> inventory)
+    {
+        List<Item> currentCategory = inventory.Where(i => i.Categorization.ToString().Equals(categories[SelectedCategory])).ToList();
+    }
+
     private void FadeText(Transform position)
     {
         Sequence sequence = DOTween.Sequence();
+
+        transform.Find("Category Name").GetComponent<TextMeshProUGUI>().SetText(categories[SelectedCategory]);
 
         sequence.Append(transform.Find("Category Name").GetComponent<RectTransform>().DOLocalMoveX(position.GetComponent<RectTransform>().localPosition.x, animationTime));
 
@@ -63,7 +88,12 @@ public class CategoryComponent : MonoBehaviour
 
     private void Awake()
     {
-        components = GetComponentsInChildren<CategoryHoverButton>().ToList();   
+        components = GetComponentsInChildren<CategoryHoverButton>().ToList();
+    }
+
+    private void Start()
+    {
+        SelectComponent(components[0], true);
     }
 
     #endregion
