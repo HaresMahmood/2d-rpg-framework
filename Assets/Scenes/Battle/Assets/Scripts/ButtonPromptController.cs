@@ -17,7 +17,7 @@ public class ButtonPromptController : MonoBehaviour
 
     [Header("Settings")]
     [SerializeField, Range(0.01f, 1f)] private float animationDelay;
-    [SerializeField, Range(0.1f, 5f)] private float animationTime;
+    [SerializeField, Range(0.1f, 5f)] private float animationDuration;
 
     private List<ButtonList.ButtonPrompt> promptGroups;
     private List<PromptSubComponent> components;
@@ -42,7 +42,7 @@ public class ButtonPromptController : MonoBehaviour
 
             components[i].GetComponent<Button>().interactable = false;
 
-            componentSequence.Append(components[i].GetComponent<CanvasGroup>().DOFade(0f, animationTime));
+            componentSequence.Append(components[i].GetComponent<CanvasGroup>().DOFade(0f, animationDuration));
             sequence.Insert(timeOffset, componentSequence);
         }
 
@@ -68,7 +68,7 @@ public class ButtonPromptController : MonoBehaviour
                 this.components[i].SetInformation(promptGroups[i], device == "Gamepad" ? 1 : 0); // TODO: *[1]
                 LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponent<RectTransform>());
 
-                componentSequence.Append(this.components[i].GetComponent<CanvasGroup>().DOFade(1f, animationTime));
+                componentSequence.Append(this.components[i].GetComponent<CanvasGroup>().DOFade(1f, animationDuration));
                 sequence2.Insert(timeOffset, componentSequence);
             }
 

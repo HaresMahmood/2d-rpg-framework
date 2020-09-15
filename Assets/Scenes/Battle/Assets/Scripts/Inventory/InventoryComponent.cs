@@ -3,15 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using System;
 
 /// <summary>
 ///
 /// </summary>
 public class InventoryComponent : UserInterfaceComponent, UIButtonParentHandler
 {
+    #region Properties
+
+    public Inventory Inventory { get { return inventory; } }
+
+    #endregion
+
     #region Variables
 
     [SerializeField] private Inventory inventory;
+
+    [Header("Settings")]
+    [SerializeField, Range(0.1f, 5f)] private float animationDuration;
 
     #endregion
 
@@ -35,21 +45,24 @@ public class InventoryComponent : UserInterfaceComponent, UIButtonParentHandler
         }
     }
 
-    public override void SetInformation<T>(T information)
+
+
+    // TODO: Debug
+    public void SetInformation(List<Item> inventory)
     {
-        /*
-        List<PartyMember> party = ((Party)Convert.ChangeType(information, typeof(Party))).playerParty;
-
-        for (int i = 0; i < party.Count; i++)
+        for (int i = 0; i < components.Count; i++)
         {
-            components[i].SetInformation(party[i]);
+            ((InventorySubComponent)components[i]).Animate(false, animationDuration);
         }
 
-        for (int i = party.Count; i < components.Count; i++)
+        for (int i = 0; i < inventory.Count; i++)
         {
-            ((PartySubComponent)components[i]).AnimateComponent(0f);
+            ((InventorySubComponent)components[i]).SetInformation(inventory[i]);
+            ((InventorySubComponent)components[i]).Animate(true, animationDuration);
         }
-        */
+
+        transform.Find("Inventory/Content/Items/Empty").GetComponent<CanvasGroup>().DOFade(Convert.ToInt32(inventory.Count == 0), animationDuration);
+        transform.Find("Inventory/Content/Items/Grid").GetComponent<CanvasGroup>().DOFade(Convert.ToInt32(inventory.Count != 0), animationDuration);
     }
 
     #endregion

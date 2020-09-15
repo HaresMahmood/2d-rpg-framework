@@ -34,6 +34,7 @@ public class InventoryEditor : Editor
 
     public override void OnInspectorGUI()
     {
+        /*
         if (ToggleButtonStyleNormal == null)
         {
             ToggleButtonStyleNormal = "Button";
@@ -43,8 +44,9 @@ public class InventoryEditor : Editor
 
         tab = GUILayout.Toolbar(tab, categories.ToArray());
         DrawInspector(categories[tab]);
+        */
 
-        //base.OnInspectorGUI();
+        base.OnInspectorGUI();
     }
 
     private void DrawInspector(string category)
@@ -224,6 +226,7 @@ public class InventoryEditor : Editor
             GUILayout.EndVertical();
             GUILayout.EndHorizontal();
         }
+        
     }
 
     public void AddItem(string category)

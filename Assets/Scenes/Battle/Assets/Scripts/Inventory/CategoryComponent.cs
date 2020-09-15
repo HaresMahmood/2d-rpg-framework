@@ -7,8 +7,10 @@ using TMPro;
 
 
 //////////////////////////////////////
+//
 // TODO: Basically a complete redo
 // This is a proof of concept!
+//
 //////////////////////////////////////
 
 
@@ -17,12 +19,6 @@ using TMPro;
 /// </summary>
 public class CategoryComponent : MonoBehaviour
 {
-    #region Properties
-
-    public int SelectedCategory { get; set; }
-
-    #endregion
-
     #region Variables
 
     [Header("Setup")]
@@ -34,6 +30,8 @@ public class CategoryComponent : MonoBehaviour
 
     private List<CategoryHoverButton> components;
 
+    private int selectedCategory = -1;
+
     #endregion
 
     #region Miscellaneous Methods
@@ -41,7 +39,6 @@ public class CategoryComponent : MonoBehaviour
     public void SelectComponent(CategoryHoverButton component, bool isSelected)
     {
         component.IsSelected = isSelected;
-        SelectedCategory = components.IndexOf(component);
 
         component.GetComponentInChildren<Image>().DOColor(isSelected ? GameManager.instance.accentColor : Color.white, animationTime);
 
@@ -53,9 +50,12 @@ public class CategoryComponent : MonoBehaviour
             }
         }
 
-        if (isSelected)
+        if (isSelected && selectedCategory != components.IndexOf(component))
         {
+            selectedCategory = components.IndexOf(component);
+
             FadeText(component.transform);
+            SetInformation();
         }
     }
 
@@ -71,16 +71,18 @@ public class CategoryComponent : MonoBehaviour
         }
     }
 
-    public void SetInformation(List<Item> inventory)
+    public void SetInformation()
     {
-        List<Item> currentCategory = inventory.Where(i => i.Categorization.ToString().Equals(categories[SelectedCategory])).ToList();
+        List<Item> currentCategory = GetComponentInParent<InventoryComponent>().Inventory.items.Where(i => i.Categorization.ToString().Replace("_", " ").Equals(categories[selectedCategory])).ToList();
+
+        GetComponentInParent<InventoryComponent>().SetInformation(currentCategory);
     }
 
     private void FadeText(Transform position)
     {
         Sequence sequence = DOTween.Sequence();
 
-        transform.Find("Category Name").GetComponent<TextMeshProUGUI>().SetText(categories[SelectedCategory]);
+        transform.Find("Category Name").GetComponent<TextMeshProUGUI>().SetText(categories[selectedCategory]);
 
         sequence.Append(transform.Find("Category Name").GetComponent<RectTransform>().DOLocalMoveX(position.GetComponent<RectTransform>().localPosition.x, animationTime));
 

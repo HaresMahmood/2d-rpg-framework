@@ -12,7 +12,7 @@ using UnityEngine.UI;
 ///
 /// </summary>
 [RequireComponent(typeof(Button))]
-public class CategoryHoverButton : MonoBehaviour, ISelectHandler, IDeselectHandler, IPointerEnterHandler
+public class CategoryHoverButton : MonoBehaviour, ISelectHandler, IPointerEnterHandler
 {
     #region Properties
 
@@ -32,13 +32,11 @@ public class CategoryHoverButton : MonoBehaviour, ISelectHandler, IDeselectHandl
 
     public void OnSelect(BaseEventData eventData)
     {
-        GetComponentInParent<CategoryComponent>().SelectComponent(this, true);
+        if (GetComponent<Button>().enabled)
+        {
+            GetComponentInParent<CategoryComponent>().DeselectComponents(this);
+        }
 
-    }
-
-    public void OnDeselect(BaseEventData eventData)
-    {
-        GetComponentInParent<CategoryComponent>().SelectComponent(this, false);
     }
 
     #endregion
