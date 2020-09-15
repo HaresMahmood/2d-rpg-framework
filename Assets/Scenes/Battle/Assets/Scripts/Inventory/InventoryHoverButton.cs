@@ -30,6 +30,7 @@ public class InventoryHoverButton : MonoBehaviour, ISelectHandler, IDeselectHand
     public void OnSelect(BaseEventData eventData)
     {
         transform.Find("Selector").gameObject.SetActive(true);
+        GetComponentInParent<InventoryComponent>().SelectComponent(GetComponent<UserInterfaceSubComponent>());
     }
 
     public void OnDeselect(BaseEventData eventData)

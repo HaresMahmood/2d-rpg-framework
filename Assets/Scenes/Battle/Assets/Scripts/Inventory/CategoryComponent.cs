@@ -27,6 +27,7 @@ public class CategoryComponent : MonoBehaviour
 
     [Header("Setup")]
     [SerializeField] private List<string> categories = new List<string>();
+    [SerializeField] private Scrollbar scrollbar;
 
     [Header("Settings")]
     [SerializeField, Range(0.01f, 2f)] private float animationTime = 0.2f;
@@ -42,8 +43,15 @@ public class CategoryComponent : MonoBehaviour
         component.IsSelected = isSelected;
         SelectedCategory = components.IndexOf(component);
 
-        component.GetComponentInChildren<Image>().DOColor(isSelected ? GameManager.instance.accentColor : Color.white, animationTime); // Tint all images
-        //component.GetComponentInChildren<Image>().GetComponent<RectTransform>().DOAnchorPosY(component.transform.position.y + (isSelected ? 3 : -3), animationTime);
+        component.GetComponentInChildren<Image>().DOColor(isSelected ? GameManager.instance.accentColor : Color.white, animationTime);
+
+        if (component.GetComponentsInChildren<Image>().Length > 0)
+        {
+            foreach (Image image in component.GetComponentsInChildren<Image>())
+            {
+                image.DOColor(isSelected ? GameManager.instance.accentColor : Color.white, animationTime);
+            }
+        }
 
         if (isSelected)
         {
@@ -94,6 +102,8 @@ public class CategoryComponent : MonoBehaviour
     private void Start()
     {
         SelectComponent(components[0], true);
+
+        scrollbar.value = 1;
     }
 
     #endregion

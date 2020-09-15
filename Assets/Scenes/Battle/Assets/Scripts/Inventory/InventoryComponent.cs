@@ -1,8 +1,8 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 /// <summary>
 ///
@@ -11,11 +11,19 @@ public class InventoryComponent : UserInterfaceComponent, UIButtonParentHandler
 {
     #region Variables
 
-    [SerializeField] private Inventory party;
+    [SerializeField] private Inventory inventory;
 
     #endregion
 
     #region Miscellaneous Methods
+
+    // TODO: Make ExtensionMethod?
+    public void SelectComponent(UserInterfaceSubComponent component)
+    {
+        int row = Mathf.FloorToInt(((components.IndexOf(component) - (components.IndexOf(component) % GetComponentInChildren<GridLayoutGroup>().constraintCount)) / (float)GetComponentInChildren<GridLayoutGroup>().constraintCount));
+
+        StartCoroutine(GetComponentInChildren<Scrollbar>().LerpScrollbar(1f - (float)row / ((components.Count / GetComponentInChildren<GridLayoutGroup>().constraintCount) - 1), 0.1f)); // TODO: Make serializable, remove LerpScrollbar!
+    }
 
     public void DeselectComponents(UserInterfaceSubComponent selectedComponent)
     {
@@ -56,7 +64,7 @@ public class InventoryComponent : UserInterfaceComponent, UIButtonParentHandler
         }
 
         transform.Find("Inventory/Content/Categories").GetComponent<ButtonPromptController>().SetInformation(transform.Find("Inventory/Content/Categories").GetComponent<ButtonList>().PromptGroups);
-        GetComponentInChildren<Scrollbar>().value = 0;
+        SelectComponent(components[0]);
     }
 
     #endregion
