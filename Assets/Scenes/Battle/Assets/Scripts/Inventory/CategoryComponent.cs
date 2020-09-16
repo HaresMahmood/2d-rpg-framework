@@ -59,6 +59,11 @@ public class CategoryComponent : MonoBehaviour
         }
     }
 
+    public void SelectComponent(int increment)
+    {
+        DeselectComponents(components[ExtensionMethods.IncrementInt(selectedCategory, 0, categories.Count, increment)]);
+    }
+
     public void DeselectComponents(CategoryHoverButton selectedComponent)
     {
         List<CategoryHoverButton> components = this.components.Where(c => c != selectedComponent && c.IsSelected).ToList();

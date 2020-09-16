@@ -53,12 +53,14 @@ public class InventoryComponent : UserInterfaceComponent, UIButtonParentHandler
         for (int i = 0; i < components.Count; i++)
         {
             ((InventorySubComponent)components[i]).Animate(false, animationDuration);
+            components[i].GetComponent<Button>().enabled = false;
         }
 
         for (int i = 0; i < inventory.Count; i++)
         {
             ((InventorySubComponent)components[i]).SetInformation(inventory[i]);
             ((InventorySubComponent)components[i]).Animate(true, animationDuration);
+            components[i].GetComponent<Button>().enabled = true;
         }
 
         transform.Find("Inventory/Content/Items/Empty").GetComponent<CanvasGroup>().DOFade(Convert.ToInt32(inventory.Count == 0), animationDuration);
