@@ -29,13 +29,15 @@ public class InventoryGridComponent : UserInterfaceComponent
         {
             int row = Mathf.FloorToInt(((components.IndexOf(component) - (components.IndexOf(component) % columns)) / (float)columns));
 
+            Debug.Log(row);
+
             StartCoroutine(GetComponentInChildren<Scrollbar>().LerpScrollbar(1f - (float)row / ((components.Count / columns) - 1), 0.1f)); // TODO: Make serializable, remove LerpScrollbar!
         }
     }
 
     public override void SetInformation<T>(T information)
     {
-        List<Item> inventory = ((Inventory)Convert.ChangeType(information, typeof(Inventory))).items;
+        List<Item> inventory = ((List<Item>)Convert.ChangeType(information, typeof(List<Item>)));
 
         for (int i = 0; i < components.Count; i++)
         {
@@ -55,8 +57,8 @@ public class InventoryGridComponent : UserInterfaceComponent
             components[i].gameObject.SetActive(inventory.Count > (visibleRows * columns));
         }
 
-        transform.Find("Items/Empty").GetComponent<CanvasGroup>().DOFade(Convert.ToInt32(inventory.Count == 0), animationDuration);
-        transform.Find("Items/Grid").GetComponent<CanvasGroup>().DOFade(Convert.ToInt32(inventory.Count != 0), animationDuration);
+        transform.Find("Empty").GetComponent<CanvasGroup>().DOFade(Convert.ToInt32(inventory.Count == 0), animationDuration);
+        transform.Find("Grid").GetComponent<CanvasGroup>().DOFade(Convert.ToInt32(inventory.Count != 0), animationDuration);
     }
 
     public void SetDescription(Item item)

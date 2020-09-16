@@ -168,7 +168,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   party: {fileID: 11400000, guid: 714be781ae39b994c927e1025d05fb87, type: 2}
-  userInterface: {fileID: 273171515}
+  userInterface: {fileID: 0}
   animationControllers:
   - {fileID: 1750226564}
   - {fileID: 1508525486}
@@ -1084,7 +1084,7 @@ GameObject:
   - component: {fileID: 134834578}
   - component: {fileID: 134834581}
   m_Layer: 5
-  m_Name: Icon (6)
+  m_Name: Berries
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1120,17 +1120,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 134834576}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Script: {fileID: 11500000, guid: 64251c7bb770f664097fd7bdbac4c44d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_IgnoreLayout: 0
-  m_MinWidth: -1
-  m_MinHeight: -1
-  m_PreferredWidth: -1
-  m_PreferredHeight: -1
-  m_FlexibleWidth: -1
-  m_FlexibleHeight: -1
-  m_LayoutPriority: 1
 --- !u!95 &134834579
 Animator:
   serializedVersion: 3
@@ -1556,7 +1548,7 @@ PrefabInstance:
     - target: {fileID: 376770245575761528, guid: e85b3e94b36202b4d90ec29945381aa6,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 376770245575761528, guid: e85b3e94b36202b4d90ec29945381aa6,
         type: 3}
@@ -1567,7 +1559,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 6518449619303376247}
+      objectReference: {fileID: 0}
     - target: {fileID: 376770245575761528, guid: e85b3e94b36202b4d90ec29945381aa6,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -2169,8 +2161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c994c4669650e94e9269786b553bc43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventory: {fileID: 11400000, guid: 5a47d2040f5278546be326f7821df575, type: 2}
-  animationDuration: 0.1
+  information: {fileID: 11400000, guid: 5a47d2040f5278546be326f7821df575, type: 2}
 --- !u!114 &206784766
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3254,7 +3245,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 273171514}
-  - component: {fileID: 273171515}
   m_Layer: 0
   m_Name: UI
   m_TagString: Untagged
@@ -3285,20 +3275,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 2560, y: 1440}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &273171515
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 273171513}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e1665bf101901340a35da3b6dfbb6f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  information: {fileID: 11400000, guid: 714be781ae39b994c927e1025d05fb87, type: 2}
-  animationTime: 0
 --- !u!1 &278480823
 GameObject:
   m_ObjectHideFlags: 0
@@ -3818,7 +3794,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 75}
+  m_SizeDelta: {x: 0, y: 55}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &347578228
 MonoBehaviour:
@@ -3868,8 +3844,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 70
-  m_fontSizeBase: 70
+  m_fontSize: 55
+  m_fontSizeBase: 55
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -3953,7 +3929,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 100}
+  m_SizeDelta: {x: 0, y: 140}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &370884218
 MonoBehaviour:
@@ -4003,7 +3979,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 40
+  m_fontSize: 37.3
   m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -4089,7 +4065,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 700, y: 515}
+  m_SizeDelta: {x: 475, y: 515}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &395529006
 MonoBehaviour:
@@ -5982,7 +5958,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 608486635}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -6207,7 +6183,7 @@ PrefabInstance:
     - target: {fileID: 376770245575761528, guid: e85b3e94b36202b4d90ec29945381aa6,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 376770245575761528, guid: e85b3e94b36202b4d90ec29945381aa6,
         type: 3}
@@ -6218,7 +6194,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 6518449619303376247}
+      objectReference: {fileID: 0}
     - target: {fileID: 376770245575761528, guid: e85b3e94b36202b4d90ec29945381aa6,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -7213,7 +7189,7 @@ GameObject:
   - component: {fileID: 783148472}
   - component: {fileID: 783148475}
   m_Layer: 5
-  m_Name: Icon (4)
+  m_Name: Battle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7248,17 +7224,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 783148470}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Script: {fileID: 11500000, guid: 64251c7bb770f664097fd7bdbac4c44d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_IgnoreLayout: 0
-  m_MinWidth: -1
-  m_MinHeight: -1
-  m_PreferredWidth: -1
-  m_PreferredHeight: -1
-  m_FlexibleWidth: -1
-  m_FlexibleHeight: -1
-  m_LayoutPriority: 1
 --- !u!95 &783148473
 Animator:
   serializedVersion: 3
@@ -13191,6 +13159,7 @@ GameObject:
   - component: {fileID: 1187992284}
   - component: {fileID: 1187992283}
   - component: {fileID: 1187992282}
+  - component: {fileID: 1187992287}
   - component: {fileID: 1187992286}
   m_Layer: 5
   m_Name: Canvas (Battle)
@@ -13308,9 +13277,8 @@ MonoBehaviour:
   firstSelected: {fileID: 690068373}
   promptGroups:
   - text: Inventory
-    action: {fileID: 4859837234501267398, guid: 7b1ef33fd2e04a64fa860215814154c6,
-      type: 3}
-    value: -1
+    action: {fileID: 47659136065754399, guid: 7b1ef33fd2e04a64fa860215814154c6, type: 3}
+    value: 0
     onClick:
       m_PersistentCalls:
         m_Calls:
@@ -13326,58 +13294,10 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-        - m_Target: {fileID: 6518449619303376247}
-          m_TargetAssemblyTypeName: CategoryComponent, Assembly-CSharp
-          m_MethodName: SelectComponent
-          m_Mode: 3
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
     prompts:
-    - text: Q
+    - text: DEL
       icon: {fileID: 0}
-    - text: L1/L
-      icon: {fileID: 0}
-  - text: Heal
-    action: {fileID: 4859837234501267398, guid: 7b1ef33fd2e04a64fa860215814154c6,
-      type: 3}
-    value: 1
-    onClick:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 2114862581}
-          m_TargetAssemblyTypeName: UserInterfaceManager, Assembly-CSharp
-          m_MethodName: PushUserInterface
-          m_Mode: 2
-          m_Arguments:
-            m_ObjectArgument: {fileID: 206784761}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-        - m_Target: {fileID: 6518449619303376247}
-          m_TargetAssemblyTypeName: CategoryComponent, Assembly-CSharp
-          m_MethodName: SelectComponent
-          m_Mode: 3
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 1
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-    prompts:
-    - text: E
-      icon: {fileID: 0}
-    - text: R1/R
+    - text: X
       icon: {fileID: 0}
   - text: Party
     action: {fileID: 5559448308325070525, guid: 7b1ef33fd2e04a64fa860215814154c6,
@@ -13451,6 +13371,20 @@ MonoBehaviour:
       icon: {fileID: 21300000, guid: 18bc11aaa02c10f418755e7110be55a1, type: 3}
     - text: B
       icon: {fileID: 0}
+--- !u!114 &1187992287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1187992280}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e1665bf101901340a35da3b6dfbb6f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  information: {fileID: 11400000, guid: 714be781ae39b994c927e1025d05fb87, type: 2}
+  animationTime: 0
 --- !u!1001 &1215241652
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14475,7 +14409,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1284745745}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -17232,7 +17166,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 55}
+  m_SizeDelta: {x: 0, y: 45}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1676130446
 MonoBehaviour:
@@ -17282,8 +17216,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 55
-  m_fontSizeBase: 55
+  m_fontSize: 45
+  m_fontSizeBase: 45
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -17660,7 +17594,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 35}
+  m_SizeDelta: {x: 0, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1717020587
 MonoBehaviour:
@@ -18069,7 +18003,7 @@ GameObject:
   - component: {fileID: 1798587845}
   - component: {fileID: 1798587848}
   m_Layer: 5
-  m_Name: Icon (1)
+  m_Name: "Pok\xE9 Balls"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18104,17 +18038,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1798587843}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Script: {fileID: 11500000, guid: 64251c7bb770f664097fd7bdbac4c44d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_IgnoreLayout: 0
-  m_MinWidth: -1
-  m_MinHeight: -1
-  m_PreferredWidth: -1
-  m_PreferredHeight: -1
-  m_FlexibleWidth: -1
-  m_FlexibleHeight: -1
-  m_LayoutPriority: 1
 --- !u!95 &1798587846
 Animator:
   serializedVersion: 3
@@ -19445,6 +19371,7 @@ GameObject:
   - component: {fileID: 1928325650}
   - component: {fileID: 1928325649}
   - component: {fileID: 1928325648}
+  - component: {fileID: 1928325652}
   m_Layer: 5
   m_Name: Items
   m_TagString: Untagged
@@ -19556,6 +19483,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1928325646}
   m_CullTransparentMesh: 0
+--- !u!114 &1928325652
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1928325646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae368808925613a4b909068db4561133, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationDuration: 0.15
 --- !u!1001 &1950944419
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22322,6 +22262,7 @@ GameObject:
   - component: {fileID: 563414960386384501}
   - component: {fileID: 5507350311540825646}
   - component: {fileID: 1223688001583454026}
+  - component: {fileID: 3581146716588896524}
   - component: {fileID: 3581146716588896523}
   - component: {fileID: 3581146716588896522}
   m_Layer: 5
@@ -22351,7 +22292,19 @@ MonoBehaviour:
     value: -1
     onClick:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 3581146716588896524}
+          m_TargetAssemblyTypeName: CategoryComponent, Assembly-CSharp
+          m_MethodName: SelectComponent
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: -1
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
     prompts:
     - text: z
       icon: {fileID: 0}
@@ -22363,7 +22316,19 @@ MonoBehaviour:
     value: 1
     onClick:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 3581146716588896524}
+          m_TargetAssemblyTypeName: CategoryComponent, Assembly-CSharp
+          m_MethodName: SelectComponent
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 1
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
     prompts:
     - text: c
       icon: {fileID: 0}
@@ -22384,27 +22349,20 @@ MonoBehaviour:
   actionAsset: {fileID: -944628639613478452, guid: 7b1ef33fd2e04a64fa860215814154c6,
     type: 3}
   animationDelay: 0.07
-  animationDuration: 0
---- !u!114 &4514552825962095868
+  animationDuration: 0.15
+--- !u!114 &3581146716588896524
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6518449619303376246}
+  m_GameObject: {fileID: 3581146716588896521}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Script: {fileID: 11500000, guid: 75c383fa432143e43a1bcd344a62b875, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_IgnoreLayout: 0
-  m_MinWidth: -1
-  m_MinHeight: -1
-  m_PreferredWidth: -1
-  m_PreferredHeight: -1
-  m_FlexibleWidth: -1
-  m_FlexibleHeight: -1
-  m_LayoutPriority: 1
+  animationDuration: 0.2
 --- !u!224 &4755235431194258207
 RectTransform:
   m_ObjectHideFlags: 0
@@ -22838,8 +22796,6 @@ GameObject:
   - component: {fileID: 695534136145590477}
   - component: {fileID: 9059894039853448224}
   - component: {fileID: 123352652977554666}
-  - component: {fileID: 4514552825962095868}
-  - component: {fileID: 6518449619303376247}
   m_Layer: 5
   m_Name: Category Icons
   m_TagString: Untagged
@@ -22847,25 +22803,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &6518449619303376247
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6518449619303376246}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75c383fa432143e43a1bcd344a62b875, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  categories:
-  - "Pok\xE9 Balls"
-  - Health
-  - Berries
-  - Battle
-  scrollbar: {fileID: 948026907}
-  animationTime: 0.2
 --- !u!1 &6647105519984799565
 GameObject:
   m_ObjectHideFlags: 0
@@ -23287,10 +23224,10 @@ GameObject:
   - component: {fileID: 855072418920561169}
   - component: {fileID: 2972272655774378514}
   - component: {fileID: 6916377406954469124}
-  - component: {fileID: 7588989249081001128}
+  - component: {fileID: 6916377406954469126}
   - component: {fileID: 6916377406954469125}
   m_Layer: 5
-  m_Name: Icon (2)
+  m_Name: Health
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23352,6 +23289,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c69cf2ae48a82f47bd90e395411eef5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6916377406954469126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6916377406954469123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64251c7bb770f664097fd7bdbac4c44d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &6949006835106689953
 RectTransform:
   m_ObjectHideFlags: 0
@@ -23393,26 +23342,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &7588989249081001128
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6916377406954469123}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IgnoreLayout: 0
-  m_MinWidth: -1
-  m_MinHeight: -1
-  m_PreferredWidth: -1
-  m_PreferredHeight: -1
-  m_FlexibleWidth: -1
-  m_FlexibleHeight: -1
-  m_LayoutPriority: 1
 --- !u!114 &9059894039853448224
 MonoBehaviour:
   m_ObjectHideFlags: 0

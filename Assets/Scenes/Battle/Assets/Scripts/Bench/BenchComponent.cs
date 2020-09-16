@@ -24,5 +24,12 @@ public class BenchComponent : UserInterfaceComponent
     }
 
     #endregion
+
+    #region Unity Methods
+
+    protected override void Start()
+    { }
+
+    #endregion
 }
 

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using DG.Tweening;
 using TMPro;
@@ -7,12 +8,30 @@ using TMPro;
 /// </summary>
 public class CategoryComponent : UserInterfaceComponent
 {
+    #region Properties
+
+    public string SelectedCategory
+    {
+        get
+        {
+            return components[selectedCategory].name;
+        }
+    }
+
+    #endregion
+
     #region Variables
 
     [Header("Settings")]
     [SerializeField, Range(0.01f, 0.5f)] private float animationDuration;
 
     private int selectedCategory = -1;
+
+    #endregion
+
+    #region Events
+
+    public event EventHandler OnCategoryChange;
 
     #endregion
 
@@ -27,6 +46,8 @@ public class CategoryComponent : UserInterfaceComponent
             selectedCategory = components.IndexOf(component);
 
             FadeText(component.transform);
+
+            OnCategoryChange?.Invoke(this, EventArgs.Empty);
         }
     }
 
@@ -37,9 +58,20 @@ public class CategoryComponent : UserInterfaceComponent
 
     private void FadeText(Transform position)
     {
-        transform.Find("Category Name").GetComponent<TextMeshProUGUI>().SetText(position.name);
+        transform.Find("Category Icons/Category Name").GetComponent<TextMeshProUGUI>().SetText(position.name);
 
-        transform.Find("Category Name").GetComponent<RectTransform>().DOLocalMoveX(position.GetComponent<RectTransform>().localPosition.x, animationDuration);
+        transform.Find("Category Icons/Category Name").GetComponent<RectTransform>().DOLocalMoveX(position.GetComponent<RectTransform>().localPosition.x, animationDuration);
+    }
+
+    #endregion
+
+    #region Unity Methods
+
+    protected override void Start()
+    {
+        base.Start();
+
+        GetComponent<ButtonPromptController>().SetInformation(GetComponent<ButtonList>().PromptGroups);
     }
 
     #endregion

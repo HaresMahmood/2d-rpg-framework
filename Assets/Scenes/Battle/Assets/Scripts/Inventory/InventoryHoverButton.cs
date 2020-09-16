@@ -14,6 +14,20 @@ using UnityEngine.UI;
 [RequireComponent(typeof(InventorySubComponent))]
 public class InventoryHoverButton : HoverButton, IDeselectHandler
 {
+    #region Miscellaneous Methods
+
+    public override void Select(bool isSelected)
+    {
+        base.Select(isSelected);
+
+        if (isSelected)
+        {
+            GetComponentInParent<InventoryGridComponent>().SelectComponent(GetComponent<CategorySubComponent>());
+        }
+    }
+
+    #endregion
+
     #region Unity Methods
 
     public void OnDeselect(BaseEventData eventData)
