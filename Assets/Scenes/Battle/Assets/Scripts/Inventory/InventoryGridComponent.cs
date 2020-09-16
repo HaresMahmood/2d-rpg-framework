@@ -29,8 +29,6 @@ public class InventoryGridComponent : UserInterfaceComponent
         {
             int row = Mathf.FloorToInt(((components.IndexOf(component) - (components.IndexOf(component) % columns)) / (float)columns));
 
-            Debug.Log(row);
-
             StartCoroutine(GetComponentInChildren<Scrollbar>().LerpScrollbar(1f - (float)row / ((components.Count / columns) - 1), 0.1f)); // TODO: Make serializable, remove LerpScrollbar!
         }
     }

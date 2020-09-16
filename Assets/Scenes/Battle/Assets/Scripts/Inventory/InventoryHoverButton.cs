@@ -22,7 +22,7 @@ public class InventoryHoverButton : HoverButton, IDeselectHandler
 
         if (isSelected)
         {
-            GetComponentInParent<InventoryGridComponent>().SelectComponent(GetComponent<CategorySubComponent>());
+            GetComponentInParent<InventoryGridComponent>().SelectComponent(GetComponent<UserInterfaceSubComponent>());
         }
     }
 
