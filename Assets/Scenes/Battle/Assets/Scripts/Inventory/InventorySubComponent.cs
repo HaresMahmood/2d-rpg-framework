@@ -9,6 +9,12 @@ using DG.Tweening;
 /// </summary>
 public class InventorySubComponent : UserInterfaceSubComponent
 {
+    #region Properties
+
+    public Item Item { get { return item; } }
+
+    #endregion
+
     #region Variables
 
     [Header("Values")]

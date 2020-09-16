@@ -12,7 +12,7 @@ using UnityEngine.UI;
 ///
 /// </summary>
 [RequireComponent(typeof(Button))]
-public class InventoryHoverButton : MonoBehaviour, ISelectHandler, IDeselectHandler, IPointerEnterHandler
+public class InventoryHoverButton : MonoBehaviour, ISelectHandler, IPointerEnterHandler
 {
     #region Unity Methods
 
@@ -23,19 +23,21 @@ public class InventoryHoverButton : MonoBehaviour, ISelectHandler, IDeselectHand
             UIButtonParentHandler buttonHandler = GetComponentInParent(typeof(UIButtonParentHandler)) as UIButtonParentHandler;
 
             transform.Find("Selector").gameObject.SetActive(true);
+            ((InventoryComponent)buttonHandler).SetDescription(GetComponent<InventorySubComponent>().Item);
             buttonHandler.DeselectComponents(GetComponent<UserInterfaceSubComponent>());
         }
     }
 
     public void OnSelect(BaseEventData eventData)
     {
-        transform.Find("Selector").gameObject.SetActive(true);
-        GetComponentInParent<InventoryComponent>().SelectComponent(GetComponent<UserInterfaceSubComponent>());
-    }
+        if (GetComponent<Button>().enabled)
+        {
+            UIButtonParentHandler buttonHandler = GetComponentInParent(typeof(UIButtonParentHandler)) as UIButtonParentHandler;
 
-    public void OnDeselect(BaseEventData eventData)
-    {
-        transform.Find("Selector").gameObject.SetActive(false);
+            transform.Find("Selector").gameObject.SetActive(true);
+            ((InventoryComponent)buttonHandler).SetDescription(GetComponent<InventorySubComponent>().Item);
+            buttonHandler.DeselectComponents(GetComponent<UserInterfaceSubComponent>());
+        }
     }
 
     #endregion

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using System;
+using TMPro;
 
 /// <summary>
 ///
@@ -33,9 +34,12 @@ public class InventoryComponent : UserInterfaceComponent, UIButtonParentHandler
     // TODO: Make ExtensionMethod?
     public void SelectComponent(UserInterfaceSubComponent component)
     {
-        int row = Mathf.FloorToInt(((components.IndexOf(component) - (components.IndexOf(component) % columns)) / (float)columns));
+        if (GetComponentInChildren<Scrollbar>() != null)
+        {
+            int row = Mathf.FloorToInt(((components.IndexOf(component) - (components.IndexOf(component) % columns)) / (float)columns));
 
-        StartCoroutine(GetComponentInChildren<Scrollbar>().LerpScrollbar(1f - (float)row / ((components.Count / columns) - 1), 0.1f)); // TODO: Make serializable, remove LerpScrollbar!
+            StartCoroutine(GetComponentInChildren<Scrollbar>().LerpScrollbar(1f - (float)row / ((components.Count / columns) - 1), 0.1f)); // TODO: Make serializable, remove LerpScrollbar!
+        }
     }
 
     public void DeselectComponents(UserInterfaceSubComponent selectedComponent)
@@ -47,8 +51,6 @@ public class InventoryComponent : UserInterfaceComponent, UIButtonParentHandler
             component.transform.Find("Selector").gameObject.SetActive(false);
         }
     }
-
-
 
     // TODO: Debug
     public void SetInformation(List<Item> inventory)
@@ -70,11 +72,15 @@ public class InventoryComponent : UserInterfaceComponent, UIButtonParentHandler
         {
             components[i].gameObject.SetActive(inventory.Count > (visibleRows * columns));
         }
-
-        
         
         transform.Find("Inventory/Content/Items/Items/Empty").GetComponent<CanvasGroup>().DOFade(Convert.ToInt32(inventory.Count == 0), animationDuration);
         transform.Find("Inventory/Content/Items/Items/Grid").GetComponent<CanvasGroup>().DOFade(Convert.ToInt32(inventory.Count != 0), animationDuration);
+    }
+
+    public void SetDescription(Item item)
+    {
+        transform.Find("Inventory/Content/Details/Information/Basic Information/Name").GetComponent<TextMeshProUGUI>().SetText(item.Name);
+        transform.Find("Inventory/Content/Details/Information/Description/Value").GetComponent<TextMeshProUGUI>().SetText(item.Description);
     }
 
     #endregion
