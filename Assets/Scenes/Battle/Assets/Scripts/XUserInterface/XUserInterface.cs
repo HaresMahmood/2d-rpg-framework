@@ -9,6 +9,7 @@ public class XUserInterface<T> : MonoBehaviour
 {
     #region Variables
 
+    [Header("Setup")]
     [SerializeField] protected T information;
 
     protected List<UserInterfaceComponent> components;

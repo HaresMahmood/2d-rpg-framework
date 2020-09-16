@@ -51,6 +51,14 @@ public class @Controls : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
+                    ""name"": ""Remove"",
+                    ""type"": ""Button"",
+                    ""id"": ""02acb480-d3d4-4aa4-b90c-e9547874491b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
                     ""name"": ""Start"",
                     ""type"": ""Button"",
                     ""id"": ""879fb948-ade4-4938-b58c-730b71fabb39"",
@@ -637,6 +645,50 @@ public class @Controls : IInputActionCollection, IDisposable
                     ""action"": ""Submit"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d6d96246-5074-4ced-ab9b-d5293ca231ce"",
+                    ""path"": ""<Keyboard>/delete"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Remove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4e8c63d5-b09e-4c58-a341-5d37ff79ca38"",
+                    ""path"": ""<SwitchProControllerHID>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Remove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ea42e095-1cc9-4ebc-a92d-131992038c21"",
+                    ""path"": ""<XInputController>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Remove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7a2adf88-e8c1-491c-9261-cec68abfc29f"",
+                    ""path"": ""<DualShockGamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Remove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -660,6 +712,7 @@ public class @Controls : IInputActionCollection, IDisposable
         m_UI_Submit = m_UI.FindAction("Submit", throwIfNotFound: true);
         m_UI_Cancel = m_UI.FindAction("Cancel", throwIfNotFound: true);
         m_UI_Toggle = m_UI.FindAction("Toggle", throwIfNotFound: true);
+        m_UI_Remove = m_UI.FindAction("Remove", throwIfNotFound: true);
         m_UI_Start = m_UI.FindAction("Start", throwIfNotFound: true);
         m_UI_Point = m_UI.FindAction("Point", throwIfNotFound: true);
         m_UI_Click = m_UI.FindAction("Click", throwIfNotFound: true);
@@ -723,6 +776,7 @@ public class @Controls : IInputActionCollection, IDisposable
     private readonly InputAction m_UI_Submit;
     private readonly InputAction m_UI_Cancel;
     private readonly InputAction m_UI_Toggle;
+    private readonly InputAction m_UI_Remove;
     private readonly InputAction m_UI_Start;
     private readonly InputAction m_UI_Point;
     private readonly InputAction m_UI_Click;
@@ -741,6 +795,7 @@ public class @Controls : IInputActionCollection, IDisposable
         public InputAction @Submit => m_Wrapper.m_UI_Submit;
         public InputAction @Cancel => m_Wrapper.m_UI_Cancel;
         public InputAction @Toggle => m_Wrapper.m_UI_Toggle;
+        public InputAction @Remove => m_Wrapper.m_UI_Remove;
         public InputAction @Start => m_Wrapper.m_UI_Start;
         public InputAction @Point => m_Wrapper.m_UI_Point;
         public InputAction @Click => m_Wrapper.m_UI_Click;
@@ -772,6 +827,9 @@ public class @Controls : IInputActionCollection, IDisposable
                 @Toggle.started -= m_Wrapper.m_UIActionsCallbackInterface.OnToggle;
                 @Toggle.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnToggle;
                 @Toggle.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnToggle;
+                @Remove.started -= m_Wrapper.m_UIActionsCallbackInterface.OnRemove;
+                @Remove.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnRemove;
+                @Remove.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnRemove;
                 @Start.started -= m_Wrapper.m_UIActionsCallbackInterface.OnStart;
                 @Start.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnStart;
                 @Start.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnStart;
@@ -818,6 +876,9 @@ public class @Controls : IInputActionCollection, IDisposable
                 @Toggle.started += instance.OnToggle;
                 @Toggle.performed += instance.OnToggle;
                 @Toggle.canceled += instance.OnToggle;
+                @Remove.started += instance.OnRemove;
+                @Remove.performed += instance.OnRemove;
+                @Remove.canceled += instance.OnRemove;
                 @Start.started += instance.OnStart;
                 @Start.performed += instance.OnStart;
                 @Start.canceled += instance.OnStart;
@@ -876,6 +937,7 @@ public class @Controls : IInputActionCollection, IDisposable
         void OnSubmit(InputAction.CallbackContext context);
         void OnCancel(InputAction.CallbackContext context);
         void OnToggle(InputAction.CallbackContext context);
+        void OnRemove(InputAction.CallbackContext context);
         void OnStart(InputAction.CallbackContext context);
         void OnPoint(InputAction.CallbackContext context);
         void OnClick(InputAction.CallbackContext context);

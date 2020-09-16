@@ -38,6 +38,14 @@
                     "interactions": ""
                 },
                 {
+                    "name": "Remove",
+                    "type": "Button",
+                    "id": "02acb480-d3d4-4aa4-b90c-e9547874491b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
                     "name": "Start",
                     "type": "Button",
                     "id": "879fb948-ade4-4938-b58c-730b71fabb39",
@@ -622,6 +630,50 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Submit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d6d96246-5074-4ced-ab9b-d5293ca231ce",
+                    "path": "<Keyboard>/delete",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard & Mouse",
+                    "action": "Remove",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4e8c63d5-b09e-4c58-a341-5d37ff79ca38",
+                    "path": "<SwitchProControllerHID>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Remove",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ea42e095-1cc9-4ebc-a92d-131992038c21",
+                    "path": "<XInputController>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Remove",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7a2adf88-e8c1-491c-9261-cec68abfc29f",
+                    "path": "<DualShockGamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Remove",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -18,7 +18,7 @@ public class InventoryController : CategoryUserInterfaceController
 
     private static InventoryController instance;
 
-    [SerializeField] private InventoryUserInterface userInterface;
+    [SerializeField] private ExInventoryUserInterface userInterface;
 
     #endregion
 
@@ -182,7 +182,7 @@ public class InventoryController : CategoryUserInterfaceController
     {
         base.InteractInput(selectedValue);
 
-        ((InventoryUserInterface)UserInterface).ActiveSubMenu(selectedValue);
+        ((ExInventoryUserInterface)UserInterface).ActiveSubMenu(selectedValue);
     }
 
     protected override void GetInput(int max)

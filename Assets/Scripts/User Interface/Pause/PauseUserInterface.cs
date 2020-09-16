@@ -43,7 +43,7 @@ public class PauseUserInterface : UserInterface
         UpdateNavigationText(selectedValue, previousValue, nextValue);
 
         // TODO: Debug
-        if (menus[selectedValue] is InventoryUserInterface || menus[selectedValue] is PartyUserInterface)
+        if (menus[selectedValue] is ExInventoryUserInterface || menus[selectedValue] is PartyUserInterface)
         {
             string selectedMenuName = menus[selectedValue].name;
             string previousMenuName = selectedMenuName == "Inventory" ? "Party" : "Inventory";

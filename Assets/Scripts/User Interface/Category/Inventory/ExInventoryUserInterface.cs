@@ -8,7 +8,7 @@ using TMPro;
 /// <summary>
 ///
 /// </summary>
-public sealed class InventoryUserInterface : CategoryUserInterface
+public sealed class ExInventoryUserInterface : CategoryUserInterface
 {
     #region Constants
 

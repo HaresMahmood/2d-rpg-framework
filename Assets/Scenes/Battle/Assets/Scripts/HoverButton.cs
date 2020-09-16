@@ -2,36 +2,51 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-//////////////////////////////////////
-// TODO: Redo (make interface)
-//////////////////////////////////////
-
 /// <summary>
 ///
 /// </summary>
-public class HoverButton : MonoBehaviour, ISelectHandler, IDeselectHandler, IPointerEnterHandler //, IPointerExitHandler
+[RequireComponent(typeof(Button))]
+public class HoverButton : MonoBehaviour, IPointerEnterHandler, ISelectHandler
 {
-    #region Unity Methods
+    #region Properties
 
-    public void OnPointerEnter(PointerEventData eventData)
+    public virtual bool IsSelected 
+    {
+        get { return transform.Find("Selector").gameObject; }
+        protected set { }
+    }
+
+    #endregion
+
+    #region Miscellaneous Methods
+
+    public virtual void Select(bool isSelected)
+    {
+        transform.Find("Selector").gameObject.SetActive(isSelected);
+    }
+
+    protected virtual void Hover()
     {
         if (GetComponent<Button>().enabled)
         {
-            GetComponent<MoveButtonSubComponent>().SelectButton(true);
-            GetComponentInParent<MoveButtonComponent>().DeselectButtons(GetComponent<Button>());
+            UIHoverButtonHandler buttonHandler = GetComponentInParent(typeof(UIHoverButtonHandler)) as UIHoverButtonHandler;
+            
+            buttonHandler.DeselectComponents(GetComponent<UserInterfaceSubComponent>());
         }
     }
 
-    public void OnSelect(BaseEventData eventData)
+    #endregion
+
+    #region Unity Methods
+
+    public virtual void OnPointerEnter(PointerEventData eventData)
     {
-        GetComponent<MoveButtonSubComponent>().SelectButton(true);
-        GetComponentInParent<MoveButtonComponent>().DeselectButtons(GetComponent<Button>());
+        Hover();
     }
 
-    public void OnDeselect(BaseEventData eventData)
+    public virtual void OnSelect(BaseEventData eventData)
     {
-        GetComponent<MoveButtonSubComponent>().SelectButton(false);
-        LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponentInParent<RectTransform>());
+        Hover();
     }
 
     #endregion

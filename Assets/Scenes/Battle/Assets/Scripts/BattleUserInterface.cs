@@ -56,9 +56,9 @@ public class BattleUserInterface : XUserInterface<Party>
 
         //damageText = transform.Find("Canvas (Damage)/Damage").GetComponent<DamageText>();
 
-        partnerHealth = transform.Find("Canvas (Battle)/Fighters/Partner").GetComponent<PartySubComponent>();
-        enemyHealth = transform.Find("Canvas (Battle)/Fighters/Enemy").GetComponent<PartySubComponent>();
-        abilityComponent = transform.Find("Canvas (Battle)/Fighters/Middle/Ability").GetComponent<AbilityComponent>();
+        partnerHealth = transform.Find("Fighters/Partner").GetComponent<PartySubComponent>();
+        enemyHealth = transform.Find("Fighters/Enemy").GetComponent<PartySubComponent>();
+        abilityComponent = transform.Find("Fighters/Middle/Ability").GetComponent<AbilityComponent>();
 
         BattleManager.Instance.OnAttackComplete += Battle_OnAttack;
         AbilityController.OnAbilityInvoke += Abilities_OnAbilityInvoke;
@@ -71,9 +71,7 @@ public class BattleUserInterface : XUserInterface<Party>
         SetPartner();
         SetEnemy();
 
-        FindComponent("Canvas (Party)").gameObject.SetActive(false);
-        FindComponent("Canvas (Inventory)").gameObject.SetActive(false);
-        UserInterfaceManager.Instance.PushUserInterface(transform.Find("Canvas (Battle)").gameObject);
+        UserInterfaceManager.Instance.PushUserInterface(gameObject);
     }
 
     #endregion

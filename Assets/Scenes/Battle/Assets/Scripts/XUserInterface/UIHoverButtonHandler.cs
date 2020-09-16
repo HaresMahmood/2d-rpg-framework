@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 ///
 /// </summary>
-public interface UIButtonParentHandler
+public interface UIHoverButtonHandler
 {
     #region Variables
 

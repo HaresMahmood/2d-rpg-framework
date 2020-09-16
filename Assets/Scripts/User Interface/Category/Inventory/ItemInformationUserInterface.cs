@@ -78,7 +78,7 @@ public class ItemInformationUserInterface : InformationUserInterface
     {
         StartCoroutine(ResetSubMenu(selectedValue));
         StartCoroutine(InventoryController.Instance.SetActive(true));
-        ((InventoryUserInterface)InventoryController.Instance.UserInterface).FadeInventoryUserInterface(1f);
+        ((ExInventoryUserInterface)InventoryController.Instance.UserInterface).FadeInventoryUserInterface(1f);
         StartCoroutine(ItemInformationController.Instance.SetActive(false));
     }
 
@@ -111,7 +111,7 @@ public class ItemInformationUserInterface : InformationUserInterface
         if (!isActive)
         {
             StartCoroutine(InventoryController.Instance.SetActive(true));
-            ((InventoryUserInterface)InventoryController.Instance.UserInterface).FadeInventoryUserInterface(1f);
+            ((ExInventoryUserInterface)InventoryController.Instance.UserInterface).FadeInventoryUserInterface(1f);
         }
 
         StartCoroutine(ItemInformationController.Instance.SetActive(isActive));
