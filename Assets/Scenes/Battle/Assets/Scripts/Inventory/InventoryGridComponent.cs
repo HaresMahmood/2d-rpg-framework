@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using DG.Tweening;
 using System;
 using TMPro;
@@ -55,8 +56,12 @@ public class InventoryGridComponent : UserInterfaceComponent
             components[i].gameObject.SetActive(inventory.Count > (visibleRows * columns));
         }
 
+        EventSystem.current.SetSelectedGameObject(components[0].gameObject);
+
         transform.Find("Empty").GetComponent<CanvasGroup>().DOFade(Convert.ToInt32(inventory.Count == 0), animationDuration);
         transform.Find("Grid").GetComponent<CanvasGroup>().DOFade(Convert.ToInt32(inventory.Count != 0), animationDuration);
+
+        SelectComponent(components[0]); // TODO: Fix scrollbar
     }
 
     public void SetDescription(Item item)
