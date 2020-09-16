@@ -73,8 +73,8 @@ public class InventoryComponent : UserInterfaceComponent, UIButtonParentHandler
 
         
         
-        transform.Find("Inventory/Content/Items/Empty").GetComponent<CanvasGroup>().DOFade(Convert.ToInt32(inventory.Count == 0), animationDuration);
-        transform.Find("Inventory/Content/Items/Grid").GetComponent<CanvasGroup>().DOFade(Convert.ToInt32(inventory.Count != 0), animationDuration);
+        transform.Find("Inventory/Content/Items/Items/Empty").GetComponent<CanvasGroup>().DOFade(Convert.ToInt32(inventory.Count == 0), animationDuration);
+        transform.Find("Inventory/Content/Items/Items/Grid").GetComponent<CanvasGroup>().DOFade(Convert.ToInt32(inventory.Count != 0), animationDuration);
     }
 
     #endregion
@@ -96,7 +96,7 @@ public class InventoryComponent : UserInterfaceComponent, UIButtonParentHandler
             components[i].transform.Find("Selector").gameObject.SetActive(false);
         }
 
-        transform.Find("Inventory/Content/Categories").GetComponent<ButtonPromptController>().SetInformation(transform.Find("Inventory/Content/Categories").GetComponent<ButtonList>().PromptGroups);
+        transform.Find("Inventory/Content/Items/Categories").GetComponent<ButtonPromptController>().SetInformation(transform.Find("Inventory/Content/Items/Categories").GetComponent<ButtonList>().PromptGroups);
         SelectComponent(components[0]);
     }
 
