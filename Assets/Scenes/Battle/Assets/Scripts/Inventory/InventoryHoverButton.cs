@@ -16,14 +16,11 @@ public class InventoryHoverButton : HoverButton, IDeselectHandler
 {
     #region Miscellaneous Methods
 
-    public override void Select(bool isSelected)
+    public override void OnSelect(BaseEventData eventData)
     {
-        base.Select(isSelected);
+        base.OnSelect(eventData);
 
-        if (isSelected)
-        {
-            GetComponentInParent<InventoryGridComponent>().SelectComponent(GetComponent<UserInterfaceSubComponent>());
-        }
+        GetComponentInParent<InventoryGridComponent>().SelectComponent(GetComponent<UserInterfaceSubComponent>());
     }
 
     #endregion
