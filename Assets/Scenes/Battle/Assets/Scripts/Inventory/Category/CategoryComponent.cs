@@ -56,11 +56,19 @@ public class CategoryComponent : UserInterfaceComponent
         DeselectComponents(components[ExtensionMethods.IncrementInt(selectedCategory, 0, components.Count, increment)]);
     }
 
+    public void SelectComponent(float component)
+    {
+        DeselectComponents(components[(int)component]);
+    }
+
     private void FadeText(Transform position)
     {
-        transform.Find("Category Icons/Category Name").GetComponent<TextMeshProUGUI>().SetText(position.name);
+        if (transform.Find("Category Icons/Category Name").transform.localPosition.x != position.localPosition.x)
+        {
+            transform.Find("Category Icons/Category Name").GetComponent<TextMeshProUGUI>().SetText(position.name);
 
-        transform.Find("Category Icons/Category Name").GetComponent<RectTransform>().DOLocalMoveX(position.GetComponent<RectTransform>().localPosition.x, animationDuration);
+            transform.Find("Category Icons/Category Name").GetComponent<RectTransform>().DOLocalMoveX(position.GetComponent<RectTransform>().localPosition.x, animationDuration).OnComplete(() => FadeText(position));
+        }
     }
 
     #endregion
