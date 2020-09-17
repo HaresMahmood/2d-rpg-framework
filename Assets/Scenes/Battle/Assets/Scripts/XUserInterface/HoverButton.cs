@@ -10,11 +10,7 @@ public class HoverButton : MonoBehaviour, IPointerEnterHandler, ISelectHandler
 {
     #region Properties
 
-    public virtual bool IsSelected 
-    {
-        get { return transform.Find("Selector").gameObject; }
-        protected set { }
-    }
+    public bool IsSelected { get; protected set; } = true;
 
     #endregion
 
@@ -22,7 +18,9 @@ public class HoverButton : MonoBehaviour, IPointerEnterHandler, ISelectHandler
 
     public virtual void Select(bool isSelected)
     {
-        transform.Find("Selector").gameObject.SetActive(isSelected);
+        IsSelected = isSelected;
+
+        GetComponent<UserInterfaceSubComponent>().Select(isSelected);
     }
 
     protected virtual void Hover()

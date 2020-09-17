@@ -11,7 +11,7 @@ public class MoveButtonSubComponent : UserInterfaceSubComponent
     #region Variables
 
     [Header("Values")]
-    [SerializeField] private PartyMember.MemberMove move;
+    [SerializeField, ReadOnly] private PartyMember.MemberMove move;
 
     private GameObject textContainer;
     private GameObject selector;
@@ -23,20 +23,13 @@ public class MoveButtonSubComponent : UserInterfaceSubComponent
 
     #endregion
 
-    #region Properties
-
-    public bool IsSelected { get; private set; }
-
-    #endregion
-
     #region Miscellaneous Methods
 
-    public void SelectButton(bool isSelected)
+    public override void Select(bool isSelected)
     {
-        IsSelected = isSelected;
+        base.Select(isSelected);
 
         textContainer.SetActive(isSelected);
-        transform.Find("Selector").gameObject.SetActive(isSelected);
 
         LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponentInParent<RectTransform>());
     }
@@ -62,6 +55,8 @@ public class MoveButtonSubComponent : UserInterfaceSubComponent
 
     public override void SetInspectorValues()
     {
+        base.SetInspectorValues();
+
         textContainer = transform.Find("Text").gameObject;
         selector = transform.Find("Selector").gameObject;
         moveName = textContainer.transform.Find("Name").GetComponent<TextMeshProUGUI>();

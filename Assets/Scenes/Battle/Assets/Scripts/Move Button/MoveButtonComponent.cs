@@ -12,14 +12,9 @@ public class MoveButtonComponent : UserInterfaceComponent
 {
     #region Miscellaneous Methods
 
-    public void DeselectButtons(Button selectedButton)
+    public override void DeselectComponents(UserInterfaceSubComponent selectedComponent)
     {
-        List<UserInterfaceSubComponent> buttons = components.Where(b => b.GetComponent<Button>() != selectedButton && ((MoveButtonSubComponent)b).IsSelected).ToList();
-
-        foreach (UserInterfaceSubComponent button in buttons)
-        {
-            ((MoveButtonSubComponent)button).SelectButton(false);
-        }
+        base.DeselectComponents(selectedComponent);
 
         LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponentInParent<RectTransform>());
     }
@@ -34,7 +29,7 @@ public class MoveButtonComponent : UserInterfaceComponent
         if (isEnabled)
         {
             EventSystem.current.SetSelectedGameObject(components[0].gameObject);
-            ((MoveButtonSubComponent)components[0]).SelectButton(true);
+            ((MoveButtonSubComponent)components[0]).Select(true);
         }
     }
 
@@ -59,18 +54,6 @@ public class MoveButtonComponent : UserInterfaceComponent
                 components[i].gameObject.SetActive(false);
                 components.RemoveAt(i);
             }
-        }
-    }
-
-    #endregion
-
-    #region Unity Methods
-
-    private void Start()
-    {
-        for (int i = 1; i < components.Count; i++)
-        {
-            ((MoveButtonSubComponent)components[i]).SelectButton(false);
         }
     }
 

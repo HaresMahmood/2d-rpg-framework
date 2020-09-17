@@ -56,6 +56,8 @@ public class InventorySubComponent : UserInterfaceSubComponent
 
     public override void SetInspectorValues()
     {
+        base.SetInspectorValues();
+
         slot = transform.Find("Information");
 
         favoriteTag = slot.Find("Tags/Favorite").gameObject;

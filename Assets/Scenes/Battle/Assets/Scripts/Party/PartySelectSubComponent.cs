@@ -11,7 +11,7 @@ using DG.Tweening;
 /// <summary>
 ///
 /// </summary>
-public class PartySubComponent : UserInterfaceSubComponent
+public class PartySelectSubComponent : UserInterfaceSubComponent
 {
     #region Variables
 
@@ -19,7 +19,7 @@ public class PartySubComponent : UserInterfaceSubComponent
     [SerializeField] private bool animateAtStart;
 
     [Header("Values")]
-    [SerializeField] private PartyMember member;
+    [SerializeField, ReadOnly] private PartyMember member;
 
     private Image sprite;
 
@@ -59,18 +59,20 @@ public class PartySubComponent : UserInterfaceSubComponent
         hpText.SetText($"{hpValue}<color=#{ColorUtility.ToHtmlStringRGB(GameManager.GetAccentColor())}>HP</color>");
     }
 
-    public void AnimateSlot(float opacity)
-    {
-        StartCoroutine(sprite.gameObject.FadeOpacity(opacity, 0.1f));
-        sprite.GetComponent<Animator>().SetBool("isActive", opacity != 0.2f);
-    }
-
     public void AnimateComponent(float opacity)
     {
         transform.Find("Sprites").GetComponent<CanvasGroup>().alpha = opacity;
         transform.Find("Information").GetComponent<CanvasGroup>().alpha = opacity;
 
         GetComponent<Button>().enabled = opacity != 0f;
+    }
+
+    public override void Select(bool isSelected)
+    {
+        base.Select(isSelected);
+
+        StartCoroutine(sprite.gameObject.FadeOpacity(isSelected ? 0.35f : 0.2f, 0.1f));
+        sprite.GetComponent<Animator>().SetBool("isActive", isSelected);
     }
 
     public override void SetInformation<T>(T slotObject)
@@ -105,6 +107,8 @@ public class PartySubComponent : UserInterfaceSubComponent
 
     public override void SetInspectorValues()
     {
+        base.SetInspectorValues();
+
         sprite = transform.Find("Sprites/Sprite").GetComponent<Image>();
 
         nameText = transform.Find("Information/Name & Gender/Name").GetComponent<TextMeshProUGUI>();
@@ -127,7 +131,7 @@ public class PartySubComponent : UserInterfaceSubComponent
     {
         if (animateAtStart)
         {
-            AnimateSlot(0.35f); // TODO: Replace with event "OnPartnerStageStart" or something
+            Select(true); // TODO: Replace with event "OnPartnerStageStart" or something
         }
     }
 

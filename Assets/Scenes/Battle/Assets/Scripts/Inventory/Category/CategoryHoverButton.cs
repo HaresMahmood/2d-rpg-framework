@@ -6,19 +6,9 @@ using UnityEngine;
 [RequireComponent(typeof(CategorySubComponent))]
 public class CategoryHoverButton : HoverButton
 {
-    #region Properties
-
-    public override bool IsSelected 
-    { 
-        get;
-        protected set; 
-    }
-
-    #endregion
-
     #region Miscellaneous Methods
 
-    public override void Select(bool isSelected)
+    public override void Select(bool isSelected) // TODO: Debug
     {
         IsSelected = isSelected;
 
