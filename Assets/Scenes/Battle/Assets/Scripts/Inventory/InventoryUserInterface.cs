@@ -34,6 +34,8 @@ public class InventoryUserInterface : XUserInterface<Inventory>
     {
         base.Awake();
 
+        ((InventoryGridComponent)FindComponent("Items")).AnimationDuration = animationDuration;
+
         ((CategoryComponent)FindComponent("Categories")).OnCategoryChange += CategoryComponent_OnCategoryChange;
         ((InventoryGridComponent)FindComponent("Items")).OnValueChange += InventoryUserInterface_OnValueChange;
     }

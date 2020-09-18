@@ -5,16 +5,20 @@ using UnityEngine.EventSystems;
 using DG.Tweening;
 using System;
 using TMPro;
+using System.Linq;
 
 /// <summary>
 ///
 /// </summary>
 public class InventoryGridComponent : UserInterfaceComponent
 {
-    #region Variables
+    #region Properties
 
-    [Header("Settings")]
-    [SerializeField, Range(0.01f, 0.5f)] private float animationDuration;
+    public float AnimationDuration { private get; set; }
+
+    #endregion
+
+    #region Variables
 
     private int columns;
     private int visibleRows;
@@ -46,28 +50,28 @@ public class InventoryGridComponent : UserInterfaceComponent
     {
         List<Item> inventory = ((List<Item>)Convert.ChangeType(information, typeof(List<Item>)));
 
+        for (int i = (visibleRows * columns); i < components.Count; i++)
+        {
+            components[i].gameObject.SetActive(inventory.Count > (visibleRows * columns)); // TODO: Fix Scrollbar
+        }
+
         for (int i = 0; i < components.Count; i++)
         {
-            ((InventorySubComponent)components[i]).Animate(false, animationDuration);
+            ((InventorySubComponent)components[i]).Animate(false, AnimationDuration);
             components[i].GetComponent<Button>().enabled = false;
         }
 
         for (int i = 0; i < inventory.Count; i++)
         {
             ((InventorySubComponent)components[i]).SetInformation(inventory[i]);
-            ((InventorySubComponent)components[i]).Animate(true, animationDuration);
+            ((InventorySubComponent)components[i]).Animate(true, AnimationDuration);
             components[i].GetComponent<Button>().enabled = true;
         }
 
-        for (int i = (visibleRows * columns); i < components.Count; i++)
-        {
-            components[i].gameObject.SetActive(inventory.Count > (visibleRows * columns));
-        }
+        EventSystem.current.SetSelectedGameObject(this.components[0].gameObject);
 
-        EventSystem.current.SetSelectedGameObject(components[0].gameObject);
-
-        transform.Find("Empty").GetComponent<CanvasGroup>().DOFade(Convert.ToInt32(inventory.Count == 0), animationDuration);
-        transform.Find("Grid").GetComponent<CanvasGroup>().DOFade(Convert.ToInt32(inventory.Count != 0), animationDuration);
+        transform.Find("Empty").GetComponent<CanvasGroup>().DOFade(Convert.ToInt32(inventory.Count == 0), AnimationDuration);
+        transform.Find("Grid").GetComponent<CanvasGroup>().DOFade(Convert.ToInt32(inventory.Count != 0), AnimationDuration);
 
         OnValueChange?.Invoke(this, inventory.Count == 0 ? null : ((InventorySubComponent)components[0]).Item);
     }
