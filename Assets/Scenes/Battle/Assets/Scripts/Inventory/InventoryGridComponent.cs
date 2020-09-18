@@ -21,6 +21,12 @@ public class InventoryGridComponent : UserInterfaceComponent
 
     #endregion
 
+    #region Events
+
+    public event EventHandler<Item> OnValueChange;
+
+    #endregion
+
     #region Miscellaneous Methods
 
     // TODO: Make ExtensionMethod?
@@ -32,6 +38,8 @@ public class InventoryGridComponent : UserInterfaceComponent
 
             StartCoroutine(GetComponentInChildren<Scrollbar>().LerpScrollbar(1f - (float)row / ((components.Count / columns) - 1), 0.1f)); // TODO: Make serializable, remove LerpScrollbar!
         }
+
+        OnValueChange?.Invoke(this, ((InventorySubComponent)component).Item);
     }
 
     public override void SetInformation<T>(T information)

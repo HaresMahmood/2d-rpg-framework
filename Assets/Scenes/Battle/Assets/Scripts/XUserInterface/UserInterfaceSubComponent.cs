@@ -7,7 +7,7 @@ public class UserInterfaceSubComponent : MonoBehaviour, UIHandler
 {
     #region Variables
 
-    private GameObject selector;
+    protected GameObject selector;
 
     #endregion
 

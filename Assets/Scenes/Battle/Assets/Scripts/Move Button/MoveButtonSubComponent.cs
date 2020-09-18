@@ -14,7 +14,6 @@ public class MoveButtonSubComponent : UserInterfaceSubComponent
     [SerializeField, ReadOnly] private PartyMember.MemberMove move;
 
     private GameObject textContainer;
-    private GameObject selector;
 
     private TextMeshProUGUI moveName;
     private TextMeshProUGUI pp;
@@ -58,7 +57,6 @@ public class MoveButtonSubComponent : UserInterfaceSubComponent
         base.SetInspectorValues();
 
         textContainer = transform.Find("Text").gameObject;
-        selector = transform.Find("Selector").gameObject;
         moveName = textContainer.transform.Find("Name").GetComponent<TextMeshProUGUI>();
         pp = textContainer.transform.Find("PP").GetComponent<TextMeshProUGUI>();
         icon = transform.Find("Icon").GetComponent<TypingIconUserInterface>();

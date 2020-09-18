@@ -20,7 +20,7 @@ public class InventorySubComponent : UserInterfaceSubComponent
     [Header("Values")]
     [SerializeField, ReadOnly] private Item item;
 
-    private Transform slot;
+    private Transform information;
 
     private GameObject favoriteTag;
     private GameObject newTag;
@@ -36,16 +36,14 @@ public class InventorySubComponent : UserInterfaceSubComponent
     {
         if (isActive)
         {
-            slot.gameObject.SetActive(isActive);
+            information.gameObject.SetActive(isActive);
         }
 
-        slot.GetComponent<CanvasGroup>().DOFade(Convert.ToInt32(isActive), animationDuration).OnComplete(() => slot.gameObject.SetActive(isActive));
+        information.GetComponent<CanvasGroup>().DOFade(Convert.ToInt32(isActive), animationDuration).OnComplete(() => information.gameObject.SetActive(isActive));
     }
 
     public void SetInformation(Item information)
     {
-       // Item item = (Item)Convert.ChangeType(information, typeof(Item));
-
         this.item = information;
 
         itemSprite.sprite = item.Sprite;
@@ -58,13 +56,13 @@ public class InventorySubComponent : UserInterfaceSubComponent
     {
         base.SetInspectorValues();
 
-        slot = transform.Find("Information");
+        information = transform.Find("Information");
 
-        favoriteTag = slot.Find("Tags/Favorite").gameObject;
-        newTag = slot.Find("Tags/New").gameObject;
+        favoriteTag = information.Find("Tags/Favorite").gameObject;
+        newTag = information.Find("Tags/New").gameObject;
 
-        itemSprite = slot.Find("Sprite").GetComponent<Image>();
-        quantityText = slot.Find("Quantity").GetComponentInChildren<TextMeshProUGUI>();
+        itemSprite = information.Find("Sprite").GetComponent<Image>();
+        quantityText = information.Find("Quantity").GetComponentInChildren<TextMeshProUGUI>();
     }
 
     #endregion
