@@ -69,7 +69,7 @@ public class InventoryGridComponent : UserInterfaceComponent
         transform.Find("Empty").GetComponent<CanvasGroup>().DOFade(Convert.ToInt32(inventory.Count == 0), animationDuration);
         transform.Find("Grid").GetComponent<CanvasGroup>().DOFade(Convert.ToInt32(inventory.Count != 0), animationDuration);
 
-        SelectComponent(components[0]); // TODO: Fix scrollbar
+        OnValueChange?.Invoke(this, inventory.Count == 0 ? null : ((InventorySubComponent)components[0]).Item);
     }
 
     public void SetDescription(Item item)
