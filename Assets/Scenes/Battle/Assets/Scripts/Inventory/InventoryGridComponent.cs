@@ -68,7 +68,7 @@ public class InventoryGridComponent : UserInterfaceComponent
             components[i].GetComponent<Button>().enabled = true;
         }
 
-        EventSystem.current.SetSelectedGameObject(this.components[0].gameObject);
+        EventSystem.current.SetSelectedGameObject(inventory.Count == 0 ? null : components[0].gameObject);
 
         transform.Find("Empty").GetComponent<CanvasGroup>().DOFade(Convert.ToInt32(inventory.Count == 0), AnimationDuration);
         transform.Find("Grid").GetComponent<CanvasGroup>().DOFade(Convert.ToInt32(inventory.Count != 0), AnimationDuration);
