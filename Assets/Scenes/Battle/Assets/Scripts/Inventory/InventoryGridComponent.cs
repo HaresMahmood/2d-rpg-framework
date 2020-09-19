@@ -34,13 +34,16 @@ public class InventoryGridComponent : UserInterfaceComponent
     #region Miscellaneous Methods
 
     // TODO: Make ExtensionMethod?
-    public void SelectComponent(UserInterfaceSubComponent component)
+    public void SelectComponent(UserInterfaceSubComponent component, bool scroll)
     {
-        if (GetComponentInChildren<Scrollbar>() != null)
+        if (scroll) // TODO: Debug
         {
-            int row = Mathf.FloorToInt(((components.IndexOf(component) - (components.IndexOf(component) % columns)) / (float)columns));
+            if (GetComponentInChildren<Scrollbar>() != null)
+            {
+                int row = Mathf.FloorToInt(((components.IndexOf(component) - (components.IndexOf(component) % columns)) / (float)columns));
 
-            StartCoroutine(GetComponentInChildren<Scrollbar>().LerpScrollbar(1f - (float)row / ((components.Count / columns) - 1), 0.1f)); // TODO: Make serializable, remove LerpScrollbar!
+                StartCoroutine(GetComponentInChildren<Scrollbar>().LerpScrollbar(1f - (float)row / ((components.Count / columns) - 1), 0.1f)); // TODO: Make serializable, remove LerpScrollbar!
+            }
         }
 
         OnValueChange?.Invoke(this, ((InventorySubComponent)component).Item);
@@ -63,7 +66,7 @@ public class InventoryGridComponent : UserInterfaceComponent
 
         for (int i = 0; i < inventory.Count; i++)
         {
-            ((InventorySubComponent)components[i]).SetInformation(inventory[i]);
+            components[i].SetInformation(inventory[i]);
             ((InventorySubComponent)components[i]).Animate(true, AnimationDuration);
             components[i].GetComponent<Button>().enabled = true;
         }

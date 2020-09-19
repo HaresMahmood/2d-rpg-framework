@@ -91,7 +91,7 @@ public class ItemEditor : Editor
 
             EditorGUILayout.LabelField(new GUIContent("Category", "Category of this Pokémon.\n\n" +
             "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-            ((Item.ItemCategory)target.Categorization).Value = (Item.ItemCategory.CategoryConstant)EditorGUILayout.EnumPopup(((Item.ItemCategory)target.Categorization).Value);
+            ((Item.ItemCategory)target.Categorization).Value = (Item.ItemCategory.Category)EditorGUILayout.EnumPopup(((Item.ItemCategory)target.Categorization).Value);
 
             GUILayout.EndHorizontal();
             GUILayout.EndVertical();
@@ -133,7 +133,7 @@ public class ItemEditor : Editor
 
         EditorUtility.SetDirty(target);
 
-        //base.OnInspectorGUI();
+        base.OnInspectorGUI();
     }
 }
 

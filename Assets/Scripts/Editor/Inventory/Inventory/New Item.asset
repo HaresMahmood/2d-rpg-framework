@@ -13,11 +13,18 @@ MonoBehaviour:
   m_Name: New Item
   m_EditorClassIdentifier: 
   id: 0
-  name: 
-  description: 
+  name: "Pok\xE9 Ball"
+  description: "A device for catching wild Pok\xE9mon. It's thrown like a ball at
+    its target."
+  sprite: {fileID: 3738675117322673966, guid: 7233ad1b3e5ed1d46b02dce8aa6ace9c, type: 3}
   categorization:
-    value: 0
-  sprite: {fileID: 0}
-  quantity: 0
-  isFavorite: 0
-  isNew: 0
+    value: 1
+  tags:
+    quantity: 0
+    isFavorite: 0
+    isNew: 0
+  effect:
+    type: 0
+    status: 0
+    stat: 0
+    amount: 1

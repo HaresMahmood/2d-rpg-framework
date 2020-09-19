@@ -10,15 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 67de09d52199d944d92ac06b5078ab34, type: 3}
-  m_Name: Quick Ball
+  m_Name: New Item 1
   m_EditorClassIdentifier: 
   id: 0
-  name: Quick Ball
-  description: "A somewhat different Pok\xE9 Ball that has a more successful catch
-    rate if used at the start of a wild encounter."
+  name: Potion
+  description: A spray-type medicine for treating wounds.
   categorization:
-    value: 0
-  sprite: {fileID: 6858425084796564925, guid: 7233ad1b3e5ed1d46b02dce8aa6ace9c, type: 3}
-  quantity: 0
-  isFavorite: 0
-  isNew: 0
+    value: 2
+  sprite: {fileID: -2017323211661843852, guid: 7233ad1b3e5ed1d46b02dce8aa6ace9c, type: 3}
+  effect:
+    type: 0
+    status: 0
+    stat: 0
+    amount: 20

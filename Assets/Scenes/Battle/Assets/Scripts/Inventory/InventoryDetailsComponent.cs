@@ -43,6 +43,7 @@ public class InventoryDetailsComponent : UserInterfaceComponent
     private void SetInformation(Item information)
     {
         nameText.SetText(information.Name);
+        effectText.SetText(information.Effect.GetValue(((Item.ItemCategory)information.Categorization).Value)); // TODO: Debug
         descriptionText.SetText(information.Description);
     }
 

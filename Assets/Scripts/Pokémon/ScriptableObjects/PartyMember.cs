@@ -12,7 +12,7 @@ public class PartyMember : ScriptableObject
     [SerializeField] private Pokemon species;
     [SerializeField] private string nickname;
     [SerializeField] private MemberGender gender = new MemberGender();
-    [SerializeField] private PokeBall pokeBall;
+    [SerializeField] private Item pokeBall;
     [SerializeField] private MemberPokerus pokerus = new MemberPokerus();
     [SerializeField] private StatusAilment ailment = new StatusAilment();
     [SerializeField] private MemberProgression progression = new MemberProgression();
@@ -46,7 +46,7 @@ public class PartyMember : ScriptableObject
         get { return gender; }
     }
 
-    public PokeBall PokeBall
+    public Item PokeBall
     {
         get { return pokeBall; }
         set { pokeBall = value; }

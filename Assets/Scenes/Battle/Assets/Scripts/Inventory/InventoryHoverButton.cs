@@ -13,18 +13,22 @@ using UnityEngine.EventSystems;
 [RequireComponent(typeof(InventorySubComponent))]
 public class InventoryHoverButton : HoverButton, IDeselectHandler
 {
-    #region Miscellaneous Methods
+    #region Unity Methods
+
+    public override void OnPointerEnter(PointerEventData eventData)
+    {
+        base.OnPointerEnter(eventData);
+
+        GetComponentInParent<InventoryGridComponent>().SelectComponent(GetComponent<UserInterfaceSubComponent>(), false);
+    }
+
 
     public override void OnSelect(BaseEventData eventData)
     {
         base.OnSelect(eventData);
 
-        GetComponentInParent<InventoryGridComponent>().SelectComponent(GetComponent<UserInterfaceSubComponent>());
+        GetComponentInParent<InventoryGridComponent>().SelectComponent(GetComponent<UserInterfaceSubComponent>(), true);
     }
-
-    #endregion
-
-    #region Unity Methods
 
     public void OnDeselect(BaseEventData eventData)
     {

@@ -42,14 +42,16 @@ public class InventorySubComponent : UserInterfaceSubComponent
         information.GetComponent<CanvasGroup>().DOFade(Convert.ToInt32(isActive), animationDuration).OnComplete(() => information.gameObject.SetActive(isActive));
     }
 
-    public void SetInformation(Item information)
+    public override void SetInformation<T>(T information)
     {
-        this.item = information;
+        Item item = (Item)Convert.ChangeType(information, typeof(Item));
+
+        this.item = item;
 
         itemSprite.sprite = item.Sprite;
-        quantityText.SetText($"x{item.Quantity}");
-        favoriteTag.SetActive(item.IsFavorite);
-        newTag.SetActive(item.IsNew);
+        //quantityText.SetText($"x{item.Quantity}");
+        //favoriteTag.SetActive(item.IsFavorite);
+        //newTag.SetActive(item.IsNew);
     }
 
     public override void SetInspectorValues()

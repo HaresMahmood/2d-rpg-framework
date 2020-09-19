@@ -8,7 +8,7 @@ public class QuantitySelectorUserInterface : UserInterface
 {
     #region Constants
 
-    public override int MaxObjects => SelectedItem.Quantity;
+    public override int MaxObjects => 30;
 
     #endregion
 
@@ -48,7 +48,7 @@ public class QuantitySelectorUserInterface : UserInterface
 
         if (!isActive && xCoordinate == -1)
         {
-            SelectedItem.Quantity -= Value;
+            //SelectedItem.Quantity -= Value;
         }
     }
 

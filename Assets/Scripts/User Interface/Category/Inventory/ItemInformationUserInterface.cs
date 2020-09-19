@@ -49,13 +49,13 @@ public class ItemInformationUserInterface : InformationUserInterface
 
     public void Favorite(Item item, float animationDuration = 0.1f)
     {
-        item.IsFavorite = !item.IsFavorite;
+        //item.IsFavorite = !item.IsFavorite;
 
-        Color color = item.IsFavorite ? "#EAC03E".ToColor() : Color.white;
+        //Color color = item.IsFavorite ? "#EAC03E".ToColor() : Color.white;
         int index = item.Behavior.FindIndex(b => b.buttonName == "Favorite");
 
-        StartCoroutine(buttons[index].transform.Find("Big Icon/Icon").gameObject.FadeColor(color, animationDuration));
-        StartCoroutine(buttons[index].transform.Find("Small Icon/Icon").gameObject.FadeColor(color, animationDuration));
+        //StartCoroutine(buttons[index].transform.Find("Big Icon/Icon").gameObject.FadeColor(color, animationDuration));
+        //StartCoroutine(buttons[index].transform.Find("Small Icon/Icon").gameObject.FadeColor(color, animationDuration));
     }
 
     public void Discard(Item item, float opacity = 0.7f)
@@ -101,7 +101,7 @@ public class ItemInformationUserInterface : InformationUserInterface
             {
                 SetObjectDefinitionsFromPanel(horizontalPanel);
                 SetValues(item);
-                valueText.SetText((item).Quantity.ToString());
+                //valueText.SetText((item).Quantity.ToString());
                 spriteImage.sprite = (item).Sprite;
             }
         }
@@ -126,15 +126,15 @@ public class ItemInformationUserInterface : InformationUserInterface
     {
         Item item = (Item)selectedObject;
 
-        Color textColor = item.Effect.GetQuantity().Equals("") ? "#B0B0B0".ToColor() : GameManager.GetAccentColor();
-        bool arrowState = item.Effect.GetQuantity().Equals("") ? false : true;
+        Color textColor = new Color(); //item.Effect.GetQuantity().Equals("") ? "#B0B0B0".ToColor() : GameManager.GetAccentColor();
+        bool arrowState = false; //item.Effect.GetQuantity().Equals("") ? false : true;
 
         nameText.SetText(item.Name);
         nameText.GetComponent<AutoTextWidth>().UpdateWidth(item.Name);
         descriptionText.SetText(item.Description);
 
         effectTypeText.SetText(item.Effect.ToString());
-        effectQuantityText.SetText(item.Effect.GetQuantity());
+        //effectQuantityText.SetText(item.Effect.GetQuantity());
 
         effectTypeText.GetComponent<AutoTextWidth>().UpdateWidth(item.Effect.ToString());
 
@@ -244,10 +244,10 @@ public class ItemInformationUserInterface : InformationUserInterface
     {
         if (index == item.Behavior.FindIndex(b => b.buttonName == "Favorite"))
         {
-            Color color = item.IsFavorite ? tulipTreeColor : Color.white;
+            //Color color = item.IsFavorite ? tulipTreeColor : Color.white;
 
-            buttons[index].transform.Find("Big Icon/Icon").GetComponent<Image>().color = color;
-            buttons[index].transform.Find("Small Icon/Icon").GetComponent<Image>().color = color;
+            //buttons[index].transform.Find("Big Icon/Icon").GetComponent<Image>().color = color;
+            //buttons[index].transform.Find("Small Icon/Icon").GetComponent<Image>().color = color;
         }
         else if (index == item.Behavior.FindIndex(b => b.buttonName == "Discard"))
         {

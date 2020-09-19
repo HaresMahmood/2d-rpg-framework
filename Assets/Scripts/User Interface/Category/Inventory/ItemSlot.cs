@@ -25,9 +25,9 @@ public class ItemSlot : CategorizableSlot
         Item item = (Item)Convert.ChangeType(slotObject, typeof(Item));
 
         itemSprite.sprite = item.Sprite;
-        quantityText.SetText(item.Quantity.ToString());
-        favoriteTag.SetActive(item.IsFavorite);
-        newTag.SetActive(item.IsNew);
+        //quantityText.SetText(item.Quantity.ToString());
+        //favoriteTag.SetActive(item.IsFavorite);
+        //newTag.SetActive(item.IsNew);
     }
 
     #endregion

@@ -164,14 +164,14 @@ public class PartyMemberEditor : Editor
 
                 EditorGUILayout.LabelField(new GUIContent("Held Item", "Category of this Pokémon.\n\n" +
                 "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-                target.HeldItem = (Holdable)EditorGUILayout.ObjectField(target.HeldItem, typeof(Holdable), false);
+                target.HeldItem = (Item)EditorGUILayout.ObjectField(target.HeldItem, typeof(Item), false);
 
                 GUILayout.EndHorizontal();
                 GUILayout.BeginHorizontal("Box");
 
                 EditorGUILayout.LabelField(new GUIContent("Poké Ball", "Category of this Pokémon.\n\n" +
                 "- Must be unique for every Pokémon.\n- Number must not be larger than 3 digits."), GUILayout.Width(95));
-                target.PokeBall = (PokeBall)EditorGUILayout.ObjectField(target.PokeBall, typeof(PokeBall), false);
+                target.PokeBall = (Item)EditorGUILayout.ObjectField(target.PokeBall, typeof(Item), false);
 
                 GUILayout.EndHorizontal();
             }

@@ -48,7 +48,7 @@ public class InventoryEditor : Editor
 
         base.OnInspectorGUI();
     }
-
+    /*
     private void DrawInspector(string category)
     {
         GUIStyle foldoutStyle = new GUIStyle(EditorStyles.foldout)
@@ -214,7 +214,6 @@ public class InventoryEditor : Editor
                         GUI.enabled = true;
 
                         GUILayout.EndHorizontal();
-                        */
                     }
 
                     GUILayout.EndHorizontal();
@@ -228,7 +227,7 @@ public class InventoryEditor : Editor
         }
         
     }
-
+    */
     public void AddItem(string category)
     {
         /*
