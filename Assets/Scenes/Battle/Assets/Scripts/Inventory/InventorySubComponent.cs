@@ -11,7 +11,7 @@ public class InventorySubComponent : UserInterfaceSubComponent
 {
     #region Properties
 
-    public Item Item { get { return item; } }
+    public Item Item { get { return item; } set { item = value; } }
 
     #endregion
 

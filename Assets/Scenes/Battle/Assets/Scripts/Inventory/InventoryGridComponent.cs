@@ -60,6 +60,7 @@ public class InventoryGridComponent : UserInterfaceComponent
 
         for (int i = 0; i < components.Count; i++)
         {
+            ((InventorySubComponent)components[i]).Item = null;
             ((InventorySubComponent)components[i]).Animate(false, AnimationDuration);
             components[i].GetComponent<Button>().enabled = false;
         }
