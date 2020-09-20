@@ -49,8 +49,8 @@ public class InventorySubComponent : UserInterfaceSubComponent
         this.item = item;
 
         itemSprite.sprite = item.Sprite;
-        //quantityText.SetText($"x{item.Quantity}");
-        //favoriteTag.SetActive(item.IsFavorite);
+        quantityText.SetText($"x{item.Tags.Quantity}");
+        //favoriteTag.SetActive(item.Tags.IsFavorite);
         //newTag.SetActive(item.IsNew);
     }
 
