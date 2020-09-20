@@ -37,15 +37,15 @@ public class CategoryComponent : UserInterfaceComponent
 
     #region Miscellaneous Methods
 
-    public void SelectComponent(CategorySubComponent component, bool isSelected)
+    public void SelectComponent(CategorySubComponent selectedComponent, bool isSelected)
     {
-        component.Fade(isSelected, animationDuration);
+        selectedComponent.Fade(isSelected, animationDuration);
 
-        if (isSelected && selectedCategory != components.IndexOf(component))
+        if (isSelected && selectedCategory != components.IndexOf(selectedComponent))
         {
-            selectedCategory = components.IndexOf(component);
+            selectedCategory = components.IndexOf(selectedComponent);
 
-            FadeText(component.transform);
+            FadeText(selectedComponent.transform);
 
             OnCategoryChange?.Invoke(this, EventArgs.Empty);
         }
@@ -54,11 +54,6 @@ public class CategoryComponent : UserInterfaceComponent
     public void SelectComponent(int increment)
     {
         DeselectComponents(components[ExtensionMethods.IncrementInt(selectedCategory, 0, components.Count, increment)]);
-    }
-
-    public void SelectComponent(float component)
-    {
-        DeselectComponents(components[(int)component]);
     }
 
     private void FadeText(Transform position)

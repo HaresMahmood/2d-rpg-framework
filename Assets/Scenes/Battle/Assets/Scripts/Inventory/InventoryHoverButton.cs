@@ -1,16 +1,9 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-
-//////////////////////////////////////
-// TODO: Redo (with interface)
-//////////////////////////////////////
-
-
 /// <summary>
 ///
 /// </summary>
-[RequireComponent(typeof(InventorySubComponent))]
 public class InventoryHoverButton : HoverButton, IDeselectHandler
 {
     #region Unity Methods

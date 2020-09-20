@@ -1,11 +1,11 @@
+using System;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using DG.Tweening;
-using System;
 using TMPro;
-using System.Linq;
 
 /// <summary>
 ///
@@ -72,7 +72,10 @@ public class InventoryGridComponent : UserInterfaceComponent
             components[i].GetComponent<Button>().enabled = true;
         }
 
-        EventSystem.current.SetSelectedGameObject(inventory.Count == 0 ? null : components[0].gameObject);
+        if (EventSystem.current.currentSelectedGameObject != components[0].gameObject)
+        {
+            EventSystem.current.SetSelectedGameObject(inventory.Count == 0 ? null : components[0].gameObject);
+        }
 
         transform.Find("Empty").GetComponent<CanvasGroup>().DOFade(Convert.ToInt32(inventory.Count == 0), AnimationDuration);
         transform.Find("Grid").GetComponent<CanvasGroup>().DOFade(Convert.ToInt32(inventory.Count != 0), AnimationDuration);

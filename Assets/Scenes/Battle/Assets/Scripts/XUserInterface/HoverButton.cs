@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 /// <summary>
 ///
 /// </summary>
-[RequireComponent(typeof(Button))]
+[RequireComponent(typeof(Button)), RequireComponent(typeof(UserInterfaceSubComponent))]
 public class HoverButton : MonoBehaviour, IPointerEnterHandler, ISelectHandler
 {
     #region Properties
