@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 /// <summary>
@@ -40,6 +40,13 @@ public class UserInterfaceManager : MonoBehaviour
 
     [Header("Values")]
     [SerializeField] private List<GameObject> stack = new List<GameObject>();
+
+    #endregion
+
+    #region Events
+
+    [Header("Events"), Space(5)]
+    [SerializeField] private UnityEvent OnStart;
 
     #endregion
 
@@ -101,6 +108,15 @@ public class UserInterfaceManager : MonoBehaviour
             EventSystem.current.SetSelectedGameObject(ui.GetComponent<ButtonList>().FirstSelected);
             prompts.SetInformation(ui.GetComponent<ButtonList>().PromptGroups);
         }
+    }
+
+    #endregion
+
+    #region Unity Methods
+
+    private void Start()
+    {
+        OnStart.Invoke();
     }
 
     #endregion
