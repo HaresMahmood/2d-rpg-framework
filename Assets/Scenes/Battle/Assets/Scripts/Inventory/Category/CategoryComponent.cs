@@ -45,6 +45,7 @@ public class CategoryComponent : UserInterfaceComponent
         {
             selectedCategory = components.IndexOf(selectedComponent);
 
+            selectedComponent.Animate();
             FadeText(selectedComponent.transform);
 
             OnCategoryChange?.Invoke(this, EventArgs.Empty);

@@ -23,6 +23,13 @@ public class CategorySubComponent : UserInterfaceSubComponent
         }
     }
 
+    public void Animate()
+    {
+        UIAnimation animation = GetComponent(typeof(UIAnimation)) as UIAnimation;
+
+        animation.Play();
+    }
+
     public override void SetInspectorValues()
     {
         icons = GetComponentsInChildren<Image>();
