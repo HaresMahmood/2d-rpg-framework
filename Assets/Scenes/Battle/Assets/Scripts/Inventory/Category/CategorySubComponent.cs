@@ -7,6 +7,12 @@ using DG.Tweening;
 /// </summary>
 public class CategorySubComponent : UserInterfaceSubComponent
 {
+    #region Properties
+
+    public float AnimationDuration { private get; set; }
+
+    #endregion
+
     #region Variables
 
     private Image[] icons;
@@ -15,7 +21,7 @@ public class CategorySubComponent : UserInterfaceSubComponent
 
     #region Miscellaneous Methods
 
-    public void Fade(bool isSelected, float animationDuration)
+    public void FadeColor(bool isSelected, float animationDuration)
     {
         foreach (Image icon in icons)
         {
@@ -23,11 +29,21 @@ public class CategorySubComponent : UserInterfaceSubComponent
         }
     }
 
+    public void FadeOpacity(float opacity, float animationDuration)
+    {
+        GetComponent<CanvasGroup>().DOFade(opacity, animationDuration);
+    }
+
     public void Animate()
     {
         UIAnimation animation = GetComponent(typeof(UIAnimation)) as UIAnimation;
 
         animation.Play();
+    }
+
+    public override void Select(bool isSelected)
+    {
+        FadeColor(isSelected, AnimationDuration);
     }
 
     public override void SetInspectorValues()

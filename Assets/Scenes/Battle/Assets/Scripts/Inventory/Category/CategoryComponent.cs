@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using TMPro;
@@ -37,18 +39,23 @@ public class CategoryComponent : UserInterfaceComponent
 
     #region Miscellaneous Methods
 
-    public void SelectComponent(CategorySubComponent selectedComponent, bool isSelected)
+    public override void DeselectComponents(UserInterfaceSubComponent selectedComponent)
     {
-        selectedComponent.Fade(isSelected, animationDuration);
+        List<UserInterfaceSubComponent> components = this.components.Where(c => c != selectedComponent && c.GetComponent<HoverButton>().IsSelected).ToList();
 
-        if (isSelected && selectedCategory != components.IndexOf(selectedComponent))
+        if (selectedCategory != this.components.IndexOf(selectedComponent))
         {
-            selectedCategory = components.IndexOf(selectedComponent);
+            selectedCategory = this.components.IndexOf(selectedComponent);
 
-            selectedComponent.Animate();
+            selectedComponent.GetComponent<HoverButton>().Select(true);
             FadeText(selectedComponent.transform);
 
             OnCategoryChange?.Invoke(this, EventArgs.Empty);
+        }
+
+        foreach (UserInterfaceSubComponent component in components)
+        {
+            component.GetComponent<HoverButton>().Select(false);
         }
     }
 
@@ -70,6 +77,16 @@ public class CategoryComponent : UserInterfaceComponent
     #endregion
 
     #region Unity Methods
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        foreach (CategorySubComponent component in components)
+        {
+            component.AnimationDuration = animationDuration;
+        }
+    }
 
     protected override void Start()
     {

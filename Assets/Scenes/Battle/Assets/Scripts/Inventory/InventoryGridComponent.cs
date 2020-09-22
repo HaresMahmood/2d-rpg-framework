@@ -36,6 +36,8 @@ public class InventoryGridComponent : UserInterfaceComponent
     // TODO: Make ExtensionMethod?
     public void SelectComponent(UserInterfaceSubComponent component, bool scroll)
     {
+        // bool isSelected = components.Where(c => c.gameObject == EventSystem.current.currentSelectedGameObject).ToArray().Length > 0;         GetComponent<CanvasGroup>().DOFade(isSelected ? 1f : 0.3f, AnimationDuration);
+
         if (scroll) // TODO: Debug
         {
             if (GetComponentInChildren<Scrollbar>() != null)
