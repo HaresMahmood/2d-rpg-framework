@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 
 [CreateAssetMenu(fileName = "New Move", menuName = "Moves/Move")]
 public class Move : ScriptableObject
@@ -11,8 +12,11 @@ public class Move : ScriptableObject
     [SerializeField] private int pp;
     [SerializeField] private int accuracy;
     [SerializeField] private int power;
+    [SerializeField] private MoveType type;
+    [SerializeField] private MoveTarget target;
     [SerializeField] private MoveCategory category;
     [SerializeField] private Typing typing;
+    [SerializeField] private UnityEvent moveEvent;
 
     #endregion
 
@@ -54,6 +58,18 @@ public class Move : ScriptableObject
         set { power = value; }
     }
 
+    public MoveType Type
+    {
+        get { return type; }
+        set { type = value; }
+    }
+
+    public MoveTarget Target
+    {
+        get { return target; }
+        set { target = value; }
+    }
+
     public MoveCategory Category
     {
         get { return category; }
@@ -65,9 +81,28 @@ public class Move : ScriptableObject
         get { return typing; }
     }
 
+    public UnityEvent MoveEvent
+    {
+        get { return moveEvent; }
+        set { moveEvent = value; }
+    }
+
     #endregion
 
     #region Enums
+
+    public enum MoveTarget
+    {
+        User,
+        Enemy,
+        Everyone
+    }
+
+    public enum MoveType
+    { 
+        Regular,
+        Stat
+    }
 
     public enum MoveCategory
     {

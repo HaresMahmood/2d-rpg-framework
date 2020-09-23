@@ -9,7 +9,7 @@ public class GenderUserInterface : ComponentUserInterface
 {
     #region Properties
 
-    private new List<Transform> icons;
+    private new List<Transform> iconList;
 
     #endregion
 
@@ -19,12 +19,12 @@ public class GenderUserInterface : ComponentUserInterface
     {
         if (gender == PartyMember.MemberGender.Gender.None)
         {
-            icons[0].gameObject.SetActive(false);
-            icons[1].gameObject.SetActive(false);
+            iconList[0].gameObject.SetActive(false);
+            iconList[1].gameObject.SetActive(false);
         }
 
-        icons[(int)gender - 1].gameObject.SetActive(true);
-        icons[ExtensionMethods.IncrementInt((int)gender - 1, 0, 2, 1)].gameObject.SetActive(false);
+        iconList[(int)gender - 1].gameObject.SetActive(true);
+        iconList[ExtensionMethods.IncrementInt((int)gender - 1, 0, 2, 1)].gameObject.SetActive(false);
     }
 
     #endregion
@@ -36,7 +36,7 @@ public class GenderUserInterface : ComponentUserInterface
     /// </summary>
     protected override void Awake()
     {
-        icons = transform.GetChildren().ToList();
+        iconList = transform.GetChildren().ToList();
     }
 
     #endregion
