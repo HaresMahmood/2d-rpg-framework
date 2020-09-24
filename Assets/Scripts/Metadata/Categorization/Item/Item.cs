@@ -12,6 +12,7 @@ public class Item : Categorizable
     [SerializeField] private ItemCategory categorization = new ItemCategory();
     [SerializeField] private ItemTags tags = new ItemTags();
     [SerializeField] private ItemEffect effect = new ItemEffect();
+    [SerializeField] private List<ItemBehavior> behavior = new List<ItemBehavior>();
 
     #endregion
 
@@ -41,8 +42,8 @@ public class Item : Categorizable
     public List<ItemBehavior> Behavior
     {
         get 
-        { 
-            return DefineBehavior(this);
+        {
+            return behavior;
         }
     }
 
@@ -169,28 +170,38 @@ public class Item : Categorizable
         #endregion
     }
 
+    [Serializable]
     public class ItemBehavior
     {
-        public string buttonName;
-        public Sprite iconSprite;
-        public UnityEvent behaviorEvent = new UnityEvent();
+        #region Fields
 
-        public ItemBehavior(string buttonName, Sprite iconSprite)
+        [SerializeField] private string text;
+        [SerializeField] private Sprite icon;
+        [SerializeField] private UnityEvent onClick = new UnityEvent();
+
+        #endregion
+
+        #region Properties
+
+        public string ButtonName
         {
-            this.buttonName = buttonName;
-            this.iconSprite = iconSprite;
+            get { return text; }
+            set { text = value; }
         }
-    }
 
-    #endregion
+        public Sprite Icon
+        {
+            get { return icon; }
+            set { icon = value; }
+        }
 
-    #region Miscellaneous Methods
+        public UnityEvent OnClick
+        {
+            get { return onClick; }
+            set { onClick = value; }
+        }
 
-    protected virtual List<ItemBehavior> DefineBehavior(Item item) // TODO: Think of beteter way to handle icons
-    {
-
-
-        return null;
+        #endregion
     }
 
     #endregion

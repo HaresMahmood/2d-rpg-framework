@@ -9,15 +9,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8dcc0b7234cc88429ba11c86528f9d3, type: 3}
+  m_Script: {fileID: 11500000, guid: 67de09d52199d944d92ac06b5078ab34, type: 3}
   m_Name: Great Ball
   m_EditorClassIdentifier: 
   id: 0
   name: Great Ball
-  description: Just a great ball.
-  categorization:
-    value: 0
+  description: "A good, high-performance Pok\xE9 Ball that provides a higher success
+    rate for catching Pok\xE9mon than a standard Pok\xE9 Ball."
   sprite: {fileID: -4686213592520977135, guid: 7233ad1b3e5ed1d46b02dce8aa6ace9c, type: 3}
-  quantity: 40
-  isFavorite: 0
-  isNew: 0
+  categorization:
+    value: 1
+  tags:
+    quantity: 0
+    isFavorite: 0
+    isNew: 0
+  effect:
+    type: 0
+    status: 0
+    stat: 0
+    amount: 0
+  behavior: []

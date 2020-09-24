@@ -52,7 +52,7 @@ public class ItemInformationUserInterface : InformationUserInterface
         //item.IsFavorite = !item.IsFavorite;
 
         //Color color = item.IsFavorite ? "#EAC03E".ToColor() : Color.white;
-        int index = item.Behavior.FindIndex(b => b.buttonName == "Favorite");
+        //int index = item.Behavior.FindIndex(b => b.text == "Favorite");
 
         //StartCoroutine(buttons[index].transform.Find("Big Icon/Icon").gameObject.FadeColor(color, animationDuration));
         //StartCoroutine(buttons[index].transform.Find("Small Icon/Icon").gameObject.FadeColor(color, animationDuration));
@@ -60,7 +60,7 @@ public class ItemInformationUserInterface : InformationUserInterface
 
     public void Discard(Item item, float opacity = 0.7f)
     {
-        int index = item.Behavior.FindIndex(b => b.buttonName == "Discard");
+        int index = 0;//item.Behavior.FindIndex(b => b.text == "Discard");
         float xCoordinate = buttons[index].transform.position.x + (buttons[index].GetComponent<RectTransform>().sizeDelta.x / 2);
 
         StartCoroutine(AnimateSelector());
@@ -119,7 +119,7 @@ public class ItemInformationUserInterface : InformationUserInterface
 
     public void InvokeItemBehavior(int selectedValue)
     {
-        selectedItem.Behavior[selectedValue].behaviorEvent.Invoke();;
+        //selectedItem.Behavior[selectedValue].behaviorEvent.Invoke();;
     }
 
     public override void SetValues(ScriptableObject selectedObject)
@@ -216,7 +216,7 @@ public class ItemInformationUserInterface : InformationUserInterface
         {
             if (item != null)
             {
-                buttons[i].SetValues(item.Behavior[i].buttonName, item.Behavior[i].iconSprite);
+                //buttons[i].SetValues(item.Behavior[i].text, item.Behavior[i].icon);
 
                 if (opacity == 1)
                 {
@@ -242,19 +242,21 @@ public class ItemInformationUserInterface : InformationUserInterface
 
     private void ApplyButtonStyles(Item item, int index)
     {
-        if (index == item.Behavior.FindIndex(b => b.buttonName == "Favorite"))
+        /*
+        if (index == item.Behavior.FindIndex(b => b.text == "Favorite"))
         {
             //Color color = item.IsFavorite ? tulipTreeColor : Color.white;
 
             //buttons[index].transform.Find("Big Icon/Icon").GetComponent<Image>().color = color;
             //buttons[index].transform.Find("Small Icon/Icon").GetComponent<Image>().color = color;
         }
-        else if (index == item.Behavior.FindIndex(b => b.buttonName == "Discard"))
+        else if (index == item.Behavior.FindIndex(b => b.text == "Discard"))
         {
             float xCoordinate = buttons[index].transform.position.x - 30f;
 
             quantitySelector.ToggleSelector(false, null, xCoordinate);
         }
+        */
     }
 
     private IEnumerator ResetSubMenu(int selectedValue, float animationDuration = 0.15f)

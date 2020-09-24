@@ -9,19 +9,32 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 777fbcb420875bb4ebce99671fae434e, type: 3}
+  m_Script: {fileID: 11500000, guid: 67de09d52199d944d92ac06b5078ab34, type: 3}
   m_Name: Potion
   m_EditorClassIdentifier: 
   id: 0
   name: Potion
   description: A spray-type medicine for treating wounds.
-  categorization:
-    value: 0
   sprite: {fileID: -2017323211661843852, guid: 7233ad1b3e5ed1d46b02dce8aa6ace9c, type: 3}
-  quantity: 0
-  isFavorite: 0
-  isNew: 0
+  categorization:
+    value: 2
+  tags:
+    quantity: 0
+    isFavorite: 0
+    isNew: 0
   effect:
     type: 0
-    quantity: 20
     status: 0
+    stat: 0
+    amount: 20
+  behavior:
+  - text: 
+    icon: {fileID: 0}
+    onClick:
+      m_PersistentCalls:
+        m_Calls: []
+  - text: 
+    icon: {fileID: 0}
+    onClick:
+      m_PersistentCalls:
+        m_Calls: []
