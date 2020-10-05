@@ -48,11 +48,11 @@ public class AbilityComponent : MonoBehaviour
         SetInformation(list[0]);
 
         sequence.Append(GetComponent<RectTransform>().DOAnchorPosY(-25f, 0.01f));
-        sequence.Append(GetComponent<CanvasGroup>().DOFade(1f, 0.15f));
-        sequence.Join(GetComponent<RectTransform>().DOAnchorPosY(0f, 0.5f)).SetEase(curve);
-        sequence.AppendInterval(2.15f);
-        sequence.Append(GetComponent<CanvasGroup>().DOFade(0f, 0.15f));
-        sequence.Join(GetComponent<RectTransform>().DOAnchorPosY(-15f, 0.15f));
+        sequence.Append(GetComponent<CanvasGroup>().DOFade(1f, 0.1f));
+        sequence.Join(GetComponent<RectTransform>().DOAnchorPosY(0f, 0.35f)).SetEase(curve);
+        sequence.AppendInterval(1.5f);
+        sequence.Append(GetComponent<CanvasGroup>().DOFade(0f, 0.1f));
+        sequence.Join(GetComponent<RectTransform>().DOAnchorPosY(-15f, 0.1f));
 
         sequence.OnComplete(() =>
         {

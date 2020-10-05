@@ -57,7 +57,7 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private BattleStage stage;
     [Space(5)]
     [SerializeField] private PartyMember enemy;
-    [SerializeField] private PartyMember partner;
+    [SerializeField, ReadOnly] private PartyMember partner;
     [Space(5)]
     [SerializeField] private PartyMember currentAttacker;
 
@@ -90,19 +90,25 @@ public class BattleManager : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    public void Attack(int damage)
+    public void Attack(PartyMember.MemberMove move)
     {
-        Debug.Log(animationControllers[(int)Stage]);
-
-        StartCoroutine(animationControllers[(int)Stage].Attack(damage));
+        StartCoroutine(animationControllers[(int)Stage].Attack(move));
     }
 
-    public void AttackComplete(int damage)
+    public void AttackComplete(PartyMember.MemberMove move)
     {
         currentAttacker = Stage == BattleStage.Partner ? enemy : partner;
-        currentAttacker.Stats.HP = Mathf.Clamp(currentAttacker.Stats.HP -= damage, 0, currentAttacker.Stats.HP);
 
-        OnAttackComplete?.Invoke(this, damage);
+        if (move.Value.Type == Move.MoveType.Regular)
+        {
+            currentAttacker.Stats.HP = Mathf.Clamp(currentAttacker.Stats.HP -= move.Value.CalculateDamage(partner, enemy), 0, currentAttacker.Stats.HP);
+        }
+        else
+        {
+            ChangeStat(currentAttacker == partner ? enemy : partner, move.Value.ChangedStat, move.Value.ChangedStatAmount);
+        }
+
+        OnAttackComplete?.Invoke(this, move.Value.CalculateDamage(partner, enemy)); // TODO: Don't pass in damage
 
         ChangeBattleStage();
     }
@@ -138,6 +144,11 @@ public class BattleManager : MonoBehaviour
         {
             Stage = (BattleStage)ExtensionMethods.IncrementInt((int)Stage, 0, 2, 1);
         }
+    }
+
+    private void ChangeStat(PartyMember member, Pokemon.Stat stat, int amount)
+    {
+        member.Stats.StatChanges[stat] = Mathf.Clamp(member.Stats.StatChanges[stat] + amount, -6, 6);
     }
 
     #endregion

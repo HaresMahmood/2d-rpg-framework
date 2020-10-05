@@ -24,11 +24,11 @@ public class BattleAnimationController : MonoBehaviour
 
     #region Miscellaneous Methods
 
-    public IEnumerator Attack(int damage)
+    public IEnumerator Attack(PartyMember.MemberMove move)
     {
         yield return new WaitForSeconds(0.5f);
 
-        BattleManager.Instance.AttackComplete(damage);
+        BattleManager.Instance.AttackComplete(move);
         OnAttackComplete.Invoke();
     }
 

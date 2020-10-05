@@ -64,7 +64,7 @@ public class MoveButtonSubComponent : UserInterfaceSubComponent
 
     private void Attack()
     {
-        BattleManager.Instance.Attack(move.Value.CalculateDamage(BattleManager.Instance.Partner, BattleManager.Instance.Enemy));
+        BattleManager.Instance.Attack(move);
     }
 
     #endregion

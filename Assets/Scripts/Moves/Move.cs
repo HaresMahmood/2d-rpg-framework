@@ -12,6 +12,8 @@ public class Move : ScriptableObject
     [SerializeField] private int pp;
     [SerializeField] private int accuracy;
     [SerializeField] private int power;
+    [SerializeField] private Pokemon.Stat changedStat;
+    [SerializeField] private int changedStatAmount;
     [SerializeField] private MoveType type;
     [SerializeField] private MoveTarget target;
     [SerializeField] private MoveCategory category;
@@ -56,6 +58,18 @@ public class Move : ScriptableObject
     {
         get { return power; }
         set { power = value; }
+    }
+
+    public Pokemon.Stat ChangedStat
+    {
+        get { return changedStat; }
+        set { changedStat = value; }
+    }
+
+    public int ChangedStatAmount
+    {
+        get { return changedStatAmount; }
+        set { changedStatAmount = value; }
     }
 
     public MoveType Type

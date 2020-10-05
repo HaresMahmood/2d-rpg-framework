@@ -15,7 +15,7 @@ public class EnemyController : MonoBehaviour
 
         Debug.Log(move.Value.Name);
 
-        BattleManager.Instance.Attack(move.Value.CalculateDamage(BattleManager.Instance.Partner, BattleManager.Instance.Enemy));
+        BattleManager.Instance.Attack(move);
     }
 
     #endregion
